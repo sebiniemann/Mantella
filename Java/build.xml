@@ -1,12 +1,12 @@
 <!-- Used only for travis ci -->
 <project name="OnlineOptimisation" default="test" basedir=".">
-  <property name="src.dir" location="Java/src"/>
-  <property name="test.dir" location="Java/test/src"/>
+  <property name="src.dir" location="/src"/>
+  <property name="test.dir" location="test/src"/>
   
-  <property name="src.lib.dir" location="Java/external"/>
-  <property name="test.lib.dir" location="Java/test/external"/>
+  <property name="src.lib.dir" location="external"/>
+  <property name="test.lib.dir" location="test/external"/>
   
-  <property name="build.dir"   location="Java/build"/>
+  <property name="build.dir"   location="build"/>
   <property name="build.src.dir" location="${build.dir}/src"/>
   <property name="build.test.dir" location="${build.dir}/test"/>
 
