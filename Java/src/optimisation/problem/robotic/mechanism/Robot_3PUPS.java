@@ -3,7 +3,8 @@ package optimisation.problem.robotic.mechanism;
 import arma.Mat;
 
 /**
- * A theoretical 3(P̲)UP̲S robot based on the 6(P̲)UP̲S called PaLiDA, as build by the Institute of Production Engineering and
+ * A theoretical 3(P̲)UP̲S robot based on the 6(P̲)UP̲S called PaLiDA, as build by the Institute of Production
+ * Engineering and
  * Machine Tools, Leibniz Universität Hannover.
  * 
  * @author Sebastian Niemann <niemann@sra.uni-hannover.de>

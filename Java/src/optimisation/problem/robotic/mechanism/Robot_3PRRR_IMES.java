@@ -37,7 +37,6 @@ public class Robot_3PRRR_IMES extends Robot_NPRRR {
         {1.090757710818982, 1.008805571279318}, // First kinematic chain
         {0.0, -1.2}, // Second kinematic chain
         {1.1996, -1.2} // Third kinematic chain
-      })
-    );
+      }));
   }
 }

@@ -23,7 +23,8 @@ public class Algebra {
   }
 
   /**
-   * Returns the cross of all elements for each column ({@code dimension} = 0) or row ({@code dimension} = 1) of matrix1 and matrix2.
+   * Returns the cross of all elements for each column ({@code dimension} = 0) or row ({@code dimension} = 1) of matrix1
+   * and matrix2.
    * 
    * @param matrix1 The first matrix
    * @param matrix2 The second matrix
@@ -46,7 +47,7 @@ public class Algebra {
 
     return result;
   }
-  
+
   /**
    * Returns the {@code p}-norm of all elements for each column of the matrix.
    * 
@@ -68,7 +69,7 @@ public class Algebra {
   public static Mat normMat(Mat matrix, String p) {
     return normMat(matrix, p, 0);
   }
-  
+
   /**
    * Computes the {@code p}-norm of all elements for each column ({@code dimension} = 0) or row ({@code dimension} = 1)
    * matrix.

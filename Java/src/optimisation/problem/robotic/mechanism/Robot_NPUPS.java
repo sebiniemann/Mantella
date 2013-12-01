@@ -108,7 +108,7 @@ public class Robot_NPUPS extends Robot {
 
     System.out.println(_directJacobian);
     System.out.println(_inverseJacobian);
-    
+
     Arma.solve(_jacobian, _directJacobian, _inverseJacobian);
     return _jacobian;
   }

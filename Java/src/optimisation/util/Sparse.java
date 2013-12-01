@@ -8,7 +8,7 @@ import arma.Mat;
  * @author Sebastian Niemann <niemann@sra.uni-hannover.de>
  */
 public class Sparse {
-  
+
   /**
    * Returns the number of nonzero elements within a matrix.
    * 

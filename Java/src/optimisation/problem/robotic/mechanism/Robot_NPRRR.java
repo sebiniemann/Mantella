@@ -72,9 +72,9 @@ public abstract class Robot_NPRRR extends Robot {
    *          row. <b>Note:</b> Must be relative to the origin of the base.
    */
   protected Robot_NPRRR(Mat endEffectorJointXYPosition,
-              Mat linkLengths,
-              Mat prismaticJointStartXYPosition,
-              Mat prismaticJointEndXYPosition) {
+                        Mat linkLengths,
+                        Mat prismaticJointStartXYPosition,
+                        Mat prismaticJointEndXYPosition) {
     _endEffectorJointXYPosition = endEffectorJointXYPosition;
     _linkLengths = linkLengths;
     _prismaticJointStartXYPosition = prismaticJointStartXYPosition;
