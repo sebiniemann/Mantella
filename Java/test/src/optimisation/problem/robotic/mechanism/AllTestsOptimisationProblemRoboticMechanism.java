@@ -9,8 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-  TestRobot_3PRRR_IMES.class,
-  TestRobot_6PUPS_PaLiDA.class
+//  TestRobot_3PRRR_IMES.class,
+//  TestRobot_6PUPS_PaLiDA.class
 })
 public class AllTestsOptimisationProblemRoboticMechanism {
 

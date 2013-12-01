@@ -18,7 +18,7 @@ import arma.Mat;
  */
 public class Geometry {
   /**
-   * Returns a two-dimensional rotation matrix through an angle
+   * Returns a two-dimensional rotation matrix through an angle.
    * 
    * @param angle The angle
    * @return The rotation matrix
@@ -34,7 +34,7 @@ public class Geometry {
   }
 
   /**
-   * Returns a ZYX-Tait-Bryan angles rotation matrix
+   * Returns a ZYX-Tait-Bryan angles rotation matrix.
    * 
    * @param rollAngle The roll angle
    * @param pitchAngle The pitch angle
@@ -49,10 +49,11 @@ public class Geometry {
     double sinYawAngle = Math.sin(yawAngle);
     double cosYawAngle = Math.cos(yawAngle);
 
+    // Avoids R = Rz*Ry*Rx, as this will suffer from singularities.
     return new Mat(new double[][]{
-      {cosYawAngle * cosPitchAngle, cosYawAngle * sinPitchAngle * sinRollAngle - sinYawAngle * cosRollAngle, cosYawAngle * sinPitchAngle * cosRollAngle + sinYawAngle * sinRollAngle},
-      {sinYawAngle * cosPitchAngle, sinYawAngle * sinPitchAngle * sinRollAngle - cosYawAngle * cosRollAngle, sinYawAngle * sinPitchAngle * cosRollAngle - cosYawAngle * sinRollAngle},
-      {-sinPitchAngle, cosPitchAngle * sinRollAngle, cosPitchAngle * cosRollAngle}
+      {cosYawAngle * cosPitchAngle, cosYawAngle * sinPitchAngle * sinRollAngle + sinYawAngle * cosRollAngle, cosYawAngle * sinPitchAngle * cosRollAngle - sinYawAngle * sinRollAngle},
+      {-sinYawAngle * cosPitchAngle, sinYawAngle * sinPitchAngle * sinRollAngle - cosYawAngle * cosRollAngle, sinYawAngle * sinPitchAngle * cosRollAngle + cosYawAngle * sinRollAngle},
+      {-sinPitchAngle, -cosPitchAngle * sinRollAngle, cosPitchAngle * cosRollAngle}
     });
   }
 }

@@ -8,7 +8,11 @@
  * http://opensource.org/licenses/MIT
  *******************************************************************************/
 // http://arma.sourceforge.net/docs.html#config_hpp
-#define ARMA_USE_CXX11 // Use C++11 features, such as initialiser lists#include <iostream>// EXIT_SUCCESS#include <string>
+#define ARMA_USE_CXX11 // Use C++11 features, such as initialiser lists
+#include <iostream>
+// EXIT_SUCCESS
+
+#include <string>
 using std::to_string;
 
 #include <armadillo>
@@ -17,6 +21,8 @@ using arma::zeros;
 using arma::ones;
 using arma::eye;
 using arma::raw_ascii;
+using arma::endr;
+using arma::datum;
 
 Mat<double> getHankelMatrix(int numberOfRows, int numberOfColumns) {
   Mat<double> hankelMatrix(numberOfRows, numberOfColumns);
@@ -82,6 +88,23 @@ int main() {
       }
     }
   }
+
+  input = {0, 1, 2, datum::eps, datum::inf, 1/12.0 * datum::pi, 1/10.0 * datum::pi, 1/8.0 * datum::pi, 1/6.0 * datum::pi, 1/4.0 * datum::pi, 1/2.0 * datum::pi, datum::pi, 3/2.0 * datum::pi, 2 * datum::pi, 3 * datum::pi, 4 * datum::pi, 5 * datum::pi, 10 * datum::pi, 100 * datum::pi};
+  input = join_vert(input, -input);
+  input.save("./input/trigonometric.mat", raw_ascii);
+
+  input = {0, 1, 2, datum::eps, 1/12.0 * datum::pi, 1/10.0 * datum::pi, 1/8.0 * datum::pi, 1/6.0 * datum::pi, 1/4.0 * datum::pi, -1/2.0 * datum::pi, -datum::pi, -3/2.0 * datum::pi, -2 * datum::pi, -3 * datum::pi};
+  input.save("./input/rotation.mat", raw_ascii);
+
+  input << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << endr
+      << 5 << 6 << 7 << 2 << 3 << 5 << 6 << 3 << 1 << 4 << 8 << 9 << endr
+      << 16 << 64 << 512 << 128 << 1 << 2 << 4 << 1 << 2 << 4 << 256 << 32 << endr
+      << 0.123456789 << 0.9 << 0.456789 << 0.3456789 << 0.89 << 0.789 << 0.6789 << 0.56789 << 0.23456789 << endr
+      << 1 << 0.00390625 << 0.5 << 0.125 << 0.015625 << 0.0625 << 0.125 << 0.015625 << 0.0625 << 0.25 << 0.03625 << 0.0078125 << endr
+      << 0 << 1 << 0 << -1 << 0 << datum::eps << -1 << 0 << datum::eps << 0 << -datum::eps << 0 << endr
+      << 0 << 1 << 0 << -1 << 0 << datum::inf << -1 << 0 << datum::inf << 0 << -datum::inf << 0 << endr;
+  input = join_vert(input, -input);
+  input.save("./input/series.mat", raw_ascii);
 
   return EXIT_SUCCESS;
 }

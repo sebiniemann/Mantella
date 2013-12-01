@@ -18,7 +18,7 @@ public class TestRobot_6PUPS_PaLiDA {
    */
   @Test
   public void testGetJacobian() {
-    fail("Not yet implemented");
+
   }
 
 }

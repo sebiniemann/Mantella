@@ -10,6 +10,9 @@
 package optimisation;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.Locale;
+
 import arma.Mat;
 
 /**
@@ -108,5 +111,15 @@ public class TestUtil {
         assertEquals(message + " at position " + n, a, b, absoluteMax * delta);
       }
     }
+  }
+  
+  /**
+   * Converts a value to a string format to be used in filenames.
+   * 
+   * @param value The value
+   * @return The string
+   */
+  public static String convertToString(double value) {
+    return (Double.isInfinite(value) ? (value > 0 ? "inf" : "-inf") : String.format(Locale.ENGLISH, "%1$1.6f", value));
   }
 }
