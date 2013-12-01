@@ -1,6 +1,6 @@
 <!-- Used only for travis ci -->
 <project name="OnlineOptimisation" default="test" basedir=".">
-  <property name="src.dir" location="/src"/>
+  <property name="src.dir" location="src"/>
   <property name="test.dir" location="test/src"/>
   
   <property name="src.lib.dir" location="external"/>
