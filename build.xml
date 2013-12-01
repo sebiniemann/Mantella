@@ -11,6 +11,7 @@
   <property name="build.test.dir" location="${build.dir}/test"/>
 
   <path id="libs.src">
+    <pathelement location="${src.lib.dir}/ArmadilloJava/ArmadilloJava.jar" />
     <pathelement location="${src.lib.dir}/EJML/ejml-0.23.jar" />
   </path>
   
