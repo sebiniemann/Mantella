@@ -1,7 +1,7 @@
 /**
  * 
  */
-package optimisation;
+package optimisation.util;
 
 import static optimisation.TestUtil.assertMatElementWiseEquals;
 
@@ -24,7 +24,7 @@ import arma.Op;
  * @author Sebastian Niemann <niemann@sra.uni-hannover.de>
  */
 @RunWith(Parameterized.class)
-public class TestUtilAlgebraCross {
+public class TestAlgebraCross {
   /**
    * 
    * Returns the matrices to be tested.
@@ -84,7 +84,7 @@ public class TestUtilAlgebraCross {
   @Test
   public void testCrossMatMatMat() throws IOException {
     Mat expected = new Mat();
-    expected.load("./test/data/expected/TestUtilAlgebraCross/testCross.mat");
+    expected.load("./test/data/expected/util/TestAlgebraCross/testCross.mat");
     assertMatElementWiseEquals("", expected, Algebra.crossMat(_testMatrix1, _testMatrix2));
   }
 
@@ -96,7 +96,7 @@ public class TestUtilAlgebraCross {
   @Test
   public void testCrossMatMatMatInt() throws IOException {
     Mat expected = new Mat();
-    expected.load("./test/data/expected/TestUtilAlgebraCross/testCross.mat");
+    expected.load("./test/data/expected/util/TestAlgebraCross/testCross.mat");
     assertMatElementWiseEquals("", expected, Algebra.crossMat(_testMatrix1, _testMatrix2, 0));
     assertMatElementWiseEquals("", expected.t(), Algebra.crossMat(_testMatrix1.t(), _testMatrix2.t(), 1));
   }

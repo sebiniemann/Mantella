@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2013 Sebastian Niemann <niemann@sra.uni-hannover.de> and contributors.
+ * Copyright (c) 2013 Sebastian Niemann <niemann@sra.uni-hannover.de> and contributors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.

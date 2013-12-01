@@ -9,6 +9,9 @@
  *******************************************************************************/
 package optimisation;
 
+import optimisation.problem.robotic.mechanism.AllTestsOptimisationProblemRoboticMechanism;
+import optimisation.util.AllTestsUtil;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -18,8 +21,8 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-  TestUtilAlgebraCross.class,
-  TestUtilAlgebraNorm.class
+  AllTestsOptimisationProblemRoboticMechanism.class,
+  AllTestsUtil.class
 })
 public class AllTests {
 

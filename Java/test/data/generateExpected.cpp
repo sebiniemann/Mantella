@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2013 Sebastian Niemann <niemann@sra.uni-hannover.de> and contributors.
+ * Copyright (c) 2013 Sebastian Niemann <niemann@sra.uni-hannover.de> and contributors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ using arma::Mat;
 using arma::raw_ascii;
 using arma::cross;
 
-void testUtilAlgebraCross() {
+void testAlgebraCross() {
   std::array < string, 5> matrices = {"zeros", "ones", "eye", "hankel", "hilbert"};
 
   Mat<double> inputA;
@@ -54,10 +54,10 @@ void testUtilAlgebraCross() {
       expected.col(j++) = cross(inputA, inputB);
     }
   }
-  expected.save("./expected/TestUtilAlgebraCross/testCross.mat", raw_ascii);
+  expected.save("./expected/util/TestAlgebraCross/testCross.mat", raw_ascii);
 }
 
-void testUtilAlgebraNorm() {
+void testAlgebraNorm() {
   std::array<double, 7> dimensions = {1, 2, 3, 4, 5, 10, 100};
   std::array < string, 5> matrices = {"zeros", "ones", "eye", "hankel", "hilbert"};
 
@@ -96,17 +96,17 @@ void testUtilAlgebraNorm() {
       j++;
     }
 
-    expectedp1.save("./expected/TestUtilAlgebraNorm/testNorm.p1." + filename, raw_ascii);
-    expectedp2.save("./expected/TestUtilAlgebraNorm/testNorm.p2." + filename, raw_ascii);
-    expectedpinf.save("./expected/TestUtilAlgebraNorm/testNorm.pinf." + filename, raw_ascii);
-    expectedpfro.save("./expected/TestUtilAlgebraNorm/testNorm.pfro." + filename, raw_ascii);
-    expectedpminf.save("./expected/TestUtilAlgebraNorm/testNorm.p-inf." + filename, raw_ascii);
+    expectedp1.save("./expected/util/TestAlgebraNorm/testNorm.p1." + filename, raw_ascii);
+    expectedp2.save("./expected/util/TestAlgebraNorm/testNorm.p2." + filename, raw_ascii);
+    expectedpinf.save("./expected/util/TestAlgebraNorm/testNorm.pinf." + filename, raw_ascii);
+    expectedpfro.save("./expected/util/TestAlgebraNorm/testNorm.pfro." + filename, raw_ascii);
+    expectedpminf.save("./expected/util/TestAlgebraNorm/testNorm.p-inf." + filename, raw_ascii);
   }
 }
 
 int main() {
-  testUtilAlgebraCross();
-  testUtilAlgebraNorm();
+  testAlgebraCross();
+  testAlgebraNorm();
 
   return EXIT_SUCCESS;
 }
