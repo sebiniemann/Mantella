@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Sebastian Niemann <niemann@sra.uni-hannover.de> and contributors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://opensource.org/licenses/MIT
+ *******************************************************************************/
 package optimisation.util;
 
 import arma.Mat;
@@ -15,9 +24,12 @@ public class Geometry {
    * @return The rotation matrix
    */
   public static Mat get2DRotationMatrix(double angle) {
+    double sinAngle = Math.sin(angle);
+    double cosAngle = Math.cos(angle);
+
     return new Mat(new double[][]{
-      {Math.cos(angle), -Math.sin(angle)},
-      {Math.sin(angle), Math.cos(angle)}
+      {cosAngle, -sinAngle},
+      {sinAngle, cosAngle}
     });
   }
 
@@ -30,10 +42,17 @@ public class Geometry {
    * @return The rotation matrix
    */
   public static Mat getZYXTaitBryanAnglesRotationMatrix(double rollAngle, double pitchAngle, double yawAngle) {
+    double sinRollAngle = Math.sin(rollAngle);
+    double cosRollAngle = Math.cos(rollAngle);
+    double sinPitchAngle = Math.sin(pitchAngle);
+    double cosPitchAngle = Math.cos(pitchAngle);
+    double sinYawAngle = Math.sin(yawAngle);
+    double cosYawAngle = Math.cos(yawAngle);
+
     return new Mat(new double[][]{
-      {Math.cos(yawAngle) * Math.cos(pitchAngle), Math.cos(yawAngle) * Math.sin(pitchAngle) * Math.sin(rollAngle) - Math.sin(yawAngle) * Math.cos(rollAngle), Math.cos(yawAngle) * Math.sin(pitchAngle) * Math.cos(rollAngle) + Math.sin(yawAngle) * Math.sin(rollAngle)},
-      {Math.sin(yawAngle) * Math.cos(pitchAngle), Math.sin(yawAngle) * Math.sin(pitchAngle) * Math.sin(rollAngle) - Math.cos(yawAngle) * Math.cos(rollAngle), Math.sin(yawAngle) * Math.sin(pitchAngle) * Math.cos(rollAngle) - Math.cos(yawAngle) * Math.sin(rollAngle)},
-      {-Math.sin(pitchAngle), Math.cos(pitchAngle) * Math.sin(rollAngle), Math.cos(pitchAngle) * Math.cos(rollAngle)}
+      {cosYawAngle * cosPitchAngle, cosYawAngle * sinPitchAngle * sinRollAngle - sinYawAngle * cosRollAngle, cosYawAngle * sinPitchAngle * cosRollAngle + sinYawAngle * sinRollAngle},
+      {sinYawAngle * cosPitchAngle, sinYawAngle * sinPitchAngle * sinRollAngle - cosYawAngle * cosRollAngle, sinYawAngle * sinPitchAngle * cosRollAngle - cosYawAngle * sinRollAngle},
+      {-sinPitchAngle, cosPitchAngle * sinRollAngle, cosPitchAngle * cosRollAngle}
     });
   }
 }
