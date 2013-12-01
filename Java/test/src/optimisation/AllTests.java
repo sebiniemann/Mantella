@@ -7,6 +7,8 @@
  * 
  * http://opensource.org/licenses/MIT
  *******************************************************************************/
+package optimisation;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
