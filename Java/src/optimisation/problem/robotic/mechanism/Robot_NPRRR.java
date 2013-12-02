@@ -9,8 +9,8 @@
  *******************************************************************************/
 package optimisation.problem.robotic.mechanism;
 
+import optimisation.util.Algebra;
 import optimisation.util.Geometry;
-import optimisation.util.Sparse;
 import optimisation.util.Trigonometry;
 import arma.Arma;
 import arma.Mat;
@@ -44,6 +44,11 @@ public abstract class Robot_NPRRR extends Robot {
    * The XY-distance between the start and the end of the prismatic joint for each kinematic chain per row.
    */
   protected Mat _prismaticJointXYDistance;
+  
+  /**
+   * The indices of kinematic chains with redundant prismatic joints
+   */
+  protected Mat _kinematicChainsWithRedundancy;
 
   // Pre-allocated memory
 
@@ -88,14 +93,16 @@ public abstract class Robot_NPRRR extends Robot {
     _linkLengths = linkLengths;
     _prismaticJointStartXYPosition = prismaticJointStartXYPosition;
 
-    _prismaticJointXYDistance = _prismaticJointStartXYPosition.minus(prismaticJointStartXYPosition);
+    _prismaticJointXYDistance = prismaticJointEndXYPosition.minus(_prismaticJointStartXYPosition);
 
     // Pre-allocated memory
+    _kinematicChainsWithRedundancy = Arma.find(Algebra.normMat(_prismaticJointXYDistance, 2, 1));
     int numberOfKinematicChains = _endEffectorJointXYPosition.n_rows;
+    int numberOfKinematicChainsWithRedundancy = _kinematicChainsWithRedundancy.n_elem;
 
-    _jacobian = new Mat(3, numberOfKinematicChains + Sparse.nnz(_prismaticJointXYDistance));
+    _jacobian = new Mat(3, numberOfKinematicChains + numberOfKinematicChainsWithRedundancy);
     _directJacobian = new Mat(numberOfKinematicChains, 3);
-    _inverseJacobian = new Mat(numberOfKinematicChains, numberOfKinematicChains + Sparse.nnz(_prismaticJointXYDistance));
+    _inverseJacobian = new Mat(numberOfKinematicChains, numberOfKinematicChains + numberOfKinematicChainsWithRedundancy);
   }
 
   @Override
@@ -114,14 +121,12 @@ public abstract class Robot_NPRRR extends Robot {
     // A copy is made since the XY-Position relative to the orign of the end effector is later needed to calculate the
     // direct Jacobian.
     Mat rotatedAndShiftedEndEffectorJointXYPosition = new Mat(rotatedEndEffectorJointXYPosition);
-    rotatedEndEffectorJointXYPosition.each_row(Op.PLUS, XYPosition);
+    rotatedAndShiftedEndEffectorJointXYPosition.each_row(Op.PLUS, XYPosition);
 
     Mat baseJointToEndEffectorJointXYPosition = rotatedAndShiftedEndEffectorJointXYPosition.minus(_prismaticJointStartXYPosition.plus(_prismaticJointXYDistance.elemTimes(prismaticJointRelativeDistances)));
-
     // See the paper cited in the class description for more information about the exact position of the angle (called
     // psi within the paper).
     Mat passiveJointAngles = Arma.acos((Arma.sumMat(Arma.square(baseJointToEndEffectorJointXYPosition), 1).minus(Arma.sumMat(Arma.square(_linkLengths), 1))).elemDivide(Arma.prodMat(_linkLengths, 1).times(2)));
-
     // See the paper cited in the class description for more information about the exact position of the angle (called
     // theta within the paper).
     Mat activeJointAngles = Trigonometry.atan2(
@@ -134,7 +139,10 @@ public abstract class Robot_NPRRR extends Robot {
     _directJacobian.col(2, Op.EQUAL, (_directJacobian.col(1).elemTimes(rotatedEndEffectorJointXYPosition.col(0))).minus(_directJacobian.col(0).elemTimes(rotatedEndEffectorJointXYPosition.col(1))));
 
     _inverseJacobian.diag(Op.EQUAL, _linkLengths.col(0).elemTimes((_directJacobian.col(0).elemTimes(Arma.sin(activeJointAngles))).minus(_directJacobian.col(1).elemTimes(Arma.cos(activeJointAngles)))));
-
+    for(int n = 0; n < _kinematicChainsWithRedundancy.n_elem; n++) {
+      _inverseJacobian.at(n, _endEffectorJointXYPosition.n_rows + n, Op.EQUAL, (_directJacobian.at(n, 0) * _prismaticJointXYDistance.at(n, 0) + _directJacobian.at(n, 1) * _prismaticJointXYDistance.at(n, 1)) / Arma.norm(_prismaticJointXYDistance.row(n), 2));
+    }
+    
     Arma.solve(_jacobian, _directJacobian, _inverseJacobian);
     return _jacobian;
   }
