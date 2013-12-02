@@ -146,20 +146,6 @@ void testGeometryTaitBryanAngles() {
   }
 }
 
-void testSparse() {
-  Mat<double> input;
-  input.load("./input/series.mat");
-
-  int nnz = 0;
-  for(double value : input) {
-    if(value != 0) {
-      nnz++;
-    }
-  }
-  Mat<double> expected = {(double) nnz};
-  expected.save("./expected/util/TestSparse/testNnz.mat", raw_ascii);
-}
-
 void testTrigonometry() {
   Mat<double> input;
   input.load("./input/trigonometric.mat");
@@ -177,7 +163,6 @@ int main() {
   testAlgebraNorm();
   testGeometry2DRotationMatrix();
   testGeometryTaitBryanAngles();
-  testSparse();
   testTrigonometry();
 
   return EXIT_SUCCESS;

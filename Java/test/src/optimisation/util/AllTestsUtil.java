@@ -13,7 +13,6 @@ import org.junit.runners.Suite.SuiteClasses;
   TestAlgebraNorm.class,
   TestGeometry2DRotationMatrix.class,
   TestGeometryTaitBryanAngles.class,
-  TestSparse.class,
   TestTrigonometry.class
 })
 public class AllTestsUtil {
