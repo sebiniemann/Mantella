@@ -11,7 +11,6 @@ package optimisation.problem.robotic.mechanism;
 
 import optimisation.util.Algebra;
 import optimisation.util.Geometry;
-import optimisation.util.Sparse;
 import arma.Arma;
 import arma.Mat;
 import arma.Op;
@@ -39,6 +38,11 @@ public class Robot_NPUPS extends Robot {
    * The XY-distance between the start and the end of the prismatic joint for each kinematic chain per row.
    */
   protected Mat _prismaticJointXYZDistance;
+  
+  /**
+   * The indices of kinematic chains with redundant prismatic joints
+   */
+  protected Mat _kinematicChainsWithRedundancy;
 
   // Pre-allocated memory
 
@@ -83,11 +87,13 @@ public class Robot_NPUPS extends Robot {
     _prismaticJointXYZDistance = _prismaticJointStartXYZPosition.minus(prismaticJointStartXYZPosition);
 
     // Pre-allocated memory
+    _kinematicChainsWithRedundancy = Arma.find(Algebra.normMat(_prismaticJointXYZDistance, 2, 1));
     int numberOfKinematicChains = _endEffectorJointXYZPosition.n_rows;
+    int numberOfKinematicChainsWithRedundancy = _kinematicChainsWithRedundancy.n_elem;
 
-    _jacobian = new Mat(6, numberOfKinematicChains + Sparse.nnz(_prismaticJointXYZDistance));
+    _jacobian = new Mat(6, numberOfKinematicChains + numberOfKinematicChainsWithRedundancy);
     _directJacobian = new Mat(numberOfKinematicChains, 6);
-    _inverseJacobian = new Mat(numberOfKinematicChains, numberOfKinematicChains + Sparse.nnz(_prismaticJointXYZDistance));
+    _inverseJacobian = new Mat(numberOfKinematicChains, numberOfKinematicChains + numberOfKinematicChainsWithRedundancy);
   }
 
   @Override
