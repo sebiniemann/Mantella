@@ -1,11 +1,8 @@
 # Maven
-/Java/target
+target
 hs_err_pid*.log
-# Development only
-/Java/ext
 
 # Eclipse
-/Java/.settings
-/Java/.classpath
-/Java/.project
-
+.settings
+.classpath
+.project
