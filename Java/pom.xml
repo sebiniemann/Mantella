@@ -8,11 +8,39 @@
 	<packaging>jar</packaging>
 	<name>online-optimisation</name>
 
+	<description>An online optimisation framework.</description>
+	<url>http://www.onlineoptimisation.org</url>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Sebastian Niemann</name>
+			<email>niemann@sra.uni-hannover.de</email>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:SebastianNiemann/OnlineOptimisation.git</connection>
+		<developerConnection>scm:git:git@github.com:SebastianNiemann/OnlineOptimisation.git</developerConnection>
+		<url>git@github.com:SebastianNiemann/OnlineOptimisation.git</url>
+	</scm>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.armadillojava</groupId>
+			<artifactId>armadillojava</artifactId>
+			<version>4.000.0</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit-dep</artifactId>
