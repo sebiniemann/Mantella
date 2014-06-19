@@ -6,3 +6,7 @@ hs_err_pid*.log
 .settings
 .classpath
 .project
+
+# IntelliJ IDEA
+*.iml
+.idea
