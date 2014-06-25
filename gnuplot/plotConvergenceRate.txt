@@ -2,6 +2,9 @@
 
 reset
 
+# loading new default color palette
+load 'config.txt'
+
 set terminal pngcairo size 336,252 enhanced font 'Verdana,9'
 set output 'convergenceRate.png'
 
