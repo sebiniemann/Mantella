@@ -8,11 +8,9 @@ hs_err_pid*.log
 .project
 
 # IntelliJ IDEA
-*.iml
+.iml
 .idea
-
 
 # Gnuplot
 gnuplot/*.dat
 gnuplot/*.png
-
