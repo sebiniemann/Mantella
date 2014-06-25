@@ -23,6 +23,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.armadillojava</groupId>
+			<artifactId>armadillojava</artifactId>
+			<version>4.000.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.jme3</groupId>
 			<artifactId>jME3-core</artifactId>
 			<version>${jmonkey.version}</version>
