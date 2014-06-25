@@ -126,8 +126,15 @@ public abstract class OptimisationProblem {
     _parameterShift = parameterShift;
   }
 
-  public final Col getParameterShift() {
-    return _parameterShift;
+  public final void setObjectiveValueShift(double objectiveValueShift) {
+    _objectiveValueShift = objectiveValueShift;
+  }
+  
+  /**
+   * Returns the number of counted objective function.
+   */
+  public final int getNumberOfEvaluations() {
+    return _numberOfEvaluations;
   }
 
   /**
@@ -156,21 +163,6 @@ public abstract class OptimisationProblem {
     }
 
     _parameterRotation = parameterRotation;
-  }
-
-  /**
-   * Returns the left hand-side rotation matrix used to rotate the parameter space around (0, .., 0) +
-   * {@code parameterShift}.
-   */
-  public final Mat getParameterRotation() {
-    return _parameterRotation;
-  }
-
-  /**
-   * Returns the number of counted objective function.
-   */
-  public final int getNumberOfEvaluations() {
-    return _numberOfEvaluations;
   }
 
   /**
@@ -226,6 +218,19 @@ public abstract class OptimisationProblem {
 
     _numberOfEvaluations++;
 
-    return getObjectiveValueImplementation(_parameterRotation.times(parameter.plus(_parameterShift))) + _objectiveValueShift;
+    return getObjectiveValueImplementation(_parameterRotation.times(parameter.minus(_parameterShift))) + getSoftConstraintValueImplementation(parameter) + _objectiveValueShift;
   }
+
+  protected double getSoftConstraintValueImplementation(Col parameter) {
+    return 0;
+  };
+  
+  public final double getSoftConstraintValue(Col parameter) {
+    if (parameter.n_rows != _numberOfDimensions) {
+      throw new RuntimeException("The dimension (" + parameter.n_elem + ") of the parameter must match the dimension of the problem (" + _numberOfDimensions + ").");
+    }
+    
+    return getSoftConstraintValueImplementation(parameter);
+  }
+  
 }

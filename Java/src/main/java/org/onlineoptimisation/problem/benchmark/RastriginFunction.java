@@ -3,9 +3,8 @@ package org.onlineoptimisation.problem.benchmark;
 import org.armadillojava.Arma;
 import org.armadillojava.Col;
 import org.armadillojava.Datum;
-import org.onlineoptimisation.problem.OptimisationProblem;
 
-public class RastriginFunction extends OptimisationProblem {
+public class RastriginFunction extends BenchmarkProblem {
 
   public RastriginFunction(int numberOfDimensions) {
     super(numberOfDimensions);
@@ -13,7 +12,8 @@ public class RastriginFunction extends OptimisationProblem {
 
   @Override
   public double getObjectiveValueImplementation(Col parameter) {
-    return 10 * (_numberOfDimensions - Arma.accu(Arma.cos(parameter.times(2 * Datum.pi)))) + Arma.accu(Arma.square(parameter));
+    Col z = delta(10).times(asymmetric(0.2, oscillate(parameter)));
+    return 10 * (_numberOfDimensions - Arma.accu(Arma.cos(z.times(2 * Datum.pi)))) + Arma.accu(Arma.square(z));
   }
 
 }

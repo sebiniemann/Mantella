@@ -2,9 +2,8 @@ package org.onlineoptimisation.problem.benchmark;
 
 import org.armadillojava.Arma;
 import org.armadillojava.Col;
-import org.onlineoptimisation.problem.OptimisationProblem;
 
-public class SphereFunction extends OptimisationProblem {
+public class SphereFunction extends BenchmarkProblem {
 
   public SphereFunction(int numberOfDimensions) {
     super(numberOfDimensions);

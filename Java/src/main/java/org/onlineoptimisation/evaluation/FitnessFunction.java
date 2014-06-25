@@ -1,7 +1,6 @@
 package org.onlineoptimisation.evaluation;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -10,19 +9,22 @@ import java.nio.charset.StandardCharsets;
 
 import org.armadillojava.Arma;
 import org.armadillojava.Col;
+import org.onlineoptimisation.Visulisation;
 import org.onlineoptimisation.problem.OptimisationProblem;
 
 public class FitnessFunction extends Evaluation {
 
-  public FitnessFunction(OptimisationProblem sphereFunction) {
-    // TODO Auto-generated constructor stub
+  OptimisationProblem _optimisationProblem;
+  
+  public FitnessFunction(OptimisationProblem optimisationproblem) {
+    _optimisationProblem = optimisationproblem;
   }
 
   public void compute() throws IOException {
-    Col X = Arma.linspace(Col.class, -5, 5, 30);
-    Col Y = Arma.linspace(Col.class, -5, 5, 30);
+    Col X = Arma.linspace(Col.class, -5, 5, 250);
+    Col Y = Arma.linspace(Col.class, -5, 5, 250);
 
-    PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream("../gnuplot/data.txt", false), StandardCharsets.UTF_8)));
+    PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream("../gnuplot/fitnessFunction.dat", false), StandardCharsets.UTF_8)));
     writer.println("# X Y Z");
 
     for (int y = 0; y < Y.n_elem; y++) {
@@ -30,15 +32,13 @@ public class FitnessFunction extends Evaluation {
         double xx = X.at(x);
         double yy = Y.at(y);
         
-        writer.println(xx + " " + yy + " " + (Math.pow(xx, 2) + Math.pow(yy, 2)));
+        writer.println(xx + " " + yy + " " + _optimisationProblem.getObjectiveValue(new Col(new double[]{xx, yy})));
       }
       writer.println();
     }
     
     writer.close();
     
-    ProcessBuilder processBuilder = new ProcessBuilder("gnuplot", "plot.txt");
-    processBuilder.directory(new File("../gnuplot"));
-    processBuilder.start();
+    Visulisation.plot("plotFitnessFunction.txt");
   }
 }

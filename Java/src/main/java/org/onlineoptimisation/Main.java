@@ -3,14 +3,19 @@ package org.onlineoptimisation;
 import org.onlineoptimisation.evaluation.Evaluation;
 import org.onlineoptimisation.evaluation.FitnessFunction;
 import org.onlineoptimisation.problem.OptimisationProblem;
-import org.onlineoptimisation.problem.benchmark.SphereFunction;
+import org.onlineoptimisation.problem.benchmark.AttractiveSectorFunction;
+import org.onlineoptimisation.problem.benchmark.BentCigarFunction;
+import org.onlineoptimisation.problem.benchmark.BuecheRastriginFunction;
+import org.onlineoptimisation.problem.benchmark.DiscusFunction;
+import org.onlineoptimisation.problem.benchmark.EllipsoidalFunction;
+import org.onlineoptimisation.problem.benchmark.LinearSlope;
+import org.onlineoptimisation.problem.benchmark.RastriginFunction;
 
 public class Main {
 
   public static void main(String[] args) throws Exception {
-
-    OptimisationProblem sphereFunction = new SphereFunction(2);
-    Evaluation fitnessFunction = new FitnessFunction(sphereFunction);
+    OptimisationProblem optimisationProblem = new BentCigarFunction(2);
+    Evaluation fitnessFunction = new FitnessFunction(optimisationProblem);
     fitnessFunction.compute();
 
     // OptimisationProblem sphereFunction = new SphereFunction(2);

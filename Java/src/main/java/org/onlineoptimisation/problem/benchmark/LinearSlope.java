@@ -2,28 +2,28 @@ package org.onlineoptimisation.problem.benchmark;
 
 import org.armadillojava.Arma;
 import org.armadillojava.Col;
-import org.onlineoptimisation.problem.OptimisationProblem;
+import org.armadillojava.Op;
 
-public class LinearSlope extends OptimisationProblem {
+public class LinearSlope extends BenchmarkProblem {
 
-  protected final Col _optimalParameter;
-  
   public LinearSlope(int numberOfDimensions) {
     super(numberOfDimensions);
 
-    _optimalParameter = Arma.ones(Col.class, _numberOfDimensions).times(5);
+    if(Arma.as_scalar(Arma.randu(1, 1)) < 0.5) {
+      setParameterShift(Arma.zeros(Col.class, _numberOfDimensions).plus(5));
+    } else {
+      setParameterShift(Arma.zeros(Col.class, _numberOfDimensions).minus(5));
+    }
   }
 
   @Override
   public double getObjectiveValueImplementation(Col parameter) {
-    double result = 0;
-    
-    for(int n = 0; n < parameter.n_elem; n++) {
-      double s = Math.signum(_optimalParameter.at(n)) * Math.pow(10, n / (_numberOfDimensions - 1));
-      result += 5 * Math.abs(s) - s * parameter.at(n);
-    }
-    
-    return result;
+    Col z = new Col(parameter);
+    Col outOfBound = Arma.find((z.elemTimes(_parameterShift)).strictGreaterThan(25));
+    z.elem(outOfBound, Op.EQUAL, _parameterShift.elem(outOfBound));
+
+    Col scaling = scaling(1).elemTimes(Arma.sign(_parameterShift));
+    return 5 * Arma.accu(Arma.abs(scaling)) - Arma.dot(scaling, z);
   }
 
 }
