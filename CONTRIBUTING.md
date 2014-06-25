@@ -73,7 +73,7 @@ Commit <hash> (<type>: <subject>)
 Feel free to read the read the [Linux Kernel commit guidelines](http://git.kernel.org/cgit/git/git.git/tree/Documentation/SubmittingPatches?id=HEAD) on how to improve commit messages. 
 
 ### Signature
-You are required to end each commit message by adding the following DCO and signing your work. Note that official contributors may be exempt from the former.
+You are required to end each commit message by adding the following DCO **and** signing your work. Official contributors may be exempt from the former.
 
 ```
 Developer's Certificate of Origin 1.1
@@ -107,12 +107,6 @@ The signature should start with `Signed-off-by:` and include your real name (no 
 ```
 Signed-off-by: Random J Developer <random@developer.example.org>
 ```
-
-Finally, sign your commit via GPG by including `-S` to each git commit command after [creating your GPG key](https://www.gnupg.org/gph/en/manual.html#AEN26):
-```
-git commit -S
-```
-For official contributors committing directly via GitHub, GPG-signing is currently not enforced.
 
 <a name="development"></a> Development Notes
 --------------------------------------------
