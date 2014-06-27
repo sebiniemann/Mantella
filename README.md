@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=ready&title=Ready)](https://waffle.io/sebastianniemann/onlineoptimisation)
 OnlineOptimisation
 ==================
 
