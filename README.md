@@ -1,6 +1,6 @@
 OnlineOptimisation
 ==================
-[![Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Stories in Ready](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=ready&title=Ready)](https://waffle.io/sebastianniemann/onlineoptimisation)
+[![Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Stories in Ready](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
 
 License
