@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package visualisation;
+package org.onlineoptimisation.extension.robotvisualisation;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -23,19 +23,19 @@ import com.jme3.renderer.Camera;
  */
 public class CustomCam implements AnalogListener, ActionListener {
 
-  private static String[] mappings = new String[]{"Up", "Left", "Down", "Right", "ZoomIn", "ZoomOut", "RotateDrag", "Control", "CamUp", "CamDown", "CamLeft", "CamRight"};
-  InputManager inputManager;
-  boolean canRotate = false;
-  boolean controlPressed = false;
-  float movespeed = 10f;
-  float rotationSpeed = 1f;
-  Camera cam;
-  Vector3f initialUpVector;
+  private static String[] _mappings = new String[]{"Up", "Left", "Down", "Right", "ZoomIn", "ZoomOut", "RotateDrag", "Control", "CamUp", "CamDown", "CamLeft", "CamRight"};
+  InputManager _inputManager;
+  boolean _canRotate = false;
+  boolean _controlPressed = false;
+  float _movespeed = 10f;
+  float _rotationSpeed = 1f;
+  Camera _cam;
+  Vector3f _initialUpVector;
 
   public CustomCam(InputManager inputManager, Camera cam) {
-    this.inputManager = inputManager;
-    this.cam = cam;
-    initialUpVector = cam.getUp().clone();
+    this._inputManager = inputManager;
+    this._cam = cam;
+    _initialUpVector = cam.getUp().clone();
 
     inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
     inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
@@ -60,7 +60,7 @@ public class CustomCam implements AnalogListener, ActionListener {
     inputManager.addMapping("CamDown", new MouseAxisTrigger(MouseInput.AXIS_Y, true),
             new KeyTrigger(KeyInput.KEY_DOWN));
 
-    inputManager.addListener(this, mappings);
+    inputManager.addListener(this, _mappings);
   }
 
   public void onAnalog(String name, float value, float tpf) {
@@ -77,67 +77,67 @@ public class CustomCam implements AnalogListener, ActionListener {
     } else if (name.equals("ZoomOut")) {
       moveCamAlongZ(value);
     } else if (name.equals("CamUp")) {
-      rotateCamera(-value * 1, cam.getLeft());
+      rotateCamera(-value * 1, _cam.getLeft());
     } else if (name.equals("CamDown")) {
-      rotateCamera(value * 1, cam.getLeft());
+      rotateCamera(value * 1, _cam.getLeft());
     } else if (name.equals("CamLeft")) {
-      rotateCamera(value, initialUpVector);
+      rotateCamera(value, _initialUpVector);
     } else if (name.equals("CamRight")) {
-      rotateCamera(-value, initialUpVector);
+      rotateCamera(-value, _initialUpVector);
     }
   }
 
   public void onAction(String name, boolean isPressed, float tpf) {
     if (name.equals("RotateDrag")) {
-      canRotate = isPressed;
+      _canRotate = isPressed;
     } else if (name.equals("Control")) {
-      controlPressed = isPressed;
+      _controlPressed = isPressed;
     }
-    if (canRotate && controlPressed) {
-      inputManager.setCursorVisible(false);
+    if (_canRotate && _controlPressed) {
+      _inputManager.setCursorVisible(false);
     } else {
-      inputManager.setCursorVisible(true);
+      _inputManager.setCursorVisible(true);
     }
   }
 
   private void moveCamAlongY(float value) {
-    Vector3f vel = new Vector3f(0, value * movespeed, 0);
-    Vector3f pos = cam.getLocation().clone();
+    Vector3f vel = new Vector3f(0, value * _movespeed, 0);
+    Vector3f pos = _cam.getLocation().clone();
 
     pos.addLocal(vel);
-    cam.setLocation(pos);
+    _cam.setLocation(pos);
   }
 
   private void moveCamAlongX(float value) {
-    Vector3f vel = new Vector3f(value * movespeed, 0, 0);
-    Vector3f pos = cam.getLocation().clone();
+    Vector3f vel = new Vector3f(value * _movespeed, 0, 0);
+    Vector3f pos = _cam.getLocation().clone();
 
     pos.addLocal(vel);
-    cam.setLocation(pos);
+    _cam.setLocation(pos);
   }
 
   private void moveCamAlongZ(float value) {
     Vector3f vel = new Vector3f(0, 0, value);
-    Vector3f pos = cam.getLocation().clone();
+    Vector3f pos = _cam.getLocation().clone();
 
     pos.addLocal(vel);
-    cam.setLocation(pos);
+    _cam.setLocation(pos);
   }
 
   public void setMoveSpeed(float value) {
-    movespeed = value;
+    _movespeed = value;
   }
 
   protected void rotateCamera(float value, Vector3f axis) {
-    if (!controlPressed || !canRotate) {
+    if (!_controlPressed || !_canRotate) {
       return;
     }
     Matrix3f mat = new Matrix3f();
-    mat.fromAngleNormalAxis(rotationSpeed * value, axis);
+    mat.fromAngleNormalAxis(_rotationSpeed * value, axis);
 
-    Vector3f up = cam.getUp();
-    Vector3f left = cam.getLeft();
-    Vector3f dir = cam.getDirection();
+    Vector3f up = _cam.getUp();
+    Vector3f left = _cam.getLeft();
+    Vector3f dir = _cam.getDirection();
 
     mat.mult(up, up);
     mat.mult(left, left);
@@ -147,6 +147,6 @@ public class CustomCam implements AnalogListener, ActionListener {
     q.fromAxes(left, up, dir);
     q.normalizeLocal();
 
-    cam.setAxes(q);
+    _cam.setAxes(q);
   }
 }

@@ -1,4 +1,4 @@
-package visualisation.mathconstructs;
+package org.onlineoptimisation.extension.robotvisualisation.mathconstructs;
 
 /**
  *
@@ -6,16 +6,16 @@ package visualisation.mathconstructs;
  */
 public class Circle {
 
-  public float x, y, radius;
+  public float _x, _y, _radius;
 
   public Circle(float x, float y, float radius) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
+    this._x = x;
+    this._y = y;
+    this._radius = radius;
   }
 
   @Override
   public String toString() {
-    return "x: " + x + ", y: " + y + ", radius: " + radius;
+    return "x: " + _x + ", y: " + _y + ", radius: " + _radius;
   }
 }

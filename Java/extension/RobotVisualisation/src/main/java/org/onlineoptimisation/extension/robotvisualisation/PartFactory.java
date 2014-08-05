@@ -1,9 +1,8 @@
-package visualisation;
+package org.onlineoptimisation.extension.robotvisualisation;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -13,20 +12,19 @@ import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.scene.shape.Dome;
 import com.jme3.scene.shape.Torus;
 import com.jme3.util.TangentBinormalGenerator;
 
 public class PartFactory {
 
-  protected AssetManager assetManager;
+  protected AssetManager _assetManager;
 
-  private final float endEffectorRadius = 0.025f;
-  private final float armThickness = 0.016f;
-  private final float zOffset = armThickness * 3;
+  private final float _endEffectorRadius = 0.025f;
+  private final float _armThickness = 0.016f;
+  private final float _zOffset = _armThickness * 3;
 
   public PartFactory(AssetManager assetManager) {
-    this.assetManager = assetManager;
+    this._assetManager = assetManager;
   }
 
   public Spatial getEndEffector(float distanceArmEndToEndEffector) {
@@ -36,11 +34,11 @@ public class PartFactory {
   public Spatial getEndEffector(float distanceArmEndToEndEffector, Vector3f endEffectorPos, float endEffectorRotation) {
     Node endEffectorNode = new Node("endEffectorNode");
 
-    Cylinder endEffector = new Cylinder(10, 10, endEffectorRadius, 0f, armThickness * 3, true, false);
+    Cylinder endEffector = new Cylinder(10, 10, _endEffectorRadius, 0f, _armThickness * 3, true, false);
     Geometry geom = new Geometry("endEffector", endEffector);
 
     //assign a material and color
-    Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material mat = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setColor("Color", ColorRGBA.Black);
     geom.setMaterial(mat);
 
@@ -48,7 +46,7 @@ public class PartFactory {
     Arrow xAxis = new Arrow(Vector3f.UNIT_X.mult(distanceArmEndToEndEffector));
     xAxis.setLineWidth(4); // make arrow thicker
     Geometry xArrowGeom = new Geometry("endEffectorXAxis", xAxis);
-    Material xMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material xMat = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     xMat.getAdditionalRenderState().setWireframe(true);
     xMat.setColor("Color", ColorRGBA.Red);
     xArrowGeom.setMaterial(xMat);
@@ -56,20 +54,20 @@ public class PartFactory {
     Arrow yAxis = new Arrow(Vector3f.UNIT_Y.mult(distanceArmEndToEndEffector));
     yAxis.setLineWidth(4); // make arrow thicker
     Geometry yArrowGeom = new Geometry("endEffectorYAxis", yAxis);
-    Material yMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material yMat = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     yMat.getAdditionalRenderState().setWireframe(true);
     yMat.setColor("Color", ColorRGBA.Green);
     yArrowGeom.setMaterial(yMat);
 
     //init the "donut" around the endeffector
-    Torus torus = new Torus(40, 40, armThickness / 4, distanceArmEndToEndEffector);
+    Torus torus = new Torus(40, 40, _armThickness / 4, distanceArmEndToEndEffector);
     Geometry torusGeom = new Geometry("endEffectorDonut", torus);
     TangentBinormalGenerator.generate(torus);
     //we can re-use the endeffector material here
     torusGeom.setMaterial(mat);
 
     //move to position
-    endEffectorNode.move(endEffectorPos.add(0, 0, zOffset));
+    endEffectorNode.move(endEffectorPos.add(0, 0, _zOffset));
 
     endEffectorNode.attachChild(geom);
     endEffectorNode.attachChild(xArrowGeom);
@@ -92,10 +90,10 @@ public class PartFactory {
   }
 
   public Spatial getLink(float length) {
-    Cylinder linkShape = new Cylinder(20, (int) Math.ceil(length) * 20, armThickness / 2, length, true, false);
+    Cylinder linkShape = new Cylinder(20, (int) Math.ceil(length) * 20, _armThickness / 2, length, true, false);
     Geometry linkGeometry = new Geometry("Link", linkShape);
 
-    Material linkMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material linkMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     linkMaterial.setColor("Color", ColorRGBA.Black);
 
     linkGeometry.setMaterial(linkMaterial);
@@ -113,10 +111,10 @@ public class PartFactory {
     Node prismaticJoint = new Node();
 
     if (base) {
-      Material baseMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+      Material baseMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
       baseMaterial.setColor("Color", ColorRGBA.Black);
 
-      Box leftBaseShape = new Box(armThickness, armThickness, armThickness);
+      Box leftBaseShape = new Box(_armThickness, _armThickness, _armThickness);
       Geometry leftBaseGeometry = new Geometry("leftBaseLink", leftBaseShape);
       //leftBaseGeometry.setLocalTranslation(new Vector3f(0, 0, -length / 2));
       leftBaseGeometry.setLocalTranslation(start);
@@ -124,7 +122,7 @@ public class PartFactory {
       leftBaseGeometry.setMaterial(baseMaterial);
       prismaticJoint.attachChild(leftBaseGeometry);
 
-      Box rightbaseShape = new Box(armThickness, armThickness, armThickness);
+      Box rightbaseShape = new Box(_armThickness, _armThickness, _armThickness);
       Geometry rightbaseGeometry = new Geometry("rightBaseLink", rightbaseShape);
       //rightbaseGeometry.setLocalTranslation(new Vector3f(0, 0, length / 2));
       rightbaseGeometry.setLocalTranslation(end);
@@ -135,25 +133,25 @@ public class PartFactory {
     }
 
     Vector3f line = end.subtract(start);
-    Cylinder linkShape = new Cylinder(20, 100, armThickness / 4, length, true, false);
+    Cylinder linkShape = new Cylinder(20, 100, _armThickness / 4, length, true, false);
     Geometry linkGeometry = new Geometry("Link", linkShape);
 
     linkGeometry.lookAt(line, Vector3f.UNIT_Y);
 
     linkGeometry.setLocalTranslation(start.add(line.mult(0.5f)));
 
-    Material linkMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material linkMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     linkMaterial.setColor("Color", ColorRGBA.Black);
 
     linkGeometry.setMaterial(linkMaterial);
     prismaticJoint.attachChild(linkGeometry);
 
-    Box joint = new Box(armThickness * 2, armThickness, armThickness);
+    Box joint = new Box(_armThickness * 2, _armThickness, _armThickness);
     Geometry jointGeometry = new Geometry("BoxLink", joint);
     float angle = line.angleBetween(Vector3f.UNIT_X);
     jointGeometry.rotate(0, 0, angle);
 
-    Material jointMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material jointMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
     if (active) {
       jointMaterial.setColor("Color", ColorRGBA.Gray);
@@ -179,7 +177,7 @@ public class PartFactory {
     Sphere jointShape = new Sphere(20, 20, 0.1f, false, false);
     Geometry jointGeometry = new Geometry("Link", jointShape);
 
-    Material jointMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material jointMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     jointMaterial.setColor("Color", ColorRGBA.White);
 
     jointGeometry.setMaterial(jointMaterial);
@@ -199,7 +197,7 @@ public class PartFactory {
   }
 
   public Spatial getRotationalJoint(boolean active, boolean base, Vector3f position) {
-    System.out.println(assetManager);
+    System.out.println(_assetManager);
     Node joint = (Node) getRotationalJoint(active, base);
     joint.setLocalTranslation(position);
     return joint;
@@ -209,22 +207,22 @@ public class PartFactory {
     Node rotationalJoint = new Node();
 
     if (base) {
-      Cylinder baseShape = new Cylinder(10, 10, armThickness / 3, armThickness, armThickness, true, false);
+      Cylinder baseShape = new Cylinder(10, 10, _armThickness / 3, _armThickness, _armThickness, true, false);
       Geometry baseGeometry = new Geometry("Link", baseShape);
 
-      Material baseMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+      Material baseMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
       baseMaterial.setColor("Color", ColorRGBA.White);
 
       baseGeometry.setMaterial(baseMaterial);
       //baseGeometry.rotateUpTo(Vector3f.UNIT_Z);
-      baseGeometry.setLocalTranslation(0, 0, -armThickness * 1.5f);
+      baseGeometry.setLocalTranslation(0, 0, -_armThickness * 1.5f);
       rotationalJoint.attachChild(baseGeometry);
     }
 
-    Sphere jointShape = new Sphere(20, 20, armThickness, false, false);
+    Sphere jointShape = new Sphere(20, 20, _armThickness, false, false);
     Geometry jointGeometry = new Geometry("Link", jointShape);
 
-    Material jointMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    Material jointMaterial = new Material(_assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
     if (active) {
       jointMaterial.setColor("Color", ColorRGBA.Gray);

@@ -1,4 +1,4 @@
-package visualisation;
+package org.onlineoptimisation.extension.robotvisualisation;
 
 import org.armadillojava.Mat;
 import java.awt.Color;
@@ -14,38 +14,38 @@ import javax.swing.SwingUtilities;
  */
 public class ImageDisplay extends JPanel {
 
-  private int width, height;
-  private BufferedImage image = null;
-  private Mat mat = null;
-  private double min = 0;
-  private double max = 0;
+  private int _width, _height;
+  private BufferedImage _image = null;
+  private Mat _mat = null;
+  private double _min = 0;
+  private double _max = 0;
 
   public ImageDisplay(int width, int height) {
-    this.width = width;
-    this.height = height;
-    image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    this._width = width;
+    this._height = height;
+    _image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
   }
 
   @Override
   public void paintComponent(Graphics gfx) {
     super.paintComponent(gfx);
     Graphics2D g2d = (Graphics2D) gfx;
-    synchronized (image) {
-      g2d.drawImage(image, null, 0, 0);
+    synchronized (_image) {
+      g2d.drawImage(_image, null, 0, 0);
     }
   }
 
   public void updateImageContents(Mat input) {
-    mat = input;
-    min = mat.min();
-    max = mat.max();
+    _mat = input;
+    _min = _mat.min();
+    _max = _mat.max();
 
-    int xPart = width / input.n_cols;
-    int xLeftOver = width % input.n_cols;
-    int yPart = height / input.n_rows;
-    int yLeftOver = height % input.n_rows;
+    int xPart = _width / input.n_cols;
+    int xLeftOver = _width % input.n_cols;
+    int yPart = _height / input.n_rows;
+    int yLeftOver = _height % input.n_rows;
 
-    synchronized (image) {
+    synchronized (_image) {
       int lowerX = 0;
       int lowerY = 0;
       int upperX = 0;
@@ -57,7 +57,7 @@ public class ImageDisplay extends JPanel {
           upperY++;
         }
         for (int x = 0; x < input.n_cols; x++) {
-          double val = mat.at(y, x);
+          double val = _mat.at(y, x);
           upperX = lowerX + xPart;
           if (xLeftOver > 0) {
             xLeftOver--;
@@ -67,7 +67,7 @@ public class ImageDisplay extends JPanel {
           lowerX = upperX;
         }
         lowerX = 0;
-        xLeftOver = width % input.n_cols;
+        xLeftOver = _width % input.n_cols;
         lowerY = upperY;
       }
     }
@@ -97,7 +97,7 @@ public class ImageDisplay extends JPanel {
 
     for (int x = lowerX; x < upperX; x++) {
       for (int y = lowerY; y < upperY; y++) {
-        image.setRGB(x, y, getARGBColor(min, max, val));
+        _image.setRGB(x, y, getARGBColor(_min, _max, val));
       }
     }
   }

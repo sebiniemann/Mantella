@@ -1,25 +1,17 @@
-package visualisation;
+package org.onlineoptimisation.extension.robotvisualisation;
 
 import org.armadillojava.Mat;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.CartoonEdgeFilter;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Cylinder;
-import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import java.awt.Canvas;
@@ -30,25 +22,25 @@ import java.util.logging.Logger;
 
 public class JMonkeyApplication extends SimpleApplication {
 
-  private float armThickness = 0.016f;
-  private float endEffectorRadius = 0.025f;
-  private float zOffset = armThickness * 3;
-  private final Node prismaticJointNode = new Node("prismaticJointNode");
-  private final Node armsNode = new Node("armsNode");
-  private final Node endEffectorNode = new Node("endEffectorNode");
-  private CustomCam camera = null;
-  private ImageDisplay imageDisplay = null;
+  private float _armThickness = 0.016f;
+  private float _endEffectorRadius = 0.025f;
+  private float _zOffset = _armThickness * 3;
+  private final Node _prismaticJointNode = new Node("prismaticJointNode");
+  private final Node _armsNode = new Node("armsNode");
+  private final Node _endEffectorNode = new Node("endEffectorNode");
+  private CustomCam _camera = null;
+  private ImageDisplay _imageDisplay = null;
 
-  private PartFactory partFactory = null;
+  private PartFactory _partFactory = null;
 
-  Mat pjStartPos;
-  Mat pjEndPos;
-  Mat pjLength;
-  Mat arms;
-  Mat activeJoints;
-  Mat linkLength;
-  Mat endEffectorPos;
-  double endEffectorRot;
+  Mat _pjStartPos;
+  Mat _pjEndPos;
+  Mat _pjLength;
+  Mat _arms;
+  Mat _activeJoints;
+  Mat _linkLength;
+  Mat _endEffectorPos;
+  double _endEffectorRot;
 
   public JMonkeyApplication(int width, int height, Mat pjStartPos, Mat pjEndPos, Mat pjLength, Mat arms, Mat activeJoints, Mat linkLength, Mat endEffectorPos, double endEffectorRot) {
 
@@ -65,32 +57,32 @@ public class JMonkeyApplication extends SimpleApplication {
     Dimension dim = new Dimension(width, height);
     ctx.getCanvas().setPreferredSize(dim);
 
-    imageDisplay = new ImageDisplay(width, height);
-    imageDisplay.setPreferredSize(new Dimension(width, height));
+    _imageDisplay = new ImageDisplay(width, height);
+    _imageDisplay.setPreferredSize(new Dimension(width, height));
 
-    this.pjStartPos = pjStartPos;
-    this.pjEndPos = pjEndPos;
-    this.pjLength = pjLength;
-    this.arms = arms;
-    this.activeJoints = activeJoints;
-    this.linkLength = linkLength;
-    this.endEffectorPos = endEffectorPos;
-    this.endEffectorRot = endEffectorRot;
+    this._pjStartPos = pjStartPos;
+    this._pjEndPos = pjEndPos;
+    this._pjLength = pjLength;
+    this._arms = arms;
+    this._activeJoints = activeJoints;
+    this._linkLength = linkLength;
+    this._endEffectorPos = endEffectorPos;
+    this._endEffectorRot = endEffectorRot;
   }
 
   public void updateVisualisation(Mat pjStartPos, Mat pjEndPos, Mat pjLength, Mat arms, Mat activeJoints, Mat linkLength, Mat endEffectorPos, double endEffectorRot) {
-    this.pjStartPos = pjStartPos;
-    this.pjEndPos = pjEndPos;
-    this.pjLength = pjLength;
-    this.arms = arms;
-    this.activeJoints = activeJoints;
-    this.linkLength = linkLength;
-    this.endEffectorPos = endEffectorPos;
-    this.endEffectorRot = endEffectorRot;
+    this._pjStartPos = pjStartPos;
+    this._pjEndPos = pjEndPos;
+    this._pjLength = pjLength;
+    this._arms = arms;
+    this._activeJoints = activeJoints;
+    this._linkLength = linkLength;
+    this._endEffectorPos = endEffectorPos;
+    this._endEffectorRot = endEffectorRot;
 
-    prismaticJointNode.detachAllChildren();
-    armsNode.detachAllChildren();
-    endEffectorNode.detachAllChildren();
+    _prismaticJointNode.detachAllChildren();
+    _armsNode.detachAllChildren();
+    _endEffectorNode.detachAllChildren();
 
     Vector3f VectorEndEffectorPos = new Vector3f((float) endEffectorPos.at(0, 0), (float) endEffectorPos.at(1, 0), (float) endEffectorPos.at(2, 0));
 
@@ -108,16 +100,16 @@ public class JMonkeyApplication extends SimpleApplication {
     //flyCam.setMoveSpeed(5);
     inputManager.setCursorVisible(true);
     //attach subnodes for our components
-    rootNode.attachChild(prismaticJointNode);
-    rootNode.attachChild(armsNode);
-    rootNode.attachChild(endEffectorNode);
+    rootNode.attachChild(_prismaticJointNode);
+    rootNode.attachChild(_armsNode);
+    rootNode.attachChild(_endEffectorNode);
 
     //need lighting so textured parts are visible
     initLighting();
 
     //add robot
-    partFactory = new PartFactory(assetManager);
-    updateVisualisation(pjStartPos, pjEndPos, pjLength, arms, activeJoints, linkLength, endEffectorPos, endEffectorRot);
+    _partFactory = new PartFactory(assetManager);
+    updateVisualisation(_pjStartPos, _pjEndPos, _pjLength, _arms, _activeJoints, _linkLength, _endEffectorPos, _endEffectorRot);
 
         //backgroundcolor
     //viewPort.setBackgroundColor(new ColorRGBA(0.925f, 1.0f, 0.81f, 1.0f));
@@ -157,16 +149,16 @@ public class JMonkeyApplication extends SimpleApplication {
   }
 
   public ImageDisplay getPlotCanvas() {
-    return imageDisplay;
+    return _imageDisplay;
   }
 
   public void setPlotMatrix(Mat input) {
-    imageDisplay.updateImageContents(input);
+    _imageDisplay.updateImageContents(input);
   }
 
   private void initControls() {
     inputManager.clearMappings();
-    camera = new CustomCam(inputManager, cam);
+    _camera = new CustomCam(inputManager, cam);
   }
 
   private void initArmsAndPrismaticJoints(Mat arms, Mat activeJoints, Mat linkLength, Mat pjStartPos, Mat pjEndPos, Mat pjLength) {
@@ -177,13 +169,13 @@ public class JMonkeyApplication extends SimpleApplication {
       //go part by part through the arm
       Vector3f previous = null;
       for (int j = 0; j + 1 < arms.n_cols; j += 2) {
-        Vector3f curr = new Vector3f((float) arms.at(i, j), (float) arms.at(i, j + 1), zOffset);
-        armsNode.attachChild(partFactory.getRotationalJoint(activeJoints.at(i, j / 2) != 0, j == 0, curr));
+        Vector3f curr = new Vector3f((float) arms.at(i, j), (float) arms.at(i, j + 1), _zOffset);
+        _armsNode.attachChild(_partFactory.getRotationalJoint(activeJoints.at(i, j / 2) != 0, j == 0, curr));
         //armsNode.attachChild(partFactory.getRotationalJoint(activeJoints.at(i, j / 2) != 0, false, curr));
 
         if (previous != null) {
           Vector3f line = curr.subtract(previous);
-          armsNode.attachChild(partFactory.getLink((float) linkLength.at(i, (j / 2) - 1), previous.add(line.mult(0.5f)), line));
+          _armsNode.attachChild(_partFactory.getLink((float) linkLength.at(i, (j / 2) - 1), previous.add(line.mult(0.5f)), line));
         }
 
         previous = curr;
@@ -201,12 +193,12 @@ public class JMonkeyApplication extends SimpleApplication {
       //convert to vector3f
       Vector3f start = new Vector3f((float) pjStartPos.at(i, 0), (float) pjStartPos.at(i, 1), 0);
       Vector3f end = new Vector3f((float) pjEndPos.at(i, 0), (float) pjEndPos.at(i, 1), 0);
-      prismaticJointNode.attachChild(partFactory.getPrismaticJoint(true, true, (float) pjLength.at(i, 0), start, end, prismaticJointArmConnectorBlocks.get(i)));
+      _prismaticJointNode.attachChild(_partFactory.getPrismaticJoint(true, true, (float) pjLength.at(i, 0), start, end, prismaticJointArmConnectorBlocks.get(i)));
     }
   }
 
   private void initEndEffector(Vector3f position, float rotation, float distanceArmEndToEndEffector) {
-    endEffectorNode.attachChild(partFactory.getEndEffector(distanceArmEndToEndEffector, position, rotation));
+    _endEffectorNode.attachChild(_partFactory.getEndEffector(distanceArmEndToEndEffector, position, rotation));
   }
 
   private void initLighting() {

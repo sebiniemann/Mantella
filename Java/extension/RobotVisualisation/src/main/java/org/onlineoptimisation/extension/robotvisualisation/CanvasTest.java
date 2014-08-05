@@ -5,10 +5,6 @@
 package visualisation;
 
 import org.armadillojava.Mat;
-import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
