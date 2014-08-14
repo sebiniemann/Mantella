@@ -37,6 +37,7 @@ public class CustomCam implements AnalogListener, ActionListener {
     this._cam = cam;
     _initialUpVector = cam.getUp().clone();
 
+    //this always moves along the axis, no matter camera rotation (see "onAnalog" below)
     inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
     inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
     inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
@@ -129,9 +130,12 @@ public class CustomCam implements AnalogListener, ActionListener {
   }
 
   protected void rotateCamera(float value, Vector3f axis) {
+    //camera shall only rotate when ctrl and the left mouse button is pressed
     if (!_controlPressed || !_canRotate) {
       return;
     }
+    
+    //some math stuff to rotate
     Matrix3f mat = new Matrix3f();
     mat.fromAngleNormalAxis(_rotationSpeed * value, axis);
 
