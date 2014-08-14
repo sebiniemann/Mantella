@@ -1,6 +1,6 @@
 package org.onlineoptimisation.extension.robotvisualisation;
 
-import visualisation.mathconstructs.Circle;
+import org.onlineoptimisation.extension.robotvisualisation.mathconstructs.Circle;
 import org.armadillojava.Mat;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
@@ -11,7 +11,7 @@ import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import visualisation.mathconstructs.Intersect;
+import org.onlineoptimisation.extension.robotvisualisation.mathconstructs.Intersect;
 
 /**
  *
