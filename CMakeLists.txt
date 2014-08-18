@@ -59,6 +59,8 @@ if(BUILD_LIBRARY)
   # All paths must start with "src/"
   add_library(hop SHARED
     src/optimisationProblem/optimisationProblem.cpp
+    src/optimisationProblem/benchmark/benchmarkProblem.cpp
+    src/helper/random.cpp
   )
   target_link_libraries (hop ${ARMADILLO_LIBRARIES})
 endif()
