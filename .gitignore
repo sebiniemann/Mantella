@@ -1,19 +1,7 @@
-# Maven
-target
-hs_err_pid*.log
-
-# Eclipse
-.settings
-.classpath
-.project
-
-# IntelliJ IDEA
-*.iml
-.idea
-
-# Gnuplot
-gnuplot/*.dat
-gnuplot/*.png
-
 # Project specific
-*.dll
+/bin
+/lib
+/build
+
+# Qt Designer
+*.user
