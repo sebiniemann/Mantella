@@ -7,10 +7,6 @@ using std::to_string;
 using std::runtime_error;
 using std::logic_error;
 
-#include <armadillo>
-using arma::zeros;
-using arma::eye;
-
 namespace hop {
   OptimisationProblem::OptimisationProblem(const unsigned int& numberOfDimensions) :
     _numberOfDimensions(numberOfDimensions),
@@ -18,7 +14,9 @@ namespace hop {
     _upperBounds(numberOfDimensions),
     _parameterTranslation(numberOfDimensions),
     _parameterRotation(numberOfDimensions, numberOfDimensions),
-    _objectiveValueTranslation(0),
+    _parameterScale(numberOfDimensions, numberOfDimensions),
+    _objectiveValueTranslation(0.0),
+    _objectiveValueScale(1.0),
     _maximalNumberOfEvaluations(1000),
     _acceptableObjectiveValue(numeric_limits<double>::lowest()),
     _numberOfEvaluations(0)
@@ -28,6 +26,7 @@ namespace hop {
 
     _parameterTranslation.zeros();
     _parameterRotation.eye();
+    _parameterScale.eye();
   }
 
   Col<uword> OptimisationProblem::isSatisfyingLowerBounds(const Col<double>& parameter) {
