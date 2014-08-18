@@ -66,7 +66,6 @@ namespace hop {
       virtual double getObjectiveValueImplementation(const Col<double>& parameter) = 0;
       virtual double getSoftConstraintsValueImplementation(const Col<double>& parameter);
 
-    private:
       unsigned int _numberOfDimensions;
 
       Col<double> _lowerBounds;
