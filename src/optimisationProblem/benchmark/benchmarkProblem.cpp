@@ -62,6 +62,16 @@ namespace hop {
     return scaling;
   }
 
+  Col<double> BenchmarkProblem::getScaling(const Col<double>& condition) const {
+    Col<double> scaling = linspace(0, 1, _numberOfDimensions);
+
+    for (size_t n = 0; n < scaling.n_elem; n++) {
+      scaling.at(n) = pow(condition.at(n), scaling.at(n));
+    }
+
+    return scaling;
+  }
+
   Col<double> BenchmarkProblem::getAsymmetricTransformation(const double& beta, const Col<double>& parameter) const {
     Col<double> asymmetricTransformation(parameter.n_elem);
     Col<double> spacing = linspace(0, 1, _numberOfDimensions);
