@@ -20,13 +20,13 @@ namespace hop {
   LinearSlope::LinearSlope(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _scaling(getScaling(10)), _direction(numberOfDimensions) {
     _direction.fill(bernoulli_distribution(0.5)(Random::RNG) ? 5.0 : -5.0);
     _scaling %= sign(_direction);
-    _partiallyObjectiveValue = 5 * accu(abs(_scaling));
+    _partiallyObjectiveValue = 5.0 * accu(abs(_scaling));
   }
 
-  double LinearSlope::getObjectiveValueImplementation(const Col<double> &parameter) {
+  double LinearSlope::getObjectiveValueImplementation(const Col<double> &parameter) const {
     Col<double> z(parameter);
 
-    Col<uword> outOfBound = find(_direction % z < 25);
+    Col<uword> outOfBound = find(_direction % z < 25.0);
     z.elem(outOfBound) = _direction.elem(outOfBound);
 
     return _partiallyObjectiveValue - dot(_scaling, z);

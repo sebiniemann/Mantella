@@ -8,8 +8,8 @@ namespace hop {
       RastriginFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      const Col<double> _delta;
+      const Col<double> _scaling;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter);
+      double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };
 }

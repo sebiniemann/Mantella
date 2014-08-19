@@ -12,6 +12,6 @@ namespace hop {
       Col<double> _scaling;
       Col<double> _direction;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter);
+      double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };
 }

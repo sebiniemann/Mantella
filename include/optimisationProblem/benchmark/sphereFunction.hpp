@@ -8,6 +8,6 @@ namespace hop {
       SphereFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      double getObjectiveValueImplementation(const Col<double>& parameter);
+      double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };
 }

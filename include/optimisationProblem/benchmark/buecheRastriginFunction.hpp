@@ -10,6 +10,6 @@ namespace hop {
     protected:
       const Col<double> _scaling;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter);
+      double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };
 }
