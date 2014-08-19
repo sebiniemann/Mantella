@@ -19,6 +19,8 @@ using std::cauchy_distribution;
 #include <armadillo>
 using arma::zeros;
 using arma::randu;
+using arma::randn;
+using arma::norm;
 using arma::linspace;
 
 #include <helper/random.hpp>
@@ -33,6 +35,21 @@ namespace hop {
 
   Col<double> BenchmarkProblem::getRandomParameterTranslation(const Col<double>& parameter) const {
     return parameter - _randomTranslation;
+  }
+
+  Mat<double> BenchmarkProblem::getRandomRotation() const {
+    Mat<double> rotationMatrix = randn(_numberOfDimensions, _numberOfDimensions);
+    for (int j = 0; j < rotationMatrix.n_cols; j++) {
+      Col<double> colJ = rotationMatrix.col(j);
+      for (int jj = 0; jj < j-1; jj++) {
+        Col<double> colJJ = rotationMatrix.col(jj);
+
+        rotationMatrix.col(j) = colJ - colJ.t() * colJJ * colJJ;
+      }
+      rotationMatrix.col(j) = colJ / norm(colJ);
+    }
+
+    return rotationMatrix;
   }
 
   Col<double> BenchmarkProblem::getScaling(const double& condition) const {

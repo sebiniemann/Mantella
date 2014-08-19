@@ -11,6 +11,7 @@ namespace hop {
       const Col<double> _randomTranslation;
 
       Col<double> getRandomParameterTranslation(const Col<double>& parameter) const;
+      Mat<double> getRandomRotation() const;
       Col<double> getScaling(const double& condition) const;
       Col<double> getAsymmetricTransformation(const double& beta, const Col<double>& parameter) const;
       double getOscillationTransformation(const double& value) const;
