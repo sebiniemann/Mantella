@@ -22,6 +22,6 @@ namespace hop {
       }
     }
 
-    return 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + pow(norm(z), 2);
+    return 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + pow(norm(z), 2) + 100 * getPenality(parameter);
   }
 }
