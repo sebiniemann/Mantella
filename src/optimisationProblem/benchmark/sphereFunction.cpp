@@ -12,7 +12,7 @@ namespace hop {
 
   }
 
-  double SphereFunction::getObjectiveValueImplementation(const Col<double> &parameter) {
+  double SphereFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
     return pow(norm(getRandomParameterTranslation(parameter)), 2);
   }
 }
