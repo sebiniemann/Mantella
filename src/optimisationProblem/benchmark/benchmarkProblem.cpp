@@ -26,7 +26,7 @@ using arma::linspace;
 #include <helper/random.hpp>
 
 namespace hop {
-  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions) : OptimisationProblem(numberOfDimensions), _randomTranslation(randu(_numberOfDimensions) * 8 - 4) {
+  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions) : OptimisationProblem(numberOfDimensions), _randomTranslation(randu(_numberOfDimensions) * 8.0 - 4.0) {
     _lowerBounds.fill(-5.0);
     _upperBounds.fill(5.0);
 
@@ -39,9 +39,9 @@ namespace hop {
 
   Mat<double> BenchmarkProblem::getRandomRotation() const {
     Mat<double> rotationMatrix = randn(_numberOfDimensions, _numberOfDimensions);
-    for (int j = 0; j < rotationMatrix.n_cols; j++) {
+    for (unsigned int j = 0; j < rotationMatrix.n_cols; j++) {
       Col<double> colJ = rotationMatrix.col(j);
-      for (int jj = 0; jj < j-1; jj++) {
+      for (unsigned int jj = 0; jj < j-1; jj++) {
         Col<double> colJJ = rotationMatrix.col(jj);
 
         rotationMatrix.col(j) = colJ - colJ.t() * colJJ * colJJ;
