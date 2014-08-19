@@ -53,7 +53,7 @@ namespace hop {
   }
 
   Col<double> BenchmarkProblem::getScaling(const double& condition) const {
-    Col<double> scaling = linspace(0, 1, _numberOfDimensions);
+    Col<double> scaling = linspace<Col<double>>(0, 1, _numberOfDimensions);
 
     for (auto& scale : scaling) {
       scale = pow(condition, scale);
@@ -63,7 +63,7 @@ namespace hop {
   }
 
   Col<double> BenchmarkProblem::getScaling(const Col<double>& condition) const {
-    Col<double> scaling = linspace(0, 1, _numberOfDimensions);
+    Col<double> scaling = linspace<Col<double>>(0, 1, _numberOfDimensions);
 
     for (size_t n = 0; n < scaling.n_elem; n++) {
       scaling.at(n) = pow(condition.at(n), scaling.at(n));
@@ -74,7 +74,7 @@ namespace hop {
 
   Col<double> BenchmarkProblem::getAsymmetricTransformation(const double& beta, const Col<double>& parameter) const {
     Col<double> asymmetricTransformation(parameter.n_elem);
-    Col<double> spacing = linspace(0, 1, _numberOfDimensions);
+    Col<double> spacing = linspace<Col<double>>(0, 1, _numberOfDimensions);
 
     for (size_t n = 0; n < parameter.n_elem; n++) {
       double value = parameter.at(n);
