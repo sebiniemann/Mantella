@@ -60,6 +60,30 @@ if(BUILD_LIBRARY)
   add_library(hop SHARED
     src/optimisationProblem/optimisationProblem.cpp
     src/optimisationProblem/benchmark/benchmarkProblem.cpp
+    src/optimisationProblem/benchmark/attractiveSectorFunction.cpp
+    src/optimisationProblem/benchmark/bentCigarFunction.cpp
+    src/optimisationProblem/benchmark/buecheRastriginFunction.cpp
+    src/optimisationProblem/benchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
+    src/optimisationProblem/benchmark/differentPowersFunction.cpp
+    src/optimisationProblem/benchmark/discusFunction.cpp
+    src/optimisationProblem/benchmark/ellipsoidalFunction.cpp
+    src/optimisationProblem/benchmark/ellipsoidalFunctionRotated.cpp
+    src/optimisationProblem/benchmark/gallaghersGaussian101mePeaksFunction.cpp
+    src/optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.cpp
+    src/optimisationProblem/benchmark/katsuuraFunction.cpp
+    src/optimisationProblem/benchmark/linearSlope.cpp
+    src/optimisationProblem/benchmark/lunacekBiRastriginFunction.cpp
+    src/optimisationProblem/benchmark/rastriginFunction.cpp
+    src/optimisationProblem/benchmark/rastriginFunctionRotated.cpp
+    src/optimisationProblem/benchmark/rosenbrockFunction.cpp
+    src/optimisationProblem/benchmark/rosenbrockFunctionRotated.cpp
+    src/optimisationProblem/benchmark/schaffersF7Function.cpp
+    src/optimisationProblem/benchmark/schaffersF7FunctionIllConditioned.cpp
+    src/optimisationProblem/benchmark/schwefelFunction.cpp
+    src/optimisationProblem/benchmark/sharpRidgeFunction.cpp
+    src/optimisationProblem/benchmark/sphereFunction.cpp
+    src/optimisationProblem/benchmark/stepEllipsoidalFunction.cpp
+    src/optimisationProblem/benchmark/weierstrassFunction.cpp
     src/helper/random.cpp
   )
   target_link_libraries (hop ${ARMADILLO_LIBRARIES})
