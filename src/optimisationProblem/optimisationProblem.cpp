@@ -7,14 +7,19 @@ using std::to_string;
 using std::runtime_error;
 using std::logic_error;
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 namespace hop {
   OptimisationProblem::OptimisationProblem(const unsigned int& numberOfDimensions) :
     _numberOfDimensions(numberOfDimensions),
-    _lowerBounds(numberOfDimensions),
-    _upperBounds(numberOfDimensions),
-    _parameterTranslation(numberOfDimensions),
-    _parameterRotation(numberOfDimensions, numberOfDimensions),
-    _parameterScale(numberOfDimensions, numberOfDimensions),
+    _lowerBounds(Col<double>(numberOfDimensions)),
+    _upperBounds(Col<double>(numberOfDimensions)),
+    _parameterTranslation(Col<double>(numberOfDimensions)),
+    _parameterRotation(Mat<double>(numberOfDimensions, numberOfDimensions)),
+    _parameterReflection(Col<double>(numberOfDimensions)),
+    _parameterScale(Mat<double>(numberOfDimensions, numberOfDimensions)),
     _objectiveValueTranslation(0.0),
     _objectiveValueScale(1.0),
     _maximalNumberOfEvaluations(1000),
@@ -26,6 +31,7 @@ namespace hop {
 
     _parameterTranslation.zeros();
     _parameterRotation.eye();
+    _parameterReflection.ones();
     _parameterScale.eye();
   }
 
@@ -137,14 +143,6 @@ namespace hop {
     }
   }
 
-  double OptimisationProblem::getSoftConstraintsValueImplementation(const Col<double>& parameter) {
-    if(parameter.n_elem != _numberOfDimensions) {
-      throw logic_error("The dimension of the parameter (" + to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + to_string(_numberOfDimensions) + ").");
-    }
-
-    return 0;
-  }
-
   unsigned int OptimisationProblem::getNumberOfDimensions() const {
     return _numberOfDimensions;
   }
@@ -173,6 +171,34 @@ namespace hop {
     _upperBounds = upperBounds;
   }
 
+  void OptimisationProblem::setParameterTranslation(const Col<double>& parameterTranslation) {
+    if (parameterTranslation.n_elem != _numberOfDimensions) {
+      throw logic_error("The dimension of the parameter translation (" + to_string(parameterTranslation.n_elem) + ") must match the dimension of the optimisation problem (" + to_string(_numberOfDimensions) + ").");
+    }
+
+    _parameterTranslation = parameterTranslation;
+  }
+
+  void OptimisationProblem::setParameterRotation(const Mat<double>& parameterRotation) {
+    _parameterRotation = parameterRotation;
+  }
+
+  void OptimisationProblem::setParameterReflection(const Col<double>& parameterReflection) {
+    _parameterReflection = parameterReflection;
+  }
+
+  void OptimisationProblem::setParameterScale(const Mat<double>& parameterScale) {
+    _parameterScale = parameterScale;
+  }
+
+  void OptimisationProblem::setObjectiveValueTranslation(const double& objectiveValueTranslation) {
+    _objectiveValueTranslation = objectiveValueTranslation;
+  }
+
+  void OptimisationProblem::OptimisationProblem::setObjectiveValueScale(const double& objectiveValueScale) {
+    _objectiveValueScale = objectiveValueScale;
+  }
+
   unsigned int OptimisationProblem::getMaximalNumberOfEvaluations() const {
     return _maximalNumberOfEvaluations;
   }
@@ -194,6 +220,14 @@ namespace hop {
   }
 
   Col<double> OptimisationProblem::getScaledCongruentParameter(const Col<double>& parameter) const {
-    return _parameterScale * _parameterRotation * (parameter * (_parameterRelection * -1) + _parameterTranslation);
+    return _parameterScale * _parameterRotation * (parameter % _parameterReflection + _parameterTranslation);
+  }
+
+  double OptimisationProblem::getSoftConstraintsValueImplementation(const Col<double>& parameter) {
+    if(parameter.n_elem != _numberOfDimensions) {
+      throw logic_error("The dimension of the parameter (" + to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + to_string(_numberOfDimensions) + ").");
+    }
+
+    return 0;
   }
 }

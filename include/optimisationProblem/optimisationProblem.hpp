@@ -47,7 +47,7 @@ namespace hop {
 
       virtual void setParameterTranslation(const Col<double>& parameterTranslation) final;
       virtual void setParameterRotation(const Mat<double>& parameterRotation) final;
-      virtual void setParameterReflection(const Mat<double>& parameterReflection) final;
+      virtual void setParameterReflection(const Col<double>& parameterReflection) final;
       virtual void setParameterScale(const Mat<double>& parameterScale) final;
       virtual void setObjectiveValueTranslation(const double& objectiveValueTranslation) final;
       virtual void setObjectiveValueScale(const double& objectiveValueScale) final;
@@ -63,8 +63,8 @@ namespace hop {
       virtual ~OptimisationProblem() = default;
 
     protected:
-      virtual double getObjectiveValueImplementation(const Col<double>& parameter) = 0;
-      virtual double getSoftConstraintsValueImplementation(const Col<double>& parameter);
+      virtual double getObjectiveValueImplementation(const Col<double>& parameter) const = 0;
+      virtual double getSoftConstraintsValueImplementation(const Col<double>& parameter) const;
 
       unsigned int _numberOfDimensions;
 
@@ -73,7 +73,7 @@ namespace hop {
 
       Col<double> _parameterTranslation;
       Mat<double> _parameterRotation;
-      Col<uword> _parameterRelection;
+      Col<double> _parameterReflection;
       Mat<double> _parameterScale;
 
       double _objectiveValueTranslation;
