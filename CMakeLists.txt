@@ -48,7 +48,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # -------------
 if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library build.")
-  
+
   # Locate libraries
   find_package(Armadillo REQUIRED)
   
@@ -112,6 +112,9 @@ if(BUILD_CLI)
     message(STATUS "")
   endif()
   
+  # Include HOP library headers
+  include_directories(${PROJECT_SOURCE_DIR}/cli)
+
   # Locate libraries
   find_package(Readline REQUIRED)
   
@@ -122,6 +125,11 @@ if(BUILD_CLI)
   # All paths must start with "cli/"
   add_executable(cli
     cli/main.cpp
+    cli/console.cpp
   )
   target_link_libraries(cli ${READLINE_LIBRARIES})
+
+  # Add HOP library
+  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+  target_link_libraries(cli hop)
 endif()
