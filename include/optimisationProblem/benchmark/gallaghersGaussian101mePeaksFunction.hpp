@@ -11,9 +11,9 @@ namespace hop {
       GallaghersGaussian101mePeaksFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      Mat<double> _delta;
+      Mat<double> _delta101;
       const Mat<double> _rotationR;
-      Mat<double> _localOptima;
+      Mat<double> _localOptima101;
       Col<double> _weight;
 
       double getObjectiveValueImplementation(const Col<double>& parameter) const;
