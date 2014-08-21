@@ -11,9 +11,6 @@ namespace hop {
       KatsuuraFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      Col<double> _xOpt;
-      double _mu1;
-      double _s;
       const Col<double> _delta;
       const Mat<double> _rotationR;
       const Mat<double> _rotationQ;

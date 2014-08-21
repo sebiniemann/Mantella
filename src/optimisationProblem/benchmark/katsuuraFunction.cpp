@@ -1,36 +1,37 @@
 #include <optimisationProblem/benchmark/katsuuraFunction.hpp>
 
-#include <algorithm>
-using std::min;
-
 #include <cmath>
 using std::sqrt;
+using std::pow;
+using std::round;
 
-#include <random>
-using std::bernoulli_distribution;
+#include <cstdlib>
+using std::abs;
 
 #include <armadillo>
 using arma::diagmat;
-using arma::sign;
-using arma::square;
-using arma::accu;
-using arma::cos;
-using arma::datum;
-
-#include <helper/random.hpp>
 
 namespace hop {
-  KatsuuraFunction::KatsuuraFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(100.0))), _rotationR(getRandomRotation()), _rotationQ(getRandomRotation()), _xOpt(numberOfDimensions) {
-    _xOpt.fill(bernoulli_distribution(0.5)(Random::RNG) ? 2.5 : -2.5);
+  KatsuuraFunction::KatsuuraFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(100.0))), _rotationR(getRandomRotation()), _rotationQ(getRandomRotation()) {
 
-    _s = 1.0 - 1.0 / (2.0 * sqrt(static_cast<double>(_numberOfDimensions) + 20.0) - 8.2);
-    _mu1 = sqrt((6.25 - 1) / _s);
   }
 
   double KatsuuraFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> xHat = 2 * sign(_xOpt) % parameter;
-    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * (xHat - 2.5);
+    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * getRandomParameterTranslation(parameter);
 
-    return min(accu(square(xHat - 2.5)), static_cast<double>(_numberOfDimensions) + _s * accu(square(xHat - _mu1))) + 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + 10000 * getPenality(parameter);
+    double product = 1.0;
+    for (size_t n = 0; n < z.n_elem; n++) {
+        double value = z.at(n);
+
+        double sum = 0.0;
+        for (unsigned int k = 1; k < 33; k++) {
+            double power = pow(2.0, k);
+            sum += abs(power * value - round(power * value)) / power;
+        }
+
+        product *= pow(1.0 + static_cast<double>(n + 1) * sum, (10.0 / pow(_numberOfDimensions, 1.2)));
+    }
+
+    return 10.0 / pow(_numberOfDimensions, 2) * (product - 1.0) + getPenality(parameter);
   }
 }
