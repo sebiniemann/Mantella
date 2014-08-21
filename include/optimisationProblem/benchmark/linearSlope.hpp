@@ -10,7 +10,7 @@ namespace hop {
     protected:
       double _partiallyObjectiveValue;
       Col<double> _scaling;
-      Col<double> _direction;
+      Col<double> _one;
 
       double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };
