@@ -22,7 +22,7 @@ project(HOP CXX)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
-option(BUILD_LIBRARY "Build library" ON)
+option(BUILD_LIBRARY "Build library (includes tests)" ON)
 option(BUILD_GUI "Build GUI" OFF)
 option(BUILD_CLI "Build CLI" OFF)
 option(BUILD_ALL "Build all" OFF)
@@ -87,6 +87,17 @@ if(BUILD_LIBRARY)
     src/helper/random.cpp
   )
   target_link_libraries (hop ${ARMADILLO_LIBRARIES})
+
+  # Include test programm headers
+  include_directories(${PROJECT_SOURCE_DIR}/cli)
+
+  add_executable(test
+    test/main.cpp
+  )
+
+  # Add HOP library
+  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+  target_link_libraries(test hop)
 endif()
 
 # ---------
@@ -112,7 +123,7 @@ if(BUILD_CLI)
     message(STATUS "")
   endif()
   
-  # Include HOP library headers
+  # Include CLI headers
   include_directories(${PROJECT_SOURCE_DIR}/cli)
 
   # Locate libraries
