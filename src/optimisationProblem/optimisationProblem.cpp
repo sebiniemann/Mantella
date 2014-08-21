@@ -223,7 +223,7 @@ namespace hop {
     return _parameterScale * _parameterRotation * (parameter % _parameterReflection + _parameterTranslation);
   }
 
-  double OptimisationProblem::getSoftConstraintsValueImplementation(const Col<double>& parameter) {
+  double OptimisationProblem::getSoftConstraintsValueImplementation(const Col<double>& parameter) const {
     if(parameter.n_elem != _numberOfDimensions) {
       throw logic_error("The dimension of the parameter (" + to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + to_string(_numberOfDimensions) + ").");
     }

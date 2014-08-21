@@ -9,7 +9,7 @@ using arma::square;
 
 namespace hop {
   RosenbrockFunction::RosenbrockFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _max(max(1.0, sqrt(static_cast<double>(numberOfDimensions) / 8.0))) {
-
+    _randomTranslation *= 0.75;
   }
 
   double RosenbrockFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {

@@ -8,7 +8,7 @@ namespace hop {
       BenchmarkProblem(const unsigned int& numberOfDimensions);
       
     protected:
-      const Col<double> _randomTranslation;
+      Col<double> _randomTranslation;
 
       Col<double> getRandomParameterTranslation(const Col<double>& parameter) const;
       Mat<double> getRandomRotation() const;
