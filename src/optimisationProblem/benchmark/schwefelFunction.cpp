@@ -3,9 +3,6 @@
 #include <cmath>
 using std::sqrt;
 
-#include <random>
-using std::bernoulli_distribution;
-
 #include <armadillo>
 using arma::sign;
 using arma::sqrt;
@@ -13,11 +10,9 @@ using arma::abs;
 using arma::mean;
 using arma::diagmat;
 
-#include <helper/random.hpp>
-
 namespace hop {
-  SchwefelFunction::SchwefelFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(10))), _one(numberOfDimensions) {
-    _one.fill(bernoulli_distribution(0.5)(Random::RNG) ? 1.0 : -1.0);
+  SchwefelFunction::SchwefelFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(10))) {
+
   }
 
   double SchwefelFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {

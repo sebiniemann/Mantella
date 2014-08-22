@@ -14,13 +14,13 @@ using arma::cos;
 
 namespace hop {
   BuecheRastriginFunction::BuecheRastriginFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _scaling(getScaling(sqrt(10.0))) {
-    for (size_t n = 0; n < _randomTranslation.n_elem; n += 2) {
-      _randomTranslation.at(n) = abs(_randomTranslation.at(n));
+    for (size_t n = 0; n < _translation.n_elem; n += 2) {
+      _translation.at(n) = abs(_translation.at(n));
     }
   }
 
   double BuecheRastriginFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _scaling % getOscillationTransformation(getRandomParameterTranslation(parameter));
+    Col<double> z = _scaling % getOscillationTransformation(parameter - _translation);
     for (size_t n = 0; n < z.n_elem; n += 2) {
       if (z.at(n) > 0.0) {
         z.at(n) *= 10.0;

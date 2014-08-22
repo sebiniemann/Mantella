@@ -12,12 +12,12 @@ using arma::cos;
 using arma::diagmat;
 
 namespace hop {
-  RastriginFunctionRotated::RastriginFunctionRotated(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(10.0))), _rotationR(getRandomRotation()), _rotationQ(getRandomRotation()) {
+  RastriginFunctionRotated::RastriginFunctionRotated(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(10.0))) {
 
   }
 
   double RastriginFunctionRotated::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationR * diagmat(_delta) * _rotationQ * getAsymmetricTransformation(0.2, getOscillationTransformation(_rotationR * getRandomParameterTranslation(parameter)));
+    Col<double> z = _rotationR * diagmat(_delta) * _rotationQ * getAsymmetricTransformation(0.2, getOscillationTransformation(_rotationR * (parameter - _translation)));
 
     return 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + pow(norm(z), 2);
   }

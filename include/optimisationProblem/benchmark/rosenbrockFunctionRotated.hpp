@@ -9,7 +9,6 @@ namespace hop {
 
     protected:
       const double _max;
-      const Mat<double> _rotationR;
 
       double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };

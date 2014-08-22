@@ -10,12 +10,12 @@ using arma::norm;
 using arma::square;
 
 namespace hop {
-  DifferentPowersFunction::DifferentPowersFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _rotationR(getRandomRotation()) {
+  DifferentPowersFunction::DifferentPowersFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {
 
   }
 
   double DifferentPowersFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = abs(_rotationR * getRandomParameterTranslation(parameter));
+    Col<double> z = abs(_rotationR * (parameter - _translation));
     return norm(z % getScaling(square(z)));
   }
 }

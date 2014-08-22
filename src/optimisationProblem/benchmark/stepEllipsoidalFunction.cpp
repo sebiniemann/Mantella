@@ -14,12 +14,12 @@ using arma::dot;
 using arma::square;
 
 namespace hop {
-  StepEllipsoidalFunction::StepEllipsoidalFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _scaling(getScaling(100.0)), _delta(getScaling(sqrt(10.0))), _rotationQ(getRandomRotation()), _rotationR(getRandomRotation()) {
+  StepEllipsoidalFunction::StepEllipsoidalFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _scaling(getScaling(100.0)), _delta(getScaling(sqrt(10.0))) {
 
   }
 
   double StepEllipsoidalFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> zHat = diagmat(_delta) * _rotationR * getRandomParameterTranslation(parameter);
+    Col<double> zHat = diagmat(_delta) * _rotationR * (parameter - _translation);
 
     Col<double> zTilde(zHat.n_elem);
     for(size_t n = 0; n < zTilde.n_elem; n++) {

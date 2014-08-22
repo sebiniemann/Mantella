@@ -10,6 +10,6 @@ namespace hop {
   }
 
   double EllipsoidalFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    return dot(_scaling, square(getOscillationTransformation(getRandomParameterTranslation(parameter))));
+    return dot(_scaling, square(getOscillationTransformation(parameter - _translation)));
   }
 }

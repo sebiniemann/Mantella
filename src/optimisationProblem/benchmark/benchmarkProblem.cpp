@@ -15,6 +15,8 @@ using std::copysign;
 
 #include <random>
 using std::cauchy_distribution;
+using std::bernoulli_distribution;
+using std::uniform_int_distribution;
 
 #include <armadillo>
 using arma::zeros;
@@ -26,15 +28,55 @@ using arma::linspace;
 #include <helper/random.hpp>
 
 namespace hop {
-  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions) : OptimisationProblem(numberOfDimensions), _randomTranslation(randu(_numberOfDimensions) * 8.0 - 4.0) {
+  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions)
+    :
+      OptimisationProblem(numberOfDimensions),
+      _translation(randu(numberOfDimensions) * 8.0 - 4.0),
+      _one(numberOfDimensions),
+      _rotationR(getRandomRotation()),
+      _rotationQ(getRandomRotation()),
+      _deltaC101(getRandomDeltaC101()),
+      _localOptimaY101(getRandomLocalOptimaY101()),
+      _deltaC21(getRandomDeltaC21()),
+      _localOptimaY21(getRandomLocalOptimaY21()) {
     _lowerBounds.fill(-5.0);
     _upperBounds.fill(5.0);
 
     _objectiveValueTranslation = min(1000.0, max(-1000.0, cauchy_distribution<double>(0.0, 100.0)(Random::RNG)));
+
+    _one.fill(bernoulli_distribution(0.5)(Random::RNG) ? 5.0 : -5.0);
   }
 
-  Col<double> BenchmarkProblem::getRandomParameterTranslation(const Col<double>& parameter) const {
-    return parameter - _randomTranslation;
+  void BenchmarkProblem::setTranslation(const Col<double>& translation) {
+    _translation = translation;
+  }
+
+  void BenchmarkProblem::setOne(const Col<double>& one) {
+    _one = one;
+  }
+
+  void BenchmarkProblem::setRotationR(const Mat<double>& rotationR) {
+    _rotationR = rotationR;
+  }
+
+  void BenchmarkProblem::setRotationQ(const Mat<double>& rotationQ) {
+    _rotationQ = rotationQ;
+  }
+
+  void BenchmarkProblem::setDeltaC101(const Mat<double>& deltaC101) {
+    _deltaC101 = deltaC101;
+  }
+
+  void BenchmarkProblem::setLocalOptimaY101(const Mat<double>& localOptimaY101) {
+    _localOptimaY101 = localOptimaY101;
+  }
+
+  void BenchmarkProblem::setDeltaC21(const Mat<double>& deltaC21) {
+    _deltaC21 = deltaC21;
+  }
+
+  void BenchmarkProblem::setLocalOptimaY21(const Mat<double>& localOptimaY21) {
+    _localOptimaY21 = localOptimaY21;
   }
 
   Mat<double> BenchmarkProblem::getRandomRotation() const {
@@ -50,6 +92,44 @@ namespace hop {
     }
 
     return rotationMatrix;
+  }
+
+  Mat<double> BenchmarkProblem::getRandomDeltaC101() const {
+    Mat<double> deltaC101(_numberOfDimensions, 101);
+    deltaC101.col(0) = getScaling(sqrt(1000.0)) / pow(1000.0, 0.25);
+
+    uniform_int_distribution<int> uniformIntDistribution(0, 99);
+    for(size_t j = 1; j < deltaC101.n_cols; j++) {
+      deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::RNG)) / 99.0), 0.25);
+    }
+
+    return deltaC101;
+  }
+
+  Mat<double> BenchmarkProblem::getRandomDeltaC21() const {
+    Mat<double> deltaC21(_numberOfDimensions, 21);
+    deltaC21.col(0) = getScaling(1000.0) / pow(1000.0, 0.25);
+
+    uniform_int_distribution<int> uniformIntDistribution(0, 19);
+    for(size_t j = 1; j < deltaC21.n_cols; j++) {
+      deltaC21.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::RNG)) / 19.0), 0.25);
+    }
+
+    return deltaC21;
+  }
+
+  Mat<double> BenchmarkProblem::getRandomLocalOptimaY101() const {
+    Mat<double> localOptimaY101 = randu(_numberOfDimensions, 101) * 8.0 - 4.0;
+    localOptimaY101.col(0) = 0.8 * localOptimaY101.col(0);
+
+    return localOptimaY101;
+  }
+
+  Mat<double> BenchmarkProblem::getRandomLocalOptimaY21() const {
+    Mat<double> localOptimaY21 = randu(_numberOfDimensions, 21) * 9.8 - 4.9;
+    localOptimaY21.col(0) = 0.8 * localOptimaY21.col(0);
+
+    return localOptimaY21;
   }
 
   Col<double> BenchmarkProblem::getScaling(const double& condition) const {

@@ -12,8 +12,6 @@ namespace hop {
 
     protected:
       const Col<double> _delta;
-      const Mat<double> _rotationR;
-      const Mat<double> _rotationQ;
 
       double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };

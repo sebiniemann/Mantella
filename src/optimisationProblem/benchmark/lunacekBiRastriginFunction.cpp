@@ -6,9 +6,6 @@ using std::min;
 #include <cmath>
 using std::sqrt;
 
-#include <random>
-using std::bernoulli_distribution;
-
 #include <armadillo>
 using arma::diagmat;
 using arma::sign;
@@ -17,11 +14,9 @@ using arma::accu;
 using arma::cos;
 using arma::datum;
 
-#include <helper/random.hpp>
-
 namespace hop {
-  LunacekBiRastriginFunction::LunacekBiRastriginFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(100.0))), _rotationR(getRandomRotation()), _rotationQ(getRandomRotation()), _xOpt(numberOfDimensions) {
-    _xOpt.fill(bernoulli_distribution(0.5)(Random::RNG) ? 2.5 : -2.5);
+  LunacekBiRastriginFunction::LunacekBiRastriginFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(100.0))), _xOpt(numberOfDimensions) {
+    _xOpt = 2.5 * _one;
 
     _s = 1.0 - 1.0 / (2.0 * sqrt(static_cast<double>(_numberOfDimensions) + 20.0) - 8.2);
     _mu1 = sqrt((6.25 - 1) / _s);

@@ -12,12 +12,12 @@ using std::abs;
 using arma::diagmat;
 
 namespace hop {
-  KatsuuraFunction::KatsuuraFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(100.0))), _rotationR(getRandomRotation()), _rotationQ(getRandomRotation()) {
+  KatsuuraFunction::KatsuuraFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(100.0))) {
 
   }
 
   double KatsuuraFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * getRandomParameterTranslation(parameter);
+    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * (parameter - _translation);
 
     double product = 1.0;
     for (size_t n = 0; n < z.n_elem; n++) {

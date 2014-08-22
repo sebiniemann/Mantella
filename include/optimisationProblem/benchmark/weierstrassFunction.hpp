@@ -10,8 +10,6 @@ namespace hop {
     protected:
       double _f0;
       const Col<double> _delta;
-      const Mat<double> _rotationR;
-      const Mat<double> _rotationQ;
 
       double getObjectiveValueImplementation(const Col<double>& parameter) const;
   };

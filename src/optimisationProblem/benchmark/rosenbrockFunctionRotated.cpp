@@ -8,7 +8,7 @@ using arma::accu;
 using arma::square;
 
 namespace hop {
-  RosenbrockFunctionRotated::RosenbrockFunctionRotated(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _max(max(1.0, sqrt(static_cast<double>(numberOfDimensions) / 8.0))), _rotationR(getRandomRotation()) {
+  RosenbrockFunctionRotated::RosenbrockFunctionRotated(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _max(max(1.0, sqrt(static_cast<double>(numberOfDimensions) / 8.0))) {
 
   }
 
