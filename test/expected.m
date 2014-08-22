@@ -60,7 +60,7 @@ function f = f(func, x, xOpt, one, R, Q, C101, y101, C21, y21)
     case 8
       f = f8(x, xOpt);
     case 9
-      f = f9(x, xOpt, R);
+      f = f9(x, R);
     case 10
       f = f10(x, xOpt, R);
     case 11
@@ -253,7 +253,7 @@ end
 % -----------------------------
 % Rosenbrock function, rotated
 % -----------------------------
-function f = f9(x, xOpt, R)
+function f = f9(x, R)
   %----- Initialisation -----
   dim = size(x, 1);
   scale = max(1, sqrt(dim) / 8.); 
