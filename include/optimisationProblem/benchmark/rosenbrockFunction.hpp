@@ -7,9 +7,11 @@ namespace hop {
     public:
       RosenbrockFunction(const unsigned int& numberOfDimensions);
 
+      void setTranslation(const Col<double>& translation) override;
+
     protected:
       const double _max;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }

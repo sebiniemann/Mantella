@@ -10,6 +10,6 @@ namespace hop {
     protected:
       const double _max;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }

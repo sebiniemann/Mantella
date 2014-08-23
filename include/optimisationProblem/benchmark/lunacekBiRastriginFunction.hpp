@@ -11,11 +11,10 @@ namespace hop {
       LunacekBiRastriginFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      Col<double> _xOpt;
       double _mu1;
-      double _s;
+      const double _s;
       const Col<double> _delta;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }

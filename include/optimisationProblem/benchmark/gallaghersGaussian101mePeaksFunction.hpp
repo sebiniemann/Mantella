@@ -13,6 +13,6 @@ namespace hop {
     protected:
       Col<double> _weight;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }

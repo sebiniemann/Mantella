@@ -10,7 +10,7 @@ namespace hop {
     protected:
       const Col<double> _delta;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }
 

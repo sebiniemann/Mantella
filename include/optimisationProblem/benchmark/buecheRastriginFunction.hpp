@@ -7,9 +7,11 @@ namespace hop {
     public:
       BuecheRastriginFunction(const unsigned int& numberOfDimensions);
 
+      void setTranslation(const Col<double> &translation) override;
+
     protected:
       const Col<double> _scaling;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }

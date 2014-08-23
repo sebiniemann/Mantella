@@ -8,7 +8,7 @@ namespace hop {
       DifferentPowersFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }
 

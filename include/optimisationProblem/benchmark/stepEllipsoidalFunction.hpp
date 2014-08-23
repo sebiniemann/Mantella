@@ -11,6 +11,6 @@ namespace hop {
       const Col<double> _scaling;
       const Col<double> _delta;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const;
+      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
   };
 }
