@@ -8,8 +8,7 @@ using std::pow;
 using arma::norm;
 
 namespace hop {
-  SphereFunction::SphereFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions)
-  {
+  SphereFunction::SphereFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {
 
   }
 

@@ -17,7 +17,7 @@ namespace hop {
   }
 
   double RastriginFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = diagmat(_delta) * getAsymmetricTransformation(0.2, getOscillationTransformation(parameter - _translation));
+    Col<double> z = _delta % getAsymmetricTransformation(0.2, getOscillationTransformation(parameter - _translation));
 
     return 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + pow(norm(z), 2);
   }

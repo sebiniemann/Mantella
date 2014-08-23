@@ -14,6 +14,11 @@ using arma::cos;
 
 namespace hop {
   BuecheRastriginFunction::BuecheRastriginFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _scaling(getScaling(sqrt(10.0))) {
+
+  }
+
+  void BuecheRastriginFunction::setTranslation(const Col<double> &translation) {
+    _translation = translation;
     for (size_t n = 0; n < _translation.n_elem; n += 2) {
       _translation.at(n) = abs(_translation.at(n));
     }
@@ -27,6 +32,6 @@ namespace hop {
       }
     }
 
-    return 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + pow(norm(z), 2) + 100 * getPenality(parameter);
+    return 10.0 * (static_cast<double>(_numberOfDimensions) - accu(cos(2.0 * datum::pi * z))) + pow(norm(z), 2) + 100.0 * getPenality(parameter);
   }
 }
