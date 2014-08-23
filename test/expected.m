@@ -3,37 +3,37 @@ function expected
   rng(123456789, 'twister');
 
   for dim = [2, 40]
-    x = rand(dim, 10000) * 10 - 5;
-    save(['./data/parameters,', int2str(dim), '.mat'], 'x', '-ascii', '-double');
+    parameters = rand(dim, 1000) * 10 - 5;
+    save(['./data/parameters,', int2str(dim), '.mat'], 'parameters', '-ascii', '-double');
     
-    xOpt = rand(dim, 1) * 4 - 4;
-    save(['./data/parameterTranslation,', int2str(dim), '.mat'], 'xOpt', '-ascii', '-double');
+    translation = rand(dim, 1) * 4 - 4;
+    save(['./data/translation,', int2str(dim), '.mat'], 'translation', '-ascii', '-double');
     
     one = repmat(sign(rand - 0.5), dim, 1);
     save(['./data/one,', int2str(dim), '.mat'], 'one', '-ascii', '-double');
     
-    R = getRandomRotation(dim);  
-    save(['./data/rotationR,', int2str(dim), '.mat'], 'R', '-ascii', '-double');
+    rotationR = getRandomRotation(dim);  
+    save(['./data/rotationR,', int2str(dim), '.mat'], 'rotationR', '-ascii', '-double');
     
-    Q = getRandomRotation(dim);
-    save(['./data/rotationQ,', int2str(dim), '.mat'], 'Q', '-ascii', '-double');
+    rotationQ = getRandomRotation(dim);
+    save(['./data/rotationQ,', int2str(dim), '.mat'], 'rotationQ', '-ascii', '-double');
       
-    C101 = getRandomC101(dim);
-    save(['./data/delta101,', int2str(dim), '.mat'], 'C101', '-ascii', '-double');
+    deltaC101 = getRandomDeltaC101(dim);
+    save(['./data/deltaC101,', int2str(dim), '.mat'], 'deltaC101', '-ascii', '-double');
       
-    y101 = getRandomY101(dim);
-    save(['./data/localOptima101,', int2str(dim), '.mat'], 'y101', '-ascii', '-double');
+    localOptimaY101 = getRandomLocalOptimaY101(dim);
+    save(['./data/localOptimaY101,', int2str(dim), '.mat'], 'localOptimaY101', '-ascii', '-double');
       
-    C21 = getRandomC21(dim);
-    save(['./data/delta21,', int2str(dim), '.mat'], 'C21', '-ascii', '-double');
+    deltaC21 = getRandomDeltaC21(dim);
+    save(['./data/deltaC21,', int2str(dim), '.mat'], 'deltaC21', '-ascii', '-double');
       
-    y21 = getRandomY21(dim);
-    save(['./data/localOptima21,', int2str(dim), '.mat'], 'y21', '-ascii', '-double');
+    localOptimaY21 = getRandomLocalOptimaY21(dim);
+    save(['./data/localOptimaY21,', int2str(dim), '.mat'], 'localOptimaY21', '-ascii', '-double');
 
     for func = 1:24
-      fx = nan(size(x, 2), 1);
-      for k = 1:size(x, 2)
-        fx(k) = f(func, x(:, k), xOpt, one, R, Q, C101, y101, C21, y21);
+      fx = nan(size(parameters, 2), 1);
+      for k = 1:size(parameters, 2)
+        fx(k) = f(func, parameters(:, k), translation, one, rotationR, rotationQ, deltaC101, localOptimaY101, deltaC21, localOptimaY21);
       end
         
       save(['./data/expectedF', int2str(func), ',', int2str(dim), '.mat'], 'fx', '-ascii', '-double');
@@ -41,56 +41,56 @@ function expected
   end
 end
 
-function f = f(func, x, xOpt, one, R, Q, C101, y101, C21, y21)
+function f = f(func, parameter, translation, one, rotationR, rotationQ, deltaC101, localOptimaY101, deltaC21, localOptimaY21)
   switch func
     case 1
-      f = f1(x, xOpt);
+      f = f1(parameter, translation);
     case 2
-      f = f2(x, xOpt);
+      f = f2(parameter, translation);
     case 3
-      f = f3(x, xOpt);
+      f = f3(parameter, translation);
     case 4
-      f = f4(x, xOpt);
+      f = f4(parameter, translation);
     case 5
-      f = f5(x, one);
+      f = f5(parameter, one);
     case 6
-      f = f6(x, xOpt, R, Q);
+      f = f6(parameter, translation, rotationR, rotationQ);
     case 7
-      f = f7(x, xOpt, R, Q);
+      f = f7(parameter, translation, rotationR, rotationQ);
     case 8
-      f = f8(x, xOpt);
+      f = f8(parameter, translation);
     case 9
-      f = f9(x, R);
+      f = f9(parameter, rotationR);
     case 10
-      f = f10(x, xOpt, R);
+      f = f10(parameter, translation, rotationR);
     case 11
-      f = f11(x, xOpt, R);
+      f = f11(parameter, translation, rotationR);
     case 12
-      f = f12(x, xOpt, R);
+      f = f12(parameter, translation, rotationR);
     case 13
-      f = f13(x, xOpt, R, Q);
+      f = f13(parameter, translation, rotationR, rotationQ);
     case 14
-      f = f14(x, xOpt, R);
+      f = f14(parameter, translation, rotationR);
     case 15
-      f = f15(x, xOpt, R, Q);
+      f = f15(parameter, translation, rotationR, rotationQ);
     case 16
-      f = f16(x, xOpt, R, Q);
+      f = f16(parameter, translation, rotationR, rotationQ);
     case 17
-      f = f17(x, xOpt, R, Q);
+      f = f17(parameter, translation, rotationR, rotationQ);
     case 18
-      f = f18(x, xOpt, R, Q);
+      f = f18(parameter, translation, rotationR, rotationQ);
     case 19
-      f = f19(x, R);
+      f = f19(parameter, rotationR);
     case 20
-      f = f20(x, one);
+      f = f20(parameter, one);
     case 21
-      f = f21(x, R, C101, y101);
+      f = f21(parameter, rotationR, deltaC101, localOptimaY101);
     case 22
-      f = f22(x, R, C21, y21);
+      f = f22(parameter, rotationR, deltaC21, localOptimaY21);
     case 23
-      f = f23(x, xOpt, R, Q);
+      f = f23(parameter, translation, rotationR, rotationQ);
     case 24
-      f = f24(x, one, R, Q);
+      f = f24(parameter, one, rotationR, rotationQ);
   end
 end
 
@@ -622,7 +622,7 @@ function R = getRandomRotation(dim)
   end
 end
 
-function C = getRandomC101(dim)
+function C = getRandomDeltaC101(dim)
   % compute scaling for each optimum
   condition = 1000.^linspace(0, 1, 100);
   [~, idx] = sort(rand(100, 1));  % random permutation
@@ -635,7 +635,7 @@ function C = getRandomC101(dim)
   end
 end
 
-function C = getRandomC21(dim)
+function C = getRandomDeltaC21(dim)
   % compute scaling for each optimum
   condition = 1000.^linspace(0, 1, 20);
   [~, idx] = sort(rand(20, 1));  % random permutation
@@ -648,13 +648,13 @@ function C = getRandomC21(dim)
   end
 end
 
-function y = getRandomY101(dim)
+function y = getRandomLocalOptimaY101(dim)
  y = rand(dim, 101) * 10.0 - 5.0; 
  % global optimum not too close to boundary
  y(:, 1) = 0.8 * y(:,1); 
 end
 
-function y = getRandomY21(dim)
+function y = getRandomLocalOptimaY21(dim)
  y = rand(dim, 21) * 9.8 - 4.9; 
  % global optimum not too close to boundary
  y(:, 1) = 0.8 * y(:,1); 
