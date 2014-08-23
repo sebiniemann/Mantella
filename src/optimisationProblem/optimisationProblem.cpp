@@ -11,28 +11,25 @@ using std::logic_error;
 using std::cout;
 using std::endl;
 
+#include <armadillo>
+using arma::zeros;
+using arma::ones;
+using arma::eye;
+
 namespace hop {
   OptimisationProblem::OptimisationProblem(const unsigned int& numberOfDimensions) :
     _numberOfDimensions(numberOfDimensions),
-    _lowerBounds(Col<double>(numberOfDimensions)),
-    _upperBounds(Col<double>(numberOfDimensions)),
-    _parameterTranslation(Col<double>(numberOfDimensions)),
-    _parameterRotation(Mat<double>(numberOfDimensions, numberOfDimensions)),
-    _parameterReflection(Col<double>(numberOfDimensions)),
-    _parameterScale(Mat<double>(numberOfDimensions, numberOfDimensions)),
-    _objectiveValueTranslation(0.0),
-    _objectiveValueScale(1.0),
-    _maximalNumberOfEvaluations(1000),
-    _acceptableObjectiveValue(numeric_limits<double>::lowest()),
     _numberOfEvaluations(0)
   {
-    _lowerBounds.fill(numeric_limits<double>::lowest());
-    _upperBounds.fill(numeric_limits<double>::max());
-
-    _parameterTranslation.zeros();
-    _parameterRotation.eye();
-    _parameterReflection.ones();
-    _parameterScale.eye();
+    setLowerBounds(zeros<Col<double>>(numberOfDimensions) - numeric_limits<double>::max());
+    setUpperBounds(zeros<Col<double>>(numberOfDimensions) + numeric_limits<double>::max());
+    setParameterTranslation(zeros<Col<double>>(numberOfDimensions));
+    setParameterRotation(eye<Mat<double>>(numberOfDimensions, numberOfDimensions));
+    setParameterScale(ones<Col<double>>(numberOfDimensions));
+    setObjectiveValueTranslation(0.0);
+    setObjectiveValueScale(1.0);
+    setMaximalNumberOfEvaluations(1000);
+    setAcceptableObjectiveValue(numeric_limits<double>::lowest());
   }
 
   Col<uword> OptimisationProblem::isSatisfyingLowerBounds(const Col<double>& parameter) {
@@ -183,11 +180,11 @@ namespace hop {
     _parameterRotation = parameterRotation;
   }
 
-  void OptimisationProblem::setParameterReflection(const Col<double>& parameterReflection) {
-    _parameterReflection = parameterReflection;
-  }
+  void OptimisationProblem::setParameterScale(const Col<double>& parameterScale) {
+    if (parameterScale.n_elem != _numberOfDimensions) {
+      throw logic_error("The dimension of the parameter scale (" + to_string(parameterScale.n_elem) + ") must match the dimension of the optimisation problem (" + to_string(_numberOfDimensions) + ").");
+    }
 
-  void OptimisationProblem::setParameterScale(const Mat<double>& parameterScale) {
     _parameterScale = parameterScale;
   }
 
@@ -220,7 +217,7 @@ namespace hop {
   }
 
   Col<double> OptimisationProblem::getScaledCongruentParameter(const Col<double>& parameter) const {
-    return _parameterScale * _parameterRotation * (parameter % _parameterReflection + _parameterTranslation);
+    return _parameterRotation * _parameterScale % (parameter + _parameterTranslation);
   }
 
   double OptimisationProblem::getSoftConstraintsValueImplementation(const Col<double>& parameter) const {

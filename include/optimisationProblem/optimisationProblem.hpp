@@ -47,8 +47,7 @@ namespace hop {
 
       virtual void setParameterTranslation(const Col<double>& parameterTranslation) final;
       virtual void setParameterRotation(const Mat<double>& parameterRotation) final;
-      virtual void setParameterReflection(const Col<double>& parameterReflection) final;
-      virtual void setParameterScale(const Mat<double>& parameterScale) final;
+      virtual void setParameterScale(const Col<double>& parameterScale) final;
       virtual void setObjectiveValueTranslation(const double& objectiveValueTranslation) final;
       virtual void setObjectiveValueScale(const double& objectiveValueScale) final;
 
@@ -73,8 +72,7 @@ namespace hop {
 
       Col<double> _parameterTranslation;
       Mat<double> _parameterRotation;
-      Col<double> _parameterReflection;
-      Mat<double> _parameterScale;
+      Col<double> _parameterScale;
 
       double _objectiveValueTranslation;
       double _objectiveValueScale;

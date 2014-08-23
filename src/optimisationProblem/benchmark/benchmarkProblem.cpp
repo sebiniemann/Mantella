@@ -24,27 +24,24 @@ using arma::randu;
 using arma::randn;
 using arma::norm;
 using arma::linspace;
+using arma::dot;
 
 #include <helper/random.hpp>
 
 namespace hop {
-  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions)
-    :
-      OptimisationProblem(numberOfDimensions),
-      _translation(randu(numberOfDimensions) * 8.0 - 4.0),
-      _one(numberOfDimensions),
-      _rotationR(getRandomRotation()),
-      _rotationQ(getRandomRotation()),
-      _deltaC101(getRandomDeltaC101()),
-      _localOptimaY101(getRandomLocalOptimaY101()),
-      _deltaC21(getRandomDeltaC21()),
-      _localOptimaY21(getRandomLocalOptimaY21()) {
-    _lowerBounds.fill(-5.0);
-    _upperBounds.fill(5.0);
+  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions) : OptimisationProblem(numberOfDimensions) {
+    setLowerBounds(zeros<Col<double>>(numberOfDimensions) - 5.0);
+    setUpperBounds(zeros<Col<double>>(numberOfDimensions) + 5.0);
+    setObjectiveValueTranslation(min(1000.0, max(-1000.0, cauchy_distribution<double>(0.0, 100.0)(Random::RNG))));
 
-    _objectiveValueTranslation = min(1000.0, max(-1000.0, cauchy_distribution<double>(0.0, 100.0)(Random::RNG)));
-
-    _one.fill(bernoulli_distribution(0.5)(Random::RNG) ? 5.0 : -5.0);
+    setTranslation(randu(numberOfDimensions) * 8.0 - 4.0);
+    setOne(zeros<Col<double>>(numberOfDimensions) + (bernoulli_distribution(0.5)(Random::RNG) ? 1.0 : -1.0));
+    setRotationR(getRandomRotation());
+    setRotationQ(getRandomRotation());
+    setDeltaC101(getRandomDeltaC101());
+    setLocalOptimaY101(getRandomLocalOptimaY101());
+    setDeltaC21(getRandomDeltaC21());
+    setLocalOptimaY21(getRandomLocalOptimaY21());
   }
 
   void BenchmarkProblem::setTranslation(const Col<double>& translation) {
@@ -82,13 +79,10 @@ namespace hop {
   Mat<double> BenchmarkProblem::getRandomRotation() const {
     Mat<double> rotationMatrix = randn(_numberOfDimensions, _numberOfDimensions);
     for (unsigned int j = 0; j < rotationMatrix.n_cols; j++) {
-      Col<double> colJ = rotationMatrix.col(j);
-      for (unsigned int jj = 0; jj < j-1; jj++) {
-        Col<double> colJJ = rotationMatrix.col(jj);
-
-        rotationMatrix.col(j) = colJ - colJ.t() * colJJ * colJJ;
+      for (unsigned int jj = 0; jj < j; jj++) {
+        rotationMatrix.col(j) = rotationMatrix.col(j) - dot(rotationMatrix.col(j), rotationMatrix.col(jj)) * rotationMatrix.col(jj);
       }
-      rotationMatrix.col(j) = colJ / norm(colJ);
+      rotationMatrix.col(j) = rotationMatrix.col(j) / norm(rotationMatrix.col(j));
     }
 
     return rotationMatrix;
