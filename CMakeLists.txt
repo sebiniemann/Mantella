@@ -13,7 +13,7 @@
 #   Daniel Kiechle - Developer / Software tester
 #   Oskar Pusz - Developer
 #------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 # Hint-based Online Programming (HOP)
 project(HOP CXX)
