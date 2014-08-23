@@ -33,7 +33,7 @@ namespace hop {
   }
 
   double GallaghersGaussian101mePeaksFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    double maximalValue = numeric_limits<double>::max();
+    double maximalValue = numeric_limits<double>::lowest();
     for(unsigned int k = 0; k < 101; k++) {
       Col<double> parameterTransposition = parameter - _localOptimaY101.col(k);
       maximalValue = max(maximalValue, _weight.at(k) * exp(-1.0 / (2.0 * static_cast<double>(_numberOfDimensions)) * dot(parameterTransposition, _rotationR.t() * diagmat(_deltaC101.col(k)) * _rotationR * parameterTransposition)));
