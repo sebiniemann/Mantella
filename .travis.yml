@@ -16,7 +16,7 @@ install:
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
-  - cmake
+  - cmake .
   - make
   - sudo make install
 
