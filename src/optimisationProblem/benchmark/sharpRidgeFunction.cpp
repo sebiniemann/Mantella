@@ -14,7 +14,7 @@ namespace hop {
   }
 
   double SharpRidgeFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * (parameter - _translation);
+    Col<double> z = _rotationQ * (_delta % (_rotationR * (parameter - _translation)));
     return pow(z.at(0), 2) + 100 * norm(z.subvec(1, z.n_elem - 1));
   }
 }

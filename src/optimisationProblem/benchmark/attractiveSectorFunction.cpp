@@ -14,7 +14,7 @@ namespace hop {
   }
 
   double AttractiveSectorFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * (parameter - _translation);
+    Col<double> z = _rotationQ * (_delta % (_rotationR * (parameter - _translation)));
     z.elem(find(z % _translation > 0)) *= 100.0;
 
     return pow(getOscillationTransformation(pow(norm(z), 2)), 0.9);

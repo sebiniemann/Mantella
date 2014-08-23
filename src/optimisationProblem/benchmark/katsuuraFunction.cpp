@@ -17,7 +17,7 @@ namespace hop {
   }
 
   double KatsuuraFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationQ * diagmat(_delta) * _rotationR * (parameter - _translation);
+    Col<double> z = _rotationQ * (_delta % (_rotationR * (parameter - _translation)));
 
     double product = 1.0;
     for (size_t n = 0; n < z.n_elem; n++) {

@@ -19,13 +19,13 @@ namespace hop {
   }
 
   double StepEllipsoidalFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> zHat = diagmat(_delta) * _rotationR * (parameter - _translation);
+    Col<double> zHat = _delta % (_rotationR * (parameter - _translation));
 
-    Col<double> zTilde(zHat.n_elem);
+    Col<double> zTilde(zHat);
     for(size_t n = 0; n < zTilde.n_elem; n++) {
       double value = zHat.at(n);
 
-      if(value > 0.5) {
+      if(abs(value) > 0.5) {
         zTilde.at(n) = round(value);
       } else {
         zTilde.at(n) = round(value * 10.0) / 10.0;

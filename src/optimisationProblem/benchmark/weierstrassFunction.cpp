@@ -17,7 +17,7 @@ namespace hop {
   }
 
   double WeierstrassFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationR * diagmat(_delta) * _rotationQ * getOscillationTransformation(_rotationR * (parameter - _translation));
+    Col<double> z = _rotationR * (_delta % (_rotationQ * getOscillationTransformation(_rotationR * (parameter - _translation))));
 
     double sum = 0;
     for (size_t n = 0; n < parameter.n_elem; n++) {
