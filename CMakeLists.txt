@@ -89,7 +89,7 @@ if(BUILD_LIBRARY)
   target_link_libraries (hop ${ARMADILLO_LIBRARIES})
 
   # Include test programm headers
-  include_directories(${PROJECT_SOURCE_DIR}/cli)
+  include_directories(${PROJECT_SOURCE_DIR}/test)
 
   add_executable(test
     test/main.cpp
