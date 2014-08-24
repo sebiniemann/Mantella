@@ -122,10 +122,6 @@ namespace hop {
       throw logic_error("The dimension of the parameter (" + to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + to_string(_numberOfDimensions) + ").");
     }
 
-    if(_numberOfEvaluations >= _maximalNumberOfEvaluations) {
-      throw runtime_error("Reached maximal number of evaluations (" + to_string(_maximalNumberOfEvaluations) + ").");
-    }
-
     _numberOfEvaluations++;
 
     auto cachePosition = _cachedObjectivValues.find(parameter);
