@@ -84,6 +84,7 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/benchmark/sphereFunction.cpp
     src/optimisationProblem/benchmark/stepEllipsoidalFunction.cpp
     src/optimisationProblem/benchmark/weierstrassFunction.cpp
+    src/optimisationAlgorithm/optimisationAlgorithm.cpp
     src/helper/random.cpp
   )
   target_link_libraries (hop ${ARMADILLO_LIBRARIES})
@@ -137,6 +138,10 @@ if(BUILD_CLI)
   add_executable(cli
     cli/main.cpp
     cli/console.cpp
+    cli/config.cpp
+    cli/plot1DFitnessFunction.cpp
+    cli/plot2DFitnessFunction.cpp
+    cli/plotNDFitnessFunction.cpp
   )
   target_link_libraries(cli ${READLINE_LIBRARIES})
 
