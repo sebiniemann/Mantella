@@ -47,4 +47,4 @@ set zlabel 'Fitness value (f)' rotate center
 unset clabel
 set cntrparam levels 20
 
-splot 'fitnessFunction.dat' with pm3d palette defined
+splot 'fitnessFunction.dat' with pm3d palette
