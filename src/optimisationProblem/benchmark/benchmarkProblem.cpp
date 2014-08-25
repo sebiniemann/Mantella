@@ -78,7 +78,7 @@ namespace hop {
 
   Mat<double> BenchmarkProblem::getRandomRotation() const {
     Mat<double> rotationMatrix = randn(_numberOfDimensions, _numberOfDimensions);
-    for (unsigned int j = 0; j < rotationMatrix.n_cols; j++) {
+    for (size_t j = 0; j < rotationMatrix.n_cols; j++) {
       for (unsigned int jj = 0; jj < j; jj++) {
         rotationMatrix.col(j) = rotationMatrix.col(j) - dot(rotationMatrix.col(j), rotationMatrix.col(jj)) * rotationMatrix.col(jj);
       }
