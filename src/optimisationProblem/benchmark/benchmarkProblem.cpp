@@ -113,7 +113,7 @@ namespace hop {
   }
 
   Mat<double> BenchmarkProblem::getRandomLocalOptimaY101() const {
-    Mat<double> localOptimaY101 = randu(_numberOfDimensions, 101) * 8.0 - 4.0;
+    Mat<double> localOptimaY101 = randu(_numberOfDimensions, 101) * 10.0 - 5.0;
     localOptimaY101.col(0) = 0.8 * localOptimaY101.col(0);
 
     return localOptimaY101;
