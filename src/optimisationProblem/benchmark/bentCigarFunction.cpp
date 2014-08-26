@@ -11,6 +11,6 @@ namespace hop {
 
   double BentCigarFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
     Col<double> z = square(_rotationR * getAsymmetricTransformation(0.5, _rotationR * (parameter - _translation)));
-    return z.at(0) + 1000000 * accu(z.subvec(1, z.n_elem - 1));
+    return z.at(0) + 1000000.0 * accu(z.subvec(1, z.n_elem - 1));
   }
 }
