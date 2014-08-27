@@ -18,8 +18,8 @@ cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 # Hint-based Online Programming (HOP)
 project(HOP CXX)
 
-# Add additional cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
+# Add additional cmake modules (currently unused)
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
 option(BUILD_LIBRARY "Build library (includes tests)" ON)
@@ -42,6 +42,9 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 
 # Include HOP library headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
+
+# Include thrid-party headers
+include_directories(${PROJECT_SOURCE_DIR}/ext)
 
 # -------------
 # BUILD LIBRARY
@@ -126,24 +129,17 @@ if(BUILD_CLI)
   
   # Include CLI headers
   include_directories(${PROJECT_SOURCE_DIR}/cli)
-
-  # Locate libraries
-  find_package(Readline REQUIRED)
-  
-  # Include headers
-  include_directories(${READLINE_INCLUDE_DIRS})
   
   # Compile the CLI
   # All paths must start with "cli/"
   add_executable(cli
     cli/main.cpp
-    cli/console.cpp
-    cli/config.cpp
-    cli/plot1DFitnessFunction.cpp
-    cli/plot2DFitnessFunction.cpp
-    cli/plotNDFitnessFunction.cpp
+    cli/optimisationProblem.cpp
+    cli/plot.cpp
+    cli/experiment.cpp
+    cli/plot/plot.cpp
+    cli/plot/plot2DFitnessFunction.cpp
   )
-  target_link_libraries(cli ${READLINE_LIBRARIES})
 
   # Add HOP library
   link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
