@@ -1,57 +1,38 @@
 #include <cstdlib>
-// EXIT_SUCCESS
-
-#include <iostream>
-using std::cout;
-using std::endl;
-
-#include <functional>
-using std::function;
-
-#include <tuple>
-using std::tuple;
-using std::make_tuple;
-
-#include <string>
-using std::string;
-
 #include <memory>
-using std::unique_ptr;
+#include <fstream>
 
-#include <armadillo>
-using arma::randu;
+#include <cereal/archives/json.hpp>
+#include <cereal/types/polymorphic.hpp>
 
-#include <optimisationProblem/benchmark/benchmarkProblem.hpp>
-using hop::BenchmarkProblem;
+#include <hop>
 
-#include <optimisationProblem/benchmark/sphereFunction.hpp>
-using hop::SphereFunction;
+#include <experiment.hpp>
+#include <plot/plot2DFitnessFunction.hpp>
 
-#include <console.hpp>
+int main (const int argc, const char* argv[]) {
+  if (argc < 2) {
 
-void helloWorld(vector<string> arguments);
-
-int main(const int argc, char* argv[]) {
-  Console console;
-  console.addCommand(make_tuple("helloWorld", function<void(vector<string>)>(helloWorld), "Simple hello world program"));
-
-  while(console.isRunning()) {
-    console.parseInput();
   }
+
+//  std::shared_ptr<Experiment> plot2DFitnessFunction = std::shared_ptr<Experiment>(new Plot2DFitnessFunction(std::shared_ptr<hop::OptimisationProblem>(new hop::SphereFunction(2))));
+
+//  std::ofstream output("output"); {
+//    cereal::JSONOutputArchive archive(output);
+//    archive(cereal::make_nvp("hop", plot2DFitnessFunction));
+//  } output.close();
+
+//  plot2DFitnessFunction->run();
+//  plot2DFitnessFunction->waitUntilFinished();
+
+  std::shared_ptr<Experiment> experiment;
+  std::ifstream input(argv[1]); {
+    cereal::JSONInputArchive archive(input);
+    archive(cereal::make_nvp("hop", experiment));
+  } input.close();
+
+  experiment->run();
+  experiment->waitUntilFinished();
 
   return EXIT_SUCCESS;
-}
-
-void helloWorld(vector<string> arguments) {
-  cout << "helloWorld: " << endl;
-  for(const auto& argument : arguments) {
-    cout << argument << endl;
-  }
-
-  unsigned int numberOfDimensions = 2;
-  unique_ptr<BenchmarkProblem> benchmarkProblem(new SphereFunction(numberOfDimensions));
-
-  for (unsigned int k = 0; k < 10; k++) {
-    cout << k << ": " << benchmarkProblem->getObjectiveValue(randu<Col<double>>(numberOfDimensions) * 10 - 5) << endl;
-  }
 }
