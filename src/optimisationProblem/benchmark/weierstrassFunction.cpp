@@ -1,31 +1,25 @@
 #include <optimisationProblem/benchmark/weierstrassFunction.hpp>
 
 #include <cmath>
-using std::sqrt;
-using std::pow;
-using std::cos;
-
-#include <armadillo>
-using arma::datum;
 
 namespace hop {
   WeierstrassFunction::WeierstrassFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(sqrt(0.01))) {
     _f0 = 0.0;
     for(unsigned int k = 0; k < 12; k++) {
-      _f0 += pow(0.5, k) * cos(2.0 * datum::pi * pow(3, k) * 0.5);
+      _f0 += std::pow(0.5, k) * cos(2.0 * arma::datum::pi * pow(3, k) * 0.5);
     }
   }
 
-  double WeierstrassFunction::getObjectiveValueImplementation(const Col<double> &parameter) const {
-    Col<double> z = _rotationR * (_delta % (_rotationQ * getOscillationTransformation(_rotationR * (parameter - _translation))));
+  double WeierstrassFunction::getObjectiveValueImplementation(const arma::Col<double> &parameter) const {
+    arma::Col<double> z = _rotationR * (_delta % (_rotationQ * getOscillationTransformation(_rotationR * (parameter - _translation))));
 
     double sum = 0;
-    for (size_t n = 0; n < parameter.n_elem; n++) {
+    for (std::size_t n = 0; n < parameter.n_elem; n++) {
       for (unsigned int k = 0; k < 12; k++) {
-        sum += pow(0.5, k) * cos(2.0 * datum::pi * pow(3.0, k) * (z.at(n) + 0.5));
+        sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z.at(n) + 0.5));
       }
     }
 
-    return 10 * (pow(sum / static_cast<double>(_numberOfDimensions) - _f0, 3) + getPenality(parameter) / static_cast<double>(_numberOfDimensions));
+    return 10 * (std::pow(sum / static_cast<double>(_numberOfDimensions) - _f0, 3) + getPenality(parameter) / static_cast<double>(_numberOfDimensions));
   }
 }

@@ -8,9 +8,9 @@ namespace hop {
       SharpRidgeFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      const Col<double> _delta;
+      const arma::Col<double> _delta;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
   };
 }
 
