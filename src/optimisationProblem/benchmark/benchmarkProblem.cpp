@@ -90,13 +90,8 @@ namespace hop {
     return deltaC21;
   }
 
-<<<<<<< HEAD
-  Mat<double> BenchmarkProblem::getRandomLocalOptimaY101() const {
-    Mat<double> localOptimaY101 = randu(_numberOfDimensions, 101) * 10.0 - 5.0;
-=======
   arma::Mat<double> BenchmarkProblem::getRandomLocalOptimaY101() const {
     arma::Mat<double> localOptimaY101 = arma::randu<arma::Mat<double>>(_numberOfDimensions, 101) * 8.0 - 4.0;
->>>>>>> devel: Removed "using .." notation and added namespace directly
     localOptimaY101.col(0) = 0.8 * localOptimaY101.col(0);
 
     return localOptimaY101;
