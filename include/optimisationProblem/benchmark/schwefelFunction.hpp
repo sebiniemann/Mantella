@@ -8,8 +8,8 @@ namespace hop {
       SchwefelFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      Col<double> _delta;
+      arma::Col<double> _delta;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
   };
 }

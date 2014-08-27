@@ -8,8 +8,8 @@ namespace hop {
       EllipsoidalFunctionRotated(const unsigned int& numberOfDimensions);
 
     protected:
-      const Col<double> _scaling;
+      const arma::Col<double> _scaling;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
   };
 }

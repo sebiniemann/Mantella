@@ -7,13 +7,13 @@ namespace hop {
     public:
       LinearSlope(const unsigned int& numberOfDimensions);
 
-      void setOne(const Col<double> &one) override;
+      void setOne(const arma::Col<double> &one) override;
 
     protected:
       double _partiallyObjectiveValue;
-      Col<double> _xOpt;
-      Col<double> _scaling;
+      arma::Col<double> _xOpt;
+      arma::Col<double> _scaling;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
   };
 }

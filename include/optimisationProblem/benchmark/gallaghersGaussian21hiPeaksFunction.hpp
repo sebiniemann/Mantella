@@ -1,8 +1,5 @@
 #pragma once
 
-#include <armadillo>
-using arma::Cube;
-
 #include <optimisationProblem/benchmark/benchmarkProblem.hpp>
 
 namespace hop {
@@ -11,9 +8,9 @@ namespace hop {
       GallaghersGaussian21hiPeaksFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      Col<double> _weight;
+      arma::Col<double> _weight;
 
-      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
   };
 }
 

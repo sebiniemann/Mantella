@@ -8,6 +8,6 @@ namespace hop {
       BentCigarFunction(const unsigned int& numberOfDimensions);
 
     protected:
-      double getObjectiveValueImplementation(const Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
   };
 }

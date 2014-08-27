@@ -1,53 +1,35 @@
 #pragma once
 
-#include <unordered_map>
-using std::unordered_map;
-
-#include <limits>
-using std::numeric_limits;
-
 #include <cstdlib>
-using std::size_t;
-
-#include <string>
-using std::string;
-
-#include <sstream>
-using std::stringstream;
-
+#include <unordered_map>
 #include <functional>
-using std::hash;
 
 #include <armadillo>
-using arma::Mat;
-using arma::Col;
-using arma::uword;
-using arma::all;
 
 namespace hop {
   class OptimisationProblem {
     public:
       OptimisationProblem(const unsigned int& numberOfDimensions);
 
-      virtual Col<uword> isSatisfyingLowerBounds(const Col<double>& parameter) final;
-      virtual Col<uword> isSatisfyingUpperBounds(const Col<double>& parameter) final;
-      virtual bool isSatisfyingSoftConstraints(const Col<double>& parameter) final;
-      virtual bool isSatisfyingConstraints(const Col<double>& parameter) final;
+      virtual arma::Col<arma::uword> isSatisfyingLowerBounds(const arma::Col<double>& parameter) final;
+      virtual arma::Col<arma::uword> isSatisfyingUpperBounds(const arma::Col<double>& parameter) final;
+      virtual bool isSatisfyingSoftConstraints(const arma::Col<double>& parameter) final;
+      virtual bool isSatisfyingConstraints(const arma::Col<double>& parameter) final;
 
-      virtual double getSoftConstraintsValue(const Col<double>& parameter) final;
-      virtual double getObjectiveValue(const Col<double>& parameter) final;
+      virtual double getSoftConstraintsValue(const arma::Col<double>& parameter) final;
+      virtual double getObjectiveValue(const arma::Col<double>& parameter) final;
 
       virtual unsigned int getNumberOfDimensions() const final;
 
-      virtual Col<double> getLowerBounds() const final;
-      virtual void setLowerBounds(const Col<double>& lowerBounds);
+      virtual arma::Col<double> getLowerBounds() const final;
+      virtual void setLowerBounds(const arma::Col<double>& lowerBounds);
 
-      virtual Col<double> getUpperBounds() const final;
-      virtual void setUpperBounds(const Col<double>& upperBounds) final;
+      virtual arma::Col<double> getUpperBounds() const final;
+      virtual void setUpperBounds(const arma::Col<double>& upperBounds) final;
 
-      virtual void setParameterTranslation(const Col<double>& parameterTranslation) final;
-      virtual void setParameterRotation(const Mat<double>& parameterRotation) final;
-      virtual void setParameterScale(const Col<double>& parameterScale) final;
+      virtual void setParameterTranslation(const arma::Col<double>& parameterTranslation) final;
+      virtual void setParameterRotation(const arma::Mat<double>& parameterRotation) final;
+      virtual void setParameterScale(const arma::Col<double>& parameterScale) final;
       virtual void setObjectiveValueTranslation(const double& objectiveValueTranslation) final;
       virtual void setObjectiveValueScale(const double& objectiveValueScale) final;
 
@@ -62,17 +44,17 @@ namespace hop {
       virtual ~OptimisationProblem() = default;
 
     protected:
-      virtual double getObjectiveValueImplementation(const Col<double>& parameter) const = 0;
-      virtual double getSoftConstraintsValueImplementation(const Col<double>& parameter) const;
+      virtual double getObjectiveValueImplementation(const arma::Col<double>& parameter) const = 0;
+      virtual double getSoftConstraintsValueImplementation(const arma::Col<double>& parameter) const;
 
       unsigned int _numberOfDimensions;
 
-      Col<double> _lowerBounds;
-      Col<double> _upperBounds;
+      arma::Col<double> _lowerBounds;
+      arma::Col<double> _upperBounds;
 
-      Col<double> _parameterTranslation;
-      Mat<double> _parameterRotation;
-      Col<double> _parameterScale;
+      arma::Col<double> _parameterTranslation;
+      arma::Mat<double> _parameterRotation;
+      arma::Col<double> _parameterScale;
 
       double _objectiveValueTranslation;
       double _objectiveValueScale;
@@ -82,16 +64,16 @@ namespace hop {
 
       unsigned int _numberOfEvaluations;
 
-      Col<double> getScaledCongruentParameter(const Col<double>& parameter) const;
+      arma::Col<double> getScaledCongruentParameter(const arma::Col<double>& parameter) const;
 
       class Hasher {
         public:
-          size_t operator() (const Col<double>& key) const {
-            size_t hashedKey = hash<double>()(key.at(0));
+          std::size_t operator() (const arma::Col<double>& key) const {
+            std::size_t hashedKey = std::hash<double>()(key.at(0));
 
             // Adapted from the Boost library (boost::hash_combine)
             for (const double& value : key) {
-              hashedKey ^= hash<double>()(value) + 0x9e3779b9 + (hashedKey << 6) + (hashedKey >> 2);
+              hashedKey ^= std::hash<double>()(value) + 0x9e3779b9 + (hashedKey << 6) + (hashedKey >> 2);
             }
 
             return hashedKey;
@@ -100,16 +82,16 @@ namespace hop {
 
       class KeyEqual {
         public:
-          bool operator() (const Col<double>& firstKey, const Col<double>& secondKey) const {
-            return all(firstKey == secondKey);
+          bool operator() (const arma::Col<double>& firstKey, const arma::Col<double>& secondKey) const {
+            return arma::all(firstKey == secondKey);
           }
       };
 
-      unordered_map<Col<double>, double, Hasher, KeyEqual> _cachedObjectivValues;
-      unordered_map<Col<double>, double, Hasher, KeyEqual> _cachedSoftConstraintsValues;
-      unordered_map<Col<double>, Col<uword>, Hasher, KeyEqual> _cachedIsSatisfyingLowerBounds;
-      unordered_map<Col<double>, Col<uword>, Hasher, KeyEqual> _cachedIsSatisfyingUpperBounds;
-      unordered_map<Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingSoftConstraints;
-      unordered_map<Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingConstraints;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> _cachedObjectivValues;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> _cachedSoftConstraintsValues;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> _cachedIsSatisfyingLowerBounds;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> _cachedIsSatisfyingUpperBounds;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingSoftConstraints;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingConstraints;
   };
 }
