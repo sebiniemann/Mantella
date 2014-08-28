@@ -6,6 +6,8 @@
 
 #include <armadillo>
 
+#include <cereal/access.hpp>
+
 namespace hop {
   class OptimisationProblem {
     public:
@@ -93,5 +95,8 @@ namespace hop {
       std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> _cachedIsSatisfyingUpperBounds;
       std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingSoftConstraints;
       std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingConstraints;
+
+      friend class cereal::access;
+      OptimisationProblem() = default;
   };
 }

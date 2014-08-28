@@ -37,5 +37,9 @@ namespace hop {
       double getOscillationTransformation(const double& value) const;
       arma::Col<double> getOscillationTransformation(const arma::Col<double>& parameter) const;
       double getPenality(const arma::Col<double>& parameter) const;
+
+      friend class cereal::access;
+      BenchmarkProblem() = default;
+
   };
 }
