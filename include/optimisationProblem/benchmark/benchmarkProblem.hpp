@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cereal/types/base_class.hpp>
+
 #include <optimisationProblem/optimisationProblem.hpp>
 
 namespace hop {
@@ -41,5 +43,9 @@ namespace hop {
       friend class cereal::access;
       BenchmarkProblem() = default;
 
+      template<class T>
+      void serialize(T& archive) {
+        archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
+      }
   };
 }

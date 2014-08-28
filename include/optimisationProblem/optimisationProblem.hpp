@@ -8,6 +8,8 @@
 
 #include <cereal/access.hpp>
 
+#include <helper/cereal.hpp>
+
 namespace hop {
   class OptimisationProblem {
     public:
@@ -98,5 +100,19 @@ namespace hop {
 
       friend class cereal::access;
       OptimisationProblem() = default;
+
+      template<class T>
+      void serialize(T& archive) {
+        archive(CEREAL_NVP(_numberOfDimensions));
+        archive(CEREAL_NVP(_lowerBounds));
+        archive(CEREAL_NVP(_upperBounds));
+        archive(CEREAL_NVP(_parameterTranslation));
+        archive(CEREAL_NVP(_parameterRotation));
+        archive(CEREAL_NVP(_parameterScale));
+        archive(CEREAL_NVP(_objectiveValueTranslation));
+        archive(CEREAL_NVP(_objectiveValueScale));
+        archive(CEREAL_NVP(_acceptableObjectiveValue));
+        archive(CEREAL_NVP(_maximalNumberOfEvaluations));
+      }
   };
 }
