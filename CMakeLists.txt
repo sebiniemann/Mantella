@@ -134,8 +134,7 @@ if(BUILD_CLI)
   # All paths must start with "cli/"
   add_executable(cli
     cli/main.cpp
-    cli/optimisationProblem.cpp
-    cli/plot.cpp
+    cli/config.cpp
     cli/experiment.cpp
     cli/plot/plot.cpp
     cli/plot/plot2DFitnessFunction.cpp

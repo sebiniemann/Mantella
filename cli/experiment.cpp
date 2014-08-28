@@ -43,7 +43,3 @@ void Experiment::runThread() {
   _isRunning = false;
   _progress = 1;
 }
-
-void Experiment::setExperimentPath(const std::string& experimentPath) {
-  _experimentPath = experimentPath;
-}
