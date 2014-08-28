@@ -11,6 +11,17 @@ namespace hop {
       arma::Col<double> _weight;
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+
+      friend class cereal::access;
+      GallaghersGaussian21hiPeaksFunction() = default;
+
+      template<class T>
+      void serialize(T& archive) {
+        archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
+        archive(CEREAL_NVP(_rotationR));
+        archive(CEREAL_NVP(_deltaC21));
+        archive(CEREAL_NVP(_localOptimaY21));
+      }
   };
 }
 

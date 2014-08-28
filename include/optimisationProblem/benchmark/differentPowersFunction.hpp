@@ -9,6 +9,16 @@ namespace hop {
 
     protected:
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+
+      friend class cereal::access;
+      DifferentPowersFunction() = default;
+
+      template<class T>
+      void serialize(T& archive) {
+        archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
+        archive(CEREAL_NVP(_translation));
+        archive(CEREAL_NVP(_rotationR));
+      }
   };
 }
 

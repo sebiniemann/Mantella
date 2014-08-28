@@ -13,5 +13,14 @@ namespace hop {
       const arma::Col<double> _scaling;
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+
+      friend class cereal::access;
+      BuecheRastriginFunction() = default;
+
+      template<class T>
+      void serialize(T& archive) {
+        archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
+        archive(CEREAL_NVP(_translation));
+      }
   };
 }
