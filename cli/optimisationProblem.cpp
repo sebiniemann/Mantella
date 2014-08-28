@@ -27,6 +27,6 @@ decltype(OptimisationProblem::_names) OptimisationProblem::_names = {
   {OptimisationProblem::Type::WeierstrassFunction, "Weierstrass function"}
 };
 
-std::string OptimisationProblem::getName(Type type) {
+std::string OptimisationProblem::getName(const Type& type) const {
   return _names.at(type);
 }

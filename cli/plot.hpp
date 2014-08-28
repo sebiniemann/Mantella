@@ -9,7 +9,7 @@ class Plot {
       FitnessFunction
     };
 
-    std::string getName(Type type);
+    std::string getName(const Type& type) const;
 
   protected:
     static const std::map<Type, std::string> _names;
