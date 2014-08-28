@@ -1,14 +1,6 @@
 #include <optimisationProblem/benchmark/rastriginFunctionRotated.hpp>
 
 #include <cmath>
-// std::sqrt
-// std::pow
-
-#include <armadillo>
-// arma::norm
-// arma::datum
-// arma::accu
-// arma::cos
 
 namespace hop {
   RastriginFunctionRotated::RastriginFunctionRotated(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _delta(getScaling(std::sqrt(10.0))) {
