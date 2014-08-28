@@ -14,7 +14,6 @@ class Plot2DFitnessFunction : public Plot {
     Plot2DFitnessFunction(const std::shared_ptr<hop::OptimisationProblem> optimisationProblem);
 
   protected:
-    int _a = 0;
     std::shared_ptr<hop::OptimisationProblem> _optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::AttractiveSectorFunction(2));
 
     void runImpelementation();
@@ -26,6 +25,6 @@ class Plot2DFitnessFunction : public Plot {
 
     template<class T>
     void serialize(T& archive) {
-      archive(CEREAL_NVP(_a));
+      archive(CEREAL_NVP(_optimisationProblem));
     }
 };
