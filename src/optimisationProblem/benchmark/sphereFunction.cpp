@@ -1,8 +1,8 @@
-#include <optimisationProblem/benchmark/sphereFunction.hpp>
+#include <hop_bits/optimisationProblem/benchmark/sphereFunction.hpp>
 
 #include <cmath>
 
-#include <helper/cereal.hpp>
+#include <hop_bits/helper/cereal.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 

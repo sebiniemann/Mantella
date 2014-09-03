@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/discusFunction.hpp>
+#include <hop_bits/optimisationProblem/benchmark/discusFunction.hpp>
 
 namespace hop {
   DiscusFunction::DiscusFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {

@@ -1,6 +1,7 @@
 language: cpp
 
 compiler:
+# Skipped until Travis CI updates to Ubuntu 14.04+
 #  - clang
   - gcc
 
@@ -27,6 +28,9 @@ install:
   - make
   - sudo make install
   - cd ..
+  
+  # Boost filesystem
+  - sudo apt-get install -qq libboost-filesystem-dev
 
 script: 
   - cmake .

@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.hpp>
+#include <hop_bits/optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.hpp>
 
 #include <algorithm>
 #include <cmath>

@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/linearSlope.hpp>
+#include <hop_bits/optimisationProblem/benchmark/linearSlope.hpp>
 
 namespace hop {
   LinearSlope::LinearSlope(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {

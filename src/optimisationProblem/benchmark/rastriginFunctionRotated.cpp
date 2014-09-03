@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/rastriginFunctionRotated.hpp>
+#include <hop_bits/optimisationProblem/benchmark/rastriginFunctionRotated.hpp>
 
 #include <cmath>
 

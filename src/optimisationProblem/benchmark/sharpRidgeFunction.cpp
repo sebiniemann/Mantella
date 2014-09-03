@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/sharpRidgeFunction.hpp>
+#include <hop_bits/optimisationProblem/benchmark/sharpRidgeFunction.hpp>
 
 #include <cmath>
 

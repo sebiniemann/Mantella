@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/bentCigarFunction.hpp>
+#include <hop_bits/optimisationProblem/benchmark/bentCigarFunction.hpp>
 
 namespace hop {
   BentCigarFunction::BentCigarFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {

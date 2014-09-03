@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/ellipsoidalFunctionRotated.hpp>
+#include <hop_bits/optimisationProblem/benchmark/ellipsoidalFunctionRotated.hpp>
 
 namespace hop {
   EllipsoidalFunctionRotated::EllipsoidalFunctionRotated(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions), _scaling(getScaling(1000000.0)) {

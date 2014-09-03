@@ -52,17 +52,19 @@ include_directories(${PROJECT_SOURCE_DIR}/ext)
 if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library build.")
 
-  # Locate libraries
-  find_package(Armadillo REQUIRED)
-  
+  # Locate libraries and headers
+  find_package(Armadillo REQUIRED) # Armadillo C++
+  find_package(Boost COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
+
   # Include headers
-  include_directories(${ARMADILLO_INCLUDE_DIRS})
-  
+  include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+  include_directories(${BOOST_INCLUDE_DIRS}) # Boost
+
   # Compile the optimisation library
   # All paths must start with "src/"
   add_library(hop SHARED
-    src/optimisationProblem/optimisationProblem.cpp
-    src/optimisationProblem/benchmark/benchmarkProblem.cpp
+    src/optimisationProblem.cpp
+    src/optimisationProblem/benchmarkProblem.cpp
     src/optimisationProblem/benchmark/attractiveSectorFunction.cpp
     src/optimisationProblem/benchmark/bentCigarFunction.cpp
     src/optimisationProblem/benchmark/buecheRastriginFunction.cpp
@@ -87,21 +89,42 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/benchmark/sphereFunction.cpp
     src/optimisationProblem/benchmark/stepEllipsoidalFunction.cpp
     src/optimisationProblem/benchmark/weierstrassFunction.cpp
-    src/optimisationAlgorithm/optimisationAlgorithm.cpp
+    src/optimisationAlgorithm.cpp
+    src/evaluation/monitor.cpp
+    src/evaluation/selector.cpp
+    src/evaluation/aggregator.cpp
+    src/evaluation/runable.cpp
+    src/evaluation/experiment.cpp
+    src/evaluation/analysis.cpp
+    src/evaluation/analysis/convergenceRate.cpp
+    src/evaluation/analysis/fitnessFunctionGrid.cpp
+    src/evaluation/analysis/performanceProfile.cpp
+    src/helper/cereal.cpp
     src/helper/random.cpp
   )
-  target_link_libraries (hop ${ARMADILLO_LIBRARIES})
 
-  # Include test programm headers
-  include_directories(${PROJECT_SOURCE_DIR}/test)
+  # Link against libraries
+  target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
 
+  # -----------
+  # BUILD TESTS
+  # -----------
+
+  # Include headers
+  include_directories(${PROJECT_SOURCE_DIR}/test) # HOP tests
+
+  # Compile the optimisation library tests
+  # All paths must start with "test/"
   add_executable(test
     test/main.cpp
   )
 
-  # Add HOP library
-  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-  target_link_libraries(test hop)
+  # Add library directories
+  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
+
+  # Link against libraries
+  target_link_libraries(test hop) # HOP
 endif()
 
 # ---------
@@ -118,29 +141,64 @@ endif()
 # ---------
 if(BUILD_CLI)
   message(STATUS "NOTICE: Configuring CLI build.")
-  
-  # The variable UNIX will also return true if cmake was run via CygWin
-  if(NOT UNIX OR CYGWIN)
-    message(STATUS "")
-    message(STATUS "WARNING: Non-UNIX OS detected:")
-    message(STATUS "WARNING: * The command-line interface is only intented to be used on UNIX-systems. Use the CLI at your on risk.")
-    message(STATUS "")
-  endif()
-  
-  # Include CLI headers
-  include_directories(${PROJECT_SOURCE_DIR}/cli)
+
+  # Include headers
+  include_directories(${PROJECT_SOURCE_DIR}/cli) # CLI
   
   # Compile the CLI
   # All paths must start with "cli/"
   add_executable(cli
     cli/main.cpp
     cli/config.cpp
-    cli/experiment.cpp
-    cli/plot/plot.cpp
-    cli/plot/plot2DFitnessFunction.cpp
   )
 
-  # Add HOP library
-  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-  target_link_libraries(cli hop)
+  # Add library directories
+  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
+
+  # Link against libraries
+  target_link_libraries(cli hop) # HOP
 endif()
+
+# ---------------------
+# Qt Creator workaround
+# ---------------------
+add_custom_target(QtWorkaround SOURCES
+  include/hop_bits/optimisationProblem.hpp
+  include/hop_bits/optimisationProblem/benchmarkProblem.hpp
+  include/hop_bits/optimisationProblem/benchmark/attractiveSectorFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bentCigarFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/buecheRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/compositeGriewankRosenbrockFunctionF8F2.hpp
+  include/hop_bits/optimisationProblem/benchmark/differentPowersFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/discusFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/ellipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/ellipsoidalFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/gallaghersGaussian101mePeaksFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/katsuuraFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/linearSlope.hpp
+  include/hop_bits/optimisationProblem/benchmark/lunacekBiRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/rastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/rastriginFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/rosenbrockFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/rosenbrockFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/schaffersF7Function.hpp
+  include/hop_bits/optimisationProblem/benchmark/schaffersF7FunctionIllConditioned.hpp
+  include/hop_bits/optimisationProblem/benchmark/schwefelFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/sharpRidgeFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/sphereFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/stepEllipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/weierstrassFunction.hpp
+  include/hop_bits/optimisationAlgorithm.hpp
+  include/hop_bits/evaluation/monitor.hpp
+  include/hop_bits/evaluation/selector.hpp
+  include/hop_bits/evaluation/aggregator.hpp
+  include/hop_bits/evaluation/runable.hpp
+  include/hop_bits/evaluation/experiment.hpp
+  include/hop_bits/evaluation/analysis.hpp
+  include/hop_bits/evaluation/analysis/convergenceRate.hpp
+  include/hop_bits/evaluation/analysis/fitnessFunctionGrid.hpp
+  include/hop_bits/evaluation/analysis/performanceProfile.hpp
+  include/hop_bits/helper/cereal.hpp
+  include/hop_bits/helper/random.hpp
+)

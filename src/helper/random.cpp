@@ -1,6 +1,6 @@
-#include <helper/random.hpp>
+#include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  std::random_device Random::RANDOM_DEVIDE;
-  std::mt19937_64 Random::RNG(Random::RANDOM_DEVIDE());
+  decltype(Random::RANDOM_DEVIDE) Random::RANDOM_DEVIDE;
+  decltype(Random::RNG) Random::RNG(Random::RANDOM_DEVIDE());
 }

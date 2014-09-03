@@ -1,4 +1,4 @@
-#include <optimisationProblem/benchmark/differentPowersFunction.hpp>
+#include <hop_bits/optimisationProblem/benchmark/differentPowersFunction.hpp>
 
 namespace hop {
   DifferentPowersFunction::DifferentPowersFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {
