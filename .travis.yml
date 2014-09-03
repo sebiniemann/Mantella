@@ -34,7 +34,9 @@ install:
   - cd ..
   
   # Boost (filesystem)
-  - sudo apt-get install -qq libboost-filesystem-dev
+  # Needed until Travis CI updates to Ubuntu 14.04+
+  - sudo apt-get install -qq libboost-filesystem1.54-dev
+#  - sudo apt-get install -qq libboost-filesystem-dev
 
 script: 
   - cmake .
