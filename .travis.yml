@@ -24,7 +24,7 @@ install:
   - sudo apt-get install -qq libopenblas-dev
   
   # Armadillo C++
-  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.400.1.tar.gz
+  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.400.2.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
