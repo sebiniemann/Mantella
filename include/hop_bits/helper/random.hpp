@@ -5,9 +5,13 @@
 namespace hop {
   class Random {
     public:
-      static std::mt19937_64 RNG;
+      Random() = delete;
+      Random(const Random&) = delete;
+      Random& operator=(const Random&) = delete;
+
+      static std::mt19937_64 Rng;
 
     protected:
-      static std::random_device RANDOM_DEVIDE;
+      static std::random_device RandomDevice;
   };
 }
