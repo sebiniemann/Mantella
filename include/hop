@@ -1,7 +1,21 @@
-#pragma
+#pragma once
 
-#include <hop_bits/optimisationProblem.hpp>
-#include <hop_bits/optimisationProblem/benchmarkProblem.hpp>
+#include <hop_bits/config.hpp>
+#include <hop_bits/evaluation/fitnessFunctionGrid.hpp>
+#include <hop_bits/evaluation/monitor/aggregator.hpp>
+#include <hop_bits/evaluation/monitor/selector.hpp>
+#include <hop_bits/evaluation/monitor.hpp>
+#include <hop_bits/evaluation/performanceProfile.hpp>
+#include <hop_bits/evaluation.hpp>
+#include <hop_bits/helper/cereal.hpp>
+#include <hop_bits/helper/random.hpp>
+#include <hop_bits/helper/runable.hpp>
+#include <hop_bits/optimisationAlgorithm/hillClimbing.hpp>
+#include <hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
+#include <hop_bits/optimisationAlgorithm/randomSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+#include <hop_bits/optimisationAlgorithm.hpp>
 #include <hop_bits/optimisationProblem/benchmark/attractiveSectorFunction.hpp>
 #include <hop_bits/optimisationProblem/benchmark/bentCigarFunction.hpp>
 #include <hop_bits/optimisationProblem/benchmark/buecheRastriginFunction.hpp>
@@ -26,12 +40,5 @@
 #include <hop_bits/optimisationProblem/benchmark/sphereFunction.hpp>
 #include <hop_bits/optimisationProblem/benchmark/stepEllipsoidalFunction.hpp>
 #include <hop_bits/optimisationProblem/benchmark/weierstrassFunction.hpp>
-#include <hop_bits/optimisationAlgorithm.hpp>
-#include <hop_bits/evaluation/monitor.hpp>
-#include <hop_bits/evaluation/selector.hpp>
-#include <hop_bits/evaluation/aggregator.hpp>
-#include <hop_bits/evaluation/runable.hpp>
-#include <hop_bits/evaluation/experiment.hpp>
-#include <hop_bits/evaluation/analysis.hpp>
-#include <hop_bits/helper/cereal.hpp>
-#include <hop_bits/helper/random.hpp>
+#include <hop_bits/optimisationProblem/benchmarkProblem.hpp>
+#include <hop_bits/optimisationProblem.hpp>
