@@ -63,8 +63,22 @@ if(BUILD_LIBRARY)
   # Compile the optimisation library
   # All paths must start with "src/"
   add_library(hop SHARED
-    src/optimisationProblem.cpp
-    src/optimisationProblem/benchmarkProblem.cpp
+    src/config.cpp
+    src/evaluation/fitnessFunctionGrid.cpp
+    src/evaluation/monitor/aggregator.cpp
+    src/evaluation/monitor/selector.cpp
+    src/evaluation/monitor.cpp
+    src/evaluation/performanceProfile.cpp
+    src/evaluation.cpp
+    src/helper/cereal.cpp
+    src/helper/random.cpp
+    src/helper/runable.cpp
+    src/optimisationAlgorithm/hillClimbing.cpp
+    src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
+    src/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
+    src/optimisationAlgorithm/randomSearch.cpp
+    src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
+    src/optimisationAlgorithm.cpp
     src/optimisationProblem/benchmark/attractiveSectorFunction.cpp
     src/optimisationProblem/benchmark/bentCigarFunction.cpp
     src/optimisationProblem/benchmark/buecheRastriginFunction.cpp
@@ -89,18 +103,8 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/benchmark/sphereFunction.cpp
     src/optimisationProblem/benchmark/stepEllipsoidalFunction.cpp
     src/optimisationProblem/benchmark/weierstrassFunction.cpp
-    src/optimisationAlgorithm.cpp
-    src/evaluation/monitor.cpp
-    src/evaluation/selector.cpp
-    src/evaluation/aggregator.cpp
-    src/evaluation/runable.cpp
-    src/evaluation/experiment.cpp
-    src/evaluation/analysis.cpp
-    src/evaluation/analysis/convergenceRate.cpp
-    src/evaluation/analysis/fitnessFunctionGrid.cpp
-    src/evaluation/analysis/performanceProfile.cpp
-    src/helper/cereal.cpp
-    src/helper/random.cpp
+    src/optimisationProblem/benchmarkProblem.cpp
+    src/optimisationProblem.cpp
   )
 
   # Link against libraries
@@ -149,7 +153,6 @@ if(BUILD_CLI)
   # All paths must start with "cli/"
   add_executable(cli
     cli/main.cpp
-    cli/config.cpp
   )
 
   # Add library directories
@@ -163,8 +166,23 @@ endif()
 # Qt Creator workaround
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
-  include/hop_bits/optimisationProblem.hpp
-  include/hop_bits/optimisationProblem/benchmarkProblem.hpp
+  include/hop
+  include/hop_bits/config.hpp
+  include/hop_bits/evaluation/fitnessFunctionGrid.hpp
+  include/hop_bits/evaluation/monitor/aggregator.hpp
+  include/hop_bits/evaluation/monitor/selector.hpp
+  include/hop_bits/evaluation/monitor.hpp
+  include/hop_bits/evaluation/performanceProfile.hpp
+  include/hop_bits/evaluation.hpp
+  include/hop_bits/helper/cereal.hpp
+  include/hop_bits/helper/random.hpp
+  include/hop_bits/helper/runable.hpp
+  include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
+  include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm/randomSearch.hpp
+  include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationProblem/benchmark/attractiveSectorFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/bentCigarFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/buecheRastriginFunction.hpp
@@ -189,16 +207,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/benchmark/sphereFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/stepEllipsoidalFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/weierstrassFunction.hpp
-  include/hop_bits/optimisationAlgorithm.hpp
-  include/hop_bits/evaluation/monitor.hpp
-  include/hop_bits/evaluation/selector.hpp
-  include/hop_bits/evaluation/aggregator.hpp
-  include/hop_bits/evaluation/runable.hpp
-  include/hop_bits/evaluation/experiment.hpp
-  include/hop_bits/evaluation/analysis.hpp
-  include/hop_bits/evaluation/analysis/convergenceRate.hpp
-  include/hop_bits/evaluation/analysis/fitnessFunctionGrid.hpp
-  include/hop_bits/evaluation/analysis/performanceProfile.hpp
-  include/hop_bits/helper/cereal.hpp
-  include/hop_bits/helper/random.hpp
+  include/hop_bits/optimisationProblem/benchmarkProblem.hpp
+  include/hop_bits/optimisationProblem.hpp
+  ext/matplotlib/test.py
 )

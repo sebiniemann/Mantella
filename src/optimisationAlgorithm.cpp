@@ -1,27 +1,38 @@
 #include <hop_bits/optimisationAlgorithm.hpp>
 
+#include <limits>
+
 namespace hop {
-  OptimisationAlgorithm::OptimisationAlgorithm() {
+  OptimisationAlgorithm::OptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+    : optimisationProblem_(optimisationProblem) {
 
   }
 
-  arma::Col<double> OptimisationAlgorithm::optimise(std::shared_ptr<OptimisationProblem> optimisationProblem) {
-    return nullptr;
+  bool OptimisationAlgorithm::optimise() {
+    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
+    bestSolution_ = arma::Col<double>({});
+    numberOfIterations_ = 0;
+
+    return optimiseImplementation();
+  }
+
+  double OptimisationAlgorithm::getBestObjectiveValue() const {
+    return bestObjectiveValue_;
+  }
+
+  arma::Col<double> OptimisationAlgorithm::getBestSolution() const {
+    return bestSolution_;
   }
 
   bool OptimisationAlgorithm::isFinished() const {
-    return true;
+    return (bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
   bool OptimisationAlgorithm::isTerminated() const {
-    return true;
+    return (optimisationProblem_->getNumberOfEvaluations() >= optimisationProblem_->getMaximalNumberOfEvaluations());
   }
 
-  void OptimisationAlgorithm::initialisation() {
-
-  }
-
-  void OptimisationAlgorithm::updateInformations(arma::Mat<double> parameters, arma::Mat<double> objectiveValues, arma::Mat<double> softConstraintsValues) {
-
+  unsigned int OptimisationAlgorithm::getNumberOfIterations() const {
+    return numberOfIterations_;
   }
 }

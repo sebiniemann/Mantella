@@ -7,21 +7,29 @@
 namespace hop {
   class OptimisationAlgorithm {
     public:
-      OptimisationAlgorithm();
-      arma::Col<double> optimise(std::shared_ptr<OptimisationProblem> optimisationProblem);
+      explicit OptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem);
+
+      OptimisationAlgorithm(const OptimisationAlgorithm&) = delete;
+      OptimisationAlgorithm& operator=(const OptimisationAlgorithm&) = delete;
+
+      bool optimise();
+
+      arma::Col<double> getBestSolution() const;
+      double getBestObjectiveValue() const;
 
       bool isFinished() const;
+      bool isTerminated() const;
+
+      unsigned int getNumberOfIterations() const;
 
     protected:
-      std::shared_ptr<OptimisationProblem> _optimisationProblem;
+      std::shared_ptr<OptimisationProblem> optimisationProblem_;
 
-      arma::Col<double> _bestParameter;
-      double _bestObjectiveValue;
+      double bestObjectiveValue_;
+      arma::Col<double> bestSolution_;
 
-      virtual void initialisation();
-      virtual arma::Mat<double> getNextParameters() = 0;
-      virtual void updateInformations(arma::Mat<double> parameters, arma::Mat<double> objectiveValues, arma::Mat<double> softConstraintsValues);
+      unsigned int numberOfIterations_;
 
-      bool isTerminated() const;
+      virtual bool optimiseImplementation() = 0;
   };
 }
