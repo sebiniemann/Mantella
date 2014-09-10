@@ -1,14 +1,19 @@
 #pragma once
 
+#include <cmath>
+
 #include <hop_bits/optimisationProblem/benchmarkProblem.hpp>
 
 namespace hop {
   class SchwefelFunction : public BenchmarkProblem {
     public:
-      SchwefelFunction(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
+
+      SchwefelFunction(const SchwefelFunction&) = delete;
+      SchwefelFunction& operator=(const SchwefelFunction&) = delete;
 
     protected:
-      arma::Col<double> _delta;
+      arma::Col<double> delta_ = getScaling(std::sqrt(10));
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -18,7 +23,7 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_one));
+        archive(CEREAL_NVP(one_));
       }
   };
 }

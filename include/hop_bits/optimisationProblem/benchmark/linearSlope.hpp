@@ -5,14 +5,17 @@
 namespace hop {
   class LinearSlope : public BenchmarkProblem {
     public:
-      LinearSlope(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
 
-      void setOne(const arma::Col<double> &one) override;
+      LinearSlope(const LinearSlope&) = delete;
+      LinearSlope& operator=(const LinearSlope&) = delete;
+
+      void setOne(const arma::Col<double>& one) override;
 
     protected:
-      double _partiallyObjectiveValue;
-      arma::Col<double> _xOpt;
-      arma::Col<double> _scaling;
+      arma::Col<double> xOpt_;
+      arma::Col<double> scaling_;
+      double partiallyObjectiveValue_;
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -22,7 +25,10 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_one));
+        archive(CEREAL_NVP(one_));
+        archive(CEREAL_NVP(xOpt_));
+        archive(CEREAL_NVP(scaling_));
+        archive(CEREAL_NVP(partiallyObjectiveValue_));
       }
   };
 }

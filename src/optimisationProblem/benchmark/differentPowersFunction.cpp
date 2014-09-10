@@ -1,12 +1,8 @@
 #include <hop_bits/optimisationProblem/benchmark/differentPowersFunction.hpp>
 
 namespace hop {
-  DifferentPowersFunction::DifferentPowersFunction(const unsigned int &numberOfDimensions) : BenchmarkProblem(numberOfDimensions) {
-
-  }
-
-  double DifferentPowersFunction::getObjectiveValueImplementation(const arma::Col<double> &parameter) const {
-    arma::Col<double> z = arma::abs(_rotationR * (parameter - _translation));
+  double DifferentPowersFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    arma::Col<double> z = arma::abs(rotationR_ * (parameter - translation_));
     return arma::norm(z % getScaling(arma::square(z)));
   }
 }

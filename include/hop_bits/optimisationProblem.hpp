@@ -13,7 +13,10 @@
 namespace hop {
   class OptimisationProblem {
     public:
-      OptimisationProblem(const unsigned int& numberOfDimensions);
+      explicit OptimisationProblem(const unsigned int& numberOfDimensions);
+
+      OptimisationProblem(const OptimisationProblem&) = delete;
+      OptimisationProblem& operator=(const OptimisationProblem&) = delete;
 
       arma::Col<arma::uword> isSatisfyingLowerBounds(const arma::Col<double>& parameter);
       arma::Col<arma::uword> isSatisfyingUpperBounds(const arma::Col<double>& parameter);
@@ -49,22 +52,22 @@ namespace hop {
       virtual double getObjectiveValueImplementation(const arma::Col<double>& parameter) const = 0;
       virtual double getSoftConstraintsValueImplementation(const arma::Col<double>& parameter) const;
 
-      unsigned int _numberOfDimensions;
+      unsigned int numberOfDimensions_;
 
-      arma::Col<double> _lowerBounds;
-      arma::Col<double> _upperBounds;
+      arma::Col<double> lowerBounds_;
+      arma::Col<double> upperBounds_;
 
-      arma::Col<double> _parameterTranslation;
-      arma::Mat<double> _parameterRotation;
-      arma::Col<double> _parameterScale;
+      arma::Col<double> parameterTranslation_;
+      arma::Mat<double> parameterRotation_;
+      arma::Col<double> parameterScale_;
 
-      double _objectiveValueTranslation;
-      double _objectiveValueScale;
+      double objectiveValueTranslation_;
+      double objectiveValueScale_;
 
-      double _acceptableObjectiveValue;
-      unsigned int _maximalNumberOfEvaluations;
+      double acceptableObjectiveValue_;
+      unsigned int maximalNumberOfEvaluations_;
 
-      unsigned int _numberOfEvaluations;
+      unsigned int numberOfEvaluations_;
 
       arma::Col<double> getScaledCongruentParameter(const arma::Col<double>& parameter) const;
 
@@ -89,28 +92,28 @@ namespace hop {
           }
       };
 
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> _cachedObjectivValues;
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> _cachedSoftConstraintsValues;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> _cachedIsSatisfyingLowerBounds;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> _cachedIsSatisfyingUpperBounds;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingSoftConstraints;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> _cachedIsSatisfyingConstraints;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedObjectivValues_;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
 
       friend class cereal::access;
       OptimisationProblem() = default;
 
       template<class T>
       void serialize(T& archive) {
-        archive(CEREAL_NVP(_numberOfDimensions));
-        archive(CEREAL_NVP(_lowerBounds));
-        archive(CEREAL_NVP(_upperBounds));
-        archive(CEREAL_NVP(_parameterTranslation));
-        archive(CEREAL_NVP(_parameterRotation));
-        archive(CEREAL_NVP(_parameterScale));
-        archive(CEREAL_NVP(_objectiveValueTranslation));
-        archive(CEREAL_NVP(_objectiveValueScale));
-        archive(CEREAL_NVP(_acceptableObjectiveValue));
-        archive(CEREAL_NVP(_maximalNumberOfEvaluations));
+        archive(CEREAL_NVP(numberOfDimensions_));
+        archive(CEREAL_NVP(lowerBounds_));
+        archive(CEREAL_NVP(upperBounds_));
+        archive(CEREAL_NVP(parameterTranslation_));
+        archive(CEREAL_NVP(parameterRotation_));
+        archive(CEREAL_NVP(parameterScale_));
+        archive(CEREAL_NVP(objectiveValueTranslation_));
+        archive(CEREAL_NVP(objectiveValueScale_));
+        archive(CEREAL_NVP(acceptableObjectiveValue_));
+        archive(CEREAL_NVP(maximalNumberOfEvaluations_));
       }
   };
 }

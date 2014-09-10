@@ -1,14 +1,19 @@
 #pragma once
 
+#include <cmath>
+
 #include <hop_bits/optimisationProblem/benchmarkProblem.hpp>
 
 namespace hop {
   class SchaffersF7Function : public BenchmarkProblem {
     public:
-      SchaffersF7Function(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
+
+      SchaffersF7Function(const SchaffersF7Function&) = delete;
+      SchaffersF7Function& operator=(const SchaffersF7Function&) = delete;
 
     protected:
-      const arma::Col<double> _delta;
+      const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -18,9 +23,9 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_translation));
-        archive(CEREAL_NVP(_rotationR));
-        archive(CEREAL_NVP(_rotationQ));
+        archive(CEREAL_NVP(translation_));
+        archive(CEREAL_NVP(rotationR_));
+        archive(CEREAL_NVP(rotationQ_));
       }
   };
 }

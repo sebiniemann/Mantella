@@ -1,16 +1,21 @@
 #pragma once
 
+#include <cmath>
+
 #include <hop_bits/optimisationProblem/benchmarkProblem.hpp>
 
 namespace hop {
   class BuecheRastriginFunction : public BenchmarkProblem {
     public:
-      BuecheRastriginFunction(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
 
-      void setTranslation(const arma::Col<double> &translation) override;
+      BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
+      BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
+
+      void setTranslation(const arma::Col<double>& translation) override;
 
     protected:
-      const arma::Col<double> _scaling;
+      const arma::Col<double> scaling_ = getScaling(std::sqrt(10.0));
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -20,7 +25,7 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_translation));
+        archive(CEREAL_NVP(translation_));
       }
   };
 }

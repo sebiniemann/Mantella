@@ -5,10 +5,13 @@
 namespace hop {
   class GallaghersGaussian21hiPeaksFunction : public BenchmarkProblem {
     public:
-      GallaghersGaussian21hiPeaksFunction(const unsigned int& numberOfDimensions);
+      explicit GallaghersGaussian21hiPeaksFunction(const unsigned int& numberOfDimensions);
+
+      GallaghersGaussian21hiPeaksFunction(const GallaghersGaussian21hiPeaksFunction&) = delete;
+      GallaghersGaussian21hiPeaksFunction& operator=(const GallaghersGaussian21hiPeaksFunction&) = delete;
 
     protected:
-      arma::Col<double> _weight;
+      arma::Col<double> weight_;
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -18,9 +21,10 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_rotationR));
-        archive(CEREAL_NVP(_deltaC21));
-        archive(CEREAL_NVP(_localOptimaY21));
+        archive(CEREAL_NVP(rotationR_));
+        archive(CEREAL_NVP(deltaC21_));
+        archive(CEREAL_NVP(localOptimaY21_));
+        archive(CEREAL_NVP(weight_));
       }
   };
 }

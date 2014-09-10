@@ -5,10 +5,13 @@
 namespace hop {
   class EllipsoidalFunction : public BenchmarkProblem {
     public:
-      EllipsoidalFunction(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
+
+      EllipsoidalFunction(const EllipsoidalFunction&) = delete;
+      EllipsoidalFunction& operator=(const EllipsoidalFunction&) = delete;
 
     protected:
-      const arma::Col<double> _scaling;
+      const arma::Col<double> scaling_ = getScaling(1000000.0);
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -18,7 +21,7 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_translation));
+        archive(CEREAL_NVP(translation_));
       }
   };
 }

@@ -1,16 +1,21 @@
 #pragma once
 
+#include <cmath>
+
 #include <hop_bits/optimisationProblem/benchmarkProblem.hpp>
 
 namespace hop {
   class LunacekBiRastriginFunction : public BenchmarkProblem {
     public:
-      LunacekBiRastriginFunction(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
+
+      LunacekBiRastriginFunction(const LunacekBiRastriginFunction&) = delete;
+      LunacekBiRastriginFunction& operator=(const LunacekBiRastriginFunction&) = delete;
 
     protected:
-      double _mu1;
-      const double _s;
-      const arma::Col<double> _delta;
+      const arma::Col<double> delta_ = getScaling(std::sqrt(100.0));
+      const double s_ = 1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1);
+      const double mu1_ = -std::sqrt((6.25 - 1) / s_);
 
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
@@ -20,9 +25,11 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_one));
-        archive(CEREAL_NVP(_rotationR));
-        archive(CEREAL_NVP(_rotationQ));
+        archive(CEREAL_NVP(one_));
+        archive(CEREAL_NVP(rotationR_));
+        archive(CEREAL_NVP(rotationQ_));
+        archive(CEREAL_NVP(s_));
+        archive(CEREAL_NVP(mu1_));
       }
   };
 }

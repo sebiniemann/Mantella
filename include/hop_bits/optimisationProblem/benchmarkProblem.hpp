@@ -7,7 +7,10 @@
 namespace hop {
   class BenchmarkProblem : public OptimisationProblem {
     public:
-      BenchmarkProblem(const unsigned int& numberOfDimensions);
+      explicit BenchmarkProblem(const unsigned int& numberOfDimensions);
+
+      BenchmarkProblem(const BenchmarkProblem&) = delete;
+      BenchmarkProblem& operator=(const BenchmarkProblem&) = delete;
 
       virtual void setTranslation(const arma::Col<double>& translation);
       virtual void setOne(const arma::Col<double>& one);
@@ -19,14 +22,14 @@ namespace hop {
       virtual void setLocalOptimaY21(const arma::Mat<double>& localOptimaY21);
       
     protected:
-      arma::Col<double> _translation;
-      arma::Col<double> _one;
-      arma::Mat<double> _rotationR;
-      arma::Mat<double> _rotationQ;
-      arma::Mat<double> _deltaC101;
-      arma::Mat<double> _localOptimaY101;
-      arma::Mat<double> _deltaC21;
-      arma::Mat<double> _localOptimaY21;
+      arma::Col<double> translation_;
+      arma::Col<double> one_;
+      arma::Mat<double> rotationR_;
+      arma::Mat<double> rotationQ_;
+      arma::Mat<double> deltaC101_;
+      arma::Mat<double> localOptimaY101_;
+      arma::Mat<double> deltaC21_;
+      arma::Mat<double> localOptimaY21_;
 
       arma::Mat<double> getRandomRotation() const;
       arma::Mat<double> getRandomDeltaC101() const;

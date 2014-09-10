@@ -5,7 +5,10 @@
 namespace hop {
   class DifferentPowersFunction : public BenchmarkProblem {
     public:
-      DifferentPowersFunction(const unsigned int& numberOfDimensions);
+      using BenchmarkProblem::BenchmarkProblem;
+
+      DifferentPowersFunction(const DifferentPowersFunction&) = delete;
+      DifferentPowersFunction& operator=(const DifferentPowersFunction&) = delete;
 
     protected:
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
@@ -16,8 +19,8 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BenchmarkProblem>(this)));
-        archive(CEREAL_NVP(_translation));
-        archive(CEREAL_NVP(_rotationR));
+        archive(CEREAL_NVP(translation_));
+        archive(CEREAL_NVP(rotationR_));
       }
   };
 }
