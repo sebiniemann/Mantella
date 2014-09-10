@@ -5,11 +5,13 @@
 namespace hop {
   class Monitor {
     public:
-      Monitor() = default;
+      Monitor() = delete;
+      Monitor(const Monitor&) = delete;
+      Monitor& operator=(const Monitor&) = delete;
 
-      static void observeSolutionCandidates();
-      static void addSolutionCandidate(const arma::Col<double>& solutionCandidate);
-      static arma::Mat<double> getSolutionCandidates();
+      static void observeCandidateSolutions();
+      static void addCandidateSolution(const arma::Col<double>& candidateSolution);
+      static arma::Mat<double> getCandidateSolutions();
 
       static void observeObjectiveValues();
       static void addObjectiveValue(const double& objectiveValue);
@@ -28,19 +30,19 @@ namespace hop {
       static arma::Row<arma::uword> getNumberOfIterations();
 
     protected:
-      static bool _observeSolutionCandidates;
-      static arma::Mat<double> _solutionCandidates;
+      static bool observeCandidateSolutions_;
+      static arma::Mat<double> candidateSolutions_;
 
-      static bool _observeoOjectiveValues;
-      static arma::Row<double> _objectiveValues;
+      static bool observeoOjectiveValues_;
+      static arma::Row<double> objectiveValues_;
 
-      static bool _observeSoftConstraintsValues;
-      static arma::Row<double> _softConstraintsValues;
+      static bool observeSoftConstraintsValues_;
+      static arma::Row<double> softConstraintsValues_;
 
-      static bool _observeNumberOfEvaluations;
-      static arma::Row<arma::uword> _numberOfEvaluations;
+      static bool observeNumberOfEvaluations_;
+      static arma::Row<arma::uword> numberOfEvaluations_;
 
-      static bool _observeNumberOfIterations;
-      static arma::Row<arma::uword> _numberOfIterations;
+      static bool observeNumberOfIterations_;
+      static arma::Row<arma::uword> numberOfIterations_;
   };
 }
