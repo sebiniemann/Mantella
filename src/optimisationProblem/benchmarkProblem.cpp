@@ -7,13 +7,16 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions) : OptimisationProblem(numberOfDimensions) {
-    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5.0);
-    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5.0);
-    setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Random::RNG))));
+  BenchmarkProblem::BenchmarkProblem(const unsigned int& numberOfDimensions)
+    : OptimisationProblem(numberOfDimensions) {
+    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
+    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
+    setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Random::Rng))));
 
-    setTranslation(arma::randu<arma::Col<double>>(numberOfDimensions) * 8.0 - 4.0);
-    setOne(arma::zeros<arma::Col<double>>(numberOfDimensions) + (std::bernoulli_distribution(0.5)(Random::RNG) ? 1.0 : -1.0));
+    setAcceptableObjectiveValue(objectiveValueTranslation_ + 10e-3);
+
+    setTranslation(arma::randu<arma::Col<double>>(numberOfDimensions_) * 8.0 - 4.0);
+    setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Random::Rng) ? 1.0 : -1.0));
     setRotationR(getRandomRotation());
     setRotationQ(getRandomRotation());
     setDeltaC101(getRandomDeltaC101());
@@ -23,41 +26,41 @@ namespace hop {
   }
 
   void BenchmarkProblem::setTranslation(const arma::Col<double>& translation) {
-    _translation = translation;
+    translation_ = translation;
   }
 
   void BenchmarkProblem::setOne(const arma::Col<double>& one) {
-    _one = one;
+    one_ = one;
   }
 
   void BenchmarkProblem::setRotationR(const arma::Mat<double>& rotationR) {
-    _rotationR = rotationR;
+    rotationR_ = rotationR;
   }
 
   void BenchmarkProblem::setRotationQ(const arma::Mat<double>& rotationQ) {
-    _rotationQ = rotationQ;
+    rotationQ_ = rotationQ;
   }
 
   void BenchmarkProblem::setDeltaC101(const arma::Mat<double>& deltaC101) {
-    _deltaC101 = deltaC101;
+    deltaC101_ = deltaC101;
   }
 
   void BenchmarkProblem::setLocalOptimaY101(const arma::Mat<double>& localOptimaY101) {
-    _localOptimaY101 = localOptimaY101;
+    localOptimaY101_ = localOptimaY101;
   }
 
   void BenchmarkProblem::setDeltaC21(const arma::Mat<double>& deltaC21) {
-    _deltaC21 = deltaC21;
+    deltaC21_ = deltaC21;
   }
 
   void BenchmarkProblem::setLocalOptimaY21(const arma::Mat<double>& localOptimaY21) {
-    _localOptimaY21 = localOptimaY21;
+    localOptimaY21_ = localOptimaY21;
   }
 
   arma::Mat<double> BenchmarkProblem::getRandomRotation() const {
-    arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(_numberOfDimensions, _numberOfDimensions);
-    for (std::size_t j = 0; j < rotationMatrix.n_cols; j++) {
-      for (unsigned int jj = 0; jj < j; jj++) {
+    arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_);
+    for (std::size_t j = 0; j < rotationMatrix.n_cols; ++j) {
+      for (unsigned int jj = 0; jj < j; ++jj) {
         rotationMatrix.col(j) = rotationMatrix.col(j) - arma::dot(rotationMatrix.col(j), rotationMatrix.col(jj)) * rotationMatrix.col(jj);
       }
       rotationMatrix.col(j) = rotationMatrix.col(j) / arma::norm(rotationMatrix.col(j));
@@ -67,45 +70,45 @@ namespace hop {
   }
 
   arma::Mat<double> BenchmarkProblem::getRandomDeltaC101() const {
-    arma::Mat<double> deltaC101(_numberOfDimensions, 101);
+    arma::Mat<double> deltaC101(numberOfDimensions_, 101);
     deltaC101.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
     std::uniform_int_distribution<int> uniformIntDistribution(0, 99);
-    for(std::size_t j = 1; j < deltaC101.n_cols; j++) {
-      deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::RNG)) / 99.0), 0.25);
+    for(std::size_t j = 1; j < deltaC101.n_cols; ++j) {
+      deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::Rng)) / 99.0), 0.25);
     }
 
     return deltaC101;
   }
 
   arma::Mat<double> BenchmarkProblem::getRandomDeltaC21() const {
-    arma::Mat<double> deltaC21(_numberOfDimensions, 21);
+    arma::Mat<double> deltaC21(numberOfDimensions_, 21);
     deltaC21.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
     std::uniform_int_distribution<int> uniformIntDistribution(0, 19);
-    for(std::size_t j = 1; j < deltaC21.n_cols; j++) {
-      deltaC21.col(j) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::RNG)) / 19.0), 0.25);
+    for(std::size_t j = 1; j < deltaC21.n_cols; ++j) {
+      deltaC21.col(j) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::Rng)) / 19.0), 0.25);
     }
 
     return deltaC21;
   }
 
   arma::Mat<double> BenchmarkProblem::getRandomLocalOptimaY101() const {
-    arma::Mat<double> localOptimaY101 = arma::randu<arma::Mat<double>>(_numberOfDimensions, 101) * 8.0 - 4.0;
+    arma::Mat<double> localOptimaY101 = arma::randu<arma::Mat<double>>(numberOfDimensions_, 101) * 8.0 - 4.0;
     localOptimaY101.col(0) = 0.8 * localOptimaY101.col(0);
 
     return localOptimaY101;
   }
 
   arma::Mat<double> BenchmarkProblem::getRandomLocalOptimaY21() const {
-    arma::Mat<double> localOptimaY21 = arma::randu<arma::Mat<double>>(_numberOfDimensions, 21) * 9.8 - 4.9;
+    arma::Mat<double> localOptimaY21 = arma::randu<arma::Mat<double>>(numberOfDimensions_, 21) * 9.8 - 4.9;
     localOptimaY21.col(0) = 0.8 * localOptimaY21.col(0);
 
     return localOptimaY21;
   }
 
   arma::Col<double> BenchmarkProblem::getScaling(const double& condition) const {
-    arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, _numberOfDimensions);
+    arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
     for (auto& scale : scaling) {
       scale = std::pow(condition, scale);
@@ -115,9 +118,9 @@ namespace hop {
   }
 
   arma::Col<double> BenchmarkProblem::getScaling(const arma::Col<double>& condition) const {
-    arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, _numberOfDimensions);
+    arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
-    for (size_t n = 0; n < scaling.n_elem; n++) {
+    for (size_t n = 0; n < scaling.n_elem; ++n) {
       scaling.at(n) = std::pow(condition.at(n), scaling.at(n));
     }
 
@@ -126,9 +129,9 @@ namespace hop {
 
   arma::Col<double> BenchmarkProblem::getAsymmetricTransformation(const double& beta, const arma::Col<double>& parameter) const {
     arma::Col<double> asymmetricTransformation(parameter.n_elem);
-    arma::Col<double> spacing = arma::linspace<arma::Col<double>>(0, 1, _numberOfDimensions);
+    arma::Col<double> spacing = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
-    for (size_t n = 0; n < parameter.n_elem; n++) {
+    for (size_t n = 0; n < parameter.n_elem; ++n) {
       double value = parameter.at(n);
 
       if (value > 0.0) {
@@ -163,7 +166,7 @@ namespace hop {
   arma::Col<double> BenchmarkProblem::getOscillationTransformation(const arma::Col<double>& parameter) const {
     arma::Col<double> oscillate(parameter.n_elem);
 
-    for (std::size_t n = 0; n < parameter.n_elem; n++) {
+    for (std::size_t n = 0; n < parameter.n_elem; ++n) {
       oscillate.at(n) = getOscillationTransformation(parameter.at(n));
     }
 
@@ -173,7 +176,7 @@ namespace hop {
   double BenchmarkProblem::getPenality(const arma::Col<double>& parameter) const {
     double penality = 0.0;
 
-    for (std::size_t n = 0; n < parameter.n_elem; n++) {
+    for (std::size_t n = 0; n < parameter.n_elem; ++n) {
       penality += std::pow(std::max(0.0, std::abs(parameter.at(n)) - 5.0), 2.0);
     }
 
