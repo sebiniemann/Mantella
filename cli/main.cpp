@@ -1,6 +1,9 @@
 #include <cstdlib>
 #include <memory>
 #include <fstream>
+#include <iostream>
+
+#include <armadillo>
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
@@ -12,24 +15,21 @@ int main (const int argc, const char* argv[]) {
 
   }
 
-//  std::shared_ptr<Experiment> fitnessFunctionGridPlotter = std::shared_ptr<Experiment>(new FitnessFunctionGridPlotter(std::shared_ptr<hop::OptimisationProblem>(new hop::SphereFunction(2))));
+  arma::arma_rng::set_seed_random();
 
-//  std::ofstream output("output"); {
-//    cereal::JSONOutputArchive archive(output);
-//    archive(cereal::make_nvp("experiment", fitnessFunctionGridPlotter));
-//  } output.close();
+  std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::SphereFunction(2));
+  optimisationProblem->setMaximalNumberOfEvaluations(10000);
 
-//  fitnessFunctionGridPlotter->run();
-//  fitnessFunctionGridPlotter->waitUntilFinished();
+  hop::ParallelStandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, 40);
+  optimisationAlgorithm.optimise();
 
-//  std::shared_ptr<Experiment> experiment;
-//  std::ifstream input(argv[1]); {
-//    cereal::JSONInputArchive archive(input);
-//    archive(cereal::make_nvp("experiment", experiment));
-//  } input.close();
-
-//  experiment->run();
-//  experiment->waitUntilFinished();
+  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;
+  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << std::endl;
+  std::cout << "bestObjectiveValue: " << optimisationAlgorithm.getBestObjectiveValue() << std::endl;
+  std::cout << "acceptableObjectiveValue: " << optimisationProblem->getAcceptableObjectiveValue() << std::endl;
+  std::cout << "bestSolution: " << optimisationAlgorithm.getBestSolution() << std::endl;
+  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << std::endl;
+  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
 
   return EXIT_SUCCESS;
 }
