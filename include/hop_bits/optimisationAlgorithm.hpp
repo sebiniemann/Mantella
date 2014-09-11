@@ -29,6 +29,7 @@ namespace hop {
       arma::Col<double> bestSolution_;
 
       unsigned int numberOfIterations_;
+      unsigned int maximalNumberOfIterations_;
 
       virtual bool optimiseImplementation() = 0;
   };

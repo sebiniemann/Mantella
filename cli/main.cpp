@@ -17,10 +17,10 @@ int main (const int argc, const char* argv[]) {
 
   arma::arma_rng::set_seed_random();
 
-  std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::SphereFunction(2));
-  optimisationProblem->setMaximalNumberOfEvaluations(10000);
+  std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::SphereFunction(5));
+  optimisationProblem->setMaximalNumberOfEvaluations(400);
 
-  hop::ParallelStandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, 40);
+  hop::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, 2);
   optimisationAlgorithm.optimise();
 
   std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;

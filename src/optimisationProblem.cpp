@@ -111,10 +111,12 @@ namespace hop {
       throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
+    ++numberOfEvaluations_;
+    Monitor::addNumberOfEvaluations(numberOfEvaluations_);
+
     auto cachePosition = cachedObjectivValues_.find(parameter);
     if(cachePosition == cachedObjectivValues_.end()) {
-      ++numberOfEvaluations_;
-      Monitor::addNumberOfEvaluations(numberOfEvaluations_);
+      ++numberOfDistinctEvaluations_;
 
       double result = getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
 
@@ -200,6 +202,10 @@ namespace hop {
 
   unsigned int OptimisationProblem::getNumberOfEvaluations() const {
     return numberOfEvaluations_;
+  }
+
+  unsigned int OptimisationProblem::getNumberOfDistinctEvaluations() const {
+    return numberOfDistinctEvaluations_;
   }
 
   arma::Col<double> OptimisationProblem::getScaledCongruentParameter(const arma::Col<double>& parameter) const {

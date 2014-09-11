@@ -47,6 +47,7 @@ namespace hop {
       void setMaximalNumberOfEvaluations(const unsigned int& maximalNumberOfEvaluations);
 
       unsigned int getNumberOfEvaluations() const;
+      unsigned int getNumberOfDistinctEvaluations() const;
 
     protected:
       virtual double getObjectiveValueImplementation(const arma::Col<double>& parameter) const = 0;
@@ -68,6 +69,7 @@ namespace hop {
       unsigned int maximalNumberOfEvaluations_;
 
       unsigned int numberOfEvaluations_;
+      unsigned int numberOfDistinctEvaluations_;
 
       arma::Col<double> getScaledCongruentParameter(const arma::Col<double>& parameter) const;
 

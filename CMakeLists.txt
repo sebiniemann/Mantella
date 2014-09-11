@@ -92,6 +92,7 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
     src/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
     src/optimisationAlgorithm/randomSearch.cpp
+    src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationProblem/benchmark/attractiveSectorFunction.cpp
@@ -196,6 +197,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm/randomSearch.hpp
+  include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationProblem/benchmark/attractiveSectorFunction.hpp
