@@ -49,6 +49,8 @@ namespace hop {
       unsigned int getNumberOfEvaluations() const;
       unsigned int getNumberOfDistinctEvaluations() const;
 
+      void reset();
+
     protected:
       virtual double getObjectiveValueImplementation(const arma::Col<double>& parameter) const = 0;
       virtual double getSoftConstraintsValueImplementation(const arma::Col<double>& parameter) const;

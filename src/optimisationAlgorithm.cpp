@@ -12,6 +12,7 @@ namespace hop {
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSolution_ = arma::Col<double>({});
     numberOfIterations_ = 0;
+    optimisationProblem_->reset();
 
     return optimiseImplementation();
   }

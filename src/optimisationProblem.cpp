@@ -208,6 +208,18 @@ namespace hop {
     return numberOfDistinctEvaluations_;
   }
 
+  void OptimisationProblem::reset() {
+    numberOfEvaluations_ = 0;
+    numberOfDistinctEvaluations_ = 0;
+
+    cachedObjectivValues_.clear();
+    cachedSoftConstraintsValues_.clear();
+    cachedIsSatisfyingLowerBounds_.clear();
+    cachedIsSatisfyingUpperBounds_.clear();
+    cachedIsSatisfyingSoftConstraints_.clear();
+    cachedIsSatisfyingConstraints_.clear();
+  }
+
   arma::Col<double> OptimisationProblem::getScaledCongruentParameter(const arma::Col<double>& parameter) const {
     return parameterRotation_ * parameterScale_ % (parameter + parameterTranslation_);
   }
