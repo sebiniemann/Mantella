@@ -42,4 +42,4 @@ script:
   - cmake .
   - make
   - cd bin
-  - ./test
+  - ./libTest

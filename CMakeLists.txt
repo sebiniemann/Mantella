@@ -33,6 +33,21 @@ if(BUILD_ALL)
   set(BUILD_CLI ON)
 endif()
 
+# OSX
+if(APPLE)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib)
+  set(CMAKE_MACOSX_RPATH ON)
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  endif()
+endif()
+
 # Set output directories
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -58,7 +73,7 @@ if(BUILD_LIBRARY)
 
   # Include headers
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
-  include_directories(${BOOST_INCLUDE_DIRS}) # Boost
+  include_directories(${Boost_INCLUDE_DIRS}) # Boost
 
   # Compile the optimisation library
   # All paths must start with "src/"
@@ -120,7 +135,7 @@ if(BUILD_LIBRARY)
 
   # Compile the optimisation library tests
   # All paths must start with "test/"
-  add_executable(test
+  add_executable(libTest
     test/main.cpp
   )
 
@@ -128,7 +143,7 @@ if(BUILD_LIBRARY)
   link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
 
   # Link against libraries
-  target_link_libraries(test hop) # HOP
+  target_link_libraries(libTest hop) # HOP
 endif()
 
 # ---------
