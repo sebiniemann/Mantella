@@ -47,6 +47,7 @@ namespace hop {
       void setMaximalNumberOfEvaluations(const unsigned int& maximalNumberOfEvaluations);
 
       unsigned int getNumberOfEvaluations() const;
+      void resetNumberOfEvaluations();
 
     protected:
       virtual double getObjectiveValueImplementation(const arma::Col<double>& parameter) const = 0;

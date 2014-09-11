@@ -202,6 +202,10 @@ namespace hop {
     return numberOfEvaluations_;
   }
 
+  void OptimisationProblem::resetNumberOfEvaluations() {
+    numberOfEvaluations_ = 0;
+  }
+
   arma::Col<double> OptimisationProblem::getScaledCongruentParameter(const arma::Col<double>& parameter) const {
     return parameterRotation_ * parameterScale_ % (parameter + parameterTranslation_);
   }
