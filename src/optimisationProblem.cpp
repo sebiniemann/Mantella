@@ -116,6 +116,7 @@ namespace hop {
 
     auto cachePosition = cachedObjectivValues_.find(parameter);
     if(cachePosition == cachedObjectivValues_.end()) {
+
       ++numberOfDistinctEvaluations_;
 
       double result = getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;

@@ -21,6 +21,7 @@ namespace hop {
       bool isTerminated() const;
 
       unsigned int getNumberOfIterations() const;
+      void setMaximalNumberOfIterations(const unsigned int& maximalNumberOfIterations);
 
     protected:
       std::shared_ptr<OptimisationProblem> optimisationProblem_;
