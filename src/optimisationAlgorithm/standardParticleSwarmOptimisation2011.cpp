@@ -41,7 +41,7 @@ namespace hop {
 
     while(true) {
       if (randomizeTopology_) {
-          topology_ = (arma::randu<arma::Mat<arma::uword>>(populationSize_, populationSize_) < neighbourhoodProbability_);
+          topology_ = (arma::randu<arma::Mat<arma::uword>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
           topology_.diag() += 1.0;
 
           randomizeTopology_ = false;

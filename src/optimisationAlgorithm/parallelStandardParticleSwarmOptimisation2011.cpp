@@ -55,7 +55,7 @@ namespace hop {
         for(std::size_t n = 0; n < populationSize_; ++n) {
 
           if (randomizeTopology_.at(n)) {
-              topology_.col(n) = (arma::randu<arma::Col<arma::uword>>(populationSize_) < neighbourhoodProbability_);
+              topology_.col(n) = (arma::randu<arma::Col<arma::uword>>(populationSize_) <= neighbourhoodProbability_);
               topology_.at(n, n) = 0.0;
 
               randomizeTopology_.at(n) = false;
