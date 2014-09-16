@@ -9,9 +9,10 @@
 #include <cereal/access.hpp>
 
 #include <hop_bits/helper/cereal.hpp>
+#include <hop_bits/helper/printable.hpp>
 
 namespace hop {
-  class OptimisationProblem {
+  class OptimisationProblem : public Printable {
     public:
       explicit OptimisationProblem(const unsigned int& numberOfDimensions);
 

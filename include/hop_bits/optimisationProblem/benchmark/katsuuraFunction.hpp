@@ -12,6 +12,8 @@ namespace hop {
       KatsuuraFunction(const KatsuuraFunction&) = delete;
       KatsuuraFunction& operator=(const KatsuuraFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       const arma::Col<double> delta_ = getScaling(std::sqrt(100.0));
 

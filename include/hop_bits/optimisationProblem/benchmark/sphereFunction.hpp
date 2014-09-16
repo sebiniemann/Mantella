@@ -10,6 +10,8 @@ namespace hop {
       SphereFunction(const SphereFunction&) = delete;
       SphereFunction& operator=(const SphereFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 

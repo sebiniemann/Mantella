@@ -23,4 +23,8 @@ namespace hop {
 
     return std::pow(getOscillationTransformation(10.0 - maximalValue), 2) + getPenality(parameter);
   }
+
+  std::string GallaghersGaussian101mePeaksFunction::to_string() const {
+    return "GallaghersGaussian101mePeaksFunction";
+  }
 }

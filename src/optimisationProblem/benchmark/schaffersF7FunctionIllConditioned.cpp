@@ -7,4 +7,8 @@ namespace hop {
 
     return std::pow(arma::mean(s % (1 + arma::square(arma::sin(50 * arma::pow(s, 0.4))))), 2) + 10.0 * getPenality(parameter);
   }
+
+  std::string SchaffersF7FunctionIllConditioned::to_string() const {
+    return "SchaffersF7FunctionIllConditioned";
+  }
 }

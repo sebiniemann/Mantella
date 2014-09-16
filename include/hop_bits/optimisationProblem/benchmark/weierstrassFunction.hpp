@@ -12,6 +12,8 @@ namespace hop {
       WeierstrassFunction(const WeierstrassFunction&) = delete;
       WeierstrassFunction& operator=(const WeierstrassFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       double f0_;
       const arma::Col<double> delta_ = getScaling(std::sqrt(0.01));

@@ -12,6 +12,8 @@ namespace hop {
       StepEllipsoidalFunction(const StepEllipsoidalFunction&) = delete;
       StepEllipsoidalFunction& operator=(const StepEllipsoidalFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       const arma::Col<double> scaling_ = getScaling(100.0);
       const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));

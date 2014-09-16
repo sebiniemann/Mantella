@@ -7,4 +7,8 @@ namespace hop {
 
     return std::pow(getOscillationTransformation(std::pow(norm(z), 2)), 0.9);
   }
+
+  std::string AttractiveSectorFunction::to_string() const {
+    return "AttractiveSectorFunction";
+  }
 }

@@ -10,6 +10,8 @@ namespace hop {
       EllipsoidalFunctionRotated(const EllipsoidalFunctionRotated&) = delete;
       EllipsoidalFunctionRotated& operator=(const EllipsoidalFunctionRotated&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       const arma::Col<double> scaling_ = getScaling(1000000.0);
 

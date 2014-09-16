@@ -10,6 +10,8 @@ namespace hop {
       DifferentPowersFunction(const DifferentPowersFunction&) = delete;
       DifferentPowersFunction& operator=(const DifferentPowersFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 

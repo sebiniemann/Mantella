@@ -5,4 +5,8 @@ namespace hop {
     arma::Col<double> z = arma::abs(rotationR_ * (parameter - translation_));
     return arma::norm(z % getScaling(arma::square(z)));
   }
+
+  std::string DifferentPowersFunction::to_string() const {
+    return "DifferentPowersFunction";
+  }
 }

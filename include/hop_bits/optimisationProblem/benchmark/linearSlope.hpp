@@ -12,6 +12,8 @@ namespace hop {
 
       void setOne(const arma::Col<double>& one) override;
 
+      std::string to_string() const override;
+
     protected:
       arma::Col<double> xOpt_;
       arma::Col<double> scaling_;

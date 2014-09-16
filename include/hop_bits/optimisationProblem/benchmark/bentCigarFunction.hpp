@@ -10,6 +10,8 @@ namespace hop {
       BentCigarFunction(const BentCigarFunction&) = delete;
       BentCigarFunction& operator=(const BentCigarFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 

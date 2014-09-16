@@ -15,6 +15,8 @@ namespace hop {
 
       void setTranslation(const arma::Col<double>& translation) override;
 
+      std::string to_string() const override;
+
     protected:
       const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 

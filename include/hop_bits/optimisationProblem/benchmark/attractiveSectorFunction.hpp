@@ -12,6 +12,8 @@ namespace hop {
       AttractiveSectorFunction(const AttractiveSectorFunction&) = delete;
       AttractiveSectorFunction& operator=(const AttractiveSectorFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 

@@ -10,6 +10,8 @@ namespace hop {
       DiscusFunction(const DiscusFunction&) = delete;
       DiscusFunction& operator=(const DiscusFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 

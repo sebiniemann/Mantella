@@ -16,4 +16,8 @@ namespace hop {
 
     return partiallyObjectiveValue_ - arma::dot(scaling_, z);
   }
+
+  std::string LinearSlope::to_string() const {
+    return "LinearSlope";
+  }
 }

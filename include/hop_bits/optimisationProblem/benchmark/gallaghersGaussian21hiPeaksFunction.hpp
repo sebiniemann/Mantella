@@ -10,6 +10,8 @@ namespace hop {
       GallaghersGaussian21hiPeaksFunction(const GallaghersGaussian21hiPeaksFunction&) = delete;
       GallaghersGaussian21hiPeaksFunction& operator=(const GallaghersGaussian21hiPeaksFunction&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       arma::Col<double> weight_;
 

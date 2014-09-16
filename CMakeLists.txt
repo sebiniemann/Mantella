@@ -86,8 +86,10 @@ if(BUILD_LIBRARY)
     src/evaluation/performanceProfile.cpp
     src/evaluation.cpp
     src/helper/cereal.cpp
+    src/helper/printable.cpp
     src/helper/random.cpp
     src/helper/runable.cpp
+    src/helper/to_string.cpp
     src/optimisationAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
     src/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
@@ -191,8 +193,10 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/evaluation/performanceProfile.hpp
   include/hop_bits/evaluation.hpp
   include/hop_bits/helper/cereal.hpp
+  include/hop_bits/helper/printable.hpp
   include/hop_bits/helper/random.hpp
   include/hop_bits/helper/runable.hpp
+  include/hop_bits/helper/to_string.hpp
   include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp

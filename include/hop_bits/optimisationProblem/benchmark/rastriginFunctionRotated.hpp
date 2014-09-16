@@ -12,6 +12,8 @@ namespace hop {
       RastriginFunctionRotated(const RastriginFunctionRotated&) = delete;
       RastriginFunctionRotated& operator=(const RastriginFunctionRotated&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 

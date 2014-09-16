@@ -8,8 +8,10 @@
 #include <hop_bits/evaluation/performanceProfile.hpp>
 #include <hop_bits/evaluation.hpp>
 #include <hop_bits/helper/cereal.hpp>
+#include <hop_bits/helper/printable.hpp>
 #include <hop_bits/helper/random.hpp>
 #include <hop_bits/helper/runable.hpp>
+#include <hop_bits/helper/to_string.hpp>
 #include <hop_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>

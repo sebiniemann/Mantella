@@ -13,6 +13,8 @@ namespace hop {
       RosenbrockFunctionRotated(const RosenbrockFunctionRotated&) = delete;
       RosenbrockFunctionRotated& operator=(const RosenbrockFunctionRotated&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 

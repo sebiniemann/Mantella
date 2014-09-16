@@ -18,4 +18,8 @@ namespace hop {
 
     return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2) + 100.0 * getPenality(parameter);
   }
+
+  std::string BuecheRastriginFunction::to_string() const {
+    return "BuecheRastriginFunction";
+  }
 }

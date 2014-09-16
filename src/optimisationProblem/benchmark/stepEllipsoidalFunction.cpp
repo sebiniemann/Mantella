@@ -19,4 +19,8 @@ namespace hop {
 
     return 0.1 * std::max(std::abs(zHat.at(0)) / 10000.0, arma::dot(scaling_, arma::square(rotationQ_ * zTilde))) + getPenality(parameter);
   }
+
+  std::string StepEllipsoidalFunction::to_string() const {
+    return "StepEllipsoidalFunction";
+  }
 }
