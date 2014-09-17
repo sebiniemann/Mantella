@@ -1,8 +1,8 @@
 # Project specific
 /bin
-/lib
 /build
+/lib
 
 # Qt Designer
-*.user
 *.autosave
+*.user
