@@ -9,6 +9,7 @@
 #
 # Authors:
 #   Sebastian Niemann - Lead developer
+#   Romeo Shuka - Developer
 #   Wolff Bock von Wülfingen - Developer
 #   Daniel Kiechle - Developer / Software tester
 #   Oskar Pusz - Developer
@@ -24,13 +25,13 @@ project(HOP CXX)
 # Provide custom build management options
 option(BUILD_LIBRARY "Build library (includes tests)" ON)
 option(BUILD_GUI "Build GUI" OFF)
-option(BUILD_CLI "Build CLI" OFF)
+option(BUILD_APPS "Build APPS" OFF)
 option(BUILD_ALL "Build all" OFF)
 
 if(BUILD_ALL)
   set(BUILD_LIBRARY ON)
   set(BUILD_GUI ON)
-  set(BUILD_CLI ON)
+  set(BUILD_APPS ON)
 endif()
 
 # OSX
@@ -55,30 +56,27 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 # Enable C++11 features
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 
-# Include HOP library headers
+# Include HOP headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
-
-# Include thrid-party headers
-include_directories(${PROJECT_SOURCE_DIR}/ext)
 
 # -------------
 # BUILD LIBRARY
 # -------------
 if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library build.")
-
-  # Locate libraries and headers
+  
+  # Locate third party libraries and headers
   find_package(Armadillo REQUIRED) # Armadillo C++
   find_package(Boost COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
-  # Include headers
+  # Include third party headers
+  include_directories(${PROJECT_SOURCE_DIR}/ext) # Catch and Cereal
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
   include_directories(${Boost_INCLUDE_DIRS}) # Boost
 
   # Compile the optimisation library
   # All paths must start with "src/"
   add_library(hop SHARED
-    src/config.cpp
     src/evaluation/fitnessFunctionGrid.cpp
     src/evaluation/monitor/aggregator.cpp
     src/evaluation/monitor/selector.cpp
@@ -97,35 +95,35 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/optimisationAlgorithm.cpp
-    src/optimisationProblem/benchmark/attractiveSectorFunction.cpp
-    src/optimisationProblem/benchmark/bentCigarFunction.cpp
-    src/optimisationProblem/benchmark/buecheRastriginFunction.cpp
-    src/optimisationProblem/benchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
-    src/optimisationProblem/benchmark/differentPowersFunction.cpp
-    src/optimisationProblem/benchmark/discusFunction.cpp
-    src/optimisationProblem/benchmark/ellipsoidalFunction.cpp
-    src/optimisationProblem/benchmark/ellipsoidalFunctionRotated.cpp
-    src/optimisationProblem/benchmark/gallaghersGaussian101mePeaksFunction.cpp
-    src/optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.cpp
-    src/optimisationProblem/benchmark/katsuuraFunction.cpp
-    src/optimisationProblem/benchmark/linearSlope.cpp
-    src/optimisationProblem/benchmark/lunacekBiRastriginFunction.cpp
-    src/optimisationProblem/benchmark/rastriginFunction.cpp
-    src/optimisationProblem/benchmark/rastriginFunctionRotated.cpp
-    src/optimisationProblem/benchmark/rosenbrockFunction.cpp
-    src/optimisationProblem/benchmark/rosenbrockFunctionRotated.cpp
-    src/optimisationProblem/benchmark/schaffersF7Function.cpp
-    src/optimisationProblem/benchmark/schaffersF7FunctionIllConditioned.cpp
-    src/optimisationProblem/benchmark/schwefelFunction.cpp
-    src/optimisationProblem/benchmark/sharpRidgeFunction.cpp
-    src/optimisationProblem/benchmark/sphereFunction.cpp
-    src/optimisationProblem/benchmark/stepEllipsoidalFunction.cpp
-    src/optimisationProblem/benchmark/weierstrassFunction.cpp
-    src/optimisationProblem/benchmarkProblem.cpp
+    src/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/bentCigarFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/buecheRastriginFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/compositeGriewankRosenbrockFunctionF8F2.cpp
+    src/optimisationProblem/benchmark/bbob2013/differentPowersFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/discusFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/ellipsoidalFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/ellipsoidalFunctionRotated.cpp
+    src/optimisationProblem/benchmark/bbob2013/gallaghersGaussian101mePeaksFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/gallaghersGaussian21hiPeaksFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/katsuuraFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/linearSlope.cpp
+    src/optimisationProblem/benchmark/bbob2013/lunacekBiRastriginFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/rastriginFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/rastriginFunctionRotated.cpp
+    src/optimisationProblem/benchmark/bbob2013/rosenbrockFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/rosenbrockFunctionRotated.cpp
+    src/optimisationProblem/benchmark/bbob2013/schaffersF7Function.cpp
+    src/optimisationProblem/benchmark/bbob2013/schaffersF7FunctionIllConditioned.cpp
+    src/optimisationProblem/benchmark/bbob2013/schwefelFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/sharpRidgeFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/sphereFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/stepEllipsoidalFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/weierstrassFunction.cpp
+    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
     src/optimisationProblem.cpp
   )
 
-  # Link against libraries
+  # Link against third party libraries
   target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
   target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
 
@@ -147,6 +145,8 @@ if(BUILD_LIBRARY)
 
   # Link against libraries
   target_link_libraries(libTest hop) # HOP
+  
+  add_custom_command(TARGET libTest POST_BUILD COMMAND libTest)
 endif()
 
 # ---------
@@ -158,26 +158,14 @@ if(BUILD_GUI)
   message(STATUS "")
 endif()
 
-# ---------
-# BUILD CLI
-# ---------
-if(BUILD_CLI)
-  message(STATUS "NOTICE: Configuring CLI build.")
+# ----------
+# BUILD APPS
+# ----------
+if(BUILD_APPS)
+  message(STATUS "NOTICE: Configuring applications build.")
 
-  # Include headers
-  include_directories(${PROJECT_SOURCE_DIR}/cli) # CLI
-  
-  # Compile the CLI
-  # All paths must start with "cli/"
-  add_executable(cli
-    cli/main.cpp
-  )
-
-  # Add library directories
-  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
-
-  # Link against libraries
-  target_link_libraries(cli hop) # HOP
+  # Add applications build script
+  add_subdirectory("./apps") 
 endif()
 
 # ---------------------
@@ -185,7 +173,6 @@ endif()
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
   include/hop
-  include/hop_bits/config.hpp
   include/hop_bits/evaluation/fitnessFunctionGrid.hpp
   include/hop_bits/evaluation/monitor/aggregator.hpp
   include/hop_bits/evaluation/monitor/selector.hpp
@@ -204,31 +191,31 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm.hpp
-  include/hop_bits/optimisationProblem/benchmark/attractiveSectorFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/bentCigarFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/buecheRastriginFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/compositeGriewankRosenbrockFunctionF8F2.hpp
-  include/hop_bits/optimisationProblem/benchmark/differentPowersFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/discusFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/ellipsoidalFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/ellipsoidalFunctionRotated.hpp
-  include/hop_bits/optimisationProblem/benchmark/gallaghersGaussian101mePeaksFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/katsuuraFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/linearSlope.hpp
-  include/hop_bits/optimisationProblem/benchmark/lunacekBiRastriginFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/rastriginFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/rastriginFunctionRotated.hpp
-  include/hop_bits/optimisationProblem/benchmark/rosenbrockFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/rosenbrockFunctionRotated.hpp
-  include/hop_bits/optimisationProblem/benchmark/schaffersF7Function.hpp
-  include/hop_bits/optimisationProblem/benchmark/schaffersF7FunctionIllConditioned.hpp
-  include/hop_bits/optimisationProblem/benchmark/schwefelFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/sharpRidgeFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/sphereFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/stepEllipsoidalFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/weierstrassFunction.hpp
-  include/hop_bits/optimisationProblem/benchmarkProblem.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/bentCigarFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/buecheRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/compositeGriewankRosenbrockFunctionF8F2.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/differentPowersFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/discusFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/ellipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/ellipsoidalFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/gallaghersGaussian101mePeaksFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/gallaghersGaussian21hiPeaksFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/katsuuraFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/linearSlope.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/lunacekBiRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rastriginFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rosenbrockFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rosenbrockFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/schaffersF7Function.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/schaffersF7FunctionIllConditioned.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/schwefelFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/sharpRidgeFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/sphereFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/stepEllipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/weierstrassFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp
   include/hop_bits/optimisationProblem.hpp
-  ext/matplotlib/test.py
+  test/optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp
 )
