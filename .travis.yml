@@ -41,5 +41,3 @@ install:
 script: 
   - cmake .
   - make
-  - cd bin
-  - ./libTest
