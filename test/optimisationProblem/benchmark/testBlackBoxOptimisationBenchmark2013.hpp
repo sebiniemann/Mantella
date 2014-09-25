@@ -9,6 +9,8 @@
 
 #include <hop>
 
+extern std::string testDirectory;
+
 TEST_CASE("Black box optimisation benchmark problem", "[benchmark]") {
 
   SECTION("Test impementation correctness") {
@@ -41,35 +43,35 @@ TEST_CASE("Black box optimisation benchmark problem", "[benchmark]") {
       };
 
       arma::Mat<double> parameters;
-      parameters.load("../test/data/parameters," + std::to_string(numberOfDimensions) +".mat");
+      parameters.load(testDirectory + "/data/parameters," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Col<double> translation;
-      translation.load("../test/data/translation," + std::to_string(numberOfDimensions) +".mat");
+      translation.load(testDirectory + "/data/translation," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Col<double> one;
-      one.load("../test/data/one," + std::to_string(numberOfDimensions) +".mat");
+      one.load(testDirectory + "/data/one," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> rotationR;
-      rotationR.load("../test/data/rotationR," + std::to_string(numberOfDimensions) +".mat");
+      rotationR.load(testDirectory + "/data/rotationR," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> rotationQ;
-      rotationQ.load("../test/data/rotationQ," + std::to_string(numberOfDimensions) +".mat");
+      rotationQ.load(testDirectory + "/data/rotationQ," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> deltaC101;
-      deltaC101.load("../test/data/deltaC101," + std::to_string(numberOfDimensions) +".mat");
+      deltaC101.load(testDirectory + "/data/deltaC101," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> localOptimaY101;
-      localOptimaY101.load("../test/data/localOptimaY101," + std::to_string(numberOfDimensions) +".mat");
+      localOptimaY101.load(testDirectory + "/data/localOptimaY101," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> deltaC21;
-      deltaC21.load("../test/data/deltaC21," + std::to_string(numberOfDimensions) +".mat");
+      deltaC21.load(testDirectory + "/data/deltaC21," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> localOptimaY21;
-      localOptimaY21.load("../test/data/localOptimaY21," + std::to_string(numberOfDimensions) +".mat");
+      localOptimaY21.load(testDirectory + "/data/localOptimaY21," + std::to_string(numberOfDimensions) +".mat");
 
       for (std::size_t n = 0; n < bechmarkProblems.size(); n++) {
         arma::Col<double> expected;
-        expected.load("../test/data/expectedF" + std::to_string(n + 1) + "," + std::to_string(numberOfDimensions) +".mat");
+        expected.load(testDirectory + "/data/expectedF" + std::to_string(n + 1) + "," + std::to_string(numberOfDimensions) +".mat");
 
         bechmarkProblems.at(n)->setMaximalNumberOfEvaluations(parameters.n_cols);
         bechmarkProblems.at(n)->setObjectiveValueTranslation(0);

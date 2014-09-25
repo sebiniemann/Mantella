@@ -146,7 +146,7 @@ if(BUILD_LIBRARY)
   # Link against libraries
   target_link_libraries(libTest hop) # HOP
   
-  add_custom_command(TARGET libTest POST_BUILD COMMAND libTest)
+  add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
 endif()
 
 # ---------
