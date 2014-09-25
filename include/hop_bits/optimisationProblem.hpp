@@ -109,16 +109,16 @@ namespace hop {
 
       template<class T>
       void serialize(T& archive) {
-        archive(CEREAL_NVP(numberOfDimensions_));
-        archive(CEREAL_NVP(lowerBounds_));
-        archive(CEREAL_NVP(upperBounds_));
-        archive(CEREAL_NVP(parameterTranslation_));
-        archive(CEREAL_NVP(parameterRotation_));
-        archive(CEREAL_NVP(parameterScale_));
-        archive(CEREAL_NVP(objectiveValueTranslation_));
-        archive(CEREAL_NVP(objectiveValueScale_));
-        archive(CEREAL_NVP(acceptableObjectiveValue_));
-        archive(CEREAL_NVP(maximalNumberOfEvaluations_));
+        archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
+        archive(cereal::make_nvp("lowerBounds", lowerBounds_));
+        archive(cereal::make_nvp("upperBounds", upperBounds_));
+        archive(cereal::make_nvp("parameterTranslation", parameterTranslation_));
+        archive(cereal::make_nvp("parameterRotation", parameterRotation_));
+        archive(cereal::make_nvp("parameterScale", parameterScale_));
+        archive(cereal::make_nvp("objectiveValueTranslation", objectiveValueTranslation_));
+        archive(cereal::make_nvp("objectiveValueScale", objectiveValueScale_));
+        archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
+        archive(cereal::make_nvp("maximalNumberOfEvaluations", maximalNumberOfEvaluations_));
       }
   };
 }
