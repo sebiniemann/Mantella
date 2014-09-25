@@ -13,6 +13,10 @@ namespace hop {
     boost::filesystem::create_directories(path);
   }
 
+  std::string Evaluation::getEvaluationPath() const {
+    return evaluationPath_;
+  }
+
   void Evaluation::save(arma::Mat<double> data, std::string fileSuffix) const {
     boost::filesystem::path filepath = boost::filesystem::path(evaluationPath_ + "/" + fileSuffix + ".mat");
 
