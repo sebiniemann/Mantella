@@ -1,12 +1,17 @@
 language: cpp
 
 compiler:
+# Skipped until Travis CI updates to Ubuntu 14.04+
 #  - clang
   - gcc
 
 before_install:
   # GCC
   - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+
+  # Needed until Travis CI updates to Ubuntu 14.04+
+  # Boost (filesystem)
+  - sudo add-apt-repository -y ppa:boost-latest/ppa
 
   - sudo apt-get update -qq
 
@@ -19,7 +24,7 @@ install:
   - sudo apt-get install -qq libopenblas-dev
   
   # Armadillo C++
-  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.400.1.tar.gz
+  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.400.2.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
@@ -27,9 +32,12 @@ install:
   - make
   - sudo make install
   - cd ..
+  
+  # Boost (filesystem)
+  # Needed until Travis CI updates to Ubuntu 14.04+
+  - sudo apt-get install -qq libboost-filesystem1.54-dev
+#  - sudo apt-get install -qq libboost-filesystem-dev
 
 script: 
   - cmake .
   - make
-  - cd bin
-  - ./test

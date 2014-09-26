@@ -1,7 +1,18 @@
-#include <cstdlib>
-// EXIT_SUCCESS
+#define CATCH_CONFIG_RUNNER
+#include <catch/catch.hpp>
 
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main()
-#include <../ext/catch/catch.hpp>
+#include <string>
 
-#include <optimisationProblem/benchmark/testBenchmarkProblem.hpp>
+std::string testDirectory;
+
+#include <optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp>
+
+int main(const int argc, const char* argv[]) {
+  if(argc < 2) {
+    // TODO Add exception
+  }
+
+  testDirectory = argv[1];
+
+  return Catch::Session().run();
+}

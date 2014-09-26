@@ -9,6 +9,7 @@
 #
 # Authors:
 #   Sebastian Niemann - Lead developer
+#   Romeo Shuka - Developer
 #   Wolff Bock von Wülfingen - Developer
 #   Daniel Kiechle - Developer / Software tester
 #   Oskar Pusz - Developer
@@ -18,29 +19,44 @@ cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 # Hint-based Online Programming (HOP)
 project(HOP CXX)
 
-# Add additional cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
+# Add additional cmake modules (currently unused)
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
 option(BUILD_LIBRARY "Build library (includes tests)" ON)
 option(BUILD_GUI "Build GUI" OFF)
-option(BUILD_CLI "Build CLI" OFF)
+option(BUILD_APPS "Build APPS" OFF)
 option(BUILD_ALL "Build all" OFF)
 
 if(BUILD_ALL)
   set(BUILD_LIBRARY ON)
   set(BUILD_GUI ON)
-  set(BUILD_CLI ON)
+  set(BUILD_APPS ON)
+endif()
+
+# OSX
+if(APPLE)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib)
+  set(CMAKE_MACOSX_RPATH ON)
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  endif()
 endif()
 
 # Set output directories
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
-# Provide support for C++11 features
+# Enable C++11 features
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 
-# Include HOP library headers
+# Include HOP headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # -------------
@@ -48,56 +64,89 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # -------------
 if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library build.")
+  
+  # Locate third party libraries and headers
+  find_package(Armadillo REQUIRED) # Armadillo C++
+  find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
-  # Locate libraries
-  find_package(Armadillo REQUIRED)
-  
-  # Include headers
-  include_directories(${ARMADILLO_INCLUDE_DIRS})
-  
+  # Include third party headers
+  include_directories(${PROJECT_SOURCE_DIR}/ext) # Catch and Cereal
+  include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+  include_directories(${Boost_INCLUDE_DIRS}) # Boost
+
   # Compile the optimisation library
   # All paths must start with "src/"
   add_library(hop SHARED
-    src/optimisationProblem/optimisationProblem.cpp
-    src/optimisationProblem/benchmark/benchmarkProblem.cpp
-    src/optimisationProblem/benchmark/attractiveSectorFunction.cpp
-    src/optimisationProblem/benchmark/bentCigarFunction.cpp
-    src/optimisationProblem/benchmark/buecheRastriginFunction.cpp
-    src/optimisationProblem/benchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
-    src/optimisationProblem/benchmark/differentPowersFunction.cpp
-    src/optimisationProblem/benchmark/discusFunction.cpp
-    src/optimisationProblem/benchmark/ellipsoidalFunction.cpp
-    src/optimisationProblem/benchmark/ellipsoidalFunctionRotated.cpp
-    src/optimisationProblem/benchmark/gallaghersGaussian101mePeaksFunction.cpp
-    src/optimisationProblem/benchmark/gallaghersGaussian21hiPeaksFunction.cpp
-    src/optimisationProblem/benchmark/katsuuraFunction.cpp
-    src/optimisationProblem/benchmark/linearSlope.cpp
-    src/optimisationProblem/benchmark/lunacekBiRastriginFunction.cpp
-    src/optimisationProblem/benchmark/rastriginFunction.cpp
-    src/optimisationProblem/benchmark/rastriginFunctionRotated.cpp
-    src/optimisationProblem/benchmark/rosenbrockFunction.cpp
-    src/optimisationProblem/benchmark/rosenbrockFunctionRotated.cpp
-    src/optimisationProblem/benchmark/schaffersF7Function.cpp
-    src/optimisationProblem/benchmark/schaffersF7FunctionIllConditioned.cpp
-    src/optimisationProblem/benchmark/schwefelFunction.cpp
-    src/optimisationProblem/benchmark/sharpRidgeFunction.cpp
-    src/optimisationProblem/benchmark/sphereFunction.cpp
-    src/optimisationProblem/benchmark/stepEllipsoidalFunction.cpp
-    src/optimisationProblem/benchmark/weierstrassFunction.cpp
+    src/evaluation/fitnessFunctionGrid.cpp
+    src/evaluation/monitor/aggregator.cpp
+    src/evaluation/monitor/selector.cpp
+    src/evaluation/monitor.cpp
+    src/evaluation/performanceProfile.cpp
+    src/evaluation.cpp
+    src/helper/cereal.cpp
+    src/helper/printable.cpp
     src/helper/random.cpp
+    src/helper/runable.cpp
+    src/helper/to_string.cpp
+    src/optimisationAlgorithm/hillClimbing.cpp
+    src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
+    src/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
+    src/optimisationAlgorithm/randomSearch.cpp
+    src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
+    src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
+    src/optimisationAlgorithm.cpp
+    src/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/bentCigarFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/buecheRastriginFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/compositeGriewankRosenbrockFunctionF8F2.cpp
+    src/optimisationProblem/benchmark/bbob2013/differentPowersFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/discusFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/ellipsoidalFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/ellipsoidalFunctionRotated.cpp
+    src/optimisationProblem/benchmark/bbob2013/gallaghersGaussian101mePeaksFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/gallaghersGaussian21hiPeaksFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/katsuuraFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/linearSlope.cpp
+    src/optimisationProblem/benchmark/bbob2013/lunacekBiRastriginFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/rastriginFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/rastriginFunctionRotated.cpp
+    src/optimisationProblem/benchmark/bbob2013/rosenbrockFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/rosenbrockFunctionRotated.cpp
+    src/optimisationProblem/benchmark/bbob2013/schaffersF7Function.cpp
+    src/optimisationProblem/benchmark/bbob2013/schaffersF7FunctionIllConditioned.cpp
+    src/optimisationProblem/benchmark/bbob2013/schwefelFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/sharpRidgeFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/sphereFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/stepEllipsoidalFunction.cpp
+    src/optimisationProblem/benchmark/bbob2013/weierstrassFunction.cpp
+    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
+    src/optimisationProblem.cpp
   )
-  target_link_libraries (hop ${ARMADILLO_LIBRARIES})
 
-  # Include test programm headers
-  include_directories(${PROJECT_SOURCE_DIR}/test)
+  # Link against third party libraries
+  target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
 
-  add_executable(test
+  # -----------
+  # BUILD TESTS
+  # -----------
+
+  # Include headers
+  include_directories(${PROJECT_SOURCE_DIR}/test) # HOP tests
+
+  # Compile the optimisation library tests
+  # All paths must start with "test/"
+  add_executable(libTest
     test/main.cpp
   )
 
-  # Add HOP library
-  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-  target_link_libraries(test hop)
+  # Add library directories
+  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
+
+  # Link against libraries
+  target_link_libraries(libTest hop) # HOP
+  
+  add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
 endif()
 
 # ---------
@@ -109,38 +158,64 @@ if(BUILD_GUI)
   message(STATUS "")
 endif()
 
-# ---------
-# BUILD CLI
-# ---------
-if(BUILD_CLI)
-  message(STATUS "NOTICE: Configuring CLI build.")
-  
-  # The variable UNIX will also return true if cmake was run via CygWin
-  if(NOT UNIX OR CYGWIN)
-    message(STATUS "")
-    message(STATUS "WARNING: Non-UNIX OS detected:")
-    message(STATUS "WARNING: * The command-line interface is only intented to be used on UNIX-systems. Use the CLI at your on risk.")
-    message(STATUS "")
-  endif()
-  
-  # Include CLI headers
-  include_directories(${PROJECT_SOURCE_DIR}/cli)
+# ----------
+# BUILD APPS
+# ----------
+if(BUILD_APPS)
+  message(STATUS "NOTICE: Configuring applications build.")
 
-  # Locate libraries
-  find_package(Readline REQUIRED)
-  
-  # Include headers
-  include_directories(${READLINE_INCLUDE_DIRS})
-  
-  # Compile the CLI
-  # All paths must start with "cli/"
-  add_executable(cli
-    cli/main.cpp
-    cli/console.cpp
-  )
-  target_link_libraries(cli ${READLINE_LIBRARIES})
-
-  # Add HOP library
-  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-  target_link_libraries(cli hop)
+  # Add applications build script
+  add_subdirectory("./apps") 
 endif()
+
+# ---------------------
+# Qt Creator workaround
+# ---------------------
+add_custom_target(QtWorkaround SOURCES
+  include/hop
+  include/hop_bits/evaluation/fitnessFunctionGrid.hpp
+  include/hop_bits/evaluation/monitor/aggregator.hpp
+  include/hop_bits/evaluation/monitor/selector.hpp
+  include/hop_bits/evaluation/monitor.hpp
+  include/hop_bits/evaluation/performanceProfile.hpp
+  include/hop_bits/evaluation.hpp
+  include/hop_bits/helper/cereal.hpp
+  include/hop_bits/helper/printable.hpp
+  include/hop_bits/helper/random.hpp
+  include/hop_bits/helper/runable.hpp
+  include/hop_bits/helper/to_string.hpp
+  include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
+  include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm/randomSearch.hpp
+  include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/bentCigarFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/buecheRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/compositeGriewankRosenbrockFunctionF8F2.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/differentPowersFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/discusFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/ellipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/ellipsoidalFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/gallaghersGaussian101mePeaksFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/gallaghersGaussian21hiPeaksFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/katsuuraFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/linearSlope.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/lunacekBiRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rastriginFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rastriginFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rosenbrockFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/rosenbrockFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/schaffersF7Function.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/schaffersF7FunctionIllConditioned.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/schwefelFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/sharpRidgeFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/sphereFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/stepEllipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/bbob2013/weierstrassFunction.hpp
+  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp
+  include/hop_bits/optimisationProblem.hpp
+  test/optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp
+)
