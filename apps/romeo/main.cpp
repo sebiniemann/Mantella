@@ -80,9 +80,9 @@ int main (const int argc, const char* argv[]) {
         for(auto neighbourhoodParameter : neighbourhoodParameters) {
           optimisationAlgorithm.setNeighbourhoodProbability(neighbourhoodParameter);
 
-                    boost::filesystem::path filepath = boost::filesystem::path("./parameterisation_prob" + hop::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(localAttractionParameter) + "_global" + std::to_string(globalAttractionParameter) + "_acc" + std::to_string(accelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
+          boost::filesystem::path filepath = boost::filesystem::path("./parameterisation_prob" + hop::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(localAttractionParameter) + "_global" + std::to_string(globalAttractionParameter) + "_acc" + std::to_string(accelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
 
-           if(!boost::filesystem::exists(filepath)) {
+          if(!boost::filesystem::exists(filepath)) {
             arma::Mat<double> results(iterations, 6 + numberOfDimensions);
             for(std::size_t n = 0; n < iterations; ++n) {
               optimisationAlgorithm.optimise();
