@@ -6,7 +6,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-#include <mpi/mpi.h>
+#include <mpi.h>
 
 namespace hop {
   ParallelOptimisationAlgorithm::ParallelOptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)

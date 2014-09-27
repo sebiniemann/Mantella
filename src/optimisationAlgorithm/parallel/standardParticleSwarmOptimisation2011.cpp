@@ -5,10 +5,9 @@
 #include <algorithm>
 #include <limits>
 
-#include <mpi/mpi.h>
+#include <mpi.h>
 
 #include <hop_bits/helper/random.hpp>
-#include <hop_bits/helper/mpi.hpp>
 
 namespace hop {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& localPopulationSize)
