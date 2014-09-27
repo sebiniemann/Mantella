@@ -16,12 +16,10 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
 find_package(Armadillo REQUIRED) # Armadillo C++
-find_package(Boost COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 find_package(MPI REQUIRED) # MPI
 
 # Include third party headers
 include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
-include_directories(${Boost_INCLUDE_DIRS}) # Boost
 include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
 
 # Compile the optimisation library
@@ -35,5 +33,4 @@ target_link_libraries(mpi "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
 
 # Link against third party libraries
 target_link_libraries(mpi ${ARMADILLO_LIBRARIES}) # Armadillo C++
-target_link_libraries(mpi ${Boost_LIBRARIES}) # Boost
 target_link_libraries(mpi ${MPI_C_LIBRARIES}) # MPI C-bindings
