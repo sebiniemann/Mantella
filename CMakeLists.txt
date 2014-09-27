@@ -17,7 +17,7 @@
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 # Hint-based Online Programming (HOP)
-project(HOP CXX)
+project(HOP C CXX)
 
 # Add additional cmake modules (currently unused)
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
@@ -68,33 +68,27 @@ if(BUILD_LIBRARY)
   # Locate third party libraries and headers
   find_package(Armadillo REQUIRED) # Armadillo C++
   find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
+  find_package(MPI REQUIRED) # MPI
 
   # Include third party headers
   include_directories(${PROJECT_SOURCE_DIR}/ext) # Catch and Cereal
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
   include_directories(${Boost_INCLUDE_DIRS}) # Boost
+  include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
 
   # Compile the optimisation library
   # All paths must start with "src/"
   add_library(hop SHARED
-    src/evaluation/fitnessFunctionGrid.cpp
-    src/evaluation/monitor/aggregator.cpp
-    src/evaluation/monitor/selector.cpp
-    src/evaluation/monitor.cpp
-    src/evaluation/performanceProfile.cpp
-    src/evaluation.cpp
-    src/helper/cereal.cpp
-    src/helper/printable.cpp
-    src/helper/random.cpp
-    src/helper/runable.cpp
-    src/helper/to_string.cpp
+    src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
-    src/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
     src/optimisationAlgorithm/randomSearch.cpp
-    src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
+   # src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
-    src/optimisationAlgorithm.cpp
+    src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
+    src/optimisationAlgorithm/parallel/standardParticleSwarmOptimisation2011.cpp
+    src/optimisationProblem.cpp
+    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
     src/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.cpp
     src/optimisationProblem/benchmark/bbob2013/bentCigarFunction.cpp
     src/optimisationProblem/benchmark/bbob2013/buecheRastriginFunction.cpp
@@ -119,13 +113,21 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/benchmark/bbob2013/sphereFunction.cpp
     src/optimisationProblem/benchmark/bbob2013/stepEllipsoidalFunction.cpp
     src/optimisationProblem/benchmark/bbob2013/weierstrassFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
-    src/optimisationProblem.cpp
+    src/evaluation.cpp
+    src/evaluation/monitor/aggregator.cpp
+    src/evaluation/monitor/selector.cpp
+    src/evaluation/monitor.cpp
+    src/helper/cereal.cpp
+    src/helper/printable.cpp
+    src/helper/random.cpp
+    src/helper/runable.cpp
+    src/helper/to_string.cpp
   )
 
   # Link against third party libraries
   target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
   target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
+  target_link_libraries(hop ${MPI_C_LIBRARIES}) # MPI C-bindings
 
   # -----------
   # BUILD TESTS
@@ -173,24 +175,16 @@ endif()
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
   include/hop
-  include/hop_bits/evaluation/fitnessFunctionGrid.hpp
-  include/hop_bits/evaluation/monitor/aggregator.hpp
-  include/hop_bits/evaluation/monitor/selector.hpp
-  include/hop_bits/evaluation/monitor.hpp
-  include/hop_bits/evaluation/performanceProfile.hpp
-  include/hop_bits/evaluation.hpp
-  include/hop_bits/helper/cereal.hpp
-  include/hop_bits/helper/printable.hpp
-  include/hop_bits/helper/random.hpp
-  include/hop_bits/helper/runable.hpp
-  include/hop_bits/helper/to_string.hpp
+  include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm/randomSearch.hpp
   include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/hop_bits/optimisationAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/parallel/standardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationProblem.hpp
+  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp
   include/hop_bits/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/bbob2013/bentCigarFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/bbob2013/buecheRastriginFunction.hpp
@@ -215,7 +209,14 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/benchmark/bbob2013/sphereFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/bbob2013/stepEllipsoidalFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/bbob2013/weierstrassFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp
-  include/hop_bits/optimisationProblem.hpp
+  include/hop_bits/evaluation.hpp
+  include/hop_bits/evaluation/monitor/aggregator.hpp
+  include/hop_bits/evaluation/monitor/selector.hpp
+  include/hop_bits/evaluation/monitor.hpp
+  include/hop_bits/helper/cereal.hpp
+  include/hop_bits/helper/printable.hpp
+  include/hop_bits/helper/random.hpp
+  include/hop_bits/helper/runable.hpp
+  include/hop_bits/helper/to_string.hpp
   test/optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp
 )
