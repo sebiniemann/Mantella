@@ -14,6 +14,6 @@ namespace hop {
       arma::Col<double> stepSize_;
       bool reduceStepSize_;
 
-      bool optimiseImplementation() override;
+      void optimiseImplementation() override;
   };
 }

@@ -10,7 +10,7 @@ namespace hop {
     setMaximalStepSize(arma::ones<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()));
   }
 
-  bool HillClimbing::optimiseImplementation() {
+  void HillClimbing::optimiseImplementation() {
     arma::Col<double> candidateSolution;
     do {
       candidateSolution = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
@@ -36,7 +36,7 @@ namespace hop {
       }
 
       if(isFinished() || isTerminated()) {
-        return isFinished();
+        return;
       }
     }
   }

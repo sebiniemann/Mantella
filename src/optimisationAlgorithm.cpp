@@ -8,7 +8,7 @@ namespace hop {
     setMaximalNumberOfIterations(1000);
   }
 
-  bool OptimisationAlgorithm::optimise() {
+  void OptimisationAlgorithm::optimise() {
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSolution_ = arma::Col<double>({});
     numberOfIterations_ = 0;

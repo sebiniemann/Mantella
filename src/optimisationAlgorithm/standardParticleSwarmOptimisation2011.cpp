@@ -16,7 +16,7 @@ namespace hop {
     setGlobalAttraction(localAttraction_);
   }
 
-  bool StandardParticleSwarmOptimisation2011::optimiseImplementation() {
+  void StandardParticleSwarmOptimisation2011::optimiseImplementation() {
     particles_ = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     particles_.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     particles_.each_col() += optimisationProblem_->getLowerBounds();
@@ -68,36 +68,36 @@ namespace hop {
         arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Random::Rng) * arma::norm(attractionCenter) + attractionCenter;
 
         arma::Col<double> velocityCandidate = acceleration_ * velocities_.col(n) + randomParticle;
-        arma::Col<double> particleCandidate = particle + velocityCandidate;
+        arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
-        arma::Col<arma::uword> belowLowerBound = arma::find(particleCandidate < optimisationProblem_->getLowerBounds());
-        arma::Col<arma::uword> aboveUpperBound = arma::find(particleCandidate > optimisationProblem_->getUpperBounds());
+        arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
+        arma::Col<arma::uword> aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
 
         velocityCandidate.elem(belowLowerBound) *= -0.5;
         velocityCandidate.elem(aboveUpperBound) *= -0.5;
 
-        particleCandidate.elem(belowLowerBound) = optimisationProblem_->getLowerBounds().elem(belowLowerBound);
-        particleCandidate.elem(aboveUpperBound) = optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
+        solutionCandidate.elem(belowLowerBound) = optimisationProblem_->getLowerBounds().elem(belowLowerBound);
+        solutionCandidate.elem(aboveUpperBound) = optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
 
         velocities_.col(n) = velocityCandidate;
-        particles_.col(n) = particleCandidate;
+        particles_.col(n) = solutionCandidate;
 
-        double objectiveValue = optimisationProblem_->getObjectiveValue(particleCandidate) + optimisationProblem_->getSoftConstraintsValue(particleCandidate);
+        double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
         if (objectiveValue < localBestObjectiveValues_.at(n)) {
           localBestObjectiveValues_.at(n) = objectiveValue;
-          localBestParticles_.col(n) = particleCandidate;
+          localBestParticles_.col(n) = solutionCandidate;
         }
 
         if (objectiveValue < bestObjectiveValue_) {
           bestObjectiveValue_ = objectiveValue;
-          bestSolution_ = particleCandidate;
+          bestSolution_ = solutionCandidate;
         } else {
           randomizeTopology_ = true;
         }
 
         if(isFinished() || isTerminated()) {
-          return isFinished();
+          return;
         }
       }
     }

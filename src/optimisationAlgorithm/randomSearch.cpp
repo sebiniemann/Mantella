@@ -6,7 +6,7 @@ namespace hop {
 
   }
 
-  bool RandomSearch::optimiseImplementation() {
+  void RandomSearch::optimiseImplementation() {
     while(true) {
       ++numberOfIterations_;
 
@@ -23,7 +23,7 @@ namespace hop {
       }
 
       if(isFinished() || isTerminated()) {
-        return isFinished();
+        return;
       }
     }
   }

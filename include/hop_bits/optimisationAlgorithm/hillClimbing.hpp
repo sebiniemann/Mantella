@@ -15,6 +15,6 @@ namespace hop {
     protected:
       arma::Col<double> maximalStepSize_;
 
-      bool optimiseImplementation() override;
+      void optimiseImplementation() override;
   };
 }

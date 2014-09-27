@@ -33,6 +33,6 @@ namespace hop {
 
       arma::Mat<arma::uword> topology_;
 
-      bool optimiseImplementation() override;
+      void optimiseImplementation() override;
   };
 }

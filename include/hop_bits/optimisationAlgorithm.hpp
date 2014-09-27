@@ -12,7 +12,7 @@ namespace hop {
       OptimisationAlgorithm(const OptimisationAlgorithm&) = delete;
       OptimisationAlgorithm& operator=(const OptimisationAlgorithm&) = delete;
 
-      bool optimise();
+      void optimise();
 
       arma::Col<double> getBestSolution() const;
       double getBestObjectiveValue() const;
@@ -32,6 +32,6 @@ namespace hop {
       unsigned int numberOfIterations_;
       unsigned int maximalNumberOfIterations_;
 
-      virtual bool optimiseImplementation() = 0;
+      virtual void optimiseImplementation() = 0;
   };
 }

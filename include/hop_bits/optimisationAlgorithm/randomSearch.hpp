@@ -11,6 +11,6 @@ namespace hop {
       RandomSearch& operator=(const RandomSearch&) = delete;
 
     protected:
-      bool optimiseImplementation() override;
+      void optimiseImplementation() override;
   };
 }

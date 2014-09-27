@@ -10,7 +10,7 @@ namespace hop {
 
   }
 
-  bool HookeJeevesAlgorithm::optimiseImplementation() {
+  void HookeJeevesAlgorithm::optimiseImplementation() {
     stepSize_ = optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     reduceStepSize_ = false;
 
@@ -46,7 +46,7 @@ namespace hop {
         }
 
         if(isFinished() || isTerminated()) {
-          return isFinished();
+          return;
         }
 
         candidateSolution.at(n) -= 2 * stepSize_.at(n);
@@ -63,7 +63,7 @@ namespace hop {
         }
 
         if(isFinished() || isTerminated()) {
-          return isFinished();
+          return;
         }
 
         candidateSolution.at(n) += stepSize_.at(n);
