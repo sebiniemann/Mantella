@@ -114,14 +114,14 @@ namespace hop {
     ++numberOfEvaluations_;
     Monitor::addNumberOfEvaluations(numberOfEvaluations_);
 
-    auto cachePosition = cachedObjectivValues_.find(parameter);
-    if(cachePosition == cachedObjectivValues_.end()) {
+    auto cachePosition = cachedObjectiveValues_.find(parameter);
+    if(cachePosition == cachedObjectiveValues_.end()) {
 
       ++numberOfDistinctEvaluations_;
 
       double result = getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
 
-      cachedObjectivValues_.insert({parameter, result});
+      cachedObjectiveValues_.insert({parameter, result});
 
       return result;
     } else {
@@ -213,7 +213,7 @@ namespace hop {
     numberOfEvaluations_ = 0;
     numberOfDistinctEvaluations_ = 0;
 
-    cachedObjectivValues_.clear();
+    cachedObjectiveValues_.clear();
     cachedSoftConstraintsValues_.clear();
     cachedIsSatisfyingLowerBounds_.clear();
     cachedIsSatisfyingUpperBounds_.clear();

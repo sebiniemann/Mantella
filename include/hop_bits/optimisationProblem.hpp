@@ -97,7 +97,7 @@ namespace hop {
           }
       };
 
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedObjectivValues_;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedObjectiveValues_;
       std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
       std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
       std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
