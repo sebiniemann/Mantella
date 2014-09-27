@@ -49,6 +49,7 @@ namespace hop {
       template<class T>
       void serialize(T& archive) {
         archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
+        archive(cereal::make_nvp("translation", translation_));
       }
   };
 }

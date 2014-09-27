@@ -20,12 +20,22 @@ namespace hop {
       double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
 
       friend class cereal::access;
-      SchwefelFunction() = default;
 
       template<class T>
       void serialize(T& archive) {
-        archive(cereal::make_nvp("benchmarkProblem", cereal::base_class<BlackBoxOptimisationBenchmark2013>(this)));
+        archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2013", cereal::base_class<BlackBoxOptimisationBenchmark2013>(this)));
+        archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
         archive(cereal::make_nvp("one", one_));
+      }
+
+      template<class T>
+      static void load_and_construct(T& archive, cereal::construct<SchwefelFunction>& construct) {
+        unsigned int numberOfDimensions;
+        archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
+        construct(numberOfDimensions);
+
+        archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2013", cereal::base_class<BlackBoxOptimisationBenchmark2013>(construct.ptr())));
+        archive(cereal::make_nvp("one", construct->one_));
       }
   };
 }
