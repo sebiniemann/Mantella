@@ -17,7 +17,7 @@
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 # Hint-based Online Programming (HOP)
-project(HOP C CXX)
+project(HOP CXX C)
 
 # Add additional cmake modules (currently unused)
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
