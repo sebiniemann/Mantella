@@ -20,6 +20,9 @@ install:
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
   
+  # MPI (actually 3.x on Ubuntu 14.04+ and 2.x before)
+  - sudo apt-get install -qq libmpich2-dev
+  
   # OpenBLAS
   - sudo apt-get install -qq libopenblas-dev
   
