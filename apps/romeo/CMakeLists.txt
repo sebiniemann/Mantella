@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
-# Hint-based Online Programming (HOP)
+# Romeo's Master Thesis
 project(RomeoMasterThesis CXX)
 
 # Enable C++11 features
