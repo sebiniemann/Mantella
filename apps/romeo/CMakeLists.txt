@@ -16,7 +16,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
 find_package(Armadillo REQUIRED) # Armadillo C++
-find_package(Boost COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
+find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
 # Include third party headers
 include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
