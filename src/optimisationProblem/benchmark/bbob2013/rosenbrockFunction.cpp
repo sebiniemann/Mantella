@@ -7,6 +7,11 @@
 #include <cereal/types/polymorphic.hpp>
 
 namespace hop {
+  RosenbrockFunction::RosenbrockFunction(const unsigned int& numberOfDimensions)
+    : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
+    setTranslation(translation_);
+  }
+
   void RosenbrockFunction::setTranslation(const arma::Col<double>& translation) {
     translation_ = 0.75 * translation;
   }

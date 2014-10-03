@@ -5,7 +5,7 @@
 namespace hop {
   class LinearSlope : public BlackBoxOptimisationBenchmark2013 {
     public:
-      using BlackBoxOptimisationBenchmark2013::BlackBoxOptimisationBenchmark2013;
+      explicit LinearSlope(const unsigned int& numberOfDimensions);
 
       LinearSlope(const LinearSlope&) = delete;
       LinearSlope& operator=(const LinearSlope&) = delete;

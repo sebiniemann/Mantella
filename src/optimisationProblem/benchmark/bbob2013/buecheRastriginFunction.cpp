@@ -4,6 +4,11 @@
 #include <cereal/types/polymorphic.hpp>
 
 namespace hop {
+  BuecheRastriginFunction::BuecheRastriginFunction(const unsigned int& numberOfDimensions)
+    : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
+    setTranslation(translation_);
+  }
+
   void BuecheRastriginFunction::setTranslation(const arma::Col<double>& translation) {
     translation_ = translation;
     for (std::size_t n = 0; n < translation_.n_elem; n += 2) {

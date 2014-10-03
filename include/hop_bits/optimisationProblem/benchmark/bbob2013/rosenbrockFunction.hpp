@@ -8,7 +8,7 @@
 namespace hop {
   class RosenbrockFunction : public BlackBoxOptimisationBenchmark2013 {
     public:
-      using BlackBoxOptimisationBenchmark2013::BlackBoxOptimisationBenchmark2013;
+      explicit RosenbrockFunction(const unsigned int& numberOfDimensions);
 
       RosenbrockFunction(const RosenbrockFunction&) = delete;
       RosenbrockFunction& operator=(const RosenbrockFunction&) = delete;

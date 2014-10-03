@@ -4,6 +4,11 @@
 #include <cereal/types/polymorphic.hpp>
 
 namespace hop {
+  LinearSlope::LinearSlope(const unsigned int& numberOfDimensions)
+    : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
+    setOne(one_);
+  }
+
   void LinearSlope::setOne(const arma::Col<double>& one) {
     one_ = one;
     xOpt_ = 5.0 * one_;

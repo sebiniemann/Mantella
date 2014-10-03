@@ -7,7 +7,7 @@
 namespace hop {
   class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark2013 {
     public:
-      using BlackBoxOptimisationBenchmark2013::BlackBoxOptimisationBenchmark2013;
+      explicit BuecheRastriginFunction(const unsigned int& numberOfDimensions);
 
       BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
       BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
