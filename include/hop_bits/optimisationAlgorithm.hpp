@@ -3,9 +3,10 @@
 #include <memory>
 
 #include <hop_bits/optimisationProblem.hpp>
+#include <hop_bits/helper/printable.hpp>
 
 namespace hop {
-  class OptimisationAlgorithm {
+  class OptimisationAlgorithm : public Printable {
     public:
       explicit OptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
