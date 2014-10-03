@@ -1,2 +1,8 @@
+# Library standard
+add_subdirectory("./optimisationProblem")
+
+# Students
 add_subdirectory("./romeo")
-add_subdirectory("./development")
+
+# Experiemental
+add_subdirectory("./mpi")
