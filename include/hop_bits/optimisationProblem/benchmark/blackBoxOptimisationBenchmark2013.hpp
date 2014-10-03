@@ -20,7 +20,7 @@ namespace hop {
       virtual void setLocalOptimaY101(const arma::Mat<double>& localOptimaY101);
       virtual void setDeltaC21(const arma::Mat<double>& deltaC21);
       virtual void setLocalOptimaY21(const arma::Mat<double>& localOptimaY21);
-      
+
     protected:
       arma::Col<double> translation_;
       arma::Col<double> one_;
@@ -31,7 +31,6 @@ namespace hop {
       arma::Mat<double> deltaC21_;
       arma::Mat<double> localOptimaY21_;
 
-      arma::Mat<double> getRandomRotation() const;
       arma::Mat<double> getRandomDeltaC101() const;
       arma::Mat<double> getRandomLocalOptimaY101() const;
       arma::Mat<double> getRandomDeltaC21() const;

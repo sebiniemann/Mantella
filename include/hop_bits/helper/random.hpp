@@ -2,6 +2,8 @@
 
 #include <random>
 
+#include <armadillo>
+
 namespace hop {
   class Random {
     public:
@@ -10,6 +12,11 @@ namespace hop {
       Random& operator=(const Random&) = delete;
 
       static std::mt19937_64 Rng;
+
+      static arma::Mat<double> getRandomRotationMatrix(unsigned int numberOfDimensions);
+
+      static arma::Col<arma::uword> getRandomPermutation(unsigned int numberOfElements, unsigned int cycleLength);
+      static arma::Col<arma::uword> getRandomPermutation(unsigned int numberOfElements);
 
     protected:
       static std::random_device RandomDevice;

@@ -17,8 +17,8 @@ namespace hop {
 
     setTranslation(arma::randu<arma::Col<double>>(numberOfDimensions_) * 8.0 - 4.0);
     setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Random::Rng) ? 1.0 : -1.0));
-    setRotationR(getRandomRotation());
-    setRotationQ(getRandomRotation());
+    setRotationR(Random::getRandomRotationMatrix(numberOfDimensions_));
+    setRotationQ(Random::getRandomRotationMatrix(numberOfDimensions_));
     setDeltaC101(getRandomDeltaC101());
     setLocalOptimaY101(getRandomLocalOptimaY101());
     setDeltaC21(getRandomDeltaC21());
@@ -55,18 +55,6 @@ namespace hop {
 
   void BlackBoxOptimisationBenchmark2013::setLocalOptimaY21(const arma::Mat<double>& localOptimaY21) {
     localOptimaY21_ = localOptimaY21;
-  }
-
-  arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomRotation() const {
-    arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_);
-    for (std::size_t j = 0; j < rotationMatrix.n_cols; ++j) {
-      for (unsigned int jj = 0; jj < j; ++jj) {
-        rotationMatrix.col(j) = rotationMatrix.col(j) - arma::dot(rotationMatrix.col(j), rotationMatrix.col(jj)) * rotationMatrix.col(jj);
-      }
-      rotationMatrix.col(j) = rotationMatrix.col(j) / arma::norm(rotationMatrix.col(j));
-    }
-
-    return rotationMatrix;
   }
 
   arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomDeltaC101() const {
