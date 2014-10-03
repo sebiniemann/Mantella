@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 # Romeo's Master Thesis
-project(RomeoMasterThesis CXX)
+project(StudentsRomeoMasterThesis CXX)
 
 # Enable C++11 features
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-# ------------------------
-# BUILD EVALUATION SCRIPTS
-# ------------------------
+# Set output directories
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+# -------------
+# BUILD SCRIPTS
+# -------------
 message(STATUS "NOTICE: Configuring Romeo's master thesis evaluation scripts.")
 
 # Include HOP headers
