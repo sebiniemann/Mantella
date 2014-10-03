@@ -23,10 +23,9 @@ project(HOP CXX C)
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
-option(BUILD_LIBRARY "Build library (includes tests)" ON)
-option(BUILD_GUI "Build GUI" OFF)
+option(BUILD_LIBRARY "Build library (includes tests)" OFF)
 option(BUILD_APPS "Build APPS" OFF)
-option(BUILD_ALL "Build all" OFF)
+option(BUILD_ALL "Build all" ON)
 
 if(BUILD_ALL)
   set(BUILD_LIBRARY ON)
@@ -82,11 +81,12 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
-    src/optimisationAlgorithm/randomSearch.cpp
-   # src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
+    src/optimisationAlgorithm/pureRandomSearch.cpp
+    src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
+    src/optimisationAlgorithm/simulatedAnnealing.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
-    src/optimisationAlgorithm/parallel/standardParticleSwarmOptimisation2011.cpp
+    src/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.cpp
     src/optimisationProblem.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
     src/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.cpp
@@ -121,7 +121,7 @@ if(BUILD_LIBRARY)
     src/helper/printable.cpp
     src/helper/random.cpp
     src/helper/runable.cpp
-    src/helper/to_string.cpp
+    src/helper/string.cpp
   )
 
   # Link against third party libraries
@@ -151,15 +151,6 @@ if(BUILD_LIBRARY)
   add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
 endif()
 
-# ---------
-# BUILD GUI
-# ---------
-if(BUILD_GUI)
-  message(STATUS "")
-  message(STATUS "ERROR: Building the GUI via cmake is not supported. Use qmake instead.")
-  message(STATUS "")
-endif()
-
 # ----------
 # BUILD APPS
 # ----------
@@ -178,11 +169,12 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/randomSearch.hpp
+  include/hop_bits/optimisationAlgorithm/pureRandomSearch.hpp
   include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/simulatedAnnealing.hpp
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/parallel/standardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationProblem.hpp
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp
   include/hop_bits/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.hpp
@@ -217,6 +209,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/helper/printable.hpp
   include/hop_bits/helper/random.hpp
   include/hop_bits/helper/runable.hpp
-  include/hop_bits/helper/to_string.hpp
+  include/hop_bits/helper/string.hpp
   test/optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp
 )
