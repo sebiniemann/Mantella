@@ -5,15 +5,24 @@
 namespace hop {
   class RoleBasedImitationAlgorithm : public OptimisationAlgorithm {
     public:
-      explicit RoleBasedImitationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem);
+      explicit RoleBasedImitationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize);
 
       RoleBasedImitationAlgorithm(const RoleBasedImitationAlgorithm&) = delete;
       RoleBasedImitationAlgorithm& operator=(const RoleBasedImitationAlgorithm&) = delete;
 
-      void setMaximalStepSize(const arma::Col<double>& maximalStepSize);
+      void setNeighbourhoodSize(const unsigned int& neighbourhoodSize);
+      void setMaximalNeighourhoodConvergence(const arma::Col<double>& maximalNeighourhoodConvergence);
+
+      std::string to_string() const override;
 
     protected:
-      arma::Col<double> maximalStepSize_;
+      const unsigned int populationSize_;
+
+      arma::Mat<double> agents_;
+      arma::Col<double> objectiveValues_;
+
+      unsigned int neighbourhoodSize_;
+      arma::Col<double> maximalNeighourhoodConvergence_;
 
       void optimiseImplementation() override;
   };

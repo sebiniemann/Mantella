@@ -7,7 +7,7 @@
 namespace hop {
   HillClimbing::HillClimbing(const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : OptimisationAlgorithm(optimisationProblem) {
-    setMaximalStepSize(arma::ones<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()));
+    setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
 
   void HillClimbing::optimiseImplementation() {
@@ -17,10 +17,10 @@ namespace hop {
     } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
 
     ++numberOfIterations_;
-    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
     bestSolution_ = candidateSolution;
+    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
-    while(true) {
+    while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
       arma::Col<double> candidateSolution;
@@ -31,17 +31,17 @@ namespace hop {
       double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
       if (objectiveValue < bestObjectiveValue_) {
-        bestObjectiveValue_ = objectiveValue;
         bestSolution_ = candidateSolution;
-      }
-
-      if(isFinished() || isTerminated()) {
-        return;
+        bestObjectiveValue_ = objectiveValue;
       }
     }
   }
 
   void HillClimbing::setMaximalStepSize(const arma::Col<double>& maximalStepSize) {
     maximalStepSize_ = maximalStepSize;
+  }
+
+  std::string HillClimbing::to_string() const {
+    return "HillClimbing";
   }
 }

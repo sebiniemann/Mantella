@@ -10,6 +10,8 @@ namespace hop {
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
 
+      std::string to_string() const override;
+
     protected:
       arma::Col<double> stepSize_;
       bool reduceStepSize_;

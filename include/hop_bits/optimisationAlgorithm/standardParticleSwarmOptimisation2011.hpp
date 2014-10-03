@@ -15,13 +15,17 @@ namespace hop {
       void setLocalAttraction(const double& localAttraction);
       void setGlobalAttraction(const double& globalAttraction);
 
+      void setMaximalSwarmConvergence(const double& swarmConvergence);
+
+      std::string to_string() const override;
+
     protected:
       const unsigned int populationSize_;
 
       arma::Mat<double> particles_;
       arma::Mat<double> velocities_;
 
-      arma::Mat<double> localBestParticles_;
+      arma::Mat<double> localBestSolutions_;
       arma::Row<double> localBestObjectiveValues_;
 
       double neighbourhoodProbability_;
@@ -29,10 +33,14 @@ namespace hop {
       double localAttraction_;
       double globalAttraction_;
 
+      double maximalSwarmConvergence_;
+
       bool randomizeTopology_;
 
       arma::Mat<arma::uword> topology_;
 
       void optimiseImplementation() override;
+
+      void initialiseSwarm();
   };
 }

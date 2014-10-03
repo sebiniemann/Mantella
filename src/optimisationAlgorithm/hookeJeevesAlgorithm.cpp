@@ -20,10 +20,10 @@ namespace hop {
     } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
 
     ++numberOfIterations_;
-    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
     bestSolution_ = candidateSolution;
+    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
-    while(true) {
+    while(!isFinished() && !isTerminated()) {
       if(reduceStepSize_) {
         stepSize_ /= 2;
       }
@@ -38,15 +38,15 @@ namespace hop {
           double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
           if (objectiveValue < bestObjectiveValue_) {
-            bestObjectiveValue_ = objectiveValue;
-            bestSolution_ = candidateSolution;
-
             reduceStepSize_ = false;
+
+            bestSolution_ = candidateSolution;
+            bestObjectiveValue_ = objectiveValue;
           }
         }
 
         if(isFinished() || isTerminated()) {
-          return;
+          break;
         }
 
         candidateSolution.at(n) -= 2 * stepSize_.at(n);
@@ -55,19 +55,23 @@ namespace hop {
           double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
           if (objectiveValue < bestObjectiveValue_) {
-            bestObjectiveValue_ = objectiveValue;
-            bestSolution_ = candidateSolution;
-
             reduceStepSize_ = false;
+
+            bestSolution_ = candidateSolution;
+            bestObjectiveValue_ = objectiveValue;
           }
         }
 
         if(isFinished() || isTerminated()) {
-          return;
+          break;
         }
 
         candidateSolution.at(n) += stepSize_.at(n);
       }
     }
+  }
+
+  std::string HookeJeevesAlgorithm::to_string() const {
+    return "HookeJeevesAlgorithm";
   }
 }

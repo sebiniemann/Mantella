@@ -12,6 +12,8 @@ namespace hop {
 
       void setMaximalStepSize(const arma::Col<double>& maximalStepSize);
 
+      std::string to_string() const override;
+
     protected:
       arma::Col<double> maximalStepSize_;
 

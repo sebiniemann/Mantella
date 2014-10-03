@@ -9,7 +9,6 @@ namespace hop {
 
       int getRank() const;
 
-
     protected:
       int rank_;
 
