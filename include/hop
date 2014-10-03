@@ -3,11 +3,11 @@
 #include <hop_bits/optimisationAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/randomSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/pureRandomSearch.hpp>
 #include <hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 #include <hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/parallel/standardParticleSwarmOptimisation2011.hpp>
+#include <hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp>
 #include <hop_bits/optimisationProblem.hpp>
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp>
 #include <hop_bits/optimisationProblem/benchmark/bbob2013/attractiveSectorFunction.hpp>
@@ -42,4 +42,4 @@
 #include <hop_bits/helper/printable.hpp>
 #include <hop_bits/helper/random.hpp>
 #include <hop_bits/helper/runable.hpp>
-#include <hop_bits/helper/to_string.hpp>
+#include <hop_bits/helper/string.hpp>
