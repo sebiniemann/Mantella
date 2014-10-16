@@ -11,7 +11,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("Black box optimisation benchmark problem", "[benchmark]") {
+TEST_CASE("Black box optimisation benchmark 2013 problems", "[BBOB2013]") {
 
   SECTION("Test impementation correctness") {
     for(auto numberOfDimensions : {2, 40}) {
@@ -69,7 +69,7 @@ TEST_CASE("Black box optimisation benchmark problem", "[benchmark]") {
       arma::Mat<double> localOptimaY21;
       localOptimaY21.load(testDirectory + "/data/localOptimaY21," + std::to_string(numberOfDimensions) +".mat");
 
-      for (std::size_t n = 0; n < bechmarkProblems.size(); n++) {
+      for (std::size_t n = 0; n < bechmarkProblems.size(); ++n) {
         arma::Col<double> expected;
         expected.load(testDirectory + "/data/expectedF" + std::to_string(n + 1) + "," + std::to_string(numberOfDimensions) +".mat");
 
@@ -84,8 +84,8 @@ TEST_CASE("Black box optimisation benchmark problem", "[benchmark]") {
         bechmarkProblems.at(n)->setDeltaC21(deltaC21);
         bechmarkProblems.at(n)->setLocalOptimaY21(localOptimaY21);
 
-        for (std::size_t j = 0; j < parameters.n_cols; j++) {
-          REQUIRE(bechmarkProblems.at(n)->getObjectiveValue(parameters.col(j)) == Approx(expected.at(j)));
+        for (std::size_t j = 0; j < parameters.n_cols; ++j) {
+          CHECK(bechmarkProblems.at(n)->getObjectiveValue(parameters.col(j)) == Approx(expected.at(j)));
         }
       }
     }

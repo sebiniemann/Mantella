@@ -4,31 +4,31 @@ function expected
 
   for dim = [2, 40]
     parameters = rand(dim, 1000) * 10 - 5;
-    save(['./data/parameters,', int2str(dim), '.mat'], 'parameters', '-ascii', '-double');
+    save(['../../data/parameters,', int2str(dim), '.mat'], 'parameters', '-ascii', '-double');
     
     translation = rand(dim, 1) * 4 - 4;
-    save(['./data/translation,', int2str(dim), '.mat'], 'translation', '-ascii', '-double');
+    save(['../../data/translation,', int2str(dim), '.mat'], 'translation', '-ascii', '-double');
     
     one = repmat(sign(rand - 0.5), dim, 1);
-    save(['./data/one,', int2str(dim), '.mat'], 'one', '-ascii', '-double');
+    save(['../../data/one,', int2str(dim), '.mat'], 'one', '-ascii', '-double');
     
     rotationR = getRandomRotation(dim);  
-    save(['./data/rotationR,', int2str(dim), '.mat'], 'rotationR', '-ascii', '-double');
+    save(['../../data/rotationR,', int2str(dim), '.mat'], 'rotationR', '-ascii', '-double');
     
     rotationQ = getRandomRotation(dim);
-    save(['./data/rotationQ,', int2str(dim), '.mat'], 'rotationQ', '-ascii', '-double');
+    save(['../../data/rotationQ,', int2str(dim), '.mat'], 'rotationQ', '-ascii', '-double');
       
     deltaC101 = getRandomDeltaC101(dim);
-    save(['./data/deltaC101,', int2str(dim), '.mat'], 'deltaC101', '-ascii', '-double');
+    save(['../../data/deltaC101,', int2str(dim), '.mat'], 'deltaC101', '-ascii', '-double');
       
     localOptimaY101 = getRandomLocalOptimaY101(dim);
-    save(['./data/localOptimaY101,', int2str(dim), '.mat'], 'localOptimaY101', '-ascii', '-double');
+    save(['../../data/localOptimaY101,', int2str(dim), '.mat'], 'localOptimaY101', '-ascii', '-double');
       
     deltaC21 = getRandomDeltaC21(dim);
-    save(['./data/deltaC21,', int2str(dim), '.mat'], 'deltaC21', '-ascii', '-double');
+    save(['../../data/deltaC21,', int2str(dim), '.mat'], 'deltaC21', '-ascii', '-double');
       
     localOptimaY21 = getRandomLocalOptimaY21(dim);
-    save(['./data/localOptimaY21,', int2str(dim), '.mat'], 'localOptimaY21', '-ascii', '-double');
+    save(['../../data/localOptimaY21,', int2str(dim), '.mat'], 'localOptimaY21', '-ascii', '-double');
 
     for func = 1:24
       fx = nan(size(parameters, 2), 1);
@@ -36,7 +36,7 @@ function expected
         fx(k) = f(func, parameters(:, k), translation, one, rotationR, rotationQ, deltaC101, localOptimaY101, deltaC21, localOptimaY21);
       end
         
-      save(['./data/expectedF', int2str(func), ',', int2str(dim), '.mat'], 'fx', '-ascii', '-double');
+      save(['../../data/expectedF', int2str(func), ',', int2str(dim), '.mat'], 'fx', '-ascii', '-double');
     end
   end
 end
