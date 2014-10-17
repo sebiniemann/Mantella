@@ -58,5 +58,41 @@ TEST_CASE("Geometry helper", "[geometry]") {
 
     }
   }
+
+  SECTION("Test rotation matrix impementation 2D") {
+
+    double rollAngle[] = {0,45,90,135,180,225,270,315,360,-0,-45,276,-56,-45.89};
+    double pitchAngle[] = {0,45,90,135,180,225,270,315,360,-0,-90,-89,78,-245};
+    double yawAngle[] = {0,45,90,135,180,225,270,315,360,-0,-225,-310,-90,345};
+
+    for (std::size_t n = 0; n != sizeof(rollAngle); ++n){
+        arma::Mat<double> result = hop::Geometry::get3DRotationMatrix(rollAngle[n],pitchAngle[n],yawAngle[n]);
+
+        arma::Mat<double>::fixed<3, 3> expectedRoll({
+          1,0,0,
+          0,cos(rollAngle[n]), -sin(rollAngle[n]),
+          0,sin(rollAngle[n]), cos(rollAngle[n]),
+        });
+
+        arma::Mat<double>::fixed<3, 3> expectedPitch({
+          cos(pitchAngle[n]),0, sin(pitchAngle[n]),
+          0,1,0,
+          -sin(pitchAngle[n]),0, cos(pitchAngle[n])
+        });
+
+        arma::Mat<double>::fixed<3, 3> expectedYaw({
+          cos(yawAngle[n]), -sin(yawAngle[n]),0,
+          sin(yawAngle[n]), cos(yawAngle[n]),0,
+          0,0,1
+        });
+        //arma::Mat<double>::fixed<3, 3> expected = expectedYaw*expectedPitch*expectedRoll;
+        arma::Mat<double>::fixed<3, 3> expected = expectedRoll*expectedPitch*expectedYaw;
+
+        for (std::size_t i = 0; i < expected.n_elem; ++i) {
+          CHECK(result.at(i) == Approx(expected.at(i)));
+        }
+
+    }
+  }
 }
 
