@@ -108,9 +108,9 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/robotic/parallelKinematicMachine/parallelKinematicMachine_3prpr.cpp
     src/optimisationProblem/robotic/parallelKinematicMachine/parallelKinematicMachine_3prrr.cpp
     src/optimisationProblem/robotic/parallelKinematicMachine/parallelKinematicMachine_6pups.cpp
-    src/objectiveFunctionAnalysis.cpp
-    src/objectiveFunctionAnalysis/firstOrderRegression.cpp
-    src/objectiveFunctionAnalysis/secondOrderRegression.cpp
+  #  src/objectiveFunctionAnalysis.cpp
+  #  src/objectiveFunctionAnalysis/firstOrderRegression.cpp
+  #  src/objectiveFunctionAnalysis/secondOrderRegression.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
@@ -206,9 +206,9 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/robotic/parallelKinematicMachine/parallelKinematicMachine_3prpr.hpp
   include/hop_bits/optimisationProblem/robotic/parallelKinematicMachine/parallelKinematicMachine_3prrr.hpp
   include/hop_bits/optimisationProblem/robotic/parallelKinematicMachine/parallelKinematicMachine_6pups.hpp
-  include/hop_bits/objectiveFunctionAnalysis.hpp
-  include/hop_bits/objectiveFunctionAnalysis/firstOrderRegression.hpp
-  include/hop_bits/objectiveFunctionAnalysis/secondOrderRegression.hpp
+#  include/hop_bits/objectiveFunctionAnalysis.hpp
+#  include/hop_bits/objectiveFunctionAnalysis/firstOrderRegression.hpp
+#  include/hop_bits/objectiveFunctionAnalysis/secondOrderRegression.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
