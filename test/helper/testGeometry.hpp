@@ -39,5 +39,24 @@ TEST_CASE("Geometry helper", "[geometry]") {
       CHECK(result.at(n) == Approx(expected.at(n)));
     }
   }
+
+  SECTION("Test rotation matrix impementation 2D") {
+
+    double angle[] = {0,45,90,135,180,225,270,315,360};
+
+    for (std::size_t n = 0; n != sizeof(angle); ++n){
+        arma::Mat<double> result = hop::Geometry::get2DRotationMatrix(angle[n]);
+
+        arma::Mat<double>::fixed<2, 2> expected({
+          cos(angle[n]), -sin(angle[n]),
+          sin(angle[n]), cos(angle[n])
+        });
+
+        for (std::size_t i = 0; i < expected.n_elem; ++i) {
+          CHECK(result.at(i) == expected.at(i));
+        }
+
+    }
+  }
 }
 
