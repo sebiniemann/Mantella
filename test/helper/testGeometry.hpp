@@ -59,7 +59,7 @@ TEST_CASE("Geometry helper", "[geometry]") {
     }
   }
 
-  SECTION("Test rotation matrix impementation 2D") {
+  SECTION("Test rotation matrix impementation 3D") {
 
     double rollAngle[] = {0,45,90,135,180,225,270,315,360,-0,-45,276,-56,-45.89};
     double pitchAngle[] = {0,45,90,135,180,225,270,315,360,-0,-90,-89,78,-245};
