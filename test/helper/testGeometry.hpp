@@ -42,7 +42,7 @@ TEST_CASE("Geometry helper", "[geometry]") {
 
   SECTION("Test rotation matrix impementation 2D") {
 
-    double angle[] = {0,45,90,135,180,225,270,315,360};
+    double angle[] = {0,45,90,135,180,225,270,315,360,-0,-45,-90,-180,-225,-315};
 
     for (std::size_t n = 0; n != sizeof(angle); ++n){
         arma::Mat<double> result = hop::Geometry::get2DRotationMatrix(angle[n]);
