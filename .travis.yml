@@ -5,6 +5,12 @@ compiler:
 #  - clang
   - gcc
 
+env:
+  global:
+   # Encrypted COVERITY_SCAN_TOKEN
+   - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
+
+
 before_install:
   # GCC
   - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
@@ -44,3 +50,12 @@ install:
 script: 
   - cmake .
   - make
+  
+addons:
+  coverity_scan:
+    project:
+      name: "SebastianNiemann/OnlineOptimisation"
+      description: "Build submitted via Travis CI"
+    notification_email: niemann@sra.uni-hannover.de
+    build_command:   "make"
+    branch_pattern: coverity_scan
