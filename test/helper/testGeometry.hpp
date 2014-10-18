@@ -53,7 +53,7 @@ TEST_CASE("Geometry helper", "[geometry]") {
         });
 
         for (std::size_t i = 0; i < expected.n_elem; ++i) {
-          CHECK(result.at(i) == expected.at(i));
+          CHECK(result.at(i) == Approx(expected.at(i)));
         }
 
     }
