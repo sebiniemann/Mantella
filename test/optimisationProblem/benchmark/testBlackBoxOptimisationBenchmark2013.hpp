@@ -1,3 +1,5 @@
+#pragma once
+
 #include <catch/catch.hpp>
 
 #include <cstdlib>
