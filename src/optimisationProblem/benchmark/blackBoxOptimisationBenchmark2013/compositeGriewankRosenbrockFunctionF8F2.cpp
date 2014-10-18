@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationProblem/benchmark/bbob2013/compositeGriewankRosenbrockFunctionF8F2.hpp>
+#include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/compositeGriewankRosenbrockFunctionF8F2.hpp>
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
