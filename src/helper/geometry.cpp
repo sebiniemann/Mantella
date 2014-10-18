@@ -33,17 +33,40 @@ namespace hop {
   }
 
   arma::Mat<double> Geometry::getCircleCircleIntersection(const arma::Mat<double>& firstCenter, const arma::Row<double>& firstRadius, const arma::Mat<double>& secondCenter, const arma::Row<double>& secondRadius) {
+    // TODO Check inputs
+
     arma::Row<double> distance = arma::sum(arma::square(secondCenter - firstCenter));
     arma::Row<double> cosine = (arma::square(firstRadius) - arma::square(secondRadius) + distance) / (2 * arma::sqrt(distance));
 
-    // TODO distance ist bereits berechnet
-    arma::Mat<double> unitVector = arma::normalise(secondCenter - firstCenter);
+    arma::Mat<double> normalisedFirstToSecondCenter = arma::normalise(secondCenter - firstCenter);
 
-    // TODO Nicht doppelt berechnen (bis auf unitVector ist alles gleich)
     arma::Mat<double> intersection = firstCenter;
-    intersection.row(0) += unitVector.row(0) % cosine + unitVector.row(1) % arma::sqrt(arma::square(firstRadius) - arma::square(cosine));
-    intersection.row(1) += unitVector.row(1) % cosine - unitVector.row(0) % arma::sqrt(arma::square(firstRadius) - arma::square(cosine));
+    arma::Mat<double> temp = arma::sqrt(arma::square(firstRadius) - arma::square(cosine));
+    intersection.row(0) += normalisedFirstToSecondCenter.row(0) % cosine + normalisedFirstToSecondCenter.row(1) % temp;
+    intersection.row(1) += normalisedFirstToSecondCenter.row(1) % cosine - normalisedFirstToSecondCenter.row(0) % temp;
 
     return intersection;
   }
+
+//  arma::Mat<double> Geometry::getCircleSphereIntersection(const arma::Mat<double>& circleCenter, const arma::Row<double>& circleRadius, const arma::Mat<double>& circleNormal, const arma::Mat<double>& sphereCenter, const arma::Row<double>& sphereRadius) {
+//    for(std::size_t n = 0; n < )
+//    arma::Row<double> distance = arma::dot(circleNormal, sphereCenter - circleCenter);
+
+
+//    arma::Mat<double>
+
+//    arma::Row<double> cosine = (arma::square(firstRadius) - arma::square(secondRadius) + distance) / (2 * arma::sqrt(distance));
+
+//    // TODO distance ist bereits berechnet
+//    arma::Mat<double> normalisedFirstToSecondCenter = secondCenter - firstCenter;
+//    normalisedFirstToSecondCenter.each_row() /= distance;
+
+//    // TODO Nicht doppelt berechnen (bis auf unitVector ist alles gleich)
+//    arma::Mat<double> intersection = firstCenter;
+//    arma::Mat<double> temp = arma::sqrt(arma::square(firstRadius) - arma::square(cosine));
+//    intersection.row(0) += normalisedFirstToSecondCenter.row(0) % cosine + normalisedFirstToSecondCenter.row(1) % temp;
+//    intersection.row(1) += normalisedFirstToSecondCenter.row(1) % cosine - normalisedFirstToSecondCenter.row(0) % temp;
+
+//    return intersection;
+//  }
 }
