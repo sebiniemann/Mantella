@@ -4,8 +4,8 @@
 
 // TODO Implement limitations for each joint (min/max prismatic length, max angle, ...)
 namespace hop {
-  ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR()
-    : ParallelKinematicMachine_3PRPR(
+  ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS()
+    : ParallelKinematicMachine_6PRUS(
         arma::Mat<double>::fixed<2, 3>({-0.000066580445834, 0.106954081945581, -0.092751709777083, -0.053477040972790, 0.092818290222917, -0.053477040972790}),
         arma::Mat<double>::fixed<2, 3>({0.6, 0.6, 0.6, 0.6, 0.6, 0.6}),
         arma::Mat<double>::fixed<2, 3>({0.1, 1.0392, 0.0, 0.8, 1.2, 0.8}),
@@ -13,7 +13,7 @@ namespace hop {
 
   }
 
-  ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR(const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints, const arma::Mat<double>::fixed<2, 3>& linkLengths, const arma::Mat<double>::fixed<2, 3>& redundantJointStarts, const arma::Mat<double>::fixed<2, 3>& redundantJointEnds)
+  ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS(const arma::Mat<double>::fixed<3, 6>& relativeEndEffectorJoints, const arma::Mat<double>::fixed<3, 6>& linkLengths, const arma::Mat<double>::fixed<3, 6>& redundantJointStarts, const arma::Mat<double>::fixed<3, 6>& redundantJointEnds)
     : endEffectorJointsRelative_(relativeEndEffectorJoints),
       linkLengths_(linkLengths),
       redundantJointStarts_(redundantJointStarts),
@@ -24,15 +24,13 @@ namespace hop {
       redundantJointAnglesCosine_(redundantJointIndicies_.n_elem) {
     for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
       double redundantJointAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
-      double redundantJointAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
-      
       
       redundantJointAnglesSine_.at(n) = std::sin(redundantJointAngle);
       redundantJointAnglesCosine_.at(n) = std::cos(redundantJointAngle);
     }
   }
 
-  arma::Mat<double> ParallelKinematicMachine_3PRPR::getJacobian(const arma::Col<double>& endEffectorPose, const arma::Col<double>& redundantActuationParameters) const {
+  arma::Mat<double> ParallelKinematicMachine_6PRUS::getJacobian(const arma::Col<double>& endEffectorPose, const arma::Col<double>& redundantActuationParameters) const {
     if(any(redundantActuationParameters < 0) || any(redundantActuationParameters > 1)) {
       // TODO Add exception
     }
@@ -53,7 +51,7 @@ namespace hop {
     arma::Mat<double>::fixed<2, 3> baseToEndEffectorJoints = endEffectorJoints - baseJoints;
     
     arma::Mat<double>::fixed<3, 3> forwardKinematic;
-    forwardKinematic.row(0, 1) = baseToEndEffectorJoints;
+    forwardKinematic.rows(0, 1) = baseToEndEffectorJoints;
     forwardKinematic.row(2) = -forwardKinematic.row(0) % endEffectorJointsRotated.row(1) + forwardKinematic.row(1) % endEffectorJointsRotated.row(0);
 
     arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
