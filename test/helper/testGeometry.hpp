@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <cmath>
+#include <array>
 
 #include <armadillo>
 
@@ -43,36 +44,22 @@ TEST_CASE("Geometry helper", "[geometry]") {
 
   SECTION("Test rotation matrix impementation 2D") {
 
-    double angle[] = {0.0,
-      45.0,
-      90.0,
-      135.0,
-      180.0,
-      225.0, 
-      270.0,
-      315.0,
-      360.0,
-      -0.0,
-      -45.0,
-      -90.0,
-      -180.0,
-      -225.0,
-      -315.0
-    };
+    std::array<double, 15> angles = {0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0};
 
-    for (std::size_t n = 0; n != sizeof(angle); ++n){
-        arma::Mat<double> result = hop::Geometry::get2DRotationMatrix(angle[n]);
+    for (auto angle : angles) {
+      arma::Mat<double> result = hop::Geometry::get2DRotationMatrix(angle);
 
-        arma::Mat<double>::fixed<2, 2> expected({
-          std::cos(angle[n]), -std::sin(angle[n]),
-          std::sin(angle[n]), std::cos(angle[n])
-        });
+      arma::Mat<double>::fixed<2, 2> expected({
+        std::cos(angle), -std::sin(angle),
+        std::sin(angle), std::cos(angle)
+      });
 
-        for (std::size_t i = 0; i < expected.n_elem; ++i) {
-          std::cout << result.at(i) - expected.at(i) << std::endl;
-          CHECK(result.at(i) == Approx(expected.at(i)));
-        }
+      //CHECK(result.n_rows == expected.n_rows);
+      //CHECK(result.n_cols == expected.n_cols);
 
+      for (std::size_t nn = 0; nn < expected.n_elem; ++nn) {
+        CHECK(result.at(nn) == Approx(expected.at(nn)));
+      }
     }
   }
 
