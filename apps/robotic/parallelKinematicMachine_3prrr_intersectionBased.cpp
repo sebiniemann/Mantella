@@ -48,13 +48,12 @@ arma::Mat<double> ParallelKinematicMachine_3PRRR_IntersectionBased::getJacobian(
   arma::Mat<double>::fixed<2, 3> passiveJoints = hop::Geometry::getCircleCircleIntersection(baseJoints, linkLengths_.row(0), endEffectorJoints, linkLengths_.row(1));
 
   arma::Mat<double>::fixed<3, 3> forwardKinematic;
-  forwardKinematic.row(0) = endEffectorJoints.row(0) - passiveJoints.row(0);
-  forwardKinematic.row(1) = endEffectorJoints.row(1) - passiveJoints.row(1);
+  forwardKinematic.rows(0, 1) = endEffectorJoints - passiveJoints;
   forwardKinematic.row(2) = -forwardKinematic.row(0) % endEffectorJointsRotated.row(1) + forwardKinematic.row(1) % endEffectorJointsRotated.row(0);
 
-  arma::Mat<double>::fixed<2, 3> baseJointsToPassiveJoints = passiveJoints - baseJoints;
+  arma::Mat<double>::fixed<2, 3> baseToPassiveJoints = passiveJoints - baseJoints;
   arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
-  inverseKinematic.diag() = forwardKinematic.row(0) % baseJointsToPassiveJoints.row(1) - forwardKinematic.row(1) % baseJointsToPassiveJoints.row(0);
+  inverseKinematic.diag() = forwardKinematic.row(0) % baseToPassiveJoints.row(1) - forwardKinematic.row(1) % baseToPassiveJoints.row(0);
   for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
     arma::uword redundantJointIndex = redundantJointIndicies_.at(n);
     inverseKinematic.at(n, 3 + n) = -(forwardKinematic.at(redundantJointIndex, 0) * redundantJointAnglesCosine_.at(n) + forwardKinematic.at(redundantJointIndex, 1) * redundantJointAnglesSine_.at(n));

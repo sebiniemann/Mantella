@@ -5,7 +5,7 @@
 ParallelKinematicMachine_6PRUS_TrigonometryBased::ParallelKinematicMachine_6PRUS_TrigonometryBased()
   : ParallelKinematicMachine_6PRUS_TrigonometryBased(
       arma::Mat<double>::fixed<3, 6>({-0.000066580445834, 0.106954081945581, -0.092751709777083, -0.053477040972790, 0.092818290222917, -0.053477040972790}),
-      arma::Mat<double>::fixed<3, 6>({0.6, 0.6, 0.6, 0.6, 0.6, 0.6}),
+      arma::Mat<double>::fixed<3, 6>({0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6}),
       arma::Mat<double>::fixed<3, 6>({0.1, 1.0392, 0.0, 0.8, 1.2, 0.8}),
       arma::Mat<double>::fixed<3, 6>({1.1, 1.0392, 0.0, -0.2, 1.2, -0.2})) {
 
@@ -43,31 +43,31 @@ arma::Mat<double> ParallelKinematicMachine_6PRUS_TrigonometryBased::getJacobian(
 
 //  std::cout << baseJoints << std::endl;
 
-  arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = hop::Geometry::get2DRotationMatrix(endEffectorAngle) * endEffectorJointsRelative_;
+  arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = hop::Geometry::get3DRotationMatrix(endEffectorAngle) * endEffectorJointsRelative_;
   arma::Mat<double>::fixed<3, 6> endEffectorJoints = endEffectorJointsRotated;
   endEffectorJoints.each_col() += endEffector;
 
 //  std::cout << endEffectorJoints << std::endl;
 
-  arma::Mat<double>::fixed<3, 6> baseJointsToEndEffectorJoints = endEffectorJoints - baseJoints;
+  arma::Mat<double>::fixed<3, 6> baseToEndEffectorJoints = endEffectorJoints - baseJoints;
 
-  arma::Row<double>::fixed<3> passiveAngles = arma::acos((arma::sum(arma::square(baseJointsToEndEffectorJoints)) - arma::sum(arma::square(linkLengths_))) / (2 * arma::prod(linkLengths_)));
+  arma::Row<double>::fixed<3> passiveAngles = arma::acos((arma::sum(arma::square(baseToEndEffectorJoints)) - arma::sum(arma::square(linkLengths_))) / (2 * arma::prod(linkLengths_)));
 
 //  std::cout << passiveAngles << std::endl;
 
   arma::Row<double>::fixed<3> activeJoints;
   for(std::size_t n; n < activeJoints.n_elem; ++n) {
     activeJoints.at(n) = std::atan2(
-      (linkLengths_.at(0, n) + linkLengths_.at(0, n) * std::cos(passiveAngles.at(n))) * baseJointsToEndEffectorJoints.at(1, n) - (linkLengths_.at(1, n) * std::sin(passiveAngles.at(n))) * baseJointsToEndEffectorJoints.at(0, n),
-      (linkLengths_.at(0, n) + linkLengths_.at(0, n) * std::cos(passiveAngles.at(n))) * baseJointsToEndEffectorJoints.at(0, n) + (linkLengths_.at(1, n) * std::sin(passiveAngles.at(n))) * baseJointsToEndEffectorJoints.at(1, n)
+      (linkLengths_.at(0, n) + linkLengths_.at(0, n) * std::cos(passiveAngles.at(n))) * baseToEndEffectorJoints.at(1, n) - (linkLengths_.at(1, n) * std::sin(passiveAngles.at(n))) * baseToEndEffectorJoints.at(0, n),
+      (linkLengths_.at(0, n) + linkLengths_.at(0, n) * std::cos(passiveAngles.at(n))) * baseToEndEffectorJoints.at(0, n) + (linkLengths_.at(1, n) * std::sin(passiveAngles.at(n))) * baseToEndEffectorJoints.at(1, n)
     );
   }
 
 //  std::cout << activeJoints << std::endl;
 
   arma::Mat<double>::fixed<3, 3> forwardKinematic;
-  forwardKinematic.row(0) = baseJointsToEndEffectorJoints.row(0) - linkLengths_.row(0) % arma::cos(activeJoints);
-  forwardKinematic.row(1) = baseJointsToEndEffectorJoints.row(1) - linkLengths_.row(1) % arma::sin(activeJoints);
+  forwardKinematic.row(0) = baseToEndEffectorJoints.row(0) - linkLengths_.row(0) % arma::cos(activeJoints);
+  forwardKinematic.row(1) = baseToEndEffectorJoints.row(1) - linkLengths_.row(1) % arma::sin(activeJoints);
   forwardKinematic.row(2) = -forwardKinematic.row(0) % endEffectorJointsRotated.row(1) + forwardKinematic.row(1) % endEffectorJointsRotated.row(0);
 
 //  std::cout << forwardKinematic << std::endl;

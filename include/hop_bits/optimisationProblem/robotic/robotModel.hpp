@@ -3,7 +3,7 @@
 #include <armadillo>
 
 namespace hop {
-  class ParallelKinematicMachine {
+  class RobotModel {
     public:
       virtual arma::Mat<double> getJacobian(const arma::Col<double>& endEffectorPose, const arma::Col<double>& redundantActuationParameters) const = 0;
   };
