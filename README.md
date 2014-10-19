@@ -9,6 +9,8 @@ Future plans
   - Adding Support for objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
+- **Backlog**
+  - Adding support for the black-box  optimisation benchmark 2014 (waiting for more information until 01.11.2014)
 
 Implemented features
 --------------------
@@ -22,7 +24,7 @@ Implemented features
   - Parallel standard particle swarm optimisation 2011 (**MPI** support)
 
 ### Optimisation Problems
-Full support of the [black box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
+Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
 
 - **Seperable functions**
   - Sphere function
