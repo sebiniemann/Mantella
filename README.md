@@ -2,6 +2,8 @@ OnlineOptimisation 0.9.0
 ==================
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![TODO](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
+This library aims to provide the necessary tools to describe and analysis real-world online optimisation problems as well as (competitive) solvers to reduce the overall computation time on recent multi-cores and high performance clusters.
+
 Future plans
 ------------
 - **Planned for 1.0.0**
@@ -26,9 +28,9 @@ Implemented features
 ### Optimisation Problems
 Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
 
-- **Seperable functions**
+- **Separable functions**
   - Sphere function
-  - Ell Seperable functionsipsoidal function
+  - Ellipsoidal function
   - Rastrigin function
   - Büche-Rastrigin function
   - Linear Slope
