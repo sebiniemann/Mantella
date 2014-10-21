@@ -48,7 +48,7 @@ namespace hop {
     return intersection;
   }
 
-//  arma::Mat<double> Geometry::getCircleSphereIntersection(const arma::Mat<double>& circleCenter, const arma::Row<double>& circleRadius, const arma::Mat<double>& circleNormal, const arma::Mat<double>& sphereCenter, const arma::Row<double>& sphereRadius) {
+  arma::Mat<double> Geometry::getCircleSphereIntersection(const arma::Mat<double>& circleCenter, const arma::Row<double>& circleRadius, const arma::Mat<double>& circleNormal, const arma::Mat<double>& sphereCenter, const arma::Row<double>& sphereRadius) {
 //    for(std::size_t n = 0; n < )
 //    arma::Row<double> distance = arma::dot(circleNormal, sphereCenter - circleCenter);
 
@@ -68,5 +68,6 @@ namespace hop {
 //    intersection.row(1) += normalisedFirstToSecondCenter.row(1) % cosine - normalisedFirstToSecondCenter.row(0) % temp;
 
 //    return intersection;
-//  }
+    return nullptr;
+  }
 }
