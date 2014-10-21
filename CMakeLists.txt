@@ -131,7 +131,6 @@ if(BUILD_LIBRARY)
     src/helper/geometry.cpp
     src/helper/printable.cpp
     src/helper/random.cpp
-    src/helper/runable.cpp
     src/helper/string.cpp
   )
 
@@ -167,12 +166,12 @@ endif()
 # ----------
 # BUILD APPS
 # ----------
-#if(BUILD_APPS)
-#  message(STATUS "NOTICE: Configuring applications.")
+if(BUILD_APPS)
+  message(STATUS "NOTICE: Configuring applications.")
 
-#  # Add applications build script
-#  add_subdirectory("./apps")
-#endif()
+  # Add applications build script
+  add_subdirectory("./apps")
+endif()
 
 # ---------------------
 # Qt Creator workaround
@@ -232,7 +231,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/helper/geometry.hpp
   include/hop_bits/helper/printable.hpp
   include/hop_bits/helper/random.hpp
-  include/hop_bits/helper/runable.hpp
   include/hop_bits/helper/string.hpp
   test/optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp
   test/helper/testGeometry.hpp
