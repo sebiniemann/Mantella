@@ -34,5 +34,7 @@ namespace hop {
       unsigned int maximalNumberOfIterations_;
 
       virtual void optimiseImplementation() = 0;
+
+      ~OptimisationAlgorithm() = default;
   };
 }

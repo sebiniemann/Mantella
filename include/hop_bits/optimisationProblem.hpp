@@ -104,6 +104,8 @@ namespace hop {
       std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
       std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
 
+      ~OptimisationProblem() = default;
+
       friend class cereal::access;
       OptimisationProblem() = default;
 
