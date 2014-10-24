@@ -6,6 +6,8 @@
 std::string testDirectory;
 
 #include <optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp>
+#include <helper/testGeometry.hpp>
+#include <helper/testString.hpp>
 
 int main(const int argc, const char* argv[]) {
   if(argc < 2) {
