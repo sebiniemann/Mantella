@@ -6,3 +6,9 @@ bin
 # Qt Designer
 *.autosave
 *.user
+*.cbp
+cmake_install.cmake
+CMakeCache.txt
+CMakeLists.txt.user
+Makefile
+CMakeFiles
