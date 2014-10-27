@@ -11,8 +11,6 @@ Contributing to OnlineOptimisation
 --------------------------------------------------
 If you have a question about how to use the OnlineOptimisation framework, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/onlineoptimisation).
 
-You may also want to check out our Getting Started.
-
 <a name="issue"></a> Found an Issue or Bug?
 -------------------------------------------
 If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues).
@@ -27,53 +25,40 @@ Note that a submitting a pull request providing the needed changes to introduced
 
 <a name="coding"></a> Coding Guidelines
 ---------------------------------------
-- Everything must be **thoroughly tested** in compliance to our Master Test Plan.
-- All methods must be **detailed documented**, regardless of their code visibility. This includes javadoc, as well as inline comments.
+- Everything must be **thoroughly tested**.
+- All methods must be **documented**, regardless of the code visibility. And do not forget about inline comments for the complicated stuff.
 - We usually follow the [Google Style Guides](https://code.google.com/p/google-styleguide/).
 
 <a name="commit"></a> Commit Guidelines
 ---------------------------------------
 Commit messages must be organised as followed:
 ```
-<type>: <subject>
+[fix|feat|doc|test|devel]: <subject>
 
 <body>
 
 <signature>
 ```
 
-### Type
-The `<type>` is used to define the nature of the commit. Stick to one of the following tags:
+### Prefix
+The prefix is used to define the nature of the commit. Stick to one of the following tags:
 
-- **fix:** Adding fixes to the source code
+- **fix:** Adding fixes
 - **feat:** Adding a new feature
 - **doc:** Changes to the documentation
 - **test:** Adding new tests
-- **devel:** Changes concerning the development process (usually Travis CI)
+- **devel:** Everything else
 
 ### Subject
 Add a short description (usually no more than 15 words) about the content  of your commit.
 
 ### Body
-Describe the details of your changes as specific as possible. Do not be afraid to add multiple lines.
-
-Please try to make your explanation as specific as possible and avoid vague descriptions.
-
-If you submit a fix, include a list of fixed issues by adding:
-```
-Fixed:
-#<issue number> <short issue description>
-```
-
-If you want to refer to a specific commit, add the SHA-1 hash together with the type and subject of the commit:
-```
-Commit <hash> (<type>: <subject>)
-```
+Describe the details of your changes as specific as possible. Do not be afraid to add multiple lines. Please try to make your explanation as specific as possible and avoid vague descriptions.
 
 Feel free to read the read the [Linux Kernel commit guidelines](http://git.kernel.org/cgit/git/git.git/tree/Documentation/SubmittingPatches?id=HEAD) on how to improve commit messages. 
 
 ### Signature
-You are required to end each commit message by adding the following DCO **and** signing your work. Official contributors may be exempt from the former.
+The signature only required in **external pull requests**. End the commit message of your pull request by adding the following DCO **and** signing your work.
 
 ```
 Developer's Certificate of Origin 1.1
@@ -112,9 +97,8 @@ Signed-off-by: Random J Developer <random@developer.example.org>
 --------------------------------------------
 We strive for an agile development process with monthly sprint meetings. New tasks are added any time via the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues) and assigned in the beginning of each sprint via [Waffle.io](https://waffle.io/sebastianniemann/onlineoptimisation). 
 
-Our repository defines four (branch) types, called:
+We make use of three kinds of branches:
 - master
-- tag
 - `<user story branch>`
 - `<hotfix branch>`
 
@@ -122,26 +106,13 @@ Our repository defines four (branch) types, called:
 The main development branch, including the current state of the next release. Small changes may be pushed directly into this branch. The last task of each sprint is releasing the latests changes into `tag`.
 
 **Lifetime:** Infinite
-**Continuous integration:** Yes
-**Continuous deployment:** Yes
-
-### Tag
-Previous releases, copied directly from `master`. A specific version may be cloned to create a `<hotfix branch>`.
-
-**Lifetime:** Infinite
-**Continuous integration:** No (direct copy of the master branch)
-**Continuous deployment:** Yes, manually
 
 ### User Story Branch
-Each sprint may add several, individual `<user story branches>`, per user story. After completion of all tasks, each `<user story branch>` is merged into the `master` branch and removed afterwards.
+Each sprint may add several, individual `<user story branches>`. After completion of all tasks, each `<user story branch>` is merged into the `master` branch and removed afterwards.
 
-**Lifetime:** One sprint
-**Continuous integration:** No
-**Continuous deployment:** No
+**Lifetime:** Preferable one sprint
 
 ### Hotfix Branch
-Only used to test hotfixes to be applied to previous releases in `tag` and removed after releasing a fix.
+Based on the latests release in `tag` and removed after releasing the hotfix.
 
-**Lifetime:** Very short, 2 days at most
-**Continuous integration:** No
-**Continuous deployment:** No
+**Lifetime:** Very short, a few days at most
