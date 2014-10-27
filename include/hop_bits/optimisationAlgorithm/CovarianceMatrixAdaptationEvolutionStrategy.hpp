@@ -5,6 +5,7 @@
 namespace hop {
   class CovarianceMatrixAdaptationEvolutionStrategy : public OptimisationAlgorithm {
     public:
+      //TODO: which input parameters should be added to the constructor?
       explicit CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       CovarianceMatrixAdaptationEvolutionStrategy(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
