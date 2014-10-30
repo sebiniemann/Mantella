@@ -1,7 +1,6 @@
 #include <hop_bits/optimisationAlgorithm/hillClimbing.hpp>
 
-#include <random>
-
+// HOP
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {

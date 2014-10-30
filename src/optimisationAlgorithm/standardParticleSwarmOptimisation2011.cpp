@@ -1,8 +1,10 @@
 #include <hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 
+// C++ STL
 #include <cmath>
 #include <random>
 
+// HOP
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {

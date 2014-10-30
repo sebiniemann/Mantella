@@ -1,5 +1,6 @@
 #include <hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp>
 
+// HOP
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
