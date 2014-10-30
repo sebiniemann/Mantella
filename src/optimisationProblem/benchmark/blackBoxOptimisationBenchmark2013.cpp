@@ -1,9 +1,11 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp>
 
+// C++ STL
 #include <algorithm>
 #include <cmath>
 #include <random>
 
+// HOP
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
