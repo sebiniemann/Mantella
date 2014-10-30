@@ -26,7 +26,18 @@ install:
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
   
-  # MPI (actually 3.x on Ubuntu 14.04+ and 2.x before)
+  # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
+  - wget -O cmake.tar.gz http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz
+  - mkdir cmake
+  - tar -xzf cmake.tar.gz -C ./cmake --strip-components=1
+  - cd cmake
+  - ./bootstrap
+  - make
+  - sudo make install
+  - cd ..
+  - rm -Rf cmake
+  
+  # MPI (will actually install 3.x on Ubuntu 14.04+ and 2.x before)
   - sudo apt-get install -qq libmpich2-dev
   
   # OpenBLAS
