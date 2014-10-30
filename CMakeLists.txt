@@ -14,7 +14,7 @@
 #   Daniel Kiechle - Developer / Software tester
 #   Oskar Pusz - Developer
 #------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 
 # Hint-based Online Programming (HOP)
 project(HOP CXX C)
@@ -115,9 +115,6 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6prus.cpp
     src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6pups.cpp
     src/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.cpp
-#    src/objectiveFunctionAnalysis.cpp
-#    src/objectiveFunctionAnalysis/firstOrderRegression.cpp
-#    src/objectiveFunctionAnalysis/secondOrderRegression.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
@@ -260,9 +257,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6prus.hpp
   include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6pups.hpp
   include/hop_bits/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.hpp
-#  include/hop_bits/objectiveFunctionAnalysis.hpp
-#  include/hop_bits/objectiveFunctionAnalysis/firstOrderRegression.hpp
-#  include/hop_bits/objectiveFunctionAnalysis/secondOrderRegression.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
