@@ -78,6 +78,7 @@ install:
 script: 
   - cmake .
   - make
+  - sudo make install
   
 addons:
   coverity_scan:
