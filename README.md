@@ -7,12 +7,12 @@ This library aims to provide the necessary tools to describe and analysis real-w
 Future plans
 ------------
 - **Planned for 1.0.0**
-  - Adding support for robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)
+  - ~~Adding support for robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ (done)
   - Adding Support for objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
 - **Backlog**
-  - Adding support for the black-box  optimisation benchmark 2014 (waiting for more information until 01.11.2014)
+  - Adding support for the black-box  optimisation benchmark 2015 (waiting for more information until 01.11.2014)
 
 Implemented features
 --------------------
@@ -26,8 +26,19 @@ Implemented features
   - Parallel standard particle swarm optimisation 2011 (**MPI** support)
 
 ### Optimisation Problems
-Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
+Support of real-world robotic optimisation problems
+- **Optimisation problems (supported by each mechanism)**
+  - Position error minimisation
+- **Mechanisms**
+  -  2-dimensional 
+    - Parallel kinematic machine 3(P)RRR
+    - Parallel kinematic machine 3(P)RPR
+  - 3-dimensional
+    - Parallel kinematic machine 6(P)RPR
+    - Parallel kinematic machine 6(P)RPR
+    - Multi-level Stewart platforms
 
+Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
 - **Separable functions**
   - Sphere function
   - Ellipsoidal function
@@ -57,11 +68,6 @@ Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.i
   - Gallagher's Gaussian 21-hi peaks function
   - Katsuura function
   - Lunacek bi-Rastrigin function
-
-Support of real-world robotic optimisation problems
-- **Position error minimisation**
-  - Parallel kinematic machine 3(P)RRR
-  - Parallel kinematic machine 3(P)RPR
 
 License
 -------
