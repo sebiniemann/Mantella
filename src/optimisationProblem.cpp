@@ -1,15 +1,15 @@
 #include <hop_bits/optimisationProblem.hpp>
 
+// C++ STL
 #include <string>
 #include <limits>
 #include <stdexcept>
 
-#include <hop_bits/evaluation/monitor.hpp>
-
 namespace hop {
   OptimisationProblem::OptimisationProblem(const unsigned int& numberOfDimensions)
     : numberOfDimensions_(numberOfDimensions),
-      numberOfEvaluations_(0) {
+      numberOfEvaluations_(0),
+      numberOfDistinctEvaluations_(0) {
     setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
     setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
@@ -17,23 +17,27 @@ namespace hop {
     setParameterScale(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setObjectiveValueTranslation(0.0);
     setObjectiveValueScale(1.0);
-    setMaximalNumberOfEvaluations(1000);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
   }
 
+  // Checks for each dimension whether the parameter is greater or equal the lower bound.
   arma::Col<arma::uword> OptimisationProblem::isSatisfyingLowerBounds(const arma::Col<double>& parameter) {
     if(parameter.n_elem != numberOfDimensions_) {
       throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
+    // Check if the result is already cached.
     auto cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
     if(cachePosition == cachedIsSatisfyingLowerBounds_.end()) {
+      // If false: Compute which parameter violates the lower bound ...
       arma::Col<arma::uword> result = (getScaledCongruentParameter(parameter) >= lowerBounds_);
 
+      // ... and add it to the cache afterwards.
       cachedIsSatisfyingLowerBounds_.insert({parameter, result});
 
       return result;
     } else {
+      // If true: Return the cached result.
       return cachePosition->second;
     }
   }
@@ -43,10 +47,13 @@ namespace hop {
       throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
+    // Check if the result is already cached.
     auto cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
     if(cachePosition == cachedIsSatisfyingUpperBounds_.end()) {
+      // If false: Compute the result ...
       arma::Col<arma::uword> result = (getScaledCongruentParameter(parameter) <= upperBounds_);
 
+      // ... and add it to the cache afterwards.
       cachedIsSatisfyingUpperBounds_.insert({parameter, result});
 
       return result;
@@ -55,6 +62,7 @@ namespace hop {
     }
   }
 
+  // Checks whether any soft-constraint is violated
   bool OptimisationProblem::isSatisfyingSoftConstraints(const arma::Col<double>& parameter) {
     if(parameter.n_elem != numberOfDimensions_) {
       throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
@@ -72,6 +80,7 @@ namespace hop {
     }
   }
 
+  // Checks whether any intervall- or soft-constraint is violated.
   bool OptimisationProblem::isSatisfyingConstraints(const arma::Col<double>& parameter) {
     if(parameter.n_elem != numberOfDimensions_) {
       throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
@@ -112,11 +121,8 @@ namespace hop {
     }
 
     ++numberOfEvaluations_;
-    Monitor::addNumberOfEvaluations(numberOfEvaluations_);
-
     auto cachePosition = cachedObjectiveValues_.find(parameter);
     if(cachePosition == cachedObjectiveValues_.end()) {
-
       ++numberOfDistinctEvaluations_;
 
       double result = getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
@@ -185,14 +191,6 @@ namespace hop {
     objectiveValueScale_ = objectiveValueScale;
   }
 
-  unsigned int OptimisationProblem::getMaximalNumberOfEvaluations() const {
-    return maximalNumberOfEvaluations_;
-  }
-
-  void OptimisationProblem::setMaximalNumberOfEvaluations(const unsigned int& maximalNumberOfEvaluations) {
-    maximalNumberOfEvaluations_ = maximalNumberOfEvaluations;
-  }
-
   double OptimisationProblem::getAcceptableObjectiveValue() const {
     return acceptableObjectiveValue_;
   }
@@ -213,6 +211,7 @@ namespace hop {
     numberOfEvaluations_ = 0;
     numberOfDistinctEvaluations_ = 0;
 
+    // Add to comment in header "... and clearing the cache"
     cachedObjectiveValues_.clear();
     cachedSoftConstraintsValues_.clear();
     cachedIsSatisfyingLowerBounds_.clear();
