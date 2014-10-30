@@ -51,7 +51,7 @@ install:
   - rm -Rf cereal
 
   # Catch
-  sudo apt-get install -qq catch  
+  - sudo apt-get install -qq catch  
 
   # Boost (filesystem)
   # Needed until Travis CI updates to Ubuntu 14.04+
