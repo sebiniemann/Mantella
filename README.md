@@ -7,7 +7,7 @@ This library aims to provide the necessary tools to describe and analysis real-w
 Future plans
 ------------
 - **Planned for 1.0.0**
-  - ~~Adding support for robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ (done)
+  - ~~Adding support for robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
   - Adding Support for objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
