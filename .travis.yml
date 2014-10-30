@@ -51,7 +51,13 @@ install:
   - rm -Rf cereal
 
   # Catch
-  - sudo apt-get install -qq catch  
+  # Needed until Travis CI updates to Ubuntu 14.04+
+  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/develop.tar.gz
+  - mkdir catch
+  - tar -xzf catch.tar.gz -C ./catch --strip-components=1
+  - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
+  - rm -Rf catch
+#  - sudo apt-get install -qq catch  
 
   # Boost (filesystem)
   # Needed until Travis CI updates to Ubuntu 14.04+
