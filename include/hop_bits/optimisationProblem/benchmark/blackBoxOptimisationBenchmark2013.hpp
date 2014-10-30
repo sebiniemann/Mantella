@@ -1,7 +1,9 @@
 #pragma once
 
+// Cereal
 #include <cereal/types/base_class.hpp>
 
+// HOP
 #include <hop_bits/optimisationProblem.hpp>
 
 namespace hop {
@@ -20,6 +22,8 @@ namespace hop {
       virtual void setLocalOptimaY101(const arma::Mat<double>& localOptimaY101);
       virtual void setDeltaC21(const arma::Mat<double>& deltaC21);
       virtual void setLocalOptimaY21(const arma::Mat<double>& localOptimaY21);
+
+      ~BlackBoxOptimisationBenchmark2013() = default;
 
     protected:
       arma::Col<double> translation_;
