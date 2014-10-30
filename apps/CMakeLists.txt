@@ -6,4 +6,3 @@ add_subdirectory("./romeo")
 
 # Experiemental
 add_subdirectory("./mpi")
-add_subdirectory("./robotic")
