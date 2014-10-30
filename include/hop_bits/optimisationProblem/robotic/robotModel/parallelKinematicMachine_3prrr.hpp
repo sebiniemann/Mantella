@@ -1,16 +1,34 @@
 #pragma once
 
+// HOP
 #include <hop_bits/optimisationProblem/robotic/robotModel.hpp>
 
 namespace hop {
   class ParallelKinematicMachine_3PRRR : public RobotModel {
     public:
       explicit ParallelKinematicMachine_3PRRR();
-      explicit ParallelKinematicMachine_3PRRR(const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints, const arma::Mat<double>::fixed<2, 3>& linkLengths, const arma::Mat<double>::fixed<2, 3>& redundantJointStarts, const arma::Mat<double>::fixed<2, 3>& redundantJointEnds);
+      explicit ParallelKinematicMachine_3PRRR(
+          const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
+          const arma::Mat<double>::fixed<2, 3>& linkLengths,
+          const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
+          const arma::Mat<double>::fixed<2, 3>& redundantJointEnds);
 
-      arma::Mat<double> getJacobian(const arma::Col<double>& endEffectorPose, const arma::Col<double>& redundantActuationParameters) const override;
+      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
+      ParallelKinematicMachine_3PRRR(const ParallelKinematicMachine_3PRRR&) = delete;
+      ParallelKinematicMachine_3PRRR& operator=(const ParallelKinematicMachine_3PRRR&) = delete;
 
-    protected:
+      std::vector<arma::Mat<double>> getModelCharacterisation(
+          const arma::Col<double>& endEffectorPose,
+          const arma::Mat<double>& redundantJointActuations) const override;
+
+      arma::Mat<double> getActuation(
+          const arma::Col<double>& endEffectorPose,
+          const arma::Mat<double>& redundantJointActuations) const override;
+
+      double getPositionError(
+          const arma::Col<double>& endEffectorPose,
+          const arma::Mat<double>& redundantJointActuations) const override;
+
       arma::Mat<double>::fixed<2, 3> endEffectorJointsRelative_;
       arma::Mat<double>::fixed<2, 3> linkLengths_;
 
