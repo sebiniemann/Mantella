@@ -1,7 +1,7 @@
 #pragma once
 
 // Catch
-#include <catch/catch.hpp>
+#include <catch.hpp>
 
 // C++ STL
 #include <cstdlib>

@@ -1,6 +1,6 @@
 // Catch
 #define CATCH_CONFIG_RUNNER
-#include <catch/catch.hpp>
+#include <catch.hpp>
 
 // C++ STL
 #include <string>
