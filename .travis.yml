@@ -41,7 +41,18 @@ install:
   - make
   - sudo make install
   - cd ..
-  
+  - rm -Rf armadillo
+
+  # Cereal
+  - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.0.0.tar.gz
+  - mkdir cereal
+  - tar -xzf cereal.tar.gz -C ./cereal --strip-components=1
+  - sudo cp -R cereal/include/cereal /usr/local/include/
+  - rm -Rf cereal
+
+  # Catch
+  sudo apt-get install -qq catch  
+
   # Boost (filesystem)
   # Needed until Travis CI updates to Ubuntu 14.04+
   - sudo apt-get install -qq libboost-filesystem1.54-dev
