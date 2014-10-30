@@ -1,17 +1,24 @@
 #pragma once
 
+// Catch
 #include <catch/catch.hpp>
 
+// C++ STL
 #include <cstdlib>
 #include <array>
 #include <memory>
 #include <string>
 
+// Armadillo
 #include <armadillo>
 
+// Boost
+#include <boost/filesystem.hpp>
+
+// HOP
 #include <hop>
 
-extern std::string testDirectory;
+extern boost::filesystem::path testDirectory;
 
 TEST_CASE("Black box optimisation benchmark 2013 problems", "[BBOB2013]") {
 
@@ -45,37 +52,36 @@ TEST_CASE("Black box optimisation benchmark 2013 problems", "[BBOB2013]") {
       };
 
       arma::Mat<double> parameters;
-      parameters.load(testDirectory + "/data/parameters," + std::to_string(numberOfDimensions) +".mat");
+      parameters.load(testDirectory.string() + "/data/parameters," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Col<double> translation;
-      translation.load(testDirectory + "/data/translation," + std::to_string(numberOfDimensions) +".mat");
+      translation.load(testDirectory.string() + "/data/translation," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Col<double> one;
-      one.load(testDirectory + "/data/one," + std::to_string(numberOfDimensions) +".mat");
+      one.load(testDirectory.string() + "/data/one," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> rotationR;
-      rotationR.load(testDirectory + "/data/rotationR," + std::to_string(numberOfDimensions) +".mat");
+      rotationR.load(testDirectory.string() + "/data/rotationR," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> rotationQ;
-      rotationQ.load(testDirectory + "/data/rotationQ," + std::to_string(numberOfDimensions) +".mat");
+      rotationQ.load(testDirectory.string() + "/data/rotationQ," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> deltaC101;
-      deltaC101.load(testDirectory + "/data/deltaC101," + std::to_string(numberOfDimensions) +".mat");
+      deltaC101.load(testDirectory.string() + "/data/deltaC101," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> localOptimaY101;
-      localOptimaY101.load(testDirectory + "/data/localOptimaY101," + std::to_string(numberOfDimensions) +".mat");
+      localOptimaY101.load(testDirectory.string() + "/data/localOptimaY101," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> deltaC21;
-      deltaC21.load(testDirectory + "/data/deltaC21," + std::to_string(numberOfDimensions) +".mat");
+      deltaC21.load(testDirectory.string() + "/data/deltaC21," + std::to_string(numberOfDimensions) +".mat");
 
       arma::Mat<double> localOptimaY21;
-      localOptimaY21.load(testDirectory + "/data/localOptimaY21," + std::to_string(numberOfDimensions) +".mat");
+      localOptimaY21.load(testDirectory.string() + "/data/localOptimaY21," + std::to_string(numberOfDimensions) +".mat");
 
       for (std::size_t n = 0; n < bechmarkProblems.size(); ++n) {
         arma::Col<double> expected;
-        expected.load(testDirectory + "/data/expectedF" + std::to_string(n + 1) + "," + std::to_string(numberOfDimensions) +".mat");
+        expected.load(testDirectory.string() + "/data/expectedF" + std::to_string(n + 1) + "," + std::to_string(numberOfDimensions) +".mat");
 
-        bechmarkProblems.at(n)->setMaximalNumberOfEvaluations(parameters.n_cols);
         bechmarkProblems.at(n)->setObjectiveValueTranslation(0);
         bechmarkProblems.at(n)->setTranslation(translation);
         bechmarkProblems.at(n)->setOne(one);
