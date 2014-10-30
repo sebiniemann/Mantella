@@ -1,21 +1,51 @@
 #include <hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6pups.hpp>
 
+// HOP
 #include <hop_bits/helper/geometry.hpp>
 
 // TODO Implement limitations for each joint (min/max prismatic length, max angle, ...)
 namespace hop {
   ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS()
     : ParallelKinematicMachine_6PUPS(
-        arma::Mat<double>::fixed<3, 6>({-0.000066580445834, 0.106954081945581, -0.092751709777083, -0.053477040972790, 0.092818290222917, -0.053477040972790}),
-        arma::Mat<double>::fixed<3, 6>({0.1, 1.0392, 0.0, 0.8, 1.2, 0.8}),
-        arma::Mat<double>::fixed<3, 6>({1.1, 1.0392, 0.0, -0.2, 1.2, -0.2})) {
+        arma::Mat<double>::fixed<3, 6>({
+          -0.025561381023353, 0.086293776138137, 0.12,
+          0.025561381023353, 0.086293776138137, 0.12,
+          0.087513292835791, -0.021010082747031, 0.12,
+          0.061951911812438, -0.065283693391106, 0.12,
+          -0.061951911812438, -0.065283693391106, 0.12,
+          -0.087513292835791, -0.021010082747032, 0.12}),
+        arma::Mat<double>::fixed<3, 6>({
+          -0.463708870031622, 0.417029254828353, -0.346410161513775,
+          0.463708870031622, 0.417029254828353, -0.346410161513775,
+          0.593012363818459, 0.193069033993384, -0.346410161513775,
+          0.129303493786838, -0.610098288821738, -0.346410161513775,
+          -0.129303493786837, -0.610098288821738, -0.346410161513775,
+          -0.593012363818459, 0.193069033993384, -0.346410161513775}),
+        arma::Mat<double>::fixed<3, 6>({
+          -0.247202519085512, 0.292029254828353, 0.086602540378444,
+          0.247202519085512, 0.292029254828353, 0.086602540378444,
+          0.376506012872349, 0.068069033993384, 0.086602540378444,
+          0.129303493786838, -0.360098288821738, 0.086602540378444,
+          -0.129303493786837, -0.360098288821738, 0.086602540378444,
+          -0.376506012872349, 0.068069033993384, 0.086602540378444}),
+        arma::Row<double>::fixed<6>({
+          0.39, 0.39, 0.39, 0.39, 0.39, 0.39}),
+        arma::Row<double>::fixed<6>({
+          0.95, 0.95, 0.95, 0.95, 0.95, 0.95})) {
 
   }
 
-  ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS(const arma::Mat<double>::fixed<3, 6>& relativeEndEffectorJoints, const arma::Mat<double>::fixed<3, 6>& redundantJointStarts, const arma::Mat<double>::fixed<3, 6>& redundantJointEnds)
+  ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS(
+      const arma::Mat<double>::fixed<3, 6>& relativeEndEffectorJoints,
+      const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
+      const arma::Mat<double>::fixed<3, 6>& redundantJointEnds,
+      const arma::Row<double>::fixed<6>& minimalActiveJointActuations,
+      const arma::Row<double>::fixed<6>& maximalActiveJointActuations)
     : endEffectorJointsRelative_(relativeEndEffectorJoints),
       redundantJointStarts_(redundantJointStarts),
       redundantJointEnds_(redundantJointEnds),
+      minimalActiveJointActuations_(minimalActiveJointActuations),
+      maximalActiveJointActuations_(maximalActiveJointActuations),
       redundantJointsStartToEnd_(redundantJointEnds_ - redundantJointStarts_),
       redundantJointIndicies_(arma::find(arma::any(redundantJointsStartToEnd_))),
       redundantJointAngles_(3, redundantJointIndicies_.n_elem) {
@@ -26,9 +56,13 @@ namespace hop {
     }
   }
 
-  arma::Mat<double> ParallelKinematicMachine_6PUPS::getJacobian(const arma::Col<double>& endEffectorPose, const arma::Col<double>& redundantActuationParameters) const {
-    if(any(redundantActuationParameters < 0) || any(redundantActuationParameters > 1)) {
-      // TODO Add exception
+  std::vector<arma::Mat<double>> ParallelKinematicMachine_6PUPS::getModelCharacterisation(
+      const arma::Col<double>& endEffectorPose,
+      const arma::Mat<double>& redundantJointActuations) const {
+    std::vector<arma::Mat<double>> modelCharacterisation;
+
+    if(arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
+      throw std::runtime_error("All values for the actuation of redundantion joints must be between [0, 1].");
     }
 
     arma::Col<double>::fixed<3> endEffector = endEffectorPose.subvec(0, 2);
@@ -39,28 +73,61 @@ namespace hop {
     arma::Mat<double>::fixed<3, 6> baseJoints = redundantJointStarts_;
     for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
       std::size_t redundantJointIndex = redundantJointIndicies_.at(n);
-      baseJoints.col(redundantJointIndex) += redundantActuationParameters.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
+      baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
     }
 
     arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = hop::Geometry::get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelative_;
     arma::Mat<double>::fixed<3, 6> endEffectorJoints = endEffectorJointsRotated;
     endEffectorJoints.each_col() += endEffector;
 
-    arma::Mat<double>::fixed<3, 6> baseToEndEffectorJoints = endEffectorJoints - baseJoints;
-    
+    modelCharacterisation.push_back(baseJoints);
+    modelCharacterisation.push_back(endEffectorJoints);
+
+    return modelCharacterisation;
+  }
+
+  arma::Mat<double> ParallelKinematicMachine_6PUPS::getActuation(
+      const arma::Col<double>& endEffectorPose,
+      const arma::Mat<double>& redundantJointActuations) const {
+    std::vector<arma::Mat<double>> modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
+
+    arma::Mat<double>::fixed<3, 6> baseJoints = modelCharacterisation.at(0);
+    arma::Mat<double>::fixed<3, 6> endEffectorJoints = modelCharacterisation.at(1);
+
+    return arma::sqrt(arma::sum(arma::square(endEffectorJoints - baseJoints)));
+  }
+
+  double ParallelKinematicMachine_6PUPS::getPositionError(
+      const arma::Col<double>& endEffectorPose,
+      const arma::Mat<double>& redundantJointActuations) const {
+    std::vector<arma::Mat<double>> modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
+
+    arma::Mat<double>::fixed<3, 6> baseJoints = modelCharacterisation.at(1);
+
+    arma::Mat<double>::fixed<3, 6> endEffectorJoints = modelCharacterisation.at(1);
+    arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = endEffectorJoints;
+    endEffectorJointsRotated.each_col() -= endEffectorPose.subvec(0, 1);
+
+    arma::Mat<double>::fixed<3, 6> baseToEndEffectorJointPositions = endEffectorJoints - baseJoints;
+    arma::Col<double>::fixed<6> baseToEndEffectorJointActuations = arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
+
+    if(any(baseToEndEffectorJointActuations < minimalActiveJointActuations_) || any(baseToEndEffectorJointActuations > maximalActiveJointActuations_)) {
+      return 0;
+    }
+
     arma::Mat<double>::fixed<6, 6> forwardKinematic;
-    forwardKinematic.rows(0, 2) = baseToEndEffectorJoints;
-    for(std::size_t n = 0; n < 3; ++n) {
-      forwardKinematic.row(3 + n) = arma::cross(endEffectorJointsRotated, baseToEndEffectorJoints.col(n));
+    forwardKinematic.rows(0, 2) = baseToEndEffectorJointPositions;
+    for(std::size_t j = 0; j < baseToEndEffectorJointPositions.n_cols; ++j) {
+      forwardKinematic.submat(3, j, 5, j) = arma::cross(endEffectorJointsRotated.col(j), baseToEndEffectorJointPositions.col(j));
     }
 
     arma::Mat<double> inverseKinematic(6, 6 + redundantJointIndicies_.n_elem, arma::fill::zeros);
-    inverseKinematic.diag() = -arma::sqrt(arma::sum(arma::square(baseToEndEffectorJoints)));
+    inverseKinematic.diag() = -arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
     for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
       arma::uword redundantJointIndex = redundantJointIndicies_.at(n);
-      inverseKinematic.at(n, 6 + n) = arma::dot(baseToEndEffectorJoints.col(redundantJointIndex), redundantJointAngles_.col(redundantJointIndex));
+      inverseKinematic.at(n, 6 + n) = arma::dot(baseToEndEffectorJointPositions.col(redundantJointIndex), redundantJointAngles_.col(redundantJointIndex));
     }
 
-    return arma::solve(forwardKinematic.t(), inverseKinematic);
+    return -1 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));
   }
 }
