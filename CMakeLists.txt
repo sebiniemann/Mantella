@@ -171,8 +171,8 @@ if(BUILD_LIBRARY)
   target_link_libraries(libTest hop) # HOP
 
   # Link against third party libraries
-  target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
-  target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
+  target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(libTest ${Boost_LIBRARIES}) # Boost
   
   add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
 
