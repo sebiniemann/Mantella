@@ -1,5 +1,6 @@
 #pragma once
 
+// HOP
 #include <hop_bits/optimisationAlgorithm.hpp>
 
 namespace hop {
@@ -15,9 +16,6 @@ namespace hop {
       std::string to_string() const override;
 
     protected:
-      arma::Col<double> state_;
-      double objectiveValue_;
-
       arma::Col<double> maximalStepSize_;
 
       void optimiseImplementation() override;

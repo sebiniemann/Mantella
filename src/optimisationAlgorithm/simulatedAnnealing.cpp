@@ -1,8 +1,9 @@
 #include <hop_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 
-#include <random>
+// C++ STL
 #include <cmath>
 
+// HOP
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
@@ -18,31 +19,33 @@ namespace hop {
     } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
 
     ++numberOfIterations_;
-    state_ = candidateSolution;
-    objectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
+    arma::Col<double> state = candidateSolution;
+    double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
     bestSolution_ = candidateSolution;
-    bestObjectiveValue_ = objectiveValue_;
+    bestObjectiveValue_ = objectiveValue;
 
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
       arma::Col<double> candidateSolution;
       do {
-        candidateSolution = state_ + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Random::Rng);
+        candidateSolution = state + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Random::Rng);
       } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
 
       double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
-      if (objectiveValue < objectiveValue_ || std::exp((objectiveValue_ - objectiveValue) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Random::Rng)) {
-        state_ = candidateSolution;
-        objectiveValue_ = objectiveValue;
-      }
+      //TODO FIX THIS
+//      if (objectiveValue < bestObjectiveValue_ || ) {
+//        state = candidateSolution;
+//        bestObjectiveValue_ = objectiveValue;
+//      } else if(std::exp((objectiveValue - objectiveValue) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Random::Rng)) {
+//        state = candidateSolution;
+//      }
 
-      if (objectiveValue < bestObjectiveValue_) {
-        bestSolution_ = candidateSolution;
-        bestObjectiveValue_ = objectiveValue;
-      }
+//      if (objectiveValue < bestObjectiveValue_) {
+//        bestSolution_ = candidateSolution;
+//      }
     }
   }
 
