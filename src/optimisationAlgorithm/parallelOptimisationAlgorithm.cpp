@@ -1,11 +1,14 @@
 #include <hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp>
 
+// C++ STL
 #include <sstream>
 
+// Cereal
 #include <cereal/cereal.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
+// MPI
 #include <mpi.h>
 
 namespace hop {
@@ -45,7 +48,7 @@ namespace hop {
       }
     }
 
-    free(serialisedOptimisationProblemBuffer);
+    delete(serialisedOptimisationProblemBuffer);
 
     parallelOptimiseImplementation();
   }
