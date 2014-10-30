@@ -19,8 +19,13 @@ cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 # Hint-based Online Programming (HOP)
 project(HOP CXX C)
 
+set(HOP_MAJOR 1)
+set(HOP_MINOR 0)
+set(HOP_PATCH 0)
+set(HOP_VERSION "${HOP_MAJOR}.${HOP_MINOR}.${HOP_PATCH}")
+
 # Add additional cmake modules (currently unused)
-# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
 option(BUILD_LIBRARY "Build library (includes tests)" OFF)
@@ -29,7 +34,6 @@ option(BUILD_ALL "Build all" ON)
 
 if(BUILD_ALL)
   set(BUILD_LIBRARY ON)
-  set(BUILD_GUI ON)
   set(BUILD_APPS ON)
 endif()
 
@@ -62,17 +66,18 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # BUILD LIBRARY
 # -------------
 if(BUILD_LIBRARY)
-  message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library.")
+  message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library (version: ${HOP_VERSION}).")
   
   # Locate third party libraries and headers
   find_package(Armadillo REQUIRED) # Armadillo C++
+  find_package(Cereal REQUIRED) # Cereal (header only)
   find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
   find_package(MPI REQUIRED) # MPI
 
   # Include third party headers
-  include_directories(${PROJECT_SOURCE_DIR}/ext) # Catch and Cereal
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
-  include_directories(${Boost_INCLUDE_DIRS}) # Boost
+  include_directories(${CEREAL_INCLUDE_DIRS}) # Cereal
+  include_directories(${CATCH_INCLUDE_DIRS}) # Catch
   include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
 
   # Compile the optimisation library
@@ -104,7 +109,6 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.cpp
-    src/optimisationProblem/robotic/redundancySolution.cpp
     src/optimisationProblem/robotic/robotModel.cpp
     src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prpr.cpp
     src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prrr.cpp
@@ -123,10 +127,6 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
     src/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.cpp
-    src/evaluation.cpp
-    src/evaluation/monitor/aggregator.cpp
-    src/evaluation/monitor/selector.cpp
-    src/evaluation/monitor.cpp
     src/helper/cereal.cpp
     src/helper/geometry.cpp
     src/helper/printable.cpp
@@ -145,6 +145,16 @@ if(BUILD_LIBRARY)
 
   message(STATUS "NOTICE: Configuring tests")
 
+  # Locate third party libraries and headers
+  find_package(Armadillo REQUIRED) # Armadillo C++
+  find_package(Catch REQUIRED) # Catch (header only)
+  find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
+
+  # Include third party headers
+  include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+  include_directories(${CATCH_INCLUDE_DIRS}) # Catch
+  include_directories(${Boost_INCLUDE_DIRS}) # Boost
+
   # Include headers
   include_directories(${PROJECT_SOURCE_DIR}/test) # HOP tests
 
@@ -154,13 +164,54 @@ if(BUILD_LIBRARY)
     test/main.cpp
   )
 
-  # Add library directories
+  # Add HOP library directory
   link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
 
-  # Link against libraries
+  # Link against HOP library
   target_link_libraries(libTest hop) # HOP
+
+  # Link against third party libraries
+  target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
   
   add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
+
+  # ----------
+  # INSTALLING
+  # ----------
+
+  if(NOT INSTALL_INCLUDE_DIR)
+    set(INSTALL_INCLUDE_DIR "include")
+  endif()
+
+  # We use data dir to store files shared with other programs
+  # like the ArmadilloConfig.cmake file.
+  if(NOT INSTALL_DATA_DIR)
+    set(INSTALL_DATA_DIR "share")
+  endif()
+
+  # executables destination
+  if(NOT INSTALL_BIN_DIR)
+    set(INSTALL_BIN_DIR "bin")
+  endif()
+
+  include(GenerateExportHeader)
+
+  generate_export_header(hop)
+  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
+  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
+
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
+
+  install(TARGETS hop EXPORT HOPTargets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    INCLUDES DESTINATION include)
+
+  export(PACKAGE hop)
+
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
 endif()
 
 # ----------
@@ -204,7 +255,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.hpp
-  include/hop_bits/optimisationProblem/robotic/redundancySolution.hpp
   include/hop_bits/optimisationProblem/robotic/robotModel.hpp
   include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prpr.hpp
   include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prrr.hpp
@@ -223,10 +273,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp
-  include/hop_bits/evaluation.hpp
-  include/hop_bits/evaluation/monitor/aggregator.hpp
-  include/hop_bits/evaluation/monitor/selector.hpp
-  include/hop_bits/evaluation/monitor.hpp
   include/hop_bits/helper/cereal.hpp
   include/hop_bits/helper/geometry.hpp
   include/hop_bits/helper/printable.hpp
