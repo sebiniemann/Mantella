@@ -1,5 +1,6 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.hpp>
 
+// Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 

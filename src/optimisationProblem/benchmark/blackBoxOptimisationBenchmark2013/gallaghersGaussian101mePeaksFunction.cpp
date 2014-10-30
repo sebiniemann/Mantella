@@ -1,9 +1,11 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/gallaghersGaussian101mePeaksFunction.hpp>
 
+// C++ STL
 #include <algorithm>
 #include <cmath>
 #include <limits>
 
+// Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 

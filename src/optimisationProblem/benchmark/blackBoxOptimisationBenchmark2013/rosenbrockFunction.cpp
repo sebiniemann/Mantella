@@ -1,8 +1,6 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rosenbrockFunction.hpp>
 
-#include <algorithm>
-#include <cmath>
-
+// Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
