@@ -1,8 +1,21 @@
-OnlineOptimisation 0.9.0
-==================
+Hint-based Online Programming 0.9.0
+====================================
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![TODO](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
-This library aims to provide the necessary tools to describe and analysis real-world online optimisation problems as well as (competitive) solvers to reduce the overall computation time on recent multi-cores and high performance clusters.
+The Hint-based Online Programming (HOP) library aims to provide the necessary tools to describe and analysis real-world online optimisation problems as well as (competitive) solvers to reduce the overall computation time on recent multi-cores and high performance clusters.
+
+HOP is based on recent C++11 features and Armadillo, a high efficient linear algebra library. We are also implementing highly parallalised, competitive optimisation algorithms to maximise the speedup on multi-cores or high performance clusters. 
+
+Getting started
+---------------
+### Installation
+- **Requirements** (newer version should also work)
+  - CMake 2.8.8
+  - GCC 4.8.1 (or any other C++11 featur complete compiler)
+  - MPI-2
+  - Cereal 1.0.0
+  - Catch (development version)
+  - Boost filesystem 1.54
 
 Future plans
 ------------
@@ -11,6 +24,7 @@ Future plans
   - Adding Support for objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
+  - Make installation of parallised implementations optional (activated as default)
 - **Backlog**
   - Adding support for the black-box  optimisation benchmark 2015 (waiting for more information until 01.11.2014)
 
