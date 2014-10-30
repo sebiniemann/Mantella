@@ -3,14 +3,25 @@
 // HOP
 #include <hop_bits/helper/geometry.hpp>
 
-// TODO Implement limitations for each joint (min/max prismatic length, max angle, ...)
 namespace hop {
   ParallelKinematicMachine_3PRRR::ParallelKinematicMachine_3PRRR()
     : ParallelKinematicMachine_3PRRR(
-        arma::Mat<double>::fixed<2, 3>({-0.000066580445834, 0.106954081945581, -0.092751709777083, -0.053477040972790, 0.092818290222917, -0.053477040972790}),
-        arma::Mat<double>::fixed<2, 3>({0.6, 0.6, 0.6, 0.6, 0.6, 0.6}),
-        arma::Mat<double>::fixed<2, 3>({0.1, 1.0392, 0.0, 0.8, 1.2, 0.8}),
-        arma::Mat<double>::fixed<2, 3>({1.1, 1.0392, 0.0, -0.2, 1.2, -0.2})) {
+        arma::Mat<double>::fixed<2, 3>({
+          -0.000066580445834, 0.106954081945581,
+          -0.092751709777083, -0.053477040972790,
+          0.092818290222917, -0.053477040972790}),
+        arma::Mat<double>::fixed<2, 3>({
+          0.6, 0.6,
+          0.6, 0.6,
+          0.6, 0.6}),
+        arma::Mat<double>::fixed<2, 3>({
+          0.1, 1.0392,
+          0.0, 0.8,
+          1.2, 0.8}),
+        arma::Mat<double>::fixed<2, 3>({
+          1.1, 1.0392,
+          0.0, -0.2,
+          1.2, -0.2})) {
 
   }
 
