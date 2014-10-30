@@ -1,10 +1,10 @@
 #pragma once
 
+// Catch
 #include <catch/catch.hpp>
 
+// HOP
 #include <hop>
-
-extern std::string testDirectory;
 
 TEST_CASE("String helper", "[string]") {
 
