@@ -1,8 +1,10 @@
 #pragma once
 
+// C++ STL
 #include <array>
 #include <vector>
 
+// HOP
 #include <hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp>
 
 namespace hop {
@@ -36,8 +38,6 @@ namespace hop {
       double globalAttraction_;
 
       unsigned int communicationSteps_;
-
-      bool randomizeTopology_;
 
       arma::Mat<arma::uword> topology_;
 

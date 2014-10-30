@@ -1,13 +1,15 @@
 #include <hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp>
 
+// C++ STL
 #include <cmath>
 #include <random>
 #include <algorithm>
 #include <limits>
-#include <iostream>
 
+// MPI
 #include <mpi.h>
 
+// HOP
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
@@ -63,15 +65,15 @@ namespace hop {
     MPI_Bcast(bestSolution_.memptr(), bestSolution_.n_elem, MPI_DOUBLE, bestObjectiveValueOutput.rank, MPI_COMM_WORLD);
     bestObjectiveValue_ = bestObjectiveValueOutput.value;
 
-    randomizeTopology_ = true;
+    bool randomizeTopology = true;
 
     while(!isFinished() && !isTerminated()) {
       for(unsigned int k = 0; k < communicationSteps_; ++k) {
-        if (randomizeTopology_) {
+        if (randomizeTopology) {
             topology_ = (arma::randu<arma::Mat<arma::uword>>(localPopulationSize_, localPopulationSize_) <= neighbourhoodProbability_);
             topology_.diag() += 1.0;
 
-            randomizeTopology_ = false;
+            randomizeTopology = false;
         }
 
         arma::Col<arma::uword> permutation = Random::getRandomPermutation(localPopulationSize_);
@@ -120,7 +122,7 @@ namespace hop {
             bestObjectiveValue_ = objectiveValue;
             bestSolution_ = solutionCandidate;
           } else {
-            randomizeTopology_ = true;
+            randomizeTopology = true;
           }
 
           if(isFinished() || isTerminated()) {
@@ -137,6 +139,7 @@ namespace hop {
 
       MPI_Allreduce(&bestObjectiveValueInput, &bestObjectiveValueOutput, 1, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
       MPI_Bcast(bestSolution_.memptr(), bestSolution_.n_elem, MPI_DOUBLE, bestObjectiveValueOutput.rank, MPI_COMM_WORLD);
+
       bestObjectiveValue_ = bestObjectiveValueOutput.value;
     }
   }
