@@ -14,6 +14,7 @@
 
 #include <hop>
 
+// TODO rework as examples
 int main(const int argc, const char* argv[]) {
   
   if (argc < 8) {

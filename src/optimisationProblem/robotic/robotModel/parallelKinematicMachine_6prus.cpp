@@ -3,7 +3,6 @@
 // HOP
 #include <hop_bits/helper/geometry.hpp>
 
-// TODO Implement limitations for each joint (min/max prismatic length, max angle, ...)
 namespace hop {
   ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS()
     : ParallelKinematicMachine_6PRUS(
