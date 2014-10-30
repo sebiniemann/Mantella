@@ -1,23 +1,47 @@
 #pragma once
 
+// HOP
 #include <hop_bits/optimisationProblem/robotic/robotModel.hpp>
 
 namespace hop {
   class ParallelKinematicMachine_3PRPR : public RobotModel {
     public:
       explicit ParallelKinematicMachine_3PRPR();
-      explicit ParallelKinematicMachine_3PRPR(const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints, const arma::Mat<double>::fixed<2, 3>& redundantJointStarts, const arma::Mat<double>::fixed<2, 3>& redundantJointEnds);
+      explicit ParallelKinematicMachine_3PRPR(
+          const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
+          const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
+          const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions,
+          const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
+          const arma::Row<double>::fixed<3>& maximalActiveJointActuations);
 
-      arma::Mat<double> getJacobian(const arma::Col<double>& endEffectorPose, const arma::Col<double>& redundantActuationParameters) const override;
+      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
+      ParallelKinematicMachine_3PRPR(const ParallelKinematicMachine_3PRPR&) = delete;
+      ParallelKinematicMachine_3PRPR& operator=(const ParallelKinematicMachine_3PRPR&) = delete;
+
+      std::vector<arma::Mat<double>> getModelCharacterisation(
+          const arma::Col<double>& endEffectorPose,
+          const arma::Mat<double>& redundantJointActuations) const override;
+
+      arma::Mat<double> getActuation(
+          const arma::Col<double>& endEffectorPose,
+          const arma::Mat<double>& redundantJointActuations) const override;
+
+      double getPositionError(
+          const arma::Col<double>& endEffectorPose,
+          const arma::Mat<double>& redundantJointActuations) const override;
 
     protected:
-      arma::Mat<double>::fixed<2, 3> endEffectorJointsRelative_;
+      arma::Mat<double>::fixed<2, 3> endEffectorJointRelativePositions_;
 
-      arma::Mat<double>::fixed<2, 3> redundantJointStarts_;
-      arma::Mat<double>::fixed<2, 3> redundantJointEnds_;
-      arma::Mat<double>::fixed<2, 3> redundantJointsStartToEnd_;
+      arma::Mat<double>::fixed<2, 3> redundantJointStartPositions_;
+      arma::Mat<double>::fixed<2, 3> redundantJointEndPositions_;
+
+      arma::Row<double>::fixed<6> minimalActiveJointActuations_;
+      arma::Row<double>::fixed<6> maximalActiveJointActuations_;
+
+      arma::Mat<double>::fixed<2, 3> redundantJointStartToEndPositions_;
       arma::Col<arma::uword> redundantJointIndicies_;
-      arma::Col<double> redundantJointAnglesSine_;
-      arma::Col<double> redundantJointAnglesCosine_;
+      arma::Row<double> redundantJointAngleSines_;
+      arma::Row<double> redundantJointAngleCosines_;
   };
 }
