@@ -1,5 +1,6 @@
 #pragma once
 
+// HOP
 #include <hop_bits/optimisationAlgorithm.hpp>
 
 namespace hop {
@@ -10,11 +11,12 @@ namespace hop {
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
 
+      void setInitialStepSize(const arma::Col<double>& stepSize);
+
       std::string to_string() const override;
 
     protected:
       arma::Col<double> stepSize_;
-      bool reduceStepSize_;
 
       void optimiseImplementation() override;
   };
