@@ -8,9 +8,8 @@
 
 namespace hop {
   namespace robotic {
-    class RobotModel {
+    class Model {
       public:
-
         virtual std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const = 0;
@@ -22,6 +21,8 @@ namespace hop {
         virtual double getPositionError(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const = 0;
+
+        virtual ~Model() = default;
     };
   }
 }
