@@ -17,6 +17,7 @@ namespace hop {
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
     setLocalAttraction(0.5 + std::log(2.0));
     setGlobalAttraction(localAttraction_);
+    setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
   }
 
   void StandardParticleSwarmOptimisation2011::optimiseImplementation() {
