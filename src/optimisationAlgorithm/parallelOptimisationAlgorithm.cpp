@@ -48,7 +48,7 @@ namespace hop {
       }
     }
 
-    delete(serialisedOptimisationProblemBuffer);
+    delete[](serialisedOptimisationProblemBuffer);
 
     parallelOptimiseImplementation();
   }
