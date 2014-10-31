@@ -9,12 +9,10 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-boost::filesystem::path testDirectory;
+// HOP
+#include <hop>
 
-// Test cases
-#include <optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp>
-#include <helper/testGeometry.hpp>
-#include <helper/testString.hpp>
+boost::filesystem::path testDirectory;
 
 int main(const int argc, const char* argv[]) {
   if(argc != 2) {
@@ -26,6 +24,8 @@ int main(const int argc, const char* argv[]) {
   if(!boost::filesystem::exists(testDirectory)) {
     throw std::invalid_argument("The speficied test data directory (" + testDirectory.string() + ") does not exists.");
   }
+
+  hop::Random::setSeed(1234567890);
 
   return Catch::Session().run();
 }

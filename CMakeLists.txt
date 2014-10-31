@@ -109,12 +109,12 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.cpp
-    src/optimisationProblem/robotic/robotModel.cpp
-    src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prpr.cpp
-    src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prrr.cpp
-    src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6prus.cpp
-    src/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6pups.cpp
-    src/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.cpp
+    src/optimisationProblem/robotic/model.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.cpp
+    src/optimisationProblem/robotic/model/multiLevelStewartPlatform.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
@@ -159,6 +159,33 @@ if(BUILD_LIBRARY)
   # All paths must start with "test/"
   add_executable(libTest
     test/main.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testAttractiveSectorFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBentCigarFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBuecheRastriginFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDifferentPowersFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDiscusFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunctionRotated.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian101mePeaksFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian21hiPeaksFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testKatsuuraFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLinearSlope.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLunacekBiRastriginFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunctionRotated.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunctionRotated.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7Function.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7FunctionIllConditioned.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchwefelFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSharpRidgeFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSphereFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testStepEllipsoidalFunction.cpp
+    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testWeierstrassFunction.cpp
+    test/helper/testGeometry.cpp
+    test/helper/testRandom.cpp
+    test/helper/testString.cpp
   )
 
   # Add HOP library directory
@@ -177,37 +204,37 @@ if(BUILD_LIBRARY)
   # INSTALLING
   # ----------
 
-  if(NOT INSTALL_INCLUDE_DIR)
-    set(INSTALL_INCLUDE_DIR "include")
-  endif()
+#  if(NOT INSTALL_INCLUDE_DIR)
+#    set(INSTALL_INCLUDE_DIR "include")
+#  endif()
 
-  # We use data dir to store files shared with other programs
-  # like the ArmadilloConfig.cmake file.
-  if(NOT INSTALL_DATA_DIR)
-    set(INSTALL_DATA_DIR "share")
-  endif()
+#  # We use data dir to store files shared with other programs
+#  # like the ArmadilloConfig.cmake file.
+#  if(NOT INSTALL_DATA_DIR)
+#    set(INSTALL_DATA_DIR "share")
+#  endif()
 
-  # executables destination
-  if(NOT INSTALL_BIN_DIR)
-    set(INSTALL_BIN_DIR "bin")
-  endif()
+#  # executables destination
+#  if(NOT INSTALL_BIN_DIR)
+#    set(INSTALL_BIN_DIR "bin")
+#  endif()
 
-  include(GenerateExportHeader)
+#  include(GenerateExportHeader)
 
-  generate_export_header(hop)
-  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
-  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
+#  generate_export_header(hop)
+#  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
+#  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
 
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
+#  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-  install(TARGETS hop EXPORT HOPTargets
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib)
+#  install(TARGETS hop EXPORT HOPTargets
+#    ARCHIVE DESTINATION lib
+#    LIBRARY DESTINATION lib)
 
-  export(PACKAGE hop)
+#  export(PACKAGE hop)
 
-  include(CMakePackageConfigHelpers)
-  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
+#  include(CMakePackageConfigHelpers)
+#  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
 endif()
 
 # ----------
@@ -251,12 +278,12 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp
   include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.hpp
-  include/hop_bits/optimisationProblem/robotic/robotModel.hpp
-  include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prpr.hpp
-  include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prrr.hpp
-  include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6prus.hpp
-  include/hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6pups.hpp
-  include/hop_bits/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.hpp
+  include/hop_bits/optimisationProblem/robotic/model.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp
+  include/hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
@@ -271,7 +298,4 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/helper/printable.hpp
   include/hop_bits/helper/random.hpp
   include/hop_bits/helper/string.hpp
-  test/optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp
-  test/helper/testGeometry.hpp
-  test/helper/testString.hpp
 )

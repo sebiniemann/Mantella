@@ -34,11 +34,11 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.hpp>
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp>
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.hpp>
-#include <hop_bits/optimisationProblem/robotic/robotModel.hpp>
-#include <hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prpr.hpp>
-#include <hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_3prrr.hpp>
-#include <hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6prus.hpp>
-#include <hop_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine_6pups.hpp>
+#include <hop_bits/optimisationProblem/robotic/model.hpp>
+#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.hpp>
+#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp>
+#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp>
+#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp>
 #include <hop_bits/helper/cereal.hpp>
 #include <hop_bits/helper/printable.hpp>
 #include <hop_bits/helper/geometry.hpp>
