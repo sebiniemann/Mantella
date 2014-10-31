@@ -4,12 +4,12 @@
 #include <vector>
 
 // HOP
-#include <hop_bits/optimisationProblem/robotic/robotModel.hpp>
+#include <hop_bits/optimisationProblem/robotic/model.hpp>
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp>
 
 namespace hop {
   namespace robotic {
-    class MultiLevelStewartPlatform : public RobotModel {
+    class MultiLevelStewartPlatform : public Model {
       public:
         MultiLevelStewartPlatform(
             const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels);
