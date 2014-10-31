@@ -8,13 +8,15 @@
 #include <cereal/types/polymorphic.hpp>
 
 namespace hop {
-  double SphereFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
-    return std::pow(arma::norm(parameter - translation_), 2);
-  }
+  namespace bbob2013 {
+    double SphereFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+      return std::pow(arma::norm(parameter - translation_), 2);
+    }
 
-  std::string SphereFunction::to_string() const {
-    return "SphereFunction";
+    std::string SphereFunction::to_string() const {
+      return "SphereFunction";
+    }
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::SphereFunction)
+CEREAL_REGISTER_TYPE(hop::bbob2013::SphereFunction)

@@ -5,32 +5,34 @@
 #include <cereal/types/polymorphic.hpp>
 
 namespace hop {
-  BuecheRastriginFunction::BuecheRastriginFunction(const unsigned int& numberOfDimensions)
-    : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
-    setTranslation(translation_);
-  }
-
-  void BuecheRastriginFunction::setTranslation(const arma::Col<double>& translation) {
-    translation_ = translation;
-    for (std::size_t n = 0; n < translation_.n_elem; n += 2) {
-      translation_.at(n) = std::abs(translation_.at(n));
+  namespace bbob2013 {
+    BuecheRastriginFunction::BuecheRastriginFunction(const unsigned int& numberOfDimensions)
+      : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
+      setTranslation(translation_);
     }
-  }
 
-  double BuecheRastriginFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
-    arma::Col<double> z = scaling_ % getOscillationTransformation(parameter - translation_);
-    for (std::size_t n = 0; n < z.n_elem; n += 2) {
-      if (z.at(n) > 0.0) {
-        z.at(n) *= 10.0;
+    void BuecheRastriginFunction::setTranslation(const arma::Col<double>& translation) {
+      translation_ = translation;
+      for (std::size_t n = 0; n < translation_.n_elem; n += 2) {
+        translation_.at(n) = std::abs(translation_.at(n));
       }
     }
 
-    return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2) + 100.0 * getPenality(parameter);
-  }
+    double BuecheRastriginFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+      arma::Col<double> z = scaling_ % getOscillationTransformation(parameter - translation_);
+      for (std::size_t n = 0; n < z.n_elem; n += 2) {
+        if (z.at(n) > 0.0) {
+          z.at(n) *= 10.0;
+        }
+      }
 
-  std::string BuecheRastriginFunction::to_string() const {
-    return "BuecheRastriginFunction";
+      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2) + 100.0 * getPenality(parameter);
+    }
+
+    std::string BuecheRastriginFunction::to_string() const {
+      return "BuecheRastriginFunction";
+    }
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::BuecheRastriginFunction)
+CEREAL_REGISTER_TYPE(hop::bbob2013::BuecheRastriginFunction)
