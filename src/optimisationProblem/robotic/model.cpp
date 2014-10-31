@@ -1,1 +1,1 @@
-#include <hop_bits/optimisationProblem/robotic/robotModel.hpp>
+#include <hop_bits/optimisationProblem/robotic/model.hpp>
