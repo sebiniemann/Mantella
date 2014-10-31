@@ -123,7 +123,7 @@ namespace hop {
       void reset();
 
       // Provides a default deconstructor.
-      ~OptimisationProblem() = default;
+      virtual ~OptimisationProblem() = default;
 
     protected:
       // Actual implementaion of the objective function.

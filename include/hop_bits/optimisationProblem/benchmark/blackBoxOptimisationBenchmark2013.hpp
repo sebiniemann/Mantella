@@ -24,7 +24,7 @@ namespace hop {
         virtual void setDeltaC21(const arma::Mat<double>& deltaC21);
         virtual void setLocalOptimaY21(const arma::Mat<double>& localOptimaY21);
 
-        ~BlackBoxOptimisationBenchmark2013() = default;
+        virtual ~BlackBoxOptimisationBenchmark2013() = default;
 
       protected:
         arma::Col<double> translation_;

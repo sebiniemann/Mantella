@@ -45,7 +45,7 @@ namespace hop {
       void setMaximalNumberOfIterations(const unsigned int& maximalNumberOfIterations);
 
       // Provides a default deconstructor.
-      ~OptimisationAlgorithm() = default;
+      virtual ~OptimisationAlgorithm() = default;
 
     protected:
       // The optimisation problem to be optimised.
