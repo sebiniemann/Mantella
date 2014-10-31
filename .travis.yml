@@ -74,11 +74,6 @@ install:
   # Needed until Travis CI updates to Ubuntu 14.04+
   - sudo apt-get install -qq libboost-filesystem1.54-dev
 #  - sudo apt-get install -qq libboost-filesystem-dev
-
-script: 
-  - cmake .
-  - make
-  - sudo make install
   
 addons:
   coverity_scan:
@@ -86,5 +81,11 @@ addons:
       name: "SebastianNiemann/OnlineOptimisation"
       description: "Build submitted via Travis CI"
     notification_email: niemann@sra.uni-hannover.de
-    build_command:   "make"
+    build_command_prepend: "cov-configure --compiler gcc-4.8; cmake ."
+    build_command: "make"
     branch_pattern: coverity_scan
+
+script: 
+  - cmake .
+  - make
+  - sudo make install
