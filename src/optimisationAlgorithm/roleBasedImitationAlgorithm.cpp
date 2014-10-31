@@ -8,18 +8,20 @@ namespace hop {
     : OptimisationAlgorithm(optimisationProblem),
       populationSize_(populationSize),
       objectiveValues_(populationSize_) {
+    neighbourhoodSize_ = 0;
+    maximalNeighourhoodConvergence_ = 0;
 
   }
 
   void RoleBasedImitationAlgorithm::optimiseImplementation() {
-    agents_ = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
-    agents_.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
-    agents_.each_col() += optimisationProblem_->getLowerBounds();
+    arma::Mat<double> agents = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
+    agents.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
+    agents.each_col() += optimisationProblem_->getLowerBounds();
 
     for(std::size_t n = 0; n < populationSize_; ++n) {
       ++numberOfIterations_;
 
-      arma::Col<double> solution = agents_.col(n);
+      arma::Col<double> solution = agents.col(n);
       double objectiveValue = optimisationProblem_->getObjectiveValue(solution) + optimisationProblem_->getSoftConstraintsValue(solution);
       objectiveValues_.at(n) = objectiveValue;
       
@@ -39,7 +41,7 @@ namespace hop {
         ++numberOfIterations_;
 
         std::size_t nn = permutation.at(n);
-        arma::Col<double> currentSolution = agents_.col(nn);
+        arma::Col<double> currentSolution = agents.col(nn);
         double currentObjectiveValue = objectiveValues_.at(nn);
         
         arma::Col<arma::uword> neighbours = Random::getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
@@ -47,12 +49,12 @@ namespace hop {
 
         arma::Col<arma::uword> parametersToMutate = Random::getRandomPermutation(optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, optimisationProblem_->getNumberOfDimensions())(Random::Rng));
 
-        arma::Col<double> neighourhoodMeanObjectiveValues = arma::mean(static_cast<arma::Mat<double>>(agents_.cols(neighbours)).rows(parametersToMutate));
+        arma::Col<double> neighourhoodMeanObjectiveValues = arma::mean(static_cast<arma::Mat<double>>(agents.cols(neighbours)).rows(parametersToMutate));
 
         arma::Col<arma::uword> betterNeighbours = arma::find(objectiveValues_.elem(neighbours) < currentObjectiveValue);
 
         if(betterNeighbours.n_elem > 0) {
-          arma::Col<double> neighbourhoodStddevObjectiveValues = arma::stddev(static_cast<arma::Mat<double>>(agents_.cols(neighbours)).rows(parametersToMutate));
+          arma::Col<double> neighbourhoodStddevObjectiveValues = arma::stddev(static_cast<arma::Mat<double>>(agents.cols(neighbours)).rows(parametersToMutate));
           arma::Col<arma::uword> convergedNeighbours = arma::find(neighbourhoodStddevObjectiveValues < maximalNeighourhoodConvergence_.elem(parametersToMutate));
 
           if(convergedNeighbours.n_elem > 0) {

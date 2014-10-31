@@ -19,7 +19,6 @@ namespace hop {
     protected:
       const unsigned int populationSize_;
 
-      arma::Mat<double> agents_;
       arma::Col<double> objectiveValues_;
 
       unsigned int neighbourhoodSize_;

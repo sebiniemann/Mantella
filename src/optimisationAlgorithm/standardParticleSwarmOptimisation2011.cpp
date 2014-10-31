@@ -11,7 +11,8 @@ namespace hop {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
     : OptimisationAlgorithm(optimisationProblem),
       populationSize_(populationSize),
-      localBestObjectiveValues_(populationSize_) {
+      localBestObjectiveValues_(populationSize_),
+      randomizeTopology_(true) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
     setLocalAttraction(0.5 + std::log(2.0));
