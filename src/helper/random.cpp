@@ -9,6 +9,11 @@ namespace hop {
   decltype(Random::RandomDevice) Random::RandomDevice;
   decltype(Random::Rng) Random::Rng(Random::RandomDevice());
 
+  void Random::setSeed(const unsigned int& seed) {
+    Rng.seed(seed);
+    arma::arma_rng::set_seed(seed);
+  }
+
   arma::Mat<double> Random::getRandomRotationMatrix(unsigned int numberOfDimensions) {
     arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
     for (std::size_t j = 0; j < rotationMatrix.n_cols; ++j) {

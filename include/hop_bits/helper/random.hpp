@@ -13,6 +13,8 @@ namespace hop {
 
       static std::mt19937_64 Rng;
 
+      static void setSeed(const unsigned int& seed);
+
       static arma::Mat<double> getRandomRotationMatrix(unsigned int numberOfDimensions);
 
       static arma::Col<arma::uword> getRandomPermutation(unsigned int numberOfElements, unsigned int cycleLength);
