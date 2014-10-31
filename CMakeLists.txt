@@ -204,37 +204,37 @@ if(BUILD_LIBRARY)
   # INSTALLING
   # ----------
 
-#  if(NOT INSTALL_INCLUDE_DIR)
-#    set(INSTALL_INCLUDE_DIR "include")
-#  endif()
+  if(NOT INSTALL_INCLUDE_DIR)
+    set(INSTALL_INCLUDE_DIR "include")
+  endif()
 
-#  # We use data dir to store files shared with other programs
-#  # like the ArmadilloConfig.cmake file.
-#  if(NOT INSTALL_DATA_DIR)
-#    set(INSTALL_DATA_DIR "share")
-#  endif()
+  # We use data dir to store files shared with other programs
+  # like the ArmadilloConfig.cmake file.
+  if(NOT INSTALL_DATA_DIR)
+    set(INSTALL_DATA_DIR "share")
+  endif()
 
-#  # executables destination
-#  if(NOT INSTALL_BIN_DIR)
-#    set(INSTALL_BIN_DIR "bin")
-#  endif()
+  # executables destination
+  if(NOT INSTALL_BIN_DIR)
+    set(INSTALL_BIN_DIR "bin")
+  endif()
 
-#  include(GenerateExportHeader)
+  include(GenerateExportHeader)
 
-#  generate_export_header(hop)
-#  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
-#  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
+  generate_export_header(hop)
+  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
+  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
 
-#  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-#  install(TARGETS hop EXPORT HOPTargets
-#    ARCHIVE DESTINATION lib
-#    LIBRARY DESTINATION lib)
+  install(TARGETS hop EXPORT HOPTargets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib)
 
-#  export(PACKAGE hop)
+  export(PACKAGE hop)
 
-#  include(CMakePackageConfigHelpers)
-#  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
 endif()
 
 # ----------
