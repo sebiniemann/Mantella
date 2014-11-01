@@ -128,6 +128,7 @@ if(BUILD_LIBRARY)
     src/helper/geometry.cpp
     src/helper/printable.cpp
     src/helper/random.cpp
+    src/helper/regression.cpp
     src/helper/string.cpp
   )
 
@@ -219,22 +220,22 @@ if(BUILD_LIBRARY)
     set(INSTALL_BIN_DIR "bin")
   endif()
 
-  include(GenerateExportHeader)
+#  include(GenerateExportHeader)
 
-  generate_export_header(hop)
-  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
-  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
+#  generate_export_header(hop)
+#  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
+#  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
 
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-  install(TARGETS hop EXPORT HOPTargets
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib)
+#  install(TARGETS hop EXPORT HOPTargets
+#    ARCHIVE DESTINATION lib
+#    LIBRARY DESTINATION lib)
 
-  export(PACKAGE hop)
+#  export(PACKAGE hop)
 
-  include(CMakePackageConfigHelpers)
-  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
+#  include(CMakePackageConfigHelpers)
+#  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
 endif()
 
 # ----------
@@ -297,5 +298,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/helper/geometry.hpp
   include/hop_bits/helper/printable.hpp
   include/hop_bits/helper/random.hpp
+  include/hop_bits/helper/regression.hpp
   include/hop_bits/helper/string.hpp
 )

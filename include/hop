@@ -43,4 +43,5 @@
 #include <hop_bits/helper/printable.hpp>
 #include <hop_bits/helper/geometry.hpp>
 #include <hop_bits/helper/random.hpp>
+#include <hop_bits/helper/regression.hpp>
 #include <hop_bits/helper/string.hpp>
