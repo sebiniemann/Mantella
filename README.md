@@ -20,13 +20,14 @@ Getting started
 Future plans
 ------------
 - **Planned for 1.0.0**
-  - ~~Adding support for robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
-  - Adding Support for objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
+  - ~~Adding robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
+  - Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
+  - Set installation of parallised implementations to be optional (but still activated as default)
+- **Planned for 1.1.0**
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
-  - Make installation of parallised implementations optional (activated as default)
 - **Backlog**
-  - Adding support for the black-box  optimisation benchmark 2015 (waiting for more information until 01.11.2014)
+  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information until 01.11.2014)
 
 Implemented features
 --------------------
