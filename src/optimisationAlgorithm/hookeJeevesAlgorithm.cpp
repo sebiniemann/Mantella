@@ -4,7 +4,8 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  HookeJeevesAlgorithm::HookeJeevesAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+  HookeJeevesAlgorithm::HookeJeevesAlgorithm(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : OptimisationAlgorithm(optimisationProblem) {
     setInitialStepSize(optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds());
   }
@@ -69,7 +70,8 @@ namespace hop {
     }
   }
 
-  void HookeJeevesAlgorithm::setInitialStepSize(const arma::Col<double>& stepSize) {
+  void HookeJeevesAlgorithm::setInitialStepSize(
+      const arma::Col<double>& stepSize) {
     stepSize_ = stepSize;
   }
 

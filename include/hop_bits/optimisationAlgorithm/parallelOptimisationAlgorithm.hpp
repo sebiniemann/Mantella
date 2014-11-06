@@ -6,7 +6,8 @@
 namespace hop {
   class ParallelOptimisationAlgorithm : public OptimisationAlgorithm {
     public:
-      explicit ParallelOptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem);
+      explicit ParallelOptimisationAlgorithm(
+          const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       int getRank() const;
       int getNumberOfNodes() const;

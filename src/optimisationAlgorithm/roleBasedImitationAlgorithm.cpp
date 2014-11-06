@@ -4,7 +4,8 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
+  RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
     : OptimisationAlgorithm(optimisationProblem),
       populationSize_(populationSize),
       maximalNeighourhoodConvergence_(populationSize_),
@@ -19,27 +20,27 @@ namespace hop {
     agents.each_col() += optimisationProblem_->getLowerBounds();
 
     arma::Col<double> objectiveValues(populationSize_);
-    for(std::size_t n = 0; n < populationSize_; ++n) {
+    for (std::size_t n = 0; n < populationSize_; ++n) {
       ++numberOfIterations_;
 
       arma::Col<double> solution = agents.col(n);
       double objectiveValue = optimisationProblem_->getObjectiveValue(solution) + optimisationProblem_->getSoftConstraintsValue(solution);
       objectiveValues.at(n) = objectiveValue;
       
-      if(objectiveValue < bestObjectiveValue_) {
+      if (objectiveValue < bestObjectiveValue_) {
         bestSolution_ = solution;
         bestObjectiveValue_ = objectiveValue;
       }
 
-      if(isFinished() || isTerminated()) {
+      if (isFinished() || isTerminated()) {
         break;
       }
     }
     
     // TODO replace all nn or nnn with k,l,m, ..
-    while(!isFinished() && !isTerminated()) {
+    while (!isFinished() && !isTerminated()) {
       arma::Col<arma::uword> permutation = Random::getRandomPermutation(populationSize_);
-      for(std::size_t n = 0; n < populationSize_; ++n) {
+      for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
         std::size_t k = permutation.at(n);
@@ -61,7 +62,7 @@ namespace hop {
         arma::Col<arma::uword> betterNeighbourIndicies = arma::find(neighbourObjectiveValues < currentObjectiveValue);
         arma::Col<arma::uword> worseOrEqualNeighbourIndicies = arma::find(neighbourObjectiveValues >= currentObjectiveValue);
 
-        if(betterNeighbourIndicies.n_elem > 0) {
+        if (betterNeighbourIndicies.n_elem > 0) {
           arma::Col<double> betterNeighbourFitness = neighbourObjectiveValues.elem(betterNeighbourIndicies);
 
           double meanBetterNeighbourFitness = arma::mean(betterNeighbourFitness);
@@ -70,13 +71,13 @@ namespace hop {
           arma::Col<double> meanBetterParameters = arma::mean(neighbourParameters.submat(parametersToMutate, betterNeighbourIndicies), 1);
         }
 
-        if(worseOrEqualNeighbourIndicies.n_elem > 0) {
+        if (worseOrEqualNeighbourIndicies.n_elem > 0) {
           arma::Col<double> meanWorseParameters = arma::mean(neighbourParameters.submat(parametersToMutate, worseOrEqualNeighbourIndicies), 1);
         }
 
-        if(betterNeighbourIndicies.n_elem > 0) {
-          for(const auto& parameterToMutate : parametersToMutate) {
-            if(stddevNeighbourParameters.at(parameterToMutate) < stepSize_.at(parameterToMutate)) {
+        if (betterNeighbourIndicies.n_elem > 0) {
+          for (const auto& parameterToMutate : parametersToMutate) {
+            if (stddevNeighbourParameters.at(parameterToMutate) < stepSize_.at(parameterToMutate)) {
 
             }
           }
@@ -110,11 +111,13 @@ namespace hop {
     }
   }
 
-  void RoleBasedImitationAlgorithm::setNeighbourhoodSize(const unsigned int& neighbourhoodSize) {
+  void RoleBasedImitationAlgorithm::setNeighbourhoodSize(
+      const unsigned int& neighbourhoodSize) {
     neighbourhoodSize_ = neighbourhoodSize;
   }
 
-  void RoleBasedImitationAlgorithm::setMaximalNeighourhoodConvergence(const arma::Col<double>& maximalNeighourhoodConvergence) {
+  void RoleBasedImitationAlgorithm::setMaximalNeighourhoodConvergence(
+      const arma::Col<double>& maximalNeighourhoodConvergence) {
     maximalNeighourhoodConvergence_ = maximalNeighourhoodConvergence;
   }
 

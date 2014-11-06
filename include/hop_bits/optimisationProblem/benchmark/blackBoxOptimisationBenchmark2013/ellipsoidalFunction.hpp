@@ -17,7 +17,8 @@ namespace hop {
       protected:
         const arma::Col<double> scaling_ = getScaling(1000000.0);
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

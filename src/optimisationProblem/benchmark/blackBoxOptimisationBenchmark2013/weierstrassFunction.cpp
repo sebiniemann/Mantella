@@ -6,7 +6,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    WeierstrassFunction::WeierstrassFunction(const unsigned int& numberOfDimensions)
+    WeierstrassFunction::WeierstrassFunction(
+        const unsigned int& numberOfDimensions)
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
       f0_ = 0.0;
       for (unsigned int k = 0; k < 12; ++k) {
@@ -14,7 +15,8 @@ namespace hop {
       }
     }
 
-    double WeierstrassFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    double WeierstrassFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
       arma::Col<double> z = rotationR_ * (delta_ % (rotationQ_ * getOscillationTransformation(rotationR_ * (parameter - translation_))));
 
       double sum = 0;

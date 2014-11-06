@@ -14,7 +14,9 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& localPopulationSize)
+  ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const unsigned int& localPopulationSize)
     : ParallelOptimisationAlgorithm(optimisationProblem),
       localPopulationSize_(localPopulationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(localPopulationSize_), 3.0));
@@ -44,7 +46,7 @@ namespace hop {
       double localBestObjectiveValue = optimisationProblem_->getObjectiveValue(localBestSolution) + optimisationProblem_->getSoftConstraintsValue(localBestSolution);
       localBestObjectiveValues.at(rank_ * localPopulationSize_ + n) = localBestObjectiveValue;
 
-      if(isFinished() || isTerminated()) {
+      if (isFinished() || isTerminated()) {
         break;
       }
     }
@@ -77,7 +79,7 @@ namespace hop {
 
     arma::Mat<arma::uword> topology(localPopulationSize_ * numberOfNodes_, localPopulationSize_);
     while(!isFinished() && !isTerminated()) {
-      for(unsigned int k = 0; k < communicationSteps_; ++k) {
+      for (unsigned int k = 0; k < communicationSteps_; ++k) {
         if (randomizeTopology) {
             topology = (arma::randu<arma::Mat<double>>(localPopulationSize_ * numberOfNodes_, localPopulationSize_) <= neighbourhoodProbability_);
             topology.diag(-rank_ * localPopulationSize_) += 1.0;
@@ -85,7 +87,7 @@ namespace hop {
             randomizeTopology = false;
         }
 
-        if(rank_ == 2) {
+        if (rank_ == 2) {
 //          std::cout << "topology: " << topology << std::endl;
         }
 
@@ -124,7 +126,7 @@ namespace hop {
           localVelocities.col(nn) = velocityCandidate;
           localParticles.col(nn) = solutionCandidate;
 
-          if(rank_ == 2) {
+          if (rank_ == 2) {
 //            std::cout << "localVelocities: " << localVelocities << std::endl;
           }
 
@@ -142,12 +144,12 @@ namespace hop {
             randomizeTopology = true;
           }
 
-          if(isFinished() || isTerminated()) {
+          if (isFinished() || isTerminated()) {
             break;
           }
         }
 
-        if(isFinished() || isTerminated()) {
+        if (isFinished() || isTerminated()) {
           break;
         }
       }
@@ -183,23 +185,28 @@ namespace hop {
     }
   }
 
-  void ParallelStandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(const double& neighbourhoodProbability) {
+  void ParallelStandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
+      const double& neighbourhoodProbability) {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
-  void ParallelStandardParticleSwarmOptimisation2011::setAcceleration(const double& acceleration) {
+  void ParallelStandardParticleSwarmOptimisation2011::setAcceleration(
+      const double& acceleration) {
     acceleration_ = acceleration;
   }
 
-  void ParallelStandardParticleSwarmOptimisation2011::setLocalAttraction(const double& localAttraction) {
+  void ParallelStandardParticleSwarmOptimisation2011::setLocalAttraction(
+      const double& localAttraction) {
     localAttraction_ = localAttraction;
   }
 
-  void ParallelStandardParticleSwarmOptimisation2011::setGlobalAttraction(const double& globalAttraction) {
+  void ParallelStandardParticleSwarmOptimisation2011::setGlobalAttraction(
+      const double& globalAttraction) {
     globalAttraction_ = globalAttraction;
   }
 
-  void ParallelStandardParticleSwarmOptimisation2011::setCommunicationSteps(const unsigned int& communicationSteps) {
+  void ParallelStandardParticleSwarmOptimisation2011::setCommunicationSteps(
+      const unsigned int& communicationSteps) {
     communicationSteps_ = communicationSteps;
   }
 

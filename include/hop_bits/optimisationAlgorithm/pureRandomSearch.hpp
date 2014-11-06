@@ -6,7 +6,8 @@
 namespace hop {
   class PureRandomSearch : public OptimisationAlgorithm {
     public:
-      PureRandomSearch(const std::shared_ptr<OptimisationProblem> optimisationProblem);
+      PureRandomSearch(
+          const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       PureRandomSearch(const PureRandomSearch&) = delete;
       PureRandomSearch& operator=(const PureRandomSearch&) = delete;

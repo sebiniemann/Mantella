@@ -4,7 +4,8 @@
 #include <stdexcept>
 
 namespace hop {
-  arma::Mat<double>::fixed<2, 2> Geometry::get2DRotationMatrix(const double& angle) {
+  arma::Mat<double>::fixed<2, 2> Geometry::get2DRotationMatrix(
+      const double& angle) {
     double sinAngle = std::sin(angle);
     double cosAngle = std::cos(angle);
 
@@ -15,7 +16,10 @@ namespace hop {
   }
 
   // TODO Left or right hand side implementation?
-  arma::Mat<double>::fixed<3, 3> Geometry::get3DRotationMatrix(const double& rollAngle, const double& pitchAngle, const double& yawAngle) {
+  arma::Mat<double>::fixed<3, 3> Geometry::get3DRotationMatrix(
+      const double& rollAngle,
+      const double& pitchAngle,
+      const double& yawAngle) {
     double sinRollAngle = std::sin(rollAngle);
     double cosRollAngle = std::cos(rollAngle);
     double sinPitchAngle = std::sin(pitchAngle);
@@ -31,7 +35,11 @@ namespace hop {
     });
   }
 
-  arma::Col<double>::fixed<2> Geometry::getCircleCircleIntersection(const arma::Col<double>::fixed<2>& firstCenter, const double& firstRadius, const arma::Col<double>::fixed<2>& secondCenter, const double& secondRadius) {
+  arma::Col<double>::fixed<2> Geometry::getCircleCircleIntersection(
+      const arma::Col<double>::fixed<2>& firstCenter,
+      const double& firstRadius,
+      const arma::Col<double>::fixed<2>& secondCenter,
+      const double& secondRadius) {
     double distance = arma::norm(secondCenter - firstCenter);
 
     if (distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
@@ -49,7 +57,12 @@ namespace hop {
     });
   }
 
-  arma::Col<double>::fixed<3> Geometry::getCircleSphereIntersection(const arma::Col<double>::fixed<3>& circleCenter, const double& circleRadius, const arma::Col<double>::fixed<3>& circleNormal, const arma::Col<double>::fixed<3>& sphereCenter, const double& sphereRadius) {
+  arma::Col<double>::fixed<3> Geometry::getCircleSphereIntersection(
+      const arma::Col<double>::fixed<3>& circleCenter,
+      const double& circleRadius,
+      const arma::Col<double>::fixed<3>& circleNormal,
+      const arma::Col<double>::fixed<3>& sphereCenter,
+      const double& sphereRadius) {
     // Distance between the spheres center and the intersection circle within the sphere
     double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
 

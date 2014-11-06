@@ -7,7 +7,8 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  SimulatedAnnealing::SimulatedAnnealing(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+  SimulatedAnnealing::SimulatedAnnealing(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : OptimisationAlgorithm(optimisationProblem) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
@@ -49,7 +50,8 @@ namespace hop {
     }
   }
 
-  void SimulatedAnnealing::setMaximalStepSize(const arma::Col<double>& maximalStepSize) {
+  void SimulatedAnnealing::setMaximalStepSize(
+      const arma::Col<double>& maximalStepSize) {
     maximalStepSize_ = maximalStepSize;
   }
 

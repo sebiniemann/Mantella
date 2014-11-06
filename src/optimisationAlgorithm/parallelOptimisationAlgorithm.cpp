@@ -12,14 +12,14 @@
 #include <mpi.h>
 
 namespace hop {
-  ParallelOptimisationAlgorithm::ParallelOptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+  ParallelOptimisationAlgorithm::ParallelOptimisationAlgorithm(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
     :  OptimisationAlgorithm(optimisationProblem) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
 
   void ParallelOptimisationAlgorithm::optimiseImplementation() {
-
     unsigned int serialisedOptimisationProblemLength;
     char* serialisedOptimisationProblemBuffer;
 

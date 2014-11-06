@@ -11,7 +11,9 @@ namespace hop {
   class OptimisationAlgorithm : public Printable {
     public:
       // Constructs an optimisation algorithm with the given problem to be optimised.
-      explicit OptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem);
+      explicit OptimisationAlgorithm(
+          // The problem to be optimised
+          const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       OptimisationAlgorithm(const OptimisationAlgorithm&) = delete;

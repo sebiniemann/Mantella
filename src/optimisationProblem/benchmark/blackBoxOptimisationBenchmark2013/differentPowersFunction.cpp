@@ -6,7 +6,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    double DifferentPowersFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    double DifferentPowersFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
       arma::Col<double> z = arma::abs(rotationR_ * (parameter - translation_));
       return arma::norm(z % getScaling(arma::square(z)));
     }

@@ -1,7 +1,8 @@
 #include <hop_bits/optimisationAlgorithm/pureRandomSearch.hpp>
 
 namespace hop {
-  PureRandomSearch::PureRandomSearch(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+  PureRandomSearch::PureRandomSearch(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : OptimisationAlgorithm(optimisationProblem) {
 
   }

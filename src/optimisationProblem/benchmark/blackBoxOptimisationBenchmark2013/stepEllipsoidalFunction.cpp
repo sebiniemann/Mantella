@@ -9,7 +9,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    double StepEllipsoidalFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    double StepEllipsoidalFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
       arma::Col<double> zHat = delta_ % (rotationR_ * (parameter - translation_));
 
       arma::Col<double> zTilde(zHat);

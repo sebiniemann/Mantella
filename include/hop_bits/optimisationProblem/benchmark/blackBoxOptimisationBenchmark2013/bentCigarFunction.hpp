@@ -15,7 +15,8 @@ namespace hop {
         std::string to_string() const override;
 
       protected:
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

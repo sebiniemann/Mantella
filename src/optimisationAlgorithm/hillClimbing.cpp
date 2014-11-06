@@ -4,7 +4,8 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  HillClimbing::HillClimbing(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+  HillClimbing::HillClimbing(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : OptimisationAlgorithm(optimisationProblem) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
@@ -36,7 +37,8 @@ namespace hop {
     }
   }
 
-  void HillClimbing::setMaximalStepSize(const arma::Col<double>& maximalStepSize) {
+  void HillClimbing::setMaximalStepSize(
+      const arma::Col<double>& maximalStepSize) {
     maximalStepSize_ = maximalStepSize;
   }
 

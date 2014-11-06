@@ -21,7 +21,8 @@ namespace hop {
       protected:
         const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

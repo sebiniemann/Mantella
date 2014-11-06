@@ -10,7 +10,8 @@ namespace hop {
   namespace bbob2013 {
     class WeierstrassFunction : public BlackBoxOptimisationBenchmark2013 {
       public:
-        explicit WeierstrassFunction(const unsigned int& numberOfDimensions);
+        explicit WeierstrassFunction(
+            const unsigned int& numberOfDimensions);
 
         WeierstrassFunction(const WeierstrassFunction&) = delete;
         WeierstrassFunction& operator=(const WeierstrassFunction&) = delete;
@@ -21,7 +22,8 @@ namespace hop {
         double f0_;
         const arma::Col<double> delta_ = getScaling(std::sqrt(0.01));
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

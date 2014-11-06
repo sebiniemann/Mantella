@@ -7,7 +7,8 @@ namespace hop {
   namespace bbob2013 {
     class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark2013 {
       public:
-        explicit GallaghersGaussian21hiPeaksFunction(const unsigned int& numberOfDimensions);
+        explicit GallaghersGaussian21hiPeaksFunction(
+            const unsigned int& numberOfDimensions);
 
         GallaghersGaussian21hiPeaksFunction(const GallaghersGaussian21hiPeaksFunction&) = delete;
         GallaghersGaussian21hiPeaksFunction& operator=(const GallaghersGaussian21hiPeaksFunction&) = delete;
@@ -17,7 +18,8 @@ namespace hop {
       protected:
         arma::Col<double> weight_;
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

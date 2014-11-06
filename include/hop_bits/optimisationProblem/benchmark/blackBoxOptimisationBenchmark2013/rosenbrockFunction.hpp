@@ -11,19 +11,22 @@ namespace hop {
   namespace bbob2013 {
     class RosenbrockFunction : public BlackBoxOptimisationBenchmark2013 {
       public:
-        explicit RosenbrockFunction(const unsigned int& numberOfDimensions);
+        explicit RosenbrockFunction(
+            const unsigned int& numberOfDimensions);
 
         RosenbrockFunction(const RosenbrockFunction&) = delete;
         RosenbrockFunction& operator=(const RosenbrockFunction&) = delete;
 
-        void setTranslation(const arma::Col<double>& translation) override;
+        void setTranslation(
+            const arma::Col<double>& translation) override;
 
         std::string to_string() const override;
 
       protected:
         const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

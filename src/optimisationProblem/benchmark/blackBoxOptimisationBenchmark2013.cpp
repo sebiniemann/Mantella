@@ -10,7 +10,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    BlackBoxOptimisationBenchmark2013::BlackBoxOptimisationBenchmark2013(const unsigned int& numberOfDimensions)
+    BlackBoxOptimisationBenchmark2013::BlackBoxOptimisationBenchmark2013(
+        const unsigned int& numberOfDimensions)
       : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
@@ -28,35 +29,43 @@ namespace hop {
       setLocalOptimaY21(getRandomLocalOptimaY21());
     }
 
-    void BlackBoxOptimisationBenchmark2013::setTranslation(const arma::Col<double>& translation) {
+    void BlackBoxOptimisationBenchmark2013::setTranslation(
+        const arma::Col<double>& translation) {
       translation_ = translation;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setOne(const arma::Col<double>& one) {
+    void BlackBoxOptimisationBenchmark2013::setOne(
+        const arma::Col<double>& one) {
       one_ = one;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setRotationR(const arma::Mat<double>& rotationR) {
+    void BlackBoxOptimisationBenchmark2013::setRotationR(
+        const arma::Mat<double>& rotationR) {
       rotationR_ = rotationR;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setRotationQ(const arma::Mat<double>& rotationQ) {
+    void BlackBoxOptimisationBenchmark2013::setRotationQ(
+        const arma::Mat<double>& rotationQ) {
       rotationQ_ = rotationQ;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setDeltaC101(const arma::Mat<double>& deltaC101) {
+    void BlackBoxOptimisationBenchmark2013::setDeltaC101(
+        const arma::Mat<double>& deltaC101) {
       deltaC101_ = deltaC101;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setLocalOptimaY101(const arma::Mat<double>& localOptimaY101) {
+    void BlackBoxOptimisationBenchmark2013::setLocalOptimaY101(
+        const arma::Mat<double>& localOptimaY101) {
       localOptimaY101_ = localOptimaY101;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setDeltaC21(const arma::Mat<double>& deltaC21) {
+    void BlackBoxOptimisationBenchmark2013::setDeltaC21(
+        const arma::Mat<double>& deltaC21) {
       deltaC21_ = deltaC21;
     }
 
-    void BlackBoxOptimisationBenchmark2013::setLocalOptimaY21(const arma::Mat<double>& localOptimaY21) {
+    void BlackBoxOptimisationBenchmark2013::setLocalOptimaY21(
+        const arma::Mat<double>& localOptimaY21) {
       localOptimaY21_ = localOptimaY21;
     }
 
@@ -98,7 +107,8 @@ namespace hop {
       return localOptimaY21;
     }
 
-    arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(const double& condition) const {
+    arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(
+        const double& condition) const {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
       for (auto& scale : scaling) {
@@ -108,7 +118,8 @@ namespace hop {
       return scaling;
     }
 
-    arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(const arma::Col<double>& condition) const {
+    arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(
+        const arma::Col<double>& condition) const {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
       for (std::size_t n = 0; n < scaling.n_elem; ++n) {
@@ -118,7 +129,9 @@ namespace hop {
       return scaling;
     }
 
-    arma::Col<double> BlackBoxOptimisationBenchmark2013::getAsymmetricTransformation(const double& beta, const arma::Col<double>& parameter) const {
+    arma::Col<double> BlackBoxOptimisationBenchmark2013::getAsymmetricTransformation(
+        const double& beta,
+        const arma::Col<double>& parameter) const {
       arma::Col<double> asymmetricTransformation(parameter.n_elem);
       arma::Col<double> spacing = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
@@ -135,7 +148,8 @@ namespace hop {
       return asymmetricTransformation;
     }
 
-    double BlackBoxOptimisationBenchmark2013::getOscillationTransformation(const double& value) const {
+    double BlackBoxOptimisationBenchmark2013::getOscillationTransformation(
+        const double& value) const {
       if (value != 0.0) {
         double c1;
         double c2;
@@ -154,7 +168,8 @@ namespace hop {
       }
     }
 
-    arma::Col<double> BlackBoxOptimisationBenchmark2013::getOscillationTransformation(const arma::Col<double>& parameter) const {
+    arma::Col<double> BlackBoxOptimisationBenchmark2013::getOscillationTransformation(
+        const arma::Col<double>& parameter) const {
       arma::Col<double> oscillate(parameter.n_elem);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
@@ -164,7 +179,8 @@ namespace hop {
       return oscillate;
     }
 
-    double BlackBoxOptimisationBenchmark2013::getPenality(const arma::Col<double>& parameter) const {
+    double BlackBoxOptimisationBenchmark2013::getPenality(
+        const arma::Col<double>& parameter) const {
       double penality = 0.0;
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {

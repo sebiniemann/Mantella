@@ -21,7 +21,8 @@ namespace hop {
         const arma::Col<double> scaling_ = getScaling(100.0);
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
 

@@ -10,7 +10,8 @@ namespace hop {
 
   }
 
-  void PropertiesEstimation::addPropertiesAnalysis(const std::shared_ptr<PropertiesAnalysis> propertiesAnalysis) {
+  void PropertiesEstimation::addPropertiesAnalysis(
+      const std::shared_ptr<PropertiesAnalysis> propertiesAnalysis) {
     propertiesAnalyses_.push_back(propertiesAnalysis);
   }
 

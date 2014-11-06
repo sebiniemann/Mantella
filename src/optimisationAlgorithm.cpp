@@ -4,7 +4,8 @@
 #include <limits>
 
 namespace hop {
-  OptimisationAlgorithm::OptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)
+  OptimisationAlgorithm::OptimisationAlgorithm(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : optimisationProblem_(optimisationProblem) {
     setMaximalNumberOfIterations(1000);
     reset();
@@ -35,7 +36,8 @@ namespace hop {
     return numberOfIterations_;
   }
 
-  void OptimisationAlgorithm::setMaximalNumberOfIterations(const unsigned int& maximalNumberOfIterations) {
+  void OptimisationAlgorithm::setMaximalNumberOfIterations(
+      const unsigned int& maximalNumberOfIterations) {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 

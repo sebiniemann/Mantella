@@ -8,7 +8,9 @@
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
-  StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
+  StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const unsigned int& populationSize)
     : OptimisationAlgorithm(optimisationProblem),
       populationSize_(populationSize),
       localBestObjectiveValues_(populationSize_),
@@ -125,23 +127,28 @@ namespace hop {
     randomizeTopology_ = true;
   }
 
-  void StandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(const double& neighbourhoodProbability) {
+  void StandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
+      const double& neighbourhoodProbability) {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
-  void StandardParticleSwarmOptimisation2011::setAcceleration(const double& acceleration) {
+  void StandardParticleSwarmOptimisation2011::setAcceleration(
+      const double& acceleration) {
     acceleration_ = acceleration;
   }
 
-  void StandardParticleSwarmOptimisation2011::setLocalAttraction(const double& localAttraction) {
+  void StandardParticleSwarmOptimisation2011::setLocalAttraction(
+      const double& localAttraction) {
     localAttraction_ = localAttraction;
   }
 
-  void StandardParticleSwarmOptimisation2011::setGlobalAttraction(const double& globalAttraction) {
+  void StandardParticleSwarmOptimisation2011::setGlobalAttraction(
+      const double& globalAttraction) {
     globalAttraction_ = globalAttraction;
   }
 
-  void StandardParticleSwarmOptimisation2011::setMaximalSwarmConvergence(const double& maximalSwarmConvergence) {
+  void StandardParticleSwarmOptimisation2011::setMaximalSwarmConvergence(
+      const double& maximalSwarmConvergence) {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 

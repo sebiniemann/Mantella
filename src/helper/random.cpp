@@ -19,7 +19,8 @@ namespace hop {
     Rng.seed(arma::randi<arma::Col<arma::uword>>(1).at(0));
   }
 
-  arma::Mat<double> Random::getRandomRotationMatrix(unsigned int numberOfDimensions) {
+  arma::Mat<double> Random::getRandomRotationMatrix(
+      unsigned int numberOfDimensions) {
     arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
     for (std::size_t j = 0; j < rotationMatrix.n_cols; ++j) {
       for (unsigned int jj = 0; jj < j; ++jj) {
@@ -31,7 +32,9 @@ namespace hop {
     return rotationMatrix;
   }
 
-  arma::Col<arma::uword> Random::getRandomPermutation(unsigned int numberOfElements, unsigned int cycleLength) {
+  arma::Col<arma::uword> Random::getRandomPermutation(
+      unsigned int numberOfElements,
+      unsigned int cycleLength) {
     arma::Col<arma::uword> permutation(numberOfElements);
     for (std::size_t n = 0; n < numberOfElements; ++n) {
       permutation.at(n) = n;
@@ -45,7 +48,8 @@ namespace hop {
     return permutation.subvec(0, cycleLength - 1);
   }
 
-  arma::Col<arma::uword> Random::getRandomPermutation(unsigned int numberOfElements) {
+  arma::Col<arma::uword> Random::getRandomPermutation(
+      unsigned int numberOfElements) {
     return getRandomPermutation(numberOfElements, numberOfElements);
   }
 }

@@ -9,7 +9,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    double SphereFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    double SphereFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
       return std::pow(arma::norm(parameter - translation_), 2);
     }
 

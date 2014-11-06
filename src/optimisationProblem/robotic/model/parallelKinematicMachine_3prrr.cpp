@@ -26,7 +26,11 @@ namespace hop {
 
     }
 
-    ParallelKinematicMachine_3PRRR::ParallelKinematicMachine_3PRRR(const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints, const arma::Mat<double>::fixed<2, 3>& linkLengths, const arma::Mat<double>::fixed<2, 3>& redundantJointStarts, const arma::Mat<double>::fixed<2, 3>& redundantJointEnds)
+    ParallelKinematicMachine_3PRRR::ParallelKinematicMachine_3PRRR(
+        const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
+        const arma::Mat<double>::fixed<2, 3>& linkLengths,
+        const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
+        const arma::Mat<double>::fixed<2, 3>& redundantJointEnds)
       : endEffectorJointsRelative_(relativeEndEffectorJoints),
         linkLengths_(linkLengths),
         redundantJointStarts_(redundantJointStarts),

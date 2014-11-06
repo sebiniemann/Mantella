@@ -11,7 +11,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction(const unsigned int& numberOfDimensions)
+    GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction(
+        const unsigned int& numberOfDimensions)
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions),
         weight_(101) {
       weight_.at(0) = 10.0;
@@ -20,7 +21,8 @@ namespace hop {
       }
     }
 
-    double GallaghersGaussian101mePeaksFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    double GallaghersGaussian101mePeaksFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 101; ++k) {
         arma::Col<double> parameterTransposition = parameter - localOptimaY101_.col(k);

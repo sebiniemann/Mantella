@@ -6,7 +6,8 @@
 
 namespace hop {
   namespace bbob2013 {
-    double SchaffersF7Function::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
+    double SchaffersF7Function::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
       arma::Col<double> z = arma::square(delta_ % (rotationQ_ * getAsymmetricTransformation(0.5, rotationR_ * (parameter - translation_))));
       arma::Col<double> s = arma::pow(z.subvec(0, z.n_elem - 2) + z.subvec(1, z.n_elem - 1), 0.25);
 

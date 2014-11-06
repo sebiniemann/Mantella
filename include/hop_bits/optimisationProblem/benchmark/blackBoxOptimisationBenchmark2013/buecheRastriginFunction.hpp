@@ -10,19 +10,22 @@ namespace hop {
   namespace bbob2013 {
     class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark2013 {
       public:
-        explicit BuecheRastriginFunction(const unsigned int& numberOfDimensions);
+        explicit BuecheRastriginFunction(
+            const unsigned int& numberOfDimensions);
 
         BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
         BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
 
         std::string to_string() const override;
 
-        void setTranslation(const arma::Col<double>& translation) override;
+        void setTranslation(
+            const arma::Col<double>& translation) override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(std::sqrt(10.0));
 
-        double getObjectiveValueImplementation(const arma::Col<double>& parameter) const override;
+        double getObjectiveValueImplementation(
+            const arma::Col<double>& parameter) const override;
 
         friend class cereal::access;
         template<class T>
