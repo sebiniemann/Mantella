@@ -1,6 +1,6 @@
 #pragma once
 
-// C++ STL
+// C++ Standard Library
 #include <array>
 #include <vector>
 
@@ -26,20 +26,12 @@ namespace hop {
     protected:
       const unsigned int localPopulationSize_;
 
-      arma::Mat<double> localParticles_;
-      arma::Mat<double> localVelocities_;
-
-      arma::Mat<double> localBestSolutions_;
-      arma::Row<double> localBestObjectiveValues_;
-
       double neighbourhoodProbability_;
       double acceleration_;
       double localAttraction_;
       double globalAttraction_;
 
       unsigned int communicationSteps_;
-
-      arma::Mat<arma::uword> topology_;
 
       void parallelOptimiseImplementation() override;
   };
