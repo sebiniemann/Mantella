@@ -2,7 +2,7 @@
 #define CATCH_CONFIG_RUNNER
 #include <catch.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <string>
 #include <stdexcept>
 #include <iostream>

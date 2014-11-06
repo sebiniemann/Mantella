@@ -1,6 +1,6 @@
 #include <hop_bits/helper/geometry.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <stdexcept>
 
 namespace hop {

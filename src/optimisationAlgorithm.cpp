@@ -1,6 +1,6 @@
 #include <hop_bits/optimisationAlgorithm.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <limits>
 
 namespace hop {

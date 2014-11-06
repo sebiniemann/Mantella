@@ -1,6 +1,6 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <algorithm>
 
 // Cereal

@@ -1,6 +1,6 @@
 #include <hop_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <cmath>
 
 // HOP

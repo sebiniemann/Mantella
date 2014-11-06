@@ -1,7 +1,7 @@
 // Catch
 #include <catch.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <cstdlib>
 #include <cmath>
 #include <array>

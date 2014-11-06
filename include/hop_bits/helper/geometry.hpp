@@ -1,6 +1,6 @@
 #pragma once
 
-// C++ STL
+// C++ Standard Library
 #include <armadillo>
 
 namespace hop {
