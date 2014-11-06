@@ -5,7 +5,7 @@
 
 namespace hop {
   std::size_t CacheHasher::operator() (
-      const arma::Col<double>& key) const {
+    const arma::Col<double>& key) const {
     // Start with the hash of the first value ...
     std::size_t hashedKey = std::hash<double>()(key.at(0));
 
@@ -18,8 +18,8 @@ namespace hop {
   }
 
   bool CacheKeyEqual::operator() (
-      const arma::Col<double>& firstKey,
-      const arma::Col<double>& secondKey) const {
+    const arma::Col<double>& firstKey,
+    const arma::Col<double>& secondKey) const {
     // This will also check if both vectors have the same size.
     return arma::all(firstKey == secondKey);
   }

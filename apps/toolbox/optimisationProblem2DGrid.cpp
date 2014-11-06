@@ -23,7 +23,7 @@ int main(const int argc, const char* argv[]) {
     }
 
     std::shared_ptr<hop::OptimisationProblem> optimisationProblem;
-    if(hop::endsWith(argv[1], ".serialised")) {
+    if (hop::endsWith(argv[1], ".serialised")) {
       std::ifstream input(argv[1]); {
         cereal::JSONInputArchive archive(input);
         archive(optimisationProblem);
@@ -92,7 +92,7 @@ int main(const int argc, const char* argv[]) {
       std::to_string(yAxisSize) +
       ".serialised");
 
-    if(boost::filesystem::exists(filepath)) {
+    if (boost::filesystem::exists(filepath)) {
       // TODO Add exception
     }
 
