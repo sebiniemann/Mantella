@@ -1,6 +1,6 @@
 #include <hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <sstream>
 
 // Cereal
@@ -15,6 +15,7 @@ namespace hop {
   ParallelOptimisationAlgorithm::ParallelOptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)
     :  OptimisationAlgorithm(optimisationProblem) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
+    MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
 
   void ParallelOptimisationAlgorithm::optimiseImplementation() {

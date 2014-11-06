@@ -9,9 +9,11 @@ namespace hop {
       explicit ParallelOptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       int getRank() const;
+      int getNumberOfNodes() const;
 
     protected:
       int rank_;
+      int numberOfNodes_;
 
       void optimiseImplementation() final override;
 
