@@ -65,7 +65,7 @@ namespace hop {
       deltaC101.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
       std::uniform_int_distribution<int> uniformIntDistribution(0, 99);
-      for(std::size_t j = 1; j < deltaC101.n_cols; ++j) {
+      for (std::size_t j = 1; j < deltaC101.n_cols; ++j) {
         deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::Rng)) / 99.0), 0.25);
       }
 
@@ -77,7 +77,7 @@ namespace hop {
       deltaC21.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
       std::uniform_int_distribution<int> uniformIntDistribution(0, 19);
-      for(std::size_t j = 1; j < deltaC21.n_cols; ++j) {
+      for (std::size_t j = 1; j < deltaC21.n_cols; ++j) {
         deltaC21.col(j) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::Rng)) / 19.0), 0.25);
       }
 
@@ -136,7 +136,7 @@ namespace hop {
     }
 
     double BlackBoxOptimisationBenchmark2013::getOscillationTransformation(const double& value) const {
-      if(value != 0.0) {
+      if (value != 0.0) {
         double c1;
         double c2;
         if (value > 0.0) {

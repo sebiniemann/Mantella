@@ -38,7 +38,7 @@ namespace hop {
     localBestSolutions.cols(rank_ * localPopulationSize_, (rank_ + 1) * localPopulationSize_ - 1) = localParticles;
 
     arma::Col<double> localBestObjectiveValues(localPopulationSize_ * numberOfNodes_);
-    for(std::size_t n = 0; n < localPopulationSize_; ++n) {
+    for (std::size_t n = 0; n < localPopulationSize_; ++n) {
       ++numberOfIterations_;
       arma::Col<double> localBestSolution = localBestSolutions.col(rank_ * localPopulationSize_ + n);
       double localBestObjectiveValue = optimisationProblem_->getObjectiveValue(localBestSolution) + optimisationProblem_->getSoftConstraintsValue(localBestSolution);
@@ -90,7 +90,7 @@ namespace hop {
         }
 
         arma::Col<arma::uword> permutation = Random::getRandomPermutation(localPopulationSize_);
-        for(std::size_t n = 0; n < localPopulationSize_; ++n) {
+        for (std::size_t n = 0; n < localPopulationSize_; ++n) {
           ++numberOfIterations_;
 
           std::size_t nn = permutation.at(n);

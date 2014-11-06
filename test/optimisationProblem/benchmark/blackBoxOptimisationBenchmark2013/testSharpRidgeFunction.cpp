@@ -17,7 +17,7 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("SharpRidgeFunction", "") {
-  for(auto numberOfDimensions : {2, 40}) {
+  for (auto numberOfDimensions : {2, 40}) {
     hop::bbob2013::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;

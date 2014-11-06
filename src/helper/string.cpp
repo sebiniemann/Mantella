@@ -14,7 +14,7 @@ namespace hop {
   }
 
   bool endsWith(const std::string& text, const std::string& ending) {
-    if(text.length() >= ending.length()) {
+    if (text.length() >= ending.length()) {
       return (text.compare(text.length() - ending.length(), ending.length(), ending) ==0);
     }
 

@@ -23,7 +23,7 @@ namespace hop {
     unsigned int serialisedOptimisationProblemLength;
     char* serialisedOptimisationProblemBuffer;
 
-    if(rank_ == 0) {
+    if (rank_ == 0) {
       std::ostringstream output; {
         cereal::JSONOutputArchive archive(output);
         archive(optimisationProblem_);
@@ -36,13 +36,13 @@ namespace hop {
 
     MPI_Bcast(&serialisedOptimisationProblemLength, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
 
-    if(rank_ != 0) {
+    if (rank_ != 0) {
       serialisedOptimisationProblemBuffer = new char[serialisedOptimisationProblemLength + 1];
     }
 
     MPI_Bcast(serialisedOptimisationProblemBuffer, serialisedOptimisationProblemLength + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
 
-    if(rank_ != 0) {
+    if (rank_ != 0) {
       std::istringstream input(serialisedOptimisationProblemBuffer); {
         cereal::JSONInputArchive archive(input);
         archive(optimisationProblem_);

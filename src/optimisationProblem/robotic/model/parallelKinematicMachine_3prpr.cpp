@@ -41,7 +41,7 @@ namespace hop {
         redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
         redundantJointAngleSines_(redundantJointIndicies_.n_elem),
         redundantJointAngleCosines_(redundantJointIndicies_.n_elem) {
-      for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         double redundantJointAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
         redundantJointAngleSines_.at(n) = std::sin(redundantJointAngle);
         redundantJointAngleCosines_.at(n) = std::cos(redundantJointAngle);
@@ -53,7 +53,7 @@ namespace hop {
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
 
-      if(arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
+      if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::runtime_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
 
@@ -61,7 +61,7 @@ namespace hop {
       double endEffectorAngle = endEffectorPose.at(2);
 
       arma::Mat<double>::fixed<2, 3> baseJointPositions = redundantJointStartPositions_;
-      for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         std::size_t redundantJointIndex = redundantJointIndicies_.at(n);
         baseJointPositions.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
@@ -101,7 +101,7 @@ namespace hop {
       arma::Mat<double>::fixed<2, 3> baseToEndEffectorJointPositions = endEffectorJointPositions - baseJointPositions;
       arma::Col<double>::fixed<3> baseToEndEffectorJointActuations = arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
 
-      if(any(baseToEndEffectorJointActuations < minimalActiveJointActuations_) || any(baseToEndEffectorJointActuations > maximalActiveJointActuations_)) {
+      if (any(baseToEndEffectorJointActuations < minimalActiveJointActuations_) || any(baseToEndEffectorJointActuations > maximalActiveJointActuations_)) {
         return 0;
       }
 
@@ -111,7 +111,7 @@ namespace hop {
 
       arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = -baseToEndEffectorJointActuations;
-      for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         arma::uword redundantJointIndex = redundantJointIndicies_.at(n);
         inverseKinematic.at(n, 3 + n) = forwardKinematic.at(redundantJointIndex, 0) * redundantJointAngleCosines_.at(n) + forwardKinematic.at(redundantJointIndex, 1) * redundantJointAngleSines_.at(n);
       }

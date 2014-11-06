@@ -17,7 +17,7 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("GallaghersGaussian101mePeaksFunction", "") {
-  for(auto numberOfDimensions : {2, 40}) {
+  for (auto numberOfDimensions : {2, 40}) {
     hop::bbob2013::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;

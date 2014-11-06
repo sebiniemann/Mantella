@@ -32,7 +32,7 @@ namespace hop {
       }
 
       arma::Col<arma::uword> permutation = Random::getRandomPermutation(populationSize_);
-      for(std::size_t n = 0; n < populationSize_; ++n) {
+      for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
         std::size_t nn = permutation.at(n);
@@ -82,12 +82,12 @@ namespace hop {
           randomizeTopology_ = true;
         }
 
-        if(isFinished() || isTerminated()) {
+        if (isFinished() || isTerminated()) {
           break;
         }
       }
 
-      if(static_cast<arma::Row<double>>(arma::stddev(particles_, 1)).max() < maximalSwarmConvergence_) {
+      if (static_cast<arma::Row<double>>(arma::stddev(particles_, 1)).max() < maximalSwarmConvergence_) {
         initialiseSwarm();
       }
     }
@@ -105,19 +105,19 @@ namespace hop {
 
     localBestSolutions_ = particles_;
 
-    for(std::size_t n = 0; n < populationSize_; ++n) {
+    for (std::size_t n = 0; n < populationSize_; ++n) {
       ++numberOfIterations_;
 
       arma::Col<double> localBestSolution = localBestSolutions_.col(n);
       double localBestObjectiveValue = optimisationProblem_->getObjectiveValue(localBestSolution) + optimisationProblem_->getSoftConstraintsValue(localBestSolution);
       localBestObjectiveValues_.at(n) = localBestObjectiveValue;
 
-      if(localBestObjectiveValue < bestObjectiveValue_) {
+      if (localBestObjectiveValue < bestObjectiveValue_) {
         bestSolution_ = localBestSolution;
         bestObjectiveValue_ = localBestObjectiveValue;
       }
 
-      if(isFinished() || isTerminated()) {
+      if (isFinished() || isTerminated()) {
         break;
       }
     }

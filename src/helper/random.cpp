@@ -33,12 +33,12 @@ namespace hop {
 
   arma::Col<arma::uword> Random::getRandomPermutation(unsigned int numberOfElements, unsigned int cycleLength) {
     arma::Col<arma::uword> permutation(numberOfElements);
-    for(std::size_t n = 0; n < numberOfElements; ++n) {
+    for (std::size_t n = 0; n < numberOfElements; ++n) {
       permutation.at(n) = n;
     }
 
     unsigned int length = std::min(cycleLength, numberOfElements - 1);
-    for(std::size_t n = 0; n < length; ++n) {
+    for (std::size_t n = 0; n < length; ++n) {
       permutation.swap_rows(n, std::uniform_int_distribution<unsigned int>(n, length)(Random::Rng));
     }
 

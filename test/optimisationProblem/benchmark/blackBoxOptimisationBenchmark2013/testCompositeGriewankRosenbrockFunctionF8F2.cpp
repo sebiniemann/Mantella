@@ -17,7 +17,7 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("CompositeGriewankRosenbrockFunctionF8F2", "") {
-  for(auto numberOfDimensions : {2, 40}) {
+  for (auto numberOfDimensions : {2, 40}) {
     hop::bbob2013::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
 
     arma::Mat<double> parameters;

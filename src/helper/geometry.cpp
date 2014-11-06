@@ -34,7 +34,7 @@ namespace hop {
   arma::Col<double>::fixed<2> Geometry::getCircleCircleIntersection(const arma::Col<double>::fixed<2>& firstCenter, const double& firstRadius, const arma::Col<double>::fixed<2>& secondCenter, const double& secondRadius) {
     double distance = arma::norm(secondCenter - firstCenter);
 
-    if(distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
+    if (distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
       throw std::runtime_error("Only intersections with exactly two intersections are considered valid.");
     }
 
@@ -53,7 +53,7 @@ namespace hop {
     // Distance between the spheres center and the intersection circle within the sphere
     double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
 
-    if(std::abs(innerDistance) >= sphereRadius) {
+    if (std::abs(innerDistance) >= sphereRadius) {
       throw std::runtime_error("Only intersections with exactly two intersections are considered valid.");
     }
 

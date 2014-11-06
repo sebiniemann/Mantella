@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
   arma::Col<double> duration(numberOfIterations);
   arma::Col<arma::uword> finished(numberOfIterations);
-  for(unsigned int n = 0; n < numberOfIterations; ++n) {
+  for (unsigned int n = 0; n < numberOfIterations; ++n) {
     std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
 
     hop::ParallelStandardParticleSwarmOptimisation2011 parallelOptimisationAlgorithm(optimisationProblem, localPopulationSize);
@@ -50,8 +50,8 @@ int main(int argc, char* argv[]) {
   int size;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  if(rank == 0) {
-    if(any(finished)) {
+  if (rank == 0) {
+    if (any(finished)) {
       arma::Col<double>::fixed<1> result = {arma::median(duration.elem(arma::find(finished)))};
       result.save("./duration_parallel_10_" + std::to_string(size) + ".mat", arma::raw_ascii);
     }

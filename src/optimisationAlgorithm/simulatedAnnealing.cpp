@@ -39,7 +39,7 @@ namespace hop {
 //      if (objectiveValue < bestObjectiveValue_ || ) {
 //        state = candidateSolution;
 //        bestObjectiveValue_ = objectiveValue;
-//      } else if(std::exp((objectiveValue - objectiveValue) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Random::Rng)) {
+//      } else if (std::exp((objectiveValue - objectiveValue) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Random::Rng)) {
 //        state = candidateSolution;
 //      }
 

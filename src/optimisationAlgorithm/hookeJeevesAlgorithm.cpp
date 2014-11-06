@@ -22,7 +22,7 @@ namespace hop {
     bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
     while(!isFinished() && !isTerminated()) {
-      if(reduceStepSize) {
+      if (reduceStepSize) {
         stepSize_ /= 2;
       }
 
@@ -31,7 +31,7 @@ namespace hop {
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
 
         candidateSolution.at(n) += stepSize_.at(n);
-        if(optimisationProblem_->isSatisfyingConstraints(candidateSolution)) {
+        if (optimisationProblem_->isSatisfyingConstraints(candidateSolution)) {
           ++numberOfIterations_;
           double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
@@ -43,12 +43,12 @@ namespace hop {
           }
         }
 
-        if(isFinished() || isTerminated()) {
+        if (isFinished() || isTerminated()) {
           break;
         }
 
         candidateSolution.at(n) -= 2 * stepSize_.at(n);
-        if(optimisationProblem_->isSatisfyingConstraints(candidateSolution)) {
+        if (optimisationProblem_->isSatisfyingConstraints(candidateSolution)) {
           ++numberOfIterations_;
           double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
@@ -60,7 +60,7 @@ namespace hop {
           }
         }
 
-        if(isFinished() || isTerminated()) {
+        if (isFinished() || isTerminated()) {
           break;
         }
 

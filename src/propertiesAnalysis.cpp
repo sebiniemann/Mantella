@@ -10,7 +10,7 @@ namespace hop {
     arma::Col<double> objectiveValues(optimisationProblem->getNumberOfDimensions());
 
     std::size_t n = 0;
-    for(const auto& entry : optimisationProblem->getCachedObjectiveValues()) {
+    for (const auto& entry : optimisationProblem->getCachedObjectiveValues()) {
       parameters.col(n) = entry.first;
       objectiveValues.at(n) = entry.second;
 

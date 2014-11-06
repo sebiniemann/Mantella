@@ -17,7 +17,7 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("StepEllipsoidalFunction", "") {
-  for(auto numberOfDimensions : {2, 40}) {
+  for (auto numberOfDimensions : {2, 40}) {
     hop::bbob2013::StepEllipsoidalFunction stepEllipsoidalFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;

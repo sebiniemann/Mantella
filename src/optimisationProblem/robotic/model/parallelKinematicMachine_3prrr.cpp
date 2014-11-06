@@ -35,7 +35,7 @@ namespace hop {
         redundantJointIndicies_(arma::find(arma::any(redundantJointsStartToEnd_))),
         redundantJointAnglesSine_(redundantJointIndicies_.n_elem),
         redundantJointAnglesCosine_(redundantJointIndicies_.n_elem) {
-      for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         double redundantJointAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
         redundantJointAnglesSine_.at(n) = std::sin(redundantJointAngle);
         redundantJointAnglesCosine_.at(n) = std::cos(redundantJointAngle);
@@ -47,7 +47,7 @@ namespace hop {
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
 
-      if(arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
+      if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::runtime_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
 
@@ -55,7 +55,7 @@ namespace hop {
       double endEffectorAngle = endEffectorPose.at(2);
 
       arma::Mat<double>::fixed<2, 3> baseJoints = redundantJointStarts_;
-      for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         std::size_t redundantJointIndex = redundantJointIndicies_.at(n);
         baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
       }
@@ -64,7 +64,7 @@ namespace hop {
       endEffectorJoints.each_col() += endEffector;
 
       arma::Mat<double>::fixed<2, 3> passiveJoints;
-      for(std::size_t n = 0; n < baseJoints.n_cols; ++n) {
+      for (std::size_t n = 0; n < baseJoints.n_cols; ++n) {
         passiveJoints.col(n) = hop::Geometry::getCircleCircleIntersection(baseJoints.col(n), linkLengths_.at(0, n), endEffectorJoints.col(n), linkLengths_.at(1, n));
       }
 
@@ -86,7 +86,7 @@ namespace hop {
       arma::Mat<double>::fixed<2, 3> baseToPassiveJointPositions = passiveJointPositions - baseJointPositions;
 
       arma::Row<double>::fixed<3> actuation;
-      for(std::size_t n = 0; n < baseToPassiveJointPositions.n_elem; ++n) {
+      for (std::size_t n = 0; n < baseToPassiveJointPositions.n_elem; ++n) {
         actuation.at(n) = std::atan2(baseToPassiveJointPositions.at(1, n), baseToPassiveJointPositions.at(0, n));
       }
 
@@ -113,7 +113,7 @@ namespace hop {
       arma::Mat<double>::fixed<2, 3> baseToPassiveJoints = passiveJoints - baseJoints;
       arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = forwardKinematic.row(0) % baseToPassiveJoints.row(1) - forwardKinematic.row(1) % baseToPassiveJoints.row(0);
-      for(std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         arma::uword redundantJointIndex = redundantJointIndicies_.at(n);
         inverseKinematic.at(n, 3 + n) = -(forwardKinematic.at(redundantJointIndex, 0) * redundantJointAnglesCosine_.at(n) + forwardKinematic.at(redundantJointIndex, 1) * redundantJointAnglesSine_.at(n));
       }

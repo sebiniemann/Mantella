@@ -9,7 +9,7 @@ namespace hop {
     WeierstrassFunction::WeierstrassFunction(const unsigned int& numberOfDimensions)
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
       f0_ = 0.0;
-      for(unsigned int k = 0; k < 12; ++k) {
+      for (unsigned int k = 0; k < 12; ++k) {
         f0_ += std::pow(0.5, k) * cos(2.0 * arma::datum::pi * pow(3, k) * 0.5);
       }
     }

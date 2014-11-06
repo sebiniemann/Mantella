@@ -13,10 +13,10 @@ namespace hop {
       arma::Col<double> zHat = delta_ % (rotationR_ * (parameter - translation_));
 
       arma::Col<double> zTilde(zHat);
-      for(std::size_t n = 0; n < zTilde.n_elem; ++n) {
+      for (std::size_t n = 0; n < zTilde.n_elem; ++n) {
         double value = zHat.at(n);
 
-        if(std::abs(value) > 0.5) {
+        if (std::abs(value) > 0.5) {
           zTilde.at(n) = std::round(value);
         } else {
           zTilde.at(n) = std::round(value * 10.0) / 10.0;
