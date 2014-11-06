@@ -1,6 +1,6 @@
 #include <hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <cmath>
 #include <random>
 
@@ -25,7 +25,7 @@ namespace hop {
 
     while(!isFinished() && !isTerminated()) {
       if (randomizeTopology_) {
-          topology_ = (arma::randu<arma::Mat<arma::uword>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
+          topology_ = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
           topology_.diag() += 1.0;
 
           randomizeTopology_ = false;
