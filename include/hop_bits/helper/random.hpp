@@ -14,6 +14,7 @@ namespace hop {
       static std::mt19937_64 Rng;
 
       static void setSeed(const unsigned int& seed);
+      static void setRandomSeed();
 
       static arma::Mat<double> getRandomRotationMatrix(unsigned int numberOfDimensions);
 

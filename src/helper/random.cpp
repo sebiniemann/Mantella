@@ -1,6 +1,6 @@
 #include <hop_bits/helper/random.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <cstdlib>
 #include <random>
 #include <algorithm>
@@ -12,6 +12,11 @@ namespace hop {
   void Random::setSeed(const unsigned int& seed) {
     Rng.seed(seed);
     arma::arma_rng::set_seed(seed);
+  }
+
+  void Random::setRandomSeed() {
+    arma::arma_rng::set_seed_random();
+    Rng.seed(arma::randi<arma::Col<arma::uword>>(1).at(0));
   }
 
   arma::Mat<double> Random::getRandomRotationMatrix(unsigned int numberOfDimensions) {
