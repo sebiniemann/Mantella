@@ -28,12 +28,14 @@ set(HOP_VERSION "${HOP_MAJOR}.${HOP_MINOR}.${HOP_PATCH}")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
-option(BUILD_LIBRARY "Build library (includes tests)" OFF)
+option(BUILD_LIBRARY "Build library" ON)
+option(BUILD_TEST "Build tests" OFF)
 option(BUILD_APPS "Build APPS" OFF)
-option(BUILD_ALL "Build all" ON)
+option(BUILD_ALL "Build all" OFF)
 
 if(BUILD_ALL)
   set(BUILD_LIBRARY ON)
+  set(BUILD_TEST ON)
   set(BUILD_APPS ON)
 endif()
 
@@ -71,18 +73,15 @@ if(BUILD_LIBRARY)
   # Locate third party libraries and headers
   find_package(Armadillo REQUIRED) # Armadillo C++
   find_package(Cereal REQUIRED) # Cereal (header only)
-  find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
-  find_package(MPI REQUIRED) # MPI
+  find_package(MPI) # MPI
 
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
   include_directories(${CEREAL_INCLUDE_DIRS}) # Cereal
-  include_directories(${CATCH_INCLUDE_DIRS}) # Catch
-  include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
 
-  # Compile the optimisation library
+  # Source files without MPI usage (serial algorithms only)
   # All paths must start with "src/"
-  add_library(hop SHARED
+  set(HOP_LIBRARY_SOURCES
     src/optimisationProblem.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
     src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.cpp
@@ -122,84 +121,116 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/simulatedAnnealing.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
-    src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
-    src/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.cpp
+    src/propertiesAnalysis.cpp
+    src/propertiesAnalysis/linearModel.cpp
+    src/propertiesAnalysis/linearModel/linearOrdinaryLeastSquares.cpp
+    src/propertiesAnalysis/lipschitzContinuity.cpp
+    src/propertiesAnalysis/lipschitzContinuity/completeLipschitzAnalysis.cpp
+    src/propertiesAnalysis/quadraticModel.cpp
+    src/propertiesAnalysis/quadraticModel/quadraticOrdinaryLeastSquares.cpp
+    src/propertiesEstimation.cpp
+    src/propertiesEstimation/maximumLikelihoodEstimation.cpp
+    src/helper/cache.cpp
     src/helper/cereal.cpp
     src/helper/geometry.cpp
     src/helper/printable.cpp
+    src/helper/quasiRandomSequence.cpp
     src/helper/random.cpp
     src/helper/regression.cpp
     src/helper/string.cpp
   )
 
+  if(MPI_C_FOUND)
+    message(STATUS "NOTICE: Compile with MPI support (adding parallel algorithms).")
+
+    include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
+
+    # Compile the optimisation library with MPI support (parallel algorithms)
+    add_library(hop SHARED
+      ${HOP_LIBRARY_SOURCES}
+      src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
+      src/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.cpp
+    )
+
+    # Link against third party libraries
+    target_link_libraries(hop ${MPI_C_LIBRARIES}) # MPI C-bindings
+  else()
+    message(STATUS "NOTICE: Compile without MPI support (serial algorithms only).")
+
+    # Compile the optimisation library without MPI support (serial algorithms only)
+    add_library(hop SHARED
+      ${HOP_LIBRARY_SOURCES}
+    )
+  endif()
+
   # Link against third party libraries
   target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
-  target_link_libraries(hop ${Boost_LIBRARIES}) # Boost
-  target_link_libraries(hop ${MPI_C_LIBRARIES}) # MPI C-bindings
 
   # -----------
   # BUILD TESTS
   # -----------
 
-  message(STATUS "NOTICE: Configuring tests")
+  if(BUILD_TEST)
+      message(STATUS "NOTICE: Configuring tests")
 
-  # Locate third party libraries and headers
-  find_package(Armadillo REQUIRED) # Armadillo C++
-  find_package(Catch REQUIRED) # Catch (header only)
-  find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
+      # Locate third party libraries and headers
+      find_package(Armadillo REQUIRED) # Armadillo C++
+      find_package(Catch REQUIRED) # Catch (header only)
+      find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
-  # Include third party headers
-  include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
-  include_directories(${CATCH_INCLUDE_DIRS}) # Catch
-  include_directories(${Boost_INCLUDE_DIRS}) # Boost
+      # Include third party headers
+      include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+      include_directories(${CATCH_INCLUDE_DIRS}) # Catch
+      include_directories(${Boost_INCLUDE_DIRS}) # Boost
 
-  # Include headers
-  include_directories(${PROJECT_SOURCE_DIR}/test) # HOP tests
+      # Include headers
+      include_directories(${PROJECT_SOURCE_DIR}/test) # HOP tests
 
-  # Compile the optimisation library tests
-  # All paths must start with "test/"
-  add_executable(libTest
-    test/main.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testAttractiveSectorFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBentCigarFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBuecheRastriginFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDifferentPowersFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDiscusFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunctionRotated.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian101mePeaksFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian21hiPeaksFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testKatsuuraFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLinearSlope.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLunacekBiRastriginFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunctionRotated.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunctionRotated.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7Function.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7FunctionIllConditioned.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchwefelFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSharpRidgeFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSphereFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testStepEllipsoidalFunction.cpp
-    test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testWeierstrassFunction.cpp
-    test/helper/testGeometry.cpp
-    test/helper/testRandom.cpp
-    test/helper/testString.cpp
-  )
+      # Compile the optimisation library tests
+      # All paths must start with "test/"
+      add_executable(libTest
+        test/main.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testAttractiveSectorFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBentCigarFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBuecheRastriginFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDifferentPowersFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDiscusFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunctionRotated.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian101mePeaksFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian21hiPeaksFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testKatsuuraFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLinearSlope.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLunacekBiRastriginFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunctionRotated.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunctionRotated.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7Function.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7FunctionIllConditioned.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchwefelFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSharpRidgeFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSphereFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testStepEllipsoidalFunction.cpp
+        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testWeierstrassFunction.cpp
+        test/helper/testGeometry.cpp
+        test/helper/testRandom.cpp
+        test/helper/testString.cpp
+      )
 
-  # Add HOP library directory
-  link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
+      # Add HOP library directory
+      link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
 
-  # Link against HOP library
-  target_link_libraries(libTest hop) # HOP
+      # Link against HOP library
+      target_link_libraries(libTest hop) # HOP
 
-  # Link against third party libraries
-  target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
-  target_link_libraries(libTest ${Boost_LIBRARIES}) # Boost
-  
-  add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
+      # Link against third party libraries
+      target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
+      target_link_libraries(libTest ${Boost_LIBRARIES}) # Boost
+
+      add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
+  endif()
 
   # ----------
   # INSTALLING
@@ -294,9 +325,20 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/propertiesAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/linearModel.hpp
+  include/hop_bits/propertiesAnalysis/linearModel/linearOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesAnalysis/lipschitzContinuity.hpp
+  include/hop_bits/propertiesAnalysis/lipschitzContinuity/completeLipschitzAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/quadraticModel.hpp
+  include/hop_bits/propertiesAnalysis/quadraticModel/quadraticOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesEstimation.hpp
+  include/hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
+  include/hop_bits/helper/cache.hpp
   include/hop_bits/helper/cereal.hpp
   include/hop_bits/helper/geometry.hpp
   include/hop_bits/helper/printable.hpp
+  include/hop_bits/helper/quasiRandomSequence.hpp
   include/hop_bits/helper/random.hpp
   include/hop_bits/helper/regression.hpp
   include/hop_bits/helper/string.hpp

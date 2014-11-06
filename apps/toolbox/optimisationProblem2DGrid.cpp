@@ -101,8 +101,8 @@ int main(const int argc, const char* argv[]) {
       archive(optimisationProblem);
     } output.close();
 
-    for (auto x : xAxis) {
-      for (auto y : yAxis) {
+    for (const auto& x : xAxis) {
+      for (const auto& y : yAxis) {
         std::cout << "f(" << x << ", " << y << ") = " << optimisationProblem->getObjectiveValue({x, y}) << std::endl;
       }
     }
