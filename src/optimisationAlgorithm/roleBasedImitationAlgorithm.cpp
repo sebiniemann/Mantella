@@ -7,9 +7,9 @@ namespace hop {
   RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
     : OptimisationAlgorithm(optimisationProblem),
       populationSize_(populationSize),
-      objectiveValues_(populationSize_),
-      maximalNeighourhoodConvergence_(populationSize_) {
-    neighbourhoodSize_ = 0;
+      maximalNeighourhoodConvergence_(populationSize_),
+      neighbourhoodSize_(0),
+      stepSize_(arma::square((optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) / 100)) {
 
   }
 
@@ -18,12 +18,13 @@ namespace hop {
     agents.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     agents.each_col() += optimisationProblem_->getLowerBounds();
 
+    arma::Col<double> objectiveValues(populationSize_);
     for(std::size_t n = 0; n < populationSize_; ++n) {
       ++numberOfIterations_;
 
       arma::Col<double> solution = agents.col(n);
       double objectiveValue = optimisationProblem_->getObjectiveValue(solution) + optimisationProblem_->getSoftConstraintsValue(solution);
-      objectiveValues_.at(n) = objectiveValue;
+      objectiveValues.at(n) = objectiveValue;
       
       if(objectiveValue < bestObjectiveValue_) {
         bestSolution_ = solution;
@@ -35,34 +36,54 @@ namespace hop {
       }
     }
     
+    // TODO replace all nn or nnn with k,l,m, ..
     while(!isFinished() && !isTerminated()) {
       arma::Col<arma::uword> permutation = Random::getRandomPermutation(populationSize_);
       for(std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
-        std::size_t nn = permutation.at(n);
-        arma::Col<double> currentSolution = agents.col(nn);
-        double currentObjectiveValue = objectiveValues_.at(nn);
-        
-        arma::Col<arma::uword> neighbours = Random::getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
-        neighbours.elem(arma::find(neighbours >= nn)) += 1;
+        std::size_t k = permutation.at(n);
+        arma::Col<double> currentSolution = agents.col(k);
+        double currentObjectiveValue = objectiveValues.at(k);
 
         arma::Col<arma::uword> parametersToMutate = Random::getRandomPermutation(optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, optimisationProblem_->getNumberOfDimensions())(Random::Rng));
 
-        arma::Col<double> neighourhoodMeanObjectiveValues = arma::mean(static_cast<arma::Mat<double>>(agents.cols(neighbours)).rows(parametersToMutate));
+        arma::Col<arma::uword> neighbourIndicies = Random::getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
+        neighbourIndicies.elem(arma::find(neighbourIndicies >= k)) += 1;
 
-        arma::Col<arma::uword> betterNeighbours = arma::find(objectiveValues_.elem(neighbours) < currentObjectiveValue);
+        arma::Col<double> neighbourParameters = agents.elem(neighbourIndicies);
+        arma::Col<double> neighbourObjectiveValues = objectiveValues.elem(neighbourIndicies);
 
-        if(betterNeighbours.n_elem > 0) {
-          arma::Col<double> neighbourhoodStddevObjectiveValues = arma::stddev(static_cast<arma::Mat<double>>(agents.cols(neighbours)).rows(parametersToMutate));
-          arma::Col<arma::uword> convergedNeighbours = arma::find(neighbourhoodStddevObjectiveValues < maximalNeighourhoodConvergence_.elem(parametersToMutate));
+        double meanNeighbourFitness = arma::mean(neighbourObjectiveValues);
+        arma::Col<double> meanNeighbourParameters = arma::mean(neighbourParameters.rows(parametersToMutate), 1);
+        arma::Col<double> stddevNeighbourParameters = arma::stddev(neighbourParameters.rows(parametersToMutate), 1);
 
-          if(convergedNeighbours.n_elem > 0) {
+        arma::Col<arma::uword> betterNeighbourIndicies = arma::find(neighbourObjectiveValues < currentObjectiveValue);
+        arma::Col<arma::uword> worseOrEqualNeighbourIndicies = arma::find(neighbourObjectiveValues >= currentObjectiveValue);
 
+        if(betterNeighbourIndicies.n_elem > 0) {
+          arma::Col<double> betterNeighbourFitness = neighbourObjectiveValues.elem(betterNeighbourIndicies);
+
+          double meanBetterNeighbourFitness = arma::mean(betterNeighbourFitness);
+          double stddevBetterNeighbourFitness = arma::stddev(betterNeighbourFitness);
+
+          arma::Col<double> meanBetterParameters = arma::mean(neighbourParameters.submat(parametersToMutate, betterNeighbourIndicies), 1);
+        }
+
+        if(worseOrEqualNeighbourIndicies.n_elem > 0) {
+          arma::Col<double> meanWorseParameters = arma::mean(neighbourParameters.submat(parametersToMutate, worseOrEqualNeighbourIndicies), 1);
+        }
+
+        if(betterNeighbourIndicies.n_elem > 0) {
+          for(const auto& parameterToMutate : parametersToMutate) {
+            if(stddevNeighbourParameters.at(parameterToMutate) < stepSize_.at(parameterToMutate)) {
+
+            }
           }
         } else {
 
         }
+
         //                if convergedSize > 0
 
         //                    convergedParameter = parametersToMutate(converged);

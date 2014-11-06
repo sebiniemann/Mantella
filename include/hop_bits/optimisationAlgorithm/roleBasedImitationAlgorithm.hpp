@@ -12,6 +12,7 @@ namespace hop {
       RoleBasedImitationAlgorithm& operator=(const RoleBasedImitationAlgorithm&) = delete;
 
       void setNeighbourhoodSize(const unsigned int& neighbourhoodSize);
+      void setStepSize(const double& stepSize);
       void setMaximalNeighourhoodConvergence(const arma::Col<double>& maximalNeighourhoodConvergence);
 
       std::string to_string() const override;
@@ -19,8 +20,7 @@ namespace hop {
     protected:
       const unsigned int populationSize_;
 
-      arma::Col<double> objectiveValues_;
-
+      arma::Col<double> stepSize_;
       unsigned int neighbourhoodSize_;
       arma::Col<double> maximalNeighourhoodConvergence_;
 
