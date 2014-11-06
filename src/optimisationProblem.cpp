@@ -1,6 +1,6 @@
 #include <hop_bits/optimisationProblem.hpp>
 
-// C++ STL
+// C++ Standard Library
 #include <string>
 #include <limits>
 #include <stdexcept>
@@ -27,7 +27,7 @@ namespace hop {
     }
 
     // Check if the result is already cached.
-    auto cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
+    const auto& cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
     if(cachePosition == cachedIsSatisfyingLowerBounds_.end()) {
       // If false: Compute which parameter violates the lower bound ...
       arma::Col<arma::uword> result = (getScaledCongruentParameter(parameter) >= lowerBounds_);
@@ -230,5 +230,29 @@ namespace hop {
     }
 
     return 0;
+  }
+
+  std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedObjectiveValues() const {
+    return cachedObjectiveValues_;
+  }
+
+  std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedSoftConstraintsValues() const {
+    return cachedSoftConstraintsValues_;
+  }
+
+  std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingLowerBounds() const {
+    return cachedIsSatisfyingLowerBounds_;
+  }
+
+  std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingUpperBounds() const {
+    return cachedIsSatisfyingUpperBounds_;
+  }
+
+  std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingSoftConstraints() const {
+    return cachedIsSatisfyingSoftConstraints_;
+  }
+
+  std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingConstraints() const {
+    return cachedIsSatisfyingConstraints_;
   }
 }

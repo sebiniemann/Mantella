@@ -1,9 +1,7 @@
 #pragma once
 
-// C++ STL
-#include <cstdlib>
+// C++ Standard Library
 #include <unordered_map>
-#include <functional>
 
 // Armadillo
 #include <armadillo>
@@ -12,6 +10,7 @@
 #include <cereal/access.hpp>
 
 // HOP
+#include <hop_bits/helper/cache.hpp>
 #include <hop_bits/helper/cereal.hpp>
 #include <hop_bits/helper/printable.hpp>
 
@@ -122,6 +121,13 @@ namespace hop {
       // Resets the counter by setting the number of (distinct) function evaluations to zero.
       void reset();
 
+      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> getCachedObjectiveValues() const;
+      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> getCachedSoftConstraintsValues() const;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingLowerBounds() const;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingUpperBounds() const;
+      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingSoftConstraints() const;
+      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingConstraints() const;
+
       // Provides a default deconstructor.
       virtual ~OptimisationProblem() = default;
 
@@ -164,43 +170,13 @@ namespace hop {
       // Returns the rotated, scaled and translated (shifted) parameter.
       arma::Col<double> getScaledCongruentParameter(const arma::Col<double>& parameter) const;
 
-      //! Helper classes ONLY TO BE USED BY THE CACHE MECHANISM
-      // Calculates a hash value for custom types.
-      class Hasher {
-        public:
-          // Returns a hash value for column vectors.
-          // Note: This is adapted from the Boost library (boost::hash_combine).
-          std::size_t operator() (const arma::Col<double>& key) const {
-            // Start with the hash of the first value ...
-            std::size_t hashedKey = std::hash<double>()(key.at(0));
-
-            // ... and add the hash value of all following values to it.
-            for (const double& value : key) {
-              hashedKey ^= std::hash<double>()(value) + 0x9e3779b9 + (hashedKey << 6) + (hashedKey >> 2);
-            }
-
-            return hashedKey;
-          }
-      };
-
-      // Checks if two values of a custom type are equal.
-      class KeyEqual {
-        public:
-          // Returns true if all values of the provided column vectors are equal.
-          bool operator() (const arma::Col<double>& firstKey, const arma::Col<double>& secondKey) const {
-            // This will also check if both vectors have the same size.
-            return arma::all(firstKey == secondKey);
-          }
-      };
-
       // Several caches used to avoid redundant computations.
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedObjectiveValues_;
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
-
+      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> cachedObjectiveValues_;
+      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> cachedSoftConstraintsValues_;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> cachedIsSatisfyingLowerBounds_;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> cachedIsSatisfyingUpperBounds_;
+      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> cachedIsSatisfyingSoftConstraints_;
+      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> cachedIsSatisfyingConstraints_;
 
       //! The following is ONLY TO BE USED BY CEREAL
       // Gives cereal access to otherwise protected constructors, functions and fields.
