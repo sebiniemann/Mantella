@@ -5,3 +5,4 @@ add_subdirectory("./toolbox")
 
 # Experiemental
 add_subdirectory("./mpi")
+add_subdirectory("./onlineOptimisation")
