@@ -21,9 +21,9 @@ Future plans
 ------------
 - **Planned for 1.0.0**
   - ~~Adding robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
-  - Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)
+  - ~~Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)~~ **(done)**
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
-  - Set installation of parallised implementations to be optional (but still activated as default)
+  - ~~Set installation of parallised implementations to be optional~~ **(done)**
 - **Planned for 1.1.0**
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
 - **Backlog**
