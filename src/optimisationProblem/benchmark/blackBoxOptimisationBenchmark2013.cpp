@@ -111,7 +111,7 @@ namespace hop {
     arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(const arma::Col<double>& condition) const {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
-      for (size_t n = 0; n < scaling.n_elem; ++n) {
+      for (std::size_t n = 0; n < scaling.n_elem; ++n) {
         scaling.at(n) = std::pow(condition.at(n), scaling.at(n));
       }
 
@@ -122,7 +122,7 @@ namespace hop {
       arma::Col<double> asymmetricTransformation(parameter.n_elem);
       arma::Col<double> spacing = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
-      for (size_t n = 0; n < parameter.n_elem; ++n) {
+      for (std::size_t n = 0; n < parameter.n_elem; ++n) {
         double value = parameter.at(n);
 
         if (value > 0.0) {

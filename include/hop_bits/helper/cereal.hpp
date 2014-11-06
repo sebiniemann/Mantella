@@ -29,7 +29,7 @@ namespace cereal {
 
     // ... and the values of the matrix.
     std::vector<Type> data(n_elem);
-    for(size_t n = 0; n < n_elem; ++n) {
+    for(std::size_t n = 0; n < n_elem; ++n) {
       data.at(n) = matrix.at(n);
     }
     archive(cereal::make_nvp("values", data));
@@ -76,7 +76,7 @@ namespace cereal {
 
     // ... and the values of the column vector.
     std::vector<Type> data(n_elem);
-    for(size_t n = 0; n < n_elem; ++n) {
+    for(std::size_t n = 0; n < n_elem; ++n) {
       data.at(n) = column.at(n);
     }
     archive(cereal::make_nvp("values", data));
@@ -119,7 +119,7 @@ namespace cereal {
 
     // ... and the values of the row vector.
     std::vector<Type> data(n_elem);
-    for(size_t n = 0; n < n_elem; ++n) {
+    for(std::size_t n = 0; n < n_elem; ++n) {
       data.at(n) = row.at(n);
     }
    archive(cereal::make_nvp("values", data));
