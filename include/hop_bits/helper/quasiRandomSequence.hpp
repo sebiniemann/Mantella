@@ -6,6 +6,10 @@
 namespace hop {
   class QuasiRandomSequence {
     public:
+      QuasiRandomSequence() = delete;
+      QuasiRandomSequence(const Random&) = delete;
+      QuasiRandomSequence& operator=(const Random&) = delete;
+
        static arma::Mat<double> getHaltonSequence(
            const arma::Col<arma::uword>& seed,
            const arma::Col<arma::uword>& base,
