@@ -6,7 +6,7 @@ namespace hop {
       isQuadratic_(false),
       isLipschitzContinuous_(false),
       isAlphaHoelderContinuous_(false),
-      numberOfPropertiesSets_(0) {
+      numberOfPropertySets_(0) {
 
   }
 
@@ -15,8 +15,8 @@ namespace hop {
     propertiesAnalyses_.push_back(propertiesAnalysis);
   }
 
-  std::size_t PropertiesEstimation::getNumberOfPropertiesSets() const {
-    return numberOfPropertiesSets_;
+  std::size_t PropertiesEstimation::getNumberOfPropertySets() const {
+    return numberOfPropertySets_;
   }
 
   bool PropertiesEstimation::isLinear(

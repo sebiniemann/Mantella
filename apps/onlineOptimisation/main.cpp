@@ -20,8 +20,16 @@ int main(int argc, char* argv[]) {
 
   hop::MaximumLikelihoodEstimation propertiesEstimation;
   propertiesEstimation.estimate(optimisationProblem);
-  std::cout << "isLinear: " << propertiesEstimation.isLinear(0) << std::endl;
-  std::cout << "getLinearCharacterisation: " << propertiesEstimation.getLinearEstimator(0) << std::endl;
+  std::cout << "Estimated propertySets: " << propertiesEstimation.getNumberOfPropertySets() << std::endl;
+
+  for(std::size_t n = 0; n < propertiesEstimation.getNumberOfPropertySets(); ++n) {
+    std::cout << "isLinear: " << propertiesEstimation.isLinear(n) << std::endl;
+    std::cout << "getLinearEstimator: " << propertiesEstimation.getLinearEstimator(n) << std::endl;
+    std::cout << "isQuadratic: " << propertiesEstimation.isQuadratic(n) << std::endl;
+    std::cout << "getQuadraticEstimator: " << propertiesEstimation.getQuadraticEstimator(n) << std::endl;
+    std::cout << "isLipschitzContinuous: " << propertiesEstimation.isLipschitzContinuous(n) << std::endl;
+    std::cout << "getLipschitzConstant: " << propertiesEstimation.getLipschitzConstant(n) << std::endl;
+  }
 
   return EXIT_SUCCESS;
 }

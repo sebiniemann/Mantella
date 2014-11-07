@@ -26,7 +26,7 @@ namespace hop {
       void addPropertiesAnalysis(
           const std::shared_ptr<PropertiesAnalysis> propertiesAnalysis);
 
-      std::size_t getNumberOfPropertiesSets() const;
+      std::size_t getNumberOfPropertySets() const;
 
       bool isLinear(
           const std::size_t& propertiesSetIndex) const;
@@ -55,7 +55,7 @@ namespace hop {
     protected:
       std::vector<std::shared_ptr<PropertiesAnalysis>> propertiesAnalyses_;
 
-      std::size_t numberOfPropertiesSets_;
+      std::size_t numberOfPropertySets_;
 
       std::vector<bool> isLinear_;
       std::vector<arma::Col<double>> linearEstimator_;
