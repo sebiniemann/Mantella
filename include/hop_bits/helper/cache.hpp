@@ -12,8 +12,8 @@ namespace hop {
     public:
       explicit CacheHasher() = default;
 
+      CacheHasher(const CacheHasher&) = default;
 
-      CacheHasher(const CacheHasher&) = delete;
       CacheHasher& operator=(const CacheHasher&) = delete;
 
       // Returns a hash value for column vectors.
@@ -27,7 +27,8 @@ namespace hop {
     public:
       explicit CacheKeyEqual() = default;
 
-      CacheKeyEqual(const CacheKeyEqual&) = delete;
+      CacheKeyEqual(const CacheKeyEqual&) = default;
+
       CacheKeyEqual& operator=(const CacheKeyEqual&) = delete;
 
       // Returns true if all values of both column vectors are equal.
