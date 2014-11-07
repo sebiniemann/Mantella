@@ -17,7 +17,7 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("SchaffersF7FunctionIllConditioned", "") {
-  for (auto numberOfDimensions : {2, 40}) {
+  for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
 
     arma::Mat<double> parameters;

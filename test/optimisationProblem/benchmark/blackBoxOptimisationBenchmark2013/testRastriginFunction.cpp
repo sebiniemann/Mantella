@@ -17,7 +17,7 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("RastriginFunction", "") {
-  for (auto numberOfDimensions : {2, 40}) {
+  for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::RastriginFunction rastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
