@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   arma::arma_rng::set_seed_random();
-  hop::Random::setSeed(arma::randi<arma::Col<arma::uword>>(rank + 1).at(rank));
+  hop::Rng::setSeed(arma::randi<arma::Col<arma::uword>>(rank + 1).at(rank));
 
   double localAttraction = 2.0;
   double globalAttraction = 2.0;

@@ -27,7 +27,7 @@ int main(const int argc, const char* argv[]) {
       throw std::invalid_argument("The speficied test data directory (" + testDirectory.string() + ") does not exists.");
     }
 
-    hop::Random::setSeed(1234567890);
+    hop::Rng::setSeed(1234567890);
 
     return Catch::Session().run();
   } catch(std::exception exception) {

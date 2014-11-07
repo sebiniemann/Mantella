@@ -55,4 +55,5 @@
 #include <hop_bits/helper/quasiRandomSequence.hpp>
 #include <hop_bits/helper/random.hpp>
 #include <hop_bits/helper/regression.hpp>
+#include <hop_bits/helper/rng.hpp>
 #include <hop_bits/helper/string.hpp>

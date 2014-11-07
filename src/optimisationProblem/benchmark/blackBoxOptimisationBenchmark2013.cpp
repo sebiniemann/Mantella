@@ -6,6 +6,7 @@
 #include <random>
 
 // HOP
+#include <hop_bits/helper/rng.hpp>
 #include <hop_bits/helper/random.hpp>
 
 namespace hop {
@@ -15,14 +16,14 @@ namespace hop {
       : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
-      setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Random::Rng))));
+      setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::generator))));
 
       setAcceptableObjectiveValue(objectiveValueTranslation_ + 10e-3);
 
       setTranslation(arma::randu<arma::Col<double>>(numberOfDimensions_) * 8.0 - 4.0);
-      setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Random::Rng) ? 1.0 : -1.0));
-      setRotationR(Random::getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(Random::getRandomRotationMatrix(numberOfDimensions_));
+      setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator) ? 1.0 : -1.0));
+      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
       setDeltaC101(getRandomDeltaC101());
       setLocalOptimaY101(getRandomLocalOptimaY101());
       setDeltaC21(getRandomDeltaC21());
@@ -75,7 +76,7 @@ namespace hop {
 
       std::uniform_int_distribution<int> uniformIntDistribution(0, 99);
       for (std::size_t j = 1; j < deltaC101.n_cols; ++j) {
-        deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::Rng)) / 99.0), 0.25);
+        deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 99.0), 0.25);
       }
 
       return deltaC101;
@@ -87,7 +88,7 @@ namespace hop {
 
       std::uniform_int_distribution<int> uniformIntDistribution(0, 19);
       for (std::size_t j = 1; j < deltaC21.n_cols; ++j) {
-        deltaC21.col(j) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Random::Rng)) / 19.0), 0.25);
+        deltaC21.col(j) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 19.0), 0.25);
       }
 
       return deltaC21;

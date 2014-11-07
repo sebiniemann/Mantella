@@ -4,7 +4,7 @@
 #include <cmath>
 
 // HOP
-#include <hop_bits/helper/random.hpp>
+#include <hop_bits/helper/rng.hpp>
 
 namespace hop {
   SimulatedAnnealing::SimulatedAnnealing(
@@ -31,7 +31,7 @@ namespace hop {
 
       arma::Col<double> candidateSolution;
       do {
-        candidateSolution = state + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Random::Rng);
+        candidateSolution = state + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator);
       } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
 
       double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);

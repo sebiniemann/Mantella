@@ -137,6 +137,7 @@ if(BUILD_LIBRARY)
     src/helper/quasiRandomSequence.cpp
     src/helper/random.cpp
     src/helper/regression.cpp
+    src/helper/rng.cpp
     src/helper/string.cpp
   )
 
@@ -341,5 +342,6 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/helper/quasiRandomSequence.hpp
   include/hop_bits/helper/random.hpp
   include/hop_bits/helper/regression.hpp
+  include/hop_bits/helper/rng.hpp
   include/hop_bits/helper/string.hpp
 )

@@ -12,6 +12,7 @@
 
 // HOP
 #include <hop_bits/helper/random.hpp>
+#include <hop_bits/helper/rng.hpp>
 
 namespace hop {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
@@ -91,7 +92,7 @@ namespace hop {
 //          std::cout << "topology: " << topology << std::endl;
         }
 
-        arma::Col<arma::uword> permutation = Random::getRandomPermutation(localPopulationSize_);
+        arma::Col<arma::uword> permutation = getRandomPermutation(localPopulationSize_);
         for (std::size_t n = 0; n < localPopulationSize_; ++n) {
           ++numberOfIterations_;
 
@@ -111,7 +112,7 @@ namespace hop {
             attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + nn) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
           }
 
-          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(nn) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Random::Rng) * arma::norm(attractionCenter) + attractionCenter;
+          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(nn) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
           arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
           arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());

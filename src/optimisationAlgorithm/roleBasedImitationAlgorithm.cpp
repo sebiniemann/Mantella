@@ -2,6 +2,7 @@
 
 // HOP
 #include <hop_bits/helper/random.hpp>
+#include <hop_bits/helper/rng.hpp>
 
 namespace hop {
   RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
@@ -39,7 +40,7 @@ namespace hop {
     
     // TODO replace all nn or nnn with k,l,m, ..
     while (!isFinished() && !isTerminated()) {
-      arma::Col<arma::uword> permutation = Random::getRandomPermutation(populationSize_);
+      arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
@@ -47,9 +48,9 @@ namespace hop {
         arma::Col<double> currentSolution = agents.col(k);
         double currentObjectiveValue = objectiveValues.at(k);
 
-        arma::Col<arma::uword> parametersToMutate = Random::getRandomPermutation(optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, optimisationProblem_->getNumberOfDimensions())(Random::Rng));
+        arma::Col<arma::uword> parametersToMutate = getRandomPermutation(optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, optimisationProblem_->getNumberOfDimensions())(Rng::generator));
 
-        arma::Col<arma::uword> neighbourIndicies = Random::getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
+        arma::Col<arma::uword> neighbourIndicies = getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
         neighbourIndicies.elem(arma::find(neighbourIndicies >= k)) += 1;
 
         arma::Col<double> neighbourParameters = agents.elem(neighbourIndicies);

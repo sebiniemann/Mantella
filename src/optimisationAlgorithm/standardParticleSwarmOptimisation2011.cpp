@@ -6,6 +6,7 @@
 
 // HOP
 #include <hop_bits/helper/random.hpp>
+#include <hop_bits/helper/rng.hpp>
 
 namespace hop {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
@@ -33,7 +34,7 @@ namespace hop {
           randomizeTopology_ = false;
       }
 
-      arma::Col<arma::uword> permutation = Random::getRandomPermutation(populationSize_);
+      arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
@@ -53,7 +54,7 @@ namespace hop {
           attractionCenter = (localAttraction_ * (localBestSolutions_.col(nn) - particle) + globalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
         }
 
-        arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Random::Rng) * arma::norm(attractionCenter) + attractionCenter;
+        arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
 
         arma::Col<double> velocityCandidate = acceleration_ * velocities_.col(nn) + randomParticle;
         arma::Col<double> solutionCandidate = particle + velocityCandidate;

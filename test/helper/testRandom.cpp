@@ -15,7 +15,7 @@ TEST_CASE("Random rotation matrix", "") {
   SECTION("2-dimensional rotation") {
     arma::Col<double>::fixed<10000> angles;
     for (std::size_t n = 0; n < angles.n_elem; ++n) {
-      arma::Col<double>::fixed<2> rotatedUnitVector = hop::Random::getRandomRotationMatrix(2) * arma::Col<double>::fixed<2>({-2, 1});
+      arma::Col<double>::fixed<2> rotatedUnitVector = hop::getRandomRotationMatrix(2) * arma::Col<double>::fixed<2>({-2, 1});
       angles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
     }
 
@@ -28,7 +28,7 @@ TEST_CASE("Random rotation matrix", "") {
     arma::Col<double>::fixed<10000> pitchAngles;
     arma::Col<double>::fixed<10000> yawAngles;
     for (std::size_t n = 0; n < rollAngles.n_elem; ++n) {
-      arma::Col<double>::fixed<3> rotatedUnitVector = hop::Random::getRandomRotationMatrix(3) * arma::Col<double>::fixed<3>({-2, 1, 3});
+      arma::Col<double>::fixed<3> rotatedUnitVector = hop::getRandomRotationMatrix(3) * arma::Col<double>::fixed<3>({-2, 1, 3});
       rollAngles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
       pitchAngles.at(n) = std::atan2(rotatedUnitVector.at(2), rotatedUnitVector.at(1));
       yawAngles.at(n) = std::atan2(rotatedUnitVector.at(0), rotatedUnitVector.at(2));
@@ -51,7 +51,7 @@ TEST_CASE("Random permutation", "") {
   SECTION("Full permutation") {
     arma::Mat<arma::uword>::fixed<10, 10000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = hop::Random::getRandomPermutation(permutations.n_rows);
+      permutations.col(n) = hop::getRandomPermutation(permutations.n_rows);
     }
 
     arma::Col<arma::uword> centers(permutations.n_rows);
@@ -68,7 +68,7 @@ TEST_CASE("Random permutation", "") {
   SECTION("Partial permutation") {
     arma::Mat<arma::uword>::fixed<10, 20000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = hop::Random::getRandomPermutation(permutations.n_rows + 1, permutations.n_rows);
+      permutations.col(n) = hop::getRandomPermutation(permutations.n_rows + 1, permutations.n_rows);
     }
 
     arma::Col<arma::uword> centers(permutations.n_rows);

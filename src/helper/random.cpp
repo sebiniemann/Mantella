@@ -2,24 +2,13 @@
 
 // C++ Standard Library
 #include <cstdlib>
-#include <random>
 #include <algorithm>
 
+// HOP
+#include <hop_bits/helper/rng.hpp>
+
 namespace hop {
-  decltype(Random::RandomDevice) Random::RandomDevice;
-  decltype(Random::Rng) Random::Rng(Random::RandomDevice());
-
-  void Random::setSeed(const unsigned int& seed) {
-    Rng.seed(seed);
-    arma::arma_rng::set_seed(seed);
-  }
-
-  void Random::setRandomSeed() {
-    arma::arma_rng::set_seed_random();
-    Rng.seed(arma::randi<arma::Col<arma::uword>>(1).at(0));
-  }
-
-  arma::Mat<double> Random::getRandomRotationMatrix(
+  arma::Mat<double> getRandomRotationMatrix(
       unsigned int numberOfDimensions) {
     arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
     for (std::size_t j = 0; j < rotationMatrix.n_cols; ++j) {
@@ -32,7 +21,7 @@ namespace hop {
     return rotationMatrix;
   }
 
-  arma::Col<arma::uword> Random::getRandomPermutation(
+  arma::Col<arma::uword> getRandomPermutation(
       unsigned int numberOfElements,
       unsigned int cycleLength) {
     arma::Col<arma::uword> permutation(numberOfElements);
@@ -42,13 +31,13 @@ namespace hop {
 
     unsigned int length = std::min(cycleLength, numberOfElements - 1);
     for (std::size_t n = 0; n < length; ++n) {
-      permutation.swap_rows(n, std::uniform_int_distribution<unsigned int>(n, length)(Random::Rng));
+      permutation.swap_rows(n, std::uniform_int_distribution<unsigned int>(n, length)(Rng::generator));
     }
 
     return permutation.subvec(0, cycleLength - 1);
   }
 
-  arma::Col<arma::uword> Random::getRandomPermutation(
+  arma::Col<arma::uword> getRandomPermutation(
       unsigned int numberOfElements) {
     return getRandomPermutation(numberOfElements, numberOfElements);
   }
