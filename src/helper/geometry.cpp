@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 namespace hop {
-  arma::Mat<double>::fixed<2, 2> Geometry::get2DRotationMatrix(
+  arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
       const double& angle) {
     double sinAngle = std::sin(angle);
     double cosAngle = std::cos(angle);
@@ -16,7 +16,7 @@ namespace hop {
   }
 
   // TODO Left or right hand side implementation?
-  arma::Mat<double>::fixed<3, 3> Geometry::get3DRotationMatrix(
+  arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
       const double& rollAngle,
       const double& pitchAngle,
       const double& yawAngle) {
@@ -35,7 +35,7 @@ namespace hop {
     });
   }
 
-  arma::Col<double>::fixed<2> Geometry::getCircleCircleIntersection(
+  arma::Col<double>::fixed<2> getCircleCircleIntersection(
       const arma::Col<double>::fixed<2>& firstCenter,
       const double& firstRadius,
       const arma::Col<double>::fixed<2>& secondCenter,
@@ -57,7 +57,7 @@ namespace hop {
     });
   }
 
-  arma::Col<double>::fixed<3> Geometry::getCircleSphereIntersection(
+  arma::Col<double>::fixed<3> getCircleSphereIntersection(
       const arma::Col<double>::fixed<3>& circleCenter,
       const double& circleRadius,
       const arma::Col<double>::fixed<3>& circleNormal,

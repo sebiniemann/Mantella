@@ -66,7 +66,7 @@ namespace hop {
         baseJointPositions.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<2, 3> endEffectorJointRelativePositionsRotated = hop::Geometry::get2DRotationMatrix(endEffectorAngle) * endEffectorJointRelativePositions_;
+      arma::Mat<double>::fixed<2, 3> endEffectorJointRelativePositionsRotated = get2DRotationMatrix(endEffectorAngle) * endEffectorJointRelativePositions_;
       arma::Mat<double>::fixed<2, 3> endEffectorJointPositions = endEffectorJointRelativePositionsRotated;
       endEffectorJointPositions.each_col() += endEffectorPosition;
 

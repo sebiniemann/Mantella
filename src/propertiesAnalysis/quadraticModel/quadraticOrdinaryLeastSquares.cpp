@@ -28,6 +28,6 @@ namespace hop {
       quadraticModelParameters.col(n) = quadraticModelParameter;
     }
 
-    quadraticEstimator_ = Regression::getEstimator(quadraticModelParameters, objectiveValues);
+    quadraticEstimator_ = getEstimator(quadraticModelParameters, objectiveValues);
   }
 }

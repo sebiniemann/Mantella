@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 namespace hop {
-  arma::Col<double> Regression::getEstimator(
+  arma::Col<double> getEstimator(
       const arma::Mat<double>& regressors,
       const arma::Col<double>& regressand) {
     // TODO Check size

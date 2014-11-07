@@ -16,7 +16,7 @@ namespace hop {
     return printable->to_string();
   }
 
-  bool String::endsWith(
+  bool endsWith(
       const std::string& text,
       const std::string& ending) {
     if (text.length() >= ending.length()) {

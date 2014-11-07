@@ -64,12 +64,12 @@ namespace hop {
         baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<2, 3> endEffectorJoints = hop::Geometry::get2DRotationMatrix(endEffectorAngle) * endEffectorJointsRelative_;
+      arma::Mat<double>::fixed<2, 3> endEffectorJoints = get2DRotationMatrix(endEffectorAngle) * endEffectorJointsRelative_;
       endEffectorJoints.each_col() += endEffector;
 
       arma::Mat<double>::fixed<2, 3> passiveJoints;
       for (std::size_t n = 0; n < baseJoints.n_cols; ++n) {
-        passiveJoints.col(n) = hop::Geometry::getCircleCircleIntersection(baseJoints.col(n), linkLengths_.at(0, n), endEffectorJoints.col(n), linkLengths_.at(1, n));
+        passiveJoints.col(n) = getCircleCircleIntersection(baseJoints.col(n), linkLengths_.at(0, n), endEffectorJoints.col(n), linkLengths_.at(1, n));
       }
 
       modelCharacterisation.push_back(baseJoints);

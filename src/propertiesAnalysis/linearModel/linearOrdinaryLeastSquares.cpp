@@ -7,6 +7,6 @@ namespace hop {
   void LinearOrdinaryLeastSquares::analyseImplementation(
       const arma::Mat<double>& parameters,
       const arma::Col<double>& objectiveValues) {
-    linearEstimator_ = Regression::getEstimator(parameters, objectiveValues);
+    linearEstimator_ = getEstimator(parameters, objectiveValues);
   }
 }

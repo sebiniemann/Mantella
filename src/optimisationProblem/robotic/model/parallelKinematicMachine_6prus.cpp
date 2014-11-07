@@ -69,7 +69,7 @@ namespace hop {
       }
 
       for (std::size_t n = 0; n < baseJointsAngles.n_cols; ++n) {
-        baseJointsRotation_.slice(n) = Geometry::get3DRotationMatrix(redundantJointAngles_.at(0, n), 0, redundantJointAngles_.at(1, n));
+        baseJointsRotation_.slice(n) = get3DRotationMatrix(redundantJointAngles_.at(0, n), 0, redundantJointAngles_.at(1, n));
       }
 
       for (std::size_t n = 0; n < baseJointsRotation_.n_slices; ++n) {
@@ -97,13 +97,13 @@ namespace hop {
         baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = Geometry::get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelative_;
+      arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelative_;
       arma::Mat<double>::fixed<3, 6> endEffectorJoints = endEffectorJointsRotated;
       endEffectorJoints.each_col() += endEffectorPosition;
 
       arma::Mat<double>::fixed<3, 6> passiveJoints;
       for (std::size_t n = 0; n < baseJoints.n_cols; ++n) {
-        passiveJoints.col(n) = Geometry::getCircleSphereIntersection(baseJoints.col(n), linkLengths_.at(0, n), baseJointsNormal_.col(n), endEffectorJoints.col(n), linkLengths_.at(1, n));
+        passiveJoints.col(n) = getCircleSphereIntersection(baseJoints.col(n), linkLengths_.at(0, n), baseJointsNormal_.col(n), endEffectorJoints.col(n), linkLengths_.at(1, n));
       }
 
       modelCharacterisation.push_back(baseJoints);
