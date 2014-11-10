@@ -2,9 +2,9 @@ Hint-based Online Programming 0.9.0
 ====================================
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![TODO](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
-The Hint-based Online Programming (HOP) library aims to provide the necessary tools to describe and analysis real-world online optimisation problems as well as (competitive) solvers to reduce the overall computation time on recent multi-cores and high performance clusters.
+The Hint-based Online Programming (HOP) library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
 
-HOP is based on recent C++11 features and Armadillo, a high efficient linear algebra library. We are also implementing highly parallalised, competitive optimisation algorithms to maximise the speedup on multi-cores or high performance clusters. 
+HOP is written based on modern C++11 features and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
 
 Getting started
 ---------------
