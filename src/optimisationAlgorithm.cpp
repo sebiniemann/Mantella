@@ -13,7 +13,7 @@ namespace hop {
 
   void OptimisationAlgorithm::optimise() {
     reset();
-    return optimiseImplementation();
+    optimiseImplementation();
   }
 
   double OptimisationAlgorithm::getBestObjectiveValue() const {
