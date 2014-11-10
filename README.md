@@ -4,7 +4,7 @@ Hint-based Online Programming 0.9.0
 
 The Hint-based Online Programming (HOP) library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
 
-HOP is written based on modern C++11 features and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
+HOP is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
 
 Getting started
 ---------------
