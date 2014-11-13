@@ -121,7 +121,7 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/simulatedAnnealing.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
-	src/optimisationAlgorithm/CovarianceMatrixAdaptationEvolutionStrategy.cpp
+    src/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
     src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
     src/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.cpp
     src/evaluation.cpp
@@ -223,7 +223,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/simulatedAnnealing.hpp
   include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/hop_bits/optimisationAlgorithm/CovarianceMatrixAdaptationEvolutionStrategy.hpp
+  include/hop_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
   include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/evaluation.hpp
