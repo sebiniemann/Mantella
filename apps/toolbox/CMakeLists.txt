@@ -33,7 +33,8 @@ add_executable(optimisationProblem2DGrid
 )
 
 # Link against HOP
-target_link_libraries(optimisationProblem2DGrid "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
+target_link_libraries(optimisationProblem2DGrid hop)
+#target_link_libraries(optimisationProblem2DGrid "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
 
 # Link against third party libraries
 target_link_libraries(optimisationProblem2DGrid ${ARMADILLO_LIBRARIES}) # Armadillo C++
