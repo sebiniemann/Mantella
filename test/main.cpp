@@ -30,7 +30,7 @@ int main(const int argc, const char* argv[]) {
     hop::Rng::setSeed(1234567890);
 
     return Catch::Session().run();
-  } catch(std::exception exception) {
-    std::cout << exception.what() << std::cout;
+  } catch(const std::exception& exception) {
+    std::cout << exception.what();
   }
 }

@@ -108,7 +108,7 @@ int main(const int argc, const char* argv[]) {
     }
 
     return EXIT_SUCCESS;
-  } catch(std::exception exception) {
-    std::cout << exception.what() << std::cout;
+  } catch(const std::exception& exception) {
+    std::cout << exception.what();
   }
 }
