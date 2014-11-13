@@ -5,6 +5,7 @@ CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolution
     // init input parameters
     // TODO: iteration number gets multiplied with dimensions² on wiki, also do that here?
     numberOfDimensions_ = optimisationProblem->getNumberOfDimensions();
+    
     objectiveValues_ = arma::randu<arma::vec>(numberOfDimensions_);
     sigma_ = 0.3;
     stopValue_ = 1e-10;
@@ -30,9 +31,9 @@ CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolution
     pc_.zeros(numberOfDimensions_);
     ps_.zeros(numberOfDimensions_);
     B_.eye(numberOfDimensions_, numberOfDimensions_);
-    D_.ones(numberOfDimensions_,1);
-    C_ = B_ * arma::diagmat(square(D_)) * B_.t();
-    invsqrtC_ = B_ * arma::diagmat(D_.i()) * B_.t();
+    D_.ones(numberOfDimensions_);
+    C_.eye(numberOfDimensions_, numberOfDimensions_);
+    invsqrtC_.eye(numberOfDimensions_, numberOfDimensions_);
     eigeneval_ = 0;
     chiN_ = std::sqrt(numberOfDimensions_) * (1 - 1 / (4 * numberOfDimensions_) + 1 / (21 * std::pow(numberOfDimensions_, 2)));
 }
@@ -43,7 +44,7 @@ void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
         arma::Col<double> arfitness = arma::Col<double>(lambda_);
         arma::Mat<double> arx = arma::Mat<double>(numberOfDimensions_, lambda_);
         for(std::size_t n = 0; n < lambda_; ++n) {
-            arx.col(n) = objectiveValues_ + sigma_ * B_ * (D_ * arma::randn<arma::Col<double>>(numberOfDimensions_));
+            arx.col(n) = objectiveValues_ + sigma_ * B_ * (D_ % arma::randn<arma::Col<double>>(numberOfDimensions_));
             arfitness(n) = frosenbrock(arx.col(n));
             ++numberOfIterations_;
         }
@@ -84,7 +85,7 @@ void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
             arma::eig_sym(tempD, B_, C_);
             D_ = arma::sqrt(arma::diagmat(tempD)); //TODO: From wiki "D is a vector of standard deviations now" which it obviously isn't here.
                                                 //also not sure what the point of that is, since it's going to be used as a matrix in the next line anyway.
-            invsqrtC_ = B_ * arma::diagmat(D_.i()) * B_.t();
+            invsqrtC_ = B_ * arma::diagmat(1 / D_) * B_.t();
         }
 
         //break, if fitness is good enough or condition exceeds 1e14, better termination methods are advisable
