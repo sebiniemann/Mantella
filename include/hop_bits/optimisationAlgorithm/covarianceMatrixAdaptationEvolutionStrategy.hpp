@@ -42,7 +42,7 @@ namespace hop {
       arma::Col<double> pc_;
       arma::Col<double> ps_;
       arma::Mat<double> B_;
-      arma::Mat<double> D_;
+      arma::Col<double> D_;
       arma::Mat<double> C_;
       arma::Mat<double> invsqrtC_;
       double eigeneval_;
