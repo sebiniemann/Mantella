@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/CovarianceMatrixAdaptationEvolutionStrategy.hpp>
+#include <hop_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
 namespace hop {
 CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem) : OptimisationAlgorithm(optimisationProblem) {
