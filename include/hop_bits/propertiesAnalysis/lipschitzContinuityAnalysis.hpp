@@ -4,7 +4,7 @@
 #include <hop_bits/propertiesAnalysis.hpp>
 
 namespace hop {
-  class LipschitzContinuity : public PropertiesAnalysis {
+  class LipschitzContinuityAnalysis : public PropertiesAnalysis {
     public:
       double getLipschitzConstant() const;
 
