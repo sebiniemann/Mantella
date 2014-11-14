@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
   std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
   std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
   std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
-  std::cout << "bestSolution: " << optimisationAlgorithm.getBestSolution() << std::endl;
+  std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
 
   propertiesEstimation.estimate(optimisationProblem);
   std::cout << "getNumberOfPropertySets: " << propertiesEstimation.getNumberOfPropertySets() << std::endl;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
   std::cout << "numberOfEvaluations: " << optimisationProblem2->getNumberOfEvaluations() << std::endl;
   std::cout << "numberOfDistinctEvaluations: " << optimisationProblem2->getNumberOfDistinctEvaluations() << std::endl;
   std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm2.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
-  std::cout << "bestSolution: " << optimisationAlgorithm2.getBestSolution() << std::endl;
+  std::cout << "bestParameter: " << optimisationAlgorithm2.getBestParameter() << std::endl;
 
   propertiesEstimation.estimate(optimisationProblem2);
   std::cout << "getNumberOfPropertySets: " << propertiesEstimation.getNumberOfPropertySets() << std::endl;
