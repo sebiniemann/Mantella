@@ -1,10 +1,10 @@
 #pragma once
 
 // HOP
-#include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 
 namespace hop {
-  class SimulatedAnnealing : public OptimisationAlgorithm {
+  class SimulatedAnnealing : public TrajectoryBasedAlgorithm {
     public:
       explicit SimulatedAnnealing(
           const std::shared_ptr<OptimisationProblem> optimisationProblem);

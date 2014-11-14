@@ -1,10 +1,10 @@
 #pragma once
 
 // HOP
-#include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 
 namespace hop {
-  class HillClimbing : public OptimisationAlgorithm {
+  class HillClimbing : public TrajectoryBasedAlgorithm {
     public:
       explicit HillClimbing(
           const std::shared_ptr<OptimisationProblem> optimisationProblem);

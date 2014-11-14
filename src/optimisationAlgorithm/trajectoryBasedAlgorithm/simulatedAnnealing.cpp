@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp>
 
 // C++ Standard Library
 #include <cmath>
@@ -9,7 +9,7 @@
 namespace hop {
   SimulatedAnnealing::SimulatedAnnealing(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : OptimisationAlgorithm(optimisationProblem) {
+    : TrajectoryBasedAlgorithm(optimisationProblem) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
 
@@ -23,7 +23,7 @@ namespace hop {
     arma::Col<double> state = candidateSolution;
     double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
-    bestSolution_ = candidateSolution;
+    bestParameter_ = candidateSolution;
     bestObjectiveValue_ = objectiveValue;
 
     while(!isFinished() && !isTerminated()) {

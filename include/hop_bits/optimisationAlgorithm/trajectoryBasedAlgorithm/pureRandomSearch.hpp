@@ -1,10 +1,10 @@
 #pragma once
 
 // HOP
-#include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 
 namespace hop {
-  class PureRandomSearch : public OptimisationAlgorithm {
+  class PureRandomSearch : public TrajectoryBasedAlgorithm {
     public:
       PureRandomSearch(
           const std::shared_ptr<OptimisationProblem> optimisationProblem);

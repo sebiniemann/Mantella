@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp>
 
 // HOP
 #include <hop_bits/helper/random.hpp>
@@ -6,7 +6,7 @@
 namespace hop {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : OptimisationAlgorithm(optimisationProblem) {
+    : TrajectoryBasedAlgorithm(optimisationProblem) {
     setInitialStepSize(optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds());
   }
 
@@ -19,7 +19,7 @@ namespace hop {
     } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
 
     ++numberOfIterations_;
-    bestSolution_ = candidateSolution;
+    bestParameter_ = candidateSolution;
     bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
     while(!isFinished() && !isTerminated()) {
@@ -28,7 +28,7 @@ namespace hop {
       }
 
       reduceStepSize = true;
-      arma::Col<double> candidateSolution = bestSolution_;
+      arma::Col<double> candidateSolution = bestParameter_;
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
 
         candidateSolution.at(n) += stepSize_.at(n);
@@ -39,7 +39,7 @@ namespace hop {
           if (objectiveValue < bestObjectiveValue_) {
             reduceStepSize = false;
 
-            bestSolution_ = candidateSolution;
+            bestParameter_ = candidateSolution;
             bestObjectiveValue_ = objectiveValue;
           }
         }
@@ -56,7 +56,7 @@ namespace hop {
           if (objectiveValue < bestObjectiveValue_) {
             reduceStepSize = false;
 
-            bestSolution_ = candidateSolution;
+            bestParameter_ = candidateSolution;
             bestObjectiveValue_ = objectiveValue;
           }
         }

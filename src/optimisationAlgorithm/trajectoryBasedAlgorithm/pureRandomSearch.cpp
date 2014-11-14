@@ -1,9 +1,9 @@
-#include <hop_bits/optimisationAlgorithm/pureRandomSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/pureRandomSearch.hpp>
 
 namespace hop {
   PureRandomSearch::PureRandomSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : OptimisationAlgorithm(optimisationProblem) {
+    : TrajectoryBasedAlgorithm(optimisationProblem) {
 
   }
 
@@ -19,7 +19,7 @@ namespace hop {
       double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
       if (objectiveValue < bestObjectiveValue_) {
-        bestSolution_ = candidateSolution;
+        bestParameter_ = candidateSolution;
         bestObjectiveValue_ = objectiveValue;
       }
     }
