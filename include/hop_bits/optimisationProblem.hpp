@@ -14,12 +14,13 @@
 #include <hop_bits/helper/cereal.hpp>
 #include <hop_bits/helper/printable.hpp>
 
+// TODO Add includes (only skip if within its own header)
 namespace hop {
   // Base class of all optimisation problems in this library. Provides access to all usually
   // needed informations.
   //
   // Within this library, optiomisation problems are viewed as contiunous, real-valued minimisation
-  // problems with interval- and/or soft-constraints. Support for hard-constraints is not yet
+  // problems with interval and/or soft-constraints. Support for hard-constraints is not yet
   // implemented.
   //
   // The parameter space and objective values can be translated (shifted), rotated and scaled to
@@ -31,8 +32,8 @@ namespace hop {
     public:
       // Constructs an optimisation problem with the given number of dimensions to be optimised.
       explicit OptimisationProblem(
-          // The number of dimensions
-          const unsigned int& numberOfDimensions);
+        // The number of dimensions
+        const unsigned int& numberOfDimensions);
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       OptimisationProblem(const OptimisationProblem&) = delete;
@@ -42,100 +43,122 @@ namespace hop {
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
       arma::Col<arma::uword> isSatisfyingLowerBounds(
-          const arma::Col<double>& parameter);
+        // The parameter to be tested
+        const arma::Col<double>& parameter);
 
       // Checks for each dimension whether the parameter is lower or equal the upper bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
       arma::Col<arma::uword> isSatisfyingUpperBounds(
-          const arma::Col<double>& parameter);
+        // The parameter to be tested
+        const arma::Col<double>& parameter);
 
       // Checks whether the soft-constraint is non-zero.
       // Returns false if the constraint is violated and true otherwise.
       // Note: Computes the result only once and caches it afterwards.
       bool isSatisfyingSoftConstraints(
-          const arma::Col<double>& parameter);
+        // The parameter to be tested
+        const arma::Col<double>& parameter);
 
-      // Checks whether any interval- or soft-constraint is violated.
+      // Checks whether any interval or soft-constraint is violated.
       // Returns false if the constraint is violated and true otherwise.
       // Note: Computes the results only once per constraint and caches them afterwards.
       bool isSatisfyingConstraints(
-          const arma::Col<double>& parameter);
+        // The parameter to be tested
+        const arma::Col<double>& parameter);
 
       // Returns the sum of all soft-constraint values.
       // The value must always be positive and only 0 if no constraint is violated.
       // Note: Computes the result only once and caches it afterwards.
       double getSoftConstraintsValue(
-          const arma::Col<double>& parameter);
+        // The parameter to be evaluated
+        const arma::Col<double>& parameter);
 
       // Returns the objective value to be minimised
       // Better solutions must have a lower objective value.
       // Note: Computes the result only once and caches it afterwards.
       double getObjectiveValue(
-          const arma::Col<double>& parameter);
+        // The parameter to be evaluated
+        const arma::Col<double>& parameter);
 
-      // Returns the number of dimensions to be optimised.
-      unsigned int getNumberOfDimensions() const;
+      // Returns the number of dimensions to be optimised
+      unsigned int getNumberOfDimensions() const noexcept;
 
       // Returns the lower bounds of the search space.
-      arma::Col<double> getLowerBounds() const;
+      arma::Col<double> getLowerBounds() const noexcept;
 
       // Sets the lower bounds of the search space.
-      // This must be strictly lower then the upper bound for each dimension.
+      // Note: It is not checked, whether it is strictly greater then the lower bound or not.
       void setLowerBounds(
-          const arma::Col<double>& lowerBounds);
+        // The new lower bounds
+        const arma::Col<double>& lowerBounds);
 
       // Returns the upper bounds of the search space
-      arma::Col<double> getUpperBounds() const;
+      arma::Col<double> getUpperBounds() const noexcept;
 
       // Sets the upper bounds of the search space.
-      // This must be strictly greater then the lower bound for each dimension.
+      // Note: It is not checked, whether it is strictly greater then the lower bound or not.
       void setUpperBounds(
-          const arma::Col<double>& upperBounds);
+        // The new upper bounds
+        const arma::Col<double>& upperBounds);
 
-      // Sets the translation (i.e. shift) which is added to the parameter before any other
-      // computation.
+      // Sets the translation (i.e. shift) which is added (not substracted) to the parameter before
+      // any other computation.
+      // Note: The translation is always based on the same origin and will not add up is multiple
+      // set.
       void setParameterTranslation(
+        // The new translation of the parameter space
           const arma::Col<double>& parameterTranslation);
 
       // Sets the scaling which is multiplied to the parameter after its translation.
+      // Reflections due to negative values are permitted.
+      // Note: The scaling is always based on the same origin and will not add up is multiple set.
       void setParameterScale(
-          const arma::Col<double>& parameterScale);
+        // The new scaling of the parameter space
+        const arma::Col<double>& parameterScale);
 
       // Sets the rotation which is multiplied to the parameter after the scaling.
+      // Note: The rotation is always based on the same origin and will not add up is multiple set.
       void setParameterRotation(
-          const arma::Mat<double>& parameterRotation);
+        // The new rotation of the parameter space
+        const arma::Mat<double>& parameterRotation);
 
       // Sets the translation (i.e. shift) which is added to the objective value after its
       // computation.
+      // Note: The translation is always based on the same origin and will not add up is multiple
+      // set.
       void setObjectiveValueTranslation(
-          const double& objectiveValueTranslation);
+        // The new translation of the objective value space
+        const double& objectiveValueTranslation) noexcept;
 
       // Sets the scaling which is multiplied to the objective value after its translation.
+      // Note: The scaling is always based on the same origin and will not add up is multiple set.
       void setObjectiveValueScale(
-          const double& objectiveValueScale);
+        // The new scaling of the objective value space
+        const double& objectiveValueScale) noexcept;
 
       // Returns the upper limit for an objective value to be acceptable. The optimisation process
       // is usually finished after reaching this threshold.
-      // Note: The value must not actual be reachable.
-      double getAcceptableObjectiveValue() const;
+      // Note: The objective value must not be reachable.
+      double getAcceptableObjectiveValue() const noexcept;
 
       // Sets the upper limit for an objective value to be acceptable. The optimisation process
       // is usually finished after reaching this threshold.
-      // Note: The value must not actual be reachable.
+      // Note: The objective value must not be reachable.
       void setAcceptableObjectiveValue(
-          const double& acceptableObjectiveValue);
+          const double& acceptableObjectiveValue) noexcept;
 
       // Returns the number of objective function evaluations.
       // Note: The value includes retrival from cache and actual computation.
-      unsigned int getNumberOfEvaluations() const;
+      unsigned int getNumberOfEvaluations() const noexcept;
 
       // Returns the number of unique objective function evaluations.
       // Note: This will only include actual computations and no cache retrival.
-      unsigned int getNumberOfDistinctEvaluations() const;
+      unsigned int getNumberOfDistinctEvaluations() const noexcept;
 
-      // Resets the counter by setting the number of (distinct) function evaluations to zero.
-      void reset();
+      // Resets the counter by setting the number of (distinct) function evaluations to zero and
+      // clearing the caches.
+      void reset() noexcept;
 
       std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> getCachedObjectiveValues() const;
       std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> getCachedSoftConstraintsValues() const;
@@ -148,15 +171,6 @@ namespace hop {
       virtual ~OptimisationProblem() = default;
 
     protected:
-      // Actual implementaion of the objective function.
-      // Note: The dimension of the parameter is checked beforehand.
-      virtual double getObjectiveValueImplementation(
-          const arma::Col<double>& parameter) const = 0;
-      // Actual implementaion of the soft-constraints function.
-      // Returns 0.0 if not overloaded.
-      virtual double getSoftConstraintsValueImplementation(
-          const arma::Col<double>& parameter) const;
-
       // The number of dimensions to be optimised
       unsigned int numberOfDimensions_;
 
@@ -185,9 +199,22 @@ namespace hop {
       // The number of distinct objective function evaluations so far (computated only).
       unsigned int numberOfDistinctEvaluations_;
 
+      // Actual implementaion of the objective function.
+      // Note: The dimension of the parameter is checked beforehand.
+      virtual double getObjectiveValueImplementation(
+        // The parameter to be evaluated
+        const arma::Col<double>& parameter) const = 0;
+
+      // Actual implementaion of the soft-constraints function.
+      // Returns 0.0 if not overloaded.
+      virtual double getSoftConstraintsValueImplementation(
+        // The parameter to be evaluated
+        const arma::Col<double>& parameter) const;
+
       // Returns the rotated, scaled and translated (shifted) parameter.
       arma::Col<double> getScaledCongruentParameter(
-          const arma::Col<double>& parameter) const;
+        // The parameter to be rotated, scaled and translated (shifted)
+        const arma::Col<double>& parameter) const;
 
       // Several caches used to avoid redundant computations.
       std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> cachedObjectiveValues_;
