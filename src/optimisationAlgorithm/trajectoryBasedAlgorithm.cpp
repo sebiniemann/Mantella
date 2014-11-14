@@ -9,6 +9,10 @@ namespace hop {
 
   void TrajectoryBasedAlgorithm::setInitialParameter(
       const arma::Col<double>& initialParameter) {
+    if(initialParameter.n_elem != optimisationProblem_->getNumberOfDimensions()) {
+      // TODO Add exception
+    }
+
     initialParameter_ = initialParameter;
   }
 }
