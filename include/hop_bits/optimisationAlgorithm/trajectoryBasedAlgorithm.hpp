@@ -6,7 +6,8 @@
 namespace hop {
   class TrajectoryBasedAlgorithm : public OptimisationAlgorithm {
     public:
-      using OptimisationAlgorithm::OptimisationAlgorithm;
+      explicit TrajectoryBasedAlgorithm(
+          const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       void setInitialParameter(
           const arma::Col<double>& initialParameter);
