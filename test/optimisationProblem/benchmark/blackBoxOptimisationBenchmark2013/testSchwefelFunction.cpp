@@ -29,7 +29,6 @@ TEST_CASE("SchwefelFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     schwefelFunction.setObjectiveValueTranslation(0);
     schwefelFunction.setOne(one);
 

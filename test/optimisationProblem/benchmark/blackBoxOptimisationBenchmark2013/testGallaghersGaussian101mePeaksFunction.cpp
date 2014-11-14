@@ -35,7 +35,6 @@ TEST_CASE("GallaghersGaussian101mePeaksFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian101mePeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     gallaghersGaussian101mePeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian101mePeaksFunction.setRotationR(rotationR);
     gallaghersGaussian101mePeaksFunction.setDeltaC101(deltaC101);

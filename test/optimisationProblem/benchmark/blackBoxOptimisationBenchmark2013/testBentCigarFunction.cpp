@@ -32,7 +32,6 @@ TEST_CASE("BentCigarFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedBentCigarFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     bentCigarFunction.setObjectiveValueTranslation(0);
     bentCigarFunction.setTranslation(translation);
     bentCigarFunction.setRotationR(rotationR);

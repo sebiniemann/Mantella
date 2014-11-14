@@ -35,7 +35,6 @@ TEST_CASE("RosenbrockFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     rosenbrockFunction.setObjectiveValueTranslation(0);
     rosenbrockFunction.setTranslation(translation);
     rosenbrockFunction.setRotationR(rotationR);

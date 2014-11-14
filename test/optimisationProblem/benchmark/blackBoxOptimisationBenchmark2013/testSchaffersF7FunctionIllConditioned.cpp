@@ -35,7 +35,6 @@ TEST_CASE("SchaffersF7FunctionIllConditioned", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedSchaffersF7FunctionIllConditioned,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     schaffersF7FunctionIllConditioned.setObjectiveValueTranslation(0);
     schaffersF7FunctionIllConditioned.setTranslation(translation);
     schaffersF7FunctionIllConditioned.setRotationR(rotationR);

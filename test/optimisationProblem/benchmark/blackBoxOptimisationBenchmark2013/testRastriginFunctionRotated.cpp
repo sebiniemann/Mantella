@@ -35,7 +35,6 @@ TEST_CASE("RastriginFunctionRotated", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedRastriginFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     rastriginFunctionRotated.setObjectiveValueTranslation(0);
     rastriginFunctionRotated.setTranslation(translation);
     rastriginFunctionRotated.setRotationR(rotationR);

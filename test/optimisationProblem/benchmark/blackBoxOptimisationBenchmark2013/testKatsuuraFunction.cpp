@@ -35,7 +35,6 @@ TEST_CASE("KatsuuraFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedKatsuuraFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     katsuuraFunction.setObjectiveValueTranslation(0);
     katsuuraFunction.setTranslation(translation);
     katsuuraFunction.setRotationR(rotationR);

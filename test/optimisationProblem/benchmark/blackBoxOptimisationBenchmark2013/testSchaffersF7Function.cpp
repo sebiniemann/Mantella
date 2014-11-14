@@ -35,7 +35,6 @@ TEST_CASE("SchaffersF7Function", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedSchaffersF7Function,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     schaffersF7Function.setObjectiveValueTranslation(0);
     schaffersF7Function.setTranslation(translation);
     schaffersF7Function.setRotationR(rotationR);

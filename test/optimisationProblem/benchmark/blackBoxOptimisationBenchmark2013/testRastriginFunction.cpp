@@ -29,7 +29,6 @@ TEST_CASE("RastriginFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     rastriginFunction.setObjectiveValueTranslation(0);
     rastriginFunction.setTranslation(translation);
 

@@ -35,7 +35,6 @@ TEST_CASE("LunacekBiRastriginFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedLunacekBiRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     lunacekBiRastriginFunction.setObjectiveValueTranslation(0);
     lunacekBiRastriginFunction.setOne(one);
     lunacekBiRastriginFunction.setRotationR(rotationR);

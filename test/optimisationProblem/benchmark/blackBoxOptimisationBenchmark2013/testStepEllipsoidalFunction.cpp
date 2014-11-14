@@ -35,7 +35,6 @@ TEST_CASE("StepEllipsoidalFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedStepEllipsoidalFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     stepEllipsoidalFunction.setObjectiveValueTranslation(0);
     stepEllipsoidalFunction.setTranslation(translation);
     stepEllipsoidalFunction.setRotationR(rotationR);

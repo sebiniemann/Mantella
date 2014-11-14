@@ -29,7 +29,6 @@ TEST_CASE("SphereFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedSphereFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     sphereFunction.setObjectiveValueTranslation(0);
     sphereFunction.setTranslation(translation);
 

@@ -35,7 +35,6 @@ TEST_CASE("AttractiveSectorFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedAttractiveSectorFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     attractiveSectorFunction.setObjectiveValueTranslation(0);
     attractiveSectorFunction.setTranslation(translation);
     attractiveSectorFunction.setRotationR(rotationR);

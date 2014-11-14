@@ -32,7 +32,6 @@ TEST_CASE("DiscusFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedDiscusFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     discusFunction.setObjectiveValueTranslation(0);
     discusFunction.setTranslation(translation);
     discusFunction.setRotationR(rotationR);

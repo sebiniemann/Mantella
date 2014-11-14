@@ -35,7 +35,6 @@ TEST_CASE("WeierstrassFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedWeierstrassFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     weierstrassFunction.setObjectiveValueTranslation(0);
     weierstrassFunction.setTranslation(translation);
     weierstrassFunction.setRotationR(rotationR);

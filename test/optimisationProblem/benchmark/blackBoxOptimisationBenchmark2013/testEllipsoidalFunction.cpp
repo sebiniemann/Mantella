@@ -29,7 +29,6 @@ TEST_CASE("EllipsoidalFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     ellipsoidalFunction.setObjectiveValueTranslation(0);
     ellipsoidalFunction.setTranslation(translation);
 

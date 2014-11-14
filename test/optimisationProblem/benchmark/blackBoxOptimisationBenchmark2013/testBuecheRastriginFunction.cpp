@@ -29,7 +29,6 @@ TEST_CASE("BuecheRastriginFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedBuecheRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     buecheRastriginFunction.setObjectiveValueTranslation(0);
     buecheRastriginFunction.setTranslation(translation);
 

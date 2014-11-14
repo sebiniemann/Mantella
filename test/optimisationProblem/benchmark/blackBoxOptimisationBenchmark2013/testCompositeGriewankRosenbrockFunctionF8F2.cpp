@@ -29,7 +29,6 @@ TEST_CASE("CompositeGriewankRosenbrockFunctionF8F2", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedCompositeGriewankRosenbrockFunctionF8F2,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     compositeGriewankRosenbrockFunctionF8F2.setObjectiveValueTranslation(0);
     compositeGriewankRosenbrockFunctionF8F2.setRotationR(rotationR);
 

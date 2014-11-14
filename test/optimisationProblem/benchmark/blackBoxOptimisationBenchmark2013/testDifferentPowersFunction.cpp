@@ -32,7 +32,6 @@ TEST_CASE("DifferentPowersFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedDifferentPowersFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     differentPowersFunction.setObjectiveValueTranslation(0);
     differentPowersFunction.setTranslation(translation);
     differentPowersFunction.setRotationR(rotationR);

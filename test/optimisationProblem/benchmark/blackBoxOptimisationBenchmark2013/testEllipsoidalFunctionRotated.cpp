@@ -32,7 +32,6 @@ TEST_CASE("EllipsoidalFunctionRotated", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     ellipsoidalFunctionRotated.setObjectiveValueTranslation(0);
     ellipsoidalFunctionRotated.setTranslation(translation);
     ellipsoidalFunctionRotated.setRotationR(rotationR);

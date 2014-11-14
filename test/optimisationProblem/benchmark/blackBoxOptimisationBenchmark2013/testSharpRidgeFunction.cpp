@@ -35,7 +35,6 @@ TEST_CASE("SharpRidgeFunction", "") {
     arma::Col<double> expected;
     expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedSharpRidgeFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    // TODO Adjust objectiveValueTranslation
     sharpRidgeFunction.setObjectiveValueTranslation(0);
     sharpRidgeFunction.setTranslation(translation);
     sharpRidgeFunction.setRotationR(rotationR);
