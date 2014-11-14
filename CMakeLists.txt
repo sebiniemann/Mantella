@@ -115,12 +115,14 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.cpp
     src/optimisationProblem/robotic/model/multiLevelStewartPlatform.cpp
     src/optimisationAlgorithm.cpp
-    src/optimisationAlgorithm/hillClimbing.cpp
-    src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
-    src/optimisationAlgorithm/pureRandomSearch.cpp
-    src/optimisationAlgorithm/roleBasedImitationAlgorithm.cpp
-    src/optimisationAlgorithm/simulatedAnnealing.cpp
-    src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
+    src/optimisationAlgorithm/trajectoryBasedAlgorithm.cpp
+    src/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.cpp
+    src/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.cpp
+    src/optimisationAlgorithm/trajectoryBasedAlgorithm/pureRandomSearch.cpp
+    src/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.cpp
+    src/optimisationAlgorithm/populationBasedAlgorithm.cpp
+    src/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.cpp
+    src/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/propertiesAnalysis.cpp
     src/propertiesAnalysis/functionModelAnalysis.cpp
     src/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.cpp
@@ -150,8 +152,8 @@ if(BUILD_LIBRARY)
     # Compile the optimisation library with MPI support (parallel algorithms)
     add_library(hop SHARED
       ${HOP_LIBRARY_SOURCES}
-      src/optimisationAlgorithm/parallelOptimisationAlgorithm.cpp
-      src/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.cpp
+      src/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.cpp
+      src/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
     )
 
     # Link against third party libraries
@@ -319,14 +321,16 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp
   include/hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
   include/hop_bits/optimisationAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/hillClimbing.hpp
-  include/hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/pureRandomSearch.hpp
-  include/hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/simulatedAnnealing.hpp
-  include/hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp
+  include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/pureRandomSearch.hpp
+  include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/propertiesAnalysis.hpp
   include/hop_bits/propertiesAnalysis/functionModelAnalysis.hpp
   include/hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp

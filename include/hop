@@ -1,13 +1,5 @@
 #pragma once
 
-#include <hop_bits/optimisationAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/hillClimbing.hpp>
-#include <hop_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/pureRandomSearch.hpp>
-#include <hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
-#include <hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp>
 #include <hop_bits/optimisationProblem.hpp>
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp>
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.hpp>
@@ -39,6 +31,17 @@
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp>
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp>
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp>
+#include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/pureRandomSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
 #include <hop_bits/propertiesAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
