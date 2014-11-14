@@ -11,6 +11,6 @@
 
 namespace hop {
   arma::Col<double> getEstimator(
-      const arma::Mat<double>& regressors,
+      const arma::Mat<double>& regressor,
       const arma::Col<double>& regressand);
 }

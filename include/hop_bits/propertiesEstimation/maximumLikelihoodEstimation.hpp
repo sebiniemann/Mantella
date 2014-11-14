@@ -6,7 +6,10 @@
 namespace hop {
   class MaximumLikelihoodEstimation : public PropertiesEstimation {
     public:
-      void estimate(
-          const std::shared_ptr<OptimisationProblem>& optimisationProblem) const override;
+      using PropertiesEstimation::PropertiesEstimation;
+
+    protected:
+      void estimateImplementation(
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) override;
   };
 }
