@@ -5,10 +5,10 @@
 #include <vector>
 
 // HOP
-#include <hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
 
 namespace hop {
-  class ParallelStandardParticleSwarmOptimisation2011 : public ParallelOptimisationAlgorithm {
+  class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm {
     public:
       explicit ParallelStandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& localPopulationSize);

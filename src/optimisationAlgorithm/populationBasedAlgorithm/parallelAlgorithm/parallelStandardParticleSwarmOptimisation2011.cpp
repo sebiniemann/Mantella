@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
 
 // C++ Standard Library
 #include <cmath>
@@ -18,7 +18,7 @@ namespace hop {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const unsigned int& localPopulationSize)
-    : ParallelOptimisationAlgorithm(optimisationProblem),
+    : ParallelAlgorithm(optimisationProblem),
       localPopulationSize_(localPopulationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(localPopulationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
@@ -74,7 +74,7 @@ namespace hop {
 
     arma::uword bestSolutionIndex;
     bestObjectiveValue_ = localBestObjectiveValues.min(bestSolutionIndex);
-    bestSolution_ = localBestSolutions.col(bestSolutionIndex);
+    bestParameter_ = localBestSolutions.col(bestSolutionIndex);
 
     bool randomizeTopology = true;
 
@@ -140,7 +140,7 @@ namespace hop {
 
           if (objectiveValue < bestObjectiveValue_) {
             bestObjectiveValue_ = objectiveValue;
-            bestSolution_ = solutionCandidate;
+            bestParameter_ = solutionCandidate;
           } else {
             randomizeTopology = true;
           }
@@ -179,7 +179,7 @@ namespace hop {
       double bestObjectiveValue = localBestObjectiveValues.min(bestSolutionIndex);
       if (bestObjectiveValue < bestObjectiveValue_) {
         bestObjectiveValue_ = bestObjectiveValue;
-        bestSolution_ = localBestSolutions.col(bestSolutionIndex);
+        bestParameter_ = localBestSolutions.col(bestSolutionIndex);
       } else {
         randomizeTopology = true;
       }
