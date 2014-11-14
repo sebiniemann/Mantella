@@ -1,3 +1,5 @@
 # Experiemental
-add_subdirectory("./mpi")
+if(MPI_C_FOUND)
+  add_subdirectory("./mpi")
+endif()
 add_subdirectory("./onlineOptimisation")

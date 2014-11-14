@@ -2,9 +2,9 @@ Hint-based Online Programming 0.9.0
 ====================================
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![TODO](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
-The Hint-based Online Programming (HOP) library aims to provide the necessary tools to describe and analysis real-world online optimisation problems as well as (competitive) solvers to reduce the overall computation time on recent multi-cores and high performance clusters.
+The Hint-based Online Programming (HOP) library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
 
-HOP is based on recent C++11 features and Armadillo, a high efficient linear algebra library. We are also implementing highly parallalised, competitive optimisation algorithms to maximise the speedup on multi-cores or high performance clusters. 
+HOP is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
 
 Getting started
 ---------------
@@ -13,7 +13,7 @@ Getting started
   - CMake 2.8.8
   - GCC 4.8.1 (or any other C++11 featur complete compiler)
   - MPI-2
-  - Cereal 1.0.0
+  - Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
   - Catch (development version)
   - Boost filesystem 1.54
 
@@ -25,9 +25,12 @@ Future plans
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - ~~Set installation of parallised implementations to be optional~~ **(done)**
 - **Planned for 1.1.0**
-  - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
+  - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
+  - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
+- **Planned for 1.2.0**
+  - Adding a seperate website (besides this readme on Github), including a user documentation and a *getting started*
 - **Backlog**
-  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information until 01.11.2014)
+  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information from Nikolaus Hansen)
 
 Implemented features
 --------------------

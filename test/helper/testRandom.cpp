@@ -66,7 +66,7 @@ TEST_CASE("Random permutation", "") {
   }
 
   SECTION("Partial permutation") {
-    arma::Mat<arma::uword>::fixed<10, 20000> permutations;
+    arma::Mat<arma::uword>::fixed<10, 40000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
       permutations.col(n) = hop::getRandomPermutation(permutations.n_rows + 1, permutations.n_rows);
     }

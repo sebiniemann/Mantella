@@ -29,7 +29,7 @@ add_executable(main
 )
 
 # Link against HOP
-target_link_libraries(main "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
+target_link_libraries(main hop)
 
 # Link against third party libraries
 target_link_libraries(main ${ARMADILLO_LIBRARIES}) # Armadillo C++
