@@ -11,7 +11,6 @@ namespace hop {
     
     arma::Col<double> objectiveValues = arma::randu<arma::vec>(numberOfDimensions);
     double sigma = 0.3;
-    double stopValue = 1e-10;
     //init selection parameters
     unsigned int lambda = 4 + std::floor(3 * std::log(numberOfDimensions));
     double mu = lambda / 2;
@@ -87,11 +86,6 @@ namespace hop {
         D = arma::sqrt(arma::diagmat(tempD)); // TODO: From wiki "D is a vector of standard deviations now" which it obviously isn't here.
                                               // also not sure what the point of that is, since it's going to be used as a matrix in the next line anyway.
         invsqrtC = B * arma::diagmat(1 / D) * B.t();
-      }
-
-        //break, if fitness is good enough or condition exceeds 1e14, better termination methods are advisable
-      if(arfitness.at(1) <= stopValue || D.max() / D.min() > 1e7) {
-        break;
       }
     }
     //while loop has ended
