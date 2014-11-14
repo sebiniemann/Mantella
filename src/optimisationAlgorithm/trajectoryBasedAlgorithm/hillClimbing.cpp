@@ -3,6 +3,7 @@
 // HOP
 #include <hop_bits/helper/rng.hpp>
 
+// TODO setInitialParameter
 namespace hop {
   HillClimbing::HillClimbing(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
@@ -11,9 +12,23 @@ namespace hop {
   }
 
   void HillClimbing::optimiseImplementation() {
+    bestParameter_ = initialParameter_;
+    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(initialParameter_);
+    bestSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(initialParameter_);
+
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
-      updateBestParameter(bestParameter_ + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator));
+
+      arma::Col<double> parameter = bestParameter_ + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator);
+
+      double objectiveValue = optimisationProblem_->getObjectiveValue(parameter);
+      double softConstraintValue = optimisationProblem_->getSoftConstraintsValue(parameter);
+
+      if(softConstraintValue < bestSoftConstraintValue_ || softConstraintValue == bestSoftConstraintValue_ && objectiveValue < bestObjectiveValue_) {
+        bestParameter_ = parameter;
+        bestObjectiveValue_ = softConstraintValue;
+        bestSoftConstraintValue_ = objectiveValue;
+      }
     }
   }
 
