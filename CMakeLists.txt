@@ -30,13 +30,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 # Provide custom build management options
 option(BUILD_LIBRARY "Build library" ON)
 option(BUILD_TEST "Build tests" OFF)
-option(BUILD_APPS "Build APPS" OFF)
+option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_ALL "Build all" OFF)
 
 if(BUILD_ALL)
   set(BUILD_LIBRARY ON)
   set(BUILD_TEST ON)
-  set(BUILD_APPS ON)
+  set(BUILD_EXAMPLES ON)
 endif()
 
 # OSX
@@ -122,12 +122,13 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/simulatedAnnealing.cpp
     src/optimisationAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/propertiesAnalysis.cpp
-    src/propertiesAnalysis/linearModel.cpp
-    src/propertiesAnalysis/linearModel/linearOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/lipschitzContinuity.cpp
-    src/propertiesAnalysis/lipschitzContinuity/completeLipschitzAnalysis.cpp
-    src/propertiesAnalysis/quadraticModel.cpp
-    src/propertiesAnalysis/quadraticModel/quadraticOrdinaryLeastSquares.cpp
+    src/propertiesAnalysis/functionModelAnalysis.cpp
+    src/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.cpp
+    src/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.cpp
+    src/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.cpp
+    src/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.cpp
+    src/propertiesAnalysis/lipschitzContinuityAnalysis.cpp
+    src/propertiesAnalysis/lipschitzContinuityAnalysis/completeLipschitzAnalysis.cpp
     src/propertiesEstimation.cpp
     src/propertiesEstimation/maximumLikelihoodEstimation.cpp
     src/helper/cache.cpp
@@ -270,14 +271,14 @@ if(BUILD_LIBRARY)
 #  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
 endif()
 
-# ----------
-# BUILD APPS
-# ----------
-if(BUILD_APPS)
+# --------------
+# BUILD EXAMPLES
+# -------------
+if(BUILD_EXAMPLES)
   message(STATUS "NOTICE: Configuring applications.")
 
   # Add applications build script
-  add_subdirectory("./apps")
+  add_subdirectory("./examples")
 endif()
 
 # ---------------------
@@ -327,12 +328,13 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/parallelOptimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/parallel/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/propertiesAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/linearModel.hpp
-  include/hop_bits/propertiesAnalysis/linearModel/linearOrdinaryLeastSquares.hpp
-  include/hop_bits/propertiesAnalysis/lipschitzContinuity.hpp
-  include/hop_bits/propertiesAnalysis/lipschitzContinuity/completeLipschitzAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/quadraticModel.hpp
-  include/hop_bits/propertiesAnalysis/quadraticModel/quadraticOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesAnalysis/functionModelAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis/completeLipschitzAnalysis.hpp
   include/hop_bits/propertiesEstimation.hpp
   include/hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
   include/hop_bits/helper/cache.hpp
