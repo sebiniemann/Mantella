@@ -1,18 +1,24 @@
 #include <hop_bits/propertiesEstimation.hpp>
 
 namespace hop {
-  PropertiesEstimation::PropertiesEstimation()
-    : isLinear_(false),
+  PropertiesEstimation::PropertiesEstimation(
+      const std::shared_ptr<LinearModelAnalysis> linearModelAnalysis,
+      const std::shared_ptr<QuadraticModelAnalysis> quadraticModelAnalysis,
+      const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis)
+    : linearModelAnalysis_(linearModelAnalysis),
+      quadraticModelAnalysis_(quadraticModelAnalysis),
+      lipschitzContinuityAnalysis_(lipschitzContinuityAnalysis),
+      numberOfPropertySets_(0),
+      isLinear_(false),
       isQuadratic_(false),
       isLipschitzContinuous_(false),
-      isAlphaHoelderContinuous_(false),
-      numberOfPropertySets_(0) {
+      isAlphaHoelderContinuous_(false) {
 
   }
 
-  void PropertiesEstimation::addPropertiesAnalysis(
-      const std::shared_ptr<PropertiesAnalysis> propertiesAnalysis) {
-    propertiesAnalyses_.push_back(propertiesAnalysis);
+  void PropertiesEstimation::estimate(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
+    return estimateImplementation(optimisationProblem);
   }
 
   std::size_t PropertiesEstimation::getNumberOfPropertySets() const {
@@ -24,9 +30,9 @@ namespace hop {
     return isLinear_.at(propertiesSetIndex);
   }
 
-  arma::Col<double> PropertiesEstimation::getLinearEstimator(
+  arma::Col<double> PropertiesEstimation::getLinearModelEstimator(
       const std::size_t& propertiesSetIndex) const {
-    return linearEstimator_.at(propertiesSetIndex);
+    return linearModelEstimators_.at(propertiesSetIndex);
   }
 
   bool PropertiesEstimation::isQuadratic(
@@ -34,9 +40,9 @@ namespace hop {
     return isQuadratic_.at(propertiesSetIndex);
   }
 
-  arma::Col<double> PropertiesEstimation::getQuadraticEstimator(
+  arma::Col<double> PropertiesEstimation::getQuadraticModelEstimator(
       const std::size_t& propertiesSetIndex) const{
-    return quadraticEstimator_.at(propertiesSetIndex);
+    return quadraticModelEstimators_.at(propertiesSetIndex);
   }
 
   bool PropertiesEstimation::isLipschitzContinuous(
@@ -46,7 +52,7 @@ namespace hop {
 
   double PropertiesEstimation::getLipschitzConstant(
       const std::size_t& propertiesSetIndex) const {
-    return lipschitzConstant_.at(propertiesSetIndex);
+    return lipschitzConstants_.at(propertiesSetIndex);
   }
 
   bool PropertiesEstimation::isAlphaHoelderContinuous(
@@ -56,6 +62,6 @@ namespace hop {
 
   double PropertiesEstimation::getAlphaHoelderConstant(
       const std::size_t& propertiesSetIndex) const {
-    return alphaHoelderConstant_.at(propertiesSetIndex);
+    return alphaHoelderConstants_.at(propertiesSetIndex);
   }
 }
