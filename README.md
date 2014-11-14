@@ -28,9 +28,9 @@ Future plans
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
   - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
 - **Planned for 1.2.0**
-  - Adding a seperate website (besides this readme on Github) including a user documentation and a *getting started*
+  - Adding a seperate website (besides this readme on Github), including a user documentation and a *getting started*
 - **Backlog**
-  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information until 01.11.2014)
+  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information from Nikolaus Hansen)
 
 Implemented features
 --------------------
