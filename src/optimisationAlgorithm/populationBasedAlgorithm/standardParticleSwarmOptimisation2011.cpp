@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 
 // C++ Standard Library
 #include <cmath>
@@ -12,7 +12,7 @@ namespace hop {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const unsigned int& populationSize)
-    : OptimisationAlgorithm(optimisationProblem),
+    : PopulationBasedAlgorithm(optimisationProblem),
       populationSize_(populationSize),
       localBestObjectiveValues_(populationSize_),
       randomizeTopology_(true) {
@@ -80,7 +80,7 @@ namespace hop {
 
         if (objectiveValue < bestObjectiveValue_) {
           bestObjectiveValue_ = objectiveValue;
-          bestSolution_ = solutionCandidate;
+          bestParameter_ = solutionCandidate;
         } else {
           randomizeTopology_ = true;
         }
@@ -116,7 +116,7 @@ namespace hop {
       localBestObjectiveValues_.at(n) = localBestObjectiveValue;
 
       if (localBestObjectiveValue < bestObjectiveValue_) {
-        bestSolution_ = localBestSolution;
+        bestParameter_ = localBestSolution;
         bestObjectiveValue_ = localBestObjectiveValue;
       }
 

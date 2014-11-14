@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/roleBasedImitationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
 
 // HOP
 #include <hop_bits/helper/random.hpp>
@@ -7,7 +7,7 @@
 namespace hop {
   RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
       const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
-    : OptimisationAlgorithm(optimisationProblem),
+    : PopulationBasedAlgorithm(optimisationProblem),
       populationSize_(populationSize),
       maximalNeighourhoodConvergence_(populationSize_),
       neighbourhoodSize_(0),
@@ -29,7 +29,7 @@ namespace hop {
       objectiveValues.at(n) = objectiveValue;
       
       if (objectiveValue < bestObjectiveValue_) {
-        bestSolution_ = solution;
+        bestParameter_ = solution;
         bestObjectiveValue_ = objectiveValue;
       }
 

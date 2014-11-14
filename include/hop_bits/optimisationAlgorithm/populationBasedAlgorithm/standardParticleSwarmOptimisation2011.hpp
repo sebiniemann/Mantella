@@ -1,10 +1,10 @@
 #pragma once
 
 // HOP
-#include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
 
 namespace hop {
-  class StandardParticleSwarmOptimisation2011 : public OptimisationAlgorithm {
+  class StandardParticleSwarmOptimisation2011 : public PopulationBasedAlgorithm {
     public:
       explicit StandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize);

@@ -1,10 +1,10 @@
 #pragma once
 
 // HOP
-#include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
 
 namespace hop {
-  class RoleBasedImitationAlgorithm : public OptimisationAlgorithm {
+  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm {
     public:
       explicit RoleBasedImitationAlgorithm(
           const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize);
