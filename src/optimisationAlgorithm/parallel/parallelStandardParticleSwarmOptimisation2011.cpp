@@ -96,23 +96,23 @@ namespace hop {
         for (std::size_t n = 0; n < localPopulationSize_; ++n) {
           ++numberOfIterations_;
 
-          std::size_t nn = permutation.at(n);
-          arma::Col<double> particle = localParticles.col(nn);
+          std::size_t k = permutation.at(n);
+          arma::Col<double> particle = localParticles.col(k);
 
           arma::uword neighbourhoodBestParticleIndex;
-          arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(topology.col(nn));
+          arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(topology.col(k));
           static_cast<arma::Col<double>>(localBestObjectiveValues.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
 
           neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies.at(neighbourhoodBestParticleIndex);
 
           arma::Col<double> attractionCenter;
-          if (neighbourhoodBestParticleIndex == rank_ * localPopulationSize_ + nn) {
-            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + nn) - particle)) / 2.0;
+          if (neighbourhoodBestParticleIndex == rank_ * localPopulationSize_ + k) {
+            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + k) - particle)) / 2.0;
           } else {
-            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + nn) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + k) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
           }
 
-          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(nn) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
+          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
           arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
           arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
@@ -124,8 +124,8 @@ namespace hop {
           solutionCandidate.elem(belowLowerBound) = optimisationProblem_->getLowerBounds().elem(belowLowerBound);
           solutionCandidate.elem(aboveUpperBound) = optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
 
-          localVelocities.col(nn) = velocityCandidate;
-          localParticles.col(nn) = solutionCandidate;
+          localVelocities.col(k) = velocityCandidate;
+          localParticles.col(k) = solutionCandidate;
 
           if (rank_ == 2) {
 //            std::cout << "localVelocities: " << localVelocities << std::endl;
@@ -133,9 +133,9 @@ namespace hop {
 
           double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
-          if (objectiveValue < localBestObjectiveValues.at(nn)) {
-            localBestObjectiveValues.at(rank_ * localPopulationSize_ + nn) = objectiveValue;
-            localBestSolutions.col(rank_ * localPopulationSize_ + nn) = solutionCandidate;
+          if (objectiveValue < localBestObjectiveValues.at(k)) {
+            localBestObjectiveValues.at(rank_ * localPopulationSize_ + k) = objectiveValue;
+            localBestSolutions.col(rank_ * localPopulationSize_ + k) = solutionCandidate;
           }
 
           if (objectiveValue < bestObjectiveValue_) {

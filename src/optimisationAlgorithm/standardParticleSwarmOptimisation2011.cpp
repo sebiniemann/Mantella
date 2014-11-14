@@ -38,25 +38,25 @@ namespace hop {
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
-        std::size_t nn = permutation.at(n);
-        arma::Col<double> particle = particles_.col(nn);
+        std::size_t k = permutation.at(n);
+        arma::Col<double> particle = particles_.col(k);
 
         arma::uword neighbourhoodBestParticleIndex;
-        arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(topology_.col(nn));
+        arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(topology_.col(k));
         static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
 
         neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies.at(neighbourhoodBestParticleIndex);
 
         arma::Col<double> attractionCenter;
-        if (neighbourhoodBestParticleIndex == nn) {
-          attractionCenter = (localAttraction_ * (localBestSolutions_.col(nn) - particle)) / 2.0;
+        if (neighbourhoodBestParticleIndex == k) {
+          attractionCenter = (localAttraction_ * (localBestSolutions_.col(k) - particle)) / 2.0;
         } else {
-          attractionCenter = (localAttraction_ * (localBestSolutions_.col(nn) - particle) + globalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+          attractionCenter = (localAttraction_ * (localBestSolutions_.col(k) - particle) + globalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
         }
 
         arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
 
-        arma::Col<double> velocityCandidate = acceleration_ * velocities_.col(nn) + randomParticle;
+        arma::Col<double> velocityCandidate = acceleration_ * velocities_.col(k) + randomParticle;
         arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
         arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
@@ -68,14 +68,14 @@ namespace hop {
         solutionCandidate.elem(belowLowerBound) = optimisationProblem_->getLowerBounds().elem(belowLowerBound);
         solutionCandidate.elem(aboveUpperBound) = optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
 
-        velocities_.col(nn) = velocityCandidate;
-        particles_.col(nn) = solutionCandidate;
+        velocities_.col(k) = velocityCandidate;
+        particles_.col(k) = solutionCandidate;
 
         double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
-        if (objectiveValue < localBestObjectiveValues_.at(nn)) {
-          localBestObjectiveValues_.at(nn) = objectiveValue;
-          localBestSolutions_.col(nn) = solutionCandidate;
+        if (objectiveValue < localBestObjectiveValues_.at(k)) {
+          localBestObjectiveValues_.at(k) = objectiveValue;
+          localBestSolutions_.col(k) = solutionCandidate;
         }
 
         if (objectiveValue < bestObjectiveValue_) {
