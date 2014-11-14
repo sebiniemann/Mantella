@@ -25,7 +25,10 @@ Future plans
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - ~~Set installation of parallised implementations to be optional~~ **(done)**
 - **Planned for 1.1.0**
-  - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation), developed by Nikolaus Hansen
+  - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
+  - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
+- **Planned for 1.2.0**
+  - Adding a seperate website (besides this readme on Github) including a user documentation and a *getting started*
 - **Backlog**
   - Adding the black-boxoptimisation benchmark 2015 (waiting for more information until 01.11.2014)
 
