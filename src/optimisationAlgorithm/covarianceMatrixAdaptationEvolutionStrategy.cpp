@@ -1,116 +1,106 @@
 #include <hop_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
 namespace hop {
-CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem) : OptimisationAlgorithm(optimisationProblem) {
+  CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem) : OptimisationAlgorithm(optimisationProblem) {
     // init input parameters
     // TODO: iteration number gets multiplied with dimensions² on wiki, also do that here?
-    numberOfDimensions_ = optimisationProblem->getNumberOfDimensions();
+  }
+
+  void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
+    unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
     
-    objectiveValues_ = arma::randu<arma::vec>(numberOfDimensions_);
-    sigma_ = 0.3;
-    stopValue_ = 1e-10;
+    arma::Col<double> objectiveValues = arma::randu<arma::vec>(numberOfDimensions);
+    double sigma = 0.3;
+    double stopValue = 1e-10;
     //init selection parameters
-    lambda_ = 4 + std::floor(3 * std::log(numberOfDimensions_));
-    mu_ = lambda_ / 2;
-    weights_ = arma::Col<double>(mu_);
+    unsigned int lambda = 4 + std::floor(3 * std::log(numberOfDimensions));
+    double mu = lambda / 2;
+    arma::Col<double> weights = arma::Col<double>(mu);
     
-    for(std::size_t n = 0; n < weights_.n_elem; ++n) {
-        weights_(n) = log(mu_ + 0.5) - log(n);
+    for(std::size_t n = 0; n < weights.n_elem; ++n) {
+      weights.at(n) = std::log(mu + 0.5) - std::log(n);
     }
     
-    mu_ = std::floor(mu_);
-    weights_ = weights_ / arma::sum(weights_);
-    mueff_ = std::pow(arma::sum(weights_), 2) / arma::sum(arma::square(weights_));
+    mu = std::floor(mu);
+    weights = weights / arma::sum(weights);
+    double mueff = std::pow(arma::sum(weights), 2) / arma::sum(arma::square(weights));
     //init adaptation parameters
-    cc_ = (4 + mueff_ / numberOfDimensions_) / (numberOfDimensions_ + 4 + 2 * mueff_ / numberOfDimensions_);
-    cs_ = (mueff_+2) / (numberOfDimensions_ + mueff_ + 5);
-    c1_ = 2 / (std::pow(numberOfDimensions_ + 1.3, 2) + mueff_);
-    cmu_ = std::min(1 - c1_, 2 * (mueff_ - 2 + 1 / mueff_) / (std::pow(numberOfDimensions_ + 2, 2) + mueff_));
-    damps_ = 1 + 2 * std::max(0.0, std::sqrt((mueff_ - 1) / (numberOfDimensions_ + 1)) - 1) + cs_;
+    double cc = (4 + mueff / numberOfDimensions) / (numberOfDimensions + 4 + 2 * mueff / numberOfDimensions);
+    double cs = (mueff+2) / (numberOfDimensions + mueff + 5);
+    double c1 = 2 / (std::pow(numberOfDimensions + 1.3, 2) + mueff);
+    double cmu = std::min(1 - c1, 2 * (mueff - 2 + 1 / mueff) / (std::pow(numberOfDimensions + 2, 2) + mueff));
+    double damps = 1 + 2 * std::max(0.0, std::sqrt((mueff - 1) / (numberOfDimensions + 1)) - 1) + cs;
     //init dynamic parameters and constants
-    pc_.zeros(numberOfDimensions_);
-    ps_.zeros(numberOfDimensions_);
-    B_.eye(numberOfDimensions_, numberOfDimensions_);
-    D_.ones(numberOfDimensions_);
-    C_.eye(numberOfDimensions_, numberOfDimensions_);
-    invsqrtC_.eye(numberOfDimensions_, numberOfDimensions_);
-    eigeneval_ = 0;
-    chiN_ = std::sqrt(numberOfDimensions_) * (1 - 1 / (4 * numberOfDimensions_) + 1 / (21 * std::pow(numberOfDimensions_, 2)));
-}
-
-void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
+    arma::Col<double> pc(numberOfDimensions, arma::fill::zeros);
+    arma::Col<double> ps(numberOfDimensions, arma::fill::zeros);
+    arma::Mat<double> B(numberOfDimensions, numberOfDimensions, arma::fill::eye);
+    arma::Col<double> D(numberOfDimensions, arma::fill::ones);
+    arma::Mat<double> C(numberOfDimensions, numberOfDimensions, arma::fill::eye);
+    arma::Mat<double> invsqrtC(numberOfDimensions, numberOfDimensions, arma::fill::eye);
+    double eigeneval = 0;
+    double chiN = std::sqrt(numberOfDimensions) * (1 - 1 / (4 * numberOfDimensions) + 1 / (21 * std::pow(numberOfDimensions, 2)));
+  
     while(!isFinished() && !isTerminated()) {
-        //generate and evaluate lambda offspring
-        arma::Col<double> arfitness = arma::Col<double>(lambda_);
-        arma::Mat<double> arx = arma::Mat<double>(numberOfDimensions_, lambda_);
-        for(std::size_t n = 0; n < lambda_; ++n) {
-            arx.col(n) = objectiveValues_ + sigma_ * B_ * (D_ % arma::randn<arma::Col<double>>(numberOfDimensions_));
-            arfitness(n) = frosenbrock(arx.col(n));
-            ++numberOfIterations_;
-        }
-        //sort by fitness and compute weighted mean into objectiveValues_
-        arma::Col<arma::uword> arindex = arma::sort_index(arfitness);
-        arma::Col<double> oldObjectiveValues = objectiveValues_;
-        //next line should be unnecessary, depending on if arma returns a copy or not in the line after that
-        objectiveValues_ = arma::Col<double>(numberOfDimensions_);
-        //TODO: xmean = arx(:,arindex(1:mu))*weights;
-        //is the actual matlab syntax for the following line, not a 100% sure if this is correct
-        objectiveValues_ = arx.cols(arindex) * weights_;
+      //generate and evaluate lambda offspring
+      arma::Col<double> arfitness = arma::Col<double>(lambda);
+      arma::Mat<double> arx = arma::Mat<double>(numberOfDimensions, lambda);
+      for(std::size_t n = 0; n < lambda; ++n) {
+        arx.col(n) = objectiveValues + sigma * B * (D % arma::randn<arma::Col<double>>(numberOfDimensions));
+        arfitness(n) = optimisationProblem_->getObjectiveValue(arx.col(n));
+        ++numberOfIterations_;
+      }
+      //sort by fitness and compute weighted mean into objectiveValues
+      arma::Col<arma::uword> arindex = arma::sort_index(arfitness);
+      arma::Col<double> oldObjectiveValues = objectiveValues;
+      //next line should be unnecessary, depending on if arma returns a copy or not in the line after that
+      objectiveValues = arma::Col<double>(numberOfDimensions);
+      //TODO: xmean = arx(:,arindex(1:mu))*weights;
+      //is the actual matlab syntax for the following line, not a 100% sure if this is correct
+      objectiveValues = arx.cols(arindex) * weights;
 
-        //cumulation: update evolution paths
-        ps_ = (1 - cs_) * ps_ + std::sqrt(cs_ * (2 - cs_) * mueff_) * invsqrtC_ * (objectiveValues_ - oldObjectiveValues) / sigma_;
-        int hsig = arma::norm(ps_) / std::sqrt(std::pow(1 - (1 - cs_), 2 * numberOfIterations_ / lambda_)) / chiN_ < 1.4 + 2 / (numberOfDimensions_ + 1);
-        pc_ = (1 - cc_) * pc_ + hsig * std::sqrt(cc_ * (2-cc_) * mueff_) * (objectiveValues_ - oldObjectiveValues) / sigma_;
+      //cumulation: update evolution paths
+      ps = (1 - cs) * ps + std::sqrt(cs * (2 - cs) * mueff) * invsqrtC * (objectiveValues - oldObjectiveValues) / sigma;
+      int hsig = arma::norm(ps) / std::sqrt(std::pow(1 - (1 - cs), 2 * numberOfIterations_ / lambda)) / chiN < 1.4 + 2 / (numberOfDimensions + 1);
+      pc = (1 - cc) * pc + hsig * std::sqrt(cc * (2-cc) * mueff) * (objectiveValues - oldObjectiveValues) / sigma;
 
-        //adapt covariance matrix C
-        arma::Mat<double> artmp = (1 / sigma_) * arx.cols(arindex) - arma::repmat(oldObjectiveValues, 1, mu_);
-        C_ = (1-c1_-cmu_) * C_ + //old matrix
-                c1_ * (pc_*pc_.t() + //rank one update
-                       (1-hsig) * cc_ * (2-cc_) * C_) + //correction for hsig==0
-                cmu_ * artmp * arma::diagmat(weights_) * artmp.t(); // rank mu update
+      //adapt covariance matrix C
+      arma::Mat<double> artmp = (1 / sigma) * arx.cols(arindex) - arma::repmat(oldObjectiveValues, 1, mu);
+      C = (1-c1-cmu) * C + //old matrix
+              c1 * (pc*pc.t() + //rank one update
+                     (1-hsig) * cc * (2-cc) * C) + //correction for hsig==0
+              cmu * artmp * arma::diagmat(weights) * artmp.t(); // rank mu update
 
-        //adapt step size sigma
-        sigma_ = sigma_ * std::exp((cs_ / damps_) * (arma::norm(ps_) / chiN_ - 1));
+      //adapt step size sigma
+      sigma = sigma * std::exp((cs / damps) * (arma::norm(ps) / chiN - 1));
 
-        //decomposition of C into B*diag(D.^2)*B' (diagonalization)
-        if((numberOfIterations_ - eigeneval_) > (lambda_ / (c1_ + cmu_) / numberOfIterations_ / 10)) {
-            eigeneval_ = numberOfIterations_;
-            //TODO: C = triu(C) + triu(C,1)';
-            //is the actual matlab syntax for the next lines, unfortunately arma doesn't have triu with a second parameter (yet)
-            arma::Mat<double> tempC = arma::trimatu(C_);
-            tempC.diag().zeros();
-            C_ = arma::trimatu(C_) + tempC.t(); //enforce symmetry
-            //matlab code is [B,D] = eig(C); arma uses switched arguments according to API
-            arma::Col<double> tempD = arma::Col<double>();
-            arma::eig_sym(tempD, B_, C_);
-            D_ = arma::sqrt(arma::diagmat(tempD)); //TODO: From wiki "D is a vector of standard deviations now" which it obviously isn't here.
-                                                //also not sure what the point of that is, since it's going to be used as a matrix in the next line anyway.
-            invsqrtC_ = B_ * arma::diagmat(1 / D_) * B_.t();
-        }
+      //decomposition of C into B*diag(D.^2)*B' (diagonalization)
+      if((numberOfIterations_ - eigeneval) > (lambda / (c1 + cmu) / numberOfIterations_ / 10)) {
+        eigeneval = numberOfIterations_;
+        //TODO: C = triu(C) + triu(C,1)';
+        //is the actual matlab syntax for the next lines, unfortunately arma doesn't have triu with a second parameter (yet)
+        arma::Mat<double> tempC = arma::trimatu(C);
+        tempC.diag().zeros();
+        C = arma::trimatu(C) + tempC.t(); //enforce symmetry
+        //matlab code is [B,D] = eig(C); arma uses switched arguments according to API
+        arma::Col<double> tempD = arma::Col<double>();
+        arma::eig_sym(tempD, B, C);
+        D = arma::sqrt(arma::diagmat(tempD)); // TODO: From wiki "D is a vector of standard deviations now" which it obviously isn't here.
+                                              // also not sure what the point of that is, since it's going to be used as a matrix in the next line anyway.
+        invsqrtC = B * arma::diagmat(1 / D) * B.t();
+      }
 
         //break, if fitness is good enough or condition exceeds 1e14, better termination methods are advisable
-        if(arfitness.at(1) <= stopValue_ || D_.max() / D_.min() > 1e7) {
-            break;
-        }
+      if(arfitness.at(1) <= stopValue || D.max() / D.min() > 1e7) {
+        break;
+      }
     }
     //while loop has ended
 
     //TODO: matlab returns xmin = arx(:, arindex(1));
     //not sure where to safe our return value?
-}
+  }
 
-std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const {
+  std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const {
     return "CovarianceMatrixAdaptationEvolutionStrategy";
-}
-
-double CovarianceMatrixAdaptationEvolutionStrategy::frosenbrock(arma::Col<double> x) {
-    if(x.n_elem < 2) {
-        throw std::logic_error("The dimension must be greater than one!");
-    } else {
-        double firstTerm = 100 * arma::sum(arma::square(arma::square(x.rows(0, x.n_elem - 2)) - x.rows(1, x.n_elem - 1)));
-        arma::Col<double> innerStuff = x.rows(0, x.n_elem - 2);
-        double secondTerm = arma::sum(arma::square(innerStuff - 1));
-        return  firstTerm + secondTerm;
-    }
-}
+  }
 }
