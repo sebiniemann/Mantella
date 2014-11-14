@@ -2,13 +2,17 @@
 
 // C++ Standard Library
 #include <stdexcept>
+#include <iostream>
+#include <stdexcept>
 
 namespace hop {
   arma::Col<double> getEstimator(
-      const arma::Mat<double>& regressors,
+      const arma::Mat<double>& regressor,
       const arma::Col<double>& regressand) {
-    // TODO Check size
+    if(regressor.n_cols != regressand.n_rows) {
+      throw std::runtime_error("The number of observations within the regressor (" + std::to_string(regressor.n_cols) + ") and regressand (" + std::to_string(regressand.n_rows) + ") must match.");
+    }
 
-    return (regressors.t() * regressors).i() * regressors.t() * regressand;
+    return (regressor * regressor.t()).i() * regressor * regressand;
   }
 }
