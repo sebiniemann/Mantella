@@ -11,7 +11,8 @@ namespace hop {
   class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm {
     public:
       explicit ParallelStandardParticleSwarmOptimisation2011(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& localPopulationSize);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem,
+          const unsigned int& populationSize);
 
       ParallelStandardParticleSwarmOptimisation2011(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
       ParallelStandardParticleSwarmOptimisation2011& operator=(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
@@ -30,8 +31,6 @@ namespace hop {
       std::string to_string() const override;
 
     protected:
-      const unsigned int localPopulationSize_;
-
       double neighbourhoodProbability_;
       double acceleration_;
       double localAttraction_;

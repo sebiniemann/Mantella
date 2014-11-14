@@ -6,9 +6,9 @@
 
 namespace hop {
   RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
-    : PopulationBasedAlgorithm(optimisationProblem),
-      populationSize_(populationSize),
+      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const unsigned int& populationSize)
+    : PopulationBasedAlgorithm(optimisationProblem, populationSize),
       maximalNeighourhoodConvergence_(populationSize_),
       neighbourhoodSize_(0),
       stepSize_(arma::square((optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) / 100)) {

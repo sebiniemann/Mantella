@@ -7,7 +7,8 @@ namespace hop {
   class ParallelAlgorithm : public PopulationBasedAlgorithm {
     public:
       explicit ParallelAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem,
+          const unsigned int& populationSize);
 
       int getRank() const;
       int getNumberOfNodes() const;

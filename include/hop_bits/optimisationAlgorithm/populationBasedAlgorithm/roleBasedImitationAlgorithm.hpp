@@ -22,8 +22,6 @@ namespace hop {
       std::string to_string() const override;
 
     protected:
-      const unsigned int populationSize_;
-
       arma::Col<double> stepSize_;
       unsigned int neighbourhoodSize_;
       arma::Col<double> maximalNeighourhoodConvergence_;

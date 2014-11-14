@@ -27,8 +27,6 @@ namespace hop {
       std::string to_string() const override;
 
     protected:
-      const unsigned int populationSize_;
-
       arma::Mat<double> particles_;
       arma::Mat<double> velocities_;
 

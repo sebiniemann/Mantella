@@ -17,10 +17,9 @@
 namespace hop {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& localPopulationSize)
-    : ParallelAlgorithm(optimisationProblem),
-      localPopulationSize_(localPopulationSize) {
-    setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(localPopulationSize_), 3.0));
+      const unsigned int& populationSize)
+    : ParallelAlgorithm(optimisationProblem, populationSize) {
+    setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
     setLocalAttraction(0.5 + std::log(2.0));
     setGlobalAttraction(localAttraction_);
@@ -28,47 +27,47 @@ namespace hop {
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::parallelOptimiseImplementation() {
-    arma::Mat<double> localParticles = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), localPopulationSize_);
+    arma::Mat<double> localParticles = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     localParticles.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     localParticles.each_col() += optimisationProblem_->getLowerBounds();
 
-    arma::Mat<double> localVelocities = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), localPopulationSize_);
+    arma::Mat<double> localVelocities = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     localVelocities.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     localVelocities.each_col() += optimisationProblem_->getLowerBounds();
     localVelocities -= localParticles;
 
-    arma::Mat<double> localBestSolutions(optimisationProblem_->getNumberOfDimensions(), localPopulationSize_ * numberOfNodes_);
-    localBestSolutions.cols(rank_ * localPopulationSize_, (rank_ + 1) * localPopulationSize_ - 1) = localParticles;
+    arma::Mat<double> localBestSolutions(optimisationProblem_->getNumberOfDimensions(), populationSize_ * numberOfNodes_);
+    localBestSolutions.cols(rank_ * populationSize_, (rank_ + 1) * populationSize_ - 1) = localParticles;
 
-    arma::Col<double> localBestObjectiveValues(localPopulationSize_ * numberOfNodes_);
-    for (std::size_t n = 0; n < localPopulationSize_; ++n) {
+    arma::Col<double> localBestObjectiveValues(populationSize_ * numberOfNodes_);
+    for (std::size_t n = 0; n < populationSize_; ++n) {
       ++numberOfIterations_;
-      arma::Col<double> localBestSolution = localBestSolutions.col(rank_ * localPopulationSize_ + n);
+      arma::Col<double> localBestSolution = localBestSolutions.col(rank_ * populationSize_ + n);
       double localBestObjectiveValue = optimisationProblem_->getObjectiveValue(localBestSolution) + optimisationProblem_->getSoftConstraintsValue(localBestSolution);
-      localBestObjectiveValues.at(rank_ * localPopulationSize_ + n) = localBestObjectiveValue;
+      localBestObjectiveValues.at(rank_ * populationSize_ + n) = localBestObjectiveValue;
 
       if (isFinished() || isTerminated()) {
         break;
       }
     }
 
-    arma::Mat<double> localBestSolutionsSend = localBestSolutions.cols(rank_ * localPopulationSize_, (rank_ + 1) * localPopulationSize_ - 1);
+    arma::Mat<double> localBestSolutionsSend = localBestSolutions.cols(rank_ * populationSize_, (rank_ + 1) * populationSize_ - 1);
     MPI_Allgather(
           localBestSolutionsSend.memptr(),
-          localPopulationSize_ * optimisationProblem_->getNumberOfDimensions(),
+          populationSize_ * optimisationProblem_->getNumberOfDimensions(),
           MPI_DOUBLE,
           localBestSolutions.memptr(),
-          localPopulationSize_ * optimisationProblem_->getNumberOfDimensions(),
+          populationSize_ * optimisationProblem_->getNumberOfDimensions(),
           MPI_DOUBLE,
           MPI_COMM_WORLD);
 
-    arma::Col<double> localBestObjectiveValuesSend = localBestObjectiveValues.subvec(rank_ * localPopulationSize_, (rank_ + 1) * localPopulationSize_ - 1);
+    arma::Col<double> localBestObjectiveValuesSend = localBestObjectiveValues.subvec(rank_ * populationSize_, (rank_ + 1) * populationSize_ - 1);
     MPI_Allgather(
           localBestObjectiveValuesSend.memptr(),
-          localPopulationSize_,
+          populationSize_,
           MPI_DOUBLE,
           localBestObjectiveValues.memptr(),
-          localPopulationSize_,
+          populationSize_,
           MPI_DOUBLE,
           MPI_COMM_WORLD);
 
@@ -78,12 +77,12 @@ namespace hop {
 
     bool randomizeTopology = true;
 
-    arma::Mat<arma::uword> topology(localPopulationSize_ * numberOfNodes_, localPopulationSize_);
+    arma::Mat<arma::uword> topology(populationSize_ * numberOfNodes_, populationSize_);
     while(!isFinished() && !isTerminated()) {
       for (unsigned int k = 0; k < communicationSteps_; ++k) {
         if (randomizeTopology) {
-            topology = (arma::randu<arma::Mat<double>>(localPopulationSize_ * numberOfNodes_, localPopulationSize_) <= neighbourhoodProbability_);
-            topology.diag(-rank_ * localPopulationSize_) += 1.0;
+            topology = (arma::randu<arma::Mat<double>>(populationSize_ * numberOfNodes_, populationSize_) <= neighbourhoodProbability_);
+            topology.diag(-rank_ * populationSize_) += 1.0;
 
             randomizeTopology = false;
         }
@@ -92,8 +91,8 @@ namespace hop {
 //          std::cout << "topology: " << topology << std::endl;
         }
 
-        arma::Col<arma::uword> permutation = getRandomPermutation(localPopulationSize_);
-        for (std::size_t n = 0; n < localPopulationSize_; ++n) {
+        arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
+        for (std::size_t n = 0; n < populationSize_; ++n) {
           ++numberOfIterations_;
 
           std::size_t k = permutation.at(n);
@@ -106,10 +105,10 @@ namespace hop {
           neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies.at(neighbourhoodBestParticleIndex);
 
           arma::Col<double> attractionCenter;
-          if (neighbourhoodBestParticleIndex == rank_ * localPopulationSize_ + k) {
-            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + k) - particle)) / 2.0;
+          if (neighbourhoodBestParticleIndex == rank_ * populationSize_ + k) {
+            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * populationSize_ + k) - particle)) / 2.0;
           } else {
-            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * localPopulationSize_ + k) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+            attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * populationSize_ + k) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
           }
 
           arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
@@ -134,8 +133,8 @@ namespace hop {
           double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
           if (objectiveValue < localBestObjectiveValues.at(k)) {
-            localBestObjectiveValues.at(rank_ * localPopulationSize_ + k) = objectiveValue;
-            localBestSolutions.col(rank_ * localPopulationSize_ + k) = solutionCandidate;
+            localBestObjectiveValues.at(rank_ * populationSize_ + k) = objectiveValue;
+            localBestSolutions.col(rank_ * populationSize_ + k) = solutionCandidate;
           }
 
           if (objectiveValue < bestObjectiveValue_) {
@@ -155,23 +154,23 @@ namespace hop {
         }
       }
 
-      arma::Mat<double> localBestSolutionsSend = localBestSolutions.cols(rank_ * localPopulationSize_, (rank_ + 1) * localPopulationSize_ - 1);
+      arma::Mat<double> localBestSolutionsSend = localBestSolutions.cols(rank_ * populationSize_, (rank_ + 1) * populationSize_ - 1);
       MPI_Allgather(
             localBestSolutionsSend.memptr(),
-            localPopulationSize_ * optimisationProblem_->getNumberOfDimensions(),
+            populationSize_ * optimisationProblem_->getNumberOfDimensions(),
             MPI_DOUBLE,
             localBestSolutions.memptr(),
-            localPopulationSize_ * optimisationProblem_->getNumberOfDimensions(),
+            populationSize_ * optimisationProblem_->getNumberOfDimensions(),
             MPI_DOUBLE,
             MPI_COMM_WORLD);
 
-      arma::Col<double> localBestObjectiveValuesSend = localBestObjectiveValues.subvec(rank_ * localPopulationSize_, (rank_ + 1) * localPopulationSize_ - 1);
+      arma::Col<double> localBestObjectiveValuesSend = localBestObjectiveValues.subvec(rank_ * populationSize_, (rank_ + 1) * populationSize_ - 1);
       MPI_Allgather(
             localBestObjectiveValuesSend.memptr(),
-            localPopulationSize_,
+            populationSize_,
             MPI_DOUBLE,
             localBestObjectiveValues.memptr(),
-            localPopulationSize_,
+            populationSize_,
             MPI_DOUBLE,
             MPI_COMM_WORLD);
 

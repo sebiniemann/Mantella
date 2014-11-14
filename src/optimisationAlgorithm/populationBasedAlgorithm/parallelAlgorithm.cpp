@@ -13,8 +13,9 @@
 
 namespace hop {
   ParallelAlgorithm::ParallelAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : PopulationBasedAlgorithm(optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const unsigned int& populationSize)
+    : PopulationBasedAlgorithm(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
