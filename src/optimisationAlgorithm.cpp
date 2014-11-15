@@ -8,6 +8,7 @@ namespace hop {
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : optimisationProblem_(optimisationProblem),
       bestObjectiveValue_(std::numeric_limits<double>::infinity()),
+      bestSoftConstraintValue_(std::numeric_limits<double>::infinity()),
       numberOfIterations_(0) {
     setMaximalNumberOfIterations(1000);
   }
@@ -15,6 +16,7 @@ namespace hop {
   void OptimisationAlgorithm::optimise() {
     // Reset results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
+    bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
     bestParameter_.reset();
     numberOfIterations_ = 0;
     optimisationProblem_->reset();
