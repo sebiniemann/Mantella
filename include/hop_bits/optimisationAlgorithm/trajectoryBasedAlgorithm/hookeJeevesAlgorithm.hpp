@@ -13,13 +13,21 @@ namespace hop {
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
 
       void setInitialStepSize(
-          const arma::Col<double>& stepSize);
+          const arma::Col<double>& initialStepSize);
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
-      arma::Col<double> stepSize_;
+      arma::Col<double> initialStepSize_;
 
+      arma::Col<double> stepSize_;
+      bool reduceStepSize_;
+
+      arma::Col<double> candidateParameter_;
+      double candidateSoftConstraintValue_;
+      double candidateObjectiveValue_;
+
+      arma::Col<double> getReducedStepSize();
       void optimiseImplementation() override;
   };
 }
