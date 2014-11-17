@@ -14,48 +14,49 @@ namespace hop {
   }
 
   void SimulatedAnnealing::optimiseImplementation() {
-    arma::Col<double> candidateSolution;
-    do {
-      candidateSolution = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
-    } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
-
     ++numberOfIterations_;
-    arma::Col<double> state = candidateSolution;
-    double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
 
-    bestParameter_ = candidateSolution;
-    bestObjectiveValue_ = objectiveValue;
+    bestParameter_ = initialParameter_;
+    bestSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(initialParameter_);
+    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(initialParameter_);
 
+    state_ = bestParameter_;
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
-      arma::Col<double> candidateSolution;
-      do {
-        candidateSolution = state + maximalStepSize_ % arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator);
-      } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
+      candidateParameter_ = state_ + maximalStepSize_ % getVelocity();
+      candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+      candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-      double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
+      if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+        state_ = candidateParameter_;
 
-      //TODO FIX THIS
-//      if (objectiveValue < bestObjectiveValue_ || ) {
-//        state = candidateSolution;
-//        bestObjectiveValue_ = objectiveValue;
-//      } else if (std::exp((objectiveValue - objectiveValue) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Random::Rng)) {
-//        state = candidateSolution;
-//      }
-
-//      if (objectiveValue < bestObjectiveValue_) {
-//        bestSolution_ = candidateSolution;
-//      }
+        bestParameter_ = candidateParameter_;
+        bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+        bestObjectiveValue_ = candidateObjectiveValue_;
+      } else if(isAcceptableState()) {
+        state_ = candidateParameter_;
+      }
     }
+  }
+
+  bool SimulatedAnnealing::isAcceptableState() {
+    return std::exp((bestObjectiveValue_ - candidateObjectiveValue_) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Rng::generator);
+  }
+
+  arma::Col<double> SimulatedAnnealing::getVelocity() {
+    return arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator);
   }
 
   void SimulatedAnnealing::setMaximalStepSize(
       const arma::Col<double>& maximalStepSize) {
+    if(maximalStepSize.n_rows != optimisationProblem_->getNumberOfDimensions()) {
+      throw std::logic_error("The dimension of the maximal step size (" + std::to_string(maximalStepSize.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
+    }
     maximalStepSize_ = maximalStepSize;
   }
 
-  std::string SimulatedAnnealing::to_string() const {
+  std::string SimulatedAnnealing::to_string() const noexcept {
     return "SimulatedAnnealing";
   }
 }
