@@ -12,9 +12,13 @@ namespace hop {
       PureRandomSearch(const PureRandomSearch&) = delete;
       PureRandomSearch& operator=(const PureRandomSearch&) = delete;
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
+      arma::Col<double> candidateParameter_;
+      double candidateSoftConstraintValue_;
+      double candidateObjectiveValue_;
+
       void optimiseImplementation() override;
   };
 }

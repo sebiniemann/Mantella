@@ -8,24 +8,26 @@ namespace hop {
   }
 
   void PureRandomSearch::optimiseImplementation() {
+    bestParameter_ = initialParameter_;
+    bestSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(initialParameter_);
+    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(initialParameter_);
+
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
-      arma::Col<double> candidateSolution;
-      do {
-        candidateSolution = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
-      } while(!optimisationProblem_->isSatisfyingConstraints(candidateSolution));
+      candidateParameter_ = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
+      candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+      candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-      double objectiveValue = optimisationProblem_->getObjectiveValue(candidateSolution) + optimisationProblem_->getSoftConstraintsValue(candidateSolution);
-
-      if (objectiveValue < bestObjectiveValue_) {
-        bestParameter_ = candidateSolution;
-        bestObjectiveValue_ = objectiveValue;
+      if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+        bestParameter_ = candidateParameter_;
+        bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+        bestObjectiveValue_ = candidateObjectiveValue_;
       }
     }
   }
 
-  std::string PureRandomSearch::to_string() const {
+  std::string PureRandomSearch::to_string() const noexcept {
     return "PureRandomSearch";
   }
 }
