@@ -29,7 +29,7 @@ namespace hop {
       return 10 * (std::pow(sum / static_cast<double>(numberOfDimensions_) - f0_, 3) + getPenality(parameter) / static_cast<double>(numberOfDimensions_));
     }
 
-    std::string WeierstrassFunction::to_string() const {
+    std::string WeierstrassFunction::to_string() const noexcept {
       return "WeierstrassFunction";
     }
   }

@@ -16,7 +16,7 @@ namespace hop {
         WeierstrassFunction(const WeierstrassFunction&) = delete;
         WeierstrassFunction& operator=(const WeierstrassFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         double f0_;

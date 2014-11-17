@@ -12,7 +12,7 @@ namespace hop {
       return 1000000 * z.at(0) + arma::accu(z.subvec(1, z.n_elem - 1));
     }
 
-    std::string DiscusFunction::to_string() const {
+    std::string DiscusFunction::to_string() const noexcept {
       return "DiscusFunction";
     }
   }

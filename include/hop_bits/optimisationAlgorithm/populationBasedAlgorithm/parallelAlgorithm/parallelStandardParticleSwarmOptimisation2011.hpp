@@ -28,7 +28,7 @@ namespace hop {
       void setCommunicationSteps(
           const unsigned int& communicationSteps);
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
       double neighbourhoodProbability_;

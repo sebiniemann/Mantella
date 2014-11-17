@@ -13,7 +13,7 @@ namespace hop {
       return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2);
     }
 
-    std::string RastriginFunctionRotated::to_string() const {
+    std::string RastriginFunctionRotated::to_string() const noexcept {
       return "RastriginFunctionRotated";
     }
   }

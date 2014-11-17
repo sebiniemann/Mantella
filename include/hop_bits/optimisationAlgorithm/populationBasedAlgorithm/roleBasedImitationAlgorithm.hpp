@@ -19,7 +19,7 @@ namespace hop {
       void setMaximalNeighourhoodConvergence(
           const arma::Col<double>& maximalNeighourhoodConvergence);
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> stepSize_;

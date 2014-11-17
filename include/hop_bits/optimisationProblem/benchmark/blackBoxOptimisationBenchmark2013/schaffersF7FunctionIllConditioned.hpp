@@ -15,7 +15,7 @@ namespace hop {
         SchaffersF7FunctionIllConditioned(const SchaffersF7FunctionIllConditioned&) = delete;
         SchaffersF7FunctionIllConditioned& operator=(const SchaffersF7FunctionIllConditioned&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(1000.0));

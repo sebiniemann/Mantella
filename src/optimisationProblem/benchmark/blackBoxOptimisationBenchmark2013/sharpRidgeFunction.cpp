@@ -12,7 +12,7 @@ namespace hop {
       return std::pow(z.at(0), 2) + 100 * arma::norm(z.subvec(1, z.n_elem - 1));
     }
 
-    std::string SharpRidgeFunction::to_string() const {
+    std::string SharpRidgeFunction::to_string() const noexcept {
       return "SharpRidgeFunction";
     }
   }

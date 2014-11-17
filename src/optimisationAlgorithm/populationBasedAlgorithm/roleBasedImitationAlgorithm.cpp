@@ -37,8 +37,7 @@ namespace hop {
         break;
       }
     }
-    
-    // TODO replace all nn or nnn with k,l,m, ..
+
     while (!isFinished() && !isTerminated()) {
       arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
@@ -122,7 +121,7 @@ namespace hop {
     maximalNeighourhoodConvergence_ = maximalNeighourhoodConvergence;
   }
 
-  std::string RoleBasedImitationAlgorithm::to_string() const {
+  std::string RoleBasedImitationAlgorithm::to_string() const noexcept {
     return "RoleBasedImitationAlgorithm";
   }
 }

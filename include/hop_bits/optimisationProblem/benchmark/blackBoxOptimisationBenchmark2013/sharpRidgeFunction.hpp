@@ -15,7 +15,7 @@ namespace hop {
         SharpRidgeFunction(const SharpRidgeFunction&) = delete;
         SharpRidgeFunction& operator=(const SharpRidgeFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));

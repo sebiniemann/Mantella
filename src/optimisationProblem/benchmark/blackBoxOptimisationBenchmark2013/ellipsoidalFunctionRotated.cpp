@@ -11,7 +11,7 @@ namespace hop {
       return arma::dot(scaling_, arma::square(getOscillationTransformation(rotationR_ * (parameter - translation_))));
     }
 
-    std::string EllipsoidalFunctionRotated::to_string() const {
+    std::string EllipsoidalFunctionRotated::to_string() const noexcept {
       return "EllipsoidalFunctionRotated";
     }
   }

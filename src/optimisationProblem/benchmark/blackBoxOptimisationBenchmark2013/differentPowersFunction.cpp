@@ -12,7 +12,7 @@ namespace hop {
       return arma::norm(z % getScaling(arma::square(z)));
     }
 
-    std::string DifferentPowersFunction::to_string() const {
+    std::string DifferentPowersFunction::to_string() const noexcept {
       return "DifferentPowersFunction";
     }
   }

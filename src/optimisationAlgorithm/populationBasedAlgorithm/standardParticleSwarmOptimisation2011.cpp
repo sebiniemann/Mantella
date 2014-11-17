@@ -152,7 +152,7 @@ namespace hop {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 
-  std::string StandardParticleSwarmOptimisation2011::to_string() const {
+  std::string StandardParticleSwarmOptimisation2011::to_string() const noexcept {
     return "StandardParticleSwarmOptimisation2011";
   }
 }

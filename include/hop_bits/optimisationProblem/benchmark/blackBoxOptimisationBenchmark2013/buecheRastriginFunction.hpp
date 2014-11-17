@@ -16,7 +16,7 @@ namespace hop {
         BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
         BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
         void setTranslation(
             const arma::Col<double>& translation) override;

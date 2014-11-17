@@ -24,21 +24,21 @@ namespace hop {
       void setMaximalSwarmConvergence(
           const double& swarmConvergence);
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
-      arma::Mat<double> particles_;
-      arma::Mat<double> velocities_;
-
-      arma::Mat<double> localBestSolutions_;
-      arma::Row<double> localBestObjectiveValues_;
-
       double neighbourhoodProbability_;
       double acceleration_;
       double localAttraction_;
       double globalAttraction_;
 
       double maximalSwarmConvergence_;
+
+      arma::Mat<double> particles_;
+      arma::Mat<double> velocities_;
+
+      arma::Mat<double> localBestSolutions_;
+      arma::Row<double> localBestObjectiveValues_;
 
       bool randomizeTopology_;
 

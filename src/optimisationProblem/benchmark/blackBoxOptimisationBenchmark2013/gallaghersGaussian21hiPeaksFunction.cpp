@@ -32,7 +32,7 @@ namespace hop {
       return std::pow(getOscillationTransformation(10.0 - maximalValue), 2) + getPenality(parameter);
     }
 
-    std::string GallaghersGaussian21hiPeaksFunction::to_string() const {
+    std::string GallaghersGaussian21hiPeaksFunction::to_string() const noexcept {
       return "GallaghersGaussian21hiPeaksFunction";
     }
   }

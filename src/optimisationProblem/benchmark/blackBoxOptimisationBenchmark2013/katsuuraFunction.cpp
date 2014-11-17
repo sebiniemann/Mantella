@@ -26,7 +26,7 @@ namespace hop {
       return 10.0 / std::pow(numberOfDimensions_, 2) * (product - 1.0) + getPenality(parameter);
     }
 
-    std::string KatsuuraFunction::to_string() const {
+    std::string KatsuuraFunction::to_string() const noexcept {
       return "KatsuuraFunction";
     }
   }

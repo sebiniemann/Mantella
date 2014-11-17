@@ -20,7 +20,7 @@ namespace hop {
       return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getPenality(z / 100.0);
     }
 
-    std::string SchwefelFunction::to_string() const {
+    std::string SchwefelFunction::to_string() const noexcept {
       return "SchwefelFunction";
     }
   }

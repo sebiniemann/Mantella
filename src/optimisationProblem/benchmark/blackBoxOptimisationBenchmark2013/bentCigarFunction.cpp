@@ -12,7 +12,7 @@ namespace hop {
       return z.at(0) + 1000000.0 * arma::accu(z.subvec(1, z.n_elem - 1));
     }
 
-    std::string BentCigarFunction::to_string() const {
+    std::string BentCigarFunction::to_string() const noexcept {
       return "BentCigarFunction";
     }
   }

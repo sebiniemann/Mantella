@@ -12,7 +12,7 @@ namespace hop {
         SphereFunction(const SphereFunction&) = delete;
         SphereFunction& operator=(const SphereFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         double getObjectiveValueImplementation(

@@ -14,7 +14,7 @@ namespace hop {
       return std::pow(arma::norm(parameter - translation_), 2);
     }
 
-    std::string SphereFunction::to_string() const {
+    std::string SphereFunction::to_string() const noexcept {
       return "SphereFunction";
     }
   }

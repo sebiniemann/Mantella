@@ -14,7 +14,7 @@ namespace hop {
       return 10 * arma::mean(s / 4000.0 - arma::cos(s)) + 10;
     }
 
-    std::string CompositeGriewankRosenbrockFunctionF8F2::to_string() const {
+    std::string CompositeGriewankRosenbrockFunctionF8F2::to_string() const noexcept {
       return "CompositeGriewankRosenbrockFunctionF8F2";
     }
   }

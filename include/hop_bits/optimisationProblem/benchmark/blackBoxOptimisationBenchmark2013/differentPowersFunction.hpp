@@ -12,7 +12,7 @@ namespace hop {
         DifferentPowersFunction(const DifferentPowersFunction&) = delete;
         DifferentPowersFunction& operator=(const DifferentPowersFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         double getObjectiveValueImplementation(

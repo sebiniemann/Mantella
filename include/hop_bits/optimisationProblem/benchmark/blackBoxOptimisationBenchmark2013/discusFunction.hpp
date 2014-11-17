@@ -12,7 +12,7 @@ namespace hop {
         DiscusFunction(const DiscusFunction&) = delete;
         DiscusFunction& operator=(const DiscusFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         double getObjectiveValueImplementation(

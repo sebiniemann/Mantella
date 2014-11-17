@@ -210,7 +210,7 @@ namespace hop {
     communicationSteps_ = communicationSteps;
   }
 
-  std::string ParallelStandardParticleSwarmOptimisation2011::to_string() const {
+  std::string ParallelStandardParticleSwarmOptimisation2011::to_string() const noexcept {
     return "ParallelStandardParticleSwarmOptimisation2011";
   }
 }

@@ -15,7 +15,7 @@ namespace hop {
         LunacekBiRastriginFunction(const LunacekBiRastriginFunction&) = delete;
         LunacekBiRastriginFunction& operator=(const LunacekBiRastriginFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(100.0));

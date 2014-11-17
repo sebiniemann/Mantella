@@ -12,7 +12,7 @@ namespace hop {
         EllipsoidalFunction(const EllipsoidalFunction&) = delete;
         EllipsoidalFunction& operator=(const EllipsoidalFunction&) = delete;
 
-        std::string to_string() const override;
+        std::string to_string() const noexcept override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(1000000.0);
