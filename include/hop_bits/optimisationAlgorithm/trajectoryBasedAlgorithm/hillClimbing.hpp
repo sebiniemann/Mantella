@@ -15,11 +15,16 @@ namespace hop {
       void setMaximalStepSize(
           const arma::Col<double>& maximalStepSize);
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> maximalStepSize_;
 
+      arma::Col<double> candidateParameter_;
+      double candidateSoftConstraintValue_;
+      double candidateObjectiveValue_;
+
+      arma::Col<double> getVelocity();
       void optimiseImplementation() override;
   };
 }
