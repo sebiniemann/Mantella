@@ -16,7 +16,7 @@ namespace hop {
   void PopulationBasedAlgorithm::setInitialPopulation(
       const arma::Mat<double>& initialPopulation) {
     if(initialPopulation.n_rows != optimisationProblem_->getNumberOfDimensions()) {
-      // TODO Add exception
+      throw std::logic_error("The dimension of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the dimension of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
     }
 
     initialPopulation_ = initialPopulation;
