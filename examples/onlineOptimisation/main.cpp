@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
   hop::MaximumLikelihoodEstimation propertiesEstimation(
         std::shared_ptr<hop::LinearModelAnalysis>(new hop::LinearOrdinaryLeastSquares()),
         std::shared_ptr<hop::QuadraticModelAnalysis>(new hop::QuadraticOrdinaryLeastSquares()),
-        std::shared_ptr<hop::LipschitzContinuityAnalysis>(new hop::CompleteLipschitzAnalysis()));
+        std::shared_ptr<hop::LipschitzContinuityAnalysis>(new hop::DirectLipschitzContinuityAnalysis()));
 
   std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::LinearSlope(2));
 

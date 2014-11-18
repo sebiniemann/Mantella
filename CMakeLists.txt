@@ -129,8 +129,18 @@ if(BUILD_LIBRARY)
     src/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.cpp
     src/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.cpp
     src/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/lipschitzContinuityAnalysis.cpp
-    src/propertiesAnalysis/lipschitzContinuityAnalysis/completeLipschitzAnalysis.cpp
+    src/propertiesAnalysis/modalityAnalysis.cpp
+    src/propertiesAnalysis/modalityAnalysis/directModalityAnalysis.cpp
+    src/propertiesAnalysis/roughnessAnalysis.cpp
+    src/propertiesAnalysis/roughnessAnalysis/directRoughnessAnalysis.cpp
+    src/propertiesAnalysis/continuityAnalysis.cpp
+    src/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.cpp
+    src/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
+    src/propertiesAnalysis/separabilityAnalysis.cpp
+    src/propertiesAnalysis/separabilityAnalysis/directSeparabilityAnalysis.cpp
+    src/propertiesAnalysis/proportionalityAnalysis.cpp
+    src/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.cpp
+    src/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.cpp
     src/propertiesEstimation.cpp
     src/propertiesEstimation/maximumLikelihoodEstimation.cpp
     src/helper/cache.cpp
@@ -337,8 +347,18 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp
   include/hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp
   include/hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp
-  include/hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis/completeLipschitzAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/modalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/modalityAnalysis/directModalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/roughnessAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/roughnessAnalysis/directRoughnessAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/continuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/separabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/separabilityAnalysis/directSeparabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/proportionalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
   include/hop_bits/propertiesEstimation.hpp
   include/hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
   include/hop_bits/helper/cache.hpp

@@ -11,8 +11,7 @@ namespace hop {
       numberOfPropertySets_(0),
       isLinear_(false),
       isQuadratic_(false),
-      isLipschitzContinuous_(false),
-      isAlphaHoelderContinuous_(false) {
+      isLipschitzContinuous_(false) {
 
   }
 
@@ -53,15 +52,5 @@ namespace hop {
   double PropertiesEstimation::getLipschitzConstant(
       const std::size_t& propertiesSetIndex) const {
     return lipschitzConstants_.at(propertiesSetIndex);
-  }
-
-  bool PropertiesEstimation::isAlphaHoelderContinuous(
-      const std::size_t& propertiesSetIndex) const {
-    return isAlphaHoelderContinuous_.at(propertiesSetIndex);
-  }
-
-  double PropertiesEstimation::getAlphaHoelderConstant(
-      const std::size_t& propertiesSetIndex) const {
-    return alphaHoelderConstants_.at(propertiesSetIndex);
   }
 }

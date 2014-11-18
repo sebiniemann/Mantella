@@ -11,7 +11,7 @@
 #include <hop_bits/optimisationProblem.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
-#include <hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
 
 namespace hop {
   class PropertiesEstimation {
@@ -45,11 +45,6 @@ namespace hop {
       double getLipschitzConstant(
           const std::size_t& propertiesSetIndex) const;
 
-      bool isAlphaHoelderContinuous(
-          const std::size_t& propertiesSetIndex) const;
-      double getAlphaHoelderConstant(
-          const std::size_t& propertiesSetIndex) const;
-
       double getPlausibility(
           const std::size_t& propertiesSetIndex) const;
 
@@ -68,9 +63,6 @@ namespace hop {
 
       std::vector<bool> isLipschitzContinuous_;
       std::vector<double> lipschitzConstants_;
-
-      std::vector<bool> isAlphaHoelderContinuous_;
-      std::vector<double> alphaHoelderConstants_;
 
       virtual void estimateImplementation(
           const std::shared_ptr<OptimisationProblem> optimisationProblem) = 0;

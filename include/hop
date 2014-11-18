@@ -48,8 +48,9 @@
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp>
-#include <hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis.hpp>
-#include <hop_bits/propertiesAnalysis/lipschitzContinuityAnalysis/completeLipschitzAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/continuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp>
 #include <hop_bits/propertiesEstimation.hpp>
 #include <hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 #include <hop_bits/helper/cache.hpp>
