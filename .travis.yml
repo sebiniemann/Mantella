@@ -41,7 +41,15 @@ install:
   - sudo apt-get install -qq libmpich2-dev
   
   # OpenBLAS
-  - sudo apt-get install -qq libopenblas-dev
+  # Needed until Travis CI updates to Ubuntu 14.04+
+  - wget -O openblas.tar.gz https://github.com/xianyi/OpenBLAS/archive/v0.2.12.tar.gz
+  - mkdir openblas
+  - tar -xzf openblas.tar.gz -C ./openblas --strip-components=1
+  - cd openblas
+  - make
+  - cd ..
+  - rm -Rf openblas
+#  - sudo apt-get install -qq libopenblas-dev
   
   # Armadillo C++
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.450.4.tar.gz
