@@ -79,7 +79,6 @@ addons:
   coverity_scan:
     project:
       name: "SebastianNiemann/OnlineOptimisation"
-      description: "Build submitted via Travis CI"
     notification_email: niemann@sra.uni-hannover.de
     build_command_prepend: "cov-configure --compiler gcc-4.8; cmake ."
     build_command: "make"
