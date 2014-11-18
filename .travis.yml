@@ -48,7 +48,7 @@ install:
   - tar -xzf openblas.tar.gz -C ./openblas --strip-components=1
   - cd openblas
   - make -s
-  - sudo make PREFIX=/usr/lib install
+  - sudo make PREFIX=/usr install
   - cd ..
   - rm -Rf openblas
 #  - sudo apt-get install -qq libopenblas-dev
