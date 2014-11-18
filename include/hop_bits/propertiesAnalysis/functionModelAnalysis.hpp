@@ -6,7 +6,7 @@
 namespace hop {
   class FunctionModelAnalysis : public PropertiesAnalysis {
     public:
-      arma::Col<double> getResiduals() const;
+      arma::Col<double> getResiduals() const noexcept;
 
     protected:
       arma::Col<double> residuals_;

@@ -6,7 +6,7 @@
 namespace hop {
   class QuadraticModelAnalysis : public FunctionModelAnalysis {
     public:
-      arma::Col<double> getQuadraticModelEstimator() const;
+      arma::Col<double> getQuadraticModelEstimator() const noexcept;
 
     protected:
       arma::Col<double> quadraticModelEstimator_;
