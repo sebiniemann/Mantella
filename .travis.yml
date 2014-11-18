@@ -40,20 +40,9 @@ install:
   # MPI (will actually install 3.x on Ubuntu 14.04+ and 2.x before)
   - sudo apt-get install -qq libmpich2-dev
   
-  # OpenBLAS
-  # Needed until Travis CI updates to Ubuntu 14.04+
-  - sudo apt-get install gfortran
-  - wget -O openblas.tar.gz https://github.com/xianyi/OpenBLAS/archive/v0.2.12.tar.gz
-  - mkdir openblas
-  - tar -xzf openblas.tar.gz -C ./openblas --strip-components=1
-  - cd openblas
-  - make -s
-  - sudo make PREFIX=/usr install
-  - cd ..
-  - rm -Rf openblas
-#  - sudo apt-get install -qq libopenblas-dev
-  
   # Armadillo C++
+  - sudo apt-get install -qq libopenblas-dev
+  - sudo apt-get install -qq liblapack-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.450.4.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
