@@ -6,7 +6,10 @@
 namespace hop {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : TrajectoryBasedAlgorithm(optimisationProblem) {
+    : TrajectoryBasedAlgorithm(optimisationProblem),
+      reduceStepSize_(false),
+      candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
+      candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
     setInitialStepSize(optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds());
   }
 

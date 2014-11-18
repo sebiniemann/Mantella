@@ -9,7 +9,9 @@
 namespace hop {
   SimulatedAnnealing::SimulatedAnnealing(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : TrajectoryBasedAlgorithm(optimisationProblem) {
+    : TrajectoryBasedAlgorithm(optimisationProblem),
+      candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
+      candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
 
