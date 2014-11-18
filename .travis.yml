@@ -80,11 +80,11 @@ addons:
     project:
       name: "SebastianNiemann/OnlineOptimisation"
     notification_email: niemann@sra.uni-hannover.de
-    build_command_prepend: "cov-configure --compiler gcc-4.8; cmake ."
+    build_command_prepend: "cov-configure --compiler gcc-4.8; cmake -DBUILD_ALL=on ."
     build_command: "make"
     branch_pattern: coverity_scan
 
 script: 
-  - cmake .
+  - cmake -DBUILD_ALL=on .
   - make
   - sudo make install
