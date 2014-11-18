@@ -42,6 +42,7 @@ install:
   
   # OpenBLAS
   # Needed until Travis CI updates to Ubuntu 14.04+
+  - sudo apt-get install gfortran
   - wget -O openblas.tar.gz https://github.com/xianyi/OpenBLAS/archive/v0.2.12.tar.gz
   - mkdir openblas
   - tar -xzf openblas.tar.gz -C ./openblas --strip-components=1
