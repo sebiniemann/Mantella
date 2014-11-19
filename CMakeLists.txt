@@ -119,7 +119,8 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/robotic/model/multiLevelStewartPlatform.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm.cpp
-    src/optimisationAlgorithm/samplingBasedAlgorithm/pureRandomSearch.cpp
+    src/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.cpp
+    src/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.cpp
     src/optimisationAlgorithm/trajectoryBasedAlgorithm.cpp
     src/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.cpp
     src/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.cpp
@@ -336,7 +337,8 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
-  include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/pureRandomSearch.hpp
+  include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
+  include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp
