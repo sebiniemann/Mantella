@@ -107,7 +107,7 @@ namespace hop {
     auto cachePosition = cachedSoftConstraintsValues_.find(parameter);
     if (cachePosition == cachedSoftConstraintsValues_.end()) {
       // The result was not found, compute it.
-      double result = getSoftConstraintsValueImplementation(getScaledCongruentParameter(parameter));
+      double result = getSoftConstraintsValueImplementation(parameter);
 
       if(result < 0) {
         throw std::runtime_error("The soft constraint value (" + std::to_string(result) + ") must be greater or equal 0.");
