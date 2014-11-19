@@ -32,40 +32,44 @@ namespace hop {
 
       candidateParameter_ = bestParameter_;
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
-        ++numberOfIterations_;
-
         candidateParameter_.at(n) += stepSize_.at(n);
-        candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
-        candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-        if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
-          reduceStepSize_ = false;
+        if(optimisationProblem_->getLowerBounds().at(n) <= candidateParameter_.at(n) && candidateParameter_.at(n) <= optimisationProblem_->getUpperBounds().at(n)) {
+          ++numberOfIterations_;
+          candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+          candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-          bestParameter_ = candidateParameter_;
-          bestSoftConstraintValue_ = candidateSoftConstraintValue_;
-          bestObjectiveValue_ = candidateObjectiveValue_;
+          if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+            reduceStepSize_ = false;
+
+            bestParameter_ = candidateParameter_;
+            bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+            bestObjectiveValue_ = candidateObjectiveValue_;
+          }
+
+          if (isFinished() || isTerminated()) {
+            break;
+          }
         }
-
-        if (isFinished() || isTerminated()) {
-          break;
-        }
-
-        ++numberOfIterations_;
 
         candidateParameter_.at(n) -= 2 * stepSize_.at(n);
-        candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
-        candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-        if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
-          reduceStepSize_ = false;
+        if(optimisationProblem_->getLowerBounds().at(n) <= candidateParameter_.at(n) && candidateParameter_.at(n) <= optimisationProblem_->getUpperBounds().at(n)) {
+          ++numberOfIterations_;
+          candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+          candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-          bestParameter_ = candidateParameter_;
-          bestSoftConstraintValue_ = candidateSoftConstraintValue_;
-          bestObjectiveValue_ = candidateObjectiveValue_;
-        }
+          if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+            reduceStepSize_ = false;
 
-        if (isFinished() || isTerminated()) {
-          break;
+            bestParameter_ = candidateParameter_;
+            bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+            bestObjectiveValue_ = candidateObjectiveValue_;
+          }
+
+          if (isFinished() || isTerminated()) {
+            break;
+          }
         }
 
         candidateParameter_.at(n) += stepSize_.at(n);
