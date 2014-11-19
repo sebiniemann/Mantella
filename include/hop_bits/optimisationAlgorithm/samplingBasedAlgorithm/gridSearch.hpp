@@ -15,9 +15,14 @@ namespace hop {
       GridSearch(const GridSearch&) = delete;
       GridSearch& operator=(const GridSearch&) = delete;
 
+      void setSamplingFactors(
+          const arma::Col<double>& samplingFactors);
+
       std::string to_string() const noexcept override;
 
     protected:
+      arma::Col<double> samplingFactors_;
+
       arma::Col<arma::uword> numberOfSamples_;
       std::vector<arma::Col<double>> sampleParameters_;
       arma::Col<arma::uword> sampleIndicies_;

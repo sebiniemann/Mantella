@@ -15,6 +15,19 @@ int main(int argc, char* argv[]) {
 
     std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::LinearSlope(2));
 
+    hop::GridSearch gridSearch(optimisationProblem);
+    gridSearch.optimise();
+
+    std::cout << "isFinished: " << gridSearch.isFinished() << std::endl;
+    std::cout << "isTerminated: " << gridSearch.isTerminated() << std::endl;
+    std::cout << "numberOfIterations: " << gridSearch.getNumberOfIterations() << std::endl;
+    std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
+    std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
+    std::cout << "bestSoftConstraintValue: " << gridSearch.getBestSoftConstraintValue() << std::endl;
+    std::cout << "bestObjectiveValueDelta: " << gridSearch.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
+    std::cout << "bestParameter: " << gridSearch.getBestParameter() << std::endl;
+
+
     hop::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
 

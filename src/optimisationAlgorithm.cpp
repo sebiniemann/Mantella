@@ -46,7 +46,7 @@ namespace hop {
   }
 
   bool OptimisationAlgorithm::isFinished() const noexcept {
-    return (bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
+    return (bestSoftConstraintValue_ == 0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
   bool OptimisationAlgorithm::isTerminated() const noexcept {
