@@ -24,7 +24,8 @@ Future plans
   - ~~Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)~~ **(done)**
   - Adding the Role-based imitation algorithm, developed by Emre Çakar
   - ~~Set installation of parallised implementations to be optional~~ **(done)**
-  - ~~Adding grid search algorithm for parameter optimisation~~ **(done)**
+  - ~~Adding a grid search algorithm~~ **(done)**
+  - Adding a multi resolution grid search algorithm
 - **Planned for 1.1.0**
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
   - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
