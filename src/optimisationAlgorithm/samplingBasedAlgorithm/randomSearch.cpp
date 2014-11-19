@@ -1,7 +1,7 @@
-#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/pureRandomSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp>
 
 namespace hop {
-  PureRandomSearch::PureRandomSearch(
+  RandomSearch::RandomSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : SamplingBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
@@ -9,7 +9,7 @@ namespace hop {
 
   }
 
-  void PureRandomSearch::optimiseImplementation() {
+  void RandomSearch::optimiseImplementation() {
     bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
 
@@ -28,7 +28,7 @@ namespace hop {
     }
   }
 
-  std::string PureRandomSearch::to_string() const noexcept {
+  std::string RandomSearch::to_string() const noexcept {
     return "PureRandomSearch";
   }
 }

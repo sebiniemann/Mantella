@@ -4,13 +4,13 @@
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 
 namespace hop {
-  class PureRandomSearch : public SamplingBasedAlgorithm {
+  class RandomSearch : public SamplingBasedAlgorithm {
     public:
-      PureRandomSearch(
+      RandomSearch(
           const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      PureRandomSearch(const PureRandomSearch&) = delete;
-      PureRandomSearch& operator=(const PureRandomSearch&) = delete;
+      RandomSearch(const RandomSearch&) = delete;
+      RandomSearch& operator=(const RandomSearch&) = delete;
 
       std::string to_string() const noexcept override;
 
