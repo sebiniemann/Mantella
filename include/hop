@@ -35,6 +35,7 @@
 #include <hop_bits/optimisationAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp>
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp>
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>

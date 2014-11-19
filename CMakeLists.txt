@@ -120,6 +120,7 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.cpp
+    src/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.cpp
     src/optimisationAlgorithm/trajectoryBasedAlgorithm.cpp
     src/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.cpp
@@ -338,6 +339,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
+  include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp
