@@ -1,18 +1,17 @@
-#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/pureRandomSearch.hpp>
+#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/pureRandomSearch.hpp>
 
 namespace hop {
   PureRandomSearch::PureRandomSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : TrajectoryBasedAlgorithm(optimisationProblem),
+    : SamplingBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
       candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
 
   }
 
   void PureRandomSearch::optimiseImplementation() {
-    bestParameter_ = initialParameter_;
-    bestSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(initialParameter_);
-    bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(initialParameter_);
+    bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
+    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
 
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
