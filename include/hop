@@ -31,11 +31,13 @@
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp>
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp>
 #include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp>
+#include <hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp>
 #include <hop_bits/optimisationAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
+#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/pureRandomSearch.hpp>
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/pureRandomSearch.hpp>
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp>
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
@@ -48,9 +50,18 @@
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp>
+#include <hop_bits/propertiesAnalysis/modalityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/modalityAnalysis/directModalityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/roughnessAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/roughnessAnalysis/directRoughnessAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/continuityAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/separabilityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/separabilityAnalysis/directSeparabilityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/proportionalityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp>
 #include <hop_bits/propertiesEstimation.hpp>
 #include <hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 #include <hop_bits/helper/cache.hpp>
@@ -62,3 +73,4 @@
 #include <hop_bits/helper/regression.hpp>
 #include <hop_bits/helper/rng.hpp>
 #include <hop_bits/helper/string.hpp>
+
