@@ -13,7 +13,7 @@ namespace hop {
     bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
 
-    while(!isFinished() && !isTerminated()) {
+    do {
       ++numberOfIterations_;
 
       candidateParameter_ = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
@@ -25,7 +25,7 @@ namespace hop {
         bestSoftConstraintValue_ = candidateSoftConstraintValue_;
         bestObjectiveValue_ = candidateObjectiveValue_;
       }
-    }
+    } while(!isFinished() && !isTerminated());
   }
 
   std::string RandomSearch::to_string() const noexcept {
