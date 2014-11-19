@@ -29,6 +29,7 @@ Future plans
   - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
   - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
   - Adding the Nelder–Mead method, developed by John Nelder and Roger Mead
+  - Adding parallel (MPI-based) sample-based algorithms
 - **Planned for 1.2.0**
   - Adding a seperate website (besides this readme on Github), including a user documentation and a *getting started*
 - **Backlog**
