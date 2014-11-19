@@ -21,10 +21,10 @@ namespace hop {
 
     double LinearSlope::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
-      arma::Col<double> z(parameter);
+      arma::Col<double> z = parameter;
 
-      arma::Col<arma::uword> outOfBound = arma::find(xOpt_ % z > 25.0);
-      z.elem(outOfBound) %= xOpt_.elem(outOfBound);
+      arma::Col<arma::uword> outOfBound = arma::find(xOpt_ % z >= 25.0);
+      z.elem(outOfBound) = xOpt_.elem(outOfBound);
 
       return partiallyObjectiveValue_ - arma::dot(scaling_, z);
     }
