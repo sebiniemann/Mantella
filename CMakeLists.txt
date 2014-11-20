@@ -234,6 +234,7 @@ if(BUILD_LIBRARY)
         test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSphereFunction.cpp
         test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testStepEllipsoidalFunction.cpp
         test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testWeierstrassFunction.cpp
+	test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
         test/helper/testGeometry.cpp
         test/helper/testRandom.cpp
         test/helper/testString.cpp
