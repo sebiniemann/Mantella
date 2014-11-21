@@ -6,6 +6,11 @@
 namespace hop {
   class LipschitzContinuityAnalysis : public ContinuityAnalysis {
     public:
+      LipschitzContinuityAnalysis();
+
+      LipschitzContinuityAnalysis(const LipschitzContinuityAnalysis&) = delete;
+      LipschitzContinuityAnalysis& operator=(const LipschitzContinuityAnalysis&) = delete;
+
       double getLipschitzConstant() const noexcept;
 
     protected:
