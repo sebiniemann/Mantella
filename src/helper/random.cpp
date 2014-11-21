@@ -11,11 +11,11 @@ namespace hop {
   arma::Mat<double> getRandomRotationMatrix(
       unsigned int numberOfDimensions) {
     arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
-    for (std::size_t j = 0; j < rotationMatrix.n_cols; ++j) {
-      for (unsigned int jj = 0; jj < j; ++jj) {
-        rotationMatrix.col(j) = rotationMatrix.col(j) - arma::dot(rotationMatrix.col(j), rotationMatrix.col(jj)) * rotationMatrix.col(jj);
+    for (std::size_t n = 0; n < rotationMatrix.n_cols; ++n) {
+      for (unsigned int k = 0; k < n; ++k) {
+        rotationMatrix.col(n) = rotationMatrix.col(n) - arma::dot(rotationMatrix.col(n), rotationMatrix.col(k)) * rotationMatrix.col(k);
       }
-      rotationMatrix.col(j) = rotationMatrix.col(j) / arma::norm(rotationMatrix.col(j));
+      rotationMatrix.col(n) = arma::normalise(rotationMatrix.col(n));
     }
 
     return rotationMatrix;

@@ -75,8 +75,8 @@ namespace hop {
       deltaC101.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
       std::uniform_int_distribution<int> uniformIntDistribution(0, 99);
-      for (std::size_t j = 1; j < deltaC101.n_cols; ++j) {
-        deltaC101.col(j) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 99.0), 0.25);
+      for (std::size_t n = 1; n < deltaC101.n_cols; ++n) {
+        deltaC101.col(n) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 99.0), 0.25);
       }
 
       return deltaC101;
@@ -87,8 +87,8 @@ namespace hop {
       deltaC21.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
       std::uniform_int_distribution<int> uniformIntDistribution(0, 19);
-      for (std::size_t j = 1; j < deltaC21.n_cols; ++j) {
-        deltaC21.col(j) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 19.0), 0.25);
+      for (std::size_t n = 1; n < deltaC21.n_cols; ++n) {
+        deltaC21.col(n) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 19.0), 0.25);
       }
 
       return deltaC21;
