@@ -76,7 +76,7 @@ if(BUILD_LIBRARY)
   # Locate third party libraries and headers
   find_package(Armadillo REQUIRED) # Armadillo C++
   find_package(Cereal REQUIRED) # Cereal (header only)
-  find_package(MPI) # MPI
+  #find_package(MPI) # MPI
 
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
@@ -114,6 +114,9 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/robotic/model.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_3pups.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_4prus.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.cpp
     src/optimisationProblem/robotic/model/multiLevelStewartPlatform.cpp
@@ -333,6 +336,9 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/robotic/model.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3pups.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_4prus.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp
   include/hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
