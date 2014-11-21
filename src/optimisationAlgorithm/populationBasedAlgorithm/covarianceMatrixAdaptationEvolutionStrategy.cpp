@@ -1,7 +1,7 @@
-#include <hop_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
+#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
 namespace hop {
-  CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem) : OptimisationAlgorithm(optimisationProblem) {
+  CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize) : PopulationBasedAlgorithm(optimisationProblem, populationSize) {
     // init input parameters
     // TODO: iteration number gets multiplied with dimensions² on wiki, also do that here?
   }
