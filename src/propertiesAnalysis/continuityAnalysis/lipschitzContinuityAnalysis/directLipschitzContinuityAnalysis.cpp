@@ -11,11 +11,11 @@ namespace hop {
 
     std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
-    for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend(); ++n) {
+    for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       arma::Col<double> parameter = n->first;
       double objectiveValue = n->second;
-      for (auto k = parameterToObjectiveValueMappings.cbegin(); k != parameterToObjectiveValueMappings.cend(); ++k) {
-        lipschitzConstant_ = std::max(lipschitzConstant_, std::abs((k->second - objectiveValue) / arma::norm(k->first - parameter)));
+      for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
+        lipschitzConstant_ = std::max(lipschitzConstant_, std::abs(k->second - objectiveValue) / arma::norm(k->first - parameter));
       }
     }
   }
