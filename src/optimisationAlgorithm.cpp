@@ -1,43 +1,55 @@
 #include <hop_bits/optimisationAlgorithm.hpp>
 
+// C++ Standard Library
 #include <limits>
 
 namespace hop {
-  OptimisationAlgorithm::OptimisationAlgorithm(const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : optimisationProblem_(optimisationProblem) {
+  OptimisationAlgorithm::OptimisationAlgorithm(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+    : optimisationProblem_(optimisationProblem),
+      bestObjectiveValue_(std::numeric_limits<double>::infinity()),
+      bestSoftConstraintValue_(std::numeric_limits<double>::infinity()),
+      numberOfIterations_(0) {
     setMaximalNumberOfIterations(1000);
   }
 
   void OptimisationAlgorithm::optimise() {
+    // Reset results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
-    bestSolution_ = arma::Col<double>({});
+    bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
+    bestParameter_.reset();
     numberOfIterations_ = 0;
     optimisationProblem_->reset();
 
     return optimiseImplementation();
   }
 
-  double OptimisationAlgorithm::getBestObjectiveValue() const {
-    return bestObjectiveValue_;
-  }
-
-  arma::Col<double> OptimisationAlgorithm::getBestSolution() const {
-    return bestSolution_;
-  }
-
-  bool OptimisationAlgorithm::isFinished() const {
-    return (bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
-  }
-
-  bool OptimisationAlgorithm::isTerminated() const {
-    return (numberOfIterations_ >= maximalNumberOfIterations_);
-  }
-
-  unsigned int OptimisationAlgorithm::getNumberOfIterations() const {
+  unsigned int OptimisationAlgorithm::getNumberOfIterations() const noexcept {
     return numberOfIterations_;
   }
 
-  void OptimisationAlgorithm::setMaximalNumberOfIterations(const unsigned int& maximalNumberOfIterations) {
+  void OptimisationAlgorithm::setMaximalNumberOfIterations(
+      const unsigned int& maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
+  }
+
+  arma::Col<double> OptimisationAlgorithm::getBestParameter() const noexcept {
+    return bestParameter_;
+  }
+
+  double OptimisationAlgorithm::getBestObjectiveValue() const noexcept {
+    return bestObjectiveValue_;
+  }
+
+  double OptimisationAlgorithm::getBestSoftConstraintValue() const noexcept {
+    return bestSoftConstraintValue_;
+  }
+
+  bool OptimisationAlgorithm::isFinished() const noexcept {
+    return (bestSoftConstraintValue_ == 0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
+  }
+
+  bool OptimisationAlgorithm::isTerminated() const noexcept {
+    return (numberOfIterations_ >= maximalNumberOfIterations_);
   }
 }

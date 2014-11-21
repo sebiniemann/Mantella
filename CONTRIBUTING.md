@@ -33,7 +33,7 @@ Note that a submitting a pull request providing the needed changes to introduced
 ---------------------------------------
 Commit messages must be organised as followed:
 ```
-[fix|feat|doc|test|devel]: <subject>
+[fix|doc|test|devel]: <subject>
 
 <body>
 
@@ -44,9 +44,8 @@ Commit messages must be organised as followed:
 The prefix is used to define the nature of the commit. Stick to one of the following tags:
 
 - **fix:** Adding fixes
-- **feat:** Adding a new feature
-- **doc:** Changes to the documentation
-- **test:** Adding new tests
+- **doc:** Changes to the documentation (add **[ci skip]** at the end of the first line of the commit message)
+- **test:** Adding tests
 - **devel:** Everything else
 
 ### Subject

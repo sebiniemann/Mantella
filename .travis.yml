@@ -26,36 +26,64 @@ install:
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
   
-  # MPI (actually 3.x on Ubuntu 14.04+ and 2.x before)
+  # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
+  - wget -O cmake.tar.gz http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz
+  - mkdir cmake
+  - tar -xzf cmake.tar.gz -C ./cmake --strip-components=1
+  - cd cmake
+  - ./bootstrap
+  - make -s
+  - sudo make install
+  - cd ..
+  - rm -Rf cmake
+  
+  # MPI (will actually install 3.x on Ubuntu 14.04+ and 2.x before)
   - sudo apt-get install -qq libmpich2-dev
   
-  # OpenBLAS
-  - sudo apt-get install -qq libopenblas-dev
-  
   # Armadillo C++
+  - sudo apt-get install -qq libopenblas-dev
+  - sudo apt-get install -qq liblapack-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.450.4.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
   - cmake .
-  - make
+  - make -s
   - sudo make install
   - cd ..
-  
+  - rm -Rf armadillo
+
+  # Cereal
+  - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.0.0.tar.gz
+  - mkdir cereal
+  - tar -xzf cereal.tar.gz -C ./cereal --strip-components=1
+  - sudo cp -R cereal/include/cereal /usr/local/include/
+  - rm -Rf cereal
+
+  # Catch
+  # Needed until Travis CI updates to Ubuntu 14.04+
+  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/develop.tar.gz
+  - mkdir catch
+  - tar -xzf catch.tar.gz -C ./catch --strip-components=1
+  - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
+  - rm -Rf catch
+#  - sudo apt-get install -qq catch  
+
   # Boost (filesystem)
   # Needed until Travis CI updates to Ubuntu 14.04+
   - sudo apt-get install -qq libboost-filesystem1.54-dev
 #  - sudo apt-get install -qq libboost-filesystem-dev
-
-script: 
-  - cmake .
-  - make
   
 addons:
   coverity_scan:
     project:
       name: "SebastianNiemann/OnlineOptimisation"
-      description: "Build submitted via Travis CI"
     notification_email: niemann@sra.uni-hannover.de
-    build_command:   "make"
+    build_command_prepend: "cov-configure --compiler gcc-4.8; cmake -DBUILD_ALL=on ."
+    build_command: "make"
     branch_pattern: coverity_scan
+
+script: 
+  - cmake -DBUILD_ALL=on .
+  - make
+  - sudo make install

@@ -1,0 +1,44 @@
+#pragma once
+
+// HOP
+#include <hop_bits/optimisationProblem/robotic/model.hpp>
+
+namespace hop {
+  namespace robotic {
+    class ParallelKinematicMachine_3PRRR : public Model {
+      public:
+        explicit ParallelKinematicMachine_3PRRR();
+        explicit ParallelKinematicMachine_3PRRR(
+            const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
+            const arma::Mat<double>::fixed<2, 3>& linkLengths,
+            const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
+            const arma::Mat<double>::fixed<2, 3>& redundantJointEnds);
+
+        // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
+        ParallelKinematicMachine_3PRRR(const ParallelKinematicMachine_3PRRR&) = delete;
+        ParallelKinematicMachine_3PRRR& operator=(const ParallelKinematicMachine_3PRRR&) = delete;
+
+        std::vector<arma::Mat<double>> getModelCharacterisation(
+            const arma::Col<double>& endEffectorPose,
+            const arma::Mat<double>& redundantJointActuations) const override;
+
+        arma::Mat<double> getActuation(
+            const arma::Col<double>& endEffectorPose,
+            const arma::Mat<double>& redundantJointActuations) const override;
+
+        double getPositionError(
+            const arma::Col<double>& endEffectorPose,
+            const arma::Mat<double>& redundantJointActuations) const override;
+
+        arma::Mat<double>::fixed<2, 3> endEffectorJointsRelative_;
+        arma::Mat<double>::fixed<2, 3> linkLengths_;
+
+        arma::Mat<double>::fixed<2, 3> redundantJointStarts_;
+        arma::Mat<double>::fixed<2, 3> redundantJointEnds_;
+        arma::Mat<double>::fixed<2, 3> redundantJointsStartToEnd_;
+        arma::Col<arma::uword> redundantJointIndicies_;
+        arma::Col<double> redundantJointAnglesSine_;
+        arma::Col<double> redundantJointAnglesCosine_;
+    };
+  }
+}

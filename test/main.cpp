@@ -1,20 +1,36 @@
+// Catch
 #define CATCH_CONFIG_RUNNER
-#include <catch/catch.hpp>
+#include <catch.hpp>
 
+// C++ Standard Library
 #include <string>
+#include <stdexcept>
+#include <iostream>
 
-std::string testDirectory;
+// Boost
+#include <boost/filesystem.hpp>
 
-#include <optimisationProblem/benchmark/testBlackBoxOptimisationBenchmark2013.hpp>
-#include <helper/testGeometry.hpp>
-#include <helper/testString.hpp>
+// HOP
+#include <hop>
+
+boost::filesystem::path testDirectory;
 
 int main(const int argc, const char* argv[]) {
-  if(argc < 2) {
-    // TODO Add exception
+  try {
+    if (argc != 2) {
+      throw std::invalid_argument("The number of arguments (" + std::to_string(argc) + ") provided must be exactly 2.");
+    }
+
+    testDirectory = boost::filesystem::path(argv[1]);
+
+    if (!boost::filesystem::exists(testDirectory)) {
+      throw std::invalid_argument("The speficied test data directory (" + testDirectory.string() + ") does not exists.");
+    }
+
+    hop::Rng::setSeed(1234567890);
+
+    return Catch::Session().run();
+  } catch(const std::exception& exception) {
+    std::cout << exception.what();
   }
-
-  testDirectory = argv[1];
-
-  return Catch::Session().run();
 }

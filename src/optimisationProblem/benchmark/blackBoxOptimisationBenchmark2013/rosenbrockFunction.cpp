@@ -1,30 +1,33 @@
 #include <hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rosenbrockFunction.hpp>
 
-#include <algorithm>
-#include <cmath>
-
+// Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
 namespace hop {
-  RosenbrockFunction::RosenbrockFunction(const unsigned int& numberOfDimensions)
-    : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
-    setTranslation(translation_);
-  }
+  namespace bbob2013 {
+    RosenbrockFunction::RosenbrockFunction(
+        const unsigned int& numberOfDimensions)
+      : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
+      setTranslation(translation_);
+    }
 
-  void RosenbrockFunction::setTranslation(const arma::Col<double>& translation) {
-    translation_ = 0.75 * translation;
-  }
+    void RosenbrockFunction::setTranslation(
+        const arma::Col<double>& translation) {
+      translation_ = 0.75 * translation;
+    }
 
-  double RosenbrockFunction::getObjectiveValueImplementation(const arma::Col<double>& parameter) const {
-    arma::Col<double> z = max_ * (parameter - translation_) + 1.0;
+    double RosenbrockFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const {
+      arma::Col<double> z = max_ * (parameter - translation_) + 1.0;
 
-    return 100.0 * arma::accu(arma::square(arma::square(z.subvec(0, z.n_elem - 2)) - z.subvec(1, z.n_elem - 1))) + arma::accu(arma::square(z.subvec(0, z.n_elem - 2) - 1.0));
-  }
+      return 100.0 * arma::accu(arma::square(arma::square(z.subvec(0, z.n_elem - 2)) - z.subvec(1, z.n_elem - 1))) + arma::accu(arma::square(z.subvec(0, z.n_elem - 2) - 1.0));
+    }
 
-  std::string RosenbrockFunction::to_string() const {
-    return "RosenbrockFunction";
+    std::string RosenbrockFunction::to_string() const noexcept {
+      return "RosenbrockFunction";
+    }
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::RosenbrockFunction)
+CEREAL_REGISTER_TYPE(hop::bbob2013::RosenbrockFunction)
