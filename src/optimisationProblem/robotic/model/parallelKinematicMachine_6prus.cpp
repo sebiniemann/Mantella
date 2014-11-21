@@ -153,8 +153,8 @@ namespace hop {
 
       arma::Mat<double>::fixed<6, 6> forwardKinematic;
       forwardKinematic.rows(0, 2) = baseToEndEffectorJoints;
-      for (std::size_t n = 0; n < 3; ++n) {
-        forwardKinematic.submat(3, 3 + n, 5, 3 + n) = arma::cross(endEffectorJointsRotated.col(n), baseToEndEffectorJoints.col(n));
+      for (std::size_t n = 0; n < baseToEndEffectorJoints.n_cols; ++n) {
+        forwardKinematic.submat(3, n, 5, n) = arma::cross(endEffectorJointsRotated.col(n), baseToEndEffectorJoints.col(n));
       }
 
       arma::Mat<double> inverseKinematic(6, 6 + redundantJointIndicies_.n_elem, arma::fill::zeros);
