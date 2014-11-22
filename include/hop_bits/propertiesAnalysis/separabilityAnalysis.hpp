@@ -8,6 +8,7 @@
 
 namespace hop {
   class SeparabilityAnalysis : public PropertiesAnalysis {
-
+    public:
+      using PropertiesAnalysis::PropertiesAnalysis;
   };
 }

@@ -5,6 +5,7 @@
 
 namespace hop {
   class ContinuityAnalysis : public PropertiesAnalysis {
-
+    public:
+      using PropertiesAnalysis::PropertiesAnalysis;
   };
 }
