@@ -14,7 +14,6 @@
 #include <hop_bits/helper/cereal.hpp>
 #include <hop_bits/helper/printable.hpp>
 
-// TODO Add includes (only skip if within its own header)
 namespace hop {
   // Base class of all optimisation problems in this library. Provides access to all usually
   // needed informations.
