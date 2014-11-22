@@ -19,7 +19,7 @@ namespace hop {
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
-    linearModelEstimator_ = getEstimator(parameters, objectiveValues);
+    linearModelEstimator_ = getOrdinaryLeastSquaresEstimator(parameters, objectiveValues);
     residuals_ = objectiveValues - parameters.t() * linearModelEstimator_;
   }
 }

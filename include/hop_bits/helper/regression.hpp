@@ -10,7 +10,7 @@
 #include <hop_bits/helper/cache.hpp>
 
 namespace hop {
-  arma::Col<double> getEstimator(
+  arma::Col<double> getOrdinaryLeastSquaresEstimator(
       const arma::Mat<double>& regressor,
       const arma::Col<double>& regressand);
 }

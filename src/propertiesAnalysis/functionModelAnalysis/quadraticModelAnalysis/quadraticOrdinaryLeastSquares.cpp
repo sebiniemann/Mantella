@@ -30,7 +30,7 @@ namespace hop {
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
-    quadraticModelEstimator_ = getEstimator(parameters, objectiveValues);
+    quadraticModelEstimator_ = getOrdinaryLeastSquaresEstimator(parameters, objectiveValues);
     residuals_ = objectiveValues - parameters.t() * quadraticModelEstimator_;
   }
 }
