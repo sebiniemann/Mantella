@@ -1,12 +1,12 @@
-#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp>
+#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.hpp>
 
 // HOP
 #include <hop_bits/helper/geometry.hpp>
 
 namespace hop {
   namespace robotic {
-    ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS()
-      : ParallelKinematicMachine_6PRUS(
+    ParallelKinematicMachine_3PRUS::ParallelKinematicMachine_3PRUS()
+      : ParallelKinematicMachine_3PRUS(
           arma::Mat<double>::fixed<2, 3>({
             0.0, 6.143558967020040,
             0.0, 1.954768762233649,
@@ -34,7 +34,7 @@ namespace hop {
 
     }
 
-    ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS(
+    ParallelKinematicMachine_3PRUS::ParallelKinematicMachine_3PRUS(
         const arma::Mat<double>::fixed<2, 3>& baseJointsAngles,
         const arma::Mat<double>::fixed<3, 3>& relativeEndEffectorJoints,
         const arma::Mat<double>::fixed<2, 3>& linkLengths,
@@ -62,7 +62,7 @@ namespace hop {
       }
     }
 
-    std::vector<arma::Mat<double>> ParallelKinematicMachine_6PRUS::getModelCharacterisation(
+    std::vector<arma::Mat<double>> ParallelKinematicMachine_3PRUS::getModelCharacterisation(
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
@@ -98,7 +98,7 @@ namespace hop {
       return modelCharacterisation;
     }
 
-    arma::Mat<double> ParallelKinematicMachine_6PRUS::getActuation(
+    arma::Mat<double> ParallelKinematicMachine_3PRUS::getActuation(
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
@@ -116,7 +116,7 @@ namespace hop {
       return actuation;
     }
 
-    double ParallelKinematicMachine_6PRUS::getPositionError(
+    double ParallelKinematicMachine_3PRUS::getPositionError(
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
