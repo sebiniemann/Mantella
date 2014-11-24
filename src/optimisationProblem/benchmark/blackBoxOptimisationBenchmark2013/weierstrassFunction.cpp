@@ -11,15 +11,15 @@ namespace hop {
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
       f0_ = 0.0;
       for (unsigned int k = 0; k < 12; ++k) {
-        f0_ += std::pow(0.5, k) * cos(2.0 * arma::datum::pi * pow(3, k) * 0.5);
+        f0_ += std::pow(0.5, k) * cos(2.0 * arma::datum::pi * pow(3.0, k) * 0.5);
       }
     }
 
     double WeierstrassFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> z = rotationR_ * (delta_ % (rotationQ_ * getOscillationTransformation(rotationR_ * (parameter - translation_))));
+      const arma::Col<double>& z = rotationR_ * (delta_ % (rotationQ_ * getOscillationTransformation(rotationR_ * (parameter - translation_))));
 
-      double sum = 0;
+      double sum = 0.0;
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
         for (unsigned int k = 0; k < 12; ++k) {
           sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z.at(n) + 0.5));

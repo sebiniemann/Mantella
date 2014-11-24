@@ -16,11 +16,11 @@ namespace hop {
         const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisations;
 
-      std::vector<arma::Mat<double>> modelCharacterisation = platformLevels_.at(0).getModelCharacterisation(endEffectorPose, {});
+      const std::vector<arma::Mat<double>>& modelCharacterisation = platformLevels_.at(0).getModelCharacterisation(endEffectorPose, {});
       modelCharacterisations.insert(modelCharacterisations.end(), modelCharacterisation.begin(), modelCharacterisation.end());
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        modelCharacterisation = platformLevels_.at(n).getModelCharacterisation(redundantJointActuations.col(n), {});
+        const std::vector<arma::Mat<double>>& modelCharacterisation = platformLevels_.at(n).getModelCharacterisation(redundantJointActuations.col(n), {});
         modelCharacterisations.insert(modelCharacterisations.end(), modelCharacterisation.begin(), modelCharacterisation.end());
       }
 
@@ -32,11 +32,11 @@ namespace hop {
         const arma::Mat<double>& redundantJointActuations) const noexcept {
       arma::Mat<double> actuations;
 
-      arma::Mat<double> actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
+      const arma::Mat<double>& actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
       actuations = arma::join_rows(actuations, actuation);
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        arma::Mat<double> actuation = platformLevels_.at(n).getActuation(redundantJointActuations.col(n), {});
+        const arma::Mat<double>& actuation = platformLevels_.at(n).getActuation(redundantJointActuations.col(n), {});
         actuations = arma::join_rows(actuations, actuation);
       }
 

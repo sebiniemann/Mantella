@@ -25,11 +25,11 @@ namespace hop {
         const arma::Col<double>& parameter) const noexcept {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 101; ++k) {
-        arma::Col<double> parameterTransposition = parameter - localOptimaY101_.col(k);
+        const arma::Col<double>& parameterTransposition = parameter - localOptimaY101_.col(k);
         maximalValue = std::max(maximalValue, weight_.at(k) * std::exp(-1.0 / (2.0 * static_cast<double>(numberOfDimensions_)) * dot(parameterTransposition, rotationR_.t() * arma::diagmat(deltaC101_.col(k)) * rotationR_ * parameterTransposition)));
       }
 
-      return std::pow(getOscillationTransformation(10.0 - maximalValue), 2) + getPenality(parameter);
+      return std::pow(getOscillationTransformation(10.0 - maximalValue), 2.0) + getPenality(parameter);
     }
 
     std::string GallaghersGaussian101mePeaksFunction::to_string() const noexcept {
