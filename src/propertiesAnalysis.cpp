@@ -5,13 +5,13 @@
 
 namespace hop {
   PropertiesAnalysis::PropertiesAnalysis() noexcept
-    : plausibility_(0) {
+    : plausibility_(0.0) {
 
   }
 
   void PropertiesAnalysis::analyse(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
-    plausibility_ = 0;
+    plausibility_ = 0.0;
 
     analyseImplementation(optimisationProblem);
   }

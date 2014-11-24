@@ -34,6 +34,7 @@ namespace hop {
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
         candidateParameter_.at(n) += stepSize_.at(n);
 
+        // TODO Add proper out of bound handling
         if(optimisationProblem_->getLowerBounds().at(n) <= candidateParameter_.at(n) && candidateParameter_.at(n) <= optimisationProblem_->getUpperBounds().at(n)) {
           ++numberOfIterations_;
           candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
@@ -52,7 +53,7 @@ namespace hop {
           }
         }
 
-        candidateParameter_.at(n) -= 2 * stepSize_.at(n);
+        candidateParameter_.at(n) -= 2.0 * stepSize_.at(n);
 
         if(optimisationProblem_->getLowerBounds().at(n) <= candidateParameter_.at(n) && candidateParameter_.at(n) <= optimisationProblem_->getUpperBounds().at(n)) {
           ++numberOfIterations_;

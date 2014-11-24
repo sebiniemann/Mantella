@@ -8,6 +8,7 @@
 #include <hop_bits/helper/random.hpp>
 #include <hop_bits/helper/rng.hpp>
 
+// TODO Update
 namespace hop {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
@@ -37,7 +38,7 @@ namespace hop {
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
-        std::size_t k = permutation.at(n);
+        const arma::uword& k = permutation.at(n);
         arma::Col<double> particle = particles_.col(k);
 
         arma::uword neighbourhoodBestParticleIndex;
@@ -53,7 +54,7 @@ namespace hop {
           attractionCenter = (localAttraction_ * (localBestSolutions_.col(k) - particle) + globalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
         }
 
-        arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
+        arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
 
         arma::Col<double> velocityCandidate = acceleration_ * velocities_.col(k) + randomParticle;
         arma::Col<double> solutionCandidate = particle + velocityCandidate;

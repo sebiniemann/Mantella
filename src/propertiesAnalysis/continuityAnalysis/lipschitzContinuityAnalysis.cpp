@@ -2,7 +2,7 @@
 
 namespace hop {
   LipschitzContinuityAnalysis::LipschitzContinuityAnalysis() noexcept
-    : lipschitzConstant_(0) {
+    : lipschitzConstant_(0.0) {
 
   }
 

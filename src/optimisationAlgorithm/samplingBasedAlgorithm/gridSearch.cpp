@@ -12,7 +12,7 @@ namespace hop {
 }
 
   void GridSearch::optimiseImplementation() noexcept {
-    arma::Col<double> scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
+    const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
     numberOfSamples_ = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
 
     sampleParameters_.clear();
@@ -55,8 +55,8 @@ namespace hop {
       const arma::Col<double>& samplingFactors) {
     if(samplingFactors.n_elem != optimisationProblem_->getNumberOfDimensions()) {
       throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
-    } else if(arma::sum(samplingFactors) != 1) {
-      throw std::logic_error("The sum of all sampling factors must be 1.");
+    } else if(arma::sum(samplingFactors) != 1.0) {
+      throw std::logic_error("The sum of all sampling factors (" + arma::sum(samplingFactors) + ") must be 1.");
     }
 
     samplingFactors_ = samplingFactors;
