@@ -53,9 +53,9 @@ int main (const int argc, const char* argv[]) {
 
     std::shared_ptr<hop::OptimisationProblem> optimisationProblem = optimisationProblems.at(optimisationProblemIndex);
 
-    arma::Col<double> localAttractionParameters = arma::linspace(0, 4, 10);
-    arma::Col<double> globalAttractionParameters = arma::linspace(0, 4, 10);
-    arma::Col<double> accelerationParameters = arma::linspace(0, 4, 10);
+    arma::Col<double> maximalLocalAttractionParameters = arma::linspace(0, 4, 10);
+    arma::Col<double> maximalGlobalAttractionParameters = arma::linspace(0, 4, 10);
+    arma::Col<double> maximalAccelerationParameters = arma::linspace(0, 4, 10);
     arma::Col<double> neighbourhoodParameters = arma::linspace(0.1, 1, 5);
 
     unsigned int iterations = 30;
@@ -63,19 +63,19 @@ int main (const int argc, const char* argv[]) {
     hop::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, populationSize);
     optimisationAlgorithm.setMaximalNumberOfIterations(10000);
 
-    for(auto localAttractionParameter : localAttractionParameters) {
-      optimisationAlgorithm.setLocalAttraction(localAttractionParameter);
+    for(auto maximalLocalAttractionParameter : maximalLocalAttractionParameters) {
+      optimisationAlgorithm.setMaximalLocalAttraction(maximalLocalAttractionParameter);
 
-      for(auto globalAttractionParameter : globalAttractionParameters) {
-        optimisationAlgorithm.setGlobalAttraction(globalAttractionParameter);
+      for(auto maximalGlobalAttractionParameter : maximalGlobalAttractionParameters) {
+        optimisationAlgorithm.setMaximalGlobalAttraction(maximalGlobalAttractionParameter);
 
-        for(auto accelerationParameter: accelerationParameters) {
-          optimisationAlgorithm.setAcceleration(accelerationParameter);
+        for(auto maximalAccelerationParameter: maximalAccelerationParameters) {
+          optimisationAlgorithm.setMaximalAcceleration(maximalAccelerationParameter);
 
           for(auto neighbourhoodParameter : neighbourhoodParameters) {
             optimisationAlgorithm.setNeighbourhoodProbability(neighbourhoodParameter);
 
-                      boost::filesystem::path filepath = boost::filesystem::path("./parameterisation_prob" + hop::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(localAttractionParameter) + "_global" + std::to_string(globalAttractionParameter) + "_acc" + std::to_string(accelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
+                      boost::filesystem::path filepath = boost::filesystem::path("./parameterisation_prob" + hop::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(maximalLocalAttractionParameter) + "_global" + std::to_string(maximalGlobalAttractionParameter) + "_acc" + std::to_string(maximalAccelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
 
              if(!boost::filesystem::exists(filepath)) {
               arma::Mat<double> results(iterations, 6 + numberOfDimensions);
