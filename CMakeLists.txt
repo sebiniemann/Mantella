@@ -76,7 +76,7 @@ if(BUILD_LIBRARY)
   # Locate third party libraries and headers
   find_package(Armadillo REQUIRED) # Armadillo C++
   find_package(Cereal REQUIRED) # Cereal (header only)
-  #find_package(MPI) # MPI
+  find_package(MPI) # MPI
 
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
