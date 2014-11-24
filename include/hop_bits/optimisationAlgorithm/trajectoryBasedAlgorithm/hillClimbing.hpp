@@ -7,7 +7,7 @@ namespace hop {
   class HillClimbing : public TrajectoryBasedAlgorithm {
     public:
       explicit HillClimbing(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       HillClimbing(const HillClimbing&) = delete;
       HillClimbing& operator=(const HillClimbing&) = delete;
@@ -24,7 +24,8 @@ namespace hop {
       double candidateSoftConstraintValue_;
       double candidateObjectiveValue_;
 
-      arma::Col<double> getVelocity();
-      void optimiseImplementation() override;
+      virtual arma::Col<double> getVelocity() noexcept;
+
+      void optimiseImplementation() noexcept override;
   };
 }

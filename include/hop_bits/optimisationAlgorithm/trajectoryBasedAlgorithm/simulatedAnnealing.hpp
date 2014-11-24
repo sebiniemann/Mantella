@@ -7,7 +7,7 @@ namespace hop {
   class SimulatedAnnealing : public TrajectoryBasedAlgorithm {
     public:
       explicit SimulatedAnnealing(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       SimulatedAnnealing(const SimulatedAnnealing&) = delete;
       SimulatedAnnealing& operator=(const SimulatedAnnealing&) = delete;
@@ -26,8 +26,9 @@ namespace hop {
       double candidateSoftConstraintValue_;
       double candidateObjectiveValue_;
 
-      bool isAcceptableState();
-      arma::Col<double> getVelocity();
-      void optimiseImplementation() override;
+      virtual bool isAcceptableState() noexcept;
+      virtual arma::Col<double> getVelocity() noexcept;
+
+      void optimiseImplementation() noexcept override;
   };
 }

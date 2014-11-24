@@ -7,7 +7,7 @@ namespace hop {
   class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm {
     public:
       explicit HookeJeevesAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
@@ -27,7 +27,8 @@ namespace hop {
       double candidateSoftConstraintValue_;
       double candidateObjectiveValue_;
 
-      arma::Col<double> getReducedStepSize();
-      void optimiseImplementation() override;
+      virtual arma::Col<double> getReducedStepSize() noexcept;
+
+      void optimiseImplementation() noexcept override;
   };
 }
