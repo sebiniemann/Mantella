@@ -199,7 +199,7 @@ namespace hop {
       unsigned int numberOfDistinctEvaluations_;
 
       // Actual implementaion of the objective function.
-      // Note: The dimension of the parameter is checked beforehand.
+      // Note: the number of dimensions of the parameter is checked beforehand.
       virtual double getObjectiveValueImplementation(
         // The parameter to be evaluated
         const arma::Col<double>& parameter) const noexcept = 0;
