@@ -14,7 +14,10 @@ namespace hop {
 
     void RosenbrockFunction::setTranslation(
         const arma::Col<double>& translation) {
-      // TODO Add exception
+      if (translation.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      }
+
       translation_ = 0.75 * translation;
     }
 

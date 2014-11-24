@@ -14,7 +14,10 @@ namespace hop {
 
     void BuecheRastriginFunction::setTranslation(
         const arma::Col<double>& translation) {
-      // TODO Add exception
+      if (translation.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      }
+
       translation_ = translation;
       for (std::size_t n = 0; n < translation_.n_elem; n += 2) {
         translation_.at(n) = std::abs(translation_.at(n));
