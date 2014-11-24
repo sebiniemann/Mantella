@@ -84,7 +84,7 @@ namespace hop {
   void HookeJeevesAlgorithm::setInitialStepSize(
       const arma::Col<double>& initialStepSize) {
     if(initialStepSize.n_rows != optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The dimension of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
+      throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
     }
 
     initialStepSize_ = initialStepSize;

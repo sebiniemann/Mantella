@@ -53,7 +53,7 @@ namespace hop {
   void SimulatedAnnealing::setMaximalStepSize(
       const arma::Col<double>& maximalStepSize) {
     if(maximalStepSize.n_rows != optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The dimension of the maximal step size (" + std::to_string(maximalStepSize.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
+      throw std::logic_error("The number of dimensions of the maximal step size (" + std::to_string(maximalStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
     }
     maximalStepSize_ = maximalStepSize;
   }

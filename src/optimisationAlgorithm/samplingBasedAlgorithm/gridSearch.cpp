@@ -54,9 +54,9 @@ namespace hop {
   void GridSearch::setSamplingFactors(
       const arma::Col<double>& samplingFactors) {
     if(samplingFactors.n_elem != optimisationProblem_->getNumberOfDimensions()) {
-      // TODO Add exception
+      throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
     } else if(arma::sum(samplingFactors) != 1) {
-      // TODO Add exception
+      throw std::logic_error("The sum of all sampling factors must be 1.");
     }
 
     samplingFactors_ = samplingFactors;
