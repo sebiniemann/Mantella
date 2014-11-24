@@ -52,8 +52,8 @@ namespace hop {
         arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
         arma::Col<double> solutionCandidate = particle_ + velocityCandidate;
 
-        arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
-        arma::Col<arma::uword> aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
+        const arma::Col<arma::uword>& belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
+        const arma::Col<arma::uword>& aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
 
         velocityCandidate.elem(belowLowerBound) *= -0.5;
         velocityCandidate.elem(aboveUpperBound) *= -0.5;
@@ -64,7 +64,7 @@ namespace hop {
         velocities_.col(particleIndex_) = velocityCandidate;
         particles_.col(particleIndex_) = solutionCandidate;
 
-        double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
+        const double& objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
         if (objectiveValue < localBestObjectiveValues_.at(particleIndex_)) {
           localBestObjectiveValues_.at(particleIndex_) = objectiveValue;
