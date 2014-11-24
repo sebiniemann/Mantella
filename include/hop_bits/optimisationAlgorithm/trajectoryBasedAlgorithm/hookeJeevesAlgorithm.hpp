@@ -24,7 +24,7 @@ namespace hop {
       bool reduceStepSize_;
 
       arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
+      double candidateSoftConstraintsValue_;
       double candidateObjectiveValue_;
 
       virtual arma::Col<double> getReducedStepSize() noexcept;

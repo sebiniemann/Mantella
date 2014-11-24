@@ -5,24 +5,24 @@ namespace hop {
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
-      candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
+      candidateSoftConstraintsValue_(std::numeric_limits<double>::infinity()) {
 
   }
 
   void RandomSearch::optimiseImplementation() noexcept {
-    bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
+    bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
 
     do {
       ++numberOfIterations_;
 
       candidateParameter_ = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
-      candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+      candidateSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
       candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-      if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+      if(candidateSoftConstraintsValue_ < bestSoftConstraintsValue_ || candidateSoftConstraintsValue_ == bestSoftConstraintsValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
         bestParameter_ = candidateParameter_;
-        bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+        bestSoftConstraintsValue_ = candidateSoftConstraintsValue_;
         bestObjectiveValue_ = candidateObjectiveValue_;
       }
     } while(!isFinished() && !isTerminated());

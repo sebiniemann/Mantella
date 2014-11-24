@@ -42,7 +42,7 @@ namespace hop {
       double getBestObjectiveValue() const noexcept;
 
       // Returns the objective value of the best parameter yet found.
-      double getBestSoftConstraintValue() const noexcept;
+      double getBestSoftConstraintsValue() const noexcept;
 
       // Checks whether the currently best objective value satisfies the upper bound for an
       // acceptable objective value.
@@ -75,7 +75,7 @@ namespace hop {
       double bestObjectiveValue_;
 
       // The best parameter's soft-constraint value.
-      double bestSoftConstraintValue_;
+      double bestSoftConstraintsValue_;
 
       // The actual optimisation procedere.
       // Note: The counter within the optimisation problem (counting the number of distinct function

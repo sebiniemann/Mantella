@@ -7,7 +7,7 @@ namespace hop {
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
-      candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
+      candidateSoftConstraintsValue_(std::numeric_limits<double>::infinity()) {
     setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
 }
 
@@ -20,7 +20,7 @@ namespace hop {
       sampleParameters_.push_back(arma::linspace(optimisationProblem_->getLowerBounds().at(n), optimisationProblem_->getUpperBounds().at(n), numberOfSamples_.at(n)));
     }
 
-    bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
+    bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
 
     sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
@@ -40,12 +40,12 @@ namespace hop {
         }
       }
 
-      candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+      candidateSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
       candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-      if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+      if(candidateSoftConstraintsValue_ < bestSoftConstraintsValue_ || candidateSoftConstraintsValue_ == bestSoftConstraintsValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
         bestParameter_ = candidateParameter_;
-        bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+        bestSoftConstraintsValue_ = candidateSoftConstraintsValue_;
         bestObjectiveValue_ = candidateObjectiveValue_;
       }
     } while(!isFinished() && !isTerminated());

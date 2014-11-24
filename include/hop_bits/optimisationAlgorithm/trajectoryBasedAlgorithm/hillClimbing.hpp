@@ -21,7 +21,7 @@ namespace hop {
       arma::Col<double> maximalStepSize_;
 
       arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
+      double candidateSoftConstraintsValue_;
       double candidateObjectiveValue_;
 
       virtual arma::Col<double> getVelocity() noexcept;

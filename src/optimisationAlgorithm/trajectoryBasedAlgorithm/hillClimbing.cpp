@@ -11,7 +11,7 @@ namespace hop {
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
-      candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
+      candidateSoftConstraintsValue_(std::numeric_limits<double>::infinity()) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10.0);
   }
 
@@ -19,19 +19,19 @@ namespace hop {
     ++numberOfIterations_;
 
     bestParameter_ = initialParameter_;
-    bestSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(initialParameter_);
+    bestSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(initialParameter_);
     bestObjectiveValue_ = optimisationProblem_->getObjectiveValue(initialParameter_);
 
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
       candidateParameter_ = bestParameter_ + maximalStepSize_ % getVelocity();
-      candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
+      candidateSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
       candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
 
-      if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
+      if(candidateSoftConstraintsValue_ < bestSoftConstraintsValue_ || candidateSoftConstraintsValue_ == bestSoftConstraintsValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
         bestParameter_ = candidateParameter_;
-        bestSoftConstraintValue_ = candidateSoftConstraintValue_;
+        bestSoftConstraintsValue_ = candidateSoftConstraintsValue_;
         bestObjectiveValue_ = candidateObjectiveValue_;
       }
     }

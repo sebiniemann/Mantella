@@ -16,7 +16,7 @@ namespace hop {
 
     protected:
       arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
+      double candidateSoftConstraintsValue_;
       double candidateObjectiveValue_;
 
       void optimiseImplementation() noexcept override;

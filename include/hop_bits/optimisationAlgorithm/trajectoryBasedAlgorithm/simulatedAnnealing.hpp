@@ -23,7 +23,7 @@ namespace hop {
       arma::Col<double> state_;
 
       arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
+      double candidateSoftConstraintsValue_;
       double candidateObjectiveValue_;
 
       virtual bool isAcceptableState() noexcept;
