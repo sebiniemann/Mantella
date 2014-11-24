@@ -13,7 +13,10 @@ namespace hop {
     }
 
     void LinearSlope::setOne(const arma::Col<double>& one) {
-      // TODO Add exception
+      if (one.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the one vector (" + std::to_string(one.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      }
+
       one_ = one;
       xOpt_ = 5.0 * one_;
       scaling_ = arma::sign(one_) % getScaling(10);
