@@ -15,19 +15,14 @@ namespace hop {
       void setInitialStepSize(
           const arma::Col<double>& initialStepSize);
 
+      void setStepSizeDecrease(
+          const arma::Col<double>& stepSizeDecrease);
+
       std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> initialStepSize_;
-
-      arma::Col<double> stepSize_;
-      bool reduceStepSize_;
-
-      arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintsValue_;
-      double candidateObjectiveValue_;
-
-      virtual arma::Col<double> getReducedStepSize() noexcept;
+      arma::Col<double> stepSizeDecrease_;
 
       void optimiseImplementation() noexcept override;
   };
