@@ -6,7 +6,7 @@
 namespace hop {
   class RandomSearch : public SamplingBasedAlgorithm {
     public:
-      RandomSearch(
+      explicit RandomSearch(
           const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       RandomSearch(const RandomSearch&) = delete;

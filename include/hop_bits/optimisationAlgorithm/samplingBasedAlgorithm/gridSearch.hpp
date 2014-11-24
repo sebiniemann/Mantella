@@ -9,7 +9,7 @@
 namespace hop {
   class GridSearch : public SamplingBasedAlgorithm {
     public:
-      GridSearch(
+      explicit GridSearch(
           const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       GridSearch(const GridSearch&) = delete;

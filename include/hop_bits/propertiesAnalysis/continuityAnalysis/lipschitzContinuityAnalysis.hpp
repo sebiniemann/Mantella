@@ -6,7 +6,7 @@
 namespace hop {
   class LipschitzContinuityAnalysis : public ContinuityAnalysis {
     public:
-      LipschitzContinuityAnalysis() noexcept;
+      explicit LipschitzContinuityAnalysis() noexcept;
 
       LipschitzContinuityAnalysis(const LipschitzContinuityAnalysis&) = delete;
       LipschitzContinuityAnalysis& operator=(const LipschitzContinuityAnalysis&) = delete;

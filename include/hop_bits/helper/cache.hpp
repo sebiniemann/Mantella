@@ -12,7 +12,7 @@ namespace hop {
     public:
       explicit CacheHasher() = default;
 
-      CacheHasher(const CacheHasher&) = default;
+      explicit CacheHasher(const CacheHasher&) = default;
 
       CacheHasher& operator=(const CacheHasher&) = delete;
 
