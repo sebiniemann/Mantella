@@ -12,7 +12,7 @@
 namespace hop {
   namespace bbob2013 {
     GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions),
         weight_(21) {
       weight_.at(0) = 10.0;
@@ -22,7 +22,7 @@ namespace hop {
     }
 
     double GallaghersGaussian21hiPeaksFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 21; ++k) {
         arma::Col<double> parameterTransposition = parameter - localOptimaY21_.col(k);

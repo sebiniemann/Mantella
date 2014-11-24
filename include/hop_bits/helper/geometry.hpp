@@ -7,7 +7,7 @@ namespace hop {
   // Generates a 2-dimensional right-handside rotation matrix.
   arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
       // Rotation around the x-axis.
-      const double& angle);
+      const double& angle) noexcept;
 
   // Generates a 3-dimensional right-handside rotation matrix.
   arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
@@ -16,7 +16,7 @@ namespace hop {
       // Rotation around the y-axis.
       const double& pitchAngle,
       // Rotation around the z-axis.
-      const double& yawAngle);
+      const double& yawAngle) noexcept;
 
   // Calculates the (lower) intersection points between two circles in a 2-dimensional space.
   // Note: Based on the usage of this helper function, we only considers cases with exactly two

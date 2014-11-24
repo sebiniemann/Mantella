@@ -5,10 +5,9 @@
 #include <limits>
 #include <stdexcept>
 
-// TODO Adding noexcept whenever possible
 namespace hop {
   OptimisationProblem::OptimisationProblem(
-      const unsigned int& numberOfDimensions)
+      const unsigned int& numberOfDimensions) noexcept
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
@@ -274,12 +273,12 @@ namespace hop {
   //! Note: Runtime checks are only performed for public methods.
 
   double OptimisationProblem::getSoftConstraintsValueImplementation(
-      const arma::Col<double>& parameter) const {
+      const arma::Col<double>& parameter) const noexcept {
     return 0;
   }
 
   arma::Col<double> OptimisationProblem::getScaledCongruentParameter(
-      const arma::Col<double>& parameter) const {
+      const arma::Col<double>& parameter) const noexcept {
     return parameterRotation_ * parameterScale_ % (parameter + parameterTranslation_);
   }
 }

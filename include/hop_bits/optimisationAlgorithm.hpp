@@ -13,7 +13,7 @@ namespace hop {
       // Constructs an optimisation algorithm with the given problem to be optimised.
       explicit OptimisationAlgorithm(
           // The problem to be optimised
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       OptimisationAlgorithm(const OptimisationAlgorithm&) = delete;
@@ -22,7 +22,7 @@ namespace hop {
       // Starts the optimisation process.
       // Note: The best parameter and its objective value can be retrived via the corresponding
       // getter, after the optimisation process is finished or terminates.
-      void optimise();
+      void optimise() noexcept;
 
       // Returns the current number of iterations performed.
       unsigned int getNumberOfIterations() const noexcept;

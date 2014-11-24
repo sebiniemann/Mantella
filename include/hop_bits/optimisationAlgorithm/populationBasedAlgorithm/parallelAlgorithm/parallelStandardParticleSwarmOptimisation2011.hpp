@@ -12,21 +12,21 @@ namespace hop {
     public:
       explicit ParallelStandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem> optimisationProblem,
-          const unsigned int& populationSize);
+          const unsigned int& populationSize) noexcept;
 
       ParallelStandardParticleSwarmOptimisation2011(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
       ParallelStandardParticleSwarmOptimisation2011& operator=(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
 
       void setNeighbourhoodProbability(
-          const double& neighbourhoodProbability);
+          const double& neighbourhoodProbability) noexcept;
       void setAcceleration(
-          const double& acceleration);
+          const double& acceleration) noexcept;
       void setLocalAttraction(
-          const double& localAttraction);
+          const double& localAttraction) noexcept;
       void setGlobalAttraction(
-          const double& globalAttraction);
+          const double& globalAttraction) noexcept;
       void setCommunicationSteps(
-          const unsigned int& communicationSteps);
+          const unsigned int& communicationSteps) noexcept;
 
       std::string to_string() const noexcept override;
 
@@ -38,6 +38,6 @@ namespace hop {
 
       unsigned int communicationSteps_;
 
-      void parallelOptimiseImplementation() override;
+      void parallelOptimiseImplementation() noexcept override;
   };
 }

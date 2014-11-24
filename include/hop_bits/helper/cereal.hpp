@@ -18,7 +18,7 @@ namespace cereal {
       // Archive to be filled.
       Archive& archive,
       // Matrix to be serialised.
-      const arma::Mat<Type>& matrix) {
+      const arma::Mat<Type>& matrix) noexcept {
     std::size_t n_rows = matrix.n_rows;
     std::size_t n_cols = matrix.n_cols;
     std::size_t n_elem = matrix.n_elem;
@@ -41,7 +41,7 @@ namespace cereal {
       // Archive containing the serialised matrix.
       Archive& archive,
       // Output location
-      arma::Mat<Type>& matrix) {
+      arma::Mat<Type>& matrix) noexcept {
     std::size_t n_rows;
     std::size_t n_cols;
 
@@ -68,7 +68,7 @@ namespace cereal {
       // Archive to be filled.
       Archive& archive,
       // Column vector to be serialised.
-      const arma::Col<Type>& column) {
+      const arma::Col<Type>& column) noexcept {
     std::size_t n_elem = column.n_elem;
 
     // Save the leght ...
@@ -88,7 +88,7 @@ namespace cereal {
       // Archive containing the serialised column vector.
       Archive& archive,
       // Output location
-      arma::Col<Type>& column) {
+      arma::Col<Type>& column) noexcept {
     std::size_t n_elem;
 
     // Extract the length ...
@@ -111,7 +111,7 @@ namespace cereal {
       // Archive to be filled.
       Archive& archive,
       // Row vector to be serialised.
-      const arma::Row<Type>& row) {
+      const arma::Row<Type>& row) noexcept {
     std::size_t n_elem = row.n_elem;
 
     // Save the length ...
@@ -131,7 +131,7 @@ namespace cereal {
       // Archive containing the serialised row vector.
       Archive& archive,
       // Output location
-      arma::Row<Type>& row) {
+      arma::Row<Type>& row) noexcept {
     std::size_t n_elem;
 
     // Extract the length ...

@@ -10,6 +10,6 @@ namespace hop {
 
     protected:
       void estimateImplementation(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) override;
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept override;
   };
 }

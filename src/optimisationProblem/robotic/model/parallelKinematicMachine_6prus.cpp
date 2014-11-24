@@ -5,7 +5,7 @@
 
 namespace hop {
   namespace robotic {
-    ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS()
+    ParallelKinematicMachine_6PRUS::ParallelKinematicMachine_6PRUS() noexcept
       : ParallelKinematicMachine_6PRUS(
           arma::Mat<double>::fixed<2, 6>({
             0.0, 6.143558967020040,
@@ -54,7 +54,7 @@ namespace hop {
         const arma::Mat<double>::fixed<3, 6>& relativeEndEffectorJoints,
         const arma::Mat<double>::fixed<2, 6>& linkLengths,
         const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
-        const arma::Mat<double>::fixed<3, 6>& redundantJointEnds)
+        const arma::Mat<double>::fixed<3, 6>& redundantJointEnds) noexcept
       : endEffectorJointsRelative_(relativeEndEffectorJoints),
         linkLengths_(linkLengths),
         redundantJointStarts_(redundantJointStarts),
@@ -79,7 +79,7 @@ namespace hop {
 
     std::vector<arma::Mat<double>> ParallelKinematicMachine_6PRUS::getModelCharacterisation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisation;
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
@@ -115,7 +115,7 @@ namespace hop {
 
     arma::Mat<double> ParallelKinematicMachine_6PRUS::getActuation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
 
       arma::Mat<double>::fixed<3, 6> baseJointPositions = modelCharacterisation.at(0);
@@ -133,7 +133,7 @@ namespace hop {
 
     double ParallelKinematicMachine_6PRUS::getPositionError(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
 
       arma::Mat<double>::fixed<3, 6> baseJoints = modelCharacterisation.at(0);

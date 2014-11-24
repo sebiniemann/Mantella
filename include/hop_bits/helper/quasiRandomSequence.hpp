@@ -7,10 +7,10 @@ namespace hop {
    arma::Mat<double> getHaltonSequence(
        const arma::Col<arma::uword>& seed,
        const arma::Col<arma::uword>& base,
-       const unsigned int& numberOfColumms);
+       const unsigned int& numberOfColumms) noexcept;
 
    arma::Col<double> getVanDerCorputSequence(
        const unsigned int& seed,
        const unsigned int& base,
-       const unsigned int& numberOfColumms);
+       const unsigned int& numberOfColumms) noexcept;
 }

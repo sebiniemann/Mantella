@@ -10,7 +10,7 @@ namespace hop {
   class GridSearch : public SamplingBasedAlgorithm {
     public:
       GridSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       GridSearch(const GridSearch&) = delete;
       GridSearch& operator=(const GridSearch&) = delete;
@@ -31,6 +31,6 @@ namespace hop {
       double candidateSoftConstraintValue_;
       double candidateObjectiveValue_;
 
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
   };
 }

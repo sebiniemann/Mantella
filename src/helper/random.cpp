@@ -9,7 +9,7 @@
 
 namespace hop {
   arma::Mat<double> getRandomRotationMatrix(
-      unsigned int numberOfDimensions) {
+      unsigned int numberOfDimensions) noexcept {
     arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
     for (std::size_t n = 0; n < rotationMatrix.n_cols; ++n) {
       for (unsigned int k = 0; k < n; ++k) {
@@ -23,7 +23,7 @@ namespace hop {
 
   arma::Col<arma::uword> getRandomPermutation(
       unsigned int numberOfElements,
-      unsigned int cycleLength) {
+      unsigned int cycleLength) noexcept {
     arma::Col<arma::uword> permutation(numberOfElements);
     for (std::size_t n = 0; n < numberOfElements; ++n) {
       permutation.at(n) = n;
@@ -38,7 +38,7 @@ namespace hop {
   }
 
   arma::Col<arma::uword> getRandomPermutation(
-      unsigned int numberOfElements) {
+      unsigned int numberOfElements) noexcept {
     return getRandomPermutation(numberOfElements, numberOfElements);
   }
 }

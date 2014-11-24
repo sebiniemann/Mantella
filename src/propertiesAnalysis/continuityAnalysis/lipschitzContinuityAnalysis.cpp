@@ -1,7 +1,7 @@
 #include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
 
 namespace hop {
-  LipschitzContinuityAnalysis::LipschitzContinuityAnalysis()
+  LipschitzContinuityAnalysis::LipschitzContinuityAnalysis() noexcept
     : lipschitzConstant_(0) {
 
   }

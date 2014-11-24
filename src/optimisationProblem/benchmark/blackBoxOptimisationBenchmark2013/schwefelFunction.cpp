@@ -7,7 +7,7 @@
 namespace hop {
   namespace bbob2013 {
     double SchwefelFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> xOpt = arma::abs(4.2096874633 * one_);
       arma::Col<double> xHat = 2.0 * one_ % parameter;
 

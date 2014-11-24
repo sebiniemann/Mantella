@@ -22,19 +22,22 @@ namespace hop {
         const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const override;
+            const arma::Col<double>& parameter) const noexcept override;
 
         friend class cereal::access;
 
-        template<class T>
-        void serialize(T& archive) {
+        template<class Archive>
+        void serialize(
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2013", cereal::base_class<BlackBoxOptimisationBenchmark2013>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("rotationR", rotationR_));
         }
 
-        template<class T>
-        static void load_and_construct(T& archive, cereal::construct<RosenbrockFunctionRotated>& construct) {
+        template<class Archive>
+        static void load_and_construct(
+            Archive& archive,
+            cereal::construct<RosenbrockFunctionRotated>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

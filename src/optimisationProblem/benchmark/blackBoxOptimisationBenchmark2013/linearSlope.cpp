@@ -7,12 +7,13 @@
 namespace hop {
   namespace bbob2013 {
     LinearSlope::LinearSlope(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
       setOne(one_);
     }
 
     void LinearSlope::setOne(const arma::Col<double>& one) {
+      // TODO Add exception
       one_ = one;
       xOpt_ = 5.0 * one_;
       scaling_ = arma::sign(one_) % getScaling(10);
@@ -20,7 +21,7 @@ namespace hop {
     }
 
     double LinearSlope::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = parameter;
 
       arma::Col<arma::uword> outOfBound = arma::find(xOpt_ % z >= 25.0);

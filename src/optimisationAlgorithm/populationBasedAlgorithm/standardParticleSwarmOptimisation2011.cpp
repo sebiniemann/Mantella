@@ -11,7 +11,7 @@
 namespace hop {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize)
+      const unsigned int& populationSize) noexcept
     : PopulationBasedAlgorithm(optimisationProblem, populationSize),
       localBestObjectiveValues_(populationSize_),
       randomizeTopology_(true) {
@@ -22,7 +22,7 @@ namespace hop {
     setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
   }
 
-  void StandardParticleSwarmOptimisation2011::optimiseImplementation() {
+  void StandardParticleSwarmOptimisation2011::optimiseImplementation() noexcept {
     initialiseSwarm();
 
     while(!isFinished() && !isTerminated()) {
@@ -95,7 +95,7 @@ namespace hop {
     }
   }
 
-  void StandardParticleSwarmOptimisation2011::initialiseSwarm() {
+  void StandardParticleSwarmOptimisation2011::initialiseSwarm() noexcept {
     particles_ = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     particles_.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     particles_.each_col() += optimisationProblem_->getLowerBounds();
@@ -128,27 +128,27 @@ namespace hop {
   }
 
   void StandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
-      const double& neighbourhoodProbability) {
+      const double& neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
   void StandardParticleSwarmOptimisation2011::setAcceleration(
-      const double& acceleration) {
+      const double& acceleration) noexcept {
     acceleration_ = acceleration;
   }
 
   void StandardParticleSwarmOptimisation2011::setLocalAttraction(
-      const double& localAttraction) {
+      const double& localAttraction) noexcept {
     localAttraction_ = localAttraction;
   }
 
   void StandardParticleSwarmOptimisation2011::setGlobalAttraction(
-      const double& globalAttraction) {
+      const double& globalAttraction) noexcept {
     globalAttraction_ = globalAttraction;
   }
 
   void StandardParticleSwarmOptimisation2011::setMaximalSwarmConvergence(
-      const double& maximalSwarmConvergence) {
+      const double& maximalSwarmConvergence) noexcept {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 

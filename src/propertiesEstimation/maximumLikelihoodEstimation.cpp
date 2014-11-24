@@ -2,7 +2,7 @@
 
 namespace hop {
   void MaximumLikelihoodEstimation::estimateImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
 
      linearModelAnalysis_->analyse(optimisationProblem);
      linearModelEstimators_.push_back(linearModelAnalysis_->getLinearModelEstimator());

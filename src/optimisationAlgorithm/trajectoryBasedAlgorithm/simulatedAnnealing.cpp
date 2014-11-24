@@ -8,14 +8,14 @@
 
 namespace hop {
   SimulatedAnnealing::SimulatedAnnealing(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
       candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
 
-  void SimulatedAnnealing::optimiseImplementation() {
+  void SimulatedAnnealing::optimiseImplementation() noexcept {
     ++numberOfIterations_;
 
     bestParameter_ = initialParameter_;
@@ -42,11 +42,11 @@ namespace hop {
     }
   }
 
-  bool SimulatedAnnealing::isAcceptableState() {
+  bool SimulatedAnnealing::isAcceptableState() noexcept {
     return std::exp((bestObjectiveValue_ - candidateObjectiveValue_) / (numberOfIterations_ / maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0, 1)(Rng::generator);
   }
 
-  arma::Col<double> SimulatedAnnealing::getVelocity() {
+  arma::Col<double> SimulatedAnnealing::getVelocity() noexcept {
     return arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator);
   }
 

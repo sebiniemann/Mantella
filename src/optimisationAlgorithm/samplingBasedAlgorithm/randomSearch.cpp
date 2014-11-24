@@ -2,14 +2,14 @@
 
 namespace hop {
   RandomSearch::RandomSearch(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
       candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
 
   }
 
-  void RandomSearch::optimiseImplementation() {
+  void RandomSearch::optimiseImplementation() noexcept {
     bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
 

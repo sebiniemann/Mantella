@@ -8,14 +8,14 @@
 
 namespace hop {
   HillClimbing::HillClimbing(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
       candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10);
   }
 
-  void HillClimbing::optimiseImplementation() {
+  void HillClimbing::optimiseImplementation() noexcept {
     ++numberOfIterations_;
 
     bestParameter_ = initialParameter_;
@@ -37,7 +37,7 @@ namespace hop {
     }
   }
 
-  arma::Col<double> HillClimbing::getVelocity() {
+  arma::Col<double> HillClimbing::getVelocity() noexcept {
     return arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator);
   }
 

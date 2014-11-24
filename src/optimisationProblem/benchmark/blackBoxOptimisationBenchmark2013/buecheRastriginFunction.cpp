@@ -7,13 +7,14 @@
 namespace hop {
   namespace bbob2013 {
     BuecheRastriginFunction::BuecheRastriginFunction(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
       setTranslation(translation_);
     }
 
     void BuecheRastriginFunction::setTranslation(
         const arma::Col<double>& translation) {
+      // TODO Add exception
       translation_ = translation;
       for (std::size_t n = 0; n < translation_.n_elem; n += 2) {
         translation_.at(n) = std::abs(translation_.at(n));
@@ -21,7 +22,7 @@ namespace hop {
     }
 
     double BuecheRastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = scaling_ % getOscillationTransformation(parameter - translation_);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
         if (z.at(n) > 0.0) {

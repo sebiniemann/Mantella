@@ -5,7 +5,7 @@ namespace hop {
   decltype(Rng::seed_) Rng::seed_;
 
   void Rng::setSeed(
-      const unsigned int& seed) {
+      const unsigned int& seed) noexcept {
     seed_ = seed;
 
     generator.seed(seed_);
@@ -13,12 +13,12 @@ namespace hop {
 
   }
 
-  void Rng::setRandomSeed() {
+  void Rng::setRandomSeed() noexcept {
     arma::arma_rng::set_seed_random();
     setSeed(arma::randi<arma::Col<arma::uword>>(1).at(0));
   }
 
-  unsigned int Rng::getSeed() {
+  unsigned int Rng::getSeed() noexcept {
     return seed_;
   }
 }

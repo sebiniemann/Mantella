@@ -19,16 +19,16 @@ namespace hop {
       explicit PropertiesEstimation(
           const std::shared_ptr<LinearModelAnalysis> linearModelAnalysis,
           const std::shared_ptr<QuadraticModelAnalysis> quadraticModelAnalysis,
-          const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis);
+          const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis) noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       PropertiesEstimation(const PropertiesEstimation&) = delete;
       PropertiesEstimation& operator=(const PropertiesEstimation&) = delete;
 
       void estimate(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
-      std::size_t getNumberOfPropertySets() const;
+      std::size_t getNumberOfPropertySets() const noexcept;
 
       bool isLinear(
           const std::size_t& propertiesSetIndex) const;
@@ -65,6 +65,6 @@ namespace hop {
       std::vector<double> lipschitzConstants_;
 
       virtual void estimateImplementation(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) = 0;
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept = 0;
   };
 }

@@ -5,7 +5,7 @@
 
 namespace hop {
   arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
-      const double& angle) {
+      const double& angle) noexcept {
     double sinAngle = std::sin(angle);
     double cosAngle = std::cos(angle);
 
@@ -19,7 +19,7 @@ namespace hop {
   arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
       const double& rollAngle,
       const double& pitchAngle,
-      const double& yawAngle) {
+      const double& yawAngle) noexcept {
     double sinRollAngle = std::sin(rollAngle);
     double cosRollAngle = std::cos(rollAngle);
     double sinPitchAngle = std::sin(pitchAngle);

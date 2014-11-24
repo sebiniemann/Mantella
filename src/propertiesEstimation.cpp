@@ -4,7 +4,7 @@ namespace hop {
   PropertiesEstimation::PropertiesEstimation(
       const std::shared_ptr<LinearModelAnalysis> linearModelAnalysis,
       const std::shared_ptr<QuadraticModelAnalysis> quadraticModelAnalysis,
-      const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis)
+      const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis) noexcept
     : linearModelAnalysis_(linearModelAnalysis),
       quadraticModelAnalysis_(quadraticModelAnalysis),
       lipschitzContinuityAnalysis_(lipschitzContinuityAnalysis),
@@ -16,11 +16,11 @@ namespace hop {
   }
 
   void PropertiesEstimation::estimate(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
     return estimateImplementation(optimisationProblem);
   }
 
-  std::size_t PropertiesEstimation::getNumberOfPropertySets() const {
+  std::size_t PropertiesEstimation::getNumberOfPropertySets() const noexcept {
     return numberOfPropertySets_;
   }
 

@@ -7,7 +7,7 @@ namespace hop {
   arma::Mat<double> getHaltonSequence(
       const arma::Col<arma::uword>& seed,
       const arma::Col<arma::uword>& base,
-      const unsigned int& numberOfColumms) {
+      const unsigned int& numberOfColumms) noexcept {
     arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 
     for (std::size_t n = 0; n < seed.n_elem; ++n) {
@@ -20,7 +20,7 @@ namespace hop {
   arma::Col<double> getVanDerCorputSequence(
       const unsigned int& seed,
       const unsigned int& base,
-      const unsigned int& numberOfColumms) {
+      const unsigned int& numberOfColumms) noexcept {
     arma::Col<double> sequence(numberOfColumms);
 
     for (std::size_t n = 0; n < numberOfColumms; ++n) {

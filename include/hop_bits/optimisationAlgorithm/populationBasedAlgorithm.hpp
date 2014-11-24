@@ -8,7 +8,7 @@ namespace hop {
     public:
       explicit PopulationBasedAlgorithm(
           const std::shared_ptr<OptimisationProblem> optimisationProblem,
-          const unsigned int& populationSize);
+          const unsigned int& populationSize) noexcept;
 
       void setInitialPopulation(
           const arma::Mat<double>& initialPopulation);

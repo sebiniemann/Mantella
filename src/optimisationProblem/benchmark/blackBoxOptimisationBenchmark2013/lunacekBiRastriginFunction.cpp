@@ -10,7 +10,7 @@
 namespace hop {
   namespace bbob2013 {
     double LunacekBiRastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> xHat = 2 * arma::sign(one_) % parameter;
       arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (xHat - 2.5)));
 

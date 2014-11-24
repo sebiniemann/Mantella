@@ -7,7 +7,7 @@
 namespace hop {
   namespace bbob2013 {
     double AttractiveSectorFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));
       z.elem(arma::find(z % translation_ > 0)) *= 100.0;
 

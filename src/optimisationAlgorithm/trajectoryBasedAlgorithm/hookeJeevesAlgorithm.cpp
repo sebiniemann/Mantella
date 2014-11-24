@@ -5,7 +5,7 @@
 
 namespace hop {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm(optimisationProblem),
       reduceStepSize_(false),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
@@ -13,7 +13,7 @@ namespace hop {
     setInitialStepSize(optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds());
   }
 
-  void HookeJeevesAlgorithm::optimiseImplementation() {
+  void HookeJeevesAlgorithm::optimiseImplementation() noexcept {
     ++numberOfIterations_;
 
     bestParameter_ = initialParameter_;
@@ -77,7 +77,7 @@ namespace hop {
     }
   }
 
-  arma::Col<double> HookeJeevesAlgorithm::getReducedStepSize() {
+  arma::Col<double> HookeJeevesAlgorithm::getReducedStepSize() noexcept {
     return stepSize_ / 2;
   }
 

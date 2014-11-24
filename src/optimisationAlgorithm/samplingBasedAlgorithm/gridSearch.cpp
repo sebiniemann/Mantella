@@ -4,14 +4,14 @@
 
 namespace hop {
   GridSearch::GridSearch(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem),
       candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
       candidateSoftConstraintValue_(std::numeric_limits<double>::infinity()) {
     setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
 }
 
-  void GridSearch::optimiseImplementation() {
+  void GridSearch::optimiseImplementation() noexcept {
     arma::Col<double> scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
     numberOfSamples_ = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
 
@@ -54,9 +54,9 @@ namespace hop {
   void GridSearch::setSamplingFactors(
       const arma::Col<double>& samplingFactors) {
     if(samplingFactors.n_elem != optimisationProblem_->getNumberOfDimensions()) {
-
+      // TODO Add exception
     } else if(arma::sum(samplingFactors) != 1) {
-
+      // TODO Add exception
     }
 
     samplingFactors_ = samplingFactors;

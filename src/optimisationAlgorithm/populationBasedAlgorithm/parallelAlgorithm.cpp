@@ -14,13 +14,13 @@
 namespace hop {
   ParallelAlgorithm::ParallelAlgorithm(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize)
+      const unsigned int& populationSize) noexcept
     : PopulationBasedAlgorithm(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
 
-  void ParallelAlgorithm::optimiseImplementation() {
+  void ParallelAlgorithm::optimiseImplementation() noexcept {
     unsigned int serialisedOptimisationProblemLength;
     char* serialisedOptimisationProblemBuffer;
 
@@ -55,7 +55,11 @@ namespace hop {
     parallelOptimiseImplementation();
   }
 
-  int ParallelAlgorithm::getRank() const {
+  unsigned int ParallelAlgorithm::getRank() const noexcept {
     return rank_;
+  }
+
+  unsigned int ParallelAlgorithm::getNumberOfNodes() const noexcept {
+    return numberOfNodes_;
   }
 }

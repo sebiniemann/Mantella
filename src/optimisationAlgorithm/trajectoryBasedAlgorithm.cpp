@@ -2,7 +2,7 @@
 
 namespace hop {
   TrajectoryBasedAlgorithm::TrajectoryBasedAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : OptimisationAlgorithm(optimisationProblem) {
     setInitialParameter(arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds());
   }

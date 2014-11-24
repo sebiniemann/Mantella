@@ -12,7 +12,7 @@
 namespace hop {
   namespace bbob2013 {
     BlackBoxOptimisationBenchmark2013::BlackBoxOptimisationBenchmark2013(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
@@ -32,45 +32,53 @@ namespace hop {
 
     void BlackBoxOptimisationBenchmark2013::setTranslation(
         const arma::Col<double>& translation) {
+      // TODO Add exception
       translation_ = translation;
     }
 
     void BlackBoxOptimisationBenchmark2013::setOne(
         const arma::Col<double>& one) {
+      // TODO Add exception
       one_ = one;
     }
 
     void BlackBoxOptimisationBenchmark2013::setRotationR(
         const arma::Mat<double>& rotationR) {
+      // TODO Add exception
       rotationR_ = rotationR;
     }
 
     void BlackBoxOptimisationBenchmark2013::setRotationQ(
         const arma::Mat<double>& rotationQ) {
+      // TODO Add exception
       rotationQ_ = rotationQ;
     }
 
     void BlackBoxOptimisationBenchmark2013::setDeltaC101(
         const arma::Mat<double>& deltaC101) {
+      // TODO Add exception
       deltaC101_ = deltaC101;
     }
 
     void BlackBoxOptimisationBenchmark2013::setLocalOptimaY101(
         const arma::Mat<double>& localOptimaY101) {
+      // TODO Add exception
       localOptimaY101_ = localOptimaY101;
     }
 
     void BlackBoxOptimisationBenchmark2013::setDeltaC21(
         const arma::Mat<double>& deltaC21) {
+      // TODO Add exception
       deltaC21_ = deltaC21;
     }
 
     void BlackBoxOptimisationBenchmark2013::setLocalOptimaY21(
         const arma::Mat<double>& localOptimaY21) {
+      // TODO Add exception
       localOptimaY21_ = localOptimaY21;
     }
 
-    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomDeltaC101() const {
+    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomDeltaC101() const noexcept {
       arma::Mat<double> deltaC101(numberOfDimensions_, 101);
       deltaC101.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
@@ -82,7 +90,7 @@ namespace hop {
       return deltaC101;
     }
 
-    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomDeltaC21() const {
+    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomDeltaC21() const noexcept {
       arma::Mat<double> deltaC21(numberOfDimensions_, 21);
       deltaC21.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
@@ -94,14 +102,14 @@ namespace hop {
       return deltaC21;
     }
 
-    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomLocalOptimaY101() const {
+    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomLocalOptimaY101() const noexcept {
       arma::Mat<double> localOptimaY101 = arma::randu<arma::Mat<double>>(numberOfDimensions_, 101) * 8.0 - 4.0;
       localOptimaY101.col(0) = 0.8 * localOptimaY101.col(0);
 
       return localOptimaY101;
     }
 
-    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomLocalOptimaY21() const {
+    arma::Mat<double> BlackBoxOptimisationBenchmark2013::getRandomLocalOptimaY21() const noexcept {
       arma::Mat<double> localOptimaY21 = arma::randu<arma::Mat<double>>(numberOfDimensions_, 21) * 9.8 - 4.9;
       localOptimaY21.col(0) = 0.8 * localOptimaY21.col(0);
 
@@ -109,7 +117,7 @@ namespace hop {
     }
 
     arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(
-        const double& condition) const {
+        const double& condition) const noexcept {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
       for (auto& scale : scaling) {
@@ -120,7 +128,7 @@ namespace hop {
     }
 
     arma::Col<double> BlackBoxOptimisationBenchmark2013::getScaling(
-        const arma::Col<double>& condition) const {
+        const arma::Col<double>& condition) const noexcept {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
       for (std::size_t n = 0; n < scaling.n_elem; ++n) {
@@ -132,7 +140,7 @@ namespace hop {
 
     arma::Col<double> BlackBoxOptimisationBenchmark2013::getAsymmetricTransformation(
         const double& beta,
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> asymmetricTransformation(parameter.n_elem);
       arma::Col<double> spacing = arma::linspace<arma::Col<double>>(0, 1, numberOfDimensions_);
 
@@ -150,7 +158,7 @@ namespace hop {
     }
 
     double BlackBoxOptimisationBenchmark2013::getOscillationTransformation(
-        const double& value) const {
+        const double& value) const noexcept {
       if (value != 0.0) {
         double c1;
         double c2;
@@ -170,7 +178,7 @@ namespace hop {
     }
 
     arma::Col<double> BlackBoxOptimisationBenchmark2013::getOscillationTransformation(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> oscillate(parameter.n_elem);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
@@ -181,7 +189,7 @@ namespace hop {
     }
 
     double BlackBoxOptimisationBenchmark2013::getPenality(
-        const arma::Col<double>& parameter) const {
+        const arma::Col<double>& parameter) const noexcept {
       double penality = 0.0;
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {

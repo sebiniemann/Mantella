@@ -5,7 +5,7 @@
 
 namespace hop {
   void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
     std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions() + 1, parameterToObjectiveValueMappings.size());

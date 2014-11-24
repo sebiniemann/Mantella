@@ -7,22 +7,23 @@ namespace hop {
   class StandardParticleSwarmOptimisation2011 : public PopulationBasedAlgorithm {
     public:
       explicit StandardParticleSwarmOptimisation2011(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem,
+          const unsigned int& populationSize) noexcept;
 
       StandardParticleSwarmOptimisation2011(const StandardParticleSwarmOptimisation2011&) = delete;
       StandardParticleSwarmOptimisation2011& operator=(const StandardParticleSwarmOptimisation2011&) = delete;
 
       void setNeighbourhoodProbability(
-          const double& neighbourhoodProbability);
+          const double& neighbourhoodProbability) noexcept;
       void setAcceleration(
-          const double& acceleration);
+          const double& acceleration) noexcept;
       void setLocalAttraction(
-          const double& localAttraction);
+          const double& localAttraction) noexcept;
       void setGlobalAttraction(
-          const double& globalAttraction);
+          const double& globalAttraction) noexcept;
 
       void setMaximalSwarmConvergence(
-          const double& swarmConvergence);
+          const double& swarmConvergence) noexcept;
 
       std::string to_string() const noexcept override;
 
@@ -44,8 +45,8 @@ namespace hop {
 
       arma::Mat<arma::uword> topology_;
 
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
 
-      void initialiseSwarm();
+      void initialiseSwarm() noexcept;
   };
 }

@@ -6,7 +6,7 @@
 
 namespace hop {
   void DirectLipschitzContinuityAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
     lipschitzConstant_ = 0;
 
     std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
