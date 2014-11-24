@@ -20,13 +20,8 @@ namespace hop {
     protected:
       arma::Col<double> maximalStepSize_;
 
-      arma::Col<double> state_;
-
-      arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintsValue_;
-      double candidateObjectiveValue_;
-
-      virtual bool isAcceptableState() noexcept;
+      virtual bool isAcceptableState(
+          const double& candidateObjectiveValue) noexcept;
       virtual arma::Col<double> getVelocity() noexcept;
 
       void optimiseImplementation() noexcept override;
