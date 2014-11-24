@@ -8,7 +8,7 @@ namespace hop {
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : optimisationProblem_(optimisationProblem),
       bestObjectiveValue_(std::numeric_limits<double>::infinity()),
-      bestSoftConstraintValue_(std::numeric_limits<double>::infinity()),
+      bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
       numberOfIterations_(0) {
     setMaximalNumberOfIterations(1000);
   }
@@ -16,7 +16,7 @@ namespace hop {
   void OptimisationAlgorithm::optimise() noexcept {
     // Reset results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
-    bestSoftConstraintValue_ = std::numeric_limits<double>::infinity();
+    bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
     bestParameter_.reset();
     numberOfIterations_ = 0;
     optimisationProblem_->reset();
@@ -41,12 +41,12 @@ namespace hop {
     return bestObjectiveValue_;
   }
 
-  double OptimisationAlgorithm::getBestSoftConstraintValue() const noexcept {
-    return bestSoftConstraintValue_;
+  double OptimisationAlgorithm::getBestSoftConstraintsValue() const noexcept {
+    return bestSoftConstraintsValue_;
   }
 
   bool OptimisationAlgorithm::isFinished() const noexcept {
-    return (bestSoftConstraintValue_ == 0.0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
+    return (bestSoftConstraintsValue_ == 0.0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
   bool OptimisationAlgorithm::isTerminated() const noexcept {
