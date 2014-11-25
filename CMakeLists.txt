@@ -24,7 +24,7 @@ set(HOP_MINOR 0)
 set(HOP_PATCH 0)
 set(HOP_VERSION "${HOP_MAJOR}.${HOP_MINOR}.${HOP_PATCH}")
 
-# Add additional cmake modules (currently unused)
+# Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
