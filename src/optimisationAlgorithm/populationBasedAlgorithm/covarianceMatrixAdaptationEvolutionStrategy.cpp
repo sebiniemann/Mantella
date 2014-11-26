@@ -94,7 +94,7 @@ namespace hop {
     //not sure where to safe our return value?
   }
 
-  std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const {
+  std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const noexcept {
     return "CovarianceMatrixAdaptationEvolutionStrategy";
   }
 }

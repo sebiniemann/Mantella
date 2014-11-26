@@ -12,7 +12,7 @@ namespace hop {
       CovarianceMatrixAdaptationEvolutionStrategy(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
       CovarianceMatrixAdaptationEvolutionStrategy& operator=(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
 
-      std::string to_string() const override;
+      std::string to_string() const noexcept override;
 
     protected:
       void optimiseImplementation() override;

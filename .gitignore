@@ -12,3 +12,6 @@ CMakeCache.txt
 CMakeLists.txt.user
 Makefile
 CMakeFiles
+
+#Netbeans
+/nbproject
