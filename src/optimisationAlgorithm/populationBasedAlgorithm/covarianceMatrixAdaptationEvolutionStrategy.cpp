@@ -1,6 +1,7 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
 namespace hop {
+
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize, const double stepSize)
   : PopulationBasedAlgorithm(optimisationProblem, populationSize), sigma_(stepSize) {
     // init input parameters
@@ -10,29 +11,28 @@ namespace hop {
   void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
     unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
     std::cout << "numberOfDims set\n";
-    arma::Col<double> objectiveValues = arma::randu<arma::Col<double>>(numberOfDimensions);
+    arma::Col<double> objectiveValues = arma::randu<arma::vec>(numberOfDimensions);
     std::cout << "objectiveValues set\n";
 
     //init selection parameters
     unsigned int lambda = 4 + std::floor(3 * std::log(numberOfDimensions));
-    double mu = lambda / 2.0;
+    double mu = lambda / 2;
     arma::Col<double> weights = arma::Col<double>(mu);
 
     //starting the second log at 1 is important ;)
     for (std::size_t n = 0; n < weights.n_elem; ++n) {
       weights.at(n) = std::log(mu + 0.5) - std::log(n+1);
     }
-    weights = normalise(weights, 1);
-
-    // TODO At first, weights is normalised be the p-norm (with p = 1) and afterwards normalised
-    // again by the spectral norm, without a single usage in between. This seems weird.
 
     mu = std::floor(mu);
-    double mueff = std::pow(arma::sum(weights) / arma::norm(weights), 2.0);
+    double weightSum = arma::sum(weights);
+    for (std::size_t n = 0; n < weights.n_elem; ++n) {
+      weights.at(n) = weights.at(n) / weightSum;
+    }
+    double mueff = std::pow(arma::sum(weights), 2) / arma::sum(arma::square(weights));
     std::cout << "selection parameters set\n";
     //init adaptation parameters
     double cc = (4 + mueff / numberOfDimensions) / (numberOfDimensions + 4 + 2 * mueff / numberOfDimensions);
-
     double cs = (mueff + 2) / (numberOfDimensions + mueff + 5);
     double c1 = 2 / (std::pow(numberOfDimensions + 1.3, 2) + mueff);
     double cmu = std::min(1 - c1, 2 * (mueff - 2 + 1 / mueff) / (std::pow(numberOfDimensions + 2, 2) + mueff));
