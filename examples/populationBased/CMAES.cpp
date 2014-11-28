@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
   try {
     arma::arma_rng::set_seed_random();
     unsigned int numberOfDimensions = std::stoi(argv[1]);
-    double stepSize = std::stoi(argv[2]);
+    double stepSize = std::stod(argv[2]);
 
     std::shared_ptr<hop::OptimisationProblem> optProblem(new hop::bbob2013::RosenbrockFunction(numberOfDimensions));
     //TODO: CMAES determines population according to dimension, what to do here?
@@ -16,18 +16,16 @@ int main(int argc, char** argv) {
 
     optAlgo.optimise();
 
-    arma::Col<double> results(7);
+    arma::Col<double> results(6 + numberOfDimensions);
     results.at(0) = optProblem->getNumberOfEvaluations();
     results.at(1) = optProblem->getNumberOfDistinctEvaluations();
     results.at(2) = optAlgo.getNumberOfIterations();
     results.at(3) = optAlgo.getBestObjectiveValue() - optProblem->getAcceptableObjectiveValue();
     results.at(4) = optAlgo.isFinished();
     results.at(5) = optAlgo.isTerminated();
-    results(arma::span(6, 6 + numberOfDimensions - 1)) = optAlgo.getBestParameter().t();
+    //results(arma::span(6, 6 + numberOfDimensions - 1)) = optAlgo.getBestParameter().t();
 
-    for (int i = 0; i < 7; i++) {
-      std::cout << results(i);
-    }
+    std::cout << results << std::endl;
 
     return EXIT_SUCCESS;
   } catch (const std::exception& exception) {
