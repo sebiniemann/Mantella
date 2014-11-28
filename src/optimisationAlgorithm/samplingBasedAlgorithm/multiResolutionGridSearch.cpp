@@ -1,59 +1,127 @@
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp>
 
-#include <iostream>
+// C++ Standard Library
+#include <vector>
+#include <map>
+
+// HOP
+#include <hop_bits/helper/cache.hpp>
 
 namespace hop {
   MultiResolutionGridSearch::MultiResolutionGridSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm(optimisationProblem),
-      candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
-      candidateSoftConstraintsValue_(std::numeric_limits<double>::infinity()) {
+    : SamplingBasedAlgorithm(optimisationProblem) {
     setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
-}
+    setAverageSamplesPerDimension(11);
+  }
 
   void MultiResolutionGridSearch::optimiseImplementation() noexcept {
-    const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
-    numberOfSamples_ = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
+    unsigned int resolutionDepth = 0;
 
-    sampleParameters_.clear();
-    for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
-      sampleParameters_.push_back(arma::linspace(optimisationProblem_->getLowerBounds().at(n), optimisationProblem_->getUpperBounds().at(n), numberOfSamples_.at(n)));
-    }
+    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, CacheHasher, CacheKeyEqual>> samplesPerResolution;
+    samplesPerResolution.insert({resolutionDepth, {}});
 
-    bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
-    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
+    std::map<unsigned int, double> bestSoftCostraintsPerResolution;
+    bestSoftCostraintsPerResolution.insert({resolutionDepth, std::numeric_limits<double>::infinity()});
 
-    sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
-    candidateParameter_.set_size(optimisationProblem_->getNumberOfDimensions());
-    do {
-      ++numberOfIterations_;
+    std::map<unsigned int, double> bestObjectiveValuePerResolution;
+    bestObjectiveValuePerResolution.insert({resolutionDepth, std::numeric_limits<double>::infinity()});
 
-      for(std::size_t n = 0; n < sampleIndicies_.n_elem; ++n) {
-        candidateParameter_.at(n) = sampleParameters_.at(n).at(sampleIndicies_.at(n));
+    std::map<unsigned int, arma::Col<double>> lowerGridBoundsPerResolution;
+    lowerGridBoundsPerResolution.insert({resolutionDepth, optimisationProblem_->getLowerBounds()});
+
+    std::map<unsigned int, arma::Col<double>> upperGridBoundsPerResolution;
+    upperGridBoundsPerResolution.insert({resolutionDepth, optimisationProblem_->getUpperBounds()});
+
+    while(!isFinished() & !isTerminated()) {
+      const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
+      const arma::Col<arma::uword>& numberOfSamples = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(std::pow(averageSamplesPerDimension_, optimisationProblem_->getNumberOfDimensions()) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
+
+      std::vector<arma::Col<double>> sampleParameters_;
+      for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
+        sampleParameters_.push_back(arma::linspace(lowerGridBoundsPerResolution.at(resolutionDepth).at(n), upperGridBoundsPerResolution.at(resolutionDepth).at(n), numberOfSamples.at(n)));
       }
 
-      ++sampleIndicies_.at(0);
-      for(std::size_t n = 0; n < sampleIndicies_.n_elem - 1; ++n) {
-        if(sampleIndicies_.at(n) >= numberOfSamples_.at(n)) {
-          sampleIndicies_.at(n) = 0;
-           ++sampleIndicies_.at(n + 1);
+      arma::Col<arma::uword> sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
+      arma::Col<double> candidateParameter(optimisationProblem_->getNumberOfDimensions());
+
+      const unsigned int& overallNumberOfSamples = arma::prod(numberOfSamples);
+      for(unsigned int n = 0; n < overallNumberOfSamples; ++n) {
+        ++numberOfIterations_;
+
+        for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
+          candidateParameter.at(k) = sampleParameters_.at(k).at(sampleIndicies_.at(k));
+        }
+
+        ++sampleIndicies_.at(0);
+        for(std::size_t k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
+          if(sampleIndicies_.at(k) >= numberOfSamples.at(k)) {
+            sampleIndicies_.at(k) = 0;
+             ++sampleIndicies_.at(k + 1);
+          }
+        }
+
+        const double& candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
+        const double& candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
+
+        samplesPerResolution.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
+
+        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+          bestParameter_ = candidateParameter;
+          bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
+          bestObjectiveValue_ = candidateObjectiveValue;
+        }
+
+        if(isFinished() || isTerminated()) {
+          break;
+        }
+
+      }
+
+      bool foundSomething = false;
+      arma::Col<double> refinedGridParameter;
+      double refinedGridSoftConstraintsValue = bestSoftCostraintsPerResolution.at(resolutionDepth);
+      double refinedGridObjectiveValue = bestObjectiveValuePerResolution.at(resolutionDepth);
+
+      for(const auto& sample : samplesPerResolution.at(resolutionDepth)) {
+        const double& candidateSoftConstraintsValue = sample.second.first;
+        const double& candidateObjectiveValue = sample.second.second;
+
+        if(candidateSoftConstraintsValue < refinedGridSoftConstraintsValue || candidateSoftConstraintsValue == refinedGridSoftConstraintsValue && candidateObjectiveValue < refinedGridObjectiveValue) {
+          refinedGridParameter = sample.first;
+          refinedGridSoftConstraintsValue = candidateSoftConstraintsValue;
+          refinedGridObjectiveValue = candidateObjectiveValue;
+
+          foundSomething = true;
         }
       }
 
-      candidateSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
-      candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
+      const arma::Col<double>& stepSize = (upperGridBoundsPerResolution.at(resolutionDepth) - lowerGridBoundsPerResolution.at(resolutionDepth)) / (numberOfSamples - 1);
+      arma::Col<double> lowerGridBoundsCandidate = refinedGridParameter - stepSize;
+      arma::Col<double> upperGridBoundsCandidate = refinedGridParameter + stepSize;
 
-      if(candidateSoftConstraintsValue_ < bestSoftConstraintsValue_ || candidateSoftConstraintsValue_ == bestSoftConstraintsValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
-        bestParameter_ = candidateParameter_;
-        bestSoftConstraintsValue_ = candidateSoftConstraintsValue_;
-        bestObjectiveValue_ = candidateObjectiveValue_;
+      const arma::Col<arma::uword>& belowLowerBound = arma::find(lowerGridBoundsCandidate < lowerGridBoundsPerResolution.at(resolutionDepth));
+      const arma::Col<arma::uword>& aboveUpperBound = arma::find(upperGridBoundsCandidate > upperGridBoundsPerResolution.at(resolutionDepth));
+
+      lowerGridBoundsCandidate.elem(belowLowerBound) = lowerGridBoundsPerResolution.at(resolutionDepth).elem(belowLowerBound);
+      upperGridBoundsCandidate.elem(aboveUpperBound) = upperGridBoundsPerResolution.at(resolutionDepth).elem(aboveUpperBound);
+
+      ++resolutionDepth;
+      lowerGridBoundsPerResolution.insert({resolutionDepth, lowerGridBoundsCandidate});
+      upperGridBoundsPerResolution.insert({resolutionDepth, upperGridBoundsCandidate});
+
+      bestSoftCostraintsPerResolution.insert({resolutionDepth, refinedGridSoftConstraintsValue});
+      bestObjectiveValuePerResolution.insert({resolutionDepth, refinedGridObjectiveValue});
+
+      if(samplesPerResolution.find(resolutionDepth) == samplesPerResolution.end()) {
+        samplesPerResolution.insert({resolutionDepth, {}});
       }
-    } while(!isFinished() && !isTerminated());
+    }
   }
 
-  void MultiResolutionGridSearch::setMaximalResolutionDepth(
-      const unsigned int& maximalResolutionDepth) noexcept {
-    maximalResolutionDepth_ = maximalResolutionDepth;
+  void MultiResolutionGridSearch::setAverageSamplesPerDimension(
+      const unsigned int& averageSamplesPerDimension) noexcept {
+    averageSamplesPerDimension_ = averageSamplesPerDimension;
   }
 
   void MultiResolutionGridSearch::setSamplingFactors(
