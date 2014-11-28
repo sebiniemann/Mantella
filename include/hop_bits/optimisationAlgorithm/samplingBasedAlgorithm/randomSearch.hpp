@@ -15,10 +15,6 @@ namespace hop {
       std::string to_string() const noexcept override;
 
     protected:
-      arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintsValue_;
-      double candidateObjectiveValue_;
-
       void optimiseImplementation() noexcept override;
   };
 }

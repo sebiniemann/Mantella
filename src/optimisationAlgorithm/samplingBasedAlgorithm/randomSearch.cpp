@@ -3,9 +3,7 @@
 namespace hop {
   RandomSearch::RandomSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm(optimisationProblem),
-      candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
-      candidateSoftConstraintsValue_(std::numeric_limits<double>::infinity()) {
+    : SamplingBasedAlgorithm(optimisationProblem) {
 
   }
 
@@ -16,19 +14,19 @@ namespace hop {
     do {
       ++numberOfIterations_;
 
-      candidateParameter_ = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
-      candidateSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
-      candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
+      const arma::Col<double>& candidateParameter = arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds();
+      const double& candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
+      const double& candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
 
-      if(candidateSoftConstraintsValue_ < bestSoftConstraintsValue_ || candidateSoftConstraintsValue_ == bestSoftConstraintsValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
-        bestParameter_ = candidateParameter_;
-        bestSoftConstraintsValue_ = candidateSoftConstraintsValue_;
-        bestObjectiveValue_ = candidateObjectiveValue_;
+      if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+        bestParameter_ = candidateParameter;
+        bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
+        bestObjectiveValue_ = candidateObjectiveValue;
       }
     } while(!isFinished() && !isTerminated());
   }
 
   std::string RandomSearch::to_string() const noexcept {
-    return "PureRandomSearch";
+    return "RandomSearch";
   }
 }

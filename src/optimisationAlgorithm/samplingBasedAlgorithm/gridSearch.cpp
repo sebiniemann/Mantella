@@ -1,54 +1,56 @@
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
 
-#include <iostream>
+// C++ Standard Library
+#include <vector>
 
 namespace hop {
   GridSearch::GridSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm(optimisationProblem),
-      candidateObjectiveValue_(std::numeric_limits<double>::infinity()),
-      candidateSoftConstraintsValue_(std::numeric_limits<double>::infinity()) {
+    : SamplingBasedAlgorithm(optimisationProblem) {
     setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
 }
 
   void GridSearch::optimiseImplementation() noexcept {
     const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
-    numberOfSamples_ = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
+    const arma::Col<arma::uword>& numberOfSamples_ = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
 
-    sampleParameters_.clear();
+    std::vector<arma::Col<double>> sampleParameters_;
     for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
       sampleParameters_.push_back(arma::linspace(optimisationProblem_->getLowerBounds().at(n), optimisationProblem_->getUpperBounds().at(n), numberOfSamples_.at(n)));
     }
 
-    bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
-    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
+    arma::Col<arma::uword> sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
+    arma::Col<double> candidateParameter(optimisationProblem_->getNumberOfDimensions());
 
-    sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
-    candidateParameter_.set_size(optimisationProblem_->getNumberOfDimensions());
-    do {
+    const unsigned int& overallNumberOfSamples = arma::sum(numberOfSamples_);
+    for(unsigned int n = 0; n < overallNumberOfSamples; ++n) {
       ++numberOfIterations_;
 
-      for(std::size_t n = 0; n < sampleIndicies_.n_elem; ++n) {
-        candidateParameter_.at(n) = sampleParameters_.at(n).at(sampleIndicies_.at(n));
+      for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
+        candidateParameter.at(k) = sampleParameters_.at(k).at(sampleIndicies_.at(k));
       }
 
       ++sampleIndicies_.at(0);
-      for(std::size_t n = 0; n < sampleIndicies_.n_elem - 1; ++n) {
-        if(sampleIndicies_.at(n) >= numberOfSamples_.at(n)) {
-          sampleIndicies_.at(n) = 0;
-           ++sampleIndicies_.at(n + 1);
+      for(std::size_t k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
+        if(sampleIndicies_.at(k) >= numberOfSamples_.at(k)) {
+          sampleIndicies_.at(k) = 0;
+           ++sampleIndicies_.at(k + 1);
         }
       }
 
-      candidateSoftConstraintsValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
-      candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
+      const double& candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
+      const double& candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
 
-      if(candidateSoftConstraintsValue_ < bestSoftConstraintsValue_ || candidateSoftConstraintsValue_ == bestSoftConstraintsValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
-        bestParameter_ = candidateParameter_;
-        bestSoftConstraintsValue_ = candidateSoftConstraintsValue_;
-        bestObjectiveValue_ = candidateObjectiveValue_;
+      if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+        bestParameter_ = candidateParameter;
+        bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
+        bestObjectiveValue_ = candidateObjectiveValue;
       }
-    } while(!isFinished() && !isTerminated());
+
+      if (isFinished() || isTerminated()) {
+        break;
+      }
+    }
   }
 
   void GridSearch::setSamplingFactors(
