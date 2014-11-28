@@ -56,16 +56,22 @@ namespace hop {
       arma::Mat<double> arx = arma::Mat<double>(numberOfDimensions, lambda);
       for (std::size_t n = 0; n < lambda; ++n) {
         arx.col(n) = objectiveValues + sigma_ * B * (D % arma::randn<arma::Col<double>>(numberOfDimensions));
-        //TODO: following line returns 1..12 on first run (haven't checked more) - seems... unlikely
         arfitness(n) = optimisationProblem_->getObjectiveValue(arx.col(n));
         ++numberOfIterations_;
-      }
-      for(int i = 0; i < arx.n_rows; i++) {
-        for(int j = 0; j < arx.n_cols; j++) {
-          std::cout << arx.at(i,j) <<",";
+        
+        if (arfitness(n) < bestObjectiveValue_) {
+          bestObjectiveValue_ = arfitness(n);
+          bestParameter_ = arx.col(n);
         }
-        std::cout << "COLEND\n";
+        
+        if (isFinished() || isTerminated()) {
+          break;
+        }
       }
+      
+      std::cout << arfitness << std::endl;
+      std::cout << arx << std::endl;
+      
       std::cout << "sort fitness\n";
       //sort by fitness and compute weighted mean into objectiveValues
       arma::Col<arma::uword> arindex = arma::sort_index(arfitness);
@@ -85,11 +91,9 @@ namespace hop {
       for (int i = 0; i < arindex.n_elem; i++) {
         std::cout << arindex(i) << ", ";
       }
-      std::cout << "\n";
-      for (int i = 0; i < weights.n_rows; i++) {
-        std::cout << weights(i) << ", ";
-      }
-      std::cout << "\n";
+      
+      std::cout << weights << std::endl;
+      
       //TODO: i don't know how to do a "cool" matlab style select like 1:lambda over arindex, so this is it
       // mind usage later on in adapt covariance
       arma::Col<arma::uword> shortArindex = arma::Col<arma::uword>(mu);
@@ -109,12 +113,16 @@ namespace hop {
       //cumulation: update evolution paths
       ps = (1 - cs) * ps + std::sqrt(cs * (2 - cs) * mueff) * invsqrtC * (objectiveValues - oldObjectiveValues) / sigma_;
       int hsig = arma::norm(ps) / std::sqrt(std::pow(1 - (1 - cs), 2 * numberOfIterations_ / lambda)) / chiN < 1.4 + 2 / (numberOfDimensions + 1);
+      
+      std::cout << pc << std::endl;
+      std::cout << sigma_ << std::endl;
+      
       pc = (1 - cc) * pc + hsig * std::sqrt(cc * (2 - cc) * mueff) * (objectiveValues - oldObjectiveValues) / sigma_;
-
+      
       std::cout << "adapt covariance\n";
       //adapt covariance matrix C
       arma::Mat<double> artmp = (1 / sigma_) * arx.cols(shortArindex) - arma::repmat(oldObjectiveValues, 1, mu);
-      std::cout << "first works";
+      std::cout << "first works" << std::endl;
       C = (1 - c1 - cmu) * C + //old matrix
           c1 * (pc * pc.t() + //rank one update
           (1 - hsig) * cc * (2 - cc) * C) + //correction for hsig==0
@@ -130,17 +138,19 @@ namespace hop {
         eigeneval = numberOfIterations_;
         //TODO: C = triu(C) + triu(C,1)';
         //is the actual matlab syntax for the next lines, unfortunately arma doesn't have triu with a second parameter (yet)
-        arma::Mat<double> tempC = arma::trimatu(C);
-        tempC.diag().zeros();
-        C = arma::trimatu(C) + tempC.t(); //enforce symmetry
+        C = arma::symmatu(C);
         //matlab code is [B,D] = eig(C); arma uses switched arguments according to API
-        arma::Col<double> tempD = arma::Col<double>();
+        arma::Col<double> tempD;
         //TODO: which eig is right? eig_sym failed to converge - eigs_gen and eigs_sym need a number of eigenvalues to produce...
         //also eigs_sym/eigs_gen fail because no matching function found when adding numberofDims as k. not sure why?
-        arma::eigs_gen(tempD, B, C,numberOfDimensions);
-        D = arma::sqrt(arma::diagmat(tempD)); // TODO: From wiki "D is a vector of standard deviations now" which it obviously isn't here.
+        std::cout << C << std::endl;
+        arma::eig_sym(tempD, B, C);
+        std::cout << "Test A" << std::endl;
+        D = arma::sqrt(tempD); // TODO: From wiki "D is a vector of standard deviations now" which it obviously isn't here.
+        std::cout << "Test B" << std::endl;
         // also not sure what the point of that is, since it's going to be used as a matrix in the next line anyway.
         invsqrtC = B * arma::diagmat(1 / D) * B.t();
+        std::cout << "Test C" << std::endl;
       }
     }
     //while loop has ended
