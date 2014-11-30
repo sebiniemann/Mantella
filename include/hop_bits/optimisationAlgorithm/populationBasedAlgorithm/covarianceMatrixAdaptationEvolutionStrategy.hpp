@@ -7,15 +7,17 @@ namespace hop {
     public:
       //TODO: which input parameters should be added to the constructor?
       explicit CovarianceMatrixAdaptationEvolutionStrategy(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,const unsigned int& populationSize,const double stepSize);
+        const std::shared_ptr<OptimisationProblem> optimisationProblem,const unsigned int& populationSize);
 
       CovarianceMatrixAdaptationEvolutionStrategy(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
       CovarianceMatrixAdaptationEvolutionStrategy& operator=(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
 
       std::string to_string() const noexcept override;
+      
+      void setStepsize(double sigma);
 
     protected:
       void optimiseImplementation() override;
-      double sigma_;
+      double stepSize_;
   };
 }

@@ -2,17 +2,20 @@
 #include <hop>
 
 int main(int argc, char** argv) {
-  if (argc != 3) {
-    throw std::invalid_argument("The number of arguments (" + std::to_string(argc) + ") provided must be exactly 2.");
-  }
+  //  if (argc != 2) {
+  //    throw std::invalid_argument("The number of arguments (" + std::to_string(argc) + ") provided must be exactly 1.");
+  //  }
   try {
     arma::arma_rng::set_seed_random();
-    unsigned int numberOfDimensions = std::stoi(argv[1]);
-    double stepSize = std::stod(argv[2]);
+    unsigned int numberOfDimensions = 10; //std::stoi(argv[1]);
+    unsigned int lambda = 4 + std::floor(3 * std::log(numberOfDimensions));
+    
+    std::shared_ptr<hop::bbob2013::BlackBoxOptimisationBenchmark2013>  optProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
+    optProblem->setTranslation(arma::zeros<arma::Col<double>>(optProblem->getNumberOfDimensions()));
 
-    std::shared_ptr<hop::OptimisationProblem> optProblem(new hop::bbob2013::RosenbrockFunction(numberOfDimensions));
-    //TODO: CMAES determines population according to dimension, what to do here?
-    hop::CovarianceMatrixAdaptationEvolutionStrategy optAlgo(optProblem, 0, stepSize);
+    //std::shared_ptr<hop::OptimisationProblem> optProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
+    
+    hop::CovarianceMatrixAdaptationEvolutionStrategy optAlgo(optProblem, lambda);
 
     optAlgo.optimise();
 
@@ -23,9 +26,15 @@ int main(int argc, char** argv) {
     results.at(3) = optAlgo.getBestObjectiveValue() - optProblem->getAcceptableObjectiveValue();
     results.at(4) = optAlgo.isFinished();
     results.at(5) = optAlgo.isTerminated();
-    //results(arma::span(6, 6 + numberOfDimensions - 1)) = optAlgo.getBestParameter().t();
+    results(arma::span(6, 6 + numberOfDimensions - 1)) = optAlgo.getBestParameter();
+    
+    std::cout << results.at(2) << std::endl;
+    std::cout << results.at(3) << std::endl;
 
-    std::cout << results << std::endl;
+//    std::cout << results << std::endl;
+//
+//    std::cout << "acceptable: " << optProblem->getAcceptableObjectiveValue() << std::endl;
+//    std::cout << "best: " << optAlgo.getBestObjectiveValue() << std::endl;
 
     return EXIT_SUCCESS;
   } catch (const std::exception& exception) {
