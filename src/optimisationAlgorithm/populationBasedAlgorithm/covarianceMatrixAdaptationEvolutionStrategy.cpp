@@ -34,6 +34,7 @@ namespace hop {
     double chiN = std::sqrt(numberOfDimensions) * (1.0 - (1.0 / (4.0 * numberOfDimensions)) + (1.0 / (21.0 * std::pow(numberOfDimensions, 2.0))));
 
     //LOOP START
+    unsigned int numberOfDecompositions = 0;
     while (!isFinished() && !isTerminated()) {
       //generate and evaluate lambda offspring
       arma::Col<double> arfitness(populationSize_);
@@ -65,7 +66,7 @@ namespace hop {
       //cumulation: update evolution paths
       ps = (1.0 - cs) * ps + std::sqrt(cs * (2.0 - cs) * varianceEffectiveness) * invsqrtC * (objectiveValues - oldObjectiveValues) / stepSize_;
       //original matlab line: hsig = norm(ps)/sqrt(1-(1-cs)^(2*numberOfIterations_/lambda))/chiN < 1.4 + 2/(numberOfDimensions+1);
-      double hsigLeftSide = (arma::norm(ps) / std::sqrt(1 - std::pow((1 - cs), 2 * numberOfIterations_ / populationSize_))) / chiN;
+      double hsigLeftSide = (arma::norm(ps) / std::sqrt(1.0 - std::pow((1.0 - cs), 2.0 * static_cast<double>(numberOfIterations_) / static_cast<double>(populationSize_)))) / chiN;
       double hsigRightSide = 1.4 + 2 / (numberOfDimensions + 1.0);
       //TODO: hsig cannot be an int (will always be zero), although its a bool operation happening. Must be an arma thing. Maybe even a bug?
       double hsig = hsigLeftSide < hsigRightSide;
@@ -73,6 +74,7 @@ namespace hop {
       pc = (1.0 - cc) * pc + hsig * std::sqrt(cc * (2.0 - cc) * varianceEffectiveness) * (objectiveValues - oldObjectiveValues) / stepSize_;
 
       //adapt covariance matrix C
+      // TODO Relace repmat, as this might be the most time consuming task (besides the decomposition)
       arma::Mat<double> artmp = (1.0 / stepSize_) * arx.cols(arindex) - arma::repmat(oldObjectiveValues, 1, numberOfParents);
       C = (1.0 - c1 - cmu) * C + //old matrix
           c1 * (pc * pc.t() + //rank one update
@@ -80,17 +82,15 @@ namespace hop {
           cmu * artmp * arma::diagmat(weights) * artmp.t(); // rank mu update
 
       //adapt stepsize sigma
-      stepSize_ = stepSize_ * std::exp((cs / damps) * (arma::norm(ps) / chiN - 1));
+      stepSize_ = stepSize_ * std::exp((cs / damps) * (arma::norm(ps) / chiN - 1.0));
 
       //decomposition of C into B*diag(D.^2)*B' (diagonalization)
-      //the first comparator element is actually numberOfIterations - eigeneval, but eigeneval only ever holds NOI - NOI last turn, which is the same as popSize
-      //this only might get calculated when it shouldn't is if a acceptable value is found before we reach popSize. But this gets called every time with atleast dim>=30 anyway
-      if (populationSize_ > (populationSize_ / (c1 + cmu) / (numberOfDimensions * 1.0) / 10.0)) {
+      if (numberOfIterations_ - numberOfDecompositions > 10.0 * stepSize_ / ((c1 + cmu) * static_cast<double>(numberOfDimensions))) {
+        numberOfDecompositions = numberOfIterations_;
         C = arma::symmatu(C);
         //matlab code is [B,D] = eig(C); arma uses switched arguments
-        arma::Col<double> tempD;
-        arma::eig_sym(tempD, B, C);
-        D = arma::sqrt(tempD);
+        arma::eig_sym(D, B, C);
+        D = arma::sqrt(D);
         invsqrtC = B * arma::diagmat(1.0 / D) * B.t();
       }
     }
