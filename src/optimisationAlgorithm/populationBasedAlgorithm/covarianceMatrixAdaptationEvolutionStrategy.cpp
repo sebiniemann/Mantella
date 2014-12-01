@@ -57,16 +57,10 @@ namespace hop {
       }
       
       //sort by fitness and compute weighted mean into objectiveValues
-      arma::Col<arma::uword> arindex = arma::sort_index(arfitness);
+      arma::Col<arma::uword> arindex = static_cast<arma::Col<arma::uword>>(arma::sort_index(arfitness)).subvec(0, numberOfParents - 1);
       arma::Col<double> oldObjectiveValues = objectiveValues;
-      //TODO: i don't know how to do a "cool" matlab style select like 1:lambda over arindex, so this is it
-      // mind usage later on in adapt covariance
-      arma::Col<arma::uword> shortArindex(numberOfParents);
-      for (std::size_t n = 0; n < numberOfParents; ++n) {
-        shortArindex.at(n) = arindex.at(n);
-      }
-      
-      objectiveValues = arx.cols(shortArindex) * weights;
+
+      objectiveValues = arx.cols(arindex) * weights;
       
       //cumulation: update evolution paths
       ps = (1.0 - cs) * ps + std::sqrt(cs * (2.0 - cs) * varianceEffectiveness) * invsqrtC * (objectiveValues - oldObjectiveValues) / stepSize_;
@@ -79,7 +73,7 @@ namespace hop {
       pc = (1.0 - cc) * pc + hsig * std::sqrt(cc * (2.0 - cc) * varianceEffectiveness) * (objectiveValues - oldObjectiveValues) / stepSize_;
 
       //adapt covariance matrix C
-      arma::Mat<double> artmp = (1.0 / stepSize_) * arx.cols(shortArindex) - arma::repmat(oldObjectiveValues, 1, numberOfParents);
+      arma::Mat<double> artmp = (1.0 / stepSize_) * arx.cols(arindex) - arma::repmat(oldObjectiveValues, 1, numberOfParents);
       C = (1.0 - c1 - cmu) * C + //old matrix
           c1 * (pc * pc.t() + //rank one update
           (1.0 - hsig) * cc * (2.0 - cc) * C) + //correction for hsig==0
