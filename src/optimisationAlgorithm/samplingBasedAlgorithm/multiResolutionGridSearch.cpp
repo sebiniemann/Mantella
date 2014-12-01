@@ -11,35 +11,30 @@ namespace hop {
   MultiResolutionGridSearch::MultiResolutionGridSearch(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem) {
-    setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
-    setAverageSamplesPerDimension(11);
+    setMinimalSamplingDistances(arma::ones(optimisationProblem_->getNumberOfDimensions()) * 1e-10);
+    setSamplingDistributionPerDimension(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
+    setMaximalSamplesPerResolution(11);
   }
 
   void MultiResolutionGridSearch::optimiseImplementation() noexcept {
     unsigned int resolutionDepth = 0;
 
-    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, CacheHasher, CacheKeyEqual>> samplesPerResolution;
-    samplesPerResolution.insert({resolutionDepth, {}});
+    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, CacheHasher, CacheKeyEqual>> samplesPerResolutions;
+    samplesPerResolutions.insert({resolutionDepth, {}});
 
-    std::map<unsigned int, double> bestSoftCostraintsPerResolution;
-    bestSoftCostraintsPerResolution.insert({resolutionDepth, std::numeric_limits<double>::infinity()});
+    double gridSoftCostraintsValueThreshold = std::numeric_limits<double>::infinity();
+    double gridObjectiveValueThreshold = std::numeric_limits<double>::infinity();
 
-    std::map<unsigned int, double> bestObjectiveValuePerResolution;
-    bestObjectiveValuePerResolution.insert({resolutionDepth, std::numeric_limits<double>::infinity()});
-
-    std::map<unsigned int, arma::Col<double>> lowerGridBoundsPerResolution;
-    lowerGridBoundsPerResolution.insert({resolutionDepth, optimisationProblem_->getLowerBounds()});
-
-    std::map<unsigned int, arma::Col<double>> upperGridBoundsPerResolution;
-    upperGridBoundsPerResolution.insert({resolutionDepth, optimisationProblem_->getUpperBounds()});
+    arma::Col<double> gridLowerBounds = optimisationProblem_->getLowerBounds();
+    arma::Col<double> gridUpperBounds = optimisationProblem_->getLowerBounds();
 
     while(!isFinished() & !isTerminated()) {
-      const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
-      const arma::Col<arma::uword>& numberOfSamples = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(std::pow(averageSamplesPerDimension_, optimisationProblem_->getNumberOfDimensions()) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
+      const arma::Col<double>& scaledSamplingFactors = samplingDistributionPerDimension_.at(0) / samplingDistributionPerDimension_;
+      const arma::Col<arma::uword>& numberOfSamples = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(std::pow(maximalSamplesPerResolution_, optimisationProblem_->getNumberOfDimensions()) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
 
       std::vector<arma::Col<double>> sampleParameters_;
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
-        sampleParameters_.push_back(arma::linspace(lowerGridBoundsPerResolution.at(resolutionDepth).at(n), upperGridBoundsPerResolution.at(resolutionDepth).at(n), numberOfSamples.at(n)));
+        sampleParameters_.push_back(arma::linspace(gridLowerBounds.at(n), gridUpperBounds.at(n), numberOfSamples.at(n)));
       }
 
       arma::Col<arma::uword> sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
@@ -64,7 +59,7 @@ namespace hop {
         const double& candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
         const double& candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
 
-        samplesPerResolution.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
+        samplesPerResolutions.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
 
         if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
           bestParameter_ = candidateParameter;
@@ -75,64 +70,94 @@ namespace hop {
         if(isFinished() || isTerminated()) {
           break;
         }
-
       }
 
-      bool foundSomething = false;
-      arma::Col<double> refinedGridParameter;
-      double refinedGridSoftConstraintsValue = bestSoftCostraintsPerResolution.at(resolutionDepth);
-      double refinedGridObjectiveValue = bestObjectiveValuePerResolution.at(resolutionDepth);
+      arma::Col<double> bestGridParameter;
+      double bestGridSoftConstraintsValue = std::numeric_limits<double>::infinity();
+      double bestGridObjectiveValue = std::numeric_limits<double>::infinity();
 
-      for(const auto& sample : samplesPerResolution.at(resolutionDepth)) {
-        const double& candidateSoftConstraintsValue = sample.second.first;
-        const double& candidateObjectiveValue = sample.second.second;
+      const arma::Col<double>& stepSize = (gridUpperBounds - gridLowerBounds) / (numberOfSamples - 1);
+//      if (arma::all(stepSize < minimalSamplingDistances_)) {
+//        bestGridSoftConstraintsValue = gridSoftCostraintsValueThreshold;
+//        bestGridSoftConstraintsValue = gridObjectiveValueThreshold;
 
-        if(candidateSoftConstraintsValue < refinedGridSoftConstraintsValue || candidateSoftConstraintsValue == refinedGridSoftConstraintsValue && candidateObjectiveValue < refinedGridObjectiveValue) {
-          refinedGridParameter = sample.first;
-          refinedGridSoftConstraintsValue = candidateSoftConstraintsValue;
-          refinedGridObjectiveValue = candidateObjectiveValue;
+//        unsigned int bestResolutionDepth = 0;
+//        for (std::size_t n = 0; n < samplesPerResolutions.size(); ++n) {
+//          for (const auto& sample : samplesPerResolutions.at(n)) {
+//            const double& candidateSoftConstraintsValue = sample.second.first;
+//            const double& candidateObjectiveValue = sample.second.second;
 
-          foundSomething = true;
+//            if(candidateSoftConstraintsValue < bestGridSoftConstraintsValue || candidateSoftConstraintsValue == bestGridSoftConstraintsValue && candidateObjectiveValue < bestGridObjectiveValue) {
+//              bestGridParameter = sample.first;
+//              bestGridSoftConstraintsValue = candidateSoftConstraintsValue;
+//              bestGridObjectiveValue = candidateObjectiveValue;
+
+//              bestResolutionDepth = n;
+//            }
+//          }
+//        }
+
+//        resolutionDepth = bestResolutionDepth + 1;
+//      } else {
+        for(const auto& sample : samplesPerResolutions.at(resolutionDepth)) {
+          const double& candidateSoftConstraintsValue = sample.second.first;
+          const double& candidateObjectiveValue = sample.second.second;
+
+          if(candidateSoftConstraintsValue < bestGridSoftConstraintsValue || candidateSoftConstraintsValue == bestGridSoftConstraintsValue && candidateObjectiveValue < bestGridObjectiveValue) {
+            bestGridParameter = sample.first;
+            bestGridSoftConstraintsValue = candidateSoftConstraintsValue;
+            bestGridObjectiveValue = candidateObjectiveValue;
+          }
         }
-      }
 
-      const arma::Col<double>& stepSize = (upperGridBoundsPerResolution.at(resolutionDepth) - lowerGridBoundsPerResolution.at(resolutionDepth)) / (numberOfSamples - 1);
-      arma::Col<double> lowerGridBoundsCandidate = refinedGridParameter - stepSize;
-      arma::Col<double> upperGridBoundsCandidate = refinedGridParameter + stepSize;
+        ++resolutionDepth;
+//    }
 
-      const arma::Col<arma::uword>& belowLowerBound = arma::find(lowerGridBoundsCandidate < lowerGridBoundsPerResolution.at(resolutionDepth));
-      const arma::Col<arma::uword>& aboveUpperBound = arma::find(upperGridBoundsCandidate > upperGridBoundsPerResolution.at(resolutionDepth));
+      gridSoftCostraintsValueThreshold = bestGridSoftConstraintsValue;
+      gridObjectiveValueThreshold = bestGridObjectiveValue;
 
-      lowerGridBoundsCandidate.elem(belowLowerBound) = lowerGridBoundsPerResolution.at(resolutionDepth).elem(belowLowerBound);
-      upperGridBoundsCandidate.elem(aboveUpperBound) = upperGridBoundsPerResolution.at(resolutionDepth).elem(aboveUpperBound);
+      arma::Col<double> gridLowerBoundsCandidate = bestGridParameter - stepSize;
+      arma::Col<double> gridUpperBoundsCandidate = bestGridParameter + stepSize;
 
-      ++resolutionDepth;
-      lowerGridBoundsPerResolution.insert({resolutionDepth, lowerGridBoundsCandidate});
-      upperGridBoundsPerResolution.insert({resolutionDepth, upperGridBoundsCandidate});
+      const arma::Col<arma::uword>& belowLowerBound = arma::find(gridLowerBoundsCandidate < gridLowerBounds);
+      const arma::Col<arma::uword>& aboveUpperBound = arma::find(gridUpperBoundsCandidate > gridUpperBounds);
 
-      bestSoftCostraintsPerResolution.insert({resolutionDepth, refinedGridSoftConstraintsValue});
-      bestObjectiveValuePerResolution.insert({resolutionDepth, refinedGridObjectiveValue});
+      gridLowerBoundsCandidate.elem(belowLowerBound) = gridLowerBounds.elem(belowLowerBound);
+      gridUpperBoundsCandidate.elem(aboveUpperBound) = gridUpperBounds.elem(aboveUpperBound);
 
-      if(samplesPerResolution.find(resolutionDepth) == samplesPerResolution.end()) {
-        samplesPerResolution.insert({resolutionDepth, {}});
+      gridLowerBounds = gridLowerBoundsCandidate;
+      gridUpperBounds = gridUpperBoundsCandidate;
+
+      if(samplesPerResolutions.find(resolutionDepth) == samplesPerResolutions.end()) {
+        samplesPerResolutions.insert({resolutionDepth, {}});
       }
     }
   }
 
-  void MultiResolutionGridSearch::setAverageSamplesPerDimension(
-      const unsigned int& averageSamplesPerDimension) noexcept {
-    averageSamplesPerDimension_ = averageSamplesPerDimension;
-  }
 
-  void MultiResolutionGridSearch::setSamplingFactors(
-      const arma::Col<double>& samplingFactors) {
-    if(samplingFactors.n_elem != optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
-    } else if(arma::sum(samplingFactors) != 1.0) {
-      throw std::logic_error("The sum of all sampling factors (" + std::to_string(arma::sum(samplingFactors)) + ") must be 1.");
+  void MultiResolutionGridSearch::setMinimalSamplingDistances(
+      const arma::Col<double>& minimalSamplingDistances) {
+    if(minimalSamplingDistances.n_elem != optimisationProblem_->getNumberOfDimensions()) {
+      throw std::logic_error("The number of dimensions of the sampling distances (" + std::to_string(minimalSamplingDistances.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
     }
 
-    samplingFactors_ = samplingFactors;
+    minimalSamplingDistances_ = minimalSamplingDistances;
+  }
+
+  void MultiResolutionGridSearch::setMaximalSamplesPerResolution(
+      const unsigned int& maximalSamplesPerResolution) noexcept {
+    maximalSamplesPerResolution_ = maximalSamplesPerResolution;
+  }
+
+  void MultiResolutionGridSearch::setSamplingDistributionPerDimension(
+      const arma::Col<double>& samplingDistributionPerDimension) {
+    if(samplingDistributionPerDimension.n_elem != optimisationProblem_->getNumberOfDimensions()) {
+      throw std::logic_error("The number of dimensions of the sampling distributions (" + std::to_string(samplingDistributionPerDimension.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
+    } else if(arma::sum(samplingDistributionPerDimension) != 1.0) {
+      throw std::logic_error("The sum of all sampling distributions (" + std::to_string(arma::sum(samplingDistributionPerDimension)) + ") must be 1.");
+    }
+
+    samplingDistributionPerDimension_ = samplingDistributionPerDimension;
   }
 
   std::string MultiResolutionGridSearch::to_string() const noexcept {

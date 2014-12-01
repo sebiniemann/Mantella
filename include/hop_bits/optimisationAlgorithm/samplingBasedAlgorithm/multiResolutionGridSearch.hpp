@@ -12,10 +12,10 @@ namespace hop {
       MultiResolutionGridSearch(const MultiResolutionGridSearch&) = delete;
       MultiResolutionGridSearch& operator=(const MultiResolutionGridSearch&) = delete;
 
-      void setMinimalSampleDistances(
-          const arma::Col<double>& minimalSampleDistances);
+      void setMinimalSamplingDistances(
+          const arma::Col<double>& minimalSamplingDistances);
 
-      void setMaximalSamplesPerResolution_(
+      void setMaximalSamplesPerResolution(
           const unsigned int& maximalSamplesPerResolution) noexcept;
 
       void setSamplingDistributionPerDimension(
@@ -24,7 +24,7 @@ namespace hop {
       std::string to_string() const noexcept override;
 
     protected:
-      arma::Col<double> minimalSampleDistances_;
+      arma::Col<double> minimalSamplingDistances_;
       unsigned int maximalSamplesPerResolution_;
       arma::Col<double> samplingDistributionPerDimension_;
 
