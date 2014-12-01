@@ -12,17 +12,21 @@ namespace hop {
       MultiResolutionGridSearch(const MultiResolutionGridSearch&) = delete;
       MultiResolutionGridSearch& operator=(const MultiResolutionGridSearch&) = delete;
 
-      void setAverageSamplesPerDimension(
-          const unsigned int& averageSamplesPerDimension) noexcept;
+      void setMinimalSampleDistances(
+          const arma::Col<double>& minimalSampleDistances);
 
-      void setSamplingFactors(
-          const arma::Col<double>& samplingFactors);
+      void setMaximalSamplesPerResolution_(
+          const unsigned int& maximalSamplesPerResolution) noexcept;
+
+      void setSamplingDistributionPerDimension(
+          const arma::Col<double>& samplingDistributionPerDimension);
 
       std::string to_string() const noexcept override;
 
     protected:
-      unsigned int averageSamplesPerDimension_;
-      arma::Col<double> samplingFactors_;
+      arma::Col<double> minimalSampleDistances_;
+      unsigned int maximalSamplesPerResolution_;
+      arma::Col<double> samplingDistributionPerDimension_;
 
       void optimiseImplementation() noexcept override;
   };
