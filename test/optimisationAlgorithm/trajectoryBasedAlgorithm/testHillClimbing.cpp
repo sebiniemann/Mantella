@@ -38,28 +38,29 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
       objectiveValues_.load("/Users/SRA/Documents/workspace/OnlineOptimisation/test/data/testObj.mat");
     }
 
-    arma::Mat<double> getParameterHistory() const noexcept {
+    std::vector<arma::Col<double>> getParameterHistory() const noexcept {
       return parameterHistory_;
     }
 
   protected:
     unsigned int objectiveValueIndex_;
     arma::Col<double> objectiveValues_;
-    int n;
 
-    arma::Mat<double> parameterHistory_;
+    static std::vector<arma::Col<double>> parameterHistory_;
 
     double getObjectiveValueImplementation(
        const arma::Col<double>& parameter) const override {
-       //parameterHistory_.insert_cols(n, parameter);
+       parameterHistory_.push_back(parameter);
 
       return objectiveValues_.at(objectiveValueIndex_);
     }
 
     std::string to_string() const noexcept {
-      return "HillClimbing";
+      return "TestHillClimbing";
     }
 };
+
+decltype(TestHillClimbingProblem::parameterHistory_) TestHillClimbingProblem::parameterHistory_;
 
 TEST_CASE("Hill climbing", "") {
   std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(4));
@@ -69,14 +70,13 @@ TEST_CASE("Hill climbing", "") {
   testHillClimbing.setMaximalNumberOfIterations(4);
 
   testHillClimbing.optimise();
-  arma::Mat<double> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  actualParameterHistory.load("/Users/SRA/Documents/workspace/OnlineOptimisation/test/data/testExp.mat");
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   arma::Mat<double> expectedParameterHistory;
   expectedParameterHistory.load("/Users/SRA/Documents/workspace/OnlineOptimisation/test/data/testExp.mat");
 
   for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
     arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
-    arma::Col<double> actualParameter = actualParameterHistory.col(n);
+    arma::Col<double> actualParameter = actualParameterHistory.at(n);
 
     for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
       CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
