@@ -13,19 +13,10 @@ namespace hop {
 
     //init selection parameters
     //unsigned int lambda_ = 4 + std::floor(3 * std::log(numberOfDimensions)); //overwritten by constructor value
-    double numberOfParents = populationSize_ / 2;
-    arma::Col<double> weights = arma::Col<double>(numberOfParents);
+    unsigned int numberOfParents = populationSize_ / 2;
 
-    //starting the second log at 1 is important ;)
-    for (std::size_t n = 0; n < weights.n_elem; ++n) {
-      weights.at(n) = std::log(numberOfParents + 0.5) - std::log(n + 1);
-    }
+    arma::Col<double> weights = arma::normalise(std::log((populationSize_ + 1) / 2) - arma::log(arma::linspace(1, std::floor(numberOfParents), std::floor(numberOfParents))), 1);
 
-    numberOfParents = std::floor(numberOfParents);
-    double weightSum = arma::sum(weights);
-    for (std::size_t n = 0; n < weights.n_elem; ++n) {
-      weights.at(n) = weights.at(n) / weightSum;
-    }
     double varianceEffectiveness = std::pow(arma::sum(weights), 2) / arma::sum(arma::square(weights));
     //init adaptation parameters
     double cc = (4 + varianceEffectiveness / numberOfDimensions) / (numberOfDimensions + 4 + 2 * varianceEffectiveness / numberOfDimensions); //time constant for cumulation for C
