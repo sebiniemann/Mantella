@@ -9,7 +9,7 @@ namespace hop {
 
   void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
     unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
-    arma::Col<double> objectiveValues = arma::randu<arma::vec>(numberOfDimensions);
+    arma::Col<double> objectiveValues = arma::randu<arma::Col<double>>(numberOfDimensions);
 
     //init selection parameters
     //unsigned int lambda_ = 4 + std::floor(3 * std::log(numberOfDimensions)); //overwritten by constructor value
