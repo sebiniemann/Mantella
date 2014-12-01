@@ -36,8 +36,8 @@ namespace hop {
     //LOOP START
     while (!isFinished() && !isTerminated()) {
       //generate and evaluate lambda offspring
-      arma::Col<double> arfitness = arma::Col<double>(populationSize_);
-      arma::Mat<double> arx = arma::Mat<double>(numberOfDimensions, populationSize_);
+      arma::Col<double> arfitness(populationSize_);
+      arma::Mat<double> arx(numberOfDimensions, populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
         arx.col(n) = objectiveValues + stepSize_ * B * (D % arma::randn<arma::Col<double>>(numberOfDimensions));
         arfitness(n) = optimisationProblem_->getObjectiveValue(arx.col(n));
@@ -61,7 +61,7 @@ namespace hop {
       arma::Col<double> oldObjectiveValues = objectiveValues;
       //TODO: i don't know how to do a "cool" matlab style select like 1:lambda over arindex, so this is it
       // mind usage later on in adapt covariance
-      arma::Col<arma::uword> shortArindex = arma::Col<arma::uword>(numberOfParents);
+      arma::Col<arma::uword> shortArindex(numberOfParents);
       for (std::size_t n = 0; n < numberOfParents; ++n) {
         shortArindex.at(n) = arindex.at(n);
       }
