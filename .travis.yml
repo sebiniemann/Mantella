@@ -31,11 +31,11 @@ install:
   - mkdir cmake
   - tar -xzf cmake.tar.gz -C ./cmake --strip-components=1
   - cd cmake
-  - ./bootstrap
-  - make -s
+  - cmake .
+  - make
   - sudo make install
   - cd ..
-  - rm -Rf cmake
+  - rm -Rf cmake cmake.tar.gz
   
   # MPI (will actually install 3.x on Ubuntu 14.04+ and 2.x before)
   - sudo apt-get install -qq libmpich2-dev
@@ -48,17 +48,17 @@ install:
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
   - cmake .
-  - make -s
+  - make
   - sudo make install
   - cd ..
-  - rm -Rf armadillo
+  - rm -Rf armadillo armadillo.tar.gz
 
   # Cereal
   - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.0.0.tar.gz
   - mkdir cereal
   - tar -xzf cereal.tar.gz -C ./cereal --strip-components=1
   - sudo cp -R cereal/include/cereal /usr/local/include/
-  - rm -Rf cereal
+  - rm -Rf cereal cereal.tar.gz
 
   # Catch
   # Needed until Travis CI updates to Ubuntu 14.04+
@@ -66,7 +66,7 @@ install:
   - mkdir catch
   - tar -xzf catch.tar.gz -C ./catch --strip-components=1
   - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
-  - rm -Rf catch
+  - rm -Rf catch catch.tar.gz
 #  - sudo apt-get install -qq catch  
 
   # Boost (filesystem)
