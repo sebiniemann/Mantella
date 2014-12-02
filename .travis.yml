@@ -31,7 +31,7 @@ install:
   - mkdir cmake
   - tar -xzf cmake.tar.gz -C ./cmake --strip-components=1
   - cd cmake
-  - cmake .
+  - ./bootstrap
   - make
   - sudo make install
   - cd ..
