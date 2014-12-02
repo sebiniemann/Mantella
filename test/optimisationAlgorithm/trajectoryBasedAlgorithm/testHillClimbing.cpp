@@ -23,11 +23,14 @@ class TestHillClimbing : public hop::HillClimbing {
         const std::shared_ptr<hop::OptimisationProblem> optimisationProblem)
       : HillClimbing(optimisationProblem),
         velocityIndex_(0){
-      velocities_.load(testDirectory.string() + dataPath_ + "velocities.mat");
     }
 
     arma::Col<double> getVelocity() {
       return velocities_.col(velocityIndex_++);
+    }
+
+    void setVelocitys(arma::mat velocities){
+      velocities_ = velocities;
     }
 
   protected:
@@ -41,13 +44,19 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
         const unsigned int numberOfDimensions)
       : OptimisationProblem(numberOfDimensions),
         ValueIndex_(0) {
-      objectiveValues_.load(testDirectory.string() + dataPath_ + "objectiveValues.mat");
-      softConstraintsValues_.load(testDirectory.string() + dataPath_ + "softConstraintsValues.mat");
     }
 
 
     std::vector<arma::Col<double>> getParameterHistory() const noexcept {
       return parameterHistory_;
+    }
+
+    void setObjectiveValues(arma::Col<double> objectiveValues){
+      objectiveValues_ = objectiveValues;
+    }
+
+    void setSoftConstraintsValues(arma::Col<double> softConstraintsValues){
+      softConstraintsValues_ = softConstraintsValues;
     }
 
   protected:
@@ -79,41 +88,49 @@ decltype(TestHillClimbingProblem::parameterHistory_) TestHillClimbingProblem::pa
 
 TEST_CASE("Hill climbing", "") {
 
-   // Values OptimisationProblem
-   double dimension = 4;
+   // Set OptimisationProblem values
+   arma::Col<double> upperBounds;
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds.mat"); //the parametre is optional
 
-   // Values OptimisationAlgorithm
+   arma::Col<double> lowerBounds;
+   upperBounds.load(testDirectory.string() + dataPath_ + "lowerBounds.mat"); //the parametre is optional
+
+   arma::Col<double> objectiveValues;
+   objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues.mat");
+
+   arma::Col<double> softConstraintsValues;
+   softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues.mat");
+
+   // Init OptimisationProblem
+   std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
+   testHillClimbingProblem->setUpperBounds(upperBounds);
+   testHillClimbingProblem->setLowerBounds(lowerBounds);
+   testHillClimbingProblem->setObjectiveValues(objectiveValues);
+   testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+
+   // Set OptimisationAlgorithm values
    arma::mat velocities;
    velocities.load(testDirectory.string() + dataPath_ + "velocities.mat");
 
-   // Load Expected
+   arma::Col<double> initialParameter;
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter.mat"); //the parametre is optional
+
+   arma::Col<double> maximalStepSize;
+   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize.mat"); //the parametre is optional
+
+   // Init OptimisationAlgorithm
+   TestHillClimbing testHillClimbing(testHillClimbingProblem);
+   testHillClimbing.setVelocitys(velocities);
+   testHillClimbing.setInitialParameter(initialParameter);
+   testHillClimbing.setMaximalStepSize(maximalStepSize);
+
+   // Set Expected values
    arma::Mat<double> expectedParameterHistory;
    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected.mat");
 
-
-  std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(dimension));
-
-  arma::Col<double> upperBounds;
-  if(upperBounds.quiet_load(testDirectory.string() + dataPath_ + "upperBounds.mat")) {
-    testHillClimbingProblem->setUpperBounds(upperBounds);
-  };
-  arma::Col<double> lowerBounds;
-  if(upperBounds.quiet_load(testDirectory.string() + dataPath_ + "lowerBounds.mat")) {
-    testHillClimbingProblem->setLowerBounds(lowerBounds);
-  }
-
-  TestHillClimbing testHillClimbing(testHillClimbingProblem);
-  arma::Col<double> initialParameter;
-  if(initialParameter.quiet_load(testDirectory.string() + dataPath_ + "initialParameter.mat")){
-    testHillClimbing.setInitialParameter(initialParameter);
-  };
-  arma::Col<double> maximalStepSize;
-  if(maximalStepSize.quiet_load(testDirectory.string() + dataPath_ + "maximalStepSize.mat")){
-    testHillClimbing.setMaximalStepSize(maximalStepSize);
-  };
-
+   // Run hill climbing algorithm
   testHillClimbing.optimise();
-
+  // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
 
   for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
