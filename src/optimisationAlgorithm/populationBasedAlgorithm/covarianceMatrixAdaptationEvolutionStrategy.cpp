@@ -32,9 +32,9 @@ namespace hop {
     arma::Mat<double> C(numberOfDimensions, numberOfDimensions, arma::fill::eye);
     arma::Mat<double> invsqrtC(numberOfDimensions, numberOfDimensions, arma::fill::eye);
     double chiN = std::sqrt(numberOfDimensions) * (1.0 - (1.0 / (4.0 * numberOfDimensions)) + (1.0 / (21.0 * std::pow(numberOfDimensions, 2.0))));
+    unsigned int numberOfDecompositions = 0;
 
     //LOOP START
-    unsigned int numberOfDecompositions = 0;
     while (!isFinished() && !isTerminated()) {
       //generate and evaluate lambda offspring
       arma::Col<double> arfitness(populationSize_);
@@ -68,7 +68,6 @@ namespace hop {
       //original matlab line: hsig = norm(ps)/sqrt(1-(1-cs)^(2*numberOfIterations_/lambda))/chiN < 1.4 + 2/(numberOfDimensions+1);
       double hsigLeftSide = (arma::norm(ps) / std::sqrt(1.0 - std::pow((1.0 - cs), 2.0 * static_cast<double>(numberOfIterations_) / static_cast<double>(populationSize_)))) / chiN;
       double hsigRightSide = 1.4 + 2 / (numberOfDimensions + 1.0);
-      //TODO: hsig cannot be an int (will always be zero), although its a bool operation happening. Must be an arma thing. Maybe even a bug?
       double hsig = hsigLeftSide < hsigRightSide;
 
       pc = (1.0 - cc) * pc + hsig * std::sqrt(cc * (2.0 - cc) * varianceEffectiveness) * (objectiveValues - oldObjectiveValues) / stepSize_;
