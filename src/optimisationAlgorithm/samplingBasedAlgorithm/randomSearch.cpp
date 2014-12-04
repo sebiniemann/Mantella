@@ -18,7 +18,7 @@ namespace hop {
       const double& candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
       const double& candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
 
-      if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+      if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_)) {
         bestParameter_ = candidateParameter;
         bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
         bestObjectiveValue_ = candidateObjectiveValue;

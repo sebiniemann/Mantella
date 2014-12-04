@@ -41,7 +41,7 @@ namespace hop {
         double candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
         double candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
 
-        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_)) {
           reduceStepSize = false;
 
           bestParameter_ = candidateParameter;
@@ -63,7 +63,7 @@ namespace hop {
         candidateSoftConstraintsValue = optimisationProblem_->getSoftConstraintsValue(candidateParameter);
         candidateObjectiveValue = optimisationProblem_->getObjectiveValue(candidateParameter);
 
-        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_)) {
           reduceStepSize = false;
 
           bestParameter_ = candidateParameter;

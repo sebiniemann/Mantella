@@ -64,7 +64,7 @@ namespace hop {
 
         samplesPerResolutions.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
 
-        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_) {
+        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_)) {
           bestParameter_ = candidateParameter;
           bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
           bestObjectiveValue_ = candidateObjectiveValue;
@@ -89,7 +89,7 @@ namespace hop {
             const double& candidateSoftConstraintsValue = sample.second.first;
             const double& candidateObjectiveValue = sample.second.second;
 
-            if(candidateSoftConstraintsValue < bestGridSoftConstraintsValue || candidateSoftConstraintsValue == bestGridSoftConstraintsValue && candidateObjectiveValue < bestGridObjectiveValue) {
+            if(candidateSoftConstraintsValue < bestGridSoftConstraintsValue || (candidateSoftConstraintsValue == bestGridSoftConstraintsValue && candidateObjectiveValue < bestGridObjectiveValue)) {
               bestGridParameter = sample.first;
               bestGridSoftConstraintsValue = candidateSoftConstraintsValue;
               bestGridObjectiveValue = candidateObjectiveValue;
@@ -103,7 +103,7 @@ namespace hop {
           const double& candidateSoftConstraintsValue = sample.second.first;
           const double& candidateObjectiveValue = sample.second.second;
 
-          if(candidateSoftConstraintsValue < bestGridSoftConstraintsValue || candidateSoftConstraintsValue == bestGridSoftConstraintsValue && candidateObjectiveValue < bestGridObjectiveValue) {
+          if(candidateSoftConstraintsValue < bestGridSoftConstraintsValue || (candidateSoftConstraintsValue == bestGridSoftConstraintsValue && candidateObjectiveValue < bestGridObjectiveValue)) {
             bestGridParameter = sample.first;
             bestGridSoftConstraintsValue = candidateSoftConstraintsValue;
             bestGridObjectiveValue = candidateObjectiveValue;
