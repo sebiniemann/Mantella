@@ -71,11 +71,11 @@ namespace hop {
       // The best parameter yet found.
       arma::Col<double> bestParameter_;
 
-      // The best parameter's objective value.
-      double bestObjectiveValue_;
-
       // The best parameter's soft-constraint value.
       double bestSoftConstraintsValue_;
+
+      // The best parameter's objective value.
+      double bestObjectiveValue_;
 
       // The actual optimisation procedere.
       // Note: The counter within the optimisation problem (counting the number of distinct function
