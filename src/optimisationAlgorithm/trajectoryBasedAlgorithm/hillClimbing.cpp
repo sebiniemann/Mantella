@@ -24,7 +24,7 @@ namespace hop {
 
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
-
+      //std::cout << bestParameter_ << "  " << maximalStepSize_ << "  " << getVelocity();
       candidateParameter_ = bestParameter_ + maximalStepSize_ % getVelocity();
       candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
       candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);

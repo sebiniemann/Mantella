@@ -24,7 +24,7 @@ namespace hop {
       double candidateSoftConstraintValue_;
       double candidateObjectiveValue_;
 
-      arma::Col<double> getVelocity();
+      virtual arma::Col<double> getVelocity();
       void optimiseImplementation() override;
   };
 }
