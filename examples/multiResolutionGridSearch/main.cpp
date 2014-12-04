@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <memory>
 #include <iostream>
+#include <limits>
 
 #include <hop>
 
@@ -9,6 +10,7 @@ int main(int argc, char* argv[]) {
     hop::Rng::setRandomSeed();
 
     std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::SphereFunction(2));
+    optimisationProblem->setAcceptableObjectiveValue(-std::numeric_limits<double>::infinity());
 
     hop::MultiResolutionGridSearch multiResolutionGridSearch(optimisationProblem);
     multiResolutionGridSearch.setMaximalNumberOfIterations(100000);
