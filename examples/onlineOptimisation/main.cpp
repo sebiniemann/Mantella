@@ -9,9 +9,9 @@ int main(int argc, char* argv[]) {
     hop::Rng::setRandomSeed();
 
     hop::MaximumLikelihoodEstimation propertiesEstimation(
-          std::shared_ptr<hop::LinearModelAnalysis>(new hop::LinearOrdinaryLeastSquares()),
-          std::shared_ptr<hop::QuadraticModelAnalysis>(new hop::QuadraticOrdinaryLeastSquares()),
-          std::shared_ptr<hop::LipschitzContinuityAnalysis>(new hop::DirectLipschitzContinuityAnalysis()));
+      std::shared_ptr<hop::LinearModelAnalysis>(new hop::LinearOrdinaryLeastSquares()),
+      std::shared_ptr<hop::QuadraticModelAnalysis>(new hop::QuadraticOrdinaryLeastSquares()),
+      std::shared_ptr<hop::LipschitzContinuityAnalysis>(new hop::DirectLipschitzContinuityAnalysis()));
 
     std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::LinearSlope(2));
 
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     std::cout << "numberOfIterations: " << gridSearch.getNumberOfIterations() << std::endl;
     std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
     std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
-    std::cout << "bestSoftConstraintValue: " << gridSearch.getBestSoftConstraintValue() << std::endl;
+    std::cout << "bestSoftConstraintsValue: " << gridSearch.getBestSoftConstraintsValue() << std::endl;
     std::cout << "bestObjectiveValueDelta: " << gridSearch.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
     std::cout << "bestParameter: " << gridSearch.getBestParameter() << std::endl;
 
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << std::endl;
     std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
     std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
-    std::cout << "bestSoftConstraintValue: " << optimisationAlgorithm.getBestSoftConstraintValue() << std::endl;
+    std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << std::endl;
     std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
     std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     std::cout << "numberOfIterations: " << optimisationAlgorithm2.getNumberOfIterations() << std::endl;
     std::cout << "numberOfEvaluations: " << optimisationProblem2->getNumberOfEvaluations() << std::endl;
     std::cout << "numberOfDistinctEvaluations: " << optimisationProblem2->getNumberOfDistinctEvaluations() << std::endl;
-    std::cout << "bestSoftConstraintValue: " << optimisationAlgorithm2.getBestSoftConstraintValue() << std::endl;
+    std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm2.getBestSoftConstraintsValue() << std::endl;
     std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm2.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
     std::cout << "bestParameter: " << optimisationAlgorithm2.getBestParameter() << std::endl;
 

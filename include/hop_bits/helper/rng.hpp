@@ -16,11 +16,11 @@ namespace hop {
       static std::mt19937_64 generator;
 
       static void setSeed(
-          const unsigned int& seed);
+          const unsigned int& seed) noexcept;
 
-      static void setRandomSeed();
+      static void setRandomSeed() noexcept;
 
-      static unsigned int getSeed();
+      static unsigned int getSeed() noexcept;
 
     protected:
       static unsigned int seed_;

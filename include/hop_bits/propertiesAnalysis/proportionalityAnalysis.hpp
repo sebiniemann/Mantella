@@ -5,6 +5,7 @@
 
 namespace hop {
   class ProportionalityAnalysis : public PropertiesAnalysis {
-
+    public:
+      using PropertiesAnalysis::PropertiesAnalysis;
   };
 }

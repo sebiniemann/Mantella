@@ -10,12 +10,12 @@
 namespace hop {
   namespace bbob2013 {
     double StepEllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
-      arma::Col<double> zHat = delta_ % (rotationR_ * (parameter - translation_));
+        const arma::Col<double>& parameter) const noexcept {
+      const arma::Col<double>& zHat = delta_ % (rotationR_ * (parameter - translation_));
 
       arma::Col<double> zTilde(zHat);
       for (std::size_t n = 0; n < zTilde.n_elem; ++n) {
-        double value = zHat.at(n);
+        const double& value = zHat.at(n);
 
         if (std::abs(value) > 0.5) {
           zTilde.at(n) = std::round(value);

@@ -10,8 +10,8 @@
 namespace hop {
   namespace bbob2013 {
     double SphereFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
-      return std::pow(arma::norm(parameter - translation_), 2);
+        const arma::Col<double>& parameter) const noexcept {
+      return std::pow(arma::norm(parameter - translation_), 2.0);
     }
 
     std::string SphereFunction::to_string() const noexcept {

@@ -7,45 +7,63 @@ namespace hop {
   class StandardParticleSwarmOptimisation2011 : public PopulationBasedAlgorithm {
     public:
       explicit StandardParticleSwarmOptimisation2011(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem,
+          const unsigned int& populationSize) noexcept;
 
       StandardParticleSwarmOptimisation2011(const StandardParticleSwarmOptimisation2011&) = delete;
       StandardParticleSwarmOptimisation2011& operator=(const StandardParticleSwarmOptimisation2011&) = delete;
 
       void setNeighbourhoodProbability(
-          const double& neighbourhoodProbability);
-      void setAcceleration(
-          const double& acceleration);
-      void setLocalAttraction(
-          const double& localAttraction);
-      void setGlobalAttraction(
-          const double& globalAttraction);
+          const double& neighbourhoodProbability) noexcept;
+
+      void setMaximalAcceleration(
+          const double& maximalAcceleration) noexcept;
+      void setMaximalLocalAttraction(
+          const double& maximalLocalAttraction) noexcept;
+      void setMaximalGlobalAttraction(
+          const double& maximalGlobalAttraction) noexcept;
 
       void setMaximalSwarmConvergence(
-          const double& swarmConvergence);
+          const double& maximalSwarmConvergence) noexcept;
 
       std::string to_string() const noexcept override;
 
     protected:
       double neighbourhoodProbability_;
-      double acceleration_;
-      double localAttraction_;
-      double globalAttraction_;
+
+      double maximalAcceleration_;
+      double maximalLocalAttraction_;
+      double maximalGlobalAttraction_;
 
       double maximalSwarmConvergence_;
 
       arma::Mat<double> particles_;
       arma::Mat<double> velocities_;
 
+      arma::uword particleIndex_;
+      arma::Col<double> particle_;
+
+      arma::Col<arma::uword> neighbourhoodParticlesIndecies_;
+      arma::uword neighbourhoodBestParticleIndex_;
+
+      arma::Col<double> attractionCenter_;
+
       arma::Mat<double> localBestSolutions_;
+      arma::Row<double> localBestSoftConstraintsValues_;
       arma::Row<double> localBestObjectiveValues_;
+
 
       bool randomizeTopology_;
 
       arma::Mat<arma::uword> topology_;
 
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
 
-      void initialiseSwarm();
+      void initialiseSwarm() noexcept;
+
+      arma::Mat<arma::uword> getNeighbourhoodTopology() noexcept;
+
+      double getAcceleration() noexcept;
+      arma::Col<double> getVelocity() noexcept;
   };
 }

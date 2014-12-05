@@ -5,15 +5,15 @@
 
 namespace hop {
   void QuadraticOrdinaryLeastSquares::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
-    std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
+    const std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions() * (optimisationProblem->getNumberOfDimensions() + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 
     std::size_t n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
-      arma::Col<double> parameter = parameterToObjectiveValueMapping.first;
+      const arma::Col<double>& parameter = parameterToObjectiveValueMapping.first;
 
       parameters.submat(0, n, parameter.n_elem - 1, n) = parameter;
       parameters.submat(parameter.n_elem, n, 2 * parameter.n_elem - 1,  n) = arma::square(parameter);
@@ -30,7 +30,7 @@ namespace hop {
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
-    quadraticModelEstimator_ = getEstimator(parameters, objectiveValues);
+    quadraticModelEstimator_ = getOrdinaryLeastSquaresEstimator(parameters, objectiveValues);
     residuals_ = objectiveValues - parameters.t() * quadraticModelEstimator_;
   }
 }

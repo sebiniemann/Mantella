@@ -8,58 +8,52 @@
 #include <hop_bits/helper/random.hpp>
 #include <hop_bits/helper/rng.hpp>
 
+// TODO Update
 namespace hop {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize)
+      const unsigned int& populationSize) noexcept
     : PopulationBasedAlgorithm(optimisationProblem, populationSize),
       localBestObjectiveValues_(populationSize_),
       randomizeTopology_(true) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
-    setAcceleration(1.0 / (2.0 * std::log(2.0)));
-    setLocalAttraction(0.5 + std::log(2.0));
-    setGlobalAttraction(localAttraction_);
+    setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
+    setMaximalLocalAttraction(0.5 + std::log(2.0));
+    setMaximalGlobalAttraction(maximalLocalAttraction_);
     setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
   }
 
-  void StandardParticleSwarmOptimisation2011::optimiseImplementation() {
+  void StandardParticleSwarmOptimisation2011::optimiseImplementation() noexcept {
     initialiseSwarm();
 
     while(!isFinished() && !isTerminated()) {
       if (randomizeTopology_) {
-          topology_ = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
-          topology_.diag() += 1.0;
-
-          randomizeTopology_ = false;
+        topology_ = getNeighbourhoodTopology();
+        randomizeTopology_ = false;
       }
 
-      arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
+      const arma::Col<arma::uword>& permutation = getRandomPermutation(populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
-        std::size_t k = permutation.at(n);
-        arma::Col<double> particle = particles_.col(k);
+        particleIndex_ = permutation.at(n);
+        particle_ = particles_.col(particleIndex_);
 
-        arma::uword neighbourhoodBestParticleIndex;
-        arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(topology_.col(k));
-        static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
+        neighbourhoodParticlesIndecies_ = arma::find(topology_.col(particleIndex_));
+        static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies_)).min(neighbourhoodBestParticleIndex_);
+        neighbourhoodBestParticleIndex_ = neighbourhoodParticlesIndecies_.at(neighbourhoodBestParticleIndex_);
 
-        neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies.at(neighbourhoodBestParticleIndex);
-
-        arma::Col<double> attractionCenter;
-        if (neighbourhoodBestParticleIndex == k) {
-          attractionCenter = (localAttraction_ * (localBestSolutions_.col(k) - particle)) / 2.0;
+        if (neighbourhoodBestParticleIndex_ == particleIndex_) {
+          attractionCenter_ = (maximalLocalAttraction_ * (localBestSolutions_.col(particleIndex_) - particle_)) / 2.0;
         } else {
-          attractionCenter = (localAttraction_ * (localBestSolutions_.col(k) - particle) + globalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+          attractionCenter_ = (maximalLocalAttraction_ * (localBestSolutions_.col(particleIndex_) - particle_) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex_) - particle_)) / 3.0;
         }
 
-        arma::Col<double> randomParticle = arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
+        arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
+        arma::Col<double> solutionCandidate = particle_ + velocityCandidate;
 
-        arma::Col<double> velocityCandidate = acceleration_ * velocities_.col(k) + randomParticle;
-        arma::Col<double> solutionCandidate = particle + velocityCandidate;
-
-        arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
-        arma::Col<arma::uword> aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
+        const arma::Col<arma::uword>& belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
+        const arma::Col<arma::uword>& aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
 
         velocityCandidate.elem(belowLowerBound) *= -0.5;
         velocityCandidate.elem(aboveUpperBound) *= -0.5;
@@ -67,14 +61,14 @@ namespace hop {
         solutionCandidate.elem(belowLowerBound) = optimisationProblem_->getLowerBounds().elem(belowLowerBound);
         solutionCandidate.elem(aboveUpperBound) = optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
 
-        velocities_.col(k) = velocityCandidate;
-        particles_.col(k) = solutionCandidate;
+        velocities_.col(particleIndex_) = velocityCandidate;
+        particles_.col(particleIndex_) = solutionCandidate;
 
-        double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
+        const double& objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
-        if (objectiveValue < localBestObjectiveValues_.at(k)) {
-          localBestObjectiveValues_.at(k) = objectiveValue;
-          localBestSolutions_.col(k) = solutionCandidate;
+        if (objectiveValue < localBestObjectiveValues_.at(particleIndex_)) {
+          localBestObjectiveValues_.at(particleIndex_) = objectiveValue;
+          localBestSolutions_.col(particleIndex_) = solutionCandidate;
         }
 
         if (objectiveValue < bestObjectiveValue_) {
@@ -95,7 +89,7 @@ namespace hop {
     }
   }
 
-  void StandardParticleSwarmOptimisation2011::initialiseSwarm() {
+  void StandardParticleSwarmOptimisation2011::initialiseSwarm() noexcept {
     particles_ = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     particles_.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     particles_.each_col() += optimisationProblem_->getLowerBounds();
@@ -127,28 +121,43 @@ namespace hop {
     randomizeTopology_ = true;
   }
 
+  double StandardParticleSwarmOptimisation2011::getAcceleration() noexcept {
+    return std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
+  }
+
+  arma::Col<double> StandardParticleSwarmOptimisation2011::getVelocity() noexcept {
+    return arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
+  }
+
+  arma::Mat<arma::uword> StandardParticleSwarmOptimisation2011::getNeighbourhoodTopology() noexcept {
+    arma::Mat<arma::uword> topology = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
+    topology.diag() += 1.0;
+
+    return topology;
+  }
+
   void StandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
-      const double& neighbourhoodProbability) {
+      const double& neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
-  void StandardParticleSwarmOptimisation2011::setAcceleration(
-      const double& acceleration) {
-    acceleration_ = acceleration;
+  void StandardParticleSwarmOptimisation2011::setMaximalAcceleration(
+      const double& maximalAcceleration) noexcept {
+    maximalAcceleration_ = maximalAcceleration;
   }
 
-  void StandardParticleSwarmOptimisation2011::setLocalAttraction(
-      const double& localAttraction) {
-    localAttraction_ = localAttraction;
+  void StandardParticleSwarmOptimisation2011::setMaximalLocalAttraction(
+      const double& maximalLocalAttraction) noexcept {
+    maximalLocalAttraction_ = maximalLocalAttraction;
   }
 
-  void StandardParticleSwarmOptimisation2011::setGlobalAttraction(
-      const double& globalAttraction) {
-    globalAttraction_ = globalAttraction;
+  void StandardParticleSwarmOptimisation2011::setMaximalGlobalAttraction(
+      const double& maximalGlobalAttraction) noexcept {
+    maximalGlobalAttraction_ = maximalGlobalAttraction;
   }
 
   void StandardParticleSwarmOptimisation2011::setMaximalSwarmConvergence(
-      const double& maximalSwarmConvergence) {
+      const double& maximalSwarmConvergence) noexcept {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 

@@ -7,7 +7,7 @@ namespace hop {
   class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm {
     public:
       explicit HookeJeevesAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
@@ -15,19 +15,15 @@ namespace hop {
       void setInitialStepSize(
           const arma::Col<double>& initialStepSize);
 
+      void setStepSizeDecrease(
+          const arma::Col<double>& stepSizeDecrease);
+
       std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> initialStepSize_;
+      arma::Col<double> stepSizeDecrease_;
 
-      arma::Col<double> stepSize_;
-      bool reduceStepSize_;
-
-      arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
-      double candidateObjectiveValue_;
-
-      arma::Col<double> getReducedStepSize();
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
   };
 }

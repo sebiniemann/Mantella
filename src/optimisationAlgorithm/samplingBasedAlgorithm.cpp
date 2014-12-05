@@ -2,7 +2,7 @@
 
 namespace hop {
   SamplingBasedAlgorithm::SamplingBasedAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
     : OptimisationAlgorithm(optimisationProblem) {
   }
 }

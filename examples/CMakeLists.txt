@@ -5,3 +5,4 @@ endif()
 
 add_subdirectory("./onlineOptimisation")
 add_subdirectory("./populationBased")
+add_subdirectory("./multiResolutionGridSearch")

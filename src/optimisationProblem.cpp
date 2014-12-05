@@ -5,10 +5,9 @@
 #include <limits>
 #include <stdexcept>
 
-// TODO Adding noexcept whenever possible
 namespace hop {
   OptimisationProblem::OptimisationProblem(
-      const unsigned int& numberOfDimensions)
+      const unsigned int& numberOfDimensions) noexcept
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
@@ -24,14 +23,14 @@ namespace hop {
 
   arma::Col<arma::uword> OptimisationProblem::isSatisfyingLowerBounds(const arma::Col<double>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
     if (cachePosition == cachedIsSatisfyingLowerBounds_.end()) {
       // The result was not found, compute it.
-      arma::Col<arma::uword> result = (getScaledCongruentParameter(parameter) >= lowerBounds_);
+      const arma::Col<arma::uword>& result = (getScaledCongruentParameter(parameter) >= lowerBounds_);
       cachedIsSatisfyingLowerBounds_.insert({parameter, result});
       return result;
     } else {
@@ -43,14 +42,14 @@ namespace hop {
   arma::Col<arma::uword> OptimisationProblem::isSatisfyingUpperBounds(
       const arma::Col<double>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     // Check if the result is already cached.
-    auto cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
+    const auto& cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
     if (cachePosition == cachedIsSatisfyingUpperBounds_.end()) {
       // The result was not found, compute it.
-      arma::Col<arma::uword> result = (getScaledCongruentParameter(parameter) <= upperBounds_);
+      const arma::Col<arma::uword>& result = (getScaledCongruentParameter(parameter) <= upperBounds_);
       cachedIsSatisfyingUpperBounds_.insert({parameter, result});
       return result;
     } else {
@@ -62,14 +61,14 @@ namespace hop {
   bool OptimisationProblem::isSatisfyingSoftConstraints(
       const arma::Col<double>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     // Check if the result is already cached.
-    auto cachePosition = cachedIsSatisfyingSoftConstraints_.find(parameter);
+    const auto& cachePosition = cachedIsSatisfyingSoftConstraints_.find(parameter);
     if (cachePosition == cachedIsSatisfyingSoftConstraints_.end()) {
       // The result was not found, compute it.
-      bool result = (getSoftConstraintsValue(parameter) == 0);
+      const bool& result = (getSoftConstraintsValue(parameter) == 0);
       cachedIsSatisfyingSoftConstraints_.insert({parameter, result});
       return result;
     } else {
@@ -81,14 +80,14 @@ namespace hop {
   bool OptimisationProblem::isSatisfyingConstraints(
       const arma::Col<double>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     // Check if the result is already cached.
-    auto cachePosition = cachedIsSatisfyingConstraints_.find(parameter);
+    const auto& cachePosition = cachedIsSatisfyingConstraints_.find(parameter);
     if (cachePosition == cachedIsSatisfyingConstraints_.end()) {
       // The result was not found, compute it.
-      bool result = (all(isSatisfyingLowerBounds(parameter)) && all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
+      const bool& result = (all(isSatisfyingLowerBounds(parameter)) && all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
       cachedIsSatisfyingConstraints_.insert({parameter, result});
       return result;
     } else {
@@ -100,14 +99,14 @@ namespace hop {
   double OptimisationProblem::getSoftConstraintsValue(
       const arma::Col<double>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     // Check if the result is already cached.
-    auto cachePosition = cachedSoftConstraintsValues_.find(parameter);
+    const auto& cachePosition = cachedSoftConstraintsValues_.find(parameter);
     if (cachePosition == cachedSoftConstraintsValues_.end()) {
       // The result was not found, compute it.
-      double result = getSoftConstraintsValueImplementation(parameter);
+      const double& result = getSoftConstraintsValueImplementation(parameter);
 
       if(result < 0) {
         throw std::runtime_error("The soft constraint value (" + std::to_string(result) + ") must be greater or equal 0.");
@@ -124,20 +123,20 @@ namespace hop {
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter (" + std::to_string(parameter.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     // Always increase the number of evaluations (whether its computed or retrived from cache).
     ++numberOfEvaluations_;
 
     // Check if the result is already cached.
-    auto cachePosition = cachedObjectiveValues_.find(parameter);
+    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
     if (cachePosition == cachedObjectiveValues_.end()) {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
       // The result was not found, compute it.
-      double result = objectiveValueScale_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
+      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
@@ -157,7 +156,7 @@ namespace hop {
   void OptimisationProblem::setLowerBounds(
       const arma::Col<double>& lowerBounds) {
     if (lowerBounds.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the lower bound (" + std::to_string(lowerBounds.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the lower bound (" + std::to_string(lowerBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     lowerBounds_ = lowerBounds;
@@ -169,7 +168,7 @@ namespace hop {
 
   void OptimisationProblem::setUpperBounds(const arma::Col<double>& upperBounds) {
     if (upperBounds.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the upper bound (" + std::to_string(upperBounds.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the upper bound (" + std::to_string(upperBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     upperBounds_ = upperBounds;
@@ -178,7 +177,7 @@ namespace hop {
   void OptimisationProblem::setParameterTranslation(
       const arma::Col<double>& parameterTranslation) {
     if (parameterTranslation.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter translation (" + std::to_string(parameterTranslation.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter translation (" + std::to_string(parameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     parameterTranslation_ = parameterTranslation;
@@ -190,9 +189,9 @@ namespace hop {
     if (!parameterRotation.is_square()) {
       throw std::logic_error("The rotation matrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must be square.");
     } else if (parameterRotation.n_rows != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter rotation maxtrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    } else if(arma::any(arma::vectorise(arma::abs(parameterRotation.i() - parameterRotation.t()) > 1e-15)) || std::abs(std::abs(arma::det(parameterRotation)) - 1) > 1e-15) {
-      throw std::logic_error("The rotation matrix must be orthonormal and its determinant (" + std::to_string(arma::det(parameterRotation)) + ") equally to 1 or -1.");
+      throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    } else if(arma::any(arma::vectorise(arma::abs(parameterRotation.i() - parameterRotation.t()) > 1.0e-12)) || std::abs(std::abs(arma::det(parameterRotation)) - 1.0) > 1.0e-12) {
+      throw std::logic_error("The rotation matrix must be orthonormal and its determinant (" + std::to_string(arma::det(parameterRotation)) + ") must be either 1 or -1.");
     }
 
     parameterRotation_ = parameterRotation;
@@ -201,7 +200,7 @@ namespace hop {
   void OptimisationProblem::setParameterScale(
       const arma::Col<double>& parameterScale) {
     if (parameterScale.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The dimension of the parameter scale (" + std::to_string(parameterScale.n_elem) + ") must match the dimension of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      throw std::logic_error("The number of dimensions of the parameter scale (" + std::to_string(parameterScale.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
     parameterScale_ = parameterScale;
@@ -274,12 +273,12 @@ namespace hop {
   //! Note: Runtime checks are only performed for public methods.
 
   double OptimisationProblem::getSoftConstraintsValueImplementation(
-      const arma::Col<double>& parameter) const {
-    return 0;
+      const arma::Col<double>& parameter) const noexcept {
+    return 0.0;
   }
 
   arma::Col<double> OptimisationProblem::getScaledCongruentParameter(
-      const arma::Col<double>& parameter) const {
+      const arma::Col<double>& parameter) const noexcept {
     return parameterRotation_ * parameterScale_ % (parameter + parameterTranslation_);
   }
 }

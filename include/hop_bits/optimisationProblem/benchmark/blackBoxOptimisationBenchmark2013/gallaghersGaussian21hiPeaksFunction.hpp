@@ -8,7 +8,7 @@ namespace hop {
     class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark2013 {
       public:
         explicit GallaghersGaussian21hiPeaksFunction(
-            const unsigned int& numberOfDimensions);
+            const unsigned int& numberOfDimensions) noexcept;
 
         GallaghersGaussian21hiPeaksFunction(const GallaghersGaussian21hiPeaksFunction&) = delete;
         GallaghersGaussian21hiPeaksFunction& operator=(const GallaghersGaussian21hiPeaksFunction&) = delete;
@@ -19,12 +19,13 @@ namespace hop {
         arma::Col<double> weight_;
 
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const override;
+            const arma::Col<double>& parameter) const noexcept override;
 
         friend class cereal::access;
 
-        template<class T>
-        void serialize(T& archive) {
+        template<class Archive>
+        void serialize(
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2013", cereal::base_class<BlackBoxOptimisationBenchmark2013>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("rotationR", rotationR_));
@@ -33,8 +34,10 @@ namespace hop {
           archive(cereal::make_nvp("weight", weight_));
         }
 
-        template<class T>
-        static void load_and_construct(T& archive, cereal::construct<GallaghersGaussian21hiPeaksFunction>& construct) {
+        template<class Archive>
+        static void load_and_construct(
+            Archive& archive,
+            cereal::construct<GallaghersGaussian21hiPeaksFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

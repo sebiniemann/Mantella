@@ -4,19 +4,19 @@
 #include <cstdlib>
 
 namespace hop {
-  PropertiesAnalysis::PropertiesAnalysis()
-    : plausibility_(0) {
+  PropertiesAnalysis::PropertiesAnalysis() noexcept
+    : plausibility_(0.0) {
 
   }
 
   void PropertiesAnalysis::analyse(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
-    plausibility_ = 0;
+      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
+    plausibility_ = 0.0;
 
     analyseImplementation(optimisationProblem);
   }
 
-  double PropertiesAnalysis::getPlausibility() const {
+  double PropertiesAnalysis::getPlausibility() const noexcept {
     return plausibility_;
   }
 }

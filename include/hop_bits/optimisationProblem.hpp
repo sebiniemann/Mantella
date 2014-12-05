@@ -14,7 +14,6 @@
 #include <hop_bits/helper/cereal.hpp>
 #include <hop_bits/helper/printable.hpp>
 
-// TODO Add includes (only skip if within its own header)
 namespace hop {
   // Base class of all optimisation problems in this library. Provides access to all usually
   // needed informations.
@@ -33,7 +32,7 @@ namespace hop {
       // Constructs an optimisation problem with the given number of dimensions to be optimised.
       explicit OptimisationProblem(
         // The number of dimensions
-        const unsigned int& numberOfDimensions);
+        const unsigned int& numberOfDimensions) noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       OptimisationProblem(const OptimisationProblem&) = delete;
@@ -200,21 +199,21 @@ namespace hop {
       unsigned int numberOfDistinctEvaluations_;
 
       // Actual implementaion of the objective function.
-      // Note: The dimension of the parameter is checked beforehand.
+      // Note: the number of dimensions of the parameter is checked beforehand.
       virtual double getObjectiveValueImplementation(
         // The parameter to be evaluated
-        const arma::Col<double>& parameter) const = 0;
+        const arma::Col<double>& parameter) const noexcept = 0;
 
       // Actual implementaion of the soft-constraints function.
       // Returns 0.0 if not overloaded.
       virtual double getSoftConstraintsValueImplementation(
         // The parameter to be evaluated
-        const arma::Col<double>& parameter) const;
+        const arma::Col<double>& parameter) const noexcept;
 
       // Returns the rotated, scaled and translated (shifted) parameter.
       arma::Col<double> getScaledCongruentParameter(
         // The parameter to be rotated, scaled and translated (shifted)
-        const arma::Col<double>& parameter) const;
+        const arma::Col<double>& parameter) const noexcept;
 
       // Several caches used to avoid redundant computations.
       std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> cachedObjectiveValues_;
@@ -233,8 +232,9 @@ namespace hop {
       // The fields to be saved (serialised) and their corresponding name.
       // The given name should always match the WHOLE parameter name (expect the suffix "_") to
       // lessen confusion later on.
-      template<class T>
-      void serialize(T& archive) {
+      template<class Archive>
+      void serialize(
+          Archive& archive) noexcept {
         archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
         archive(cereal::make_nvp("lowerBounds", lowerBounds_));
         archive(cereal::make_nvp("upperBounds", upperBounds_));

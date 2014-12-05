@@ -24,12 +24,12 @@ find_package(Armadillo REQUIRED) # Armadillo C++
 include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
 
 # Compile the app
-add_executable(main
+add_executable(exampleOnlineOptimisation
   main.cpp
 )
 
 # Link against HOP
-target_link_libraries(main hop)
+target_link_libraries(exampleOnlineOptimisation hop)
 
 # Link against third party libraries
-target_link_libraries(main ${ARMADILLO_LIBRARIES}) # Armadillo C++
+target_link_libraries(exampleOnlineOptimisation ${ARMADILLO_LIBRARIES}) # Armadillo C++

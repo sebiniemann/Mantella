@@ -7,6 +7,6 @@ namespace hop {
   class SamplingBasedAlgorithm : public OptimisationAlgorithm {
     public:
       explicit SamplingBasedAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
   };
 }

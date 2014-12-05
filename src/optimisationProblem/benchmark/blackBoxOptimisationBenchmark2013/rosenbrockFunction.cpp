@@ -7,19 +7,23 @@
 namespace hop {
   namespace bbob2013 {
     RosenbrockFunction::RosenbrockFunction(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2013(numberOfDimensions) {
       setTranslation(translation_);
     }
 
     void RosenbrockFunction::setTranslation(
         const arma::Col<double>& translation) {
+      if (translation.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      }
+
       translation_ = 0.75 * translation;
     }
 
     double RosenbrockFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const {
-      arma::Col<double> z = max_ * (parameter - translation_) + 1.0;
+        const arma::Col<double>& parameter) const noexcept {
+      const arma::Col<double>& z = max_ * (parameter - translation_) + 1.0;
 
       return 100.0 * arma::accu(arma::square(arma::square(z.subvec(0, z.n_elem - 2)) - z.subvec(1, z.n_elem - 1))) + arma::accu(arma::square(z.subvec(0, z.n_elem - 2) - 1.0));
     }

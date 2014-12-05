@@ -12,14 +12,14 @@ namespace hop {
     public:
       explicit CacheHasher() = default;
 
-      CacheHasher(const CacheHasher&) = default;
+      explicit CacheHasher(const CacheHasher&) = default;
 
       CacheHasher& operator=(const CacheHasher&) = delete;
 
       // Returns a hash value for column vectors.
       // Note: This is adapted from the Boost library (boost::hash_combine).
       std::size_t operator() (
-          const arma::Col<double>& key) const;
+          const arma::Col<double>& key) const noexcept;
   };
 
   // Checks whether two keys of a custom type are equal.
@@ -34,6 +34,6 @@ namespace hop {
       // Returns true if all values of both column vectors are equal.
       bool operator() (
           const arma::Col<double>& firstKey,
-          const arma::Col<double>& secondKey) const;
+          const arma::Col<double>& secondKey) const noexcept;
   };
 }

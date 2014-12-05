@@ -1,16 +1,13 @@
 #pragma once
 
-// C++ Standard Library
-#include <vector>
-
 // HOP
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 
 namespace hop {
   class GridSearch : public SamplingBasedAlgorithm {
     public:
-      GridSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+      explicit GridSearch(
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       GridSearch(const GridSearch&) = delete;
       GridSearch& operator=(const GridSearch&) = delete;
@@ -23,14 +20,6 @@ namespace hop {
     protected:
       arma::Col<double> samplingFactors_;
 
-      arma::Col<arma::uword> numberOfSamples_;
-      std::vector<arma::Col<double>> sampleParameters_;
-      arma::Col<arma::uword> sampleIndicies_;
-
-      arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
-      double candidateObjectiveValue_;
-
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
   };
 }

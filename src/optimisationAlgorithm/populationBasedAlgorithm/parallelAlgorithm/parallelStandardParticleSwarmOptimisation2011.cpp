@@ -17,7 +17,7 @@
 namespace hop {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize)
+      const unsigned int& populationSize) noexcept
     : ParallelAlgorithm(optimisationProblem, populationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
@@ -26,7 +26,7 @@ namespace hop {
     setCommunicationSteps(1);
   }
 
-  void ParallelStandardParticleSwarmOptimisation2011::parallelOptimiseImplementation() {
+  void ParallelStandardParticleSwarmOptimisation2011::parallelOptimiseImplementation() noexcept {
     arma::Mat<double> localParticles = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     localParticles.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     localParticles.each_col() += optimisationProblem_->getLowerBounds();
@@ -111,7 +111,7 @@ namespace hop {
             attractionCenter = (localAttraction_ * (localBestSolutions.col(rank_ * populationSize_ + k) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
           }
 
-          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0, 1)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
+          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
           arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
           arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
@@ -186,27 +186,27 @@ namespace hop {
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
-      const double& neighbourhoodProbability) {
+      const double& neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::setAcceleration(
-      const double& acceleration) {
+      const double& acceleration) noexcept {
     acceleration_ = acceleration;
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::setLocalAttraction(
-      const double& localAttraction) {
+      const double& localAttraction) noexcept {
     localAttraction_ = localAttraction;
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::setGlobalAttraction(
-      const double& globalAttraction) {
+      const double& globalAttraction) noexcept {
     globalAttraction_ = globalAttraction;
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::setCommunicationSteps(
-      const unsigned int& communicationSteps) {
+      const unsigned int& communicationSteps) noexcept {
     communicationSteps_ = communicationSteps;
   }
 

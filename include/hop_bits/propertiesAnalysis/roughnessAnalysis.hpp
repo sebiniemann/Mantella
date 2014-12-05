@@ -5,6 +5,7 @@
 
 namespace hop {
   class RoughnessAnalysis : public PropertiesAnalysis {
-
+    public:
+      using PropertiesAnalysis::PropertiesAnalysis;
   };
 }

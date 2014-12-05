@@ -2,23 +2,23 @@
 
 namespace hop {
   std::string to_string(
-      const Printable& printable) {
+      const Printable& printable) noexcept {
     return printable.to_string();
   }
 
   std::string to_string(
-      const std::unique_ptr<Printable> printable) {
+      const std::unique_ptr<Printable> printable) noexcept {
     return printable->to_string();
   }
 
   std::string to_string(
-      const std::shared_ptr<Printable> printable) {
+      const std::shared_ptr<Printable> printable) noexcept {
     return printable->to_string();
   }
 
   bool endsWith(
       const std::string& text,
-      const std::string& ending) {
+      const std::string& ending) noexcept {
     if (text.length() >= ending.length()) {
       return (text.compare(text.length() - ending.length(), ending.length(), ending) ==0);
     }

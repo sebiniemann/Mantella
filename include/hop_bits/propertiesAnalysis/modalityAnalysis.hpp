@@ -5,6 +5,7 @@
 
 namespace hop {
   class ModalityAnalysis : public PropertiesAnalysis {
-
+    public:
+      using PropertiesAnalysis::PropertiesAnalysis;
   };
 }

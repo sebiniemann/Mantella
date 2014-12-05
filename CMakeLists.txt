@@ -24,7 +24,7 @@ set(HOP_MINOR 0)
 set(HOP_PATCH 0)
 set(HOP_VERSION "${HOP_MAJOR}.${HOP_MINOR}.${HOP_PATCH}")
 
-# Add additional cmake modules (currently unused)
+# Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 # Provide custom build management options
@@ -114,6 +114,9 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/robotic/model.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_3pups.cpp
+    src/optimisationProblem/robotic/model/parallelKinematicMachine_4prus.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.cpp
     src/optimisationProblem/robotic/model/multiLevelStewartPlatform.cpp
@@ -261,30 +264,18 @@ if(BUILD_LIBRARY)
     set(INSTALL_INCLUDE_DIR "include")
   endif()
 
-  # We use data dir to store files shared with other programs
-  # like the ArmadilloConfig.cmake file.
-  if(NOT INSTALL_DATA_DIR)
-    set(INSTALL_DATA_DIR "share")
+  if(NOT INSTALL_LIB_DIR)
+    set(INSTALL_LIB_DIR "lib")
   endif()
 
-  # executables destination
-  if(NOT INSTALL_BIN_DIR)
-    set(INSTALL_BIN_DIR "bin")
-  endif()
-
-#  include(GenerateExportHeader)
-
-#  generate_export_header(hop)
-#  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
-#  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
+  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
+  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
 
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-#  install(TARGETS hop EXPORT HOPTargets
-#    ARCHIVE DESTINATION lib
-#    LIBRARY DESTINATION lib)
-
-#  export(PACKAGE hop)
+  install(TARGETS hop
+    ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
+    LIBRARY DESTINATION ${INSTALL_LIB_DIR})
 
 #  include(CMakePackageConfigHelpers)
 #  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
@@ -334,6 +325,9 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/robotic/model.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3pups.hpp
+  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_4prus.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp
   include/hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp

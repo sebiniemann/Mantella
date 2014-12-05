@@ -8,17 +8,17 @@ namespace hop {
     public:
       explicit ParallelAlgorithm(
           const std::shared_ptr<OptimisationProblem> optimisationProblem,
-          const unsigned int& populationSize);
+          const unsigned int& populationSize) noexcept;
 
-      int getRank() const;
-      int getNumberOfNodes() const;
+      unsigned int getRank() const noexcept;
+      unsigned int getNumberOfNodes() const noexcept;
 
     protected:
       int rank_;
       int numberOfNodes_;
 
-      void optimiseImplementation() final override;
+      void optimiseImplementation() noexcept final override;
 
-      virtual void parallelOptimiseImplementation() = 0;
+      virtual void parallelOptimiseImplementation() noexcept = 0;
   };
 }

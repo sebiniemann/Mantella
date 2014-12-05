@@ -6,8 +6,8 @@
 namespace hop {
   class RandomSearch : public SamplingBasedAlgorithm {
     public:
-      RandomSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+      explicit RandomSearch(
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
 
       RandomSearch(const RandomSearch&) = delete;
       RandomSearch& operator=(const RandomSearch&) = delete;
@@ -15,10 +15,6 @@ namespace hop {
       std::string to_string() const noexcept override;
 
     protected:
-      arma::Col<double> candidateParameter_;
-      double candidateSoftConstraintValue_;
-      double candidateObjectiveValue_;
-
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
   };
 }

@@ -7,7 +7,7 @@
 namespace hop {
   RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize)
+      const unsigned int& populationSize) noexcept
     : PopulationBasedAlgorithm(optimisationProblem, populationSize),
       maximalNeighourhoodConvergence_(populationSize_),
       neighbourhoodSize_(0),
@@ -15,7 +15,7 @@ namespace hop {
 
   }
 
-  void RoleBasedImitationAlgorithm::optimiseImplementation() {
+  void RoleBasedImitationAlgorithm::optimiseImplementation() noexcept {
     arma::Mat<double> agents = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
     agents.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
     agents.each_col() += optimisationProblem_->getLowerBounds();
@@ -112,12 +112,12 @@ namespace hop {
   }
 
   void RoleBasedImitationAlgorithm::setNeighbourhoodSize(
-      const unsigned int& neighbourhoodSize) {
+      const unsigned int& neighbourhoodSize) noexcept {
     neighbourhoodSize_ = neighbourhoodSize;
   }
 
   void RoleBasedImitationAlgorithm::setMaximalNeighourhoodConvergence(
-      const arma::Col<double>& maximalNeighourhoodConvergence) {
+      const arma::Col<double>& maximalNeighourhoodConvergence) noexcept {
     maximalNeighourhoodConvergence_ = maximalNeighourhoodConvergence;
   }
 

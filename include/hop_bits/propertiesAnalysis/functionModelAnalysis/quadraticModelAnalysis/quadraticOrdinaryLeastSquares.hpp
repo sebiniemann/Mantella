@@ -7,6 +7,6 @@ namespace hop {
   class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis {
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) override;
+          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept override;
   };
 }
