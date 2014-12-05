@@ -2,6 +2,7 @@
 
 // C++ Standard Library
 #include <stdexcept>
+#include <cmath>
 
 namespace hop {
   arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
