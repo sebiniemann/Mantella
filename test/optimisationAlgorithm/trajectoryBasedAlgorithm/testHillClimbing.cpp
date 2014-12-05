@@ -138,6 +138,7 @@ TEST_CASE("Hill climbing", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
 
+
   for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
     arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
     arma::Col<double> actualParameter = actualParameterHistory.at(n);
@@ -169,6 +170,7 @@ TEST_CASE("Hill climbing (init Test)", "") {
    testHillClimbingProblem->setLowerBounds(lowerBounds);
    testHillClimbingProblem->setObjectiveValues(objectiveValues);
    testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+   testHillClimbingProblem->setAcceptableObjectiveValue(10.0);
 
    // Set OptimisationAlgorithm values
    arma::mat velocities;
@@ -184,13 +186,32 @@ TEST_CASE("Hill climbing (init Test)", "") {
     arma::Col<double> initialParameter;
     initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[null].mat"); //the parametre is optional
 
-    //arma::Col<double> maximalStepSize;
-    //maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[1.1].mat"); //the parametre is optional
-
     expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[1.1].mat");
 
     testHillClimbing.setInitialParameter(initialParameter);
-    //testHillClimbing.setMaximalStepSize(maximalStepSize);
+    testHillClimbing.optimise();
+
+    // Comparing of candidateParameters
+    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+
+    for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
+      arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
+      arma::Col<double> actualParameter = actualParameterHistory.at(n);
+      std::cout<<actualParameter;
+      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
+        CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+      }
+    }
+
+  }
+/*
+  SECTION("Check initialParameter at each limit "){
+    arma::Col<double> initialParameter;
+    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[1.2].mat"); //the parametre is optional
+
+    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[1.2].mat");
+
+    testHillClimbing.setInitialParameter(initialParameter);
     testHillClimbing.optimise();
 
     // Comparing of candidateParameters
@@ -206,5 +227,5 @@ TEST_CASE("Hill climbing (init Test)", "") {
     }
 
   }
-
+*/
 }
