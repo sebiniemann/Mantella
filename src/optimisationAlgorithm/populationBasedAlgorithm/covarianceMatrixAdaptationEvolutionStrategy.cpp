@@ -44,12 +44,13 @@ namespace hop {
         arfitness(n) = optimisationProblem_->getObjectiveValue(arx.col(n));
         ++numberOfIterations_;
 
+        //TODO: Consider soft-constraints.
         //TODO: For performance, this could be done in another loop after the best have been selected. Not sure if really worth it
         if (arfitness(n) < bestObjectiveValue_) {
           bestObjectiveValue_ = arfitness(n);
           bestParameter_ = arx.col(n);
           //otherwise it's always infinity, so isFinished() doesn't work ;)
-          bestSoftConstraintValue_ = 0.0;
+          bestSoftConstraintsValue_ = 0.0;
         }
 
         if (isFinished() || isTerminated()) {
