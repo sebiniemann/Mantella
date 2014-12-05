@@ -58,7 +58,7 @@ namespace hop {
 
     std::vector<arma::Mat<double>> ParallelKinematicMachine_6PUPS::getModelCharacterisation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
+        const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
@@ -87,7 +87,7 @@ namespace hop {
 
     arma::Mat<double> ParallelKinematicMachine_6PUPS::getActuation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
+        const arma::Mat<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
 
       const arma::Mat<double>::fixed<3, 6>& baseJoints = modelCharacterisation.at(0);
@@ -98,19 +98,19 @@ namespace hop {
 
     double ParallelKinematicMachine_6PUPS::getPositionError(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
+        const arma::Mat<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
 
       const arma::Mat<double>::fixed<3, 6>& baseJoints = modelCharacterisation.at(1);
 
       const arma::Mat<double>::fixed<3, 6>& endEffectorJoints = modelCharacterisation.at(1);
       arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = endEffectorJoints;
-      endEffectorJointsRotated.each_col() -= endEffectorPose.subvec(0, 1);
+      endEffectorJointsRotated.each_col() -= endEffectorPose.subvec(0, 2);
 
       const arma::Mat<double>::fixed<3, 6>& baseToEndEffectorJointPositions = endEffectorJoints - baseJoints;
-      const arma::Col<double>::fixed<6>& baseToEndEffectorJointActuations = arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
+      const arma::Row<double>::fixed<6>& baseToEndEffectorJointActuations = arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
 
-      if (any(baseToEndEffectorJointActuations < minimalActiveJointActuations_) || any(baseToEndEffectorJointActuations > maximalActiveJointActuations_)) {
+      if (arma::any(baseToEndEffectorJointActuations < minimalActiveJointActuations_) || arma::any(baseToEndEffectorJointActuations > maximalActiveJointActuations_)) {
         return 0.0;
       }
 

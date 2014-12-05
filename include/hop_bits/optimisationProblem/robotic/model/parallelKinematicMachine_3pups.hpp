@@ -21,15 +21,15 @@ namespace hop {
 
         std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const override;
 
         arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const override;
 
         double getPositionError(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const override;
 
       protected:
         arma::Mat<double>::fixed<3, 3> endEffectorJointsRelative_;
