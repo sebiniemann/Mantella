@@ -4,4 +4,5 @@ if(MPI_C_FOUND)
 endif()
 
 add_subdirectory("./onlineOptimisation")
+add_subdirectory("./populationBased")
 add_subdirectory("./multiResolutionGridSearch")
