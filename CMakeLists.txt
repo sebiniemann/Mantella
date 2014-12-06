@@ -150,7 +150,8 @@ if(BUILD_LIBRARY)
     src/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.cpp
     src/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
     src/propertiesAnalysis/separabilityAnalysis.cpp
-    src/propertiesAnalysis/separabilityAnalysis/directSeparabilityAnalysis.cpp
+    src/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.cpp
+    src/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.cpp
     src/propertiesAnalysis/proportionalityAnalysis.cpp
     src/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.cpp
     src/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.cpp
@@ -363,7 +364,8 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/separabilityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/separabilityAnalysis/directSeparabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/proportionalityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
