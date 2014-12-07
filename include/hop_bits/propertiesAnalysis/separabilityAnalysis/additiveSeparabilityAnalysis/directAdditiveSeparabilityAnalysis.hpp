@@ -1,10 +1,10 @@
 #pragma once
 
 // HOP
-#include <hop_bits/propertiesAnalysis/separabilityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp>
 
 namespace hop {
-  class DirectSeparabilityAnalysis : public SeparabilityAnalysis {
+  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis {
 
   };
 }
