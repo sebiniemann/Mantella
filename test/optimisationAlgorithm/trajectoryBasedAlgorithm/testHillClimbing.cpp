@@ -145,9 +145,9 @@ TEST_CASE("Hill climbing", "") {
     arma::Col<double> actualParameter = actualParameterHistory.at(n);
 
     for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(isfinite(expectedParameter.at(k))) {
+        if(std::isfinite(expectedParameter.at(k))) {
           CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } elese {
+        } else {
           CHECK(actualParameter.at(k) == expectedParameter.at(k));
         }
     }
@@ -204,9 +204,9 @@ TEST_CASE("Hill climbing (init Test)", "") {
       arma::Col<double> actualParameter = actualParameterHistory.at(n);
       std::cout<<actualParameter;
       for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(isfinite(expectedParameter.at(k))) {
+        if(std::isfinite(expectedParameter.at(k))) {
           CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } elese {
+        } else {
           CHECK(actualParameter.at(k) == expectedParameter.at(k));
         }
       }
@@ -231,9 +231,9 @@ TEST_CASE("Hill climbing (init Test)", "") {
       arma::Col<double> actualParameter = actualParameterHistory.at(n);
 
       for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(isfinite(expectedParameter.at(k))) {
+        if(std::isfinite(expectedParameter.at(k))) {
           CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } elese {
+        } else {
           CHECK(actualParameter.at(k) == expectedParameter.at(k));
         }
       }
