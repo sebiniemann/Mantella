@@ -45,6 +45,7 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
       : OptimisationProblem(numberOfDimensions) {
       softConstraintsValuesIndex_ = 0;
       objectiveValuesIndex_ = 0;
+      parameterHistory_.clear();
     }
 
 
