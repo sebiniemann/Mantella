@@ -4,6 +4,7 @@
 // C++ Standard Library
 #include <memory>
 #include <iostream>
+#include <cmath>
 
 // Boost
 #include <boost/filesystem.hpp>
@@ -144,7 +145,11 @@ TEST_CASE("Hill climbing", "") {
     arma::Col<double> actualParameter = actualParameterHistory.at(n);
 
     for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-      CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        if(isfinite(expectedParameter.at(k))) {
+          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        } elese {
+          CHECK(actualParameter.at(k) == expectedParameter.at(k));
+        }
     }
   }
 }
@@ -199,7 +204,11 @@ TEST_CASE("Hill climbing (init Test)", "") {
       arma::Col<double> actualParameter = actualParameterHistory.at(n);
       std::cout<<actualParameter;
       for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        if(isfinite(expectedParameter.at(k))) {
+          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        } elese {
+          CHECK(actualParameter.at(k) == expectedParameter.at(k));
+        }
       }
     }
 
@@ -222,7 +231,11 @@ TEST_CASE("Hill climbing (init Test)", "") {
       arma::Col<double> actualParameter = actualParameterHistory.at(n);
 
       for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        if(isfinite(expectedParameter.at(k))) {
+          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        } elese {
+          CHECK(actualParameter.at(k) == expectedParameter.at(k));
+        }
       }
     }
 
