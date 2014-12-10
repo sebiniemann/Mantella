@@ -23,18 +23,18 @@ namespace hop {
 
   arma::Col<arma::uword> getRandomPermutation(
       unsigned int numberOfElements,
-      unsigned int cycleLength) noexcept {
+      unsigned int cycleSize) noexcept {
     arma::Col<arma::uword> permutation(numberOfElements);
     for (std::size_t n = 0; n < numberOfElements; ++n) {
       permutation.at(n) = n;
     }
 
-    unsigned int length = std::min(cycleLength, numberOfElements - 1);
+    unsigned int length = std::min(cycleSize, numberOfElements - 1);
     for (std::size_t n = 0; n < length; ++n) {
       permutation.swap_rows(n, std::uniform_int_distribution<unsigned int>(n, length)(Rng::generator));
     }
 
-    return permutation.subvec(0, cycleLength - 1);
+    return permutation.subvec(0, cycleSize - 1);
   }
 
   arma::Col<arma::uword> getRandomPermutation(

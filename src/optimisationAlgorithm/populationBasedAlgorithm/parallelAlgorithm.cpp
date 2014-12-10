@@ -21,7 +21,7 @@ namespace hop {
   }
 
   void ParallelAlgorithm::optimiseImplementation() noexcept {
-    unsigned int serialisedOptimisationProblemLength;
+    unsigned int serialisedOptimisationProblemSize;
     char* serialisedOptimisationProblemBuffer;
 
     if (rank_ == 0) {
@@ -31,17 +31,17 @@ namespace hop {
       };
 
       std::string serialisedOptimisationProblem = output.str();
-      serialisedOptimisationProblemLength = serialisedOptimisationProblem.size();
-      serialisedOptimisationProblemBuffer = std::strcpy(new char[serialisedOptimisationProblemLength + 1], serialisedOptimisationProblem.c_str());
+      serialisedOptimisationProblemSize = serialisedOptimisationProblem.size();
+      serialisedOptimisationProblemBuffer = std::strcpy(new char[serialisedOptimisationProblemSize + 1], serialisedOptimisationProblem.c_str());
     }
 
-    MPI_Bcast(&serialisedOptimisationProblemLength, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
 
     if (rank_ != 0) {
-      serialisedOptimisationProblemBuffer = new char[serialisedOptimisationProblemLength + 1];
+      serialisedOptimisationProblemBuffer = new char[serialisedOptimisationProblemSize + 1];
     }
 
-    MPI_Bcast(serialisedOptimisationProblemBuffer, serialisedOptimisationProblemLength + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
+    MPI_Bcast(serialisedOptimisationProblemBuffer, serialisedOptimisationProblemSize + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     if (rank_ != 0) {
       std::istringstream input(serialisedOptimisationProblemBuffer); {
