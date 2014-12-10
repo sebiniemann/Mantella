@@ -55,8 +55,13 @@ if(APPLE)
 endif()
 
 # Set output directories
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+if(NOT EXECUTABLE_OUTPUT_PATH)
+  set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+endif()
+
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+endif()
 
 # Enable C++11 features
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -133,39 +138,39 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.cpp
     src/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm.cpp
+    src/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.cpp
-    src/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
     src/propertiesAnalysis.cpp
-    src/propertiesAnalysis/functionModelAnalysis.cpp
-    src/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.cpp
-    src/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.cpp
-    src/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/modalityAnalysis.cpp
-    src/propertiesAnalysis/modalityAnalysis/directModalityAnalysis.cpp
-    src/propertiesAnalysis/roughnessAnalysis.cpp
-    src/propertiesAnalysis/roughnessAnalysis/directRoughnessAnalysis.cpp
-    src/propertiesAnalysis/continuityAnalysis.cpp
-    src/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.cpp
-    src/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
-    src/propertiesAnalysis/separabilityAnalysis.cpp
-    src/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.cpp
-    src/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.cpp
-    src/propertiesAnalysis/proportionalityAnalysis.cpp
-    src/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.cpp
-    src/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.cpp
+    src/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.cpp
     src/propertiesEstimation.cpp
     src/propertiesEstimation/maximumLikelihoodEstimation.cpp
-    src/helper/cache.cpp
     src/helper/cereal.cpp
+    src/helper/combinatorics.cpp
     src/helper/geometry.cpp
     src/helper/printable.cpp
     src/helper/quasiRandomSequence.cpp
     src/helper/random.cpp
-    src/helper/regression.cpp
     src/helper/rng.cpp
     src/helper/string.cpp
+    src/helper/unordered_map.cpp
   )
 
   if(MPI_C_FOUND)
@@ -345,39 +350,39 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
   include/hop_bits/propertiesAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/functionModelAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp
-  include/hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp
-  include/hop_bits/propertiesAnalysis/modalityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/modalityAnalysis/directModalityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/roughnessAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/roughnessAnalysis/directRoughnessAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/continuityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/separabilityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/proportionalityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
   include/hop_bits/propertiesEstimation.hpp
   include/hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
-  include/hop_bits/helper/cache.hpp
   include/hop_bits/helper/cereal.hpp
+  include/hop_bits/helper/combinatorics.hpp
   include/hop_bits/helper/geometry.hpp
   include/hop_bits/helper/printable.hpp
   include/hop_bits/helper/quasiRandomSequence.hpp
   include/hop_bits/helper/random.hpp
-  include/hop_bits/helper/regression.hpp
   include/hop_bits/helper/rng.hpp
   include/hop_bits/helper/string.hpp
+  include/hop_bits/helper/unordered_map.hpp
 )
