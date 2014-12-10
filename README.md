@@ -8,14 +8,23 @@ HOP is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (deve
 
 Getting started
 ---------------
+### Prerequirements (newer version should also work)
+- CMake 2.8.8
+- GCC 4.8.1 (or any other C++11 feature complete compiler)
+- Armadillo C++ 4.100.0
+- Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
+#### Only needed for parallel algorithms
+- MPI 3.0.0
+#### Only needed for tests
+- Catch (development version)
+- Boost filesystem 1.54
 ### Installation
-- **Requirements** (newer version should also work)
-  - CMake 2.8.8
-  - GCC 4.8.1 (or any other C++11 featur complete compiler)
-  - MPI-3
-  - Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
-  - Catch (development version)
-  - Boost filesystem 1.54
+- cd path/to/project
+- mkdir build
+- cd build
+- cmake ..
+- make
+- sudo make install
 
 Future plans
 ------------
