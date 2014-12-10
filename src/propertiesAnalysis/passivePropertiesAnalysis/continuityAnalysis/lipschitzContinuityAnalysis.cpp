@@ -1,4 +1,4 @@
-#include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
 
 namespace hop {
   LipschitzContinuityAnalysis::LipschitzContinuityAnalysis() noexcept

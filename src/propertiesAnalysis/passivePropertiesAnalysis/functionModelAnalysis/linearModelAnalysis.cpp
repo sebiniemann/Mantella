@@ -1,4 +1,4 @@
-#include <hop_bits/propertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
 
 namespace hop {
   arma::Col<double> LinearModelAnalysis::getLinearModelEstimator() const noexcept {

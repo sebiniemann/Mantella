@@ -1,4 +1,4 @@
-#include <hop_bits/propertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp>
 
 // C++ Standard Library
 #include <cstdlib>
@@ -9,7 +9,7 @@ namespace hop {
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
     lipschitzConstant_ = 0.0;
 
-    const std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+    const std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<double>& parameter = n->first;
@@ -18,5 +18,10 @@ namespace hop {
         lipschitzConstant_ = std::max(lipschitzConstant_, std::abs(k->second - objectiveValue) / arma::norm(k->first - parameter));
       }
     }
+  }
+
+  void DirectLipschitzContinuityAnalysis::analyseImplementation(
+      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
+
   }
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 // HOP
-#include <hop_bits/propertiesAnalysis/continuityAnalysis.hpp>
+#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp>
 
 namespace hop {
   class LipschitzContinuityAnalysis : public ContinuityAnalysis {

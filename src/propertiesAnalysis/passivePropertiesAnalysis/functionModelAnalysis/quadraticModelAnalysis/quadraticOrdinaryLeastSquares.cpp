@@ -1,12 +1,9 @@
-#include <hop_bits/propertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp>
-
-// HOP
-#include <hop_bits/helper/regression.hpp>
+#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp>
 
 namespace hop {
   void QuadraticOrdinaryLeastSquares::analyseImplementation(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
-    const std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+    const std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions() * (optimisationProblem->getNumberOfDimensions() + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
@@ -30,7 +27,17 @@ namespace hop {
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
-    quadraticModelEstimator_ = getOrdinaryLeastSquaresEstimator(parameters, objectiveValues);
-    residuals_ = objectiveValues - parameters.t() * quadraticModelEstimator_;
+    try {
+      quadraticModelEstimator_ = (parameters * parameters.t()).i() * parameters * objectiveValues;
+      residuals_ = objectiveValues - parameters.t() * quadraticModelEstimator_;
+    } catch (const std::runtime_error& exception ) {
+      quadraticModelEstimator_ = {};
+      residuals_ = {};
+    }
+  }
+
+  void QuadraticOrdinaryLeastSquares::analyseImplementation(
+      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
+
   }
 }
