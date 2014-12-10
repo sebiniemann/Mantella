@@ -2,16 +2,19 @@
 
 namespace hop {
   PropertiesEstimation::PropertiesEstimation(
+      const std::shared_ptr<CorrelationAnalysis> correlationAnalysis,
       const std::shared_ptr<LinearModelAnalysis> linearModelAnalysis,
       const std::shared_ptr<QuadraticModelAnalysis> quadraticModelAnalysis,
-      const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis) noexcept
-    : linearModelAnalysis_(linearModelAnalysis),
+      const std::shared_ptr<LipschitzContinuityAnalysis> lipschitzContinuityAnalysis,
+      const std::shared_ptr<AdditiveSeparabilityAnalysis> additiveSeparabilityAnalysis) noexcept
+    : correlationAnalysis_(correlationAnalysis),
+      linearModelAnalysis_(linearModelAnalysis),
       quadraticModelAnalysis_(quadraticModelAnalysis),
       lipschitzContinuityAnalysis_(lipschitzContinuityAnalysis),
+      additiveSeparabilityAnalysis_(additiveSeparabilityAnalysis),
       numberOfPropertySets_(0),
       isLinear_(false),
-      isQuadratic_(false),
-      isLipschitzContinuous_(false) {
+      isQuadratic_(false) {
 
   }
 
@@ -22,6 +25,11 @@ namespace hop {
 
   std::size_t PropertiesEstimation::getNumberOfPropertySets() const noexcept {
     return numberOfPropertySets_;
+  }
+
+  double PropertiesEstimation::getCorrelationCoefficient(
+      const std::size_t& propertiesSetIndex) const {
+    return correlationCoefficient_.at(propertiesSetIndex);
   }
 
   bool PropertiesEstimation::isLinear(
@@ -44,13 +52,18 @@ namespace hop {
     return quadraticModelEstimators_.at(propertiesSetIndex);
   }
 
-  bool PropertiesEstimation::isLipschitzContinuous(
-      const std::size_t& propertiesSetIndex) const {
-    return isLipschitzContinuous_.at(propertiesSetIndex);
-  }
-
   double PropertiesEstimation::getLipschitzConstant(
       const std::size_t& propertiesSetIndex) const {
     return lipschitzConstants_.at(propertiesSetIndex);
+  }
+
+  bool PropertiesEstimation::isSeparable(
+      const std::size_t& propertiesSetIndex) const {
+    return isSeparable_.at(propertiesSetIndex);
+  }
+
+  std::vector<arma::Col<arma::uword>> PropertiesEstimation::getPartitions(
+      const std::size_t& propertiesSetIndex) const {
+    return partitions_.at(propertiesSetIndex);
   }
 }
