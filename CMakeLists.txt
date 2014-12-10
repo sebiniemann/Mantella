@@ -82,12 +82,12 @@ if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library (version: ${HOP_VERSION}).")
   
   # Locate third party libraries and headers
-  find_package(Armadillo REQUIRED) # Armadillo C++
+  find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
   find_package(Cereal REQUIRED) # Cereal (header only)
-  find_package(MPI) # MPI
+  find_package(MPI 3.0.0) # MPI
 
   # Include third party headers
-  include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+  include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
   include_directories(${CEREAL_INCLUDE_DIRS}) # Cereal
 
   # Source files without MPI usage (serial algorithms only)
@@ -145,14 +145,14 @@ if(BUILD_LIBRARY)
     src/propertiesAnalysis/passivePropertiesAnalysis.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.cpp
+    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.cpp
     src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
     src/propertiesAnalysis/activePropertiesAnalysis.cpp
     src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.cpp
     src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.cpp
@@ -207,12 +207,12 @@ if(BUILD_LIBRARY)
       message(STATUS "NOTICE: Configuring tests")
 
       # Locate third party libraries and headers
-      find_package(Armadillo REQUIRED) # Armadillo C++
+      find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
       find_package(Catch REQUIRED) # Catch (header only)
       find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
       # Include third party headers
-      include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+      include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
       include_directories(${CATCH_INCLUDE_DIRS}) # Catch
       include_directories(${Boost_INCLUDE_DIRS}) # Boost
 
@@ -359,14 +359,14 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
+  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp
   include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp
-  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
-  include/hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/activePropertiesAnalysis.hpp
   include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp
   include/hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp

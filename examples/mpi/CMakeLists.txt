@@ -18,11 +18,11 @@ message(STATUS "NOTICE: Configuring experiemental MPI applications.")
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
-find_package(Armadillo REQUIRED) # Armadillo C++
-find_package(MPI REQUIRED) # MPI
+find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
+find_package(MPI 3.0.0 REQUIRED) # MPI
 
 # Include third party headers
-include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
+include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
 include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
 
 # Compile the optimisation app
