@@ -27,7 +27,7 @@ namespace hop {
     std::vector<arma::Col<arma::uword>> partition;
     partition.push_back(arma::linspace<arma::Col<arma::uword>>(0, optimisationProblem->getNumberOfDimensions() - 1, optimisationProblem->getNumberOfDimensions()));
     for(const auto& partitionCandidate : partitionCandidates) {
-      arma::Col<double> differences(10);
+      arma::Col<double> differences(maximalNumberOfIterations_);
 
       for(std::size_t n = 0; n < differences.n_elem; ++n) {
         arma::Col<double> firstPartA = arma::randu<arma::Col<double>>(partitionCandidate.first.n_elem);
@@ -57,8 +57,6 @@ namespace hop {
             optimisationProblem->getObjectiveValue(candidateB) -
             optimisationProblem->getObjectiveValue(candidateC);
       }
-
-      // std::cout << differences << std::endl;
     }
   }
 }
