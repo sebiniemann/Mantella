@@ -6,7 +6,7 @@
 #include <iostream>
 
 // HOP
-#include <hop_bits/helper/cache.hpp>
+#include <hop_bits/helper/unordered_map.hpp>
 
 namespace hop {
   MultiResolutionGridSearch::MultiResolutionGridSearch(
@@ -20,7 +20,7 @@ namespace hop {
   void MultiResolutionGridSearch::optimiseImplementation() noexcept {
     unsigned int resolutionDepth = 0;
 
-    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, CacheHasher, CacheKeyEqual>> samplesPerResolutions;
+    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hasher, KeyEqual>> samplesPerResolutions;
     samplesPerResolutions.insert({resolutionDepth, {}});
 
     double gridSoftCostraintsValueThreshold = std::numeric_limits<double>::infinity();
@@ -98,6 +98,8 @@ namespace hop {
             }
           }
         }
+
+        resolutionDepth = bestResolutionDepth;
       } else {
         for(const auto& sample : samplesPerResolutions.at(resolutionDepth)) {
           const double& candidateSoftConstraintsValue = sample.second.first;
@@ -113,7 +115,6 @@ namespace hop {
         ++resolutionDepth;
       }
 
-      std::cout << "11234251" << std::endl;
       const arma::Col<double>& stepSize = (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) / arma::pow(numberOfSamples - 1, resolutionDepth);
 
       gridSoftCostraintsValueThreshold = bestGridSoftConstraintsValue;
@@ -124,18 +125,15 @@ namespace hop {
       arma::Col<double> gridLowerBoundsCandidate = bestGridParameter - stepSize;
       arma::Col<double> gridUpperBoundsCandidate = bestGridParameter + stepSize;
 
-      std::cout << "565611234251" << std::endl;
       belowLowerBound = arma::find(gridLowerBoundsCandidate < gridLowerBounds);
       aboveUpperBound = arma::find(gridUpperBoundsCandidate > gridUpperBounds);
 
-      std::cout << "89811234251" << std::endl;
       gridLowerBoundsCandidate.elem(belowLowerBound) = gridLowerBounds.elem(belowLowerBound);
       gridUpperBoundsCandidate.elem(aboveUpperBound) = gridUpperBounds.elem(aboveUpperBound);
 
       gridLowerBounds = gridLowerBoundsCandidate;
       gridUpperBounds = gridUpperBoundsCandidate;
 
-      std::cout << "00011234251" << std::endl;
       if(samplesPerResolutions.find(resolutionDepth) == samplesPerResolutions.end()) {
         samplesPerResolutions.insert({resolutionDepth, {}});
       }

@@ -10,9 +10,9 @@
 #include <cereal/access.hpp>
 
 // HOP
-#include <hop_bits/helper/cache.hpp>
 #include <hop_bits/helper/cereal.hpp>
 #include <hop_bits/helper/printable.hpp>
+#include <hop_bits/helper/unordered_map.hpp>
 
 namespace hop {
   // Base class of all optimisation problems in this library. Provides access to all usually
@@ -159,12 +159,12 @@ namespace hop {
       // clearing the caches.
       void reset() noexcept;
 
-      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> getCachedObjectiveValues() const;
-      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> getCachedSoftConstraintsValues() const;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingLowerBounds() const;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingUpperBounds() const;
-      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingSoftConstraints() const;
-      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> getCachedIsSatisfyingConstraints() const;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> getCachedObjectiveValues() const;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> getCachedSoftConstraintsValues() const;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingLowerBounds() const;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingUpperBounds() const;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> getCachedIsSatisfyingSoftConstraints() const;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> getCachedIsSatisfyingConstraints() const;
 
       // Provides a default deconstructor.
       virtual ~OptimisationProblem() = default;
@@ -216,12 +216,12 @@ namespace hop {
         const arma::Col<double>& parameter) const noexcept;
 
       // Several caches used to avoid redundant computations.
-      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> cachedObjectiveValues_;
-      std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> cachedSoftConstraintsValues_;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> cachedIsSatisfyingLowerBounds_;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> cachedIsSatisfyingUpperBounds_;
-      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> cachedIsSatisfyingSoftConstraints_;
-      std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> cachedIsSatisfyingConstraints_;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedObjectiveValues_;
+      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
+      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
+      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
 
       //! The following is ONLY TO BE USED BY CEREAL
       // Gives cereal access to otherwise protected constructors, functions and fields.

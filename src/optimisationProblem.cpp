@@ -245,27 +245,27 @@ namespace hop {
     cachedIsSatisfyingConstraints_.clear();
   }
 
-  std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedObjectiveValues() const {
+  std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> OptimisationProblem::getCachedObjectiveValues() const {
     return cachedObjectiveValues_;
   }
 
-  std::unordered_map<arma::Col<double>, double, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedSoftConstraintsValues() const {
+  std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> OptimisationProblem::getCachedSoftConstraintsValues() const {
     return cachedSoftConstraintsValues_;
   }
 
-  std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingLowerBounds() const {
+  std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> OptimisationProblem::getCachedIsSatisfyingLowerBounds() const {
     return cachedIsSatisfyingLowerBounds_;
   }
 
-  std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingUpperBounds() const {
+  std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> OptimisationProblem::getCachedIsSatisfyingUpperBounds() const {
     return cachedIsSatisfyingUpperBounds_;
   }
 
-  std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingSoftConstraints() const {
+  std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> OptimisationProblem::getCachedIsSatisfyingSoftConstraints() const {
     return cachedIsSatisfyingSoftConstraints_;
   }
 
-  std::unordered_map<arma::Col<double>, bool, CacheHasher, CacheKeyEqual> OptimisationProblem::getCachedIsSatisfyingConstraints() const {
+  std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> OptimisationProblem::getCachedIsSatisfyingConstraints() const {
     return cachedIsSatisfyingConstraints_;
   }
 
