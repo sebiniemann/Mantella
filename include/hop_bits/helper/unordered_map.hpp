@@ -8,13 +8,13 @@
 
 namespace hop {
   // Calculates a hash value for custom types.
-  class CacheHasher {
+  class Hasher {
     public:
-      explicit CacheHasher() = default;
+      explicit Hasher() = default;
 
-      explicit CacheHasher(const CacheHasher&) = default;
+      explicit Hasher(const Hasher&) = default;
 
-      CacheHasher& operator=(const CacheHasher&) = delete;
+      Hasher& operator=(const Hasher&) = delete;
 
       // Returns a hash value for column vectors.
       // Note: This is adapted from the Boost library (boost::hash_combine).
@@ -23,13 +23,13 @@ namespace hop {
   };
 
   // Checks whether two keys of a custom type are equal.
-  class CacheKeyEqual {
+  class KeyEqual {
     public:
-      explicit CacheKeyEqual() = default;
+      explicit KeyEqual() = default;
 
-      CacheKeyEqual(const CacheKeyEqual&) = default;
+      KeyEqual(const KeyEqual&) = default;
 
-      CacheKeyEqual& operator=(const CacheKeyEqual&) = delete;
+      KeyEqual& operator=(const KeyEqual&) = delete;
 
       // Returns true if all values of both column vectors are equal.
       bool operator() (

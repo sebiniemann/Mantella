@@ -1,10 +1,10 @@
-#include <hop_bits/helper/cache.hpp>
+#include <hop_bits/helper/unordered_map.hpp>
 
 // C++ Standard Library
 #include <functional>
 
 namespace hop {
-  std::size_t CacheHasher::operator() (
+  std::size_t Hasher::operator() (
     const arma::Col<double>& key) const noexcept {
     // Start with the hash of the first value ...
     std::size_t hashedKey = std::hash<double>()(key.at(0));
@@ -17,7 +17,7 @@ namespace hop {
     return hashedKey;
   }
 
-  bool CacheKeyEqual::operator() (
+  bool KeyEqual::operator() (
     const arma::Col<double>& firstKey,
     const arma::Col<double>& secondKey) const noexcept {
     // This will also check if both vectors have the same size.
