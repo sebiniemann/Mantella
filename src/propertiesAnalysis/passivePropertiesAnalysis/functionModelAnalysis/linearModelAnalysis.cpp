@@ -1,6 +1,10 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
 
 namespace hop {
+  LinearModelAnalysis::LinearModelAnalysis() noexcept {
+    setLinearModelResidualsThreshold(0.75);
+  }
+
   arma::Col<double> LinearModelAnalysis::getLinearModelEstimator() const noexcept {
     return linearModelEstimator_;
   }
