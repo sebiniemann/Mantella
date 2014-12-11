@@ -1,8 +1,8 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp>
 
 namespace hop {
-  SeparabilityAnalysis::setMaximalNumberOfIterations(
-      const unsigned int& maximalNumberOfIterations) {
+  void SeparabilityAnalysis::setMaximalNumberOfIterations(
+      const unsigned int& maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 }
