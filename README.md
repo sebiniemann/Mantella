@@ -13,11 +13,14 @@ Getting started
 - GCC 4.8.1 (or any other C++11 feature complete compiler)
 - Armadillo C++ 4.100.0
 - Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
+
 #### Only needed for parallel algorithms
 - MPI 3.0.0
+
 #### Only needed for tests
 - Catch (development version)
 - Boost filesystem 1.54
+
 ### Installation
 - cd path/to/project
 - mkdir build
