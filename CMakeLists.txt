@@ -19,8 +19,8 @@ cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 # Hint-based Online Programming (HOP)
 project(HOP CXX C)
 
-set(HOP_MAJOR 1)
-set(HOP_MINOR 0)
+set(HOP_MAJOR 0)
+set(HOP_MINOR 9)
 set(HOP_PATCH 0)
 set(HOP_VERSION "${HOP_MAJOR}.${HOP_MINOR}.${HOP_PATCH}")
 
