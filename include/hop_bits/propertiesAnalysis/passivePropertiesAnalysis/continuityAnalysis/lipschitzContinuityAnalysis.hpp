@@ -4,7 +4,7 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  template <typename ParameterType, class DistanceFunction>
   class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit LipschitzContinuityAnalysis() noexcept;
@@ -18,7 +18,7 @@ namespace hop {
       double lipschitzConstant_;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...

@@ -8,12 +8,12 @@ int main(int argc, char* argv[]) {
   try {
     hop::Rng::setRandomSeed();
 
-    hop::MaximumLikelihoodEstimation propertiesEstimation(
-      std::shared_ptr<hop::CorrelationAnalysis<double>>(new hop::FitnessDistanceCorrelationAnalysis()),
-      std::shared_ptr<hop::LipschitzContinuityAnalysis<double>>(new hop::DirectLipschitzContinuityAnalysis()),
-      std::shared_ptr<hop::LinearModelAnalysis<double>>(new hop::LinearOrdinaryLeastSquares()),
-      std::shared_ptr<hop::QuadraticModelAnalysis<double>>(new hop::QuadraticOrdinaryLeastSquares()),
-      std::shared_ptr<hop::AdditiveSeparabilityAnalysis<double>>(new hop::DirectAdditiveSeparabilityAnalysis()));
+    hop::MaximumLikelihoodEstimation<double, hop::EuclideanDistance> propertiesEstimation(
+      std::shared_ptr<hop::CorrelationAnalysis<double, hop::EuclideanDistance>>(new hop::FitnessDistanceCorrelationAnalysis()),
+      std::shared_ptr<hop::LipschitzContinuityAnalysis<double, hop::EuclideanDistance>>(new hop::DirectLipschitzContinuityAnalysis()),
+      std::shared_ptr<hop::LinearModelAnalysis<double, hop::EuclideanDistance>>(new hop::LinearOrdinaryLeastSquares()),
+      std::shared_ptr<hop::QuadraticModelAnalysis<double, hop::EuclideanDistance>>(new hop::QuadraticOrdinaryLeastSquares()),
+      std::shared_ptr<hop::AdditiveSeparabilityAnalysis<double, hop::EuclideanDistance>>(new hop::DirectAdditiveSeparabilityAnalysis()));
 
     std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(4));
 

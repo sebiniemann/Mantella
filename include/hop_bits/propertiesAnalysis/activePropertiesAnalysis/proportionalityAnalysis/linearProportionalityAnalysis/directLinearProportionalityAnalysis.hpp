@@ -2,11 +2,12 @@
 
 // HOP
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis<double> {
+  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis<double, EuclideanDistance> {
     public:
-      using LinearProportionalityAnalysis<double>::LinearProportionalityAnalysis;
+      using LinearProportionalityAnalysis<double, EuclideanDistance>::LinearProportionalityAnalysis;
 
     protected:
       void analyseImplementation(

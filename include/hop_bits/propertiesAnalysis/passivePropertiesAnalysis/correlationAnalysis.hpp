@@ -4,7 +4,7 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  template <typename ParameterType, class DistanceFunction>
     class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit CorrelationAnalysis() noexcept;
@@ -18,7 +18,7 @@ namespace hop {
       double correlationCoefficient_;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...

@@ -4,13 +4,13 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  template <typename ParameterType, class DistanceFunction>
   class LinearProportionalityAnalysis : public ProportionalityAnalysis<ParameterType, DistanceFunction> {
     public:
       using ProportionalityAnalysis<ParameterType, DistanceFunction>::ProportionalityAnalysis;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...

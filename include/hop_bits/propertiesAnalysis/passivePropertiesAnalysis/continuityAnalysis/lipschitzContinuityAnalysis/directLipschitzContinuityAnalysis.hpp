@@ -2,11 +2,12 @@
 
 // HOP
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  class DirectLipschitzContinuityAnalysis : public LipschitzContinuityAnalysis<double> {
+  class DirectLipschitzContinuityAnalysis : public LipschitzContinuityAnalysis<double, EuclideanDistance> {
     public:
-      using LipschitzContinuityAnalysis<double>::LipschitzContinuityAnalysis;
+      using LipschitzContinuityAnalysis<double, EuclideanDistance>::LipschitzContinuityAnalysis;
 
     protected:
       void analyseImplementation(

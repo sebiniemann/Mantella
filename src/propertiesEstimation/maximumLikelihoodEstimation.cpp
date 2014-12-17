@@ -1,27 +1,16 @@
 #include <hop_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 
-#include <iostream>
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
 
 namespace hop {
-  void MaximumLikelihoodEstimation::estimateImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    correlationAnalysis_->analyse(optimisationProblem);
-    correlationCoefficients_.push_back(correlationAnalysis_->getCorrelationCoefficient());
+  // Nothing to see here, move along ...
 
-    lipschitzContinuityAnalysis_->analyse(optimisationProblem);
-    lipschitzConstants_.push_back(lipschitzContinuityAnalysis_->getLipschitzConstant());
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    linearModelAnalysis_->analyse(optimisationProblem);
-    linearModelEstimators_.push_back(linearModelAnalysis_->getLinearModelEstimator());
-    isLinear_.push_back(linearModelAnalysis_->isLinear());
-
-    quadraticModelAnalysis_->analyse(optimisationProblem);
-    quadraticModelEstimators_.push_back(quadraticModelAnalysis_->getQuadraticModelEstimator());
-    isQuadratic_.push_back(quadraticModelAnalysis_->isQuadratic());
-
-    additiveSeparabilityAnalysis_->analyse(optimisationProblem);
-
-    numberOfPropertySets_ = 1;
-  }
+  // Nothing to see here, move along ...
 }

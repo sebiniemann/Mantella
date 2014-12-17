@@ -7,10 +7,10 @@ namespace hop {
   template <typename ParameterType, class DistanceFunction>
   class ActivePropertiesAnalysis : public PropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
-      using PropertiesAnalysis<ParameterType>::PropertiesAnalysis;
+      using PropertiesAnalysis<ParameterType, DistanceFunction>::PropertiesAnalysis;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...

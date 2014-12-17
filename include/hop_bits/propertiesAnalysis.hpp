@@ -5,10 +5,9 @@
 
 // HOP
 #include <hop_bits/optimisationProblem.hpp>
-#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  template <typename ParameterType, class DistanceFunction>
   class PropertiesAnalysis {
     public:
       explicit PropertiesAnalysis() noexcept
@@ -32,7 +31,7 @@ namespace hop {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept = 0;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...

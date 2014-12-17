@@ -10,20 +10,20 @@ namespace hop {
   template <typename ParameterType, class DistanceFunction>
   class PassivePropertiesAnalysis : public PropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
-      using PropertiesAnalysis<ParameterType>::PropertiesAnalysis;
+      using PropertiesAnalysis<ParameterType, DistanceFunction>::PropertiesAnalysis;
 
-      using PropertiesAnalysis<ParameterType>::analyse;
+      using PropertiesAnalysis<ParameterType, DistanceFunction>::analyse;
 
       void analyse(
           const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept;
     protected:
-      using PropertiesAnalysis<ParameterType>::analyseImplementation;
+      using PropertiesAnalysis<ParameterType, DistanceFunction>::analyseImplementation;
 
       virtual void analyseImplementation(
           const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept = 0;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...
@@ -36,7 +36,7 @@ namespace hop {
   template <typename ParameterType, class DistanceFunction>
   void PassivePropertiesAnalysis<ParameterType, DistanceFunction>::analyse(
       const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept {
-    PropertiesAnalysis<ParameterType>::plausibility_ = 0.0;
+    PropertiesAnalysis<ParameterType, DistanceFunction>::plausibility_ = 0.0;
 
     analyseImplementation(parameterToObjectiveValueMapping);
   }

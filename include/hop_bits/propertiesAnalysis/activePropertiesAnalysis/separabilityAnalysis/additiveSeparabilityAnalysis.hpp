@@ -4,7 +4,7 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  template <typename ParameterType, class DistanceFunction>
   class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit AdditiveSeparabilityAnalysis() noexcept;
@@ -20,7 +20,7 @@ namespace hop {
       double additiveSeparabilityErrorThreshold_;
   };
 
-  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
   //! Note: Forward declaration is needed to avoid ordering errors within the source file.
 
   // Nothing to see here, move along ...

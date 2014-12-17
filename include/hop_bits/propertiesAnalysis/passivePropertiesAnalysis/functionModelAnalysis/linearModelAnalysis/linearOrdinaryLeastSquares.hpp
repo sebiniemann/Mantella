@@ -2,11 +2,12 @@
 
 // HOP
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  class LinearOrdinaryLeastSquares : public LinearModelAnalysis<double> {
+  class LinearOrdinaryLeastSquares : public LinearModelAnalysis<double, EuclideanDistance> {
     public:
-      using LinearModelAnalysis<double>::LinearModelAnalysis;
+      using LinearModelAnalysis<double, EuclideanDistance>::LinearModelAnalysis;
 
     protected:
       void analyseImplementation(

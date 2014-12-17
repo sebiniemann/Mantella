@@ -2,11 +2,12 @@
 
 // HOP
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double> {
+  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double, EuclideanDistance> {
     public:
-      using QuadraticModelAnalysis<double>::QuadraticModelAnalysis;
+      using QuadraticModelAnalysis<double, EuclideanDistance>::QuadraticModelAnalysis;
 
     protected:
       void analyseImplementation(

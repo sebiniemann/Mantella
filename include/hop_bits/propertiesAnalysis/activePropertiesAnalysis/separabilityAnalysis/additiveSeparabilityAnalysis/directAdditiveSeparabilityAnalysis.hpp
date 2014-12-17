@@ -2,11 +2,12 @@
 
 // HOP
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis<double> {
+  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis<double, EuclideanDistance> {
     public:
-      using AdditiveSeparabilityAnalysis<double>::AdditiveSeparabilityAnalysis;
+      using AdditiveSeparabilityAnalysis<double, EuclideanDistance>::AdditiveSeparabilityAnalysis;
 
     protected:
       void analyseImplementation(
