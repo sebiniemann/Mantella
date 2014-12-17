@@ -4,13 +4,13 @@
 #include <vector>
 
 // HOP
-#include <hop_bits/optimisationProblem/robotic/model.hpp>
-#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp>
+#include <hop_bits/optimisationProblem/kinematicMachine.hpp>
+#include <hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
 
 // TODO Add default constructor
 namespace hop {
   namespace robotic {
-    class MultiLevelStewartPlatform : public Model {
+    class MultiLevelStewartPlatform : public KinematicMachine {
       public:
         explicit MultiLevelStewartPlatform(
             const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) noexcept;

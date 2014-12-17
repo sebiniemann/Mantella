@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp>
+#include <hop_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp>
 
 // HOP
 #include <hop_bits/helper/geometry.hpp>

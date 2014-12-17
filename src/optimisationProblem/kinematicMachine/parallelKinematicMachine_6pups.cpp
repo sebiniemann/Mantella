@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp>
+#include <hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
 
 // HOP
 #include <hop_bits/helper/geometry.hpp>

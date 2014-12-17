@@ -1,11 +1,11 @@
 #pragma once
 
 // HOP
-#include <hop_bits/optimisationProblem/robotic/model.hpp>
+#include <hop_bits/optimisationProblem/kinematicMachine.hpp>
 
 namespace hop {
   namespace robotic {
-    class ParallelKinematicMachine_3PRPR : public Model {
+    class ParallelKinematicMachine_3PRPR : public KinematicMachine {
       public:
         explicit ParallelKinematicMachine_3PRPR() noexcept;
         explicit ParallelKinematicMachine_3PRPR(
