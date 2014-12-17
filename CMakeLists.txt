@@ -93,32 +93,34 @@ if(BUILD_LIBRARY)
   # Source files without MPI usage (serial algorithms only)
   # All paths must start with "src/"
   set(HOP_LIBRARY_SOURCES
+    src/metric.cpp
+    src/metric/euclideanDistance.cpp
     src/optimisationProblem.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/bentCigarFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/buecheRastriginFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/compositeGriewankRosenbrockFunctionF8F2.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/differentPowersFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/discusFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/ellipsoidalFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/ellipsoidalFunctionRotated.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/gallaghersGaussian101mePeaksFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/gallaghersGaussian21hiPeaksFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/katsuuraFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/linearSlope.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/lunacekBiRastriginFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rastriginFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rastriginFunctionRotated.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rosenbrockFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rosenbrockFunctionRotated.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/schaffersF7Function.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/schaffersF7FunctionIllConditioned.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/schwefelFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sharpRidgeFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.cpp
-    src/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/bentCigarFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/buecheRastriginFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/compositeGriewankRosenbrockFunctionF8F2.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/differentPowersFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/discusFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/ellipsoidalFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/ellipsoidalFunctionRotated.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/gallaghersGaussian101mePeaksFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/gallaghersGaussian21hiPeaksFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/katsuuraFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/linearSlope.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/lunacekBiRastriginFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/rastriginFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/rastriginFunctionRotated.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/rosenbrockFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/rosenbrockFunctionRotated.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/schaffersF7Function.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/schaffersF7FunctionIllConditioned.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/schwefelFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/sharpRidgeFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/sphereFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.cpp
+    src/optimisationProblem/blackBoxOptimisationBenchmark2013/weierstrassFunction.cpp
     src/optimisationProblem/robotic/model.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.cpp
     src/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.cpp
@@ -223,30 +225,30 @@ if(BUILD_LIBRARY)
       # All paths must start with "test/"
       add_executable(libTest
         test/main.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testAttractiveSectorFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBentCigarFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testBuecheRastriginFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDifferentPowersFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testDiscusFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testEllipsoidalFunctionRotated.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian101mePeaksFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testGallaghersGaussian21hiPeaksFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testKatsuuraFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLinearSlope.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testLunacekBiRastriginFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRastriginFunctionRotated.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testRosenbrockFunctionRotated.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7Function.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchaffersF7FunctionIllConditioned.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSchwefelFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSharpRidgeFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testSphereFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testStepEllipsoidalFunction.cpp
-        test/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/testWeierstrassFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testAttractiveSectorFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testBentCigarFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testBuecheRastriginFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testDifferentPowersFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testDiscusFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testEllipsoidalFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testEllipsoidalFunctionRotated.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testGallaghersGaussian101mePeaksFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testGallaghersGaussian21hiPeaksFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testKatsuuraFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testLinearSlope.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testLunacekBiRastriginFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testRastriginFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testRastriginFunctionRotated.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testRosenbrockFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testRosenbrockFunctionRotated.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testSchaffersF7Function.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testSchaffersF7FunctionIllConditioned.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testSchwefelFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testSharpRidgeFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testSphereFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testStepEllipsoidalFunction.cpp
+        test/optimisationProblem/blackBoxOptimisationBenchmark2013/testWeierstrassFunction.cpp
         test/helper/testGeometry.cpp
         test/helper/testRandom.cpp
         test/helper/testString.cpp
@@ -305,32 +307,34 @@ endif()
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
   include/hop
+  include/hop_bits/metric.hpp
+  include/hop_bits/metric/euclideanDistance.hpp
   include/hop_bits/optimisationProblem.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/bentCigarFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/buecheRastriginFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/compositeGriewankRosenbrockFunctionF8F2.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/differentPowersFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/discusFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/ellipsoidalFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/ellipsoidalFunctionRotated.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/gallaghersGaussian101mePeaksFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/gallaghersGaussian21hiPeaksFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/katsuuraFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/linearSlope.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/lunacekBiRastriginFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rastriginFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rastriginFunctionRotated.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rosenbrockFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rosenbrockFunctionRotated.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/schaffersF7Function.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/schaffersF7FunctionIllConditioned.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/schwefelFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sharpRidgeFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/sphereFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp
-  include/hop_bits/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/weierstrassFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/bentCigarFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/buecheRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/compositeGriewankRosenbrockFunctionF8F2.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/differentPowersFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/discusFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/ellipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/ellipsoidalFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/gallaghersGaussian101mePeaksFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/gallaghersGaussian21hiPeaksFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/katsuuraFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/linearSlope.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/lunacekBiRastriginFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/rastriginFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/rastriginFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/rosenbrockFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/rosenbrockFunctionRotated.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/schaffersF7Function.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/schaffersF7FunctionIllConditioned.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/schwefelFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/sharpRidgeFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/sphereFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp
+  include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/weierstrassFunction.hpp
   include/hop_bits/optimisationProblem/robotic/model.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.hpp
   include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp
