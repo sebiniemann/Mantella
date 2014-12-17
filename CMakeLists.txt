@@ -121,15 +121,16 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/blackBoxOptimisationBenchmark2013/sphereFunction.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2013/weierstrassFunction.cpp
-    src/optimisationProblem/robotic/model.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_3pups.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_4prus.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.cpp
-    src/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.cpp
-    src/optimisationProblem/robotic/model/multiLevelStewartPlatform.cpp
+    src/optimisationProblem/kinematicMachine.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prpr.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prrr.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prus.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3pups.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_4prus.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.cpp
+    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.cpp
+    src/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.cpp
+    src/optimisationProblem/nkFitnessLandscape.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.cpp
@@ -335,15 +336,16 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/sphereFunction.hpp
   include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/stepEllipsoidalFunction.hpp
   include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/weierstrassFunction.hpp
-  include/hop_bits/optimisationProblem/robotic/model.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prpr.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prrr.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3prus.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_3pups.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_4prus.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6prus.hpp
-  include/hop_bits/optimisationProblem/robotic/model/parallelKinematicMachine_6pups.hpp
-  include/hop_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prpr.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prrr.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prus.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3pups.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_4prus.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp
+  include/hop_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp
+  include/hop_bits/optimisationProblem/nkFitnessLandscape.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
