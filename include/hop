@@ -16,8 +16,8 @@
 //------------------------------------------------------------------------------
 #pragma once
 
-#include <hop_bits/metric.hpp>
-#include <hop_bits/metric/euclideanDistance.hpp>
+#include <hop_bits/distanceFunction.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 #include <hop_bits/optimisationProblem.hpp>
 #include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013.hpp>
 #include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013.hpp>
@@ -64,8 +64,12 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+
+#ifdef MPI_SUCCESS
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
+#endif
+
 #include <hop_bits/propertiesAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp>
