@@ -7,8 +7,8 @@
 #include <hop_bits/propertiesAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType>
-  class PassivePropertiesAnalysis : public PropertiesAnalysis<ParameterType> {
+  template <typename ParameterType, class DistanceFunction>
+  class PassivePropertiesAnalysis : public PropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
       using PropertiesAnalysis<ParameterType>::PropertiesAnalysis;
 
@@ -33,8 +33,8 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  void PassivePropertiesAnalysis<ParameterType>::analyse(
+  template <typename ParameterType, class DistanceFunction>
+  void PassivePropertiesAnalysis<ParameterType, DistanceFunction>::analyse(
       const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept {
     PropertiesAnalysis<ParameterType>::plausibility_ = 0.0;
 

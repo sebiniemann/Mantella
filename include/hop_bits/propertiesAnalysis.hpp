@@ -5,9 +5,10 @@
 
 // HOP
 #include <hop_bits/optimisationProblem.hpp>
+#include <hop_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace hop {
-  template <typename ParameterType>
+  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
   class PropertiesAnalysis {
     public:
       explicit PropertiesAnalysis() noexcept
@@ -41,16 +42,16 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  void PropertiesAnalysis<ParameterType>::analyse(
+  template <typename ParameterType, class DistanceFunction>
+  void PropertiesAnalysis<ParameterType, DistanceFunction>::analyse(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
     plausibility_ = 0.0;
 
     analyseImplementation(optimisationProblem);
   }
 
-  template <typename ParameterType>
-  double PropertiesAnalysis<ParameterType>::getPlausibility() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  double PropertiesAnalysis<ParameterType, DistanceFunction>::getPlausibility() const noexcept {
     return plausibility_;
   }
 

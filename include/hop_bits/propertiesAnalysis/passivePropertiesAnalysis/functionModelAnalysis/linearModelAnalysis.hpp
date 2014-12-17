@@ -4,8 +4,8 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType>
-  class LinearModelAnalysis : public FunctionModelAnalysis<ParameterType> {
+  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  class LinearModelAnalysis : public FunctionModelAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit LinearModelAnalysis() noexcept;
 
@@ -37,19 +37,19 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  LinearModelAnalysis<ParameterType>::LinearModelAnalysis() noexcept
+  template <typename ParameterType, class DistanceFunction>
+  LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() noexcept
     : isLinear_(false) {
     setLinearModelResidualsThreshold(0.25);
   }
 
-  template <typename ParameterType>
-  arma::Col<double> LinearModelAnalysis<ParameterType>::getLinearModelEstimator() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  arma::Col<double> LinearModelAnalysis<ParameterType, DistanceFunction>::getLinearModelEstimator() const noexcept {
     return linearModelEstimator_;
   }
 
-  template <typename ParameterType>
-  void LinearModelAnalysis<ParameterType>::setLinearModelResidualsThreshold(
+  template <typename ParameterType, class DistanceFunction>
+  void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelResidualsThreshold(
       const double& linearModelResidualsThreshold) {
     if(linearModelResidualsThreshold < 0 || linearModelResidualsThreshold > 1) {
       throw std::runtime_error("The quadratic model residuals threshold (" + std::to_string(linearModelResidualsThreshold) + ") must be within 0 and 1.");
@@ -58,8 +58,8 @@ namespace hop {
     linearModelResidualsThreshold_ = linearModelResidualsThreshold;
   }
 
-  template <typename ParameterType>
-  bool LinearModelAnalysis<ParameterType>::isLinear() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  bool LinearModelAnalysis<ParameterType, DistanceFunction>::isLinear() const noexcept {
     return isLinear_;
   }
   //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON

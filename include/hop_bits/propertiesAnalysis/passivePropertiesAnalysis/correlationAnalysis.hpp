@@ -4,8 +4,8 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType>
-    class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType> {
+  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+    class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit CorrelationAnalysis() noexcept;
 
@@ -28,14 +28,14 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  CorrelationAnalysis<ParameterType>::CorrelationAnalysis() noexcept
+  template <typename ParameterType, class DistanceFunction>
+  CorrelationAnalysis<ParameterType, DistanceFunction>::CorrelationAnalysis() noexcept
     : correlationCoefficient_(0.0) {
 
   }
 
-  template <typename ParameterType>
-  double CorrelationAnalysis<ParameterType>::getCorrelationCoefficient() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  double CorrelationAnalysis<ParameterType, DistanceFunction>::getCorrelationCoefficient() const noexcept {
     return correlationCoefficient_;
   }
 

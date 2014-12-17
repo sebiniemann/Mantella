@@ -4,10 +4,10 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType>
-  class ProportionalityAnalysis : public ActivePropertiesAnalysis<ParameterType> {
+  template <typename ParameterType, class DistanceFunction>
+  class ProportionalityAnalysis : public ActivePropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
-      using ActivePropertiesAnalysis<ParameterType>::ActivePropertiesAnalysis;
+      using ActivePropertiesAnalysis<ParameterType, DistanceFunction>::ActivePropertiesAnalysis;
 
       void setMaximalNumberOfIterations(
           const unsigned int& maximalNumberOfIterations) noexcept;
@@ -26,8 +26,8 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  void ProportionalityAnalysis<ParameterType>::setMaximalNumberOfIterations(
+  template <typename ParameterType, class DistanceFunction>
+  void ProportionalityAnalysis<ParameterType, DistanceFunction>::setMaximalNumberOfIterations(
       const unsigned int& maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }

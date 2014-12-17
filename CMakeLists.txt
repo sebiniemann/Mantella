@@ -93,8 +93,8 @@ if(BUILD_LIBRARY)
   # Source files without MPI usage (serial algorithms only)
   # All paths must start with "src/"
   set(HOP_LIBRARY_SOURCES
-    src/metric.cpp
-    src/metric/euclideanDistance.cpp
+    src/distanceFunction.cpp
+    src/distanceFunction/euclideanDistance.cpp
     src/optimisationProblem.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2013.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.cpp
@@ -307,8 +307,8 @@ endif()
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
   include/hop
-  include/hop_bits/metric.hpp
-  include/hop_bits/metric/euclideanDistance.hpp
+  include/hop_bits/distanceFunction.hpp
+  include/hop_bits/distanceFunction/euclideanDistance.hpp
   include/hop_bits/optimisationProblem.hpp
   include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013.hpp
   include/hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/attractiveSectorFunction.hpp

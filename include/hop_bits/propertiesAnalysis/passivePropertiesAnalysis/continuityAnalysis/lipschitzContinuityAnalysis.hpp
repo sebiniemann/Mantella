@@ -4,8 +4,8 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType>
-  class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType> {
+  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit LipschitzContinuityAnalysis() noexcept;
 
@@ -28,14 +28,14 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  LipschitzContinuityAnalysis<ParameterType>::LipschitzContinuityAnalysis() noexcept
+  template <typename ParameterType, class DistanceFunction>
+  LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::LipschitzContinuityAnalysis() noexcept
     : lipschitzConstant_(0.0) {
 
   }
 
-  template <typename ParameterType>
-  double LipschitzContinuityAnalysis<ParameterType>::getLipschitzConstant() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  double LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::getLipschitzConstant() const noexcept {
     return lipschitzConstant_;
   }
 

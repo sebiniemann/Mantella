@@ -4,8 +4,8 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp>
 
 namespace hop {
-  template <typename ParameterType>
-  class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType> {
+  template <typename ParameterType, class DistanceFunction = EuclideanDistance>
+  class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType, DistanceFunction> {
     public:
       explicit AdditiveSeparabilityAnalysis() noexcept;
 
@@ -30,13 +30,13 @@ namespace hop {
   //! Only PUBLIC methods from here on
   //! Note: Runtime checks are only performed for public methods.
 
-  template <typename ParameterType>
-  AdditiveSeparabilityAnalysis<ParameterType>::AdditiveSeparabilityAnalysis() noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::AdditiveSeparabilityAnalysis() noexcept {
     setAdditiveSeparabilityErrorThreshold(0.75);
   }
 
-  template <typename ParameterType>
-  void AdditiveSeparabilityAnalysis<ParameterType>::setAdditiveSeparabilityErrorThreshold(
+  template <typename ParameterType, class DistanceFunction>
+  void AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityErrorThreshold(
       const double& additiveSeparabilityErrorThreshold) {
     if(additiveSeparabilityErrorThreshold < 0 || additiveSeparabilityErrorThreshold > 1) {
       throw std::runtime_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityErrorThreshold) + ") must be within 0 and 1.");
