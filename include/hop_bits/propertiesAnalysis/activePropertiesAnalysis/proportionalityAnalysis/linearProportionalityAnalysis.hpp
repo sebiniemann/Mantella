@@ -4,8 +4,26 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp>
 
 namespace hop {
-  class LinearProportionalityAnalysis : public ProportionalityAnalysis {
+  template <typename ParameterType>
+  class LinearProportionalityAnalysis : public ProportionalityAnalysis<ParameterType> {
     public:
-      using ProportionalityAnalysis::ProportionalityAnalysis;
+      using ProportionalityAnalysis<ParameterType>::ProportionalityAnalysis;
   };
+
+  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
+
+  // Nothing to see here, move along ...
+
+  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
+  //!
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
+
+  //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
 }

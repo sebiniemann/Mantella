@@ -2,7 +2,7 @@
 
 namespace hop {
   RandomSearch::RandomSearch(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem) {
 
   }

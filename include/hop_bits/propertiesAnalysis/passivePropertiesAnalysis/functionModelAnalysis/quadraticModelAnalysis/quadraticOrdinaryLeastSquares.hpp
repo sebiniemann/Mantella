@@ -4,13 +4,13 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
 
 namespace hop {
-  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis {
+  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double> {
     public:
-      using QuadraticModelAnalysis::QuadraticModelAnalysis;
+      using QuadraticModelAnalysis<double>::QuadraticModelAnalysis;
 
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept override;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
       void analyseImplementation(
           const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
   };

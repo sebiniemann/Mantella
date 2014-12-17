@@ -1,16 +1,16 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  AdditiveSeparabilityAnalysis::AdditiveSeparabilityAnalysis() noexcept {
-    setAdditiveSeparabilityThreshold(0.75);
-  }
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  void AdditiveSeparabilityAnalysis::setAdditiveSeparabilityThreshold(
-      const double& additiveSeparabilityThreshold) {
-    if(additiveSeparabilityThreshold < 0 || additiveSeparabilityThreshold > 1) {
-      throw std::runtime_error("The additive separability threshold (" + std::to_string(additiveSeparabilityThreshold) + ") must be within 0 and 1.");
-    }
+  // Nothing to see here, move along ...
 
-    additiveSeparabilityThreshold_ = additiveSeparabilityThreshold;
-  }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
 }

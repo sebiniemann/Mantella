@@ -4,10 +4,10 @@
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 
 namespace hop {
-  class GridSearch : public SamplingBasedAlgorithm {
+  class GridSearch : public SamplingBasedAlgorithm<double> {
     public:
       explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       GridSearch(const GridSearch&) = delete;
       GridSearch& operator=(const GridSearch&) = delete;

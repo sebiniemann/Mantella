@@ -1,20 +1,16 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  QuadraticModelAnalysis::QuadraticModelAnalysis() noexcept {
-    setQuadraticModelResidualsThreshold(0.75);
-  }
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  arma::Col<double> QuadraticModelAnalysis::getQuadraticModelEstimator() const noexcept {
-    return quadraticModelEstimator_;
-  }
+  // Nothing to see here, move along ...
 
-  void QuadraticModelAnalysis::setQuadraticModelResidualsThreshold(
-      const double& quadraticModelResidualsThreshold) {
-    if(quadraticModelResidualsThreshold < 0 || quadraticModelResidualsThreshold > 1) {
-      throw std::runtime_error("The quadratic model residuals threshold (" + std::to_string(quadraticModelResidualsThreshold) + ") must be within 0 and 1.");
-    }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    quadraticModelResidualsThreshold_ = quadraticModelResidualsThreshold;
-  }
+  // Nothing to see here, move along ...
 }

@@ -2,7 +2,7 @@
 
 namespace hop {
   void QuadraticOrdinaryLeastSquares::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions() * (optimisationProblem->getNumberOfDimensions() + 3) / 2 + 1, parameterToObjectiveValueMappings.size());

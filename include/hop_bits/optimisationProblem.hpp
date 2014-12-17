@@ -27,6 +27,7 @@ namespace hop {
   //
   // Accessing constraints and the objective value makes use of caches to avoid redundant
   // computations.
+  template <typename ParameterType>
   class OptimisationProblem : public Printable {
     public:
       // Constructs an optimisation problem with the given number of dimensions to be optimised.
@@ -43,63 +44,63 @@ namespace hop {
       // Note: Computes the result only once and caches it afterwards.
       arma::Col<arma::uword> isSatisfyingLowerBounds(
         // The parameter to be tested
-        const arma::Col<double>& parameter);
+        const arma::Col<ParameterType>& parameter);
 
       // Checks for each dimension whether the parameter is lower or equal the upper bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
       arma::Col<arma::uword> isSatisfyingUpperBounds(
         // The parameter to be tested
-        const arma::Col<double>& parameter);
+        const arma::Col<ParameterType>& parameter);
 
       // Checks whether the soft-constraint is non-zero.
       // Returns false if the constraint is violated and true otherwise.
       // Note: Computes the result only once and caches it afterwards.
       bool isSatisfyingSoftConstraints(
         // The parameter to be tested
-        const arma::Col<double>& parameter);
+        const arma::Col<ParameterType>& parameter);
 
       // Checks whether any interval or soft-constraint is violated.
       // Returns false if the constraint is violated and true otherwise.
       // Note: Computes the results only once per constraint and caches them afterwards.
       bool isSatisfyingConstraints(
         // The parameter to be tested
-        const arma::Col<double>& parameter);
+        const arma::Col<ParameterType>& parameter);
 
       // Returns the sum of all soft-constraint values.
       // The value must always be positive and only 0 if no constraint is violated.
       // Note: Computes the result only once and caches it afterwards.
       double getSoftConstraintsValue(
         // The parameter to be evaluated
-        const arma::Col<double>& parameter);
+        const arma::Col<ParameterType>& parameter);
 
       // Returns the objective value to be minimised
       // Better solutions must have a lower objective value.
       // Note: Computes the result only once and caches it afterwards.
       double getObjectiveValue(
         // The parameter to be evaluated
-        const arma::Col<double>& parameter);
+        const arma::Col<ParameterType>& parameter);
 
       // Returns the number of dimensions to be optimised
       unsigned int getNumberOfDimensions() const noexcept;
 
       // Returns the lower bounds of the search space.
-      arma::Col<double> getLowerBounds() const noexcept;
+      arma::Col<ParameterType> getLowerBounds() const noexcept;
 
       // Sets the lower bounds of the search space.
       // Note: It is not checked, whether it is strictly greater then the lower bound or not.
       void setLowerBounds(
         // The new lower bounds
-        const arma::Col<double>& lowerBounds);
+        const arma::Col<ParameterType>& lowerBounds);
 
       // Returns the upper bounds of the search space
-      arma::Col<double> getUpperBounds() const noexcept;
+      arma::Col<ParameterType> getUpperBounds() const noexcept;
 
       // Sets the upper bounds of the search space.
       // Note: It is not checked, whether it is strictly greater then the lower bound or not.
       void setUpperBounds(
         // The new upper bounds
-        const arma::Col<double>& upperBounds);
+        const arma::Col<ParameterType>& upperBounds);
 
       // Sets the translation (i.e. shift) which is added (not substracted) to the parameter before
       // any other computation.
@@ -107,20 +108,20 @@ namespace hop {
       // set.
       void setParameterTranslation(
         // The new translation of the parameter space
-          const arma::Col<double>& parameterTranslation);
+          const arma::Col<ParameterType>& parameterTranslation);
 
       // Sets the scaling which is multiplied to the parameter after its translation.
       // Reflections due to negative values are permitted.
       // Note: The scaling is always based on the same origin and will not add up is multiple set.
       void setParameterScale(
         // The new scaling of the parameter space
-        const arma::Col<double>& parameterScale);
+        const arma::Col<ParameterType>& parameterScale);
 
       // Sets the rotation which is multiplied to the parameter after the scaling.
       // Note: The rotation is always based on the same origin and will not add up is multiple set.
       void setParameterRotation(
         // The new rotation of the parameter space
-        const arma::Mat<double>& parameterRotation);
+        const arma::Mat<ParameterType>& parameterRotation);
 
       // Sets the translation (i.e. shift) which is added to the objective value after its
       // computation.
@@ -159,12 +160,12 @@ namespace hop {
       // clearing the caches.
       void reset() noexcept;
 
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> getCachedObjectiveValues() const;
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> getCachedSoftConstraintsValues() const;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingLowerBounds() const;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingUpperBounds() const;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> getCachedIsSatisfyingSoftConstraints() const;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> getCachedIsSatisfyingConstraints() const;
+      std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> getCachedObjectiveValues() const;
+      std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> getCachedSoftConstraintsValues() const;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingLowerBounds() const;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingUpperBounds() const;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> getCachedIsSatisfyingSoftConstraints() const;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> getCachedIsSatisfyingConstraints() const;
 
       // Provides a default deconstructor.
       virtual ~OptimisationProblem() = default;
@@ -174,9 +175,9 @@ namespace hop {
       unsigned int numberOfDimensions_;
 
       // The lower bound of tthe search space
-      arma::Col<double> lowerBounds_;
+      arma::Col<ParameterType> lowerBounds_;
       // The upper bound of the search space
-      arma::Col<double> upperBounds_;
+      arma::Col<ParameterType> upperBounds_;
 
       // The translation (shift) of the parameter space
       arma::Col<double> parameterTranslation_;
@@ -198,30 +199,30 @@ namespace hop {
       // The number of distinct objective function evaluations so far (computated only).
       unsigned int numberOfDistinctEvaluations_;
 
-      // Actual implementaion of the objective function.
-      // Note: the number of dimensions of the parameter is checked beforehand.
-      virtual double getObjectiveValueImplementation(
-        // The parameter to be evaluated
-        const arma::Col<double>& parameter) const noexcept = 0;
+      // Returns the rotated, scaled and translated (shifted) parameter.
+      arma::Col<ParameterType> getScaledCongruentParameter(
+        // The parameter to be rotated, scaled and translated (shifted)
+        const arma::Col<ParameterType>& parameter) const noexcept;
 
       // Actual implementaion of the soft-constraints function.
       // Returns 0.0 if not overloaded.
       virtual double getSoftConstraintsValueImplementation(
         // The parameter to be evaluated
-        const arma::Col<double>& parameter) const noexcept;
+        const arma::Col<ParameterType>& parameter) const noexcept;
 
-      // Returns the rotated, scaled and translated (shifted) parameter.
-      arma::Col<double> getScaledCongruentParameter(
-        // The parameter to be rotated, scaled and translated (shifted)
-        const arma::Col<double>& parameter) const noexcept;
+      // Actual implementaion of the objective function.
+      // Note: the number of dimensions of the parameter is checked beforehand.
+      virtual double getObjectiveValueImplementation(
+        // The parameter to be evaluated
+        const arma::Col<ParameterType>& parameter) const noexcept = 0;
 
       // Several caches used to avoid redundant computations.
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedObjectiveValues_;
-      std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
-      std::unordered_map<arma::Col<double>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
-      std::unordered_map<arma::Col<double>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
+      std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> cachedObjectiveValues_;
+      std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
 
       //! The following is ONLY TO BE USED BY CEREAL
       // Gives cereal access to otherwise protected constructors, functions and fields.
@@ -232,7 +233,7 @@ namespace hop {
       // The fields to be saved (serialised) and their corresponding name.
       // The given name should always match the WHOLE parameter name (expect the suffix "_") to
       // lessen confusion later on.
-      template<class Archive>
+      template <typename Archive>
       void serialize(
           Archive& archive) noexcept {
         archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
@@ -246,4 +247,296 @@ namespace hop {
         archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
       }
   };
+
+  //! Only FORWARD DECLERARTION of FULLY TEMPLATE SPECIALISATION from here on.
+  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
+
+  template <>
+  OptimisationProblem<double>::OptimisationProblem(
+      const unsigned int& numberOfDimensions) noexcept;
+
+  template <>
+  void OptimisationProblem<double>::setParameterTranslation(
+      const arma::Col<double>& parameterTranslation);
+
+  template <>
+  void OptimisationProblem<double>::setParameterRotation(
+      const arma::Mat<double>& parameterRotation);
+
+  template <>
+  void OptimisationProblem<double>::setParameterScale(
+      const arma::Col<double>& parameterScale);
+
+  template <>
+  arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
+      const arma::Col<double>& parameter) const noexcept;
+
+  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
+  //!
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  template <typename ParameterType>
+  OptimisationProblem<ParameterType>::OptimisationProblem(
+      const unsigned int& numberOfDimensions) noexcept
+    : numberOfDimensions_(numberOfDimensions),
+      numberOfEvaluations_(0),
+      numberOfDistinctEvaluations_(0) {
+    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
+    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
+    setObjectiveValueTranslation(0.0);
+    setObjectiveValueScale(1.0);
+    setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
+  }
+
+  template <typename ParameterType>
+  arma::Col<arma::uword> OptimisationProblem<ParameterType>::isSatisfyingLowerBounds(
+      const arma::Col<ParameterType>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
+    if (cachePosition == cachedIsSatisfyingLowerBounds_.end()) {
+      // The result was not found, compute it.
+      const arma::Col<arma::uword>& result = (getScaledCongruentParameter(parameter) >= lowerBounds_);
+      cachedIsSatisfyingLowerBounds_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
+  template <typename ParameterType>
+  arma::Col<arma::uword> OptimisationProblem<ParameterType>::isSatisfyingUpperBounds(
+      const arma::Col<ParameterType>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
+    if (cachePosition == cachedIsSatisfyingUpperBounds_.end()) {
+      // The result was not found, compute it.
+      const arma::Col<arma::uword>& result = (getScaledCongruentParameter(parameter) <= upperBounds_);
+      cachedIsSatisfyingUpperBounds_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
+  template <typename ParameterType>
+  bool OptimisationProblem<ParameterType>::isSatisfyingSoftConstraints(
+      const arma::Col<ParameterType>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedIsSatisfyingSoftConstraints_.find(parameter);
+    if (cachePosition == cachedIsSatisfyingSoftConstraints_.end()) {
+      // The result was not found, compute it.
+      const bool& result = (getSoftConstraintsValue(parameter) == 0);
+      cachedIsSatisfyingSoftConstraints_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
+  template <typename ParameterType>
+  bool OptimisationProblem<ParameterType>::isSatisfyingConstraints(
+      const arma::Col<ParameterType>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedIsSatisfyingConstraints_.find(parameter);
+    if (cachePosition == cachedIsSatisfyingConstraints_.end()) {
+      // The result was not found, compute it.
+      const bool& result = (all(isSatisfyingLowerBounds(parameter)) && all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
+      cachedIsSatisfyingConstraints_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
+  template <typename ParameterType>
+  double OptimisationProblem<ParameterType>::getSoftConstraintsValue(
+      const arma::Col<ParameterType>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedSoftConstraintsValues_.find(parameter);
+    if (cachePosition == cachedSoftConstraintsValues_.end()) {
+      // The result was not found, compute it.
+      const double& result = getSoftConstraintsValueImplementation(parameter);
+
+      if(result < 0) {
+        throw std::runtime_error("The soft constraint value (" + std::to_string(result) + ") must be greater or equal 0.");
+      }
+
+      cachedSoftConstraintsValues_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
+  template <typename ParameterType>
+  double OptimisationProblem<ParameterType>::getObjectiveValue(
+      const arma::Col<ParameterType>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Always increase the number of evaluations (whether its computed or retrived from cache).
+    ++numberOfEvaluations_;
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
+    if (cachePosition == cachedObjectiveValues_.end()) {
+      // Increase the number of distinct evaluations only if we actually compute the value.
+      ++numberOfDistinctEvaluations_;
+
+      // The result was not found, compute it.
+      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
+      cachedObjectiveValues_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
+  template <typename ParameterType>
+  unsigned int OptimisationProblem<ParameterType>::getNumberOfDimensions() const noexcept {
+    return numberOfDimensions_;
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getLowerBounds() const noexcept {
+    return lowerBounds_;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::setLowerBounds(
+      const arma::Col<ParameterType>& lowerBounds) {
+    if (lowerBounds.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the lower bound (" + std::to_string(lowerBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    lowerBounds_ = lowerBounds;
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getUpperBounds() const noexcept {
+    return upperBounds_;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::setUpperBounds(
+      const arma::Col<ParameterType>& upperBounds) {
+    if (upperBounds.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the upper bound (" + std::to_string(upperBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    upperBounds_ = upperBounds;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::setObjectiveValueTranslation(
+      const double& objectiveValueTranslation) noexcept {
+    objectiveValueTranslation_ = objectiveValueTranslation;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScale(
+      const double& objectiveValueScale) noexcept {
+    objectiveValueScale_ = objectiveValueScale;
+  }
+
+  template <typename ParameterType>
+  double OptimisationProblem<ParameterType>::getAcceptableObjectiveValue() const noexcept {
+    return acceptableObjectiveValue_;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::setAcceptableObjectiveValue(
+      const double& acceptableObjectiveValue) noexcept {
+    acceptableObjectiveValue_ = acceptableObjectiveValue;
+  }
+
+  template <typename ParameterType>
+  unsigned int OptimisationProblem<ParameterType>::getNumberOfEvaluations() const noexcept {
+    return numberOfEvaluations_;
+  }
+
+  template <typename ParameterType>
+  unsigned int OptimisationProblem<ParameterType>::getNumberOfDistinctEvaluations() const noexcept {
+    return numberOfDistinctEvaluations_;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::reset() noexcept {
+    numberOfEvaluations_ = 0;
+    numberOfDistinctEvaluations_ = 0;
+
+    cachedObjectiveValues_.clear();
+    cachedSoftConstraintsValues_.clear();
+    cachedIsSatisfyingLowerBounds_.clear();
+    cachedIsSatisfyingUpperBounds_.clear();
+    cachedIsSatisfyingSoftConstraints_.clear();
+    cachedIsSatisfyingConstraints_.clear();
+  }
+
+  template <typename ParameterType>
+  std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const {
+    return cachedObjectiveValues_;
+  }
+
+  template <typename ParameterType>
+  std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedSoftConstraintsValues() const {
+    return cachedSoftConstraintsValues_;
+  }
+
+  template <typename ParameterType>
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const {
+    return cachedIsSatisfyingLowerBounds_;
+  }
+
+  template <typename ParameterType>
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const {
+    return cachedIsSatisfyingUpperBounds_;
+  }
+
+  template <typename ParameterType>
+  std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingSoftConstraints() const {
+    return cachedIsSatisfyingSoftConstraints_;
+  }
+
+  template <typename ParameterType>
+  std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const {
+    return cachedIsSatisfyingConstraints_;
+  }
+
+  //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON
+  //! Note: Runtime checks are only performed for public methods.
+
+  template <typename ParameterType>
+  double OptimisationProblem<ParameterType>::getSoftConstraintsValueImplementation(
+      const arma::Col<ParameterType>& parameter) const noexcept {
+    return 0.0;
+  }
 }

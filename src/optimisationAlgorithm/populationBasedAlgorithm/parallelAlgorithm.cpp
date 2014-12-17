@@ -1,65 +1,16 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
 
-// C++ Standard Library
-#include <sstream>
-
-// Cereal
-#include <cereal/cereal.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/types/polymorphic.hpp>
-
-// MPI
-#include <mpi.h>
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
 
 namespace hop {
-  ParallelAlgorithm::ParallelAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm(optimisationProblem, populationSize) {
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
-    MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
-  }
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  void ParallelAlgorithm::optimiseImplementation() noexcept {
-    unsigned int serialisedOptimisationProblemSize;
-    char* serialisedOptimisationProblemBuffer;
+  // Nothing to see here, move along ...
 
-    if (rank_ == 0) {
-      std::ostringstream output; {
-        cereal::JSONOutputArchive archive(output);
-        archive(optimisationProblem_);
-      };
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-      std::string serialisedOptimisationProblem = output.str();
-      serialisedOptimisationProblemSize = serialisedOptimisationProblem.size();
-      serialisedOptimisationProblemBuffer = std::strcpy(new char[serialisedOptimisationProblemSize + 1], serialisedOptimisationProblem.c_str());
-    }
-
-    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
-
-    if (rank_ != 0) {
-      serialisedOptimisationProblemBuffer = new char[serialisedOptimisationProblemSize + 1];
-    }
-
-    MPI_Bcast(serialisedOptimisationProblemBuffer, serialisedOptimisationProblemSize + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
-
-    if (rank_ != 0) {
-      std::istringstream input(serialisedOptimisationProblemBuffer); {
-        cereal::JSONInputArchive archive(input);
-        archive(optimisationProblem_);
-      }
-    }
-
-    delete[](serialisedOptimisationProblemBuffer);
-
-    parallelOptimiseImplementation();
-  }
-
-  unsigned int ParallelAlgorithm::getRank() const noexcept {
-    return rank_;
-  }
-
-  unsigned int ParallelAlgorithm::getNumberOfNodes() const noexcept {
-    return numberOfNodes_;
-  }
+  // Nothing to see here, move along ...
 }

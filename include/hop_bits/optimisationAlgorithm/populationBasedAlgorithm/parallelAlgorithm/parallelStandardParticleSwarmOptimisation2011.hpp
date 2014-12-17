@@ -8,10 +8,10 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
 
 namespace hop {
-  class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm {
+  class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm<double> {
     public:
       explicit ParallelStandardParticleSwarmOptimisation2011(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem,
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
       ParallelStandardParticleSwarmOptimisation2011(const ParallelStandardParticleSwarmOptimisation2011&) = delete;

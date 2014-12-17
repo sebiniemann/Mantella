@@ -7,7 +7,7 @@
 
 namespace hop {
   void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions(), parameterToObjectiveValueMappings.size());

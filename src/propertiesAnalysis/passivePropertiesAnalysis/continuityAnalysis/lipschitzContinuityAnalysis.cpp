@@ -1,12 +1,16 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  LipschitzContinuityAnalysis::LipschitzContinuityAnalysis() noexcept
-    : lipschitzConstant_(0.0) {
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  }
+  // Nothing to see here, move along ...
 
-  double LipschitzContinuityAnalysis::getLipschitzConstant() const noexcept {
-    return lipschitzConstant_;
-  }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
 }

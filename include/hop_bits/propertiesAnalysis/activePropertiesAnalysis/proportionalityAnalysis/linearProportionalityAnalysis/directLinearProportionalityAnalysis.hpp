@@ -4,12 +4,12 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp>
 
 namespace hop {
-  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis {
+  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis<double> {
     public:
-      using LinearProportionalityAnalysis::LinearProportionalityAnalysis;
+      using LinearProportionalityAnalysis<double>::LinearProportionalityAnalysis;
 
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept override;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
   };
 }

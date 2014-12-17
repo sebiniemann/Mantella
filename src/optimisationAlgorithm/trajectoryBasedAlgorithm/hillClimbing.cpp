@@ -9,7 +9,7 @@
 // TODO Add restarting
 namespace hop {
   HillClimbing::HillClimbing(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm(optimisationProblem) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10.0);
   }

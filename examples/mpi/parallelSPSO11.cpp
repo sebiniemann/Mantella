@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
     arma::Col<double> duration(numberOfIterations);
     arma::Col<arma::uword> finished(numberOfIterations);
     for (unsigned int n = 0; n < numberOfIterations; ++n) {
-      std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
+      std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
 
       hop::ParallelStandardParticleSwarmOptimisation2011 parallelOptimisationAlgorithm(optimisationProblem, localPopulationSize);
       parallelOptimisationAlgorithm.setLocalAttraction(localAttraction);

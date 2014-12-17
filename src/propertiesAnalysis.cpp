@@ -1,22 +1,16 @@
 #include <hop_bits/propertiesAnalysis.hpp>
 
-// C++ Standard Library
-#include <cstdlib>
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
 
 namespace hop {
-  PropertiesAnalysis::PropertiesAnalysis() noexcept
-    : plausibility_(0.0) {
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  }
+  // Nothing to see here, move along ...
 
-  void PropertiesAnalysis::analyse(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
-    plausibility_ = 0.0;
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    analyseImplementation(optimisationProblem);
-  }
-
-  double PropertiesAnalysis::getPlausibility() const noexcept {
-    return plausibility_;
-  }
+  // Nothing to see here, move along ...
 }

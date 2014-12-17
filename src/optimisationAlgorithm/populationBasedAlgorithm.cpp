@@ -1,25 +1,16 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  PopulationBasedAlgorithm::PopulationBasedAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const unsigned int& populationSize) noexcept
-    : OptimisationAlgorithm(optimisationProblem),
-      populationSize_(populationSize) {
-    arma::Mat<double> population = arma::randu<arma::Mat<double>>(optimisationProblem_->getNumberOfDimensions(), populationSize_);
-    population.each_col() %= optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds();
-    population.each_col() += optimisationProblem_->getLowerBounds();
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    setInitialPopulation(population);
-  }
+  // Nothing to see here, move along ...
 
-  void PopulationBasedAlgorithm::setInitialPopulation(
-      const arma::Mat<double>& initialPopulation) {
-    if(initialPopulation.n_rows != optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
-    }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    initialPopulation_ = initialPopulation;
-    populationSize_ = initialPopulation.n_cols;
-  }
+  // Nothing to see here, move along ...
 }

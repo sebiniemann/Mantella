@@ -1,9 +1,10 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
 namespace hop {
-
-  CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem, const unsigned int& populationSize)
-  : PopulationBasedAlgorithm(optimisationProblem, populationSize) {
+  CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
+     const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
+      const unsigned int& populationSize)
+  : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize) {
     setStepsize(0.3);
   }
 
@@ -57,13 +58,13 @@ namespace hop {
           break;
         }
       }
-      
+
       //sort by fitness and compute weighted mean into objectiveValues
       arma::Col<arma::uword> arindex = static_cast<arma::Col<arma::uword>>(arma::sort_index(arfitness)).subvec(0, numberOfParents - 1);
       arma::Col<double> oldObjectiveValues = objectiveValues;
 
       objectiveValues = arx.cols(arindex) * weights;
-      
+
       //cumulation: update evolution paths
       ps = (1.0 - cs) * ps + std::sqrt(cs * (2.0 - cs) * varianceEffectiveness) * invsqrtC * (objectiveValues - oldObjectiveValues) / stepSize_;
       //original matlab line: hsig = norm(ps)/sqrt(1-(1-cs)^(2*numberOfIterations_/lambda))/chiN < 1.4 + 2/(numberOfDimensions+1);
@@ -97,11 +98,11 @@ namespace hop {
     //LOOP END
   }
 
-  std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const noexcept {
-    return "CovarianceMatrixAdaptationEvolutionStrategy";
-  }
-
   void CovarianceMatrixAdaptationEvolutionStrategy::setStepsize(double sigma) {
     stepSize_ = sigma;
+  }
+
+  std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const noexcept {
+    return "CovarianceMatrixAdaptationEvolutionStrategy";
   }
 }

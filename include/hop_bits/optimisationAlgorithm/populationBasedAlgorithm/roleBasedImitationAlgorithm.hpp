@@ -4,10 +4,10 @@
 #include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
 
 namespace hop {
-  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm {
+  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double> {
     public:
       explicit RoleBasedImitationAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem,
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
       RoleBasedImitationAlgorithm(const RoleBasedImitationAlgorithm&) = delete;

@@ -1,18 +1,16 @@
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  TrajectoryBasedAlgorithm::TrajectoryBasedAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
-    : OptimisationAlgorithm(optimisationProblem) {
-    setInitialParameter(arma::randu<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions()) % (optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds()) + optimisationProblem_->getLowerBounds());
-  }
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  void TrajectoryBasedAlgorithm::setInitialParameter(
-      const arma::Col<double>& initialParameter) {
-    if(initialParameter.n_elem != optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the initial parameter (" + std::to_string(initialParameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(optimisationProblem_->getNumberOfDimensions()) + ").");
-    }
+  // Nothing to see here, move along ...
 
-    initialParameter_ = initialParameter;
-  }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
 }

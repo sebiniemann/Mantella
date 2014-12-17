@@ -13,7 +13,7 @@
 
 namespace cereal {
   // Helper template to serialise matrices.
-  template <class Archive, class Type>
+  template <typename Archive, class Type>
   void save(
       // Archive to be filled.
       Archive& archive,
@@ -36,7 +36,7 @@ namespace cereal {
   }
 
   // Helper template to deserialise matrices
-  template <class Archive, class Type>
+  template <typename Archive, class Type>
   void load(
       // Archive containing the serialised matrix.
       Archive& archive,
@@ -63,7 +63,7 @@ namespace cereal {
   }
 
   // Helper template to serialise column vectors.
-  template <class Archive, class Type>
+  template <typename Archive, class Type>
   void save(
       // Archive to be filled.
       Archive& archive,
@@ -83,7 +83,7 @@ namespace cereal {
   }
 
   // Helper template to deserialise column vectors.
-  template <class Archive, class Type>
+  template <typename Archive, class Type>
   void load(
       // Archive containing the serialised column vector.
       Archive& archive,
@@ -106,7 +106,7 @@ namespace cereal {
   }
 
   // Helper template to serialise row vectors.
-  template <class Archive, class Type>
+  template <typename Archive, class Type>
   void save(
       // Archive to be filled.
       Archive& archive,
@@ -126,7 +126,7 @@ namespace cereal {
   }
 
   // Helper template to deserialise row vectors.
-  template <class Archive, class Type>
+  template <typename Archive, class Type>
   void load(
       // Archive containing the serialised row vector.
       Archive& archive,

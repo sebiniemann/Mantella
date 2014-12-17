@@ -1,12 +1,16 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  CorrelationAnalysis::CorrelationAnalysis() noexcept
-    : correlationCoefficient_(0.0) {
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  }
+  // Nothing to see here, move along ...
 
-  double CorrelationAnalysis::getCorrelationCoefficient() const noexcept {
-    return correlationCoefficient_;
-  }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
 }

@@ -9,8 +9,8 @@
 // TODO Add restarting
 namespace hop {
   SimulatedAnnealing::SimulatedAnnealing(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
-    : TrajectoryBasedAlgorithm(optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
+    : TrajectoryBasedAlgorithm<double>(optimisationProblem) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10.0);
   }
 

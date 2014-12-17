@@ -10,8 +10,8 @@
 
 namespace hop {
   MultiResolutionGridSearch::MultiResolutionGridSearch(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm(optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
+    : SamplingBasedAlgorithm<double>(optimisationProblem) {
     setMinimalSamplingDistances(arma::ones(optimisationProblem_->getNumberOfDimensions()) * 1e-3);
     setSamplingDistributionPerDimension(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
     setMaximalSamplesPerResolution(11);

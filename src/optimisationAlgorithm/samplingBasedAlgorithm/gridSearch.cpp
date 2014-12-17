@@ -5,10 +5,10 @@
 
 namespace hop {
   GridSearch::GridSearch(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem) {
     setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
-}
+  }
 
   void GridSearch::optimiseImplementation() noexcept {
     const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;

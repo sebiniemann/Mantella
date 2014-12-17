@@ -1,10 +1,16 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
 
-namespace hop {
-  void PassivePropertiesAnalysis::analyse(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
-    plausibility_ = 0.0;
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
 
-    analyseImplementation(parameterToObjectiveValueMapping);
-  }
+namespace hop {
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
+
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
+
+  // Nothing to see here, move along ...
 }

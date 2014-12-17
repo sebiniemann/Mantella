@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
   try {
     hop::Rng::setRandomSeed();
 
-    std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::SphereFunction(2));
+    std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(2));
     optimisationProblem->setAcceptableObjectiveValue(-std::numeric_limits<double>::infinity());
 
     hop::MultiResolutionGridSearch multiResolutionGridSearch(optimisationProblem);

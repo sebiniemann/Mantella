@@ -1,20 +1,16 @@
 #include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
 
+//! Only FULLY TEMPLATE SPECIALISATION from here on
+//! Note: Partial template specialisations must be placed within the header file.
+
 namespace hop {
-  LinearModelAnalysis::LinearModelAnalysis() noexcept {
-    setLinearModelResidualsThreshold(0.75);
-  }
+  //! Only PUBLIC methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-  arma::Col<double> LinearModelAnalysis::getLinearModelEstimator() const noexcept {
-    return linearModelEstimator_;
-  }
+  // Nothing to see here, move along ...
 
-  void LinearModelAnalysis::setLinearModelResidualsThreshold(
-      const double& linearModelResidualsThreshold) {
-    if(linearModelResidualsThreshold < 0 || linearModelResidualsThreshold > 1) {
-      throw std::runtime_error("The quadratic model residuals threshold (" + std::to_string(linearModelResidualsThreshold) + ") must be within 0 and 1.");
-    }
+  //! Only PROTECTED or PRIVATE methods from here on
+  //! Note: Runtime checks are only performed for public methods.
 
-    linearModelResidualsThreshold_ = linearModelResidualsThreshold;
-  }
+  // Nothing to see here, move along ...
 }

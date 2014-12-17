@@ -9,13 +9,13 @@ int main(int argc, char* argv[]) {
     hop::Rng::setRandomSeed();
 
     hop::MaximumLikelihoodEstimation propertiesEstimation(
-      std::shared_ptr<hop::CorrelationAnalysis>(new hop::FitnessDistanceCorrelationAnalysis()),
-      std::shared_ptr<hop::LinearModelAnalysis>(new hop::LinearOrdinaryLeastSquares()),
-      std::shared_ptr<hop::QuadraticModelAnalysis>(new hop::QuadraticOrdinaryLeastSquares()),
-      std::shared_ptr<hop::LipschitzContinuityAnalysis>(new hop::DirectLipschitzContinuityAnalysis()),
-      std::shared_ptr<hop::AdditiveSeparabilityAnalysis>(new hop::DirectAdditiveSeparabilityAnalysis()));
+      std::shared_ptr<hop::CorrelationAnalysis<double>>(new hop::FitnessDistanceCorrelationAnalysis()),
+      std::shared_ptr<hop::LipschitzContinuityAnalysis<double>>(new hop::DirectLipschitzContinuityAnalysis()),
+      std::shared_ptr<hop::LinearModelAnalysis<double>>(new hop::LinearOrdinaryLeastSquares()),
+      std::shared_ptr<hop::QuadraticModelAnalysis<double>>(new hop::QuadraticOrdinaryLeastSquares()),
+      std::shared_ptr<hop::AdditiveSeparabilityAnalysis<double>>(new hop::DirectAdditiveSeparabilityAnalysis()));
 
-    std::shared_ptr<hop::OptimisationProblem> optimisationProblem(new hop::bbob2013::SphereFunction(4));
+    std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(4));
 
     hop::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();

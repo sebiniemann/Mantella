@@ -4,10 +4,10 @@
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 
 namespace hop {
-  class HillClimbing : public TrajectoryBasedAlgorithm {
+  class HillClimbing : public TrajectoryBasedAlgorithm<double> {
     public:
       explicit HillClimbing(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       HillClimbing(const HillClimbing&) = delete;
       HillClimbing& operator=(const HillClimbing&) = delete;

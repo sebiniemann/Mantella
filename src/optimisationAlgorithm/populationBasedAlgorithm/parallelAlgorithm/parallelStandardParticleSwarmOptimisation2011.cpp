@@ -5,7 +5,6 @@
 #include <random>
 #include <algorithm>
 #include <limits>
-#include <iostream>
 
 // MPI
 #include <mpi.h>
@@ -16,9 +15,9 @@
 
 namespace hop {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : ParallelAlgorithm(optimisationProblem, populationSize) {
+    : ParallelAlgorithm<double>(optimisationProblem, populationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
     setLocalAttraction(0.5 + std::log(2.0));
@@ -87,10 +86,6 @@ namespace hop {
             randomizeTopology = false;
         }
 
-        if (rank_ == 2) {
-//          std::cout << "topology: " << topology << std::endl;
-        }
-
         arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
         for (std::size_t n = 0; n < populationSize_; ++n) {
           ++numberOfIterations_;
@@ -125,10 +120,6 @@ namespace hop {
 
           localVelocities.col(k) = velocityCandidate;
           localParticles.col(k) = solutionCandidate;
-
-          if (rank_ == 2) {
-//            std::cout << "localVelocities: " << localVelocities << std::endl;
-          }
 
           double objectiveValue = optimisationProblem_->getObjectiveValue(solutionCandidate) + optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 

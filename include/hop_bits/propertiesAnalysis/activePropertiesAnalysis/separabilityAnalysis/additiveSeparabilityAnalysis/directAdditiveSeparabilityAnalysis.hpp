@@ -4,12 +4,12 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp>
 
 namespace hop {
-  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis {
+  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis<double> {
     public:
-      using AdditiveSeparabilityAnalysis::AdditiveSeparabilityAnalysis;
+      using AdditiveSeparabilityAnalysis<double>::AdditiveSeparabilityAnalysis;
 
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept override;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
   };
 }

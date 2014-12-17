@@ -9,7 +9,7 @@
 
 namespace hop {
   void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates;
     for(unsigned int n = 1; n <= std::floor(optimisationProblem->getNumberOfDimensions() / 2); ++n) {
       for(const auto& combination : getCombinationsWithoutRepetition(optimisationProblem->getNumberOfDimensions(), n)) {

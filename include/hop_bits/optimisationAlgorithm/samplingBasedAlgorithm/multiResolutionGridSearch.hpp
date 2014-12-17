@@ -4,10 +4,10 @@
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 
 namespace hop {
-  class MultiResolutionGridSearch : public SamplingBasedAlgorithm {
+  class MultiResolutionGridSearch : public SamplingBasedAlgorithm<double> {
     public:
       explicit MultiResolutionGridSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       MultiResolutionGridSearch(const MultiResolutionGridSearch&) = delete;
       MultiResolutionGridSearch& operator=(const MultiResolutionGridSearch&) = delete;

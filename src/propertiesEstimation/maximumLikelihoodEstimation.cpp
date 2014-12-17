@@ -4,21 +4,21 @@
 
 namespace hop {
   void MaximumLikelihoodEstimation::estimateImplementation(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
 
     correlationAnalysis_->analyse(optimisationProblem);
-    correlationCoefficient_.push_back(correlationAnalysis_->getCorrelationCoefficient());
+    correlationCoefficients_.push_back(correlationAnalysis_->getCorrelationCoefficient());
 
     lipschitzContinuityAnalysis_->analyse(optimisationProblem);
     lipschitzConstants_.push_back(lipschitzContinuityAnalysis_->getLipschitzConstant());
 
     linearModelAnalysis_->analyse(optimisationProblem);
     linearModelEstimators_.push_back(linearModelAnalysis_->getLinearModelEstimator());
-    isLinear_.push_back(false);
+    isLinear_.push_back(linearModelAnalysis_->isLinear());
 
     quadraticModelAnalysis_->analyse(optimisationProblem);
     quadraticModelEstimators_.push_back(quadraticModelAnalysis_->getQuadraticModelEstimator());
-    isQuadratic_.push_back(false);
+    isQuadratic_.push_back(quadraticModelAnalysis_->isQuadratic());
 
     additiveSeparabilityAnalysis_->analyse(optimisationProblem);
 

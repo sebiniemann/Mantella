@@ -4,10 +4,10 @@
 #include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 
 namespace hop {
-  class RandomSearch : public SamplingBasedAlgorithm {
+  class RandomSearch : public SamplingBasedAlgorithm<double> {
     public:
       explicit RandomSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       RandomSearch(const RandomSearch&) = delete;
       RandomSearch& operator=(const RandomSearch&) = delete;

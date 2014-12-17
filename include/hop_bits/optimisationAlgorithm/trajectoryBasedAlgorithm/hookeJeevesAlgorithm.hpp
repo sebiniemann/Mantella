@@ -4,10 +4,10 @@
 #include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 
 namespace hop {
-  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm {
+  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double> {
     public:
       explicit HookeJeevesAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
