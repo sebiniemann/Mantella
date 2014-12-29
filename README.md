@@ -11,7 +11,7 @@ Getting started
 ### Prerequirements (newer version should also work)
 - CMake 2.8.8
 - GCC 4.8.1 (or any other C++11 feature complete compiler)
-- Armadillo C++ 4.100.0
+- Armadillo C++ 4.600.0
 - Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
 
 #### Only needed for parallel algorithms

@@ -82,7 +82,7 @@ if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library (version: ${HOP_VERSION}).")
   
   # Locate third party libraries and headers
-  find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
+  find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
   find_package(Cereal REQUIRED) # Cereal (header only)
   find_package(MPI 3.0.0) # MPI
 
@@ -210,7 +210,7 @@ if(BUILD_LIBRARY)
       message(STATUS "NOTICE: Configuring tests")
 
       # Locate third party libraries and headers
-      find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
+      find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
       find_package(Catch REQUIRED) # Catch (header only)
       find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
