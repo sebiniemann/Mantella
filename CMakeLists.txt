@@ -130,7 +130,7 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.cpp
     src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.cpp
     src/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.cpp
-    src/optimisationProblem/nkFitnessLandscape.cpp
+    src/optimisationProblem/nkModel.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.cpp
@@ -345,7 +345,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.hpp
   include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp
   include/hop_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp
-  include/hop_bits/optimisationProblem/nkFitnessLandscape.hpp
+  include/hop_bits/optimisationProblem/nkModel.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
