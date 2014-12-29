@@ -5,12 +5,12 @@
 
 namespace hop {
   arma::Mat<double> getRandomRotationMatrix(
-      unsigned int numberOfDimensions) noexcept;
+      const unsigned int& numberOfDimensions) noexcept;
 
-  arma::Col<arma::uword> getRandomPermutation(
-      unsigned int numberOfElements,
-      unsigned int cycleLength) noexcept;
+  arma::Col<unsigned int> getRandomPermutation(
+      const unsigned int& numberOfElements,
+      const unsigned int& cycleLength) noexcept;
 
-  arma::Col<arma::uword> getRandomPermutation(
-      unsigned int numberOfElements) noexcept;
+  arma::Col<unsigned int> getRandomPermutation(
+      const unsigned int& numberOfElements) noexcept;
 }
