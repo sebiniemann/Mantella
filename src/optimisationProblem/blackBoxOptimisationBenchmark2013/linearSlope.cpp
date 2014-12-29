@@ -27,7 +27,7 @@ namespace hop {
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = parameter;
 
-      const arma::Col<arma::uword>& outOfBound = arma::find(xOpt_ % z >= 25.0);
+      const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
       z.elem(outOfBound) = xOpt_.elem(outOfBound);
 
       return partiallyObjectiveValue_ - arma::dot(scaling_, z);

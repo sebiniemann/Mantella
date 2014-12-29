@@ -9,7 +9,7 @@ namespace hop {
     double SharpRidgeFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));
-      return std::pow(z.at(0), 2.0) + 100.0 * arma::norm(z.subvec(1, z.n_elem - 1));
+      return std::pow(z.at(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
     }
 
     std::string SharpRidgeFunction::to_string() const noexcept {
