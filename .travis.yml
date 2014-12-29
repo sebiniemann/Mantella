@@ -43,7 +43,7 @@ install:
   # Armadillo C++
   - sudo apt-get install -qq libopenblas-dev
   - sudo apt-get install -qq liblapack-dev
-  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.450.4.tar.gz
+  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.600.0.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
