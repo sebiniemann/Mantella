@@ -4,10 +4,10 @@
 #include <cstdlib>
 
 namespace hop {
-  std::vector<arma::Col<arma::uword>> getCombinationsWithoutRepetition(const unsigned int& numberOfElements, const unsigned int& combinationSize) {
-    std::vector<arma::Col<arma::uword>> combinations;
+  std::vector<arma::Col<unsigned int>> getCombinationsWithoutRepetition(const unsigned int& numberOfElements, const unsigned int& combinationSize) {
+    std::vector<arma::Col<unsigned int>> combinations;
 
-    arma::Col<arma::uword> combination = arma::linspace<arma::Col<arma::uword>>(0, combinationSize - 1, combinationSize);
+    arma::Col<unsigned int> combination = arma::linspace<arma::Col<unsigned int>>(0, combinationSize - 1, combinationSize);
     combinations.push_back(combination);
 
     while(true) {

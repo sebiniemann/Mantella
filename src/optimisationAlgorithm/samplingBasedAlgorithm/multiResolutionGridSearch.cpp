@@ -29,18 +29,18 @@ namespace hop {
     arma::Col<double> gridLowerBounds = optimisationProblem_->getLowerBounds();
     arma::Col<double> gridUpperBounds = optimisationProblem_->getUpperBounds();
 
-    arma::Col<arma::uword> belowLowerBound(optimisationProblem_->getNumberOfDimensions(), arma::fill::zeros);
-    arma::Col<arma::uword> aboveUpperBound(optimisationProblem_->getNumberOfDimensions(), arma::fill::zeros);
+    arma::Col<unsigned int> belowLowerBound(optimisationProblem_->getNumberOfDimensions(), arma::fill::zeros);
+    arma::Col<unsigned int> aboveUpperBound(optimisationProblem_->getNumberOfDimensions(), arma::fill::zeros);
     while(!isFinished() & !isTerminated()) {
       const arma::Col<double>& scaledSamplingFactors = samplingDistributionPerDimension_.at(0) / samplingDistributionPerDimension_;
-      const arma::Col<arma::uword>& numberOfSamples = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(std::pow(maximalSamplesPerResolution_ / std::pow(2, arma::sum(belowLowerBound) + arma::sum(aboveUpperBound)), optimisationProblem_->getNumberOfDimensions()) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
+      const arma::Col<unsigned int>& numberOfSamples = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(std::pow(maximalSamplesPerResolution_ / std::pow(2, arma::sum(belowLowerBound) + arma::sum(aboveUpperBound)), optimisationProblem_->getNumberOfDimensions()) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
 
       std::vector<arma::Col<double>> sampleParameters_;
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
         sampleParameters_.push_back(arma::linspace(gridLowerBounds.at(n), gridUpperBounds.at(n), numberOfSamples.at(n)));
       }
 
-      arma::Col<arma::uword> sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
+      arma::Col<unsigned int> sampleIndicies_ = arma::zeros<arma::Col<unsigned int>>(sampleParameters_.size());
       arma::Col<double> candidateParameter(optimisationProblem_->getNumberOfDimensions());
 
       const unsigned int& overallNumberOfSamples = arma::prod(numberOfSamples);

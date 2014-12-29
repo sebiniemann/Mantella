@@ -72,7 +72,7 @@ namespace hop {
 
       arma::Mat<double>::fixed<3, 6> baseJoints = redundantJointStarts_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
-        const arma::uword& redundantJointIndex = redundantJointIndicies_.at(n);
+        const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
         baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
       }
 
@@ -123,7 +123,7 @@ namespace hop {
       arma::Mat<double> inverseKinematic(6, 6 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = -arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const arma::uword& redundantJointIndex = redundantJointIndicies_.at(n);
+        const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
         inverseKinematic.at(n, 6 + n) = arma::dot(baseToEndEffectorJointPositions.col(redundantJointIndex), redundantJointAngles_.col(redundantJointIndex));
       }
 

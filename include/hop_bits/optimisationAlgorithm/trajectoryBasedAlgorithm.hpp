@@ -31,7 +31,7 @@ namespace hop {
   TrajectoryBasedAlgorithm<ParameterType>::TrajectoryBasedAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : OptimisationAlgorithm<ParameterType>(optimisationProblem) {
-    // TODO fix for arma::uword
+    // TODO fix for unsigned int
     setInitialParameter(arma::randu<arma::Col<ParameterType>>(OptimisationAlgorithm<ParameterType>::optimisationProblem_->getNumberOfDimensions()) % (OptimisationAlgorithm<ParameterType>::optimisationProblem_->getUpperBounds() - OptimisationAlgorithm<ParameterType>::optimisationProblem_->getLowerBounds()) + OptimisationAlgorithm<ParameterType>::optimisationProblem_->getLowerBounds());
   }
 

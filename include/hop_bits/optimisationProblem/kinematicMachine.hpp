@@ -24,5 +24,7 @@ namespace hop {
 
         virtual ~KinematicMachine() = default;
     };
+
+    // TODO Add Opt. implementation
   }
 }

@@ -32,7 +32,7 @@ namespace hop {
         randomizeTopology_ = false;
       }
 
-      const arma::Col<arma::uword>& permutation = getRandomPermutation(populationSize_);
+      const arma::Col<unsigned int>& permutation = getRandomPermutation(populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
@@ -52,8 +52,8 @@ namespace hop {
         arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
         arma::Col<double> solutionCandidate = particle_ + velocityCandidate;
 
-        const arma::Col<arma::uword>& belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
-        const arma::Col<arma::uword>& aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
+        const arma::Col<unsigned int>& belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
+        const arma::Col<unsigned int>& aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
 
         velocityCandidate.elem(belowLowerBound) *= -0.5;
         velocityCandidate.elem(aboveUpperBound) *= -0.5;
@@ -129,8 +129,8 @@ namespace hop {
     return arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
   }
 
-  arma::Mat<arma::uword> StandardParticleSwarmOptimisation2011::getNeighbourhoodTopology() noexcept {
-    arma::Mat<arma::uword> topology = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
+  arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011::getNeighbourhoodTopology() noexcept {
+    arma::Mat<unsigned int> topology = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
     topology.diag() += 1.0;
 
     return topology;

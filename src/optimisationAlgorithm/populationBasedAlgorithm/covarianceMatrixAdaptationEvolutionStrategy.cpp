@@ -60,7 +60,7 @@ namespace hop {
       }
 
       //sort by fitness and compute weighted mean into objectiveValues
-      arma::Col<arma::uword> arindex = static_cast<arma::Col<arma::uword>>(arma::sort_index(arfitness)).subvec(0, numberOfParents - 1);
+      arma::Col<unsigned int> arindex = static_cast<arma::Col<unsigned int>>(arma::sort_index(arfitness)).head(numberOfParents);
       arma::Col<double> oldObjectiveValues = objectiveValues;
 
       objectiveValues = arx.cols(arindex) * weights;

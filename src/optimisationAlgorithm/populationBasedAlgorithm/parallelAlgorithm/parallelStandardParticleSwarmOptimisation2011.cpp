@@ -70,13 +70,13 @@ namespace hop {
           MPI_DOUBLE,
           MPI_COMM_WORLD);
 
-    arma::uword bestSolutionIndex;
+    unsigned int bestSolutionIndex;
     bestObjectiveValue_ = localBestObjectiveValues.min(bestSolutionIndex);
     bestParameter_ = localBestSolutions.col(bestSolutionIndex);
 
     bool randomizeTopology = true;
 
-    arma::Mat<arma::uword> topology(populationSize_ * numberOfNodes_, populationSize_);
+    arma::Mat<unsigned int> topology(populationSize_ * numberOfNodes_, populationSize_);
     while(!isFinished() && !isTerminated()) {
       for (unsigned int k = 0; k < communicationSteps_; ++k) {
         if (randomizeTopology) {
@@ -86,15 +86,15 @@ namespace hop {
             randomizeTopology = false;
         }
 
-        arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
+        arma::Col<unsigned int> permutation = getRandomPermutation(populationSize_);
         for (std::size_t n = 0; n < populationSize_; ++n) {
           ++numberOfIterations_;
 
           std::size_t k = permutation.at(n);
           arma::Col<double> particle = localParticles.col(k);
 
-          arma::uword neighbourhoodBestParticleIndex;
-          arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(topology.col(k));
+          unsigned int neighbourhoodBestParticleIndex;
+          arma::Col<unsigned int> neighbourhoodParticlesIndecies = arma::find(topology.col(k));
           static_cast<arma::Col<double>>(localBestObjectiveValues.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
 
           neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies.at(neighbourhoodBestParticleIndex);
@@ -109,8 +109,8 @@ namespace hop {
           arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
           arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
-          arma::Col<arma::uword> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
-          arma::Col<arma::uword> aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
+          arma::Col<unsigned int> belowLowerBound = arma::find(solutionCandidate < optimisationProblem_->getLowerBounds());
+          arma::Col<unsigned int> aboveUpperBound = arma::find(solutionCandidate > optimisationProblem_->getUpperBounds());
 
           velocityCandidate.elem(belowLowerBound) *= -0.5;
           velocityCandidate.elem(aboveUpperBound) *= -0.5;
@@ -165,7 +165,7 @@ namespace hop {
             MPI_DOUBLE,
             MPI_COMM_WORLD);
 
-      arma::uword bestSolutionIndex;
+      unsigned int bestSolutionIndex;
       double bestObjectiveValue = localBestObjectiveValues.min(bestSolutionIndex);
       if (bestObjectiveValue < bestObjectiveValue_) {
         bestObjectiveValue_ = bestObjectiveValue;

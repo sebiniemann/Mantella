@@ -20,7 +20,7 @@ namespace hop {
       ++n;
     }
 
-    arma::uword bestParameterIndex;
+    unsigned int bestParameterIndex;
     objectiveValues.min(bestParameterIndex);
 
     parameters.each_col() -= parameters.col(bestParameterIndex);

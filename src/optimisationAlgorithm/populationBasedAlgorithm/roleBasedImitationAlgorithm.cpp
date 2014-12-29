@@ -39,7 +39,7 @@ namespace hop {
     }
 
     while (!isFinished() && !isTerminated()) {
-      arma::Col<arma::uword> permutation = getRandomPermutation(populationSize_);
+      arma::Col<unsigned int> permutation = getRandomPermutation(populationSize_);
       for (std::size_t n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
@@ -47,9 +47,9 @@ namespace hop {
         arma::Col<double> currentSolution = agents.col(k);
         double currentObjectiveValue = objectiveValues.at(k);
 
-        arma::Col<arma::uword> parametersToMutate = getRandomPermutation(optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, optimisationProblem_->getNumberOfDimensions())(Rng::generator));
+        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, optimisationProblem_->getNumberOfDimensions())(Rng::generator));
 
-        arma::Col<arma::uword> neighbourIndicies = getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
+        arma::Col<unsigned int> neighbourIndicies = getRandomPermutation(populationSize_ - 1, neighbourhoodSize_);
         neighbourIndicies.elem(arma::find(neighbourIndicies >= k)) += 1;
 
         arma::Col<double> neighbourParameters = agents.elem(neighbourIndicies);
@@ -59,8 +59,8 @@ namespace hop {
         arma::Col<double> meanNeighbourParameters = arma::mean(neighbourParameters.rows(parametersToMutate), 1);
         arma::Col<double> stddevNeighbourParameters = arma::stddev(neighbourParameters.rows(parametersToMutate), 1);
 
-        arma::Col<arma::uword> betterNeighbourIndicies = arma::find(neighbourObjectiveValues < currentObjectiveValue);
-        arma::Col<arma::uword> worseOrEqualNeighbourIndicies = arma::find(neighbourObjectiveValues >= currentObjectiveValue);
+        arma::Col<unsigned int> betterNeighbourIndicies = arma::find(neighbourObjectiveValues < currentObjectiveValue);
+        arma::Col<unsigned int> worseOrEqualNeighbourIndicies = arma::find(neighbourObjectiveValues >= currentObjectiveValue);
 
         if (betterNeighbourIndicies.n_elem > 0) {
           arma::Col<double> betterNeighbourFitness = neighbourObjectiveValues.elem(betterNeighbourIndicies);

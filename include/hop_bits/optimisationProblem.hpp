@@ -42,14 +42,14 @@ namespace hop {
       // Checks for each dimension whether the parameter is greater or equal the lower bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
-      arma::Col<arma::uword> isSatisfyingLowerBounds(
+      arma::Col<unsigned int> isSatisfyingLowerBounds(
         // The parameter to be tested
         const arma::Col<ParameterType>& parameter);
 
       // Checks for each dimension whether the parameter is lower or equal the upper bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
-      arma::Col<arma::uword> isSatisfyingUpperBounds(
+      arma::Col<unsigned int> isSatisfyingUpperBounds(
         // The parameter to be tested
         const arma::Col<ParameterType>& parameter);
 
@@ -162,8 +162,8 @@ namespace hop {
 
       std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> getCachedObjectiveValues() const;
       std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> getCachedSoftConstraintsValues() const;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingLowerBounds() const;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> getCachedIsSatisfyingUpperBounds() const;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hasher, KeyEqual> getCachedIsSatisfyingLowerBounds() const;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hasher, KeyEqual> getCachedIsSatisfyingUpperBounds() const;
       std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> getCachedIsSatisfyingSoftConstraints() const;
       std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> getCachedIsSatisfyingConstraints() const;
 
@@ -219,8 +219,8 @@ namespace hop {
       // Several caches used to avoid redundant computations.
       std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> cachedObjectiveValues_;
       std::unordered_map<arma::Col<ParameterType>, double, Hasher, KeyEqual> cachedSoftConstraintsValues_;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hasher, KeyEqual> cachedIsSatisfyingLowerBounds_;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hasher, KeyEqual> cachedIsSatisfyingUpperBounds_;
       std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
       std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
 
@@ -282,15 +282,15 @@ namespace hop {
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
-    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
-    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
+    setLowerBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) - std::numeric_limits<ParameterType>::max());
+    setUpperBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::numeric_limits<ParameterType>::max());
     setObjectiveValueTranslation(0.0);
     setObjectiveValueScale(1.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
   }
 
   template <typename ParameterType>
-  arma::Col<arma::uword> OptimisationProblem<ParameterType>::isSatisfyingLowerBounds(
+  arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingLowerBounds(
       const arma::Col<ParameterType>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
@@ -300,7 +300,7 @@ namespace hop {
     const auto& cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
     if (cachePosition == cachedIsSatisfyingLowerBounds_.end()) {
       // The result was not found, compute it.
-      const arma::Col<arma::uword>& result = (getScaledCongruentParameter(parameter) >= lowerBounds_);
+      const arma::Col<unsigned int>& result = (parameter >= lowerBounds_);
       cachedIsSatisfyingLowerBounds_.insert({parameter, result});
       return result;
     } else {
@@ -310,7 +310,7 @@ namespace hop {
   }
 
   template <typename ParameterType>
-  arma::Col<arma::uword> OptimisationProblem<ParameterType>::isSatisfyingUpperBounds(
+  arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingUpperBounds(
       const arma::Col<ParameterType>& parameter) {
     if (parameter.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
@@ -320,7 +320,7 @@ namespace hop {
     const auto& cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
     if (cachePosition == cachedIsSatisfyingUpperBounds_.end()) {
       // The result was not found, compute it.
-      const arma::Col<arma::uword>& result = (getScaledCongruentParameter(parameter) <= upperBounds_);
+      const arma::Col<unsigned int>& result = (parameter <= upperBounds_);
       cachedIsSatisfyingUpperBounds_.insert({parameter, result});
       return result;
     } else {
@@ -411,7 +411,7 @@ namespace hop {
       ++numberOfDistinctEvaluations_;
 
       // The result was not found, compute it.
-      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
+      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(parameter) + objectiveValueTranslation_;
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
@@ -512,12 +512,12 @@ namespace hop {
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const {
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const {
     return cachedIsSatisfyingLowerBounds_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<arma::uword>, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const {
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const {
     return cachedIsSatisfyingUpperBounds_;
   }
 
