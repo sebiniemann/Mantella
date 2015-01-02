@@ -62,7 +62,7 @@ install:
 
   # Catch
   # Needed until Travis CI updates to Ubuntu 14.04+
-  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/3e0c5018123e7e32b3c35f4169cbdca4bcb8f332.zip
+  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/3e0c5018123e7e32b3c35f4169cbdca4bcb8f332.tar.gz
   - mkdir catch
   - tar -xzf catch.tar.gz -C ./catch --strip-components=1
   - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
