@@ -1,4 +1,6 @@
 # Site settings
+baseurl: http://SebastianNiemann.github.io/OnlineOptimisation
+
 # The title must match the project name
 title: Mantella 
 subtitle: Mantella is a extremly competitive modern C++ framework for analysing and solving optimisation problems on PCs and HPCs.
@@ -19,9 +21,7 @@ navigation:
    url: api-reference
  - title: Questions
    url: questions
-   
-permalink: date
-  
+
 # Removes the need of .html suffixes
 permalink: pretty
   
