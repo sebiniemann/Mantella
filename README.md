@@ -24,12 +24,14 @@ Getting started
 - Boost filesystem 1.54
 
 ### Installation
-- cd path/to/project
-- mkdir build
-- cd build
-- cmake ..
-- make
-- sudo make install
+```bash
+cd path/to/project
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
 
 Future plans
 ------------
