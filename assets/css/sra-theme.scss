@@ -1,0 +1,38 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+// Our variables
+$base-font-family: "Open Sans", Helvetica, Arial, sans-serif;
+$base-font-size: 16px;
+$small-font-size: $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit: 30px;
+
+$text-color: #111;
+$background-color: #f7f7f7;
+$link-color: #2a7ae2;
+
+$primary-color: #b60606;
+$primary-color-light: lighten($primary-color, 10%);
+$primary-color-dark: darken($primary-color, 15%);
+
+$gray-color-darker: lighten(#000, 13.5%); // #222
+$gray-color-dark: lighten(#000, 20%); // #333
+$gray-color: lighten(#000, 33.5%); // #555
+$gray-color-light: lighten(#000, 46.7%); // #777
+$gray-color-lighter: lighten(#000, 93.5%); // #eee
+
+$success-color: #5cb85c;
+$warning-color: #f0ad4e;
+$danger-color: #d9534f;
+$info-color: #5bc0de;
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+  "base",
+  "layout",
+  "syntax-highlighting"
+;

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="{{ site.author }}">
+    
+    <title>
+      {% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}
+    </title>
+    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/sra-theme.css">
+    
+    <!-- Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Nunito:400,700|Open+Sans" rel="stylesheet" type="text/css">
+    
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+      
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="shortcut icon" href="./favicon.ico">
+  </head>
+  </head>
+  <body>
+    <a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+    
+    <!-- Main navigation -->
+    <header class="navbar navbar-static-top custom-docs-nav" id="top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".custom-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="{{ site.baseurl }}/" class="navbar-brand">{{ site.title }}</a>
+        </div>
+        <nav class="collapse navbar-collapse custom-navbar-collapse">
+          <ul class="nav navbar-nav">
+          {% for link in site.navigation %}
+              {% assign active = nil %}
+              {% if page.url contains link.url %}
+                  {% assign active = 'active' %}
+              {% endif %}
+              <li class="{{ active }}">
+                  <a href="{{ site.baseurl }}/{{ link.url }}">{{ link.title }}</a>
+              </li>
+          {% endfor %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="{{ site.github-url }}" target="_blank">Github</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    {{ content }}
+    
+    <footer class="custom-docs-footer" role="contentinfo">
+      <div class="container">
+        <p>
+          {{ site.title }} and these docs are maintained by the <a href="{{ site.github-url }}/graphs/contributors" target="_blank">core {{ site.title }} team and contributers</a>. Thank you ever so much for your hard work!
+          <br />
+          Code licensed under <a href="http://opensource.org/licenses/MIT" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+        <p>
+          Currently v0.9.0 · <a href="{{ site.github-url }}/issues" target="_blank">{{ site.title }} Issues</a> <!--· <a href="{{ site.github-url }}/blob/master/CHANGELOG.md">Changelog</a>--> · <a href="{{ site.baseurl }}/impressum">Impressum</a>
+        </p>
+      </div>
+    </footer>
+    
+    <!-- jQuery (necessary for Bootstrap) -->
+    <script src="{{ site.baseurl }}/assets/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="{{ site.baseurl }}/assets/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{ site.baseurl }}/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="{{ site.baseurl }}/assets/js/documentation.min.js"></script>
+    
+    <!-- Google Analytics OptOut -->
+    <script>
+      // Set to the same value as the web property used on the site
+      var gaProperty = 'UA-XXXX-Y';
+
+      // Disable tracking if the opt-out cookie exists.
+      var disableStr = 'ga-disable-' + gaProperty;
+      if (document.cookie.indexOf(disableStr + '=true') > -1) {
+        window[disableStr] = true;
+      }
+
+      // Opt-out function
+      function gaOptout() {
+        document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+        window[disableStr] = true;
+      }
+    </script>
+  </body>
+</html>
