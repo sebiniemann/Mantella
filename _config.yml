@@ -3,8 +3,8 @@ baseurl: http://SebastianNiemann.github.io/OnlineOptimisation
 
 # The title must match the project name
 title: Mantella 
-subtitle: Mantella is a extremly competitive modern C++ framework for analysing and solving optimisation problems on PCs and HPCs.
-description: Mantella is a extremly competitive modern C++ framework for analysing and solving optimisation problems on PCs and HPCs.
+subtitle: Mantella is an extremly competitive modern C++ framework for analysing and solving optimisation problems on PCs and HPCs.
+description: Mantella is an extremly competitive modern C++ framework for analysing and solving optimisation problems on PCs and HPCs.
   
 author: Core Mantella team
 github-url: https://github.com/SebastianNiemann/OnlineOptimisation
