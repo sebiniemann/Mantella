@@ -18,6 +18,21 @@
 extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hillClimbing/";
 
+void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<double> expected){
+    for(std::size_t n = 0; n < expected.n_cols; ++n) {
+      arma::Col<double> expectedParameter = expected.col(n);
+      arma::Col<double> actualParameter = actualHistory.at(n);
+
+      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
+        if(std::isfinite(expectedParameter.at(k))) {
+          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+        } else {
+          CHECK(actualParameter.at(k) == expectedParameter.at(k));
+        }
+      }
+    }
+}
+
 class TestHillClimbing : public hop::HillClimbing {
   public:
     TestHillClimbing(
@@ -96,16 +111,16 @@ TEST_CASE("Hill climbing", "") {
 
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
-   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds.mat"); //the parametre is optional
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.1].mat"); //the parametre is optional
 
    arma::Col<double> lowerBounds;
-   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds.mat"); //the parametre is optional
+   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.1].mat"); //the parametre is optional
 
    arma::Col<double> objectiveValues;
-   objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[2.0].mat");
+   objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[2.1].mat");
 
    arma::Col<double> softConstraintsValues;
-   softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues[2.0].mat");
+   softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues[2.1].mat");
 
    // Init OptimisationProblem
    std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
@@ -116,10 +131,10 @@ TEST_CASE("Hill climbing", "") {
 
    // Set OptimisationAlgorithm values
    arma::mat velocities;
-   velocities.load(testDirectory.string() + dataPath_ + "velocities[2.0].mat");
+   velocities.load(testDirectory.string() + dataPath_ + "velocities[2.1].mat");
 
    arma::Col<double> initialParameter;
-   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[null].mat"); //the parametre is optional
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); //the parametre is optional
 
    arma::Col<double> maximalStepSize;
    maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.1].mat"); //the parametre is optional
@@ -138,36 +153,78 @@ TEST_CASE("Hill climbing", "") {
   testHillClimbing.optimise();
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  compareResults(actualParameterHistory,expectedParameterHistory);
 
 
-  for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
-    arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
-    arma::Col<double> actualParameter = actualParameterHistory.at(n);
-
-    for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(std::isfinite(expectedParameter.at(k))) {
-          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } else {
-          CHECK(actualParameter.at(k) == expectedParameter.at(k));
-        }
-    }
-  }
 }
 
-TEST_CASE("Hill climbing (init Test)", "") {
+TEST_CASE("Test Maximalstepsize", "") {
 
-   // Set OptimisationProblem values
+  // name for the expected data
+  std::string expectedName = "1.1";
+
+  //Set OptimisationProblem values
+  arma::Col<double> upperBounds;
+  upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
+
+  arma::Col<double> lowerBounds;
+  lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
+
+  arma::Col<double> objectiveValues;
+  objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
+
+  arma::Col<double> softConstraintsValues;
+  softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues["+ expectedName +"].mat");
+
+  // Init OptimisationProblem
+  std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
+  testHillClimbingProblem->setUpperBounds(upperBounds);
+  testHillClimbingProblem->setLowerBounds(lowerBounds);
+  testHillClimbingProblem->setObjectiveValues(objectiveValues);
+  testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+  testHillClimbingProblem->setAcceptableObjectiveValue(10.0);
+
+  // Set OptimisationAlgorithm values
+  arma::mat velocities;
+  velocities.load(testDirectory.string() + dataPath_ + "velocities["+ expectedName +"].mat");
+
+  arma::Col<double> initialParameter;
+  initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter["+ expectedName +"].mat");
+
+  // Init OptimisationAlgorithm
+  TestHillClimbing testHillClimbing(testHillClimbingProblem);
+  testHillClimbing.setVelocitys(velocities);
+  testHillClimbing.setInitialParameter(initialParameter);
+
+  // Set Expected values
+  arma::Mat<double> expectedParameterHistory;
+  expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
+
+  // Run hill climbing algorithm
+  testHillClimbing.optimise();
+
+  // Comparing of candidateParameters
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  compareResults(actualParameterHistory,expectedParameterHistory);
+  }
+
+TEST_CASE("Check initialParameter at each limit", "") {
+
+   // name for the expected data
+   std::string expectedName = "1.2";
+
+   //Set OptimisationProblem values
    arma::Col<double> upperBounds;
-   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds.mat"); //the parametre is optional
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
 
    arma::Col<double> lowerBounds;
-   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds.mat"); //the parametre is optional
+   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
 
    arma::Col<double> objectiveValues;
-   objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[1.0].mat");
+   objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
 
    arma::Col<double> softConstraintsValues;
-   softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues[1.0].mat");
+   softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues["+ expectedName +"].mat");
 
    // Init OptimisationProblem
    std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
@@ -179,66 +236,227 @@ TEST_CASE("Hill climbing (init Test)", "") {
 
    // Set OptimisationAlgorithm values
    arma::mat velocities;
-   velocities.load(testDirectory.string() + dataPath_ + "velocities[1.0].mat");
+   velocities.load(testDirectory.string() + dataPath_ + "velocities["+ expectedName +"].mat");
+
+   arma::Col<double> initialParameter;
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter["+ expectedName +"].mat");
 
    // Init OptimisationAlgorithm
    TestHillClimbing testHillClimbing(testHillClimbingProblem);
    testHillClimbing.setVelocitys(velocities);
+   testHillClimbing.setInitialParameter(initialParameter);
 
+   // Set Expected values
    arma::Mat<double> expectedParameterHistory;
+   expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
 
-  SECTION("Check MaximalStepSize"){
-    arma::Col<double> initialParameter;
-    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[null].mat"); //the parametre is optional
+   // Run hill climbing algorithm
+   testHillClimbing.optimise();
 
-    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[1.1].mat");
-
-    testHillClimbing.setInitialParameter(initialParameter);
-    testHillClimbing.optimise();
-
-    // Comparing of candidateParameters
-    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-
-    for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
-      arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
-      arma::Col<double> actualParameter = actualParameterHistory.at(n);
-      std::cout<<actualParameter;
-      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(std::isfinite(expectedParameter.at(k))) {
-          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } else {
-          CHECK(actualParameter.at(k) == expectedParameter.at(k));
-        }
-      }
-    }
-
+   // Comparing of candidateParameters
+   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+   compareResults(actualParameterHistory,expectedParameterHistory);
   }
-/*
-  SECTION("Check initialParameter at each limit "){
-    arma::Col<double> initialParameter;
-    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[1.2].mat"); //the parametre is optional
 
-    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[1.2].mat");
+TEST_CASE("Check initialParameter at one limit", "") {
 
-    testHillClimbing.setInitialParameter(initialParameter);
-    testHillClimbing.optimise();
+  // name for the expected data
+  std::string expectedName = "1.3";
 
-    // Comparing of candidateParameters
-    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  //Set OptimisationProblem values
+  arma::Col<double> upperBounds;
+  upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
 
-    for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
-      arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
-      arma::Col<double> actualParameter = actualParameterHistory.at(n);
+  arma::Col<double> lowerBounds;
+  lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
 
-      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(std::isfinite(expectedParameter.at(k))) {
-          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } else {
-          CHECK(actualParameter.at(k) == expectedParameter.at(k));
-        }
-      }
-    }
+  arma::Col<double> objectiveValues;
+  objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
 
+  arma::Col<double> softConstraintsValues;
+  softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues["+ expectedName +"].mat");
+
+  // Init OptimisationProblem
+  std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
+  testHillClimbingProblem->setUpperBounds(upperBounds);
+  testHillClimbingProblem->setLowerBounds(lowerBounds);
+  testHillClimbingProblem->setObjectiveValues(objectiveValues);
+  testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+  testHillClimbingProblem->setAcceptableObjectiveValue(10.0);
+
+  // Set OptimisationAlgorithm values
+  arma::mat velocities;
+  velocities.load(testDirectory.string() + dataPath_ + "velocities["+ expectedName +"].mat");
+
+  arma::Col<double> initialParameter;
+  initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter["+ expectedName +"].mat");
+
+  // Init OptimisationAlgorithm
+  TestHillClimbing testHillClimbing(testHillClimbingProblem);
+  testHillClimbing.setVelocitys(velocities);
+  testHillClimbing.setInitialParameter(initialParameter);
+
+  // Set Expected values
+  arma::Mat<double> expectedParameterHistory;
+  expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
+
+  // Run hill climbing algorithm
+  testHillClimbing.optimise();
+
+  // Comparing of candidateParameters
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  compareResults(actualParameterHistory,expectedParameterHistory);
   }
-*/
-}
+
+TEST_CASE("Check initialParameter in-range", "") {
+
+  // name for the expected data
+  std::string expectedName = "1.4";
+
+  //Set OptimisationProblem values
+  arma::Col<double> upperBounds;
+  upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
+
+  arma::Col<double> lowerBounds;
+  lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
+
+  arma::Col<double> objectiveValues;
+  objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
+
+  arma::Col<double> softConstraintsValues;
+  softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues["+ expectedName +"].mat");
+
+  // Init OptimisationProblem
+  std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
+  testHillClimbingProblem->setUpperBounds(upperBounds);
+  testHillClimbingProblem->setLowerBounds(lowerBounds);
+  testHillClimbingProblem->setObjectiveValues(objectiveValues);
+  testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+  testHillClimbingProblem->setAcceptableObjectiveValue(10.0);
+
+  // Set OptimisationAlgorithm values
+  arma::mat velocities;
+  velocities.load(testDirectory.string() + dataPath_ + "velocities["+ expectedName +"].mat");
+
+  arma::Col<double> initialParameter;
+  initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter["+ expectedName +"].mat");
+
+  // Init OptimisationAlgorithm
+  TestHillClimbing testHillClimbing(testHillClimbingProblem);
+  testHillClimbing.setVelocitys(velocities);
+  testHillClimbing.setInitialParameter(initialParameter);
+
+  // Set Expected values
+  arma::Mat<double> expectedParameterHistory;
+  expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
+
+  // Run hill climbing algorithm
+  testHillClimbing.optimise();
+
+  // Comparing of candidateParameters
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  compareResults(actualParameterHistory,expectedParameterHistory);
+  }
+
+TEST_CASE("Check initialParameter out of range maximal limit", "") {
+
+  // name for the expected data
+  std::string expectedName = "1.5";
+
+  //Set OptimisationProblem values
+  arma::Col<double> upperBounds;
+  upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
+
+  arma::Col<double> lowerBounds;
+  lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
+
+  arma::Col<double> objectiveValues;
+  objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
+
+  arma::Col<double> softConstraintsValues;
+  softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues["+ expectedName +"].mat");
+
+  // Init OptimisationProblem
+  std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
+  testHillClimbingProblem->setUpperBounds(upperBounds);
+  testHillClimbingProblem->setLowerBounds(lowerBounds);
+  testHillClimbingProblem->setObjectiveValues(objectiveValues);
+  testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+  testHillClimbingProblem->setAcceptableObjectiveValue(10.0);
+
+  // Set OptimisationAlgorithm values
+  arma::mat velocities;
+  velocities.load(testDirectory.string() + dataPath_ + "velocities["+ expectedName +"].mat");
+
+  arma::Col<double> initialParameter;
+  initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter["+ expectedName +"].mat");
+
+  // Init OptimisationAlgorithm
+  TestHillClimbing testHillClimbing(testHillClimbingProblem);
+  testHillClimbing.setVelocitys(velocities);
+  testHillClimbing.setInitialParameter(initialParameter);
+
+  // Set Expected values
+  arma::Mat<double> expectedParameterHistory;
+  expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
+
+  // Run hill climbing algorithm
+  testHillClimbing.optimise();
+
+  // Comparing of candidateParameters
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  compareResults(actualParameterHistory,expectedParameterHistory);
+  }
+
+TEST_CASE("Check initialParameter out of range arbitrary values", "") {
+
+  // name for the expected data
+  std::string expectedName = "1.6";
+
+  //Set OptimisationProblem values
+  arma::Col<double> upperBounds;
+  upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
+
+  arma::Col<double> lowerBounds;
+  lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
+
+  arma::Col<double> objectiveValues;
+  objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
+
+  arma::Col<double> softConstraintsValues;
+  softConstraintsValues.load(testDirectory.string() + dataPath_ + "softConstraintsValues["+ expectedName +"].mat");
+
+  // Init OptimisationProblem
+  std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
+  testHillClimbingProblem->setUpperBounds(upperBounds);
+  testHillClimbingProblem->setLowerBounds(lowerBounds);
+  testHillClimbingProblem->setObjectiveValues(objectiveValues);
+  testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
+  testHillClimbingProblem->setAcceptableObjectiveValue(10.0);
+
+  // Set OptimisationAlgorithm values
+  arma::mat velocities;
+  velocities.load(testDirectory.string() + dataPath_ + "velocities["+ expectedName +"].mat");
+
+  arma::Col<double> initialParameter;
+  initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter["+ expectedName +"].mat");
+
+  // Init OptimisationAlgorithm
+  TestHillClimbing testHillClimbing(testHillClimbingProblem);
+  testHillClimbing.setVelocitys(velocities);
+  testHillClimbing.setInitialParameter(initialParameter);
+
+  // Set Expected values
+  arma::Mat<double> expectedParameterHistory;
+  expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
+
+  // Run hill climbing algorithm
+  testHillClimbing.optimise();
+
+  // Comparing of candidateParameters
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+  compareResults(actualParameterHistory,expectedParameterHistory);
+  }
+
+
+
