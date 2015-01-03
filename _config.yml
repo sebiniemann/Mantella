@@ -27,5 +27,9 @@ permalink: pretty
   
 # SASS
 sass:
-    sass_dir: _sass
-    style: :compressed
+  sass_dir: _sass
+  style: :compressed
+
+# Parse Markdown inside HTML blocks
+kramdown:
+  parse_block_html: true
