@@ -23,6 +23,8 @@ layout: base
       </nav>
     </div>
     <main class="col-md-9" role="main">
+      {{ content }}
+      
       {% for post in site.categories[page.category] %}
         <section class="custom-docs-section">
           <h1 id="{{ post.title | downcase | replace: ' ', '-' }}" class="page-header">{{ post.title }}</h1>
