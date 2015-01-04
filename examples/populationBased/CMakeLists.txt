@@ -27,6 +27,9 @@ include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
 add_executable(CMAES
   CMAES.cpp
 )
+add_executable(MCS
+  MCS.cpp
+)
 
 # Link against HOP
 target_link_libraries(CMAES hop)

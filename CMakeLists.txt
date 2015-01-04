@@ -142,6 +142,7 @@ if(BUILD_LIBRARY)
     src/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
+    src/optimisationAlgorithm/populationBasedAlgorithm/MultilevelCoordinateSearch.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.cpp
     src/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.cpp
     src/propertiesAnalysis.cpp
@@ -357,6 +358,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
+  include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/MultilevelCoordinateSearch.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp
