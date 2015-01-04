@@ -19,7 +19,7 @@ TEST_CASE("Random rotation matrix", "") {
       angles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
     }
 
-    arma::Col<arma::uword> histogram = arma::hist(angles);
+    arma::Col<unsigned int> histogram = arma::hist(angles);
     CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / angles.n_elem);
   }
 
@@ -34,7 +34,7 @@ TEST_CASE("Random rotation matrix", "") {
       yawAngles.at(n) = std::atan2(rotatedUnitVector.at(0), rotatedUnitVector.at(2));
     }
 
-    arma::Col<arma::uword> histogram;
+    arma::Col<unsigned int> histogram;
 
     histogram = arma::hist(rollAngles);
     CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / rollAngles.n_elem);
@@ -49,35 +49,35 @@ TEST_CASE("Random rotation matrix", "") {
 
 TEST_CASE("Random permutation", "") {
   SECTION("Full permutation") {
-    arma::Mat<arma::uword>::fixed<10, 10000> permutations;
+    arma::Mat<unsigned int>::fixed<10, 10000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = hop::getRandomPermutation(permutations.n_rows);
+      permutations.col(n) = hop::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows));
     }
 
-    arma::Col<arma::uword> centers(permutations.n_rows);
+    arma::Col<unsigned int> centers(permutations.n_rows);
     for (std::size_t n = 0; n < permutations.n_rows; ++n) {
       centers.at(n) = n;
     }
 
     for (std::size_t n = 0; n < permutations.n_rows; ++n) {
-      arma::Row<arma::uword> histogram = arma::hist(permutations.row(n), centers);
+      arma::Row<unsigned int> histogram = arma::hist(permutations.row(n), centers);
       CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
     }
   }
 
   SECTION("Partial permutation") {
-    arma::Mat<arma::uword>::fixed<10, 40000> permutations;
+    arma::Mat<unsigned int>::fixed<10, 40000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = hop::getRandomPermutation(permutations.n_rows + 1, permutations.n_rows);
+      permutations.col(n) = hop::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows + 1), static_cast<unsigned int>(permutations.n_rows));
     }
 
-    arma::Col<arma::uword> centers(permutations.n_rows);
+    arma::Col<unsigned int> centers(permutations.n_rows);
     for (std::size_t n = 0; n < permutations.n_rows; ++n) {
       centers.at(n) = n;
     }
 
     for (std::size_t n = 0; n < permutations.n_rows; ++n) {
-      arma::Row<arma::uword> histogram = arma::hist(permutations.row(n), centers);
+      arma::Row<unsigned int> histogram = arma::hist(permutations.row(n), centers);
       CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
     }
   }

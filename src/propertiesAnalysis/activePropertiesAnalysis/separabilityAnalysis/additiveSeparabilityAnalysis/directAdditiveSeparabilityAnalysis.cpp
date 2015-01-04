@@ -10,10 +10,10 @@
 namespace hop {
   void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
-    std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates;
+    std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates;
     for(unsigned int n = 1; n <= std::floor(optimisationProblem->getNumberOfDimensions() / 2); ++n) {
       for(const auto& combination : getCombinationsWithoutRepetition(optimisationProblem->getNumberOfDimensions(), n)) {
-        arma::Col<arma::uword> complement(optimisationProblem->getNumberOfDimensions() - combination.n_elem);
+        arma::Col<unsigned int> complement(optimisationProblem->getNumberOfDimensions() - combination.n_elem);
         std::size_t k = 0;
         for(std::size_t l = 0; l < optimisationProblem->getNumberOfDimensions(); ++l) {
           if(!arma::any(combination == l)) {
@@ -24,8 +24,8 @@ namespace hop {
       }
     }
 
-    std::vector<arma::Col<arma::uword>> partition;
-    partition.push_back(arma::linspace<arma::Col<arma::uword>>(0, optimisationProblem->getNumberOfDimensions() - 1, optimisationProblem->getNumberOfDimensions()));
+    std::vector<arma::Col<unsigned int>> partition;
+    partition.push_back(arma::linspace<arma::Col<unsigned int>>(0, optimisationProblem->getNumberOfDimensions() - 1, optimisationProblem->getNumberOfDimensions()));
     for(const auto& partitionCandidate : partitionCandidates) {
       arma::Col<double> differences(maximalNumberOfIterations_);
 

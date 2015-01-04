@@ -13,7 +13,7 @@ namespace hop {
 
       arma::Col<double> zHat(xHat.n_elem);
       zHat.at(0) = xHat.at(0);
-      zHat.subvec(1, zHat.n_elem - 1) = xHat.subvec(1, zHat.n_elem - 1) + 0.25 * (xHat.subvec(0, xHat.n_elem - 2) - xOpt.subvec(0, xOpt.n_elem - 2));
+      zHat.tail(zHat.n_elem - 1) = xHat.tail(zHat.n_elem - 1) + 0.25 * (xHat.head(xHat.n_elem - 1) - xOpt.head(xOpt.n_elem - 1));
 
       const arma::Col<double>& z = 100.0 * (delta_ % (zHat - xOpt) + xOpt);
 

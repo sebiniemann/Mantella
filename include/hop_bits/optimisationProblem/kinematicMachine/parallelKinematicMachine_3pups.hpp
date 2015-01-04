@@ -41,7 +41,7 @@ namespace hop {
         arma::Row<double>::fixed<3> maximalActiveJointActuations_;
 
         arma::Mat<double>::fixed<3, 3> redundantJointsStartToEnd_;
-        arma::Col<arma::uword> redundantJointIndicies_;
+        arma::Col<unsigned int> redundantJointIndicies_;
         arma::Mat<double> redundantJointAngles_;
     };
   }

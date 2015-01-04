@@ -62,6 +62,32 @@ namespace hop {
     parameterScale_ = parameterScale;
   }
 
+  template <>
+  double OptimisationProblem<double>::getObjectiveValue(
+      const arma::Col<double>& parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    }
+
+    // Always increase the number of evaluations (whether its computed or retrived from cache).
+    ++numberOfEvaluations_;
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
+    if (cachePosition == cachedObjectiveValues_.end()) {
+      // Increase the number of distinct evaluations only if we actually compute the value.
+      ++numberOfDistinctEvaluations_;
+
+      // The result was not found, compute it.
+      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
+      cachedObjectiveValues_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
+  }
+
   //! Only PROTECTED or PRIVATE methods from here on
   //! Note: Runtime checks are only performed for public methods.
 

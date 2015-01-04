@@ -7,7 +7,7 @@
 #include <armadillo>
 
 namespace hop {
-  std::vector<arma::Col<arma::uword>> getCombinationsWithoutRepetition(
+  std::vector<arma::Col<unsigned int>> getCombinationsWithoutRepetition(
       const unsigned int& numberOfElements,
       const unsigned int& combinationSize);
 }

@@ -15,7 +15,7 @@ namespace hop {
 
   void Rng::setRandomSeed() noexcept {
     arma::arma_rng::set_seed_random();
-    setSeed(arma::randi<arma::Col<arma::uword>>(1).at(0));
+    setSeed(arma::randi<arma::Col<unsigned int>>(1).at(0));
   }
 
   unsigned int Rng::getSeed() noexcept {

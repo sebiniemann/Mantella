@@ -1,17 +1,19 @@
-Hint-based Online Programming 0.9.0
+![Mantella](http://sebastianniemann.github.io/OnlineOptimisation/images/Mantella.png)
+
+Mantella 0.9.0
 ====================================
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![TODO](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
-The Hint-based Online Programming (HOP) library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
+The Mantella C++ optimisation library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
 
-HOP is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
+Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
 
 Getting started
 ---------------
 ### Prerequirements (newer version should also work)
 - CMake 2.8.8
 - GCC 4.8.1 (or any other C++11 feature complete compiler)
-- Armadillo C++ 4.100.0
+- Armadillo C++ 4.600.0
 - Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
 
 #### Only needed for parallel algorithms
@@ -22,12 +24,14 @@ Getting started
 - Boost filesystem 1.54
 
 ### Installation
-- cd path/to/project
-- mkdir build
-- cd build
-- cmake ..
-- make
-- sudo make install
+```bash
+cd path/to/project
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
 
 Future plans
 ------------

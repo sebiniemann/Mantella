@@ -26,8 +26,8 @@ namespace hop {
 
       arma::Col<double> candidateParameter = bestParameter_ + maximalStepSize_ % getVelocity();
 
-      const arma::Col<arma::uword>& belowLowerBound = arma::find(candidateParameter < optimisationProblem_->getLowerBounds());
-      const arma::Col<arma::uword>& aboveUpperBound = arma::find(candidateParameter > optimisationProblem_->getUpperBounds());
+      const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < optimisationProblem_->getLowerBounds());
+      const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > optimisationProblem_->getUpperBounds());
 
       candidateParameter.elem(belowLowerBound) = optimisationProblem_->getLowerBounds().elem(belowLowerBound);
       candidateParameter.elem(aboveUpperBound) = optimisationProblem_->getUpperBounds().elem(aboveUpperBound);

@@ -5,8 +5,8 @@
 
 namespace hop {
   arma::Mat<double> getHaltonSequence(
-      const arma::Col<arma::uword>& seed,
-      const arma::Col<arma::uword>& base,
+      const arma::Col<unsigned int>& seed,
+      const arma::Col<unsigned int>& base,
       const unsigned int& numberOfColumms) noexcept {
     arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 

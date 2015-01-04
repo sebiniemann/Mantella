@@ -12,14 +12,14 @@ namespace hop {
 
   void GridSearch::optimiseImplementation() noexcept {
     const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
-    const arma::Col<arma::uword>& numberOfSamples_ = arma::conv_to<arma::Col<arma::uword>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
+    const arma::Col<unsigned int>& numberOfSamples_ = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(optimisationProblem_->getNumberOfDimensions())));
 
     std::vector<arma::Col<double>> sampleParameters_;
     for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
       sampleParameters_.push_back(arma::linspace(optimisationProblem_->getLowerBounds().at(n), optimisationProblem_->getUpperBounds().at(n), numberOfSamples_.at(n)));
     }
 
-    arma::Col<arma::uword> sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(sampleParameters_.size());
+    arma::Col<unsigned int> sampleIndicies_ = arma::zeros<arma::Col<unsigned int>>(sampleParameters_.size());
     arma::Col<double> candidateParameter(optimisationProblem_->getNumberOfDimensions());
 
     const unsigned int& overallNumberOfSamples = arma::sum(numberOfSamples_);

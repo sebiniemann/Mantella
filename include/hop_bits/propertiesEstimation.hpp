@@ -51,7 +51,7 @@ namespace hop {
 
       bool isSeparable(
           const std::size_t& propertiesSetIndex) const;
-      std::vector<arma::Col<arma::uword>> getSeparations(
+      std::vector<arma::Col<unsigned int>> getSeparations(
           const std::size_t& propertiesSetIndex) const;
 
       double getPlausibility(
@@ -77,10 +77,10 @@ namespace hop {
       std::vector<double> correlationCoefficients_;
 
       std::vector<bool> isSeparable_;
-      std::vector<std::vector<arma::Col<arma::uword>>> separations_;
+      std::vector<std::vector<arma::Col<unsigned int>>> separations_;
 
 //      std::vector<bool> isProportionalSeparable_;
-//      std::vector<std::unordered_map<arma::Col<arma::uword>, std::pair<arma::Col<arma::uword>, double>, Hasher, KeyEqual>> proportionalPartitions_;
+//      std::vector<std::unordered_map<arma::Col<unsigned int>, std::pair<arma::Col<unsigned int>, double>, Hasher, KeyEqual>> proportionalPartitions_;
 
       std::vector<double> plausibilities_;
 

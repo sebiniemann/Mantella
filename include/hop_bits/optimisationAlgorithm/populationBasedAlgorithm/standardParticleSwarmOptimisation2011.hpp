@@ -40,11 +40,11 @@ namespace hop {
       arma::Mat<double> particles_;
       arma::Mat<double> velocities_;
 
-      arma::uword particleIndex_;
+      unsigned int particleIndex_;
       arma::Col<double> particle_;
 
-      arma::Col<arma::uword> neighbourhoodParticlesIndecies_;
-      arma::uword neighbourhoodBestParticleIndex_;
+      arma::Col<unsigned int> neighbourhoodParticlesIndecies_;
+      unsigned int neighbourhoodBestParticleIndex_;
 
       arma::Col<double> attractionCenter_;
 
@@ -55,13 +55,13 @@ namespace hop {
 
       bool randomizeTopology_;
 
-      arma::Mat<arma::uword> topology_;
+      arma::Mat<unsigned int> topology_;
 
       void optimiseImplementation() noexcept override;
 
       void initialiseSwarm() noexcept;
 
-      arma::Mat<arma::uword> getNeighbourhoodTopology() noexcept;
+      arma::Mat<unsigned int> getNeighbourhoodTopology() noexcept;
 
       double getAcceleration() noexcept;
       arma::Col<double> getVelocity() noexcept;

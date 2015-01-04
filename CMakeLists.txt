@@ -82,7 +82,7 @@ if(BUILD_LIBRARY)
   message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library (version: ${HOP_VERSION}).")
   
   # Locate third party libraries and headers
-  find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
+  find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
   find_package(Cereal REQUIRED) # Cereal (header only)
   find_package(MPI 3.0.0) # MPI
 
@@ -130,7 +130,7 @@ if(BUILD_LIBRARY)
     src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.cpp
     src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.cpp
     src/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.cpp
-    src/optimisationProblem/nkFitnessLandscape.cpp
+    src/optimisationProblem/nkModel.cpp
     src/optimisationAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm.cpp
     src/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.cpp
@@ -210,7 +210,7 @@ if(BUILD_LIBRARY)
       message(STATUS "NOTICE: Configuring tests")
 
       # Locate third party libraries and headers
-      find_package(Armadillo 4.100.0 REQUIRED) # Armadillo C++
+      find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
       find_package(Catch REQUIRED) # Catch (header only)
       find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
@@ -345,7 +345,7 @@ add_custom_target(QtWorkaround SOURCES
   include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.hpp
   include/hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp
   include/hop_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp
-  include/hop_bits/optimisationProblem/nkFitnessLandscape.hpp
+  include/hop_bits/optimisationProblem/nkModel.hpp
   include/hop_bits/optimisationAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
   include/hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
