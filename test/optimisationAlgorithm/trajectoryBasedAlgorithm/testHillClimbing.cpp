@@ -126,6 +126,8 @@ TEST_CASE("Hill climbing", "") {
    std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
    testHillClimbingProblem->setUpperBounds(upperBounds);
    testHillClimbingProblem->setLowerBounds(lowerBounds);
+
+   testHillClimbingProblem->setAcceptableObjectiveValue(-500.0);
    testHillClimbingProblem->setObjectiveValues(objectiveValues);
    testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
 
