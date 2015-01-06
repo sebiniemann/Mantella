@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("GallaghersGaussian101mePeaksFunction", "") {
+TEST_CASE("BBOB2015-GallaghersGaussian101mePeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
 

@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("WeierstrassFunction", "") {
+TEST_CASE("BBOB2015-WeierstrassFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::WeierstrassFunction weierstrassFunction(numberOfDimensions);
 

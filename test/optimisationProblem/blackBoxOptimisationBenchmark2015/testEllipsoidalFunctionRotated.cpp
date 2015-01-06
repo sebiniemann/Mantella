@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("EllipsoidalFunctionRotated", "") {
+TEST_CASE("BBOB2015-EllipsoidalFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::EllipsoidalFunctionRotated ellipsoidalFunctionRotated(numberOfDimensions);
 

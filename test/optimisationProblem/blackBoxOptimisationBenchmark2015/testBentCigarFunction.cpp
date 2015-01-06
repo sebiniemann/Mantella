@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("BentCigarFunction", "") {
+TEST_CASE("BBOB2015-BentCigarFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::BentCigarFunction bentCigarFunction(numberOfDimensions);
 

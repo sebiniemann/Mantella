@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("SharpRidgeFunction", "") {
+TEST_CASE("BBOB2015-SharpRidgeFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
 

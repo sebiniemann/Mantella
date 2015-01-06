@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("RastriginFunctionRotated", "") {
+TEST_CASE("BBOB2015-RastriginFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::RastriginFunctionRotated rastriginFunctionRotated(numberOfDimensions);
 

@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("SchaffersF7FunctionIllConditioned", "") {
+TEST_CASE("BBOB2015-SchaffersF7FunctionIllConditioned", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
 

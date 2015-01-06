@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("DiscusFunction", "") {
+TEST_CASE("BBOB2015-DiscusFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::DiscusFunction discusFunction(numberOfDimensions);
 

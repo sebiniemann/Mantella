@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("StepEllipsoidalFunction", "") {
+TEST_CASE("BBOB2015-StepEllipsoidalFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::StepEllipsoidalFunction stepEllipsoidalFunction(numberOfDimensions);
 

@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("KatsuuraFunction", "") {
+TEST_CASE("BBOB2015-KatsuuraFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2015::KatsuuraFunction katsuuraFunction(numberOfDimensions);
 
