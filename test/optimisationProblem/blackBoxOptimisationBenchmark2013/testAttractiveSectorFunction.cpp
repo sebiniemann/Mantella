@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("AttractiveSectorFunction", "") {
+TEST_CASE("BBOB2013-AttractiveSectorFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
 

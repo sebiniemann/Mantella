@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("RosenbrockFunction", "") {
+TEST_CASE("BBOB2013-RosenbrockFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::RosenbrockFunction rosenbrockFunction(numberOfDimensions);
 

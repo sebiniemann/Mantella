@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("RastriginFunction", "") {
+TEST_CASE("BBOB2013-RastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::RastriginFunction rastriginFunction(numberOfDimensions);
 

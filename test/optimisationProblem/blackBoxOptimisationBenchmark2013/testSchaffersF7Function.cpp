@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("SchaffersF7Function", "") {
+TEST_CASE("BBOB2013-SchaffersF7Function", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::SchaffersF7Function schaffersF7Function(numberOfDimensions);
 

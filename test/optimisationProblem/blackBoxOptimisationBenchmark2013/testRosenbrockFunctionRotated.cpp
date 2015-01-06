@@ -16,7 +16,7 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("RosenbrockFunctionRotated", "") {
+TEST_CASE("BBOB2013-RosenbrockFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::RosenbrockFunctionRotated rosenbrockFunctionRotated(numberOfDimensions);
 
