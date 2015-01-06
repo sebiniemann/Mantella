@@ -4,7 +4,7 @@
 ////COMMENTS
 //step1_ is used at a lot of places where matrix/column sizes arent calculable in advance (since size is dynamic in matlab).
 //some variables have been renamed, there original name is noted in the header file (if they are renamed).
-//there are a LOT of unexplained numbers in matlab where it's not clear if they have to be decremented to fit starting at 0...
+//there are a LOT of unexplained numbers in matlab where it's not clear if they have to be decremented to fit arrays starting at 0...
 namespace hop {
 
   MultilevelCoordinateSearch::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
@@ -38,12 +38,12 @@ namespace hop {
 
     //init of large arrays
     //TODO: type completely unclear right now, pdf page 6f
-    isplit_ = arma::Col<double>(step1_, arma::fill::zeros);
+    isplit_ = arma::Col<arma::uword>(step1_, arma::fill::zeros);
     level_ = arma::Col<arma::uword>(step1_, arma::fill::zeros);
-    ipar_ = arma::Col<double>(step1_, arma::fill::zeros);
-    ichild_ = arma::Col<double>(step1_, arma::fill::zeros);
-    f_ = arma::Col<double>(step1_, arma::fill::zeros);
-    z_ = arma::Col<double>(step1_, arma::fill::zeros);
+    ipar_ = arma::Col<arma::uword>(step1_, arma::fill::zeros);
+    ichild_ = arma::Col<arma::uword>(step1_, arma::fill::zeros);
+    boxBaseVertexFunctionValues_ = arma::Mat<double>(2, step1_, arma::fill::zeros);
+    z_ = arma::Mat<double>(2, step1_, arma::fill::zeros);
     nogain_ = arma::Col<double>(step1_, arma::fill::zeros);
 
     //initialization list
@@ -52,7 +52,7 @@ namespace hop {
     x0_.col(0) = boundaries_.col(0);
     x0_.col(1) = (boundaries_.col(0) + boundaries_.col(1)) / 2.0;
     x0_.col(2) = boundaries_.col(1);
-    ////    initialPointIndex_(numberOfDimensions, 2);
+    initListEvaluations_ = arma::Mat<double>(populationSize_,numberOfDimensions);
 
     //TODO: for custom initialisation lists there is a check here to see if they violate the boundaries
 
@@ -111,7 +111,7 @@ namespace hop {
     //init of record list, nboxes, nbasket,nbasket0,nsweep, m, nloc, xloc
     //"flag" is not needed since it is equal to optProblem->isFinished()
     //values not listed here are defined in header
-    record_ = arma::Col<double>(boxDivisions_ - 1, arma::fill::zeros);
+    record_ = arma::Col<arma::uword>(boxDivisions_ - 1, arma::fill::zeros);
     m_ = numberOfDimensions;
     record_(0) = 1;
     xloc_ = arma::Mat<double>(maxLocalSearchSteps_, step1_);
@@ -121,15 +121,170 @@ namespace hop {
   }
 
   void MultilevelCoordinateSearch::optimiseImplementation() {
+    //for convenience
+    unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
 
+    double f0min = bestObjectiveValue_;
+    //the vector record is updated, and the minimal level s containing non-split boxes is computed
+    unsigned int minimalLevel = startSweep(); //s 
+
+    //TODO: mcs.m checks for "minimalLevel < boxDivisions" as a while condition.
+    //Which makes sense, since we cannot calculate anything if we cannot divide further.
+    while (!isFinished() && !isTerminated() && minimalLevel < boxDivisions_) {
+      unsigned int par = record_(minimalLevel); //the best box at level s is the current box
+      //vertex.m START
+      //TODO: check if populationSize_ comparisons need to be '-1'd
+      arma::Col<double> x = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+      arma::Col<double> y = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+      arma::Col<double> x1 = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+      arma::Col<double> x2 = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+      arma::Col<double> f1 = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
+      arma::Col<double> f2 = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
+      arma::Col<double> n0 = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
+      double fold = boxBaseVertexFunctionValues_(0, par);
+      unsigned int m = par;
+      while (m > 1) {
+        double i = std::abs(isplit_(ipar_(m)));
+        n0(i) = n0(i) + 1;
+        //matlab checks for 1, since it's index use 0
+        if (ichild_(m) == 0) {
+          if (x(i) == arma::datum::inf || x(i) == z_(0, ipar_(m))) {
+            //matlab passes 2, but it's used as an index so we need to use 1
+            vert1(i, 1, m, x, x1, x2, f1, f2);
+          } else {
+            updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, boxBaseVertexFunctionValues_(0, ipar_(m)));
+            fold = boxBaseVertexFunctionValues_(0, ipar_(m));
+            //matlab passes 1, but it's used as an index so we need to use 0
+            vert2(i, 0, m, x, x1, x2, f1, f2);
+          }
+          //matlab checks for 2, since it's index use 1
+        } else if (ichild_(m) >= 1) {
+          updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, boxBaseVertexFunctionValues_(0, ipar_(m)));
+          fold = boxBaseVertexFunctionValues_(0, ipar_(m));
+          if (x(i) == arma::datum::inf || x(i) == z_(1, ipar_(m))) {
+            //matlab passes 1, but it's used as an index so we need to use 0
+            vert1(i, 0, m, x, x1, x2, f1, f2);
+          } else {
+            //matlab passes 2, but it's used as an index so we need to use 1
+            vert2(i, 1, m, x, x1, x2, f1, f2);
+          }
+        }
+        //matlab checks for 1/2, since it's index use 0/1
+        //original matlab code: 1 <= ichild(m) & ichild(m) <= 2 & y(i) == Inf
+        if ((ichild_(m) == 0 || ichild_(m) == 1) && y(i) == arma::datum::inf) {
+          y(i) = splitGoldenSectionRule(z_(0, ipar_(m)), z_(1, ipar_(m)), boxBaseVertexFunctionValues_(0, ipar_(m)), boxBaseVertexFunctionValues_(1, ipar_(m)));
+        }
+        //box m was generated by splitting according to the init. list
+        if (ichild_(m) < 0) {
+          int j1 = 0;
+          int j2 = 0;
+          int j3 = 0;
+          int k = 0;
+          if (boundaries_.col(0)(i) < x0_(i, 0)) {
+            //TODO: since these are indexes too they also might need to be decremented
+            j1 = std::ceil(std::abs(ichild_(m))/2.0);
+            j2 = std::floor(std::abs(ichild_(m))/2.0);
+            if((std::abs(ichild_(m))/2.0 < j1 && j1 > 1) || j1 == populationSize_) {
+              j3 = -1;
+            } else {
+              //TODO: this probably needs to be 0. same below. 
+              //but -1 should be correct (since that is a pseudoindex to recognize initlist boxes)
+              j3 = 1;
+            }
+          } else {
+            j1 = std::floor(std::abs(ichild_(m))/2.0) + 1;
+            j2 = std::ceil(std::abs(ichild_(m))/2.0);
+            if((std::abs(ichild_(m))/2.0 + 1) > j1 && j1 < populationSize_) {
+              j3 = 1;
+            } else {
+              j3 = -1;
+            }
+          }
+          //box m was generated in the init. procedure
+          if(isplit_(ipar_(m)) < 0) {
+            k = i;
+            //box m was generated by a later split according to the init.list
+            //k points to the corresponding function values  
+          } else {
+            //matlab passes 2, but it's used as an index so we need to use 1
+            k = z_(1, ipar_(m));
+          }
+          if(j1 != initialPointIndex_(i) || (x(i) != arma::datum::inf && x(i) != x0_(i,(initialPointIndex_(i))))) {
+            updtf(numberOfDimensions,i,fold,x1,x2,f1,f2,initListEvaluations_(initialPointIndex_(i),k));
+            fold = initListEvaluations_(initialPointIndex_(i),k);
+          }
+          if(x(i) == arma::datum::inf || x(i) == x0_(i, j1)) {
+            x(i) = x0_(i,j1);
+            if(x1(i) == arma::datum::inf) {
+              vert3(i,j1,m,k,x1,x2,f1,f2);
+            } else if(x2(i) == arma::datum::inf && x1(i) != x0_(i,j1+j3)) {
+              x2(i) = x0_(i,j1+j3);
+              f2(i) = f2(i) + initListEvaluations_(j1+j3,k);
+            } else if(x2(i) == arma::datum::inf) {
+              //matlab checks for 1, since it's index use 0
+              if(j1 != 0 && j1 != populationSize_) {
+                x2(i) = x0_(i,j1-j3);
+                f2(i) = f2(i) + initListEvaluations_(j1-j3,k);
+              } else {
+                x2(i) = x0_(i,j1+2*j3);
+                f2(i) = f2(i) + initListEvaluations_(j1+2*j3,k);
+              }
+            }
+          } else {
+            if(x1(i) == arma::datum::inf) {
+              x1(i) = x0_(i,j1);
+              f1(i) = f1(i) + initListEvaluations_(j1,k);
+              if(x(i) != x0_(i,j1+j3)) {
+                x2(i) = x0_(i,j1+j3);
+                f2(i) = f2(i) + initListEvaluations_(j1+j3,k);
+              }
+            } else if(x2(i) == arma::datum::inf) {
+              if(x1(i) != x0_(i,j1)) {
+                x2(i) = x0_(i,j1);
+                f2(i) = f2(i) + initListEvaluations_(j1,k);
+              } else if(x(i) != x0_(i,j1+j3)) {
+                x2(i) = x0_(i,j1+j3);
+                f2(i) = f2(i) + initListEvaluations_(j1+j3,k);
+              } else {
+                //matlab checks for 1, since it's index use 0
+                if(j1 != 0 && j1 != populationSize_) {
+                  x2(i) = x0_(i,j1-j3);
+                  f2(i) = f2(i) + initListEvaluations_(j1-j3,k);
+                } else {
+                  x2(i) = x0_(i,j1+2*j3);
+                  f2(i) = f2(i) + initListEvaluations_(j1+2*j3,k);
+                }
+              }
+            }
+          }
+          if(y(i) == arma::datum::inf) {
+            //TODO: why is there an index check for 0 in matlab?!!?
+            if(j2 == 0) {
+              y(i) = boundaries_.col(0)(i);
+            } else if(j2 == populationSize_) {
+              y(i) = boundaries_.col(1)(i);
+            } else {
+              y(i) = splitGoldenSectionRule(x0_(i,j2),x0_(i,j2+1),initListEvaluations_(j2,k),initListEvaluations_(j2+1,k));
+            }
+          }
+        }
+        m = ipar_(m);
+      }
+      for(int i = 0; i < numberOfDimensions; i++) {
+        if(x(i) == arma::datum::inf) {
+          x(i) = x0_(i,initialPointIndex_(i));
+          vert3(i,initialPointIndex_(i),m,i,x1,x2,f1,f2);
+        }
+        if(y(i) == arma::datum::inf) {
+          y(i) = oppositeVertex_(i);
+        }
+      }
+    }
   }
 
   void MultilevelCoordinateSearch::initBoxes() {
     //for convenience
     unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
-
-    //init variables that are dynamic in matlab
-    boxBaseVertexFunctionValues_ = arma::Mat<double> (2, step1_);
 
     //parameter values of box 1
     ipar_(0) = 0;
@@ -238,26 +393,26 @@ namespace hop {
       double splval = 0;
       if (j1 == 0) {
         splval = boundaries_.col(0)(i);
-      } else if(j1 == populationSize_ +1) {
+      } else if (j1 == populationSize_ + 1) {
         splval = boundaries_.col(1)(i);
       } else {
-        if( j1<bestPointIndex_(i)) {
-          splval = splitGoldenSectionRule(x0_(i,j1),x0_(i,bestPointIndex_(i)),initListEvaluations_(j1,i),initListEvaluations_(bestPointIndex_(i),i));
+        if (j1 < bestPointIndex_(i)) {
+          splval = splitGoldenSectionRule(x0_(i, j1), x0_(i, bestPointIndex_(i)), initListEvaluations_(j1, i), initListEvaluations_(bestPointIndex_(i), i));
         } else {
-          splval = splitGoldenSectionRule(x0_(i,bestPointIndex_(i)),x0_(i,j1),initListEvaluations_(bestPointIndex_(i),i),initListEvaluations_(j1,i));
+          splval = splitGoldenSectionRule(x0_(i, bestPointIndex_(i)), x0_(i, j1), initListEvaluations_(bestPointIndex_(i), i), initListEvaluations_(j1, i));
         }
       }
     }
     //from matlab: best function value after the init. procedure
     //doesnt make much sense to me since we never changed initListEvaluations
-    bestObjectiveValue_ = initListEvaluations_(bestPointIndex_(numberOfDimensions),numberOfDimensions);
+    bestObjectiveValue_ = initListEvaluations_(bestPointIndex_(numberOfDimensions), numberOfDimensions);
     double var0 = 0;
-    for(std::size_t i = 0; i < numberOfDimensions; i++) {
+    for (std::size_t i = 0; i < numberOfDimensions; i++) {
       //TODO: next two lines should equal [var0,p(i)] = max(var); not sure if correct
       var0 = arma::max(var);
       variabilityRanking_(i) = var0;
       var(var0) = -1;
-      bestParameter_(i) = x0_(i,bestPointIndex_(i)); //from matlab: best point after the init. procedure
+      bestParameter_(i) = x0_(i, bestPointIndex_(i)); //from matlab: best point after the init. procedure
     }
   }
 
@@ -265,11 +420,11 @@ namespace hop {
     return "MultilevelCoordinateSearch";
   }
 
-  void MultilevelCoordinateSearch::genBox(int nbox, int par, arma::uword level, int nchild, double baseVertexFunctionValue) {
+  void MultilevelCoordinateSearch::genBox(int nbox, int par, int level, int nchild, double baseVertexFunctionValue) {
     ipar_(nbox) = par;
     level_(nbox) = level;
     ichild_(nbox) = nchild;
-    boxBaseVertexFunctionValues_(nbox) = baseVertexFunctionValue;
+    boxBaseVertexFunctionValues_(0, nbox) = baseVertexFunctionValue;
   }
 
   arma::Col<double> MultilevelCoordinateSearch::quadraticPolynomialInterpolation(arma::Col<double> supportPoints, arma::Col<double> functionValues) {
@@ -315,5 +470,49 @@ namespace hop {
     } else {
       return x1 + 0.5 * (3 - std::sqrt(5))*(x2 - x1);
     }
+  }
+
+  unsigned int MultilevelCoordinateSearch::startSweep() {
+    record_ = arma::Col<arma::uword>(boxDivisions_ - 1, arma::fill::zeros);
+    unsigned int s = boxDivisions_;
+    for (unsigned int i = 0; i < nboxes_; i++) {
+      if (level_(i) > 0) {
+        if (level_(i) < s) {
+          s = level_(i);
+        }
+        if (!record_(level_(i))) {
+          record_(level_(i)) = i;
+        } else if (boxBaseVertexFunctionValues_(0, i) < boxBaseVertexFunctionValues_(0, record_(level_(i)))) {
+          record_(level_(i)) = i;
+        }
+      }
+    }
+    return s;
+  }
+
+  void MultilevelCoordinateSearch::vert1(int updateIndex, unsigned int par, unsigned int m, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+
+  }
+
+  void MultilevelCoordinateSearch::vert2(int updateIndex, unsigned int par, unsigned int m, arma::Col<double> x, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+
+  }
+
+  void MultilevelCoordinateSearch::vert3(int updateIndex, unsigned int par, unsigned int m, unsigned int f0Index, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+
+  }
+
+  void MultilevelCoordinateSearch::updtf(unsigned int numberOfDimensions, unsigned int splittingIndex, double fold, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2, double baseVertexValueCurrentBox) {
+    for (int i = 0; i < numberOfDimensions; i++) {
+      if (i != splittingIndex) {
+        if (x1(i) == arma::datum::inf) {
+          f1(i) = f1(i) + fold - baseVertexValueCurrentBox;
+        }
+        if (x2(i) == arma::datum::inf) {
+          f2(i) = f2(i) + fold - baseVertexValueCurrentBox;
+        }
+      }
+    }
+    //updtf.m sets fold = f here. since the inputvalue fold never gets changed, this doesn't actually belong here.
   }
 }
