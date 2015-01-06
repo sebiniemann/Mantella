@@ -37,7 +37,7 @@ class TestHillClimbing : public hop::HillClimbing {
   public:
     TestHillClimbing(
         const std::shared_ptr<hop::OptimisationProblem> optimisationProblem)
-      : HillClimbing(optimisationProblem),
+      : hop::HillClimbing(optimisationProblem),
         velocityIndex_(0){
     }
 
@@ -58,7 +58,7 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
   public:
     TestHillClimbingProblem(
         const unsigned int numberOfDimensions)
-      : OptimisationProblem(numberOfDimensions) {
+      : hop::OptimisationProblem(numberOfDimensions) {
       softConstraintsValuesIndex_ = 0;
       objectiveValuesIndex_ = 0;
       parameterHistory_.clear();
