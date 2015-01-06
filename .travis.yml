@@ -23,7 +23,7 @@ before_install:
 
 install:
   # GCC
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
   
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
