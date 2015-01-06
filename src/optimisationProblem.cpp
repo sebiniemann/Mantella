@@ -5,13 +5,7 @@
 #include <limits>
 #include <stdexcept>
 
-//! Only FULLY TEMPLATE SPECIALISATION from here on
-//! Note: Partial template specialisations must be placed within the header file.
-
 namespace hop {
-  //! Only PUBLIC methods from here on
-  //! Note: Runtime checks are only performed for public methods.
-
   template <>
   OptimisationProblem<double>::OptimisationProblem(
       const unsigned int& numberOfDimensions) noexcept
@@ -87,9 +81,6 @@ namespace hop {
       return cachePosition->second;
     }
   }
-
-  //! Only PROTECTED or PRIVATE methods from here on
-  //! Note: Runtime checks are only performed for public methods.
 
   template <>
   arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(

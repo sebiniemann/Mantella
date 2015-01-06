@@ -224,7 +224,6 @@ namespace hop {
       std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> cachedIsSatisfyingSoftConstraints_;
       std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> cachedIsSatisfyingConstraints_;
 
-      //! The following is ONLY TO BE USED BY CEREAL
       // Gives cereal access to otherwise protected constructors, functions and fields.
       friend class cereal::access;
       // Cereal uses a default constructor and will afterwards update the fields directly.
@@ -248,9 +247,6 @@ namespace hop {
       }
   };
 
-  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
-  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
-
   template <>
   OptimisationProblem<double>::OptimisationProblem(
       const unsigned int& numberOfDimensions) noexcept;
@@ -270,11 +266,6 @@ namespace hop {
   template <>
   arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
       const arma::Col<double>& parameter) const noexcept;
-
-  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
-  //!
-  //! Only PUBLIC methods from here on
-  //! Note: Runtime checks are only performed for public methods.
 
   template <typename ParameterType>
   OptimisationProblem<ParameterType>::OptimisationProblem(
@@ -530,9 +521,6 @@ namespace hop {
   std::unordered_map<arma::Col<ParameterType>, bool, Hasher, KeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const {
     return cachedIsSatisfyingConstraints_;
   }
-
-  //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON
-  //! Note: Runtime checks are only performed for public methods.
 
   template <typename ParameterType>
   double OptimisationProblem<ParameterType>::getSoftConstraintsValueImplementation(
