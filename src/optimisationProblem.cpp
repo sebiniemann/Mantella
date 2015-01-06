@@ -39,8 +39,10 @@ namespace hop {
       throw std::logic_error("The rotation matrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must be square.");
     } else if (parameterRotation.n_rows != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    } else if(arma::any(arma::vectorise(arma::abs(parameterRotation.i() - parameterRotation.t()) > 1.0e-12)) || std::abs(std::abs(arma::det(parameterRotation)) - 1.0) > 1.0e-12) {
-      throw std::logic_error("The rotation matrix must be orthonormal and its determinant (" + std::to_string(arma::det(parameterRotation)) + ") must be either 1 or -1.");
+    } else if(arma::any(arma::vectorise(arma::abs(parameterRotation.i() - parameterRotation.t()) > 1.0e-12 * parameterRotation.max()))) {
+      throw std::logic_error("The rotation matrix must be orthonormal.");
+    } else if(std::abs(std::abs(arma::det(parameterRotation)) - 1.0) > 1.0e-12) {
+      throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(parameterRotation)) + ") must be either 1 or -1.");
     }
 
     parameterRotation_ = parameterRotation;
