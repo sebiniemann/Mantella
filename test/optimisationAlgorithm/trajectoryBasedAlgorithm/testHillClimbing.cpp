@@ -25,7 +25,7 @@ class TestHillClimbing : public hop::HillClimbing {
         velocityIndex_(0){
     }
 
-    arma::Col<double> getVelocity() {
+    arma::Col<double> getVelocity() override {
       return velocities_.col(velocityIndex_++);
     }
 
@@ -42,8 +42,9 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
   public:
     TestHillClimbingProblem(
         const unsigned int numberOfDimensions)
-      : OptimisationProblem(numberOfDimensions),
-        ValueIndex_(0) {
+      : OptimisationProblem(numberOfDimensions) {
+      softConstraintsValuesIndex_ = 0;
+      objectiveValuesIndex_ = 0;
     }
 
 
@@ -60,23 +61,24 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
     }
 
   protected:
-    unsigned int ValueIndex_;
+    static unsigned int softConstraintsValuesIndex_;
+    static unsigned int objectiveValuesIndex_;
     arma::Col<double> objectiveValues_;
     arma::Col<double> softConstraintsValues_;
 
     static std::vector<arma::Col<double>> parameterHistory_;
 
+    double getSoftConstraintsValueImplementation(
+       const arma::Col<double>& parameter) const override {
+
+      return softConstraintsValues_.at(softConstraintsValuesIndex_++);
+    }
+
     double getObjectiveValueImplementation(
        const arma::Col<double>& parameter) const override {
        parameterHistory_.push_back(parameter);
 
-      return objectiveValues_.at(ValueIndex_);
-    }
-
-    double getSoftConstraintsValueImplementation(
-       const arma::Col<double>& parameter) const override {
-
-      return softConstraintsValues_.at(ValueIndex_);
+      return objectiveValues_.at(objectiveValuesIndex_++);
     }
 
     std::string to_string() const noexcept {
@@ -85,6 +87,8 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
 };
 
 decltype(TestHillClimbingProblem::parameterHistory_) TestHillClimbingProblem::parameterHistory_;
+decltype(TestHillClimbingProblem::softConstraintsValuesIndex_) TestHillClimbingProblem::softConstraintsValuesIndex_;
+decltype(TestHillClimbingProblem::objectiveValuesIndex_) TestHillClimbingProblem::objectiveValuesIndex_;
 
 TEST_CASE("Hill climbing", "") {
 
