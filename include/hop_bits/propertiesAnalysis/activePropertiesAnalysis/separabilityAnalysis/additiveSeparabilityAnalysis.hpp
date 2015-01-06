@@ -13,40 +13,25 @@ namespace hop {
       AdditiveSeparabilityAnalysis(const AdditiveSeparabilityAnalysis&) = delete;
       AdditiveSeparabilityAnalysis& operator=(const AdditiveSeparabilityAnalysis&) = delete;
 
-      void setAdditiveSeparabilityErrorThreshold(
-          const double& additiveSeparabilityErrorThreshold);
+      void setAdditiveSeparabilityMeanErrorThreshold(
+          const double& additiveSeparabilityMeanErrorThreshold);
 
     protected:
-      double additiveSeparabilityErrorThreshold_;
+      double additiveSeparabilityMeanErrorThreshold_;
   };
-
-  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
-  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
-
-  // Nothing to see here, move along ...
-
-  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
-  //!
-  //! Only PUBLIC methods from here on
-  //! Note: Runtime checks are only performed for public methods.
 
   template <typename ParameterType, class DistanceFunction>
   AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::AdditiveSeparabilityAnalysis() noexcept {
-    setAdditiveSeparabilityErrorThreshold(0.75);
+    setAdditiveSeparabilityMeanErrorThreshold(0.75);
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityErrorThreshold(
-      const double& additiveSeparabilityErrorThreshold) {
-    if(additiveSeparabilityErrorThreshold < 0 || additiveSeparabilityErrorThreshold > 1) {
-      throw std::runtime_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityErrorThreshold) + ") must be within 0 and 1.");
+  void AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityMeanErrorThreshold(
+      const double& additiveSeparabilityMeanErrorThreshold) {
+    if(additiveSeparabilityMeanErrorThreshold < 0 || additiveSeparabilityMeanErrorThreshold > 1) {
+      throw std::runtime_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMeanErrorThreshold) + ") must be within 0 and 1.");
     }
 
-    additiveSeparabilityErrorThreshold_ = additiveSeparabilityErrorThreshold;
+    additiveSeparabilityMeanErrorThreshold_ = additiveSeparabilityMeanErrorThreshold;
   }
-
-  //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON
-  //! Note: Runtime checks are only performed for public methods.
-
-  // Nothing to see here, move along ...
 }
