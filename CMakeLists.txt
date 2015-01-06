@@ -16,13 +16,13 @@
 #------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 
-# Hint-based Online Programming (HOP)
-project(HOP CXX C)
+# Mantrella, C++ optimisation framework
+project(Mantrella CXX C)
 
-set(HOP_MAJOR 0)
-set(HOP_MINOR 9)
-set(HOP_PATCH 0)
-set(HOP_VERSION "${HOP_MAJOR}.${HOP_MINOR}.${HOP_PATCH}")
+set(MANTRELLA_MAJOR 0)
+set(MANTRELLA_MINOR 9)
+set(MANTRELLA_PATCH 0)
+set(MANTRELLA_VERSION "${MANTRELLA_MAJOR}.${MANTRELLA_MINOR}.${MANTRELLA_PATCH}")
 
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
@@ -79,7 +79,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # BUILD LIBRARY
 # -------------
 if(BUILD_LIBRARY)
-  message(STATUS "NOTICE: Configuring Hint-based Online Programming (HOP) library (version: ${HOP_VERSION}).")
+  message(STATUS "NOTICE: Configuring Hint-based Online Programming (Mantrella) library (version: ${MANTRELLA_VERSION}).")
   
   # Locate third party libraries and headers
   find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
@@ -92,7 +92,7 @@ if(BUILD_LIBRARY)
 
   # Source files without MPI usage (serial algorithms only)
   # All paths must start with "src/"
-  set(HOP_LIBRARY_SOURCES
+  set(MANTRELLA_LIBRARY_SOURCES
     src/distanceFunction.cpp
     src/distanceFunction/euclideanDistance.cpp
     src/optimisationProblem.cpp
@@ -282,25 +282,25 @@ if(BUILD_LIBRARY)
     include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
 
     # Compile the optimisation library with MPI support (parallel algorithms)
-    add_library(hop SHARED
-      ${HOP_LIBRARY_SOURCES}
+    add_library(mantrella SHARED
+      ${MANTRELLA_LIBRARY_SOURCES}
       src/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.cpp
       src/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.cpp
     )
 
     # Link against third party libraries
-    target_link_libraries(hop ${MPI_C_LIBRARIES}) # MPI C-bindings
+    target_link_libraries(mantrella ${MPI_C_LIBRARIES}) # MPI C-bindings
   else()
     message(STATUS "NOTICE: Compile without MPI support (serial algorithms only).")
 
     # Compile the optimisation library without MPI support (serial algorithms only)
-    add_library(hop SHARED
-      ${HOP_LIBRARY_SOURCES}
+    add_library(mantrella SHARED
+      ${MANTRELLA_LIBRARY_SOURCES}
     )
   endif()
 
   # Link against third party libraries
-  target_link_libraries(hop ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(mantrella ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
   # -----------
   # BUILD TESTS
@@ -320,7 +320,7 @@ if(BUILD_LIBRARY)
       include_directories(${Boost_INCLUDE_DIRS}) # Boost
 
       # Include headers
-      include_directories(${PROJECT_SOURCE_DIR}/test) # HOP tests
+      include_directories(${PROJECT_SOURCE_DIR}/test) # MANTRELLA tests
 
       # Compile the optimisation library tests
       # All paths must start with "test/"
@@ -451,11 +451,11 @@ if(BUILD_LIBRARY)
         test/helper/testString.cpp
       )
 
-      # Add HOP library directory
-      link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # HOP
+      # Add MANTRELLA library directory
+      link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # MANTRELLA
 
-      # Link against HOP library
-      target_link_libraries(libTest hop) # HOP
+      # Link against MANTRELLA library
+      target_link_libraries(libTest mantrella) # MANTRELLA
 
       # Link against third party libraries
       target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
@@ -476,17 +476,17 @@ if(BUILD_LIBRARY)
     set(INSTALL_LIB_DIR "lib")
   endif()
 
-  set_property(TARGET hop PROPERTY VERSION ${HOP_VERSION})
-  set_property(TARGET hop PROPERTY SOVERSION ${HOP_MAJOR})
+  set_property(TARGET mantrella PROPERTY VERSION ${MANTRELLA_VERSION})
+  set_property(TARGET mantrella PROPERTY SOVERSION ${MANTRELLA_MAJOR})
 
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-  install(TARGETS hop
+  install(TARGETS mantrella
     ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
     LIBRARY DESTINATION ${INSTALL_LIB_DIR})
 
 #  include(CMakePackageConfigHelpers)
-#  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/HOPConfigVersion.cmake" VERSION ${HOP_VERSION} COMPATIBILITY AnyNewerVersion)
+#  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/MANTRELLAConfigVersion.cmake" VERSION ${MANTRELLA_VERSION} COMPATIBILITY AnyNewerVersion)
 endif()
 
 # --------------

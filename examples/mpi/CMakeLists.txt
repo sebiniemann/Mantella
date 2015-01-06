@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # -------------
 message(STATUS "NOTICE: Configuring experiemental MPI applications.")
 
-# Include HOP headers
+# Include Mantrella headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
@@ -30,8 +30,9 @@ add_executable(parallelSPSO11
   parallelSPSO11.cpp
 )
 
-# Link against HOP
-target_link_libraries(parallelSPSO11 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
+# Link against Mantrella
+target_link_libraries(parallelSPSO11 mantrella)
+# target_link_libraries(parallelSPSO11 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
 
 # Link against third party libraries
 target_link_libraries(parallelSPSO11 ${ARMADILLO_LIBRARIES}) # Armadillo C++
