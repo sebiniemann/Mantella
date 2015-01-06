@@ -22,7 +22,6 @@ namespace hop {
 
       virtual arma::Col<double> getVelocity() noexcept;
 
-      virtual arma::Col<double> getVelocity();
-      void optimiseImplementation() override;
+      void optimiseImplementation() noexcept override;
   };
 }
