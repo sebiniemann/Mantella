@@ -21,13 +21,13 @@ TEST_CASE("EllipsoidalFunction", "") {
     hop::bbob2013::EllipsoidalFunction ellipsoidalFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> translation;
-    translation.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    translation.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     ellipsoidalFunction.setObjectiveValueTranslation(0);
     ellipsoidalFunction.setTranslation(translation);

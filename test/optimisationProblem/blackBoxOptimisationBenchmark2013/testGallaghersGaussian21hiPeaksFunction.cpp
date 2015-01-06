@@ -21,19 +21,19 @@ TEST_CASE("GallaghersGaussian21hiPeaksFunction", "") {
     hop::bbob2013::GallaghersGaussian21hiPeaksFunction gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> deltaC21;
-    deltaC21.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/deltaC21,dim" + std::to_string(numberOfDimensions) +".mat");
+    deltaC21.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/deltaC21,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> localOptimaY21;
-    localOptimaY21.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/localOptimaY21,dim" + std::to_string(numberOfDimensions) +".mat");
+    localOptimaY21.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/localOptimaY21,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     gallaghersGaussian21hiPeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian21hiPeaksFunction.setRotationR(rotationR);
