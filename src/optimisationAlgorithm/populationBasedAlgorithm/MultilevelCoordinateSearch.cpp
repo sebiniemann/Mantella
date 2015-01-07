@@ -109,13 +109,14 @@ namespace hop {
       }
     }
 
-    //init of record list, nboxes, nbasket,nbasket0,nsweep, m, nloc, xloc
+    //init of record list, nboxes, nbasket,nbasket0, m, nloc, xloc
     //"flag" is not needed since it is equal to optProblem->isFinished()
     //values not listed here are defined in header
+    //nsweep not needed also
     record_ = arma::Col<arma::uword>(boxDivisions_ - 1, arma::fill::zeros);
     m_ = numberOfDimensions;
     record_(0) = 1;
-    xloc_ = arma::Mat<double>(maxLocalSearchSteps_, step1_);
+    xloc_ = arma::Mat<double>(numberOfDimensions, step1_);
 
     //generate boxes
     initBoxes();
@@ -368,13 +369,18 @@ namespace hop {
       //if smax is reached, a new sweep is started 
       if(minimalLevel==boxDivisions_) {
         if(maxLocalSearchSteps_ > 0) {
-          //armadillo can't return both sort-index and sorted result, so we have to do it in two lines:
-          arma::Col<arma::uword> j = arma::sort_index(pointsInBasketValue.rows(nbasket0_+1,nbasket_));
-          pointsInBasketValue.rows(nbasket0_+1,nbasket_) = pointsInBasketValue.elem(j);
+          //original matlab sort: [fmi(nbasket0+1:nbasket),j] = sort(fmi(nbasket0+1:nbasket));
+          //the j is never used, so we don't retrieve the sort-index
+          pointsInBasketValue.rows(nbasket0_+1,nbasket_) = arma::sort(pointsInBasketValue.rows(nbasket0_+1,nbasket_));
           
-          
-          for(arma::uword ind : j) {
-            
+          for(int j = nbasket0_+1; j < nbasket_; j++) {
+            baseVertex_ pointsInBasket.col(j);
+            //TODO: Something is strange/wrong here. Variable should be "f1", 
+            //but f1 is already a vector. Why is he overwriting it in matlab??
+            double f1new = pointsInBasketValue(j);
+            if(checkLocationNotUsed()) {
+              
+            }
           }
         }
       }
@@ -981,6 +987,25 @@ namespace hop {
       record_(level) = label;
     } else if (f(label) < f(record_(level))) {
       record_(level) = label;
+    }
+  }
+  
+  bool MultilevelCoordinateSearch::checkLocationNotUsed() {
+      for(int i = 0; i < nloc_; i++) {
+        if(baseVertex_ == xloc_.col(i)) {
+          return false;
+        }
+      }
+      return true;
+    }
+  
+  void MultilevelCoordinateSearch::addLocation(arma::Col<double> loc) {
+    nloc_++;
+    if(xloc_.n_cols < nloc_) {
+      xloc_.resize(xloc_.n_cols + step);
+      xloc_.col(nloc_) = loc;
+    } else {
+      xloc_.col(nloc_) = loc;
     }
   }
 }

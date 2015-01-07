@@ -110,6 +110,14 @@ namespace hop {
     //updates the pointer record(s) to the best non-split box at level s.
     //f=vector containing the base vertex function values of the already defined boxes
     void updateRecord(unsigned int label, int level, arma::Col<double> f);
+    
+    //chkloc.m 
+    //checks whether a point has already been used as starting point for a local search
+    bool checkLocationNotUsed();
+    
+    //addloc.m 
+    //adds a new point to the list of starting points for local search
+    void addLocation(arma::Col<double> loc);
   };
 }
 
