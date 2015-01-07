@@ -13,25 +13,25 @@ namespace hop {
       AdditiveSeparabilityAnalysis(const AdditiveSeparabilityAnalysis&) = delete;
       AdditiveSeparabilityAnalysis& operator=(const AdditiveSeparabilityAnalysis&) = delete;
 
-      void setAdditiveSeparabilityMeanErrorThreshold(
-          const double& additiveSeparabilityMeanErrorThreshold);
+      void setAdditiveSeparabilityMedianErrorThreshold(
+          const double& additiveSeparabilityMedianErrorThreshold);
 
     protected:
-      double additiveSeparabilityMeanErrorThreshold_;
+      double additiveSeparabilityMedianErrorThreshold_;
   };
 
   template <typename ParameterType, class DistanceFunction>
   AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::AdditiveSeparabilityAnalysis() noexcept {
-    setAdditiveSeparabilityMeanErrorThreshold(0.75);
+    setAdditiveSeparabilityMedianErrorThreshold(0.75);
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityMeanErrorThreshold(
-      const double& additiveSeparabilityMeanErrorThreshold) {
-    if(additiveSeparabilityMeanErrorThreshold < 0 || additiveSeparabilityMeanErrorThreshold > 1) {
-      throw std::runtime_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMeanErrorThreshold) + ") must be within 0 and 1.");
+  void AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityMedianErrorThreshold(
+      const double& additiveSeparabilityMedianErrorThreshold) {
+    if(additiveSeparabilityMedianErrorThreshold < 0 || additiveSeparabilityMedianErrorThreshold > 1) {
+      throw std::runtime_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
-    additiveSeparabilityMeanErrorThreshold_ = additiveSeparabilityMeanErrorThreshold;
+    additiveSeparabilityMedianErrorThreshold_ = additiveSeparabilityMedianErrorThreshold;
   }
 }

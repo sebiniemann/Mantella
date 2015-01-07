@@ -1,5 +1,9 @@
 #include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp>
 
+// C++ Standard Library
+#include <unordered_set>
+#include <map>
+
 // Quick
 #include <iostream>
 
@@ -11,12 +15,13 @@ namespace hop {
   void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates;
-    for(unsigned int n = 1; n <= std::floor(optimisationProblem->getNumberOfDimensions() / 2); ++n) {
-      for(const auto& combination : getCombinationsWithoutRepetition(optimisationProblem->getNumberOfDimensions(), n)) {
+    for (unsigned int n = 1; n <= std::floor(optimisationProblem->getNumberOfDimensions() / 2); ++n) {
+      //TODO Garantiere sortierung der combination in getCombinationsWithoutRepetition();
+      for (const auto& combination : getCombinationsWithoutRepetition(optimisationProblem->getNumberOfDimensions(), n)) {
         arma::Col<unsigned int> complement(optimisationProblem->getNumberOfDimensions() - combination.n_elem);
         std::size_t k = 0;
-        for(std::size_t l = 0; l < optimisationProblem->getNumberOfDimensions(); ++l) {
-          if(!arma::any(combination == l)) {
+        for (std::size_t l = 0; l < optimisationProblem->getNumberOfDimensions(); ++l) {
+          if (!arma::any(combination == l)) {
             complement.at(k++) = l;
           }
         }
@@ -24,9 +29,8 @@ namespace hop {
       }
     }
 
-    std::vector<arma::Col<unsigned int>> partition;
-    partition.push_back(arma::linspace<arma::Col<unsigned int>>(0, optimisationProblem->getNumberOfDimensions() - 1, optimisationProblem->getNumberOfDimensions()));
-    for(const auto& partitionCandidate : partitionCandidates) {
+    std::vector<std::vector<arma::Col<unsigned int>>> partitions;
+    for (const auto& partitionCandidate : partitionCandidates) {
       arma::Col<double> differences(maximalNumberOfIterations_);
 
       for(std::size_t n = 0; n < differences.n_elem; ++n) {
@@ -57,6 +61,53 @@ namespace hop {
             optimisationProblem->getObjectiveValue(candidateB) -
             optimisationProblem->getObjectiveValue(candidateC);
       }
+
+      if (arma::median(differences) < additiveSeparabilityMedianErrorThreshold_) {
+        partitions.push_back({partitionCandidate.first, partitionCandidate.second});
+      }
     }
+
+    std::unordered_set<unsigned int> singlePartitions;
+    for (const auto& partition : partitions) {
+      for (const auto& dimensions : partition) {
+        if (dimensions.n_elem == 1) {
+          singlePartitions.insert(arma::as_scalar(dimensions));
+        }
+      }
+    }
+
+    std::map<std::pair<unsigned int, unsigned int>, unsigned int> pairedDimensions;
+    for(const auto& partition : partitions) {
+      for(const auto& dimensions : partition) {
+        if (dimensions.n_elem == 1) {
+          continue;
+        }
+
+        bool skip = false;
+        for(const auto& dimension : dimensions) {
+          if(singlePartitions.find(dimension) != singlePartitions.end()) {
+            skip = true;
+            break;
+          }
+        }
+
+        if(skip) {
+          continue;
+        }
+
+        for(std::size_t n = 0; n < dimensions.n_elem; ++n) {
+          std::pair<unsigned int, unsigned int> pairedDimension = {n, (n + 1) % dimensions.n_elem};
+
+          const auto& cachePosition = pairedDimensions.find(pairedDimension);
+          if (cachePosition == pairedDimensions.end()) {
+            pairedDimensions.insert({pairedDimensions, 1});
+          } else {
+            ++cachePosition->second;
+          }
+        }
+      }
+    }
+
+    std::cout << "done" << std::endl;
   }
 }

@@ -13,8 +13,8 @@ namespace hop {
       LinearModelAnalysis(const LinearModelAnalysis&) = delete;
       LinearModelAnalysis& operator=(const LinearModelAnalysis&) = delete;
 
-      void setLinearModelMeanErrorThreshold(
-          const double& linearModelMeanErrorThreshold);
+      void setLinearModelMedianErrorThreshold(
+          const double& linearModelMedianErrorThreshold);
 
       arma::Col<double> getLinearModelEstimator() const noexcept;
 
@@ -24,13 +24,13 @@ namespace hop {
       arma::Col<double> linearModelEstimator_;
       bool isLinear_;
 
-      double linearModelMeanErrorThreshold_;
+      double linearModelMedianErrorThreshold_;
   };
 
   template <typename ParameterType, class DistanceFunction>
   LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() noexcept
     : isLinear_(false) {
-    setLinearModelMeanErrorThreshold(0.25);
+    setLinearModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType, class DistanceFunction>
@@ -39,13 +39,13 @@ namespace hop {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelMeanErrorThreshold(
-      const double& linearModelMeanErrorThreshold) {
-    if(linearModelMeanErrorThreshold < 0 || linearModelMeanErrorThreshold > 1) {
-      throw std::runtime_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMeanErrorThreshold) + ") must be within 0 and 1.");
+  void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelMedianErrorThreshold(
+      const double& linearModelMedianErrorThreshold) {
+    if(linearModelMedianErrorThreshold < 0 || linearModelMedianErrorThreshold > 1) {
+      throw std::runtime_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
-    linearModelMeanErrorThreshold_ = linearModelMeanErrorThreshold;
+    linearModelMedianErrorThreshold_ = linearModelMedianErrorThreshold;
   }
 
   template <typename ParameterType, class DistanceFunction>
