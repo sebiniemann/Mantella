@@ -36,7 +36,7 @@ void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<doubl
 class TestSimulatedAnnealing : public hop::SimulatedAnnealing {
   public:
     TestSimulatedAnnealing(
-        const std::shared_ptr<hop::OptimisationProblem> optimisationProblem)
+        const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
       : hop::SimulatedAnnealing(optimisationProblem),
         velocityIndex_(0),
         statesIndex_(0){
@@ -68,11 +68,11 @@ class TestSimulatedAnnealing : public hop::SimulatedAnnealing {
     arma::mat states_;
 };
 
-class TestSimulatedAnnealingProblem : public hop::OptimisationProblem {
+class TestSimulatedAnnealingProblem : public hop::OptimisationProblem<double> {
   public:
     TestSimulatedAnnealingProblem(
         const unsigned int numberOfDimensions)
-      : hop::OptimisationProblem(numberOfDimensions) {
+      : hop::OptimisationProblem<double>(numberOfDimensions) {
       softConstraintsValuesIndex_ = 0;
       objectiveValuesIndex_ = 0;
       parameterHistory_.clear();
