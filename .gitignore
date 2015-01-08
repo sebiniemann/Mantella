@@ -1,2 +1,9 @@
-_site
-.sass-cache
+# Build
+/bin/
+/build/
+/examples/
+CMakeLists.txt.user
+
+# Jekyll
+_site/
+.sass-cache/
