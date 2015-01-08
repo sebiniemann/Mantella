@@ -36,7 +36,7 @@ void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<doubl
 class TestHillClimbing : public hop::HillClimbing {
   public:
     TestHillClimbing(
-        const std::shared_ptr<hop::OptimisationProblem> optimisationProblem)
+        const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
       : hop::HillClimbing(optimisationProblem),
         velocityIndex_(0){
     }
@@ -54,11 +54,11 @@ class TestHillClimbing : public hop::HillClimbing {
     arma::mat velocities_;
 };
 
-class TestHillClimbingProblem : public hop::OptimisationProblem {
+class TestHillClimbingProblem : public hop::OptimisationProblem<double> {
   public:
     TestHillClimbingProblem(
         const unsigned int numberOfDimensions)
-      : hop::OptimisationProblem(numberOfDimensions) {
+      : hop::OptimisationProblem<double>(numberOfDimensions) {
       softConstraintsValuesIndex_ = 0;
       objectiveValuesIndex_ = 0;
       parameterHistory_.clear();
