@@ -16,21 +16,21 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("EllipsoidalFunctionRotated", "") {
+TEST_CASE("BBOB2013-EllipsoidalFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::EllipsoidalFunctionRotated ellipsoidalFunctionRotated(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> translation;
-    translation.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    translation.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     ellipsoidalFunctionRotated.setObjectiveValueTranslation(0);
     ellipsoidalFunctionRotated.setTranslation(translation);

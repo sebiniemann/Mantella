@@ -16,24 +16,24 @@
 
 extern boost::filesystem::path testDirectory;
 
-TEST_CASE("GallaghersGaussian101mePeaksFunction", "") {
+TEST_CASE("BBOB2013-GallaghersGaussian101mePeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     hop::bbob2013::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> deltaC101;
-    deltaC101.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/deltaC101,dim" + std::to_string(numberOfDimensions) +".mat");
+    deltaC101.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/deltaC101,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> localOptimaY101;
-    localOptimaY101.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/localOptimaY101,dim" + std::to_string(numberOfDimensions) +".mat");
+    localOptimaY101.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/localOptimaY101,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/benchmark/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian101mePeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian101mePeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     gallaghersGaussian101mePeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian101mePeaksFunction.setRotationR(rotationR);

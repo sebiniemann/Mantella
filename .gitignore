@@ -13,5 +13,9 @@ CMakeLists.txt.user
 Makefile
 CMakeFiles
 
-#Netbeans
+# Netbeans
 /nbproject
+
+# Jekyll
+.sass-cache
+_site

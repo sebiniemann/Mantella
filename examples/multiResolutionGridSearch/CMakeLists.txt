@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # -------------
 message(STATUS "NOTICE: Configuring experiemental multi resolution grid search.")
 
-# Include HOP headers
+# Include Mantrella headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
@@ -28,8 +28,8 @@ add_executable(experimentalMultiResolutionGriSearch
   main.cpp
 )
 
-# Link against HOP
-target_link_libraries(experimentalMultiResolutionGriSearch hop)
+# Link against Mantrella
+target_link_libraries(experimentalMultiResolutionGriSearch mantrella)
 
 # Link against third party libraries
 target_link_libraries(experimentalMultiResolutionGriSearch ${ARMADILLO_LIBRARIES}) # Armadillo C++

@@ -13,8 +13,8 @@ namespace hop {
       LinearModelAnalysis(const LinearModelAnalysis&) = delete;
       LinearModelAnalysis& operator=(const LinearModelAnalysis&) = delete;
 
-      void setLinearModelResidualsThreshold(
-          const double& linearModelResidualsThreshold);
+      void setLinearModelMedianErrorThreshold(
+          const double& linearModelMedianErrorThreshold);
 
       arma::Col<double> getLinearModelEstimator() const noexcept;
 
@@ -24,23 +24,13 @@ namespace hop {
       arma::Col<double> linearModelEstimator_;
       bool isLinear_;
 
-      double linearModelResidualsThreshold_;
+      double linearModelMedianErrorThreshold_;
   };
-
-  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
-  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
-
-  // Nothing to see here, move along ...
-
-  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
-  //!
-  //! Only PUBLIC methods from here on
-  //! Note: Runtime checks are only performed for public methods.
 
   template <typename ParameterType, class DistanceFunction>
   LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() noexcept
     : isLinear_(false) {
-    setLinearModelResidualsThreshold(0.25);
+    setLinearModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType, class DistanceFunction>
@@ -49,21 +39,17 @@ namespace hop {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelResidualsThreshold(
-      const double& linearModelResidualsThreshold) {
-    if(linearModelResidualsThreshold < 0 || linearModelResidualsThreshold > 1) {
-      throw std::runtime_error("The quadratic model residuals threshold (" + std::to_string(linearModelResidualsThreshold) + ") must be within 0 and 1.");
+  void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelMedianErrorThreshold(
+      const double& linearModelMedianErrorThreshold) {
+    if(linearModelMedianErrorThreshold < 0 || linearModelMedianErrorThreshold > 1) {
+      throw std::runtime_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
-    linearModelResidualsThreshold_ = linearModelResidualsThreshold;
+    linearModelMedianErrorThreshold_ = linearModelMedianErrorThreshold;
   }
 
   template <typename ParameterType, class DistanceFunction>
   bool LinearModelAnalysis<ParameterType, DistanceFunction>::isLinear() const noexcept {
     return isLinear_;
   }
-  //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON
-  //! Note: Runtime checks are only performed for public methods.
-
-  // Nothing to see here, move along ...
 }

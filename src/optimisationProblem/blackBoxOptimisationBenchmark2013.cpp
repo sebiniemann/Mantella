@@ -55,8 +55,10 @@ namespace hop {
         throw std::logic_error("The rotation matrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must be square.");
       } else if (rotationR.n_rows != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      } else if(arma::any(arma::vectorise(arma::abs(rotationR.i() - rotationR.t()) > 1.0e-12)) || std::abs(std::abs(arma::det(rotationR)) - 1.0) > 1.0e-12) {
-        throw std::logic_error("The rotation matrix must be orthonormal and its determinant (" + std::to_string(arma::det(rotationR)) + ") must be either 1 or -1.");
+      } else if(arma::any(arma::vectorise(arma::abs(rotationR.i() - rotationR.t()) > 1.0e-12 * std::max(1.0, std::abs(rotationR.max()))))) {
+        throw std::logic_error("The rotation matrix must be orthonormal.");
+      } else if(std::abs(std::abs(arma::det(rotationR)) - 1.0) > 1.0e-12) {
+        throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(rotationR)) + ") must be either 1 or -1.");
       }
 
       rotationR_ = rotationR;
@@ -68,8 +70,10 @@ namespace hop {
         throw std::logic_error("The rotation matrix (" + std::to_string(rotationQ.n_rows) + ", " + std::to_string(rotationQ.n_cols) + ") must be square.");
       } else if (rotationQ.n_rows != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(rotationQ.n_rows) + ", " + std::to_string(rotationQ.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      } else if(arma::any(arma::vectorise(arma::abs(rotationQ.i() - rotationQ.t()) > 1.0e-12)) || std::abs(std::abs(arma::det(rotationQ)) - 1.0) > 1.0e-12) {
-        throw std::logic_error("The rotation matrix must be orthonormal and its determinant (" + std::to_string(arma::det(rotationQ)) + ") must be either 1 or -1.");
+      } else if(arma::any(arma::vectorise(arma::abs(rotationQ.i() - rotationQ.t()) > 1.0e-12 * std::max(1.0, std::abs(rotationQ.max()))))) {
+        throw std::logic_error("The rotation matrix must be orthonormal.");
+      } else if(std::abs(std::abs(arma::det(rotationQ)) - 1.0) > 1.0e-12) {
+        throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(rotationQ)) + ") must be either 1 or -1.");
       }
 
       rotationQ_ = rotationQ;

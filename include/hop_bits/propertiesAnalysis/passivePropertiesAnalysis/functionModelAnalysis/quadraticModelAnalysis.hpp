@@ -13,8 +13,8 @@ namespace hop {
       QuadraticModelAnalysis(const QuadraticModelAnalysis&) = delete;
       QuadraticModelAnalysis& operator=(const QuadraticModelAnalysis&) = delete;
 
-      void setQuadraticModelResidualsThreshold(
-          const double& quadraticModelResidualsThreshold);
+      void setQuadraticModelMedianErrorThreshold(
+          const double& quadraticModelMedianErrorThreshold);
 
       arma::Col<double> getQuadraticModelEstimator() const noexcept;
 
@@ -24,23 +24,13 @@ namespace hop {
       arma::Col<double> quadraticModelEstimator_;
       bool isQuadratic_;
 
-      double quadraticModelResidualsThreshold_;
+      double quadraticModelMedianErrorThreshold_;
   };
-
-  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
-  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
-
-  // Nothing to see here, move along ...
-
-  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
-  //!
-  //! Only PUBLIC methods from here on
-  //! Note: Runtime checks are only performed for public methods.
 
   template <typename ParameterType, class DistanceFunction>
   QuadraticModelAnalysis<ParameterType, DistanceFunction>::QuadraticModelAnalysis() noexcept
     : isQuadratic_(false) {
-    setQuadraticModelResidualsThreshold(0.25);
+    setQuadraticModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType, class DistanceFunction>
@@ -49,22 +39,17 @@ namespace hop {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void QuadraticModelAnalysis<ParameterType, DistanceFunction>::setQuadraticModelResidualsThreshold(
-      const double& quadraticModelResidualsThreshold) {
-    if(quadraticModelResidualsThreshold < 0 || quadraticModelResidualsThreshold > 1) {
-      throw std::runtime_error("The quadratic model residuals threshold (" + std::to_string(quadraticModelResidualsThreshold) + ") must be within 0 and 1.");
+  void QuadraticModelAnalysis<ParameterType, DistanceFunction>::setQuadraticModelMedianErrorThreshold(
+      const double& quadraticModelMedianErrorThreshold) {
+    if(quadraticModelMedianErrorThreshold < 0 || quadraticModelMedianErrorThreshold > 1) {
+      throw std::runtime_error("The quadratic model MeanError threshold (" + std::to_string(quadraticModelMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
-    quadraticModelResidualsThreshold_ = quadraticModelResidualsThreshold;
+    quadraticModelMedianErrorThreshold_ = quadraticModelMedianErrorThreshold;
   }
 
   template <typename ParameterType, class DistanceFunction>
   bool QuadraticModelAnalysis<ParameterType, DistanceFunction>::isQuadratic() const noexcept {
     return isQuadratic_;
   }
-
-  //! ALL METHODS SHOULD BE EITHER PROTECTED OR PRIVATE FROM HERE ON
-  //! Note: Runtime checks are only performed for public methods.
-
-  // Nothing to see here, move along ...
 }

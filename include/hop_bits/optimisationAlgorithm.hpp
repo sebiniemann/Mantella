@@ -84,16 +84,6 @@ namespace hop {
       virtual void optimiseImplementation() = 0;
   };
 
-  //! Only FORWARD DECLARARTION of FULLY TEMPLATE SPECIALISATION from here on.
-  //! Note: Forward declaration is needed to avoid ordering errors within the source file.
-
-  // Nothing to see here, move along ...
-
-  //! Only PARTIAL TEMPLATE SPECIALISATION from here on.
-  //!
-  //! Only PUBLIC methods from here on
-  //! Note: Runtime checks are only performed for public methods.
-
   template <typename ParameterType>
   OptimisationAlgorithm<ParameterType>::OptimisationAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
@@ -151,9 +141,4 @@ namespace hop {
   bool OptimisationAlgorithm<ParameterType>::isTerminated() const noexcept {
     return (numberOfIterations_ >= maximalNumberOfIterations_);
   }
-
-  //! Only PROTECTED or PRIVATE methods from here on
-  //! Note: Runtime checks are only performed for public methods.
-
-  // Nothing to see here, move along ...
 }
