@@ -39,9 +39,10 @@ class TestHillClimbing : public hop::HillClimbing {
         const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
       : hop::HillClimbing(optimisationProblem),
         velocityIndex_(0){
+        
     }
 
-    arma::Col<double> getVelocity() override {
+    arma::Col<double> getVelocity() noexcept override {
       return velocities_.col(velocityIndex_++);
     }
 
@@ -69,11 +70,11 @@ class TestHillClimbingProblem : public hop::OptimisationProblem<double> {
       return parameterHistory_;
     }
 
-    void setObjectiveValues(arma::Col<double> objectiveValues){
+    void setObjectiveValues(arma::Col<double> objectiveValues) {
       objectiveValues_ = objectiveValues;
     }
 
-    void setSoftConstraintsValues(arma::Col<double> softConstraintsValues){
+    void setSoftConstraintsValues(arma::Col<double> softConstraintsValues) {
       softConstraintsValues_ = softConstraintsValues;
     }
 
@@ -86,13 +87,13 @@ class TestHillClimbingProblem : public hop::OptimisationProblem<double> {
     static std::vector<arma::Col<double>> parameterHistory_;
 
     double getSoftConstraintsValueImplementation(
-       const arma::Col<double>& parameter) const override {
+       const arma::Col<double>& parameter) const noexcept override {
 
       return softConstraintsValues_.at(softConstraintsValuesIndex_++);
     }
 
     double getObjectiveValueImplementation(
-       const arma::Col<double>& parameter) const override {
+       const arma::Col<double>& parameter) const noexcept override {
        parameterHistory_.push_back(parameter);
 
       return objectiveValues_.at(objectiveValuesIndex_++);
@@ -108,7 +109,6 @@ decltype(TestHillClimbingProblem::softConstraintsValuesIndex_) TestHillClimbingP
 decltype(TestHillClimbingProblem::objectiveValuesIndex_) TestHillClimbingProblem::objectiveValuesIndex_;
 
 TEST_CASE("Hill climbing", "") {
-
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
    upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.1].mat"); //the parametre is optional
@@ -126,7 +126,6 @@ TEST_CASE("Hill climbing", "") {
    std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
    testHillClimbingProblem->setUpperBounds(upperBounds);
    testHillClimbingProblem->setLowerBounds(lowerBounds);
-
    testHillClimbingProblem->setAcceptableObjectiveValue(-500.0);
    testHillClimbingProblem->setObjectiveValues(objectiveValues);
    testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
@@ -156,12 +155,9 @@ TEST_CASE("Hill climbing", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
-
-
 }
 
 TEST_CASE("Test Maximalstepsize", "") {
-
   // name for the expected data
   std::string expectedName = "1.1";
 
@@ -208,10 +204,9 @@ TEST_CASE("Test Maximalstepsize", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
-  }
+}
 
 TEST_CASE("Check initialParameter at each limit", "") {
-
    // name for the expected data
    std::string expectedName = "1.2";
 
@@ -258,10 +253,9 @@ TEST_CASE("Check initialParameter at each limit", "") {
    // Comparing of candidateParameters
    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
    compareResults(actualParameterHistory,expectedParameterHistory);
-  }
+}
 
 TEST_CASE("Check initialParameter at one limit", "") {
-
   // name for the expected data
   std::string expectedName = "1.3";
 
@@ -308,10 +302,9 @@ TEST_CASE("Check initialParameter at one limit", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
-  }
+}
 
 TEST_CASE("Check initialParameter in-range", "") {
-
   // name for the expected data
   std::string expectedName = "1.4";
 
@@ -358,10 +351,9 @@ TEST_CASE("Check initialParameter in-range", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
-  }
+}
 
 TEST_CASE("Check initialParameter out of range maximal limit", "") {
-
   // name for the expected data
   std::string expectedName = "1.5";
 
@@ -408,10 +400,9 @@ TEST_CASE("Check initialParameter out of range maximal limit", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
-  }
+}
 
 TEST_CASE("Check initialParameter out of range arbitrary values", "") {
-
   // name for the expected data
   std::string expectedName = "1.6";
 
@@ -458,7 +449,4 @@ TEST_CASE("Check initialParameter out of range arbitrary values", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
-  }
-
-
-
+}
