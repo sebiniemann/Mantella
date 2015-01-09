@@ -25,8 +25,8 @@ Note that a submitting a pull request providing the needed changes to introduced
 
 <a name="coding"></a> Coding Guidelines
 ---------------------------------------
-- Everything must be **thoroughly tested**.
-- All methods must be **documented**, regardless of the code visibility. And do not forget about inline comments for the complicated stuff.
+- Everything should be **thoroughly tested**.
+- All methods must be **documented**, regardless of the code visibility.
 - We usually follow the [Google Style Guides](https://code.google.com/p/google-styleguide/).
 
 <a name="commit"></a> Commit Guidelines
@@ -91,27 +91,3 @@ The signature should start with `Signed-off-by:` and include your real name (no 
 ```
 Signed-off-by: Random J Developer <random@developer.example.org>
 ```
-
-<a name="development"></a> Development Notes
---------------------------------------------
-We strive for an agile development process with monthly sprint meetings. New tasks are added any time via the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues) and assigned in the beginning of each sprint via [Waffle.io](https://waffle.io/sebastianniemann/onlineoptimisation). 
-
-We make use of three kinds of branches:
-- master
-- `<user story branch>`
-- `<hotfix branch>`
-
-### Master
-The main development branch, including the current state of the next release. Small changes may be pushed directly into this branch. The last task of each sprint is releasing the latests changes into `tag`.
-
-**Lifetime:** Infinite
-
-### User Story Branch
-Each sprint may add several, individual `<user story branches>`. After completion of all tasks, each `<user story branch>` is merged into the `master` branch and removed afterwards.
-
-**Lifetime:** Preferable one sprint
-
-### Hotfix Branch
-Based on the latests release in `tag` and removed after releasing the hotfix.
-
-**Lifetime:** Very short, a few days at most
