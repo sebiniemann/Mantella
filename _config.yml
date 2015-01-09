@@ -1,15 +1,15 @@
 # Site settings
-baseurl: http://SebastianNiemann.github.io/OnlineOptimisation
+baseurl: http://SebastianNiemann.github.io/Mantella
 
 # The title must match the project name
 title: Mantella 
 subtitle: >
-  Mantella is a highly competitive modern C++ framework for
+  Mantella is an efficiency-focused, modern C++ framework for
   analysing and solving optimisation problems.
-description: Mantella is a highly competitive modern C++ framework for analysing and solving optimisation problems on multi-cores and high performance clusters.
+description: Mantella is an efficiency-focused, modern C++ framework for analysing and solving optimisation problems on multi-cores and high performance clusters.
   
 author: Core Mantella team
-github-url: https://github.com/SebastianNiemann/OnlineOptimisation
+github-url: https://github.com/SebastianNiemann/Mantella
 
 navigation:
 # Linking to the index site is hard coded within the layout
