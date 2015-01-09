@@ -1,15 +1,15 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2012.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2012.hpp>
 
 // C++ Standard Library
 #include <algorithm>
 #include <cmath>
 #include <random>
 
-// HOP
-#include <hop_bits/helper/rng.hpp>
-#include <hop_bits/helper/random.hpp>
+// Mantella
+#include <mantella_bits/helper/rng.hpp>
+#include <mantella_bits/helper/random.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2012 {
     BlackBoxOptimisationBenchmark2012::BlackBoxOptimisationBenchmark2012(
         const unsigned int& numberOfDimensions) noexcept

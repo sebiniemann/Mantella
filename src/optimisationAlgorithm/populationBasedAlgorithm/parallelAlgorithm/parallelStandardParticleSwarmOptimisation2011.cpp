@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
 
 // C++ Standard Library
 #include <cmath>
@@ -9,11 +9,11 @@
 // MPI
 #include <mpi.h>
 
-// HOP
-#include <hop_bits/helper/random.hpp>
-#include <hop_bits/helper/rng.hpp>
+// Mantella
+#include <mantella_bits/helper/random.hpp>
+#include <mantella_bits/helper/rng.hpp>
 
-namespace hop {
+namespace mant {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept

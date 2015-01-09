@@ -1,13 +1,13 @@
-#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>
 
 // C++ Standard Library
 #include <limits>
 
-// HOP
-#include <hop_bits/helper/rng.hpp>
+// Mantella
+#include <mantella_bits/helper/rng.hpp>
 
 // TODO Add restarting
-namespace hop {
+namespace mant {
   HillClimbing::HillClimbing(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm(optimisationProblem) {

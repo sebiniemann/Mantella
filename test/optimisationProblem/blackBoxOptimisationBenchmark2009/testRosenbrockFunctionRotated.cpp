@@ -11,14 +11,14 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2009-RosenbrockFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2013::RosenbrockFunctionRotated rosenbrockFunctionRotated(numberOfDimensions);
+    mant::bbob2013::RosenbrockFunctionRotated rosenbrockFunctionRotated(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

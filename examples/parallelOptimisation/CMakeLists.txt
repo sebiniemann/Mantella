@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # -------------
 message(STATUS "NOTICE: Configuring parallel optimisation applications.")
 
-# Include Mantrella headers
+# Include Mantella headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
@@ -34,8 +34,8 @@ add_executable(standardParticleSwarmOptimisation2011ParameterStudy
   standardParticleSwarmOptimisation2011ParameterStudy.cpp
 )
 
-# Link against Mantrella
-target_link_libraries(standardParticleSwarmOptimisation2011ParameterStudy mantrella)
+# Link against Mantella
+target_link_libraries(standardParticleSwarmOptimisation2011ParameterStudy mantella)
 
 # Link against third party libraries
 target_link_libraries(standardParticleSwarmOptimisation2011ParameterStudy ${ARMADILLO_LIBRARIES}) # Armadillo C++

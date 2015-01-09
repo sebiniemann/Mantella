@@ -11,14 +11,14 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2015-RosenbrockFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2015::RosenbrockFunction rosenbrockFunction(numberOfDimensions);
+    mant::bbob2015::RosenbrockFunction rosenbrockFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

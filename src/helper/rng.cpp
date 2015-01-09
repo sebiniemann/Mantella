@@ -1,6 +1,6 @@
-#include <hop_bits/helper/rng.hpp>
+#include <mantella_bits/helper/rng.hpp>
 
-namespace hop {
+namespace mant {
   decltype(Rng::generator) Rng::generator;
   decltype(Rng::seed_) Rng::seed_;
 

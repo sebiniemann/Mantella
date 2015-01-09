@@ -1,11 +1,11 @@
-#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp>
+#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp>
 
 // C++ Standard Library
 #include <cstdlib>
 #include <algorithm>
 #include <iostream>
 
-namespace hop {
+namespace mant {
   void FitnessDistanceCorrelationAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();

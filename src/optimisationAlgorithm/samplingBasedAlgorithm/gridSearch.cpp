@@ -1,9 +1,9 @@
-#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
 
 // C++ Standard Library
 #include <vector>
 
-namespace hop {
+namespace mant {
   GridSearch::GridSearch(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem) {

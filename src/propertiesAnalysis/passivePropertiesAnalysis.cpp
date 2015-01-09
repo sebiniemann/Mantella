@@ -1,1 +1,1 @@
-#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
+#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>

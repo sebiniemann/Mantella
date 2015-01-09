@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/rastriginFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/rastriginFunction.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2010 {
     double RastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -19,4 +19,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2010::RastriginFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2010::RastriginFunction)

@@ -1,6 +1,6 @@
-#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp>
 
-namespace hop {
+namespace mant {
   RandomSearch::RandomSearch(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm(optimisationProblem) {

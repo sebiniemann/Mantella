@@ -1,1 +1,1 @@
-#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>

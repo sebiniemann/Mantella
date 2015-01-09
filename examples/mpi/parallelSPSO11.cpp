@@ -5,7 +5,8 @@
 
 #include <mpi.h>
 
-#include <hop>
+// Mantella
+#include <mantella>
 
 int main(int argc, char* argv[]) {
   try {
@@ -14,7 +15,7 @@ int main(int argc, char* argv[]) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     arma::arma_rng::set_seed_random();
-    hop::Rng::setSeed(arma::randi<arma::Col<unsigned int>>(rank + 1).at(rank));
+    mant::Rng::setSeed(arma::randi<arma::Col<unsigned int>>(rank + 1).at(rank));
 
     double localAttraction = 2.0;
     double globalAttraction = 2.0;
@@ -30,9 +31,9 @@ int main(int argc, char* argv[]) {
     arma::Col<double> duration(numberOfIterations);
     arma::Col<unsigned int> finished(numberOfIterations);
     for (unsigned int n = 0; n < numberOfIterations; ++n) {
-      std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
+      std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
 
-      hop::ParallelStandardParticleSwarmOptimisation2011 parallelOptimisationAlgorithm(optimisationProblem, localPopulationSize);
+      mant::ParallelStandardParticleSwarmOptimisation2011 parallelOptimisationAlgorithm(optimisationProblem, localPopulationSize);
       parallelOptimisationAlgorithm.setLocalAttraction(localAttraction);
       parallelOptimisationAlgorithm.setGlobalAttraction(globalAttraction);
       parallelOptimisationAlgorithm.setAcceleration(acceleration);

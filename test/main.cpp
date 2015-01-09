@@ -10,8 +10,8 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 boost::filesystem::path testDirectory;
 
@@ -27,7 +27,7 @@ int main(const int argc, const char* argv[]) {
       throw std::invalid_argument("The speficied test data directory (" + testDirectory.string() + ") does not exists.");
     }
 
-    hop::Rng::setSeed(1234567890);
+    mant::Rng::setSeed(1234567890);
 
     return Catch::Session().run();
   } catch(const std::exception& exception) {

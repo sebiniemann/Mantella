@@ -1,5 +1,5 @@
 #include <armadillo>
-#include <hop>
+#include <mantella>
 
 int main(int argc, char** argv) {
   //  if (argc != 2) {
@@ -10,12 +10,12 @@ int main(int argc, char** argv) {
     unsigned int numberOfDimensions = 10; //std::stoi(argv[1]);
     unsigned int lambda = 4 + std::floor(3 * std::log(numberOfDimensions));
     
-    std::shared_ptr<hop::bbob2013::BlackBoxOptimisationBenchmark2013>  optProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
+    std::shared_ptr<mant::bbob2013::BlackBoxOptimisationBenchmark2013>  optProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
     optProblem->setTranslation(arma::zeros<arma::Col<double>>(optProblem->getNumberOfDimensions()));
 
-    //std::shared_ptr<hop::OptimisationProblem> optProblem(new hop::bbob2013::SphereFunction(numberOfDimensions));
+    //std::shared_ptr<mant::OptimisationProblem> optProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
     
-    hop::CovarianceMatrixAdaptationEvolutionStrategy optAlgo(optProblem, lambda);
+    mant::CovarianceMatrixAdaptationEvolutionStrategy optAlgo(optProblem, lambda);
 
     optAlgo.optimise();
 

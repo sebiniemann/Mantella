@@ -1,11 +1,11 @@
-#include <hop_bits/optimisationProblem.hpp>
+#include <mantella_bits/optimisationProblem.hpp>
 
 // C++ Standard Library
 #include <string>
 #include <limits>
 #include <stdexcept>
 
-namespace hop {
+namespace mant {
   template <>
   OptimisationProblem<double>::OptimisationProblem(
       const unsigned int& numberOfDimensions) noexcept

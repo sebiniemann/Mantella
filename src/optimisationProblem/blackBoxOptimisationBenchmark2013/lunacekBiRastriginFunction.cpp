@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/lunacekBiRastriginFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/lunacekBiRastriginFunction.hpp>
 
 // C++ Standard Library
 #include <algorithm>
@@ -7,7 +7,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2013 {
     double LunacekBiRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -23,4 +23,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2013::LunacekBiRastriginFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2013::LunacekBiRastriginFunction)

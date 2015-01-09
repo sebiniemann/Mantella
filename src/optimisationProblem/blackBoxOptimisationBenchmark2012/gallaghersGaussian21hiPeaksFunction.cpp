@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2012/gallaghersGaussian21hiPeaksFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2012/gallaghersGaussian21hiPeaksFunction.hpp>
 
 // C++ Standard Library
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2012 {
     GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction(
         const unsigned int& numberOfDimensions) noexcept
@@ -38,4 +38,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2012::GallaghersGaussian21hiPeaksFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2012::GallaghersGaussian21hiPeaksFunction)

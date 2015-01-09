@@ -11,14 +11,14 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2015-CompositeGriewankRosenbrockFunctionF8F2", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2015::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
+    mant::bbob2015::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

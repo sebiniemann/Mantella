@@ -1,9 +1,9 @@
-#include <hop_bits/helper/quasiRandomSequence.hpp>
+#include <mantella_bits/helper/quasiRandomSequence.hpp>
 
 // C++ Standard Library
 #include <cstdlib>
 
-namespace hop {
+namespace mant {
   arma::Mat<double> getHaltonSequence(
       const arma::Col<unsigned int>& seed,
       const arma::Col<unsigned int>& base,

@@ -1,10 +1,10 @@
-#include <hop_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp>
+#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp>
 
 // C++ Standard Library
 #include <cstdlib>
 #include <algorithm>
 
-namespace hop {
+namespace mant {
   void DirectLipschitzContinuityAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     lipschitzConstant_ = 0.0;

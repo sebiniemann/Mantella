@@ -1,10 +1,10 @@
-#include <hop_bits/helper/geometry.hpp>
+#include <mantella_bits/helper/geometry.hpp>
 
 // C++ Standard Library
 #include <stdexcept>
 #include <cmath>
 
-namespace hop {
+namespace mant {
   arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
       const double& angle) noexcept {
     double sinAngle = std::sin(angle);

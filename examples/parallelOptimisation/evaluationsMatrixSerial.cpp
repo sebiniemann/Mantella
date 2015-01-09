@@ -11,7 +11,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <hop>
+#include <mantella>
 
 int main (const int argc, const char* argv[]) {
   if (argc < 4) {
@@ -24,34 +24,34 @@ int main (const int argc, const char* argv[]) {
   unsigned int numberOfDimensions = std::stoi(argv[2]);
   std::array<unsigned int, 9> population({10, 15, 20, 25, 30, 35 ,40, 45, 50});
 
-  std::array<std::shared_ptr<hop::OptimisationProblem>, 24> optimisationProblems({
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SphereFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::EllipsoidalFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RastriginFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::BuecheRastriginFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::LinearSlope(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::AttractiveSectorFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::StepEllipsoidalFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RosenbrockFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RosenbrockFunctionRotated(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::EllipsoidalFunctionRotated(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::DiscusFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::BentCigarFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SharpRidgeFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::DifferentPowersFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RastriginFunctionRotated(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::WeierstrassFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SchaffersF7Function(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SchaffersF7FunctionIllConditioned(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SchwefelFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::GallaghersGaussian101mePeaksFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::GallaghersGaussian21hiPeaksFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::KatsuuraFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::LunacekBiRastriginFunction(numberOfDimensions)),
+  std::array<std::shared_ptr<mant::OptimisationProblem>, 24> optimisationProblems({
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SphereFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::EllipsoidalFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RastriginFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::BuecheRastriginFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::LinearSlope(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::AttractiveSectorFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::StepEllipsoidalFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RosenbrockFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RosenbrockFunctionRotated(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::EllipsoidalFunctionRotated(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::DiscusFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::BentCigarFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SharpRidgeFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::DifferentPowersFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RastriginFunctionRotated(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::WeierstrassFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SchaffersF7Function(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SchaffersF7FunctionIllConditioned(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SchwefelFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::GallaghersGaussian101mePeaksFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::GallaghersGaussian21hiPeaksFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::KatsuuraFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::LunacekBiRastriginFunction(numberOfDimensions)),
   });
 
-  std::shared_ptr<hop::OptimisationProblem> optimisationProblem = optimisationProblems.at(optimisationProblemIndex);
+  std::shared_ptr<mant::OptimisationProblem> optimisationProblem = optimisationProblems.at(optimisationProblemIndex);
   arma::Mat<double> matrixMean(1, population.size());
   arma::Mat<double> matrixStddev(1, population.size());
   arma::Mat<double> matrixMin(1, population.size());
@@ -63,14 +63,14 @@ int main (const int argc, const char* argv[]) {
   std::size_t colNumber = 0;
     for(auto populationSize : population) {
 
-      boost::filesystem::path filepath = boost::filesystem::path("/homes/shuka/Desktop/OnlineOptimisation/bin/Final/Evaluation/serialNumberOfIterations_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions) + "_pop" + std::to_string(populationSize) + ".mat");
+      boost::filesystem::path filepath = boost::filesystem::path("/homes/shuka/Desktop/OnlineOptimisation/bin/Final/Evaluation/serialNumberOfIterations_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions) + "_pop" + std::to_string(populationSize) + ".mat");
 
       if(!boost::filesystem::exists(filepath)) {
             // TODO Add exception
       }
 
       arma::Mat<double> temp;
-      temp.load("/homes/shuka/Desktop/OnlineOptimisation/bin/Final/Evaluation/serialNumberOfIterations_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions) + "_pop" + std::to_string(populationSize) + ".mat");
+      temp.load("/homes/shuka/Desktop/OnlineOptimisation/bin/Final/Evaluation/serialNumberOfIterations_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions) + "_pop" + std::to_string(populationSize) + ".mat");
       if(!temp.is_empty()){
         matrixMean.at(0, colNumber) = arma::mean(temp.col(0));
         matrixStddev.at(0, colNumber) = arma::stddev(temp.col(0));
@@ -91,11 +91,11 @@ int main (const int argc, const char* argv[]) {
     }
 
 
-  matrixMean.save("./SerialEvaluations_Mean_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
-  matrixStddev.save("./SerialEvaluations_Stddev_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
-  matrixMin.save("./SerialEvaluations_Min_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
-  matrixMax.save("./SerialEvaluations_Max_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
-  matrixMed.save("./SerialEvaluations_Median_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
-  matrixSucc.save("./SerialEvaluations_Success_" + hop::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
+  matrixMean.save("./SerialEvaluations_Mean_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
+  matrixStddev.save("./SerialEvaluations_Stddev_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
+  matrixMin.save("./SerialEvaluations_Min_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
+  matrixMax.save("./SerialEvaluations_Max_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
+  matrixMed.save("./SerialEvaluations_Median_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
+  matrixSucc.save("./SerialEvaluations_Success_" + mant::to_string(optimisationProblem)  + "_dim" + std::to_string(numberOfDimensions), arma::raw_ascii);
   return EXIT_SUCCESS;
 }

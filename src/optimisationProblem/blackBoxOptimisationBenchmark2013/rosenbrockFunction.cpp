@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/rosenbrockFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/rosenbrockFunction.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2013 {
     RosenbrockFunction::RosenbrockFunction(
         const unsigned int& numberOfDimensions) noexcept
@@ -34,4 +34,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2013::RosenbrockFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2013::RosenbrockFunction)

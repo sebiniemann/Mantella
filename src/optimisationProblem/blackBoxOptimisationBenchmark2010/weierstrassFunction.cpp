@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/weierstrassFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/weierstrassFunction.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2010 {
     WeierstrassFunction::WeierstrassFunction(
         const unsigned int& numberOfDimensions) noexcept
@@ -35,4 +35,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2010::WeierstrassFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2010::WeierstrassFunction)

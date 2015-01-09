@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
 
-// HOP
-#include <hop_bits/helper/random.hpp>
-#include <hop_bits/helper/rng.hpp>
+// Mantella
+#include <mantella_bits/helper/random.hpp>
+#include <mantella_bits/helper/rng.hpp>
 
-namespace hop {
+namespace mant {
   RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept

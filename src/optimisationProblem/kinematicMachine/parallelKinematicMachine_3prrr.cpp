@@ -1,9 +1,9 @@
-#include <hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prrr.hpp>
+#include <mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prrr.hpp>
 
-// HOP
-#include <hop_bits/helper/geometry.hpp>
+// Mantella
+#include <mantella_bits/helper/geometry.hpp>
 
-namespace hop {
+namespace mant {
   namespace robotic {
     ParallelKinematicMachine_3PRRR::ParallelKinematicMachine_3PRRR() noexcept
       : ParallelKinematicMachine_3PRRR(

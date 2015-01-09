@@ -1,9 +1,9 @@
-#include <hop_bits/helper/combinatorics.hpp>
+#include <mantella_bits/helper/combinatorics.hpp>
 
 // C++ Standard Library
 #include <cstdlib>
 
-namespace hop {
+namespace mant {
   std::vector<arma::Col<unsigned int>> getCombinationsWithoutRepetition(const unsigned int& numberOfElements, const unsigned int& combinationSize) {
     std::vector<arma::Col<unsigned int>> combinations;
 

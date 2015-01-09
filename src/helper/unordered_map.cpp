@@ -1,9 +1,9 @@
-#include <hop_bits/helper/unordered_map.hpp>
+#include <mantella_bits/helper/unordered_map.hpp>
 
 // C++ Standard Library
 #include <functional>
 
-namespace hop {
+namespace mant {
   std::size_t Hasher::operator() (
     const arma::Col<double>& key) const noexcept {
     // Start with the hash of the first value ...

@@ -1,18 +1,20 @@
+// C++ Standard Library
 #include <cstdlib>
 #include <memory>
 #include <iostream>
 #include <limits>
 
-#include <hop>
+// Mantella
+#include <mantella>
 
 int main(int argc, char* argv[]) {
   try {
-    hop::Rng::setRandomSeed();
+    mant::Rng::setRandomSeed();
 
-    std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(2));
+    std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2013::SphereFunction(2));
     optimisationProblem->setAcceptableObjectiveValue(-std::numeric_limits<double>::infinity());
 
-    hop::MultiResolutionGridSearch multiResolutionGridSearch(optimisationProblem);
+    mant::MultiResolutionGridSearch multiResolutionGridSearch(optimisationProblem);
     multiResolutionGridSearch.setMaximalNumberOfIterations(100000);
     multiResolutionGridSearch.optimise();
 

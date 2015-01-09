@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/differentPowersFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2013/differentPowersFunction.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2013 {
     double DifferentPowersFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -18,4 +18,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2013::DifferentPowersFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2013::DifferentPowersFunction)

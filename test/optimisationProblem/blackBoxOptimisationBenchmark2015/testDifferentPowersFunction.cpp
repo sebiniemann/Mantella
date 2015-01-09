@@ -11,14 +11,14 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2015-DifferentPowersFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2015::DifferentPowersFunction differentPowersFunction(numberOfDimensions);
+    mant::bbob2015::DifferentPowersFunction differentPowersFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

@@ -1,4 +1,4 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/sphereFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/sphereFunction.hpp>
 
 // C++ Standard Library
 #include <cmath>
@@ -7,7 +7,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2010 {
     double SphereFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -20,4 +20,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2010::SphereFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2010::SphereFunction)

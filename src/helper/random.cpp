@@ -1,13 +1,13 @@
-#include <hop_bits/helper/random.hpp>
+#include <mantella_bits/helper/random.hpp>
 
 // C++ Standard Library
 #include <cstdlib>
 #include <algorithm>
 
-// HOP
-#include <hop_bits/helper/rng.hpp>
+// Mantella
+#include <mantella_bits/helper/rng.hpp>
 
-namespace hop {
+namespace mant {
   arma::Mat<double> getRandomRotationMatrix(
       const unsigned int& numberOfDimensions) noexcept {
     arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);

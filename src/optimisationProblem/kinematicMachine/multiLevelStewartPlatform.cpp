@@ -1,9 +1,9 @@
-#include <hop_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp>
+#include <mantella_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp>
 
-// HOP
-#include <hop_bits/helper/geometry.hpp>
+// Mantella
+#include <mantella_bits/helper/geometry.hpp>
 
-namespace hop {
+namespace mant {
   namespace robotic {
     MultiLevelStewartPlatform::MultiLevelStewartPlatform(
         const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) noexcept

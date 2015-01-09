@@ -1,14 +1,14 @@
-#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp>
 
 // C++ Standard Library
 #include <vector>
 #include <map>
 #include <iostream>
 
-// HOP
-#include <hop_bits/helper/unordered_map.hpp>
+// Mantella
+#include <mantella_bits/helper/unordered_map.hpp>
 
-namespace hop {
+namespace mant {
   MultiResolutionGridSearch::MultiResolutionGridSearch(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm<double>(optimisationProblem) {

@@ -1,1 +1,1 @@
-#include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp>
+#include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp>

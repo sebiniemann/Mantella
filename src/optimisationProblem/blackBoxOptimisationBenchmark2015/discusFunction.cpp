@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/discusFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/discusFunction.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2015 {
     double DiscusFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -18,4 +18,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2015::DiscusFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2015::DiscusFunction)

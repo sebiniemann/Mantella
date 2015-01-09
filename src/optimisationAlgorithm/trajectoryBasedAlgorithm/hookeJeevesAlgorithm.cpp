@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp>
 
-// HOP
-#include <hop_bits/helper/random.hpp>
+// Mantella
+#include <mantella_bits/helper/random.hpp>
 
 // TODO Add restarting
-namespace hop {
+namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm<double>(optimisationProblem) {

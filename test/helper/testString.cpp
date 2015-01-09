@@ -1,13 +1,13 @@
 // Catch
 #include <catch.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 TEST_CASE("String ends with", "") {
-  CHECK(hop::endsWith("input.serialised", ".serialised") == true);
-  CHECK(hop::endsWith("input.serialised", "serialised") == true);
-  CHECK(hop::endsWith("input.serialised", ".serialise") == false);
-  CHECK(hop::endsWith("input.serialised", ".mat") == false);
+  CHECK(mant::endsWith("input.serialised", ".serialised") == true);
+  CHECK(mant::endsWith("input.serialised", "serialised") == true);
+  CHECK(mant::endsWith("input.serialised", ".serialise") == false);
+  CHECK(mant::endsWith("input.serialised", ".mat") == false);
 }
 

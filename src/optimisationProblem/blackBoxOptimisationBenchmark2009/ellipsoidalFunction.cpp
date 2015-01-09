@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2009/ellipsoidalFunction.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009/ellipsoidalFunction.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2009 {
     double EllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -17,4 +17,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2009::EllipsoidalFunction)
+CEREAL_REGISTER_TYPE(mant::bbob2009::EllipsoidalFunction)

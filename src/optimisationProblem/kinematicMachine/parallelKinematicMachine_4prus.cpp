@@ -1,9 +1,9 @@
-#include <hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_4prus.hpp>
+#include <mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_4prus.hpp>
 
-// HOP
-#include <hop_bits/helper/geometry.hpp>
+// Mantella
+#include <mantella_bits/helper/geometry.hpp>
 
-namespace hop {
+namespace mant {
   namespace robotic {
     ParallelKinematicMachine_4PRUS::ParallelKinematicMachine_4PRUS() noexcept
       : ParallelKinematicMachine_4PRUS(

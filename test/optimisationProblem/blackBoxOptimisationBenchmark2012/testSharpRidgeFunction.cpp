@@ -11,14 +11,14 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-// HOP
-#include <hop>
+// Mantella
+#include <mantella>
 
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2012-SharpRidgeFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2013::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
+    mant::bbob2013::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # -------------
 message(STATUS "NOTICE: Configuring experiemental MPI applications.")
 
-# Include Mantrella headers
+# Include Mantella headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
@@ -30,8 +30,8 @@ add_executable(parallelSPSO11
   parallelSPSO11.cpp
 )
 
-# Link against Mantrella
-target_link_libraries(parallelSPSO11 mantrella)
+# Link against Mantella
+target_link_libraries(parallelSPSO11 mantella)
 # target_link_libraries(parallelSPSO11 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
 
 # Link against third party libraries

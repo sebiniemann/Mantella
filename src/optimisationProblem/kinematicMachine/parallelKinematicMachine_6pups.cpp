@@ -1,9 +1,9 @@
-#include <hop_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
+#include <mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
 
-// HOP
-#include <hop_bits/helper/geometry.hpp>
+// Mantella
+#include <mantella_bits/helper/geometry.hpp>
 
-namespace hop {
+namespace mant {
   namespace robotic {
     ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS() noexcept
       : ParallelKinematicMachine_6PUPS(

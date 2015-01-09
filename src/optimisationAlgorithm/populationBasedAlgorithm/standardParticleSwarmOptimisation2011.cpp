@@ -1,15 +1,15 @@
-#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 
 // C++ Standard Library
 #include <cmath>
 #include <random>
 
-// HOP
-#include <hop_bits/helper/random.hpp>
-#include <hop_bits/helper/rng.hpp>
+// Mantella
+#include <mantella_bits/helper/random.hpp>
+#include <mantella_bits/helper/rng.hpp>
 
 // TODO Update
-namespace hop {
+namespace mant {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept

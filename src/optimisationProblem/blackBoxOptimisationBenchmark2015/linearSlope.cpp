@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/linearSlope.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/linearSlope.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2015 {
     LinearSlope::LinearSlope(
         const unsigned int& numberOfDimensions) noexcept
@@ -39,4 +39,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2015::LinearSlope)
+CEREAL_REGISTER_TYPE(mant::bbob2015::LinearSlope)

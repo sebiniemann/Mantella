@@ -1,6 +1,6 @@
-#include <hop_bits/optimisationProblem/nkModel.hpp>
+#include <mantella_bits/optimisationProblem/nkModel.hpp>
 
-namespace hop {
+namespace mant {
   NKModel::NKModel(
       const unsigned int& numberOfNeighbours,
       const unsigned int& numberOfDimensions) noexcept

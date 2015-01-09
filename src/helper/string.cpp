@@ -1,6 +1,6 @@
-#include <hop_bits/helper/string.hpp>
+#include <mantella_bits/helper/string.hpp>
 
-namespace hop {
+namespace mant {
   std::string to_string(
       const Printable& printable) noexcept {
     return printable.to_string();

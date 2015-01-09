@@ -1,4 +1,4 @@
-#include <hop_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp>
+#include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp>
 
 // C++ Standard Library
 #include <unordered_set>
@@ -7,11 +7,11 @@
 // Quick
 #include <iostream>
 
-// HOP
-#include <hop_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
-#include <hop_bits/helper/combinatorics.hpp>
+// Mantella
+#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
+#include <mantella_bits/helper/combinatorics.hpp>
 
-namespace hop {
+namespace mant {
   void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates;

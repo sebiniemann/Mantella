@@ -1,10 +1,10 @@
-#include <hop_bits/optimisationProblem/blackBoxOptimisationBenchmark2012/schaffersF7FunctionIllConditioned.hpp>
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2012/schaffersF7FunctionIllConditioned.hpp>
 
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
 
-namespace hop {
+namespace mant {
   namespace bbob2012 {
     double SchaffersF7FunctionIllConditioned::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
@@ -20,4 +20,4 @@ namespace hop {
   }
 }
 
-CEREAL_REGISTER_TYPE(hop::bbob2012::SchaffersF7FunctionIllConditioned)
+CEREAL_REGISTER_TYPE(mant::bbob2012::SchaffersF7FunctionIllConditioned)
