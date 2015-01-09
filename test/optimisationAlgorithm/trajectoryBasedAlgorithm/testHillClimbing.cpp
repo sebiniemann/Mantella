@@ -15,23 +15,12 @@
 // HOP
 #include <hop>
 
+// Helper
+#include "trajectoryBasedAlgorithmHelper.cpp"
+
 extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hillClimbing/";
 
-void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<double> expected){
-    for(std::size_t n = 0; n < expected.n_cols; ++n) {
-      arma::Col<double> expectedParameter = expected.col(n);
-      arma::Col<double> actualParameter = actualHistory.at(n);
-
-      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
-        if(std::isfinite(expectedParameter.at(k))) {
-          CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
-        } else {
-          CHECK(actualParameter.at(k) == expectedParameter.at(k));
-        }
-      }
-    }
-}
 
 class TestHillClimbing : public hop::HillClimbing {
   public:
@@ -108,6 +97,8 @@ decltype(TestHillClimbingProblem::parameterHistory_) TestHillClimbingProblem::pa
 decltype(TestHillClimbingProblem::softConstraintsValuesIndex_) TestHillClimbingProblem::softConstraintsValuesIndex_;
 decltype(TestHillClimbingProblem::objectiveValuesIndex_) TestHillClimbingProblem::objectiveValuesIndex_;
 
+
+
 TEST_CASE("Hill climbing", "") {
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
@@ -154,10 +145,10 @@ TEST_CASE("Hill climbing", "") {
   testHillClimbing.optimise();
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
-TEST_CASE("Test Maximalstepsize", "") {
+TEST_CASE("HillClimbing Test Maximalstepsize", "") {
   // name for the expected data
   std::string expectedName = "1.1";
 
@@ -203,10 +194,10 @@ TEST_CASE("Test Maximalstepsize", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
-TEST_CASE("Check initialParameter at each limit", "") {
+TEST_CASE("HillClimbing Check initialParameter at each limit", "") {
    // name for the expected data
    std::string expectedName = "1.2";
 
@@ -252,10 +243,10 @@ TEST_CASE("Check initialParameter at each limit", "") {
 
    // Comparing of candidateParameters
    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-   compareResults(actualParameterHistory,expectedParameterHistory);
+   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
-TEST_CASE("Check initialParameter at one limit", "") {
+TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
   // name for the expected data
   std::string expectedName = "1.3";
 
@@ -301,10 +292,10 @@ TEST_CASE("Check initialParameter at one limit", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
-TEST_CASE("Check initialParameter in-range", "") {
+TEST_CASE("HillClimbing Check initialParameter in-range", "") {
   // name for the expected data
   std::string expectedName = "1.4";
 
@@ -350,10 +341,10 @@ TEST_CASE("Check initialParameter in-range", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
-TEST_CASE("Check initialParameter out of range maximal limit", "") {
+TEST_CASE("HillClimbing Check initialParameter out of range maximal limit", "") {
   // name for the expected data
   std::string expectedName = "1.5";
 
@@ -399,10 +390,10 @@ TEST_CASE("Check initialParameter out of range maximal limit", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
-TEST_CASE("Check initialParameter out of range arbitrary values", "") {
+TEST_CASE("HillClimbing Check initialParameter out of range arbitrary values", "") {
   // name for the expected data
   std::string expectedName = "1.6";
 
@@ -448,5 +439,5 @@ TEST_CASE("Check initialParameter out of range arbitrary values", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
