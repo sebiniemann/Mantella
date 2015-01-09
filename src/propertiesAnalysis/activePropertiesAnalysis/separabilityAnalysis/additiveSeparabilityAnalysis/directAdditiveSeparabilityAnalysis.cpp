@@ -100,7 +100,7 @@ namespace mant {
 
           const auto& cachePosition = pairedDimensions.find(pairedDimension);
           if (cachePosition == pairedDimensions.end()) {
-            pairedDimensions.insert({pairedDimensions, 1});
+            pairedDimensions.insert({pairedDimension, 1});
           } else {
             ++cachePosition->second;
           }
