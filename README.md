@@ -1,4 +1,4 @@
-![Mantella](http://sebastianniemann.github.io/Mantella/images/Mantella.png)
+![Mantella](http://sebastianniemann.github.io/Mantella/assets/image/logo.png)
 
 Mantella 0.9.0
 ====================================
