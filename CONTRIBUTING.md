@@ -1,5 +1,5 @@
-Contributing to OnlineOptimisation
-==================================
+Contributing to Mantella
+========================
 - [Question or Problem?](#question)
 - [Issues and Bugs](#issue)
 - [Feature Requests](#feature)
@@ -9,17 +9,17 @@ Contributing to OnlineOptimisation
 
 <a name="question"></a> Got a Problem or Question?
 --------------------------------------------------
-If you have a question about how to use the OnlineOptimisation framework, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/onlineoptimisation).
+If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella).
 
 <a name="issue"></a> Found an Issue or Bug?
 -------------------------------------------
-If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues).
+If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues).
 
 You are welcomed to submit a pull request with your fix afterwards, if possible. **Please see our coding and commit guidelines below.**
 
 <a name="feature"></a> Requesting a Feature?
 --------------------------------------------
-If you are missing some features within the OnlineOptimisation framework feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues) labelled `feature request`.
+If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues) labelled `feature request`.
 
 Note that a submitting a pull request providing the needed changes to introduced your requested feature usually speeds up the process. **Please see our coding and commit guidelines below.**
 
