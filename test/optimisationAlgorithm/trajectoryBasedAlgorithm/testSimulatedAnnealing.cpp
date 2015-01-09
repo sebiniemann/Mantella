@@ -15,9 +15,13 @@
 // HOP
 #include <hop>
 
+// Helper
+#include "trajectoryBasedAlgorithmHelper.cpp"
+
 extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/simulatedAnnealing/";
 
+class simmulatedAnnealing{
 void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<double> expected){
     for(std::size_t n = 0; n < expected.n_cols; ++n) {
       arma::Col<double> expectedParameter = expected.col(n);
@@ -32,6 +36,7 @@ void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<doubl
       }
     }
 }
+};
 
 class TestSimulatedAnnealing : public hop::SimulatedAnnealing {
   public:
@@ -42,11 +47,11 @@ class TestSimulatedAnnealing : public hop::SimulatedAnnealing {
         statesIndex_(0){
     }
 
-    arma::Col<double> getVelocity() override {
+    arma::Col<double> getVelocity() noexcept override {
       return velocities_.col(velocityIndex_++);
     }
 
-    bool isAcceptableState() override {
+    bool isAcceptableState(const double& candidateObjectiveValue) noexcept {
       if(states_.at(statesIndex_++)==1){
         return true;
       }
@@ -100,13 +105,13 @@ class TestSimulatedAnnealingProblem : public hop::OptimisationProblem<double> {
     static std::vector<arma::Col<double>> parameterHistory_;
 
     double getSoftConstraintsValueImplementation(
-       const arma::Col<double>& parameter) const override {
+       const arma::Col<double>& parameter) const noexcept override {
 
       return softConstraintsValues_.at(softConstraintsValuesIndex_++);
     }
 
     double getObjectiveValueImplementation(
-       const arma::Col<double>& parameter) const override {
+       const arma::Col<double>& parameter) const noexcept override {
        parameterHistory_.push_back(parameter);
 
       return objectiveValues_.at(objectiveValuesIndex_++);
@@ -173,12 +178,12 @@ TEST_CASE("Simulated annealing", "") {
   testSimulatedAnnealing.optimise();
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 
 
 }
 
-TEST_CASE("test state", "") {
+TEST_CASE("SimulatedAnnealing Test state", "") {
 
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
@@ -230,13 +235,12 @@ TEST_CASE("test state", "") {
   testSimulatedAnnealing.optimise();
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 
 
 }
 
-
-TEST_CASE("Test Maximalstepsize", "") {
+TEST_CASE("SimulatedAnnealing Test Maximalstepsize", "") {
 
   // name for the expected data
   std::string expectedName = "1.1";
@@ -287,10 +291,10 @@ TEST_CASE("Test Maximalstepsize", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
   }
 
-TEST_CASE("Check initialParameter at each limit", "") {
+TEST_CASE("SimulatedAnnealing Check initialParameter at each limit", "") {
 
    // name for the expected data
    std::string expectedName = "1.2";
@@ -341,10 +345,10 @@ TEST_CASE("Check initialParameter at each limit", "") {
 
    // Comparing of candidateParameters
    std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-   compareResults(actualParameterHistory,expectedParameterHistory);
+   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
   }
 
-TEST_CASE("Check initialParameter at one limit", "") {
+TEST_CASE("SimulatedAnnealing Check initialParameter at one limit", "") {
 
   // name for the expected data
   std::string expectedName = "1.3";
@@ -395,10 +399,10 @@ TEST_CASE("Check initialParameter at one limit", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
   }
 
-TEST_CASE("Check initialParameter in-range", "") {
+TEST_CASE("SimulatedAnnealing Check initialParameter in-range", "") {
 
   // name for the expected data
   std::string expectedName = "1.4";
@@ -449,10 +453,10 @@ TEST_CASE("Check initialParameter in-range", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
   }
 
-TEST_CASE("Check initialParameter out of range maximal limit", "") {
+TEST_CASE("SimulatedAnnealing Check initialParameter out of range maximal limit", "") {
 
   // name for the expected data
   std::string expectedName = "1.5";
@@ -503,10 +507,10 @@ TEST_CASE("Check initialParameter out of range maximal limit", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
   }
 
-TEST_CASE("Check initialParameter out of range arbitrary values", "") {
+TEST_CASE("SimulatedAnnealing Check initialParameter out of range arbitrary values", "") {
 
   // name for the expected data
   std::string expectedName = "1.6";
@@ -557,8 +561,7 @@ TEST_CASE("Check initialParameter out of range arbitrary values", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testSimulatedAnnealingProblem->getParameterHistory();
-  compareResults(actualParameterHistory,expectedParameterHistory);
+  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
   }
-
 
 
