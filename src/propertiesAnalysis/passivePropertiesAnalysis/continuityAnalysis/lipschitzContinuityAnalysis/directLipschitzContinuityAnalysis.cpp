@@ -9,7 +9,7 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     lipschitzConstant_ = 0.0;
 
-    const std::unordered_map<arma::Col<double>, double, Hasher, KeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+    const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<double>& parameter = n->first;

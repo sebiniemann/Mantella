@@ -8,32 +8,47 @@
 
 namespace mant {
   // Calculates a hash value for custom types.
-  class Hasher {
+  template <typename ParameterType>
+  class Hash {
     public:
-      explicit Hasher() = default;
+      explicit Hash() = default;
 
-      explicit Hasher(const Hasher&) = default;
+      Hash(const Hash&) = default;
 
-      Hasher& operator=(const Hasher&) = delete;
+      Hash& operator=(const Hash&) = delete;
 
-      // Returns a hash value for column vectors.
-      // Note: This is adapted from the Boost library (boost::hash_combine).
       std::size_t operator() (
-          const arma::Col<double>& key) const noexcept;
-  };
+          const ParameterType& key) const noexcept;
+    };
 
   // Checks whether two keys of a custom type are equal.
-  class KeyEqual {
+  template <typename ParameterType>
+  class IsKeyEqual {
     public:
-      explicit KeyEqual() = default;
+      explicit IsKeyEqual() = default;
 
-      KeyEqual(const KeyEqual&) = default;
+      IsKeyEqual(const IsKeyEqual&) = default;
 
-      KeyEqual& operator=(const KeyEqual&) = delete;
+      IsKeyEqual& operator=(const IsKeyEqual&) = delete;
 
-      // Returns true if all values of both column vectors are equal.
       bool operator() (
-          const arma::Col<double>& firstKey,
-          const arma::Col<double>& secondKey) const noexcept;
+          const ParameterType& firstKey,
+          const ParameterType& secondKey) const noexcept;
   };
+
+  template <>
+  std::size_t Hash<arma::Col<double>>::operator() (
+    const arma::Col<double>& key) const noexcept;
+  template <>
+  std::size_t Hash<arma::Col<unsigned int>>::operator() (
+    const arma::Col<unsigned int>& key) const noexcept;
+
+  template <>
+  bool IsKeyEqual<arma::Col<double>>::operator() (
+    const arma::Col<double>& firstKey,
+    const arma::Col<double>& secondKey) const noexcept;
+  template <>
+  bool IsKeyEqual<arma::Col<unsigned int>>::operator() (
+    const arma::Col<unsigned int>& firstKey,
+    const arma::Col<unsigned int>& secondKey) const noexcept;
 }
