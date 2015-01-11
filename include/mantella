@@ -194,7 +194,7 @@
 #include <mantella_bits/helper/random.hpp>
 #include <mantella_bits/helper/rng.hpp>
 #include <mantella_bits/helper/string.hpp>
-#include <mantella_bits/helper/unordered_map.hpp>
+#include <mantella_bits/helper/unordered_container.hpp>
 
 // Parallel algorithms
 #ifdef MPI_SUCCESS
