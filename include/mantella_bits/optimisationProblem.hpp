@@ -12,7 +12,7 @@
 // Mantella
 #include <mantella_bits/helper/cereal.hpp>
 #include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/helper/unordered_map.hpp>
+#include <mantella_bits/helper/unordered_container.hpp>
 
 namespace mant {
   // Base class of all optimisation problems in this library. Provides access to all usually

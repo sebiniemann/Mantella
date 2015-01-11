@@ -6,7 +6,7 @@
 #include <iostream>
 
 // Mantella
-#include <mantella_bits/helper/unordered_map.hpp>
+#include <mantella_bits/helper/unordered_container.hpp>
 
 namespace mant {
   MultiResolutionGridSearch::MultiResolutionGridSearch(

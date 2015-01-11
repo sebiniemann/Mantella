@@ -273,7 +273,7 @@ if(BUILD_LIBRARY)
     src/helper/random.cpp
     src/helper/rng.cpp
     src/helper/string.cpp
-    src/helper/unordered_map.cpp
+    src/helper/unordered_container.cpp
   )
 
   if(MPI_C_FOUND)
@@ -686,5 +686,5 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/helper/random.hpp
   include/mantella_bits/helper/rng.hpp
   include/mantella_bits/helper/string.hpp
-  include/mantella_bits/helper/unordered_map.hpp
+  include/mantella_bits/helper/unordered_container.hpp
 )
