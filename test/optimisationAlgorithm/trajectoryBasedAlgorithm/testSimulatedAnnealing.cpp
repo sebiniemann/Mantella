@@ -12,7 +12,7 @@
 // Armadillo
 #include <armadillo>
 
-// HOP
+// Mantella
 #include <mantella>
 
 // Helper

@@ -12,7 +12,7 @@
 // Armadillo
 #include <armadillo>
 
-// HOP
+// Mantella
 #include <mantella>
 
 // Helper
@@ -149,7 +149,6 @@ TEST_CASE("Hill climbing", "") {
 }
 
 TEST_CASE("HillClimbing Test Maximalstepsize", "") {
-
   // name for the expected data
   std::string expectedName = "1.1";
 
@@ -199,7 +198,6 @@ TEST_CASE("HillClimbing Test Maximalstepsize", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter at each limit", "") {
-
    // name for the expected data
    std::string expectedName = "1.2";
 
@@ -249,7 +247,6 @@ TEST_CASE("HillClimbing Check initialParameter at each limit", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
-
   // name for the expected data
   std::string expectedName = "1.3";
 
@@ -299,7 +296,6 @@ TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter in-range", "") {
-
   // name for the expected data
   std::string expectedName = "1.4";
 
@@ -349,7 +345,6 @@ TEST_CASE("HillClimbing Check initialParameter in-range", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter out of range maximal limit", "") {
-
   // name for the expected data
   std::string expectedName = "1.5";
 
@@ -399,7 +394,6 @@ TEST_CASE("HillClimbing Check initialParameter out of range maximal limit", "") 
 }
 
 TEST_CASE("HillClimbing Check initialParameter out of range arbitrary values", "") {
-
   // name for the expected data
   std::string expectedName = "1.6";
 
