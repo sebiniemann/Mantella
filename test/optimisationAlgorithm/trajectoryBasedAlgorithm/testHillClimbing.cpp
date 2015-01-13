@@ -97,6 +97,8 @@ decltype(TestHillClimbingProblem::parameterHistory_) TestHillClimbingProblem::pa
 decltype(TestHillClimbingProblem::softConstraintsValuesIndex_) TestHillClimbingProblem::softConstraintsValuesIndex_;
 decltype(TestHillClimbingProblem::objectiveValuesIndex_) TestHillClimbingProblem::objectiveValuesIndex_;
 
+
+
 TEST_CASE("Hill climbing", "") {
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
@@ -443,9 +445,5 @@ TEST_CASE("HillClimbing Check initialParameter out of range arbitrary values", "
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
-<<<<<<< HEAD
   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
-=======
-  compareResults(actualParameterHistory,expectedParameterHistory);
->>>>>>> fix: Added noexcept specifier
 }
