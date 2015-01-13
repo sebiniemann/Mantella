@@ -28,6 +28,58 @@ class TestHillClimbing : public hop::HillClimbing {
         const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
       : hop::HillClimbing(optimisationProblem),
         velocityIndex_(0){
+    }
+
+    arma::Col<double> getVelocity() noexcept override {
+      return velocities_.col(velocityIndex_++);
+    }
+
+    void setVelocitys(arma::mat velocities){
+      velocities_ = velocities;
+    }
+
+  protected:
+    unsigned int velocityIndex_;
+    arma::mat velocities_;
+};
+
+class TestHillClimbingProblem : public hop::OptimisationProblem<double> {
+  public:
+    TestHillClimbingProblem(
+        const unsigned int numberOfDimensions)
+      : hop::OptimisationProblem<double>(numberOfDimensions) {
+      softConstraintsValuesIndex_ = 0;
+      objectiveValuesIndex_ = 0;
+// Catch
+#include <catch.hpp>
+
+// C++ Standard Library
+#include <memory>
+#include <iostream>
+#include <cmath>
+
+// Boost
+#include <boost/filesystem.hpp>
+
+// Armadillo
+#include <armadillo>
+
+// HOP
+#include <hop>
+
+// Helper
+#include "trajectoryBasedAlgorithmHelper.cpp"
+
+extern boost::filesystem::path testDirectory;
+static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hillClimbing/";
+
+
+class TestHillClimbing : public hop::HillClimbing {
+  public:
+    TestHillClimbing(
+        const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
+      : hop::HillClimbing(optimisationProblem),
+        velocityIndex_(0){
         
     }
 
