@@ -266,12 +266,12 @@ if(BUILD_LIBRARY)
     src/propertiesEstimation.cpp
     src/propertiesEstimation/maximumLikelihoodEstimation.cpp
     src/helper/cereal.cpp
-    src/helper/combinatorics.cpp
     src/helper/geometry.cpp
     src/helper/printable.cpp
     src/helper/quasiRandomSequence.cpp
     src/helper/random.cpp
     src/helper/rng.cpp
+    src/helper/setTheory.cpp
     src/helper/string.cpp
     src/helper/unordered_container.cpp
   )
@@ -682,12 +682,12 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/propertiesEstimation.hpp
   include/mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
   include/mantella_bits/helper/cereal.hpp
-  include/mantella_bits/helper/combinatorics.hpp
   include/mantella_bits/helper/geometry.hpp
   include/mantella_bits/helper/printable.hpp
   include/mantella_bits/helper/quasiRandomSequence.hpp
   include/mantella_bits/helper/random.hpp
   include/mantella_bits/helper/rng.hpp
+  include/mantella_bits/helper/setTheory.hpp
   include/mantella_bits/helper/string.hpp
   include/mantella_bits/helper/unordered_container.hpp
 )

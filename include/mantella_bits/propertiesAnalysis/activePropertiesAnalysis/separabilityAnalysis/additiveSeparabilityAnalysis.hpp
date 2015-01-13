@@ -16,7 +16,14 @@ namespace mant {
       void setAdditiveSeparabilityMedianErrorThreshold(
           const double& additiveSeparabilityMedianErrorThreshold);
 
+      std::vector<arma::Col<unsigned int>> getSeparation() const noexcept;
+
+      bool isSeparable() const noexcept;
+
     protected:
+      std::vector<arma::Col<unsigned int>> separation_;
+      bool isSeparable_;
+
       double additiveSeparabilityMedianErrorThreshold_;
   };
 

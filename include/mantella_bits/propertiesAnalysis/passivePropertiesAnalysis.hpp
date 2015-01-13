@@ -20,6 +20,8 @@ namespace mant {
       using PropertiesAnalysis<ParameterType, DistanceFunction>::analyseImplementation;
 
       virtual void analyseImplementation(
+          const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings) noexcept = 0;
+      virtual void analyseImplementation(
           const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept = 0;
   };
 

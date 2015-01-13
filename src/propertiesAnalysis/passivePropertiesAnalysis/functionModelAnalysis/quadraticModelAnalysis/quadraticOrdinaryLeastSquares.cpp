@@ -37,6 +37,11 @@ namespace mant {
   }
 
   void QuadraticOrdinaryLeastSquares::analyseImplementation(
+      const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings) noexcept {
+
+  }
+
+  void QuadraticOrdinaryLeastSquares::analyseImplementation(
       const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
 
   }

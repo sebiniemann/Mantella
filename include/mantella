@@ -187,12 +187,12 @@
 #include <mantella_bits/propertiesEstimation.hpp>
 #include <mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 #include <mantella_bits/helper/cereal.hpp>
-#include <mantella_bits/helper/combinatorics.hpp>
 #include <mantella_bits/helper/geometry.hpp>
 #include <mantella_bits/helper/printable.hpp>
 #include <mantella_bits/helper/quasiRandomSequence.hpp>
 #include <mantella_bits/helper/random.hpp>
 #include <mantella_bits/helper/rng.hpp>
+#include <mantella_bits/helper/setTheory.hpp>
 #include <mantella_bits/helper/string.hpp>
 #include <mantella_bits/helper/unordered_container.hpp>
 
