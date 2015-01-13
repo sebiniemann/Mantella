@@ -97,8 +97,6 @@ decltype(TestHillClimbingProblem::parameterHistory_) TestHillClimbingProblem::pa
 decltype(TestHillClimbingProblem::softConstraintsValuesIndex_) TestHillClimbingProblem::softConstraintsValuesIndex_;
 decltype(TestHillClimbingProblem::objectiveValuesIndex_) TestHillClimbingProblem::objectiveValuesIndex_;
 
-
-
 TEST_CASE("Hill climbing", "") {
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
@@ -149,6 +147,7 @@ TEST_CASE("Hill climbing", "") {
 }
 
 TEST_CASE("HillClimbing Test Maximalstepsize", "") {
+
   // name for the expected data
   std::string expectedName = "1.1";
 
@@ -198,6 +197,7 @@ TEST_CASE("HillClimbing Test Maximalstepsize", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter at each limit", "") {
+
    // name for the expected data
    std::string expectedName = "1.2";
 
@@ -247,6 +247,7 @@ TEST_CASE("HillClimbing Check initialParameter at each limit", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
+
   // name for the expected data
   std::string expectedName = "1.3";
 
@@ -296,6 +297,7 @@ TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter in-range", "") {
+
   // name for the expected data
   std::string expectedName = "1.4";
 
@@ -345,6 +347,7 @@ TEST_CASE("HillClimbing Check initialParameter in-range", "") {
 }
 
 TEST_CASE("HillClimbing Check initialParameter out of range maximal limit", "") {
+
   // name for the expected data
   std::string expectedName = "1.5";
 
@@ -394,6 +397,7 @@ TEST_CASE("HillClimbing Check initialParameter out of range maximal limit", "") 
 }
 
 TEST_CASE("HillClimbing Check initialParameter out of range arbitrary values", "") {
+
   // name for the expected data
   std::string expectedName = "1.6";
 
@@ -439,5 +443,9 @@ TEST_CASE("HillClimbing Check initialParameter out of range arbitrary values", "
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+<<<<<<< HEAD
   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+=======
+  compareResults(actualParameterHistory,expectedParameterHistory);
+>>>>>>> fix: Added noexcept specifier
 }
