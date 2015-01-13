@@ -1,10 +1,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> test: Added test for HillClimbing
         1.7976931348623157e+308                           Inf
         1.7976931348623157e+308                           Inf
         1.7976931348623157e+308       1.7976931348623157e+308
         1.7976931348623157e+308       1.7976931348623157e+308
         1.7976931348623157e+308       1.7976931348623157e+308
+<<<<<<< HEAD
 =======
 inf
 inf
@@ -18,4 +22,6 @@ inf  inf
 inf  inf
 inf  inf
 inf  inf
+>>>>>>> test: Added test for HillClimbing
+=======
 >>>>>>> test: Added test for HillClimbing
