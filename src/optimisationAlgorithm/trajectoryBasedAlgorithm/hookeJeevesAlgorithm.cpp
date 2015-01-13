@@ -21,7 +21,7 @@ namespace mant {
 
     bool reduceStepSize = false;
     arma::Col<double> stepSize = initialStepSize_;
-                ;
+    
     while(!isFinished() && !isTerminated()) {
       if (reduceStepSize) {
         stepSize %= stepSizeDecrease_;
