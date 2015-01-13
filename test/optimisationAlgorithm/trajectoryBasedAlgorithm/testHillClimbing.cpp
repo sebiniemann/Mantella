@@ -65,7 +65,6 @@ class TestHillClimbingProblem : public hop::OptimisationProblem {
       parameterHistory_.clear();
     }
 
-
     std::vector<arma::Col<double>> getParameterHistory() const noexcept {
       return parameterHistory_;
     }
@@ -304,6 +303,7 @@ TEST_CASE("Check initialParameter at one limit", "") {
 
   // Run hill climbing algorithm
   testHillClimbing.optimise();
+<<<<<<< HEAD
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
@@ -349,11 +349,20 @@ TEST_CASE("Check initialParameter in-range", "") {
   testHillClimbing.setInitialParameter(initialParameter);
 
   // Set Expected values
+=======
+  std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+>>>>>>> devel: Use std::vector<arma::Col<double>> for dynamic amounts of Columns
   arma::Mat<double> expectedParameterHistory;
   expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected["+ expectedName +"].mat");
 
+<<<<<<< HEAD
   // Run hill climbing algorithm
   testHillClimbing.optimise();
+=======
+  for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
+    arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
+    arma::Col<double> actualParameter = actualParameterHistory.at(n);
+>>>>>>> devel: Use std::vector<arma::Col<double>> for dynamic amounts of Columns
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
