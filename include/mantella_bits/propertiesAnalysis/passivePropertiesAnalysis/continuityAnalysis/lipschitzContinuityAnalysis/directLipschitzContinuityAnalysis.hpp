@@ -5,16 +5,49 @@
 #include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class DirectLipschitzContinuityAnalysis : public LipschitzContinuityAnalysis<double, EuclideanDistance> {
+  template <typename ParameterType, class DistanceFunction>
+  class DirectLipschitzContinuityAnalysis : public LipschitzContinuityAnalysis<ParameterType, DistanceFunction> {
     public:
-      using LipschitzContinuityAnalysis<double, EuclideanDistance>::LipschitzContinuityAnalysis;
+      using LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::LipschitzContinuityAnalysis;
 
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept override;
       void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings) noexcept override;
       void analyseImplementation(
-          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
+          const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
+
+  template <>
+  void DirectLipschitzContinuityAnalysis<double, EuclideanDistance>::analyseImplementation(
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
+
+  template <typename ParameterType, class DistanceFunction>
+  void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
+    LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_ = 0.0;
+
+    const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+
+    for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
+      const arma::Col<ParameterType>& parameter = n->first;
+      const double& objectiveValue = n->second;
+      for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
+        LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_ = std::max(LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_, std::abs(k->second - objectiveValue) / DistanceFunction::template getDistance<ParameterType>(k->first, parameter));
+      }
+    }
+  }
+
+  template <typename ParameterType, class DistanceFunction>
+  void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
+      const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings) noexcept {
+
+  }
+
+  template <typename ParameterType, class DistanceFunction>
+  void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
+      const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept {
+
+  }
 }

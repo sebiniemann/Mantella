@@ -5,7 +5,8 @@
 #include <algorithm>
 
 namespace mant {
-  void DirectLipschitzContinuityAnalysis::analyseImplementation(
+  template <>
+  void DirectLipschitzContinuityAnalysis<double, EuclideanDistance>::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     lipschitzConstant_ = 0.0;
 
@@ -18,15 +19,5 @@ namespace mant {
         lipschitzConstant_ = std::max(lipschitzConstant_, std::abs(k->second - objectiveValue) / arma::norm(k->first - parameter));
       }
     }
-  }
-
-  void DirectLipschitzContinuityAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings) noexcept {
-
-  }
-
-  void DirectLipschitzContinuityAnalysis::analyseImplementation(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
-
   }
 }
