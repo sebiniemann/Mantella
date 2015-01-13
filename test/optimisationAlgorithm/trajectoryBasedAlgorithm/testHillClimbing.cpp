@@ -9,12 +9,12 @@
 // Boost
 #include <boost/filesystem.hpp>
 
-
 // Armadillo
 #include <armadillo>
 
 // HOP
 #include <hop>
+
 
 extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hillClimbing/";
@@ -459,4 +459,5 @@ TEST_CASE("Check initialParameter out of range arbitrary values", "") {
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
   }
-  
+
+
