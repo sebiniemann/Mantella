@@ -25,7 +25,8 @@ class TestHillClimbing : public hop::HillClimbing {
         velocityIndex_(0){
     }
 
-    arma::Col<double> getVelocity() {
+    arma::Col<double> getVelocity() override {
+      std::cout << "velocityIndex_: " << velocityIndex_ << std::endl;
       return velocities_.col(velocityIndex_++);
     }
 
@@ -105,6 +106,7 @@ TEST_CASE("Hill climbing", "") {
    std::shared_ptr<TestHillClimbingProblem> testHillClimbingProblem(new TestHillClimbingProblem(upperBounds.n_elem));
    testHillClimbingProblem->setUpperBounds(upperBounds);
    testHillClimbingProblem->setLowerBounds(lowerBounds);
+   testHillClimbingProblem->setAcceptableObjectiveValue(-500.0);
    testHillClimbingProblem->setObjectiveValues(objectiveValues);
    testHillClimbingProblem->setSoftConstraintsValues(softConstraintsValues);
 
@@ -133,6 +135,7 @@ TEST_CASE("Hill climbing", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
 
+  std::cout << "expectedParameterHistory.n_cols: " << expectedParameterHistory.n_cols << std::endl;
   for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
     arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
     arma::Col<double> actualParameter = actualParameterHistory.at(n);

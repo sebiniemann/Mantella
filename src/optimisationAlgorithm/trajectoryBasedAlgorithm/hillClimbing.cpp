@@ -23,7 +23,7 @@ namespace mant {
 
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
-
+      
       arma::Col<double> candidateParameter = bestParameter_ + maximalStepSize_ % getVelocity();
 
       const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < optimisationProblem_->getLowerBounds());
