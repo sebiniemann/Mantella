@@ -148,9 +148,16 @@ TEST_CASE("Hill climbing", "") {
   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
 }
 
+<<<<<<< HEAD
 TEST_CASE("HillClimbing Test Maximalstepsize", "") {
   // name for the expected data
   std::string expectedName = "1.1";
+=======
+
+  for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
+    arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
+    arma::Col<double> actualParameter = actualParameterHistory.at(n);
+>>>>>>> devel: Added interval handling
 
   //Set OptimisationProblem values
   arma::Col<double> upperBounds;
@@ -241,6 +248,7 @@ TEST_CASE("HillClimbing Check initialParameter at each limit", "") {
    // Run hill climbing algorithm
    testHillClimbing.optimise();
 
+<<<<<<< HEAD
    // Comparing of candidateParameters
    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
    trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
@@ -253,10 +261,17 @@ TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
   //Set OptimisationProblem values
   arma::Col<double> upperBounds;
   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds["+ expectedName +"].mat");
+=======
+    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[1.1].mat");
+
+    testHillClimbing.setInitialParameter(initialParameter);
+    testHillClimbing.optimise();
+>>>>>>> devel: Added interval handling
 
   arma::Col<double> lowerBounds;
   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds["+ expectedName +"].mat");
 
+<<<<<<< HEAD
   arma::Col<double> objectiveValues;
   objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues["+ expectedName +"].mat");
 
@@ -293,6 +308,42 @@ TEST_CASE("HillClimbing Check initialParameter at one limit", "") {
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+=======
+    for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
+      arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
+      arma::Col<double> actualParameter = actualParameterHistory.at(n);
+      std::cout<<actualParameter;
+      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
+        CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+      }
+    }
+
+  }
+/*
+  SECTION("Check initialParameter at each limit "){
+    arma::Col<double> initialParameter;
+    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[1.2].mat"); //the parametre is optional
+
+    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[1.2].mat");
+
+    testHillClimbing.setInitialParameter(initialParameter);
+    testHillClimbing.optimise();
+
+    // Comparing of candidateParameters
+    std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
+
+    for(std::size_t n = 0; n < expectedParameterHistory.n_cols; ++n) {
+      arma::Col<double> expectedParameter = expectedParameterHistory.col(n);
+      arma::Col<double> actualParameter = actualParameterHistory.at(n);
+
+      for (std::size_t k = 0; k < expectedParameter.n_elem; ++k) {
+        CHECK(actualParameter.at(k) == Approx(expectedParameter.at(k)));
+      }
+    }
+
+  }
+*/
+>>>>>>> devel: Added interval handling
 }
 
 TEST_CASE("HillClimbing Check initialParameter in-range", "") {
