@@ -13,7 +13,7 @@
 #include <armadillo>
 
 // HOP
-#include <hop>
+#include <mantella>
 
 // Helper
 #include "trajectoryBasedAlgorithmHelper.cpp"
@@ -38,11 +38,11 @@ void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<doubl
 }
 };
 
-class TestSimulatedAnnealing : public hop::SimulatedAnnealing {
+class TestSimulatedAnnealing : public mant::SimulatedAnnealing {
   public:
     TestSimulatedAnnealing(
-        const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
-      : hop::SimulatedAnnealing(optimisationProblem),
+        const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)
+      : mant::SimulatedAnnealing(optimisationProblem),
         velocityIndex_(0),
         statesIndex_(0){
     }
@@ -73,11 +73,11 @@ class TestSimulatedAnnealing : public hop::SimulatedAnnealing {
     arma::mat states_;
 };
 
-class TestSimulatedAnnealingProblem : public hop::OptimisationProblem<double> {
+class TestSimulatedAnnealingProblem : public mant::OptimisationProblem<double> {
   public:
     TestSimulatedAnnealingProblem(
         const unsigned int numberOfDimensions)
-      : hop::OptimisationProblem<double>(numberOfDimensions) {
+      : mant::OptimisationProblem<double>(numberOfDimensions) {
       softConstraintsValuesIndex_ = 0;
       objectiveValuesIndex_ = 0;
       parameterHistory_.clear();

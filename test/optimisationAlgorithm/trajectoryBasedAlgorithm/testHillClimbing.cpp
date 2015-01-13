@@ -13,7 +13,7 @@
 #include <armadillo>
 
 // HOP
-#include <hop>
+#include <mantella>
 
 // Helper
 #include "trajectoryBasedAlgorithmHelper.cpp"
@@ -22,11 +22,11 @@ extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hillClimbing/";
 
 
-class TestHillClimbing : public hop::HillClimbing {
+class TestHillClimbing : public mant::HillClimbing {
   public:
     TestHillClimbing(
-        const std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem)
-      : hop::HillClimbing(optimisationProblem),
+        const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)
+      : mant::HillClimbing(optimisationProblem),
         velocityIndex_(0){
         
     }
@@ -44,11 +44,11 @@ class TestHillClimbing : public hop::HillClimbing {
     arma::mat velocities_;
 };
 
-class TestHillClimbingProblem : public hop::OptimisationProblem<double> {
+class TestHillClimbingProblem : public mant::OptimisationProblem<double> {
   public:
     TestHillClimbingProblem(
         const unsigned int numberOfDimensions)
-      : hop::OptimisationProblem<double>(numberOfDimensions) {
+      : mant::OptimisationProblem<double>(numberOfDimensions) {
       softConstraintsValuesIndex_ = 0;
       objectiveValuesIndex_ = 0;
       parameterHistory_.clear();

@@ -23,8 +23,7 @@ namespace mant {
 
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
-<<<<<<< HEAD
-      
+
       arma::Col<double> candidateParameter = bestParameter_ + maximalStepSize_ % getVelocity();
 
       const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < optimisationProblem_->getLowerBounds());
@@ -40,16 +39,6 @@ namespace mant {
         bestParameter_ = candidateParameter;
         bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
         bestObjectiveValue_ = candidateObjectiveValue;
-=======
-
-      candidateParameter_ = bestParameter_ + maximalStepSize_ % getVelocity();
-      candidateSoftConstraintValue_ = optimisationProblem_->getSoftConstraintsValue(candidateParameter_);
-      candidateObjectiveValue_ = optimisationProblem_->getObjectiveValue(candidateParameter_);
-      if(candidateSoftConstraintValue_ < bestSoftConstraintValue_ || candidateSoftConstraintValue_ == bestSoftConstraintValue_ && candidateObjectiveValue_ < bestObjectiveValue_) {
-        bestParameter_ = candidateParameter_;
-        bestSoftConstraintValue_ = candidateSoftConstraintValue_;
-        bestObjectiveValue_ = candidateObjectiveValue_;
->>>>>>> devel: new expected data
       }
     }
   }

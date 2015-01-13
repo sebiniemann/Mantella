@@ -12,9 +12,6 @@
 // Armadillo
 #include <armadillo>
 
-// HOP
-#include <hop>
-
 class trajectoryBasedAlgorithmHelper{
  public:
  static void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<double> expected){
