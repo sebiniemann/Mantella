@@ -9,6 +9,7 @@
 // Boost
 #include <boost/filesystem.hpp>
 
+
 // Armadillo
 #include <armadillo>
 
@@ -458,6 +459,4 @@ TEST_CASE("Check initialParameter out of range arbitrary values", "") {
   std::vector<arma::Col<double>> actualParameterHistory = testHillClimbingProblem->getParameterHistory();
   compareResults(actualParameterHistory,expectedParameterHistory);
   }
-
-
-
+  
