@@ -27,6 +27,7 @@ set(MANTELLA_VERSION "${MANTELLA_MAJOR}.${MANTELLA_MINOR}.${MANTELLA_PATCH}")
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
+
 # Provide custom build management options
 option(BUILD_LIBRARY "Build library" ON)
 option(BUILD_TEST "Build tests" OFF)
@@ -39,20 +40,9 @@ if(BUILD_ALL)
   set(BUILD_EXAMPLES ON)
 endif()
 
-# OSX
-if(APPLE)
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-  set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib)
-  set(CMAKE_MACOSX_RPATH ON)
-  set(CMAKE_SKIP_BUILD_RPATH FALSE)
-  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-  if("${isSystemDir}" STREQUAL "-1")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-  endif()
-endif()
+# Build options used only during development
+option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
+mark_as_advanced(MEASURE_CODE_COVERAGE)
 
 # Set output directories
 if(NOT EXECUTABLE_OUTPUT_PATH)
@@ -71,6 +61,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 # Use native machine features (SSE3, SSE4, AVX, ...), if possible and compiled with Armadillo
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+
+if(MEASURE_CODE_COVERAGE)
+  # Use debug mode, no optimisation, measure coverage
+  message(STATUS "NOTICE: Measure code coverage.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
+endif()
 
 # Include our own headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
