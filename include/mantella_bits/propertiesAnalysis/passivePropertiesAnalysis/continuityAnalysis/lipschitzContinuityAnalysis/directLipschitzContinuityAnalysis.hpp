@@ -30,11 +30,12 @@ namespace mant {
 
     const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
+    DistanceFunction distanceFunction;
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<ParameterType>& parameter = n->first;
       const double& objectiveValue = n->second;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
-        LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_ = std::max(LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_, std::abs(k->second - objectiveValue) / DistanceFunction::template getDistance<ParameterType>(k->first, parameter));
+        LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_ = std::max(LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_, std::abs(k->second - objectiveValue) / distanceFunction.getDistance(parameter, k->first));
       }
     }
   }
