@@ -8,6 +8,6 @@ namespace mant {
     protected:
       double getDistanceImplementation(
           const arma::Col<double>& firstParameter,
-          const arma::Col<double>& secondParameter) const;
+          const arma::Col<double>& secondParameter) const override;
   };
 }

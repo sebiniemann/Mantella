@@ -14,9 +14,9 @@ namespace mant {
           const arma::Col<ParameterType>& secondParameter) const;
 
     protected:
-      double getDistanceImplementation(
+      virtual double getDistanceImplementation(
           const arma::Col<ParameterType>& firstParameter,
-          const arma::Col<ParameterType>& secondParameter) const;
+          const arma::Col<ParameterType>& secondParameter) const = 0;
   };
 
   template <typename ParameterType>
