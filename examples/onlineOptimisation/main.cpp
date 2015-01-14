@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
       std::shared_ptr<mant::QuadraticModelAnalysis<double, mant::EuclideanDistance>>(new mant::QuadraticOrdinaryLeastSquares()),
       std::shared_ptr<mant::AdditiveSeparabilityAnalysis<double, mant::EuclideanDistance>>(new mant::DirectAdditiveSeparabilityAnalysis()));
 
-    std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2013::SphereFunction(4));
+    std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(4));
 
     mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
