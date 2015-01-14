@@ -124,7 +124,6 @@ TEST_CASE("Hooke Jeeves", "") {
    // Set Expected values
    arma::Mat<double> expectedParameterHistory;
    expectedParameterHistory.load(testDirectory.string() + dataPath_ + "expected[2.1].mat");
-
    // Run HookeJeeves algorithm
   testHookeJeeves.optimise();
   // Comparing of candidateParameters
