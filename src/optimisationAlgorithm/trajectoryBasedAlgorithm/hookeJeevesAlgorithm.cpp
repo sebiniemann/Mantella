@@ -32,6 +32,7 @@ namespace mant {
       arma::Col<double> candidateParameter = bestParameter_;
       for (std::size_t n = 0; n < optimisationProblem_->getNumberOfDimensions(); ++n) {
         candidateParameter.at(n) += stepSize.at(n);
+        
         if(optimisationProblem_->getUpperBounds().at(n) < candidateParameter.at(n)) {
           candidateParameter.at(n) = optimisationProblem_->getUpperBounds().at(n);
         }
