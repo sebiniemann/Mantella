@@ -75,17 +75,17 @@ install:
 
   # LCOV
   # Needed until Travis CI updates to Ubuntu 14.04+
-  - if [ "$CXX" = "g++" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
-  - if [ "$CXX" = "g++" ]; then mkdir lcov; fi
-  - if [ "$CXX" = "g++" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
-  - if [ "$CXX" = "g++" ]; then cd lcov; fi
-  - if [ "$CXX" = "g++" ]; then sudo make install; fi
-  - if [ "$CXX" = "g++" ]; then cd ..; fi
-  - if [ "$CXX" = "g++" ]; then rm -Rf lcov lcov.tar.gz; fi
+  - if [ "$CXX" = "g++-4.8" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
+  - if [ "$CXX" = "g++-4.8" ]; then mkdir lcov; fi
+  - if [ "$CXX" = "g++-4.8" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
+  - if [ "$CXX" = "g++-4.8" ]; then cd lcov; fi
+  - if [ "$CXX" = "g++-4.8" ]; then sudo make install; fi
+  - if [ "$CXX" = "g++-4.8" ]; then cd ..; fi
+  - if [ "$CXX" = "g++-4.8" ]; then rm -Rf lcov lcov.tar.gz; fi
 #  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq lcov; fi
 
   # LCOV to Coveralls conversion + upload
-  - if [ "$CXX" = "g++" ]; then gem install coveralls-lcov; fi
+  - if [ "$CXX" = "g++-4.8" ]; then gem install coveralls-lcov; fi
   
 addons:
   coverity_scan:
@@ -97,15 +97,15 @@ addons:
     branch_pattern: coverity_scan
 
 script: 
-  - if [ "$CXX" == "g++" ]; then cmake -DBUILD_ALL=On -DMEASURE_CODE_COVERAGE=On .; fi
+  - if [ "$CXX" == "g++-4.8" ]; then cmake -DBUILD_ALL=On -DMEASURE_CODE_COVERAGE=On .; fi
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_ALL=On .; fi
   - make
   - sudo make install
   
 after_success:
-  - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
-  - if [ "$CXX" == "g++" ]; then lcov --directory . --capture --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --list coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then coveralls-lcov coverage.info; fi
+  - if [ "$CXX" == "g++-4.8" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
+  - if [ "$CXX" == "g++-4.8" ]; then lcov --directory . --capture --output-file coverage.info; fi
+  - if [ "$CXX" == "g++-4.8" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
+  - if [ "$CXX" == "g++-4.8" ]; then lcov --list coverage.info; fi
+  - if [ "$CXX" == "g++-4.8" ]; then coveralls-lcov coverage.info; fi
 
