@@ -10,15 +10,10 @@
 namespace mant {
   arma::Mat<double> getRandomRotationMatrix(
       const unsigned int& numberOfDimensions) noexcept {
-    arma::Mat<double> rotationMatrix = arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
-    for (std::size_t n = 0; n < rotationMatrix.n_cols; ++n) {
-      for (unsigned int k = 0; k < n; ++k) {
-        rotationMatrix.col(n) = rotationMatrix.col(n) - arma::dot(rotationMatrix.col(n), rotationMatrix.col(k)) * rotationMatrix.col(k);
-      }
-      rotationMatrix.col(n) = arma::normalise(rotationMatrix.col(n));
-    }
-
-    return rotationMatrix;
+    arma::Mat<double> Q;
+    arma::Mat<double> R;
+    arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions));
+    return Q * arma::sign(arma::diagmat(R));
   }
 
   arma::Col<unsigned int> getRandomPermutation(
