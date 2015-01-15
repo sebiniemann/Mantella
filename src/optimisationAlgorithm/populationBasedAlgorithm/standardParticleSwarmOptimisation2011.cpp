@@ -12,7 +12,7 @@ namespace mant {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize),
+    : PopulationBasedAlgorithm<double, EuclideanDistance>(optimisationProblem, populationSize),
       localBestObjectiveValues_(populationSize_),
       randomizeTopology_(true) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));

@@ -2,9 +2,10 @@
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class SimulatedAnnealing : public TrajectoryBasedAlgorithm<double> {
+  class SimulatedAnnealing : public TrajectoryBasedAlgorithm<double, EuclideanDistance> {
     public:
       explicit SimulatedAnnealing(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;

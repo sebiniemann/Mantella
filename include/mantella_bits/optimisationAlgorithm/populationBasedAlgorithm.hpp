@@ -4,8 +4,8 @@
 #include <mantella_bits/optimisationAlgorithm.hpp>
 
 namespace mant {
-  template <typename ParameterType>
-  class PopulationBasedAlgorithm : public OptimisationAlgorithm<ParameterType> {
+  template <typename ParameterType, class DistanceFunction>
+  class PopulationBasedAlgorithm : public OptimisationAlgorithm<ParameterType, DistanceFunction> {
     public:
       explicit PopulationBasedAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
@@ -19,28 +19,28 @@ namespace mant {
       arma::Mat<ParameterType> initialPopulation_;
   };
 
-  template <typename ParameterType>
-  PopulationBasedAlgorithm<ParameterType>::PopulationBasedAlgorithm(
+  template <typename ParameterType, class DistanceFunction>
+  PopulationBasedAlgorithm<ParameterType, DistanceFunction>::PopulationBasedAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : OptimisationAlgorithm<ParameterType>(optimisationProblem),
+    : OptimisationAlgorithm<ParameterType, DistanceFunction>(optimisationProblem),
       populationSize_(populationSize) {
     // TODO fix for discrete problems
-    arma::Mat<ParameterType> population = arma::randu<arma::Mat<ParameterType>>(OptimisationAlgorithm<ParameterType>::optimisationProblem_->getNumberOfDimensions(), populationSize_);
-    population.each_col() %= OptimisationAlgorithm<ParameterType>::optimisationProblem_->getUpperBounds() - OptimisationAlgorithm<ParameterType>::optimisationProblem_->getLowerBounds();
-    population.each_col() += OptimisationAlgorithm<ParameterType>::optimisationProblem_->getLowerBounds();
+    arma::Mat<ParameterType> population = arma::randu<arma::Mat<ParameterType>>(this->optimisationProblem_->getNumberOfDimensions(), populationSize_);
+    population.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
+    population.each_col() += this->optimisationProblem_->getLowerBounds();
 
     setInitialPopulation(population);
   }
 
-  template <typename ParameterType>
-  void PopulationBasedAlgorithm<ParameterType>::setInitialPopulation(
+  template <typename ParameterType, class DistanceFunction>
+  void PopulationBasedAlgorithm<ParameterType, DistanceFunction>::setInitialPopulation(
       const arma::Mat<ParameterType>& initialPopulation) {
-    if(initialPopulation.n_rows != OptimisationAlgorithm<ParameterType>::optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(OptimisationAlgorithm<ParameterType>::optimisationProblem_->getNumberOfDimensions()) + ").");
+    if(initialPopulation.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
+      throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
     }
 
     initialPopulation_ = initialPopulation;
-    populationSize_ = initialPopulation.n_cols;
+    populationSize_ = initialPopulation_.n_cols;
   }
 }

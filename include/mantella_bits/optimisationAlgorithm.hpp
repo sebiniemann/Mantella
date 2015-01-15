@@ -8,7 +8,7 @@
 #include <mantella_bits/helper/printable.hpp>
 
 namespace mant {
-  template <typename ParameterType>
+  template <typename ParameterType, class DistanceFunction>
   class OptimisationAlgorithm : public Printable {
     public:
       // Constructs an optimisation algorithm with the given problem to be optimised.
@@ -78,24 +78,28 @@ namespace mant {
       // The best parameter's objective value.
       double bestObjectiveValue_;
 
+      // The distance function to be used.
+      DistanceFunction distanceFunction_;
+
       // The actual optimisation procedere.
       // Note: The counter within the optimisation problem (counting the number of distinct function
       // evaluations for example) are already reset beforehand.
       virtual void optimiseImplementation() = 0;
   };
 
-  template <typename ParameterType>
-  OptimisationAlgorithm<ParameterType>::OptimisationAlgorithm(
+  template <typename ParameterType, class DistanceFunction>
+  OptimisationAlgorithm<ParameterType, DistanceFunction>::OptimisationAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : optimisationProblem_(optimisationProblem),
       numberOfIterations_(0),
       bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
-      bestObjectiveValue_(std::numeric_limits<double>::infinity()) {
+      bestObjectiveValue_(std::numeric_limits<double>::infinity()),
+      distanceFunction_(DistanceFunction()) {
     setMaximalNumberOfIterations(1000);
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::optimise() noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  void OptimisationAlgorithm<ParameterType, DistanceFunction>::optimise() noexcept {
     // Reset results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
@@ -106,39 +110,39 @@ namespace mant {
     return optimiseImplementation();
   }
 
-  template <typename ParameterType>
-  unsigned int OptimisationAlgorithm<ParameterType>::getNumberOfIterations() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  unsigned int OptimisationAlgorithm<ParameterType, DistanceFunction>::getNumberOfIterations() const noexcept {
     return numberOfIterations_;
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::setMaximalNumberOfIterations(
+  template <typename ParameterType, class DistanceFunction>
+  void OptimisationAlgorithm<ParameterType, DistanceFunction>::setMaximalNumberOfIterations(
       const unsigned int& maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType>::getBestParameter() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestParameter() const noexcept {
     return bestParameter_;
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getBestSoftConstraintsValue() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  double OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestSoftConstraintsValue() const noexcept {
     return bestSoftConstraintsValue_;
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getBestObjectiveValue() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  double OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestObjectiveValue() const noexcept {
     return bestObjectiveValue_;
   }
 
-  template <typename ParameterType>
-  bool OptimisationAlgorithm<ParameterType>::isFinished() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  bool OptimisationAlgorithm<ParameterType, DistanceFunction>::isFinished() const noexcept {
     return (bestSoftConstraintsValue_ == 0.0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
-  template <typename ParameterType>
-  bool OptimisationAlgorithm<ParameterType>::isTerminated() const noexcept {
+  template <typename ParameterType, class DistanceFunction>
+  bool OptimisationAlgorithm<ParameterType, DistanceFunction>::isTerminated() const noexcept {
     return (numberOfIterations_ >= maximalNumberOfIterations_);
   }
 }

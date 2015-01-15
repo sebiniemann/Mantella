@@ -7,7 +7,7 @@
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : TrajectoryBasedAlgorithm<double>(optimisationProblem) {
+    : TrajectoryBasedAlgorithm<double, EuclideanDistance>(optimisationProblem) {
     setInitialStepSize(optimisationProblem_->getUpperBounds() - optimisationProblem_->getLowerBounds());
     setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()) * 0.5);
   }

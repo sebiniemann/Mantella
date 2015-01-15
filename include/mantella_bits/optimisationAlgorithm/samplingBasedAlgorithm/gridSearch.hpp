@@ -2,9 +2,10 @@
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class GridSearch : public SamplingBasedAlgorithm<double> {
+  class GridSearch : public SamplingBasedAlgorithm<double, EuclideanDistance> {
     public:
       explicit GridSearch(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;

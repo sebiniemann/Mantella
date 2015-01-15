@@ -2,9 +2,10 @@
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double> {
+  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double, EuclideanDistance> {
     public:
       explicit HookeJeevesAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;

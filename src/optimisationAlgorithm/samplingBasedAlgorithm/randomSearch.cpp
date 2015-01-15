@@ -3,7 +3,7 @@
 namespace mant {
   RandomSearch::RandomSearch(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm(optimisationProblem) {
+    : SamplingBasedAlgorithm<double, EuclideanDistance>(optimisationProblem) {
 
   }
 

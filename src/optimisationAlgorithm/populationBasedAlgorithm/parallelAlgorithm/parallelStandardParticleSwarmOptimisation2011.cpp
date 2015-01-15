@@ -17,7 +17,7 @@ namespace mant {
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : ParallelAlgorithm<double>(optimisationProblem, populationSize) {
+    : ParallelAlgorithm<double, EuclideanDistance>(optimisationProblem, populationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
     setLocalAttraction(0.5 + std::log(2.0));

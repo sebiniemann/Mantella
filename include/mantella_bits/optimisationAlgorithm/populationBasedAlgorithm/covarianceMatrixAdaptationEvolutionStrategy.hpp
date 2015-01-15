@@ -1,9 +1,10 @@
 #pragma once
 
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedAlgorithm<double> {
+  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedAlgorithm<double, EuclideanDistance> {
     public:
       //TODO: which input parameters should be added to the constructor?
       explicit CovarianceMatrixAdaptationEvolutionStrategy(

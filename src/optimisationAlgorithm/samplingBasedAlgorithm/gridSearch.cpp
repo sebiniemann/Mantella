@@ -6,7 +6,7 @@
 namespace mant {
   GridSearch::GridSearch(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm(optimisationProblem) {
+    : SamplingBasedAlgorithm<double, EuclideanDistance>(optimisationProblem) {
     setSamplingFactors(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
   }
 

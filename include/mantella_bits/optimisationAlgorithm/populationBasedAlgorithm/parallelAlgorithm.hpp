@@ -13,10 +13,11 @@
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  template <typename ParameterType>
-  class ParallelAlgorithm : public PopulationBasedAlgorithm<ParameterType> {
+  template <typename ParameterType, class EuclideanDistance>
+  class ParallelAlgorithm : public PopulationBasedAlgorithm<ParameterType, EuclideanDistance> {
     public:
       explicit ParallelAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
@@ -34,24 +35,24 @@ namespace mant {
       virtual void parallelOptimiseImplementation() noexcept = 0;
   };
 
-  template <typename ParameterType>
-  ParallelAlgorithm<ParameterType>::ParallelAlgorithm(
+  template <typename ParameterType, class EuclideanDistance>
+  ParallelAlgorithm<ParameterType, EuclideanDistance>::ParallelAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm<ParameterType>(optimisationProblem, populationSize) {
+    : PopulationBasedAlgorithm<ParameterType, EuclideanDistance>(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
 
-  template <typename ParameterType>
-  void ParallelAlgorithm<ParameterType>::optimiseImplementation() noexcept {
+  template <typename ParameterType, class EuclideanDistance>
+  void ParallelAlgorithm<ParameterType, EuclideanDistance>::optimiseImplementation() noexcept {
     unsigned int serialisedOptimisationProblemSize;
     char* serialisedOptimisationProblemBuffer;
 
     if (rank_ == 0) {
       std::ostringstream output; {
         cereal::JSONOutputArchive archive(output);
-        archive(OptimisationAlgorithm<ParameterType>::optimisationProblem_);
+        archive(OptimisationAlgorithm<ParameterType, EuclideanDistance>::optimisationProblem_);
       };
 
       std::string serialisedOptimisationProblem = output.str();
@@ -70,7 +71,7 @@ namespace mant {
     if (rank_ != 0) {
       std::istringstream input(serialisedOptimisationProblemBuffer); {
         cereal::JSONInputArchive archive(input);
-        archive(OptimisationAlgorithm<ParameterType>::optimisationProblem_);
+        archive(OptimisationAlgorithm<ParameterType, EuclideanDistance>::optimisationProblem_);
       }
     }
 
@@ -79,13 +80,13 @@ namespace mant {
     parallelOptimiseImplementation();
   }
 
-  template <typename ParameterType>
-  unsigned int ParallelAlgorithm<ParameterType>::getRank() const noexcept {
+  template <typename ParameterType, class EuclideanDistance>
+  unsigned int ParallelAlgorithm<ParameterType, EuclideanDistance>::getRank() const noexcept {
     return rank_;
   }
 
-  template <typename ParameterType>
-  unsigned int ParallelAlgorithm<ParameterType>::getNumberOfNodes() const noexcept {
+  template <typename ParameterType, class EuclideanDistance>
+  unsigned int ParallelAlgorithm<ParameterType, EuclideanDistance>::getNumberOfNodes() const noexcept {
     return numberOfNodes_;
   }
 }

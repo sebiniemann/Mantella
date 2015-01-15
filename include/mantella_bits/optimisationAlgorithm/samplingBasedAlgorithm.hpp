@@ -4,16 +4,9 @@
 #include <mantella_bits/optimisationAlgorithm.hpp>
 
 namespace mant {
-  template <typename ParameterType>
-  class SamplingBasedAlgorithm : public OptimisationAlgorithm<ParameterType> {
+  template <typename ParameterType, class DistanceFunction>
+  class SamplingBasedAlgorithm : public OptimisationAlgorithm<ParameterType, DistanceFunction> {
     public:
-      explicit SamplingBasedAlgorithm(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+      using OptimisationAlgorithm<ParameterType, DistanceFunction>::OptimisationAlgorithm;
   };
-
-  template <typename ParameterType>
-  SamplingBasedAlgorithm<ParameterType>::SamplingBasedAlgorithm(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : OptimisationAlgorithm<ParameterType>(optimisationProblem) {
-  }
 }

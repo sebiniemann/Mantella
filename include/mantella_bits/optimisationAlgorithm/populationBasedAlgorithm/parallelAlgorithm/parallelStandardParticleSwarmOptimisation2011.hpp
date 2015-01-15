@@ -6,9 +6,10 @@
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm<double> {
+  class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm<double, EuclideanDistance> {
     public:
       explicit ParallelStandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,

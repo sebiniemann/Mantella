@@ -2,9 +2,10 @@
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
+#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 
 namespace mant {
-  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double> {
+  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double, EuclideanDistance> {
     public:
       explicit RoleBasedImitationAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,

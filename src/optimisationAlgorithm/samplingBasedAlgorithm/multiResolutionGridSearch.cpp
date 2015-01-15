@@ -11,7 +11,7 @@
 namespace mant {
   MultiResolutionGridSearch::MultiResolutionGridSearch(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm<double>(optimisationProblem) {
+    : SamplingBasedAlgorithm<double, EuclideanDistance>(optimisationProblem) {
     setMinimalSamplingDistances(arma::ones(optimisationProblem_->getNumberOfDimensions()) * 1e-3);
     setSamplingDistributionPerDimension(arma::ones(optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(optimisationProblem_->getNumberOfDimensions()));
     setMaximalSamplesPerResolution(11);

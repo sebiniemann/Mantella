@@ -10,7 +10,7 @@
 namespace mant {
   SimulatedAnnealing::SimulatedAnnealing(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : TrajectoryBasedAlgorithm<double>(optimisationProblem) {
+    : TrajectoryBasedAlgorithm<double, EuclideanDistance>(optimisationProblem) {
     setMaximalStepSize((optimisationProblem->getUpperBounds() - optimisationProblem->getLowerBounds()) / 10.0);
   }
 

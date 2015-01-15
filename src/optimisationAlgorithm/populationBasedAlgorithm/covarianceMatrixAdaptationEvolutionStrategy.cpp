@@ -4,7 +4,7 @@ namespace mant {
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize)
-  : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize) {
+  : PopulationBasedAlgorithm<double, EuclideanDistance>(optimisationProblem, populationSize) {
     setStepsize(0.3);
   }
 
