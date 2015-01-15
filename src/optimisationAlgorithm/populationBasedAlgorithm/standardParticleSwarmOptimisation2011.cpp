@@ -8,7 +8,6 @@
 #include <mantella_bits/helper/random.hpp>
 #include <mantella_bits/helper/rng.hpp>
 
-// TODO Update
 namespace mant {
   StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
