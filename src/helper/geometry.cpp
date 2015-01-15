@@ -16,7 +16,6 @@ namespace mant {
     });
   }
 
-  // TODO Left or right hand side implementation?
   arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
       const double& rollAngle,
       const double& pitchAngle,
