@@ -52,7 +52,7 @@ Future plans
 - **Planned for 1.2.0**
   - Adding a seperate website (besides this readme on Github), including a user documentation and a *getting started*
 - **Backlog**
-  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information from Nikolaus Hansen)
+  - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
 
 Implemented features
 --------------------
@@ -78,7 +78,7 @@ Support of real-world robotic optimisation problems
     - Parallel kinematic machine 6(P)RPR
     - Multi-level Stewart platforms
 
-Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
+Full support of the [black-box optimisation benchmark (from 2009–2015)](http://coco.gforge.inria.fr), developed by Nikolaus Hansen et al., INRIA, France
 - **Separable functions**
   - Sphere function
   - Ellipsoidal function
