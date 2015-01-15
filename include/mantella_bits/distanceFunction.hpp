@@ -1,5 +1,8 @@
 #pragma once
 
+// C++ Standard Library
+#include <stdexcept>
+
 // Armadillo
 #include <armadillo>
 
@@ -24,7 +27,7 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter) const {
     if(firstParameter.n_elem != secondParameter.n_elem) {
-      // TODO Add exception
+      throw std::logic_error("The number of dimensions of the fist parameter (" + std::to_string(firstParameter.n_elem) + ") must match the number of dimensions of the second parameter (" + std::to_string(secondParameter.n_elem) + ").");
     }
 
     return getDistanceImplementation(firstParameter, secondParameter);
