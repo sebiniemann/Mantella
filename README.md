@@ -45,12 +45,12 @@ Future plans
   - ~~Adding a grid search algorithm~~ **(done)**
   - Adding a multi resolution grid search algorithm
 - **Planned for 1.1.0**
-  - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
+  - ~~Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen~~ **(done)**
   - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
   - Adding the Nelder–Mead method, developed by John Nelder and Roger Mead
   - Adding parallel (MPI-based) sample-based algorithms
 - **Planned for 1.2.0**
-  - Adding a seperate website (besides this readme on Github), including a user documentation and a *getting started*
+  - Adding a seperate website (besides this README on Github), including a user documentation and a *getting started*
 - **Backlog**
   - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
 
