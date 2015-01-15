@@ -16,11 +16,64 @@ namespace mant {
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter) const;
 
+      arma::Col<ParameterType> getNeighour(
+          const double& minimalDistance,
+          const double& maximalDistance) const noexcept;
+
+      arma::Mat<ParameterType> getNeighbours(
+          const double& minimalDistance,
+          const double& maximalDistance,
+          const unsigned int& numberOfNeighbours) const noexcept;
+
     protected:
       virtual double getDistanceImplementation(
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter) const = 0;
+
+      virtual arma::Col<ParameterType> getNeighourImplementation(
+          const double& minimalDistance,
+          const double& maximalDistance) const noexcept = 0;
+
+      virtual arma::Mat<ParameterType> getNeighboursImplementation(
+          const double& minimalDistance,
+          const double& maximalDistance,
+          const unsigned int& numberOfNeighbours) const noexcept;
   };
+
+  template <typename ParameterType>
+  double DistanceFunction<ParameterType>::getDistance(
+      const arma::Col<ParameterType>& firstParameter,
+      const arma::Col<ParameterType>& secondParameter) const {
+    if(firstParameter.n_elem != secondParameter.n_elem) {
+      throw std::logic_error("The number of dimensions of the fist parameter (" + std::to_string(firstParameter.n_elem) + ") must match the number of dimensions of the second parameter (" + std::to_string(secondParameter.n_elem) + ").");
+    }
+
+    return getDistanceImplementation(firstParameter, secondParameter);
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighour(
+      const double& minimalDistance,
+      const double& maximalDistance) const {
+    if(minimalDistance < 0) {
+      throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be strict greater than 0.");
+    } else if (maximalDistance < minimalDistance) {
+
+    }
+
+    return getDistanceImplementation(firstParameter, secondParameter);
+  }
+
+  template <typename ParameterType>
+  double DistanceFunction<ParameterType>::getDistance(
+      const arma::Col<ParameterType>& firstParameter,
+      const arma::Col<ParameterType>& secondParameter) const {
+    if(firstParameter.n_elem != secondParameter.n_elem) {
+      throw std::logic_error("The number of dimensions of the fist parameter (" + std::to_string(firstParameter.n_elem) + ") must match the number of dimensions of the second parameter (" + std::to_string(secondParameter.n_elem) + ").");
+    }
+
+    return getDistanceImplementation(firstParameter, secondParameter);
+  }
 
   template <typename ParameterType>
   double DistanceFunction<ParameterType>::getDistance(

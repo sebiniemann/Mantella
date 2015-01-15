@@ -88,7 +88,7 @@ namespace mant {
       arma::Col<ParameterType> getLowerBounds() const noexcept;
 
       // Sets the lower bounds of the search space.
-      // Note: It is not checked, whether it is strictly greater then the lower bound or not.
+      // Note: It is not checked, whether it is strictly greater than the lower bound or not.
       void setLowerBounds(
         // The new lower bounds
         const arma::Col<ParameterType>& lowerBounds);
@@ -97,7 +97,7 @@ namespace mant {
       arma::Col<ParameterType> getUpperBounds() const noexcept;
 
       // Sets the upper bounds of the search space.
-      // Note: It is not checked, whether it is strictly greater then the lower bound or not.
+      // Note: It is not checked, whether it is strictly greater than the lower bound or not.
       void setUpperBounds(
         // The new upper bounds
         const arma::Col<ParameterType>& upperBounds);
