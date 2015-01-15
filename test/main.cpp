@@ -18,7 +18,7 @@ boost::filesystem::path testDirectory;
 int main(const int argc, const char* argv[]) {
   try {
     if (argc != 2) {
-      throw std::invalid_argument("The number of arguments (" + std::to_string(argc) + ") provided must be exactly 2.");
+      throw std::invalid_argument("The location of the test data directory need to be added to the command line.");
     }
 
     testDirectory = boost::filesystem::path(argv[1]);
