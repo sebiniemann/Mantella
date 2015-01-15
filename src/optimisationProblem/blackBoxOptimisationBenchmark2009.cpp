@@ -21,7 +21,10 @@ namespace mant {
       // TODO Check value within the paper
       setAcceptableObjectiveValue(objectiveValueTranslation_ + 1.0e-3);
 
-      setTranslation(arma::randu<arma::Col<double>>(numberOfDimensions_) * 8.0 - 4.0);
+      arma::Col<double> translation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
+      translation.elem(arma::find(translation == 0)).fill(-1.0e5);
+      setTranslation(translation);
+
       setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator) ? 1.0 : -1.0));
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
