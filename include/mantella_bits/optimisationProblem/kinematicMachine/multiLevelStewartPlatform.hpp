@@ -7,11 +7,12 @@
 #include <mantella_bits/optimisationProblem/kinematicMachine.hpp>
 #include <mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
 
-// TODO Add default constructor
 namespace mant {
   namespace robotic {
     class MultiLevelStewartPlatform : public KinematicMachine {
       public:
+        explicit MultiLevelStewartPlatform() noexcept;
+
         explicit MultiLevelStewartPlatform(
             const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) noexcept;
 
