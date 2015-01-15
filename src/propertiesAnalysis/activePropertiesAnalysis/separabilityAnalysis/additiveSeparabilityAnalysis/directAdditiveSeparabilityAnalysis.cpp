@@ -96,7 +96,5 @@ namespace mant {
 //        }
 //      }
 //    }
-
-    std::cout << "done" << std::endl;
   }
 }
