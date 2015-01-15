@@ -18,8 +18,7 @@ namespace mant {
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
       setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::generator))));
 
-      // TODO Check value within the paper
-      setAcceptableObjectiveValue(objectiveValueTranslation_ + 1.0e-3);
+      setAcceptableObjectiveValue(objectiveValueTranslation_ + 1.0e-8);
 
       arma::Col<double> translation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
       translation.elem(arma::find(translation == 0)).fill(-1.0e5);
