@@ -5,6 +5,9 @@
 
 namespace mant {
   class EuclideanDistance : public DistanceFunction<double> {
+    public:
+      using DistanceFunction<double>::DistanceFunction;
+
     protected:
       double getDistanceImplementation(
           const arma::Col<double>& firstParameter,
