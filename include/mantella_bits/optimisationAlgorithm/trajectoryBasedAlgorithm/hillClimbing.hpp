@@ -23,7 +23,6 @@ namespace mant {
 
       void optimiseImplementation() noexcept override;
 
-    private:
       void setDefaultMaximalStepSize(std::true_type) noexcept;
       void setDefaultMaximalStepSize(std::false_type) noexcept;
   };
