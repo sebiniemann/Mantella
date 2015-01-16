@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
     for (unsigned int n = 0; n < numberOfIterations; ++n) {
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
 
-      mant::ParallelStandardParticleSwarmOptimisation2011 parallelOptimisationAlgorithm(optimisationProblem, localPopulationSize);
+      mant::ParallelStandardParticleSwarmOptimisation2011<mant::EuclideanDistance> parallelOptimisationAlgorithm(optimisationProblem, localPopulationSize);
       parallelOptimisationAlgorithm.setLocalAttraction(localAttraction);
       parallelOptimisationAlgorithm.setGlobalAttraction(globalAttraction);
       parallelOptimisationAlgorithm.setAcceleration(acceleration);
