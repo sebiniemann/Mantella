@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(4));
 
-    mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
+    mant::HookeJeevesAlgorithm<mant::EuclideanDistance> optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
 
     std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;
