@@ -46,7 +46,7 @@ namespace mant {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      arma::Col<ParameterType> candidateParameter = this->distanceFunction_.getNeighbour(this->bestParameter_, arma::zeros<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions), maximalStepSize_);
+      arma::Col<ParameterType> candidateParameter = this->distanceFunction_.getNeighbour(this->bestParameter_, maximalStepSize_);
 
       const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < this->optimisationProblem_->getLowerBounds());
       const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > this->optimisationProblem_->getUpperBounds());

@@ -21,6 +21,10 @@ namespace mant {
           const arma::Col<ParameterType>& minimalDistance,
           const arma::Col<ParameterType>& maximalDistance) const;
 
+      arma::Col<ParameterType> getNeighour(
+          const arma::Col<ParameterType>& parameter,
+          const arma::Col<ParameterType>& maximalDistance) const;
+
     protected:
       virtual ParameterType getDistanceImplementation(
           const arma::Col<ParameterType>& firstParameter,
@@ -59,5 +63,13 @@ namespace mant {
     }
 
     return getNeighourImplementation(minimalDistance, maximalDistance);
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighour(
+      const arma::Col<ParameterType>& parameter,
+      const arma::Col<ParameterType>& maximalDistance) const {
+
+    return getNeighour(parameter, arma::zeros<arma::Col<double>>(parameter.n_elem), maximalDistance);
   }
 }
