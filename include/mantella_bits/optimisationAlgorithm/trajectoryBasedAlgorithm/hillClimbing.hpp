@@ -32,7 +32,7 @@ namespace mant {
   HillClimbing<ParameterType, DistanceFunction>::HillClimbing(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
-    setDefaultMaximalStepSize(std::is_same<ParameterType, double>());
+    setDefaultMaximalStepSize(std::is_floating_point<ParameterType>());
   }
 
   template <typename ParameterType, class DistanceFunction>
