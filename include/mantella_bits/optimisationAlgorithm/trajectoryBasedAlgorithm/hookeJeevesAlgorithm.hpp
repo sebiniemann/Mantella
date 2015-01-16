@@ -4,6 +4,7 @@
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
 #include <mantella_bits/helper/random.hpp>
 
+// TODO Add restarting
 namespace mant {
   template <class DistanceFunction>
   class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double, DistanceFunction> {
