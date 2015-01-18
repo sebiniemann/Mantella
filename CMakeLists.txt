@@ -91,6 +91,7 @@ if(BUILD_LIBRARY)
   set(MANTELLA_LIBRARY_SOURCES
     src/distanceFunction.cpp
     src/distanceFunction/euclideanDistance.cpp
+    src/distanceFunction/infinityNorm.cpp
     src/optimisationProblem.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2009.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2009/attractiveSectorFunction.cpp
@@ -508,6 +509,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella
   include/mantella_bits/distanceFunction.hpp
   include/mantella_bits/distanceFunction/euclideanDistance.hpp
+  include/mantella_bits/distanceFunction/infinityNorm.hpp
   include/mantella_bits/optimisationProblem.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009/attractiveSectorFunction.hpp
