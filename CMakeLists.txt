@@ -91,6 +91,7 @@ if(BUILD_LIBRARY)
   set(MANTELLA_LIBRARY_SOURCES
     src/distanceFunction.cpp
     src/distanceFunction/euclideanDistance.cpp
+    src/distanceFunction/hammingDistance.cpp
     src/distanceFunction/infinityNorm.cpp
     src/optimisationProblem.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2009.cpp
