@@ -38,6 +38,7 @@ namespace mant {
     return quadraticModelEstimator_;
   }
 
+  // TODO Be more strict with runtime/logic_erros
   template <typename ParameterType, class DistanceFunction>
   void QuadraticModelAnalysis<ParameterType, DistanceFunction>::setQuadraticModelMedianErrorThreshold(
       const double& quadraticModelMedianErrorThreshold) {
