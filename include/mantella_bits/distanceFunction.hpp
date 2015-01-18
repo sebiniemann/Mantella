@@ -33,7 +33,7 @@ namespace mant {
       virtual arma::Col<ParameterType> getNeighourImplementation(
           const arma::Col<ParameterType>& parameter,
           const arma::Col<ParameterType>& minimalDistance,
-          const arma::Col<ParameterType>& maximalDistance) const noexcept = 0;
+          const arma::Col<ParameterType>& maximalDistance) const = 0;
   };
 
   template <typename ParameterType>
