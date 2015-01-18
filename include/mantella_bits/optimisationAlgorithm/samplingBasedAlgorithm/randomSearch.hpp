@@ -31,7 +31,7 @@ namespace mant {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      const arma::Col<ParameterType>& candidateParameter = this->distanceFunction_.getNeighour(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
+      const arma::Col<ParameterType>& candidateParameter = this->distanceFunction_.getNeighbour(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
       const double& candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
       const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
 

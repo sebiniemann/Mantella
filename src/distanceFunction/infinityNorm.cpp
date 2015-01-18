@@ -10,7 +10,7 @@ namespace mant {
     return arma::norm(secondParameter - firstParameter, "inf");
   }
 
-  arma::Col<double> InfinityNorm::getNeighourImplementation(
+  arma::Col<double> InfinityNorm::getNeighbourImplementation(
       const arma::Col<double>& parameter,
       const arma::Col<double>& minimalDistance,
       const arma::Col<double>& maximalDistance) const noexcept {

@@ -13,7 +13,7 @@ namespace mant {
           const arma::Col<double>& firstParameter,
           const arma::Col<double>& secondParameter) const noexcept override;
 
-      arma::Col<double> getNeighourImplementation(
+      arma::Col<double> getNeighbourImplementation(
           const arma::Col<double>& parameter,
           const arma::Col<double>& minimalDistance,
           const arma::Col<double>& maximalDistance) const noexcept override;

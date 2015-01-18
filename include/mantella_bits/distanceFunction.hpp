@@ -16,12 +16,12 @@ namespace mant {
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter) const;
 
-      arma::Col<ParameterType> getNeighour(
+      arma::Col<ParameterType> getNeighbour(
           const arma::Col<ParameterType>& parameter,
           const arma::Col<ParameterType>& minimalDistance,
           const arma::Col<ParameterType>& maximalDistance) const;
 
-      arma::Col<ParameterType> getNeighour(
+      arma::Col<ParameterType> getNeighbour(
           const arma::Col<ParameterType>& parameter,
           const arma::Col<ParameterType>& maximalDistance) const;
 
@@ -30,7 +30,7 @@ namespace mant {
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter) const noexcept = 0;
 
-      virtual arma::Col<ParameterType> getNeighourImplementation(
+      virtual arma::Col<ParameterType> getNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const arma::Col<ParameterType>& minimalDistance,
           const arma::Col<ParameterType>& maximalDistance) const = 0;
@@ -48,7 +48,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighour(
+  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighbour(
       const arma::Col<ParameterType>& parameter,
       const arma::Col<ParameterType>& minimalDistance,
       const arma::Col<ParameterType>& maximalDistance) const {
@@ -62,14 +62,14 @@ namespace mant {
       throw std::logic_error("Each maximal distance must greater or equal than its corresponding minimal distance.");
     }
 
-    return getNeighourImplementation(minimalDistance, maximalDistance);
+    return getNeighbourImplementation(minimalDistance, maximalDistance);
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighour(
+  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighbour(
       const arma::Col<ParameterType>& parameter,
       const arma::Col<ParameterType>& maximalDistance) const {
 
-    return getNeighour(parameter, arma::zeros<arma::Col<double>>(parameter.n_elem), maximalDistance);
+    return getNeighbour(parameter, arma::zeros<arma::Col<double>>(parameter.n_elem), maximalDistance);
   }
 }

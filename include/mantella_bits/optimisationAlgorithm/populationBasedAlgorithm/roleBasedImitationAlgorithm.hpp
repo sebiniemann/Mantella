@@ -21,15 +21,15 @@ namespace mant {
           const unsigned int& neighbourhoodSize) noexcept;
       void setStepSize(
           const double& stepSize) noexcept;
-      void setMaximalNeighourhoodConvergence(
-          const arma::Col<double>& maximalNeighourhoodConvergence) noexcept;
+      void setMaximalNeighbourhoodConvergence(
+          const arma::Col<double>& maximalNeighbourhoodConvergence) noexcept;
 
       std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> stepSize_;
       unsigned int neighbourhoodSize_;
-      arma::Col<double> maximalNeighourhoodConvergence_;
+      arma::Col<double> maximalNeighbourhoodConvergence_;
 
       void optimiseImplementation() noexcept override;
   };
@@ -39,7 +39,7 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
     : PopulationBasedAlgorithm<double, EuclideanDistance>(optimisationProblem, populationSize),
-      maximalNeighourhoodConvergence_(this->populationSize_),
+      maximalNeighbourhoodConvergence_(this->populationSize_),
       neighbourhoodSize_(0),
       stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)) {
 
@@ -149,9 +149,9 @@ namespace mant {
   }
 
   template<class DistanceFunction>
-  void RoleBasedImitationAlgorithm<DistanceFunction>::setMaximalNeighourhoodConvergence(
-      const arma::Col<double>& maximalNeighourhoodConvergence) noexcept {
-    maximalNeighourhoodConvergence_ = maximalNeighourhoodConvergence;
+  void RoleBasedImitationAlgorithm<DistanceFunction>::setMaximalNeighbourhoodConvergence(
+      const arma::Col<double>& maximalNeighbourhoodConvergence) noexcept {
+    maximalNeighbourhoodConvergence_ = maximalNeighbourhoodConvergence;
   }
 
   template<class DistanceFunction>

@@ -10,7 +10,7 @@ namespace mant {
     return arma::norm(secondParameter - firstParameter);
   }
 
-  arma::Col<double> EuclideanDistance::getNeighourImplementation(
+  arma::Col<double> EuclideanDistance::getNeighbourImplementation(
       const arma::Col<double>& parameter,
       const arma::Col<double>& minimalDistance,
       const arma::Col<double>& maximalDistance) const noexcept {

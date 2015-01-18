@@ -15,7 +15,7 @@ namespace mant {
     return std::abs(arma::accu(secondParameter != 0) - arma::accu(firstParameter != 0));
   }
 
-  arma::Col<unsigned int> HammingDistance::getNeighourImplementation(
+  arma::Col<unsigned int> HammingDistance::getNeighbourImplementation(
       const arma::Col<unsigned int>& parameter,
       const arma::Col<unsigned int>& minimalDistance,
       const arma::Col<unsigned int>& maximalDistance) const noexcept {
