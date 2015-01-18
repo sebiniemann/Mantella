@@ -100,7 +100,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void OptimisationAlgorithm<ParameterType, DistanceFunction>::optimise() noexcept {
-    // Reset results, counters and caches
+    // Resets the results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
     bestParameter_.reset();
