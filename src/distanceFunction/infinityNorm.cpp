@@ -14,7 +14,7 @@ namespace mant {
       const arma::Col<double>& parameter,
       const arma::Col<double>& minimalDistance,
       const arma::Col<double>& maximalDistance) const noexcept {
-    const arma::Col<double>& velocity = arma::randu<arma::Col<double>>(parameter.n_elem);
+    const arma::Col<double>& velocity = 2 * (arma::randu<arma::Col<double>>(parameter.n_elem) - 0.5);
     return parameter + arma::sign(velocity) % minimalDistance + (maximalDistance - minimalDistance) % velocity;
   }
 }
