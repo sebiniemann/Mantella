@@ -53,7 +53,7 @@ TEST_CASE("Circle sphere intersection", "") {
 }
 
 TEST_CASE("2D rotation matrix", "") {
-  std::array<double, 15> angles = {0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0};
+  std::array<double, 15> angles = {{0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0}};
 
   for (const auto& angle : angles) {
     arma::Mat<double> result = mant::get2DRotationMatrix(angle);
@@ -73,9 +73,9 @@ TEST_CASE("2D rotation matrix", "") {
 }
 
 TEST_CASE("3D rotation matrix", "") {
-  std::array<double, 14> rollAngles = {0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -45, 276, -56, -45.89};
-  std::array<double, 14> pitchAngles = {0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -90, -89, 78, -245};
-  std::array<double, 14> yawAngles = {0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -225, -310, -90, 345};
+  std::array<double, 14> rollAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -45, 276, -56, -45.89}};
+  std::array<double, 14> pitchAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -90, -89, 78, -245}};
+  std::array<double, 14> yawAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -225, -310, -90, 345}};
 
   for (const auto& rollAngle : rollAngles) {
     for (const auto& pitchAngle : pitchAngles) {
