@@ -7,11 +7,6 @@ namespace mant {
   }
 
   std::string to_string(
-      const std::unique_ptr<Printable> printable) noexcept {
-    return printable->to_string();
-  }
-
-  std::string to_string(
       const std::shared_ptr<Printable> printable) noexcept {
     return printable->to_string();
   }
