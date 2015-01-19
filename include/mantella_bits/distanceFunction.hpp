@@ -88,6 +88,6 @@ namespace mant {
       throw std::logic_error("The maximal distance (" + std::to_string(maximalDistance) + ") must be greater than or equal to the minimal distance (" + std::to_string(minimalDistance) + ").");
     }
 
-    return getNeighbourImplementation(minimalDistance, maximalDistance);
+    return getNeighbourImplementation(parameter, minimalDistance, maximalDistance);
   }
 }
