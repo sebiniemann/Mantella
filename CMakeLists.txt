@@ -93,6 +93,7 @@ if(BUILD_LIBRARY)
     src/distanceFunction/euclideanDistance.cpp
     src/distanceFunction/hammingDistance.cpp
     src/distanceFunction/infinityNorm.cpp
+    src/distanceFunction/manhattanDistance.cpp
     src/optimisationProblem.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2009.cpp
     src/optimisationProblem/blackBoxOptimisationBenchmark2009/attractiveSectorFunction.cpp
@@ -512,6 +513,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/distanceFunction/euclideanDistance.hpp
   include/mantella_bits/distanceFunction/hammingDistance.hpp
   include/mantella_bits/distanceFunction/infinityNorm.hpp
+  include/mantella_bits/distanceFunction/manhattanDistance.hpp
   include/mantella_bits/optimisationProblem.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009/attractiveSectorFunction.hpp
