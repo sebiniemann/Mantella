@@ -4,6 +4,7 @@
 #include <catch.hpp>
 
 // C++ Standard Library
+#include <cstdlib>
 #include <vector>
 
 // Armadillo
@@ -42,7 +43,7 @@ void compare(
   CHECK(actual.n_cols == expected.n_cols);
 
   for(std::size_t n = 0; n < expected.n_cols; ++n) {
-    compare(actual.col(n), expected.col(n));
+    compare<ParameterType>(static_cast<arma::Col<ParameterType>>(actual.col(n)), static_cast<arma::Col<ParameterType>>(expected.col(n)));
   }
 }
 
