@@ -89,6 +89,6 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   void HillClimbing<ParameterType, DistanceFunction>::setDefaultMaximalStepSize(
       std::false_type) noexcept {
-    setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10.0));
+    setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10));
   }
 }
