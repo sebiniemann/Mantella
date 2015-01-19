@@ -13,6 +13,9 @@ namespace mant {
       explicit DistanceFunction() = default;
 
       ParameterType getDistance(
+          const arma::Col<ParameterType>& parameter) const;
+
+      ParameterType getDistance(
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter) const;
 
@@ -23,8 +26,17 @@ namespace mant {
 
     protected:
       virtual ParameterType getDistanceImplementation(
+          const arma::Col<ParameterType>& parameter) const noexcept = 0;
+
+      ParameterType getDistance(
           const arma::Col<ParameterType>& firstParameter,
-          const arma::Col<ParameterType>& secondParameter) const noexcept = 0;
+          const arma::Col<ParameterType>& secondParameter,
+          std::true_type) const;
+
+      ParameterType getDistance(
+          const arma::Col<ParameterType>& firstParameter,
+          const arma::Col<ParameterType>& secondParameter,
+          std::false_type) const;
 
       virtual arma::Col<ParameterType> getNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
@@ -34,13 +46,38 @@ namespace mant {
 
   template <typename ParameterType>
   ParameterType DistanceFunction<ParameterType>::getDistance(
+      const arma::Col<ParameterType>& parameter) const noexcept {
+    return getDistanceImplementation(parameter);
+  }
+
+  template <typename ParameterType>
+  ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter) const {
     if(firstParameter.n_elem != secondParameter.n_elem) {
       throw std::logic_error("The number of dimensions of the first parameter (" + std::to_string(firstParameter.n_elem) + ") must match the number of dimensions of the second parameter (" + std::to_string(secondParameter.n_elem) + ").");
     }
 
-    return getDistanceImplementation(firstParameter, secondParameter);
+    return getDistance(firstParameter, secondParameter, std::is_floating_point<ParameterType>());
+  }
+
+  template <typename ParameterType>
+  ParameterType DistanceFunction<ParameterType>::getDistance(
+      const arma::Col<ParameterType>& firstParameter,
+      const arma::Col<ParameterType>& secondParameter,
+      std::true_type) const {
+    return getDistance(secondParameter - firstParameter);
+  }
+
+  template <typename ParameterType>
+  ParameterType DistanceFunction<ParameterType>::getDistance(
+      const arma::Col<ParameterType>& firstParameter,
+      const arma::Col<ParameterType>& secondParameter,
+      std::false_type) const {
+    const ParameterType& firstParameterDistance = getDistance(firstParameter);
+    const ParameterType& secondParameterDistance = getDistance(secondParameter);
+
+    return (firstParameterDistance > secondParameterDistance ? firstParameterDistance - secondParameterDistance : secondParameterDistance - firstParameterDistance);
   }
 
   template <typename ParameterType>

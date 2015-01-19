@@ -7,8 +7,7 @@ namespace mant {
   class InfinityNorm : public DistanceFunction<double> {
     protected:
       double getDistanceImplementation(
-          const arma::Col<double>& firstParameter,
-          const arma::Col<double>& secondParameter) const noexcept override;
+          const arma::Col<double>& parameter) const noexcept override;
 
       arma::Col<double> getNeighbourImplementation(
           const arma::Col<double>& parameter,

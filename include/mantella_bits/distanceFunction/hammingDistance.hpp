@@ -7,8 +7,7 @@ namespace mant {
   class HammingDistance : public DistanceFunction<unsigned int> {
     protected:
       unsigned int getDistanceImplementation(
-          const arma::Col<unsigned int>& firstParameter,
-          const arma::Col<unsigned int>& secondParameter) const noexcept override;
+          const arma::Col<unsigned int>& parameter) const noexcept override;
 
       arma::Col<unsigned int> getNeighbourImplementation(
           const arma::Col<unsigned int>& parameter,

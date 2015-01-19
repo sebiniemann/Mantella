@@ -10,22 +10,23 @@
 
 namespace mant {
   unsigned int HammingDistance::getDistanceImplementation(
-      const arma::Col<unsigned int>& firstParameter,
-      const arma::Col<unsigned int>& secondParameter) const noexcept {
-    return std::abs(arma::accu(secondParameter != 0) - arma::accu(firstParameter != 0));
+      const arma::Col<unsigned int>& parameter) const noexcept {
+    return arma::accu(parameter != 0);
   }
 
   arma::Col<unsigned int> HammingDistance::getNeighbourImplementation(
       const arma::Col<unsigned int>& parameter,
       const arma::Col<unsigned int>& minimalDistance,
       const arma::Col<unsigned int>& maximalDistance) const noexcept {
-    if(minimalDistance > std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) {
-      throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be lower than the absolute maximal distance (" + std::to_string(parameter.n_elem - getDistanceImplementation(parameter)) + ").");
+    if(arma::any(minimalDistance > 1)) {
+      throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be lower than or equal to 1 for each element.");
     }
+
+    // TODO Fix me
 
     arma::Col<unsigned int> flippedParameter = parameter;
 
-    const arma::Col<unsigned int>& elementsToFlip = getRandomPermutation(parameter.n_elem, std::uniform_int_distribution(minimalDistance, maximalDistance));
+    const arma::Col<unsigned int>& elementsToFlip = getRandomPermutation(parameter.n_elem, std::uniform_int_distribution(arma::accu(minimalDistance != 0), arma::accu(maximalDistance != 0)));
     const arma::Col<unsigned int>& flippedElements = parameter.elem(elementsToFlip);
 
     flippedParameter.elem(flippedElements != 0) = 0;

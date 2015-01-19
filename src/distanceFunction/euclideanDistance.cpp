@@ -5,9 +5,8 @@
 
 namespace mant {
   double EuclideanDistance::getDistanceImplementation(
-      const arma::Col<double>& firstParameter,
-      const arma::Col<double>& secondParameter) const noexcept {
-    return arma::norm(secondParameter - firstParameter);
+      const arma::Col<double>& parameter) const noexcept {
+    return arma::norm(parameter);
   }
 
   arma::Col<double> EuclideanDistance::getNeighbourImplementation(
