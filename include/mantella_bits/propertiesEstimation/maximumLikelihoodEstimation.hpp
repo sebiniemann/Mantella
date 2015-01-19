@@ -18,22 +18,22 @@ namespace mant {
   void MaximumLikelihoodEstimation<ParameterType, DistanceFunction>::estimateImplementation(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
 
-    PropertiesEstimation<ParameterType, DistanceFunction>::correlationAnalysis_->analyse(optimisationProblem);
-    PropertiesEstimation<ParameterType, DistanceFunction>::correlationCoefficients_.push_back(PropertiesEstimation<ParameterType, DistanceFunction>::correlationAnalysis_->getCorrelationCoefficient());
+    this->correlationAnalysis_->analyse(optimisationProblem);
+    this->correlationCoefficients_.push_back(this->correlationAnalysis_->getCorrelationCoefficient());
 
-    PropertiesEstimation<ParameterType, DistanceFunction>::lipschitzContinuityAnalysis_->analyse(optimisationProblem);
-    PropertiesEstimation<ParameterType, DistanceFunction>::lipschitzConstants_.push_back(PropertiesEstimation<ParameterType, DistanceFunction>::lipschitzContinuityAnalysis_->getLipschitzConstant());
+    this->lipschitzContinuityAnalysis_->analyse(optimisationProblem);
+    this->lipschitzConstants_.push_back(this->lipschitzContinuityAnalysis_->getLipschitzConstant());
 
-    PropertiesEstimation<ParameterType, DistanceFunction>::linearModelAnalysis_->analyse(optimisationProblem);
-    PropertiesEstimation<ParameterType, DistanceFunction>::linearModelEstimators_.push_back(PropertiesEstimation<ParameterType, DistanceFunction>::linearModelAnalysis_->getLinearModelEstimator());
-    PropertiesEstimation<ParameterType, DistanceFunction>::isLinear_.push_back(PropertiesEstimation<ParameterType, DistanceFunction>::linearModelAnalysis_->isLinear());
+    this->linearModelAnalysis_->analyse(optimisationProblem);
+    this->linearModelEstimators_.push_back(this->linearModelAnalysis_->getLinearModelEstimator());
+    this->isLinear_.push_back(this->linearModelAnalysis_->isLinear());
 
-    PropertiesEstimation<ParameterType, DistanceFunction>::quadraticModelAnalysis_->analyse(optimisationProblem);
-    PropertiesEstimation<ParameterType, DistanceFunction>::quadraticModelEstimators_.push_back(PropertiesEstimation<ParameterType, DistanceFunction>::quadraticModelAnalysis_->getQuadraticModelEstimator());
-    PropertiesEstimation<ParameterType, DistanceFunction>::isQuadratic_.push_back(PropertiesEstimation<ParameterType, DistanceFunction>::quadraticModelAnalysis_->isQuadratic());
+    this->quadraticModelAnalysis_->analyse(optimisationProblem);
+    this->quadraticModelEstimators_.push_back(this->quadraticModelAnalysis_->getQuadraticModelEstimator());
+    this->isQuadratic_.push_back(this->quadraticModelAnalysis_->isQuadratic());
 
-    PropertiesEstimation<ParameterType, DistanceFunction>::additiveSeparabilityAnalysis_->analyse(optimisationProblem);
+    this->additiveSeparabilityAnalysis_->analyse(optimisationProblem);
 
-    PropertiesEstimation<ParameterType, DistanceFunction>::numberOfPropertySets_ = 1;
+    this->numberOfPropertySets_ = 1;
   }
 }

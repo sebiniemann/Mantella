@@ -26,7 +26,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
-    LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_ = 0.0;
+    this->lipschitzConstant_ = 0.0;
 
     const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
@@ -35,7 +35,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter = n->first;
       const double& objectiveValue = n->second;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
-        LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_ = std::max(LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::lipschitzConstant_, std::abs(k->second - objectiveValue) / distanceFunction.getDistance(parameter, k->first));
+        this->lipschitzConstant_ = std::max(this->lipschitzConstant_, std::abs(k->second - objectiveValue) / distanceFunction.getDistance(parameter, k->first));
       }
     }
   }
