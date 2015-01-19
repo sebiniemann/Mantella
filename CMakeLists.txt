@@ -510,6 +510,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella
   include/mantella_bits/distanceFunction.hpp
   include/mantella_bits/distanceFunction/euclideanDistance.hpp
+  include/mantella_bits/distanceFunction/hammingDistance.hpp
   include/mantella_bits/distanceFunction/infinityNorm.hpp
   include/mantella_bits/optimisationProblem.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp
