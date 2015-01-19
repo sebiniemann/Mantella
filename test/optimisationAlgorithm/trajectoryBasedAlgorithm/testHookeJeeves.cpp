@@ -21,11 +21,11 @@
 extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hookeJeeves/";
 
-class TestHookeJeeves : public mant::HookeJeevesAlgorithm<double> {
+class TestHookeJeeves : public mant::HookeJeevesAlgorithm<mant::EuclideanDistance> {
   public:
     TestHookeJeeves(
         const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)
-      : mant::HookeJeevesAlgorithm(optimisationProblem){
+      : mant::HookeJeevesAlgorithm<mant::EuclideanDistance>(optimisationProblem){
     }
 };
 
