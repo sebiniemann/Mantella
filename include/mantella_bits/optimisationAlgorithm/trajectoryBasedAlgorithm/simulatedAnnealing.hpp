@@ -19,16 +19,15 @@ namespace mant {
       SimulatedAnnealing& operator=(const SimulatedAnnealing&) = delete;
 
       void setMaximalStepSize(
-          const arma::Col<double>& maximalStepSize);
+          const ParameterType& maximalStepSize);
 
       std::string to_string() const noexcept override;
 
     protected:
-      arma::Col<double> maximalStepSize_;
+      ParameterType maximalStepSize_;
 
       virtual bool isAcceptableState(
           const double& candidateObjectiveValue) noexcept;
-      virtual arma::Col<double> getVelocity() noexcept;
 
       void optimiseImplementation() noexcept override;
 
@@ -85,16 +84,9 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> SimulatedAnnealing<ParameterType, DistanceFunction>::getVelocity() noexcept {
-    return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
-  }
-
-  template <typename ParameterType, class DistanceFunction>
   void SimulatedAnnealing<ParameterType, DistanceFunction>::setMaximalStepSize(
-      const arma::Col<double>& maximalStepSize) {
-    if(maximalStepSize.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the maximal step size (" + std::to_string(maximalStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
-    } else if (arma::any(maximalStepSize <= 0)) {
+      const ParameterType& maximalStepSize) {
+    if (maximalStepSize <= 0) {
       throw std::logic_error("The maximal step size must be strict greater than 0.");
     }
 
@@ -115,6 +107,6 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   void SimulatedAnnealing<ParameterType, DistanceFunction>::setDefaultMaximalStepSize(
       std::false_type) noexcept {
-    setMaximalStepSize(arma::max(arma::ones<arma::Col<unsigned int>>(this->optimisationProblem_->getNumberOfDimensions()), this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10.0));
+    setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10));
   }
 }
