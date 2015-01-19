@@ -39,14 +39,15 @@ namespace mant {
       OptimisationProblem(const OptimisationProblem&) = delete;
       OptimisationProblem& operator=(const OptimisationProblem&) = delete;
 
-      // Checks for each dimension whether the parameter is greater or equal the lower bound.
+      // Checks for each dimension whether the parameter is greater than or equal to the lower
+      // bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
       arma::Col<unsigned int> isSatisfyingLowerBounds(
         // The parameter to be tested
         const arma::Col<ParameterType>& parameter);
 
-      // Checks for each dimension whether the parameter is lower or equal the upper bound.
+      // Checks for each dimension whether the parameter is lower than or equal to the upper bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.
       // Note: Computes the result only once and caches it afterwards.
       arma::Col<unsigned int> isSatisfyingUpperBounds(
@@ -374,7 +375,7 @@ namespace mant {
       const double& result = getSoftConstraintsValueImplementation(parameter);
 
       if(result < 0) {
-        throw std::runtime_error("The soft constraint value (" + std::to_string(result) + ") must be greater or equal 0.");
+        throw std::runtime_error("The soft constraint value (" + std::to_string(result) + ") must be greater than or equal to 0.");
       }
 
       cachedSoftConstraintsValues_.insert({parameter, result});

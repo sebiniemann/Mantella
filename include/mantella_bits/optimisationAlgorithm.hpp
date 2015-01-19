@@ -47,12 +47,14 @@ namespace mant {
 
       // Checks whether the currently best objective value satisfies the upper bound for an
       // acceptable objective value.
-      // Returns true if the objective value is lower of equal the upper bound and false otherwise.
+      // Returns true if the objective value is lower than or equal to the upper bound and false
+      // otherwise.
       bool isFinished() const noexcept;
 
       // Checks whether the current number of iterations performed violates the maximal number of
       // iterations.
-      // Returns true if the number of iterations is strictly lower the maximal number of iterations
+      // Returns true if the number of iterations is strictly lower than the maximal number of
+      // iterations
       // and false otherwise.
       bool isTerminated() const noexcept;
 
