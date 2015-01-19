@@ -128,14 +128,11 @@ TEST_CASE("Hill climbing", "") {
    arma::Col<double> initialParameter;
    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); // The parameter is optional
 
-   arma::Col<double> maximalStepSize;
-   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.1].mat"); // The parameter is optional
-
    // Init OptimisationAlgorithm
    TestHillClimbing testHillClimbing(testHillClimbingProblem);
    testHillClimbing.setVelocitys(velocities);
    testHillClimbing.setInitialParameter(initialParameter);
-   testHillClimbing.setMaximalStepSize(maximalStepSize);
+   testHillClimbing.setMaximalStepSize(2.0);
 
    // Set Expected values
    arma::Mat<double> expectedParameterHistory;

@@ -160,15 +160,12 @@ TEST_CASE("Simulated annealing", "") {
    arma::Col<double> initialParameter;
    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); // The parameter is optional
 
-   arma::Col<double> maximalStepSize;
-   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.1].mat"); // The parameter is optional
-
    // Init OptimisationAlgorithm
    TestSimulatedAnnealing testSimulatedAnnealing(testSimulatedAnnealingProblem);
    testSimulatedAnnealing.setVelocitys(velocities);
    testSimulatedAnnealing.setStates(states);
    testSimulatedAnnealing.setInitialParameter(initialParameter);
-   testSimulatedAnnealing.setMaximalStepSize(maximalStepSize);
+   testSimulatedAnnealing.setMaximalStepSize(2.0);
 
    // Set Expected values
    arma::Mat<double> expectedParameterHistory;
@@ -217,15 +214,12 @@ TEST_CASE("SimulatedAnnealing Test state", "") {
    arma::Col<double> initialParameter;
    initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.2].mat"); // The parameter is optional
 
-   arma::Col<double> maximalStepSize;
-   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.2].mat"); // The parameter is optional
-
    // Init OptimisationAlgorithm
    TestSimulatedAnnealing testSimulatedAnnealing(testSimulatedAnnealingProblem);
    testSimulatedAnnealing.setVelocitys(velocities);
    testSimulatedAnnealing.setStates(states);
    testSimulatedAnnealing.setInitialParameter(initialParameter);
-   testSimulatedAnnealing.setMaximalStepSize(maximalStepSize);
+   testSimulatedAnnealing.setMaximalStepSize(2.0);
 
    // Set Expected values
    arma::Mat<double> expectedParameterHistory;
