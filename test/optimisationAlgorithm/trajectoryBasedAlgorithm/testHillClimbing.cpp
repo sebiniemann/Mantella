@@ -26,12 +26,12 @@ class TestHillClimbing : public mant::HillClimbing<double, mant::EuclideanDistan
   public:
     TestHillClimbing(
         const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)
-      : mant::HillClimbing(optimisationProblem),
+      : mant::HillClimbing<double, mant::EuclideanDistance>(optimisationProblem),
         velocityIndex_(0){
         
     }
 
-    arma::Col<double> getVelocity() noexcept override {
+    arma::Col<double> getVelocity() noexcept {
       return velocities_.col(velocityIndex_++);
     }
 

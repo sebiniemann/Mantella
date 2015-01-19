@@ -42,12 +42,12 @@ class TestSimulatedAnnealing : public mant::SimulatedAnnealing<double, mant::Euc
   public:
     TestSimulatedAnnealing(
         const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)
-      : mant::SimulatedAnnealing(optimisationProblem),
+      : mant::SimulatedAnnealing<double, mant::EuclideanDistance>(optimisationProblem),
         velocityIndex_(0),
         statesIndex_(0){
     }
 
-    arma::Col<double> getVelocity() noexcept override {
+    arma::Col<double> getVelocity() noexcept {
       return velocities_.col(velocityIndex_++);
     }
 
