@@ -13,7 +13,7 @@ namespace mant {
   namespace bbob2009 {
     BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
         const unsigned int& numberOfDimensions) noexcept
-      : OptimisationProblem<double>(numberOfDimensions) {
+      : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
       setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::generator))));
