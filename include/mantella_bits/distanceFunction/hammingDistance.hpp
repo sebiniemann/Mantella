@@ -11,7 +11,7 @@ namespace mant {
 
       arma::Col<unsigned int> getNeighbourImplementation(
           const arma::Col<unsigned int>& parameter,
-          const arma::Col<unsigned int>& minimalDistance,
-          const arma::Col<unsigned int>& maximalDistance) const noexcept override;
+          const unsigned int& minimalDistance,
+          const unsigned int& maximalDistance) const noexcept override;
   };
 }

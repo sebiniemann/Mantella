@@ -11,9 +11,9 @@ namespace mant {
 
   arma::Col<double> InfinityNorm::getNeighbourImplementation(
       const arma::Col<double>& parameter,
-      const arma::Col<double>& minimalDistance,
-      const arma::Col<double>& maximalDistance) const noexcept {
-    const arma::Col<double>& velocity = 2 * (arma::randu<arma::Col<double>>(parameter.n_elem) - 0.5);
-    return parameter + arma::sign(velocity) % minimalDistance + (maximalDistance - minimalDistance) % velocity;
+      const double& minimalDistance,
+      const double& maximalDistance) const noexcept {
+    const arma::Col<double>& velocity = 2.0 * arma::randu<arma::Col<double>>(parameter.n_elem) - 1.0;
+    return parameter + arma::sign(velocity) * minimalDistance + (maximalDistance - minimalDistance) * velocity;
   }
 }
