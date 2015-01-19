@@ -327,6 +327,7 @@ if(BUILD_LIBRARY)
       # All paths must start with "test/"
       add_executable(libTest
         test/main.cpp
+        test/helper.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBuecheRastriginFunction.cpp
@@ -447,7 +448,6 @@ if(BUILD_LIBRARY)
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testSphereFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testStepEllipsoidalFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testWeierstrassFunction.cpp
-        test/optimisationAlgorithm/trajectoryBasedAlgorithm/trajectoryBasedAlgorithmHelper.cpp
 #	test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
        # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
        # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
