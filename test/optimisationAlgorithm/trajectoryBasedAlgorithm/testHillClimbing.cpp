@@ -22,7 +22,7 @@ extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hillClimbing/";
 
 
-class TestHillClimbing : public mant::HillClimbing {
+class TestHillClimbing : public mant::HillClimbing<double, mant::EuclideanDistance> {
   public:
     TestHillClimbing(
         const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)

@@ -38,7 +38,7 @@ void compareResults(std::vector<arma::Col<double>> actualHistory,arma::Mat<doubl
 }
 };
 
-class TestSimulatedAnnealing : public mant::SimulatedAnnealing {
+class TestSimulatedAnnealing : public mant::SimulatedAnnealing<double, mant::EuclideanDistance> {
   public:
     TestSimulatedAnnealing(
         const std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem)
