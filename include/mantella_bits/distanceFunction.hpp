@@ -18,12 +18,8 @@ namespace mant {
 
       arma::Col<ParameterType> getNeighbour(
           const arma::Col<ParameterType>& parameter,
-          const arma::Col<ParameterType>& minimalDistance,
-          const arma::Col<ParameterType>& maximalDistance) const;
-
-      arma::Col<ParameterType> getNeighbour(
-          const arma::Col<ParameterType>& parameter,
-          const arma::Col<ParameterType>& maximalDistance) const;
+          ParameterType& minimalDistance,
+          ParameterType& maximalDistance) const;
 
     protected:
       virtual ParameterType getDistanceImplementation(
@@ -32,8 +28,8 @@ namespace mant {
 
       virtual arma::Col<ParameterType> getNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
-          const arma::Col<ParameterType>& minimalDistance,
-          const arma::Col<ParameterType>& maximalDistance) const = 0;
+          const ParameterType& minimalDistance,
+          const ParameterType& maximalDistance) const = 0;
   };
 
   template <typename ParameterType>
@@ -50,26 +46,18 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighbour(
       const arma::Col<ParameterType>& parameter,
-      const arma::Col<ParameterType>& minimalDistance,
-      const arma::Col<ParameterType>& maximalDistance) const {
+      const ParameterType& minimalDistance,
+      const ParameterType& maximalDistance) const {
     if(minimalDistance.n_elem != maximalDistance.n_elem) {
       throw std::logic_error("The number of dimensions of the minimal distance (" + std::to_string(minimalDistance.n_elem) + ") must match the number of dimensions of the maximal distance (" + std::to_string(maximalDistance.n_elem) + ").");
     } else if(parameter.n_elem != minimalDistance.n_elem) {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the minimal/maximal distance (" + std::to_string(minimalDistance.n_elem) + ").");
-    } else if(arma::any(minimalDistance < 0)) {
-      throw std::logic_error("Each minimal distance must be strict greater than 0.");
+    } else if(minimalDistance < 0) {
+      throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be non-negative.");
     } else if (arma::any(maximalDistance < minimalDistance)) {
-      throw std::logic_error("Each maximal distance must greater or equal than its corresponding minimal distance.");
+      throw std::logic_error("The maximal distance (" + std::to_string(maximalDistance) + ") must be greater than or equal to the minimal distance (" + std::to_string(minimalDistance) + ").");
     }
 
     return getNeighbourImplementation(minimalDistance, maximalDistance);
-  }
-
-  template <typename ParameterType>
-  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighbour(
-      const arma::Col<ParameterType>& parameter,
-      const arma::Col<ParameterType>& maximalDistance) const {
-
-    return getNeighbour(parameter, arma::zeros<arma::Col<double>>(parameter.n_elem), maximalDistance);
   }
 }
