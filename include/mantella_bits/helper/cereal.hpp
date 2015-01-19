@@ -11,8 +11,6 @@
 #include <cereal/cereal.hpp>
 #include <cereal/types/vector.hpp>
 
-// TODO Add tests for these functions and add some additional tests within the optimisation problems
-
 namespace cereal {
   // Helper template to serialise matrices.
   template <typename Archive, class Type>
