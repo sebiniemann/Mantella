@@ -1,5 +1,6 @@
 // Catch
 #include <catch.hpp>
+#include <helper.hpp>
 
 // C++ Standard Library
 #include <memory>
@@ -14,9 +15,6 @@
 
 // Mantella
 #include <mantella>
-
-// Helper
-#include "trajectoryBasedAlgorithmHelper.cpp"
 
 extern boost::filesystem::path testDirectory;
 static std::string dataPath_ = "/data/optimisationAlgorithm/trajectoryBasedAlgrorithm/hookeJeeves/";
@@ -128,7 +126,7 @@ TEST_CASE("Hooke Jeeves", "") {
   testHookeJeeves.optimise();
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
 
 
 }
@@ -181,7 +179,7 @@ TEST_CASE("HookeJeeves Test state", "") {
   testHookeJeeves.optimise();
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
 
 
 }
@@ -233,7 +231,7 @@ TEST_CASE("HookeJeeves Test Maximalstepsize", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
   }
 
 TEST_CASE("HookeJeeves Check initialParameter at each limit", "") {
@@ -283,7 +281,7 @@ TEST_CASE("HookeJeeves Check initialParameter at each limit", "") {
 
    // Comparing of candidateParameters
    std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-   trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+   compare(actualParameterHistory,expectedParameterHistory);
   }
 
 TEST_CASE("HookeJeeves Check initialParameter at one limit", "") {
@@ -333,7 +331,7 @@ TEST_CASE("HookeJeeves Check initialParameter at one limit", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
   }
 
 TEST_CASE("HookeJeeves Check initialParameter in-range", "") {
@@ -383,7 +381,7 @@ TEST_CASE("HookeJeeves Check initialParameter in-range", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
   }
 
 TEST_CASE("HookeJeeves Check initialParameter out of range maximal limit", "") {
@@ -433,7 +431,7 @@ TEST_CASE("HookeJeeves Check initialParameter out of range maximal limit", "") {
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
   }
 
 TEST_CASE("HookeJeeves Check initialParameter out of range arbitrary values", "") {
@@ -483,7 +481,7 @@ TEST_CASE("HookeJeeves Check initialParameter out of range arbitrary values", ""
 
   // Comparing of candidateParameters
   std::vector<arma::Col<double>> actualParameterHistory = testHookeJeevesProblem->getParameterHistory();
-  trajectoryBasedAlgorithmHelper::compareResults(actualParameterHistory,expectedParameterHistory);
+  compare(actualParameterHistory,expectedParameterHistory);
   }
 
 
