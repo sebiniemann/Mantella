@@ -85,10 +85,10 @@ TEST_CASE("Hooke Jeeves", "") {
 
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
-   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.1].mat"); //the parametre is optional
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.1].mat"); // The parameter is optional
 
    arma::Col<double> lowerBounds;
-   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.1].mat"); //the parametre is optional
+   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.1].mat"); // The parameter is optional
 
    arma::Col<double> objectiveValues;
    objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[2.1].mat");
@@ -113,7 +113,7 @@ TEST_CASE("Hooke Jeeves", "") {
    stepSize.load(testDirectory.string() + dataPath_ + "stepSize[2.1].mat");
 
    arma::Col<double> initialParameter;
-   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); //the parametre is optional
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); // The parameter is optional
 
    // Init OptimisationAlgorithm
    TestHookeJeeves testHookeJeeves(testHookeJeevesProblem);
@@ -137,10 +137,10 @@ TEST_CASE("HookeJeeves Test state", "") {
 
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
-   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.2].mat"); //the parametre is optional
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.2].mat"); // The parameter is optional
 
    arma::Col<double> lowerBounds;
-   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.2].mat"); //the parametre is optional
+   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.2].mat"); // The parameter is optional
 
    arma::Col<double> objectiveValues;
    objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[2.2].mat");
@@ -165,7 +165,7 @@ TEST_CASE("HookeJeeves Test state", "") {
    stepSize.load(testDirectory.string() + dataPath_ + "stepSize[2.1].mat");
 
    arma::Col<double> initialParameter;
-   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.2].mat"); //the parametre is optional
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.2].mat"); // The parameter is optional
 
    // Init OptimisationAlgorithm
    TestHookeJeeves testHookeJeeves(testHookeJeevesProblem);

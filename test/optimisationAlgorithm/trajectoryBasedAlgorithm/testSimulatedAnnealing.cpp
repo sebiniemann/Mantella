@@ -130,10 +130,10 @@ TEST_CASE("Simulated annealing", "") {
 
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
-   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.1].mat"); //the parametre is optional
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.1].mat"); // The parameter is optional
 
    arma::Col<double> lowerBounds;
-   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.1].mat"); //the parametre is optional
+   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.1].mat"); // The parameter is optional
 
    arma::Col<double> objectiveValues;
    objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[2.1].mat");
@@ -158,10 +158,10 @@ TEST_CASE("Simulated annealing", "") {
    states.quiet_load(testDirectory.string() + dataPath_ + "acceptableStates[2.1].mat");
 
    arma::Col<double> initialParameter;
-   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); //the parametre is optional
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.1].mat"); // The parameter is optional
 
    arma::Col<double> maximalStepSize;
-   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.1].mat"); //the parametre is optional
+   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.1].mat"); // The parameter is optional
 
    // Init OptimisationAlgorithm
    TestSimulatedAnnealing testSimulatedAnnealing(testSimulatedAnnealingProblem);
@@ -187,10 +187,10 @@ TEST_CASE("SimulatedAnnealing Test state", "") {
 
    // Set OptimisationProblem values
    arma::Col<double> upperBounds;
-   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.2].mat"); //the parametre is optional
+   upperBounds.load(testDirectory.string() + dataPath_ + "upperBounds[2.2].mat"); // The parameter is optional
 
    arma::Col<double> lowerBounds;
-   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.2].mat"); //the parametre is optional
+   lowerBounds.load(testDirectory.string() + dataPath_ + "lowerBounds[2.2].mat"); // The parameter is optional
 
    arma::Col<double> objectiveValues;
    objectiveValues.load(testDirectory.string() + dataPath_ + "objectiveValues[2.2].mat");
@@ -215,10 +215,10 @@ TEST_CASE("SimulatedAnnealing Test state", "") {
    states.quiet_load(testDirectory.string() + dataPath_ + "acceptableStates[2.2].mat");
 
    arma::Col<double> initialParameter;
-   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.2].mat"); //the parametre is optional
+   initialParameter.load(testDirectory.string() + dataPath_ + "initialParameter[2.2].mat"); // The parameter is optional
 
    arma::Col<double> maximalStepSize;
-   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.2].mat"); //the parametre is optional
+   maximalStepSize.load(testDirectory.string() + dataPath_ + "maximalStepSize[2.2].mat"); // The parameter is optional
 
    // Init OptimisationAlgorithm
    TestSimulatedAnnealing testSimulatedAnnealing(testSimulatedAnnealingProblem);
