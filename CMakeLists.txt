@@ -448,9 +448,9 @@ if(BUILD_LIBRARY)
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testStepEllipsoidalFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testWeierstrassFunction.cpp
         test/optimisationAlgorithm/trajectoryBasedAlgorithm/trajectoryBasedAlgorithmHelper.cpp
-	test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
-        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
-        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
+#	test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
+       # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
+       # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
         test/helper/testGeometry.cpp
         test/helper/testRandom.cpp
         test/helper/testString.cpp
