@@ -452,6 +452,7 @@ if(BUILD_LIBRARY)
        # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
        # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
         test/helper/testGeometry.cpp
+        test/helper/testPrintable.cpp
         test/helper/testRandom.cpp
         test/helper/testString.cpp
       )
