@@ -2,12 +2,17 @@
 
 // C++ Standard Library
 #include <cstdlib>
+#include <stdexcept>
 
 namespace mant {
   arma::Mat<double> getHaltonSequence(
       const arma::Col<unsigned int>& base,
       const arma::Col<unsigned int>& seed,
       const unsigned int& numberOfColumms) {
+    if(base.n_elem != seed.n_elem) {
+      throw std::logic_error("The number of dimensions of the base parameter (" + std::to_string(base.n_elem) + ") must match the number of dimensions of the seed parameter (" + std::to_string(seed.n_elem) + ").");
+    }
+
     arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 
     for (std::size_t n = 0; n < seed.n_elem; ++n) {
