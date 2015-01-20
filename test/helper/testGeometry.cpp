@@ -6,9 +6,6 @@
 #include <cmath>
 #include <array>
 
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include <mantella>
 

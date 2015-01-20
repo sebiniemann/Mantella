@@ -5,9 +5,6 @@
 #include <cstdlib>
 #include <cmath>
 
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include <mantella>
 
