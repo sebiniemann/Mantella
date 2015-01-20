@@ -13,7 +13,7 @@
 namespace mant {
   namespace bbob2009 {
     BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int& numberOfDimensions)
       : OptimisationProblem<double>(numberOfDimensions) {
       std::cout << "dsf" << std::endl;
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
