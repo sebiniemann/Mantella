@@ -22,7 +22,7 @@ TEST_CASE("BBOB2009-AttractiveSectorFunction", "") {
   std::cout << "ZZZ" << std::endl;
   for (const auto& numberOfDimensions : {2, 40}) {
     std::cout << "QQQ" << numberOfDimensions << std::endl;
-    mant::bbob2013::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
+    mant::bbob2009::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
 
     std::cout << "AAA" << numberOfDimensions << std::endl;
 
