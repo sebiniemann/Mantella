@@ -22,7 +22,6 @@ namespace mant {
       const unsigned int& cycleSize) {
     if(numberOfElements < cycleSize) {
       throw std::logic_error("The cycle size (" + std::to_string(cycleSize) + ") must be lower than or equal to the number of elements (" + std::to_string(numberOfElements) + ").");
-
     }
 
     arma::Col<unsigned int> permutation(numberOfElements);
