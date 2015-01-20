@@ -7,12 +7,12 @@
 namespace mant {
   arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
       const double& angle) noexcept {
-    double sinAngle = std::sin(angle);
-    double cosAngle = std::cos(angle);
+    double sineAngle = std::sin(angle);
+    double cosineAngle = std::cos(angle);
 
     return arma::Mat<double>::fixed<2, 2>({
-      cosAngle, -sinAngle,
-      sinAngle,  cosAngle
+      cosineAngle, -sineAngle,
+      sineAngle, cosineAngle
     });
   }
 
@@ -20,18 +20,18 @@ namespace mant {
       const double& rollAngle,
       const double& pitchAngle,
       const double& yawAngle) noexcept {
-    double sinRollAngle = std::sin(rollAngle);
-    double cosRollAngle = std::cos(rollAngle);
-    double sinPitchAngle = std::sin(pitchAngle);
-    double cosPitchAngle = std::cos(pitchAngle);
-    double sinYawAngle = std::sin(yawAngle);
-    double cosYawAngle = std::cos(yawAngle);
+    double sineRollAngle = std::sin(rollAngle);
+    double cosineRollAngle = std::cos(rollAngle);
+    double sinePitchAngle = std::sin(pitchAngle);
+    double cosinePitchAngle = std::cos(pitchAngle);
+    double sineYawAngle = std::sin(yawAngle);
+    double cosineYawAngle = std::cos(yawAngle);
 
     // Avoids Rz*Ry*Rx, as this will suffer from singularities.
     return arma::Mat<double>::fixed<3, 3>({
-      cosYawAngle * cosPitchAngle, cosYawAngle * sinPitchAngle * sinRollAngle - sinYawAngle * cosRollAngle, cosYawAngle * sinPitchAngle * cosRollAngle + sinYawAngle * sinRollAngle,
-      sinYawAngle * cosPitchAngle, sinYawAngle * sinPitchAngle * sinRollAngle + cosYawAngle * cosRollAngle, sinYawAngle * sinPitchAngle * cosRollAngle - cosYawAngle * sinRollAngle,
-                   -sinPitchAngle,                                            cosPitchAngle * sinRollAngle,                                            cosPitchAngle * cosRollAngle
+      cosineYawAngle * cosinePitchAngle, cosineYawAngle * sinePitchAngle * sineRollAngle - sineYawAngle * cosineRollAngle, cosineYawAngle * sinePitchAngle * cosineRollAngle + sineYawAngle * sineRollAngle,
+      sineYawAngle * cosinePitchAngle, sineYawAngle * sinePitchAngle * sineRollAngle + cosineYawAngle * cosineRollAngle, sineYawAngle * sinePitchAngle * cosineRollAngle - cosineYawAngle * sineRollAngle,
+      -sinePitchAngle, cosinePitchAngle * sineRollAngle, cosinePitchAngle * cosineRollAngle
     });
   }
 
