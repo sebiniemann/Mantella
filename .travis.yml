@@ -24,13 +24,13 @@ before_install:
 
 install:
   # GCC
-  - if [ "$CXX" == "clang++" ]; sudo apt-get install -qq --force-yes g++-4.9; fi
+  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq --force-yes g++-4.9; fi
   - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90; fi
   - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90; fi
   - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90; fi
   
   # Clang
-  - if [ "$CXX" == "clang++" ]; sudo apt-get install -qq --force-yes g++-4.8; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.4 90; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.4 90; fi
