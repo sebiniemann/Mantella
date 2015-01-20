@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <cmath>
 #include <random>
-#include <iostream>
 
 // Mantella
 #include <mantella_bits/helper/rng.hpp>
@@ -13,9 +12,8 @@
 namespace mant {
   namespace bbob2009 {
     BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
-        const unsigned int& numberOfDimensions)
-      : OptimisationProblem<double>(numberOfDimensions) {
-      std::cout << "dsf" << std::endl;
+        const unsigned int& numberOfDimensions) noexcept
+      : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
       setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::generator))));
@@ -27,16 +25,12 @@ namespace mant {
       setTranslation(translation);
 
       setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator) ? 1.0 : -1.0));
-      std::cout << "65v" << std::endl;
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      std::cout << "c54bn56" << std::endl;
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
-      std::cout << "cb54" << std::endl;
       setDeltaC101(getRandomDeltaC101());
       setLocalOptimaY101(getRandomLocalOptimaY101());
       setDeltaC21(getRandomDeltaC21());
       setLocalOptimaY21(getRandomLocalOptimaY21());
-      std::cout << "hvtu" << std::endl;
     }
 
     void BlackBoxOptimisationBenchmark2009::setTranslation(

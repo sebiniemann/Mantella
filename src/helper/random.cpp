@@ -10,7 +10,7 @@
 
 namespace mant {
   arma::Mat<double> getRandomRotationMatrix(
-      const unsigned int& numberOfDimensions) {
+      const unsigned int& numberOfDimensions) noexcept {
     arma::Mat<double> Q;
     arma::Mat<double> R;
     arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions));

@@ -11,7 +11,7 @@ namespace mant {
     class BlackBoxOptimisationBenchmark2009 : public OptimisationProblem<double> {
       public:
         explicit BlackBoxOptimisationBenchmark2009(
-            const unsigned int& numberOfDimensions);
+            const unsigned int& numberOfDimensions) noexcept;
 
         BlackBoxOptimisationBenchmark2009(const BlackBoxOptimisationBenchmark2009&) = delete;
         BlackBoxOptimisationBenchmark2009& operator=(const BlackBoxOptimisationBenchmark2009&) = delete;

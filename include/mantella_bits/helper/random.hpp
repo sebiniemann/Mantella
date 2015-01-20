@@ -5,7 +5,7 @@
 
 namespace mant {
   arma::Mat<double> getRandomRotationMatrix(
-      const unsigned int& numberOfDimensions);
+      const unsigned int& numberOfDimensions)noexcept ;
 
   arma::Col<unsigned int> getRandomPermutation(
       const unsigned int& numberOfElements,
