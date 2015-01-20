@@ -9,7 +9,7 @@ namespace mant {
 
   arma::Col<unsigned int> getRandomPermutation(
       const unsigned int& numberOfElements,
-      const unsigned int& cycleLength) noexcept;
+      const unsigned int& cycleLength);
 
   arma::Col<unsigned int> getRandomPermutation(
       const unsigned int& numberOfElements) noexcept;
