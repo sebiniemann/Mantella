@@ -5,21 +5,21 @@
 
 namespace mant {
   arma::Mat<double> getHaltonSequence(
-      const arma::Col<unsigned int>& seed,
       const arma::Col<unsigned int>& base,
-      const unsigned int& numberOfColumms) noexcept {
+      const arma::Col<unsigned int>& seed,
+      const unsigned int& numberOfColumms) {
     arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 
     for (std::size_t n = 0; n < seed.n_elem; ++n) {
-      sequence.col(n) = getVanDerCorputSequence(seed.at(n), base.at(n), numberOfColumms);
+      sequence.row(n) = getVanDerCorputSequence(base.at(n), seed.at(n), numberOfColumms).t();
     }
 
     return sequence;
   }
 
   arma::Col<double> getVanDerCorputSequence(
-      const unsigned int& seed,
       const unsigned int& base,
+      const unsigned int& seed,
       const unsigned int& numberOfColumms) noexcept {
     arma::Col<double> sequence(numberOfColumms);
 
