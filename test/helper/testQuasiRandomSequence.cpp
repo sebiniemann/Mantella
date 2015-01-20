@@ -25,6 +25,8 @@ TEST_CASE("quasiRandomSequence: getHaltonSequence", "") {
     7.0/8.0, 5.0/9.0,
   };
   compare(mant::getHaltonSequence({2, 3}, {3, 3}, 5), expected);
+
+  CHECK_THROWS_AS(mant::getHaltonSequence({1}, {3, 3}, 5), std::logic_error);
 }
 
 TEST_CASE("quasiRandomSequence: getVanDerCorputSequence", "") {
