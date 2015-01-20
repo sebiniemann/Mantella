@@ -19,7 +19,9 @@
 extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2009-AttractiveSectorFunction", "") {
+  std::cout << "ZZZ" << std::endl;
   for (const auto& numberOfDimensions : {2, 40}) {
+    std::cout << "QQQ" << numberOfDimensions << std::endl;
     mant::bbob2013::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
 
     std::cout << "AAA" << numberOfDimensions << std::endl;
@@ -64,7 +66,10 @@ TEST_CASE("BBOB2009-AttractiveSectorFunction", "") {
 
       std::cout << "JJJ" << numberOfDimensions << "###" << n << std::endl;
       CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      std::cout << "TTT" << numberOfDimensions << "###" << n << std::endl;
     }
+    std::cout << "SSS" << numberOfDimensions << std::endl;
   }
+  std::cout << "RRR" << std::endl;
 }
 
