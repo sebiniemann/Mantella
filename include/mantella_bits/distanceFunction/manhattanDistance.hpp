@@ -29,6 +29,10 @@ namespace mant {
           std::false_type) const noexcept;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType>
   ParameterType ManhattanDistance<ParameterType>::getDistanceImplementation(
       const arma::Col<ParameterType>& parameter) const noexcept {
@@ -50,7 +54,7 @@ namespace mant {
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
       std::true_type) const noexcept {
-    return arma::normalise(2.0 * arma::randu(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::generator);
+    return arma::normalise(2.0 * arma::randu(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
   }
 
   template <typename ParameterType>

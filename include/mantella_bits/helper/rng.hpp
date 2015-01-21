@@ -13,16 +13,48 @@ namespace mant {
       Rng(const Rng&) = delete;
       Rng& operator=(const Rng&) = delete;
 
-      static std::mt19937_64 generator;
+      inline static std::mt19937_64& getGenerator() noexcept;
 
-      static void setSeed(
+      inline static void setSeed(
           const unsigned int& seed) noexcept;
 
-      static void setRandomSeed() noexcept;
+      inline static void setRandomSeed() noexcept;
 
-      static unsigned int getSeed() noexcept;
+      inline static unsigned int getSeed() noexcept;
 
     protected:
-      static unsigned int seed_;
+      inline static unsigned int& seed_() noexcept;
   };
+
+  //
+  // Implementation
+  //
+
+  inline std::mt19937_64& Rng::getGenerator() noexcept {
+    static std::mt19937_64 generator;
+    return generator;
+  }
+
+  inline void Rng::setSeed(
+      const unsigned int& seed) noexcept {
+   seed_() = seed;
+
+    getGenerator().seed(seed_());
+    arma::arma_rng::set_seed(seed_());
+
+  }
+
+  inline void Rng::setRandomSeed() noexcept {
+    arma::arma_rng::set_seed_random();
+    setSeed(arma::randi<arma::Col<unsigned int>>(1).at(0));
+  }
+
+  inline unsigned int Rng::getSeed() noexcept {
+    return seed_();
+  }
+
+  inline unsigned int& Rng::seed_() noexcept {
+    static unsigned int seed;
+    return seed;
+  }
 }
