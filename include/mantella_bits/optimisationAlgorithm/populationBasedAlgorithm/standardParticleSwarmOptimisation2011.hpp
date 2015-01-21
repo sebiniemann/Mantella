@@ -191,12 +191,12 @@ namespace mant {
 
   template<class DistanceFunction>
   double StandardParticleSwarmOptimisation2011<DistanceFunction>::getAcceleration() noexcept {
-    return std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
+    return std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
   template<class DistanceFunction>
   arma::Col<double> StandardParticleSwarmOptimisation2011<DistanceFunction>::getVelocity() noexcept {
-    return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
+    return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
   template<class DistanceFunction>

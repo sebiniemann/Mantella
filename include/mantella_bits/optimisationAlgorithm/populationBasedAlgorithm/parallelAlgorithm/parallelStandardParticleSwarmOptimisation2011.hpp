@@ -145,7 +145,7 @@ namespace mant {
             attractionCenter = (localAttraction_ * (localBestSolutions.col(this->rank_ * this->populationSize_ + k) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
           }
 
-          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator) * arma::norm(attractionCenter) + attractionCenter;
+          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator()) * arma::norm(attractionCenter) + attractionCenter;
           arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
           arma::Col<unsigned int> belowLowerBound = arma::find(solutionCandidate < this->optimisationProblem_->getLowerBounds());

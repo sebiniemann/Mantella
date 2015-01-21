@@ -18,7 +18,7 @@ namespace mant {
       : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
-      setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::generator))));
+      setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::getGenerator()))));
 
       setAcceptableObjectiveValue(objectiveValueTranslation_ + 1.0e-8);
 
@@ -26,7 +26,7 @@ namespace mant {
       translation.elem(arma::find(translation == 0)).fill(-1.0e5);
       setTranslation(translation);
 
-      setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator) ? 1.0 : -1.0));
+      setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));
       std::cout << "AAAAA" << std::endl;
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));
       std::cout << "BBBBB" << std::endl;
@@ -142,7 +142,7 @@ namespace mant {
 
       std::uniform_int_distribution<unsigned int> uniformIntDistribution(0, 99);
       for (std::size_t n = 1; n < deltaC101.n_cols; ++n) {
-        deltaC101.col(n) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 99.0), 0.25);
+        deltaC101.col(n) = getScaling(sqrt(1000.0)) / pow(pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::getGenerator())) / 99.0), 0.25);
       }
 
       return deltaC101;
@@ -154,7 +154,7 @@ namespace mant {
 
       std::uniform_int_distribution<unsigned int> uniformIntDistribution(0, 19);
       for (std::size_t n = 1; n < deltaC21.n_cols; ++n) {
-        deltaC21.col(n) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::generator)) / 19.0), 0.25);
+        deltaC21.col(n) = getScaling(sqrt(1000.0)) / std::pow(std::pow(1000.0, 2.0 * static_cast<double>(uniformIntDistribution(Rng::getGenerator())) / 19.0), 0.25);
       }
 
       return deltaC21;

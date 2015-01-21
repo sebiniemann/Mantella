@@ -78,7 +78,7 @@ namespace mant {
         arma::Col<double> currentSolution = agents.col(k);
         double currentObjectiveValue = objectiveValues.at(k);
 
-        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, this->optimisationProblem_->getNumberOfDimensions())(Rng::generator));
+        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, this->optimisationProblem_->getNumberOfDimensions())(Rng::getGenerator()));
 
         arma::Col<unsigned int> neighbourIndicies = getRandomPermutation(this->populationSize_ - 1, neighbourhoodSize_);
         neighbourIndicies.elem(arma::find(neighbourIndicies >= k)) += 1;

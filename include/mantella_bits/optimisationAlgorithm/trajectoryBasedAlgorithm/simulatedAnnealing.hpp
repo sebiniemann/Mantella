@@ -80,7 +80,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   bool SimulatedAnnealing<ParameterType, DistanceFunction>::isAcceptableState(
       const double& candidateObjectiveValue) noexcept {
-    return std::exp((this->bestObjectiveValue_ - candidateObjectiveValue) / (this->numberOfIterations_ / this->maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::generator);
+    return std::exp((this->bestObjectiveValue_ - candidateObjectiveValue) / (this->numberOfIterations_ / this->maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
   template <typename ParameterType, class DistanceFunction>
