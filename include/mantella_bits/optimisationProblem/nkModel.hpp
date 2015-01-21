@@ -6,7 +6,7 @@
 namespace mant {
   class NKModel : public OptimisationProblem<unsigned int> {
     public:
-      explicit NKModel(
+      inline explicit NKModel(
           const unsigned int& numberOfNeighbours,
           const unsigned int& numberOfDimensions) ;
 
@@ -19,7 +19,7 @@ namespace mant {
           const arma::Col<unsigned int>& parameter) const  override;
   };
 
-  NKModel::NKModel(
+  inline NKModel::NKModel(
       const unsigned int& numberOfNeighbours,
       const unsigned int& numberOfDimensions) 
     : OptimisationProblem(numberOfDimensions){
