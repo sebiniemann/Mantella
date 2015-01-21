@@ -15,7 +15,19 @@ namespace mant {
       NKModel& operator=(const NKModel&) = delete;
 
     protected:
-      double getObjectiveValueImplementation(
+      inline double getObjectiveValueImplementation(
           const arma::Col<unsigned int>& parameter) const noexcept override;
   };
+
+  NKModel::NKModel(
+      const unsigned int& numberOfNeighbours,
+      const unsigned int& numberOfDimensions) noexcept
+    : OptimisationProblem(numberOfDimensions){
+
+  }
+
+  inline double NKModel::getObjectiveValueImplementation(
+      const arma::Col<unsigned int>& parameter) const noexcept {
+    return arma::sum(parameter);
+  }
 }
