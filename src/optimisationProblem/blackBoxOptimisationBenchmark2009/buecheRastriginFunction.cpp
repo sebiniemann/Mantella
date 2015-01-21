@@ -7,7 +7,7 @@
 namespace mant {
   namespace bbob2009 {
     BuecheRastriginFunction::BuecheRastriginFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int& numberOfDimensions) 
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setTranslation(translation_);
     }
@@ -25,7 +25,7 @@ namespace mant {
     }
 
     double BuecheRastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
+        const arma::Col<double>& parameter) const  {
       arma::Col<double> z = scaling_ % getOscillationTransformation(parameter - translation_);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
         if (z.at(n) > 0.0) {
@@ -36,7 +36,7 @@ namespace mant {
       return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0) + 100.0 * getPenality(parameter);
     }
 
-    std::string BuecheRastriginFunction::to_string() const noexcept {
+    std::string BuecheRastriginFunction::to_string() const  {
       return "BuecheRastriginFunction";
     }
   }

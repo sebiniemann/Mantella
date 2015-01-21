@@ -10,11 +10,11 @@
 namespace mant {
   namespace bbob2009 {
     double SphereFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
+        const arma::Col<double>& parameter) const  {
       return std::pow(arma::norm(parameter - translation_), 2.0);
     }
 
-    std::string SphereFunction::to_string() const noexcept {
+    std::string SphereFunction::to_string() const  {
       return "SphereFunction";
     }
   }

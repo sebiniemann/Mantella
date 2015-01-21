@@ -7,7 +7,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class QuadraticModelAnalysis : public FunctionModelAnalysis<ParameterType, DistanceFunction> {
     public:
-      explicit QuadraticModelAnalysis() noexcept;
+      explicit QuadraticModelAnalysis() ;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       QuadraticModelAnalysis(const QuadraticModelAnalysis&) = delete;
@@ -16,9 +16,9 @@ namespace mant {
       void setQuadraticModelMedianErrorThreshold(
           const double& quadraticModelMedianErrorThreshold);
 
-      arma::Col<double> getQuadraticModelEstimator() const noexcept;
+      arma::Col<double> getQuadraticModelEstimator() const ;
 
-      bool isQuadratic() const noexcept;
+      bool isQuadratic() const ;
 
     protected:
       arma::Col<double> quadraticModelEstimator_;
@@ -28,13 +28,13 @@ namespace mant {
   };
 
   template <typename ParameterType, class DistanceFunction>
-  QuadraticModelAnalysis<ParameterType, DistanceFunction>::QuadraticModelAnalysis() noexcept
+  QuadraticModelAnalysis<ParameterType, DistanceFunction>::QuadraticModelAnalysis() 
     : isQuadratic_(false) {
     setQuadraticModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> QuadraticModelAnalysis<ParameterType, DistanceFunction>::getQuadraticModelEstimator() const noexcept {
+  arma::Col<double> QuadraticModelAnalysis<ParameterType, DistanceFunction>::getQuadraticModelEstimator() const  {
     return quadraticModelEstimator_;
   }
 
@@ -50,7 +50,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  bool QuadraticModelAnalysis<ParameterType, DistanceFunction>::isQuadratic() const noexcept {
+  bool QuadraticModelAnalysis<ParameterType, DistanceFunction>::isQuadratic() const  {
     return isQuadratic_;
   }
 }

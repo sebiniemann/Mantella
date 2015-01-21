@@ -12,18 +12,18 @@ namespace mant {
         EllipsoidalFunction(const EllipsoidalFunction&) = delete;
         EllipsoidalFunction& operator=(const EllipsoidalFunction&) = delete;
 
-        std::string to_string() const noexcept override;
+        std::string to_string() const  override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(1000000.0);
 
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+            const arma::Col<double>& parameter) const  override;
 
         friend class cereal::access;
 
         template <typename Archive>
-        void serialize(Archive& archive) noexcept {
+        void serialize(Archive& archive)  {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -32,7 +32,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<EllipsoidalFunction>& construct) noexcept {
+            cereal::construct<EllipsoidalFunction>& construct)  {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

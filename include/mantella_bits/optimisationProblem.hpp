@@ -33,7 +33,7 @@ namespace mant {
       // Constructs an optimisation problem with the given number of dimensions to be optimised.
       explicit OptimisationProblem(
         // The number of dimensions
-        const unsigned int& numberOfDimensions) noexcept;
+        const unsigned int& numberOfDimensions) ;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       OptimisationProblem(const OptimisationProblem&) = delete;
@@ -83,10 +83,10 @@ namespace mant {
         const arma::Col<ParameterType>& parameter);
 
       // Returns the number of dimensions to be optimised
-      unsigned int getNumberOfDimensions() const noexcept;
+      unsigned int getNumberOfDimensions() const ;
 
       // Returns the lower bounds of the search space.
-      arma::Col<ParameterType> getLowerBounds() const noexcept;
+      arma::Col<ParameterType> getLowerBounds() const ;
 
       // Sets the lower bounds of the search space.
       // Note: It is not checked, whether it is strictly greater than the lower bound or not.
@@ -95,7 +95,7 @@ namespace mant {
         const arma::Col<ParameterType>& lowerBounds);
 
       // Returns the upper bounds of the search space
-      arma::Col<ParameterType> getUpperBounds() const noexcept;
+      arma::Col<ParameterType> getUpperBounds() const ;
 
       // Sets the upper bounds of the search space.
       // Note: It is not checked, whether it is strictly greater than the lower bound or not.
@@ -130,36 +130,36 @@ namespace mant {
       // set.
       void setObjectiveValueTranslation(
         // The new translation of the objective value space
-        const double& objectiveValueTranslation) noexcept;
+        const double& objectiveValueTranslation) ;
 
       // Sets the scaling which is multiplied to the objective value after its translation.
       // Note: The scaling is always based on the same origin and will not add up is multiple set.
       void setObjectiveValueScale(
         // The new scaling of the objective value space
-        const double& objectiveValueScale) noexcept;
+        const double& objectiveValueScale) ;
 
       // Returns the upper limit for an objective value to be acceptable. The optimisation process
       // is usually finished after reaching this threshold.
       // Note: The objective value must not be reachable.
-      double getAcceptableObjectiveValue() const noexcept;
+      double getAcceptableObjectiveValue() const ;
 
       // Sets the upper limit for an objective value to be acceptable. The optimisation process
       // is usually finished after reaching this threshold.
       // Note: The objective value must not be reachable.
       void setAcceptableObjectiveValue(
-          const double& acceptableObjectiveValue) noexcept;
+          const double& acceptableObjectiveValue) ;
 
       // Returns the number of objective function evaluations.
       // Note: The value includes retrival from cache and actual computation.
-      unsigned int getNumberOfEvaluations() const noexcept;
+      unsigned int getNumberOfEvaluations() const ;
 
       // Returns the number of unique objective function evaluations.
       // Note: This will only include actual computations and no cache retrival.
-      unsigned int getNumberOfDistinctEvaluations() const noexcept;
+      unsigned int getNumberOfDistinctEvaluations() const ;
 
       // Resets the counter by setting the number of (distinct) function evaluations to zero and
       // clearing the caches.
-      void reset() noexcept;
+      void reset() ;
 
       std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedObjectiveValues() const;
       std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedSoftConstraintsValues() const;
@@ -203,19 +203,19 @@ namespace mant {
       // Returns the rotated, scaled and translated (shifted) parameter.
       arma::Col<ParameterType> getScaledCongruentParameter(
         // The parameter to be rotated, scaled and translated (shifted)
-        const arma::Col<ParameterType>& parameter) const noexcept;
+        const arma::Col<ParameterType>& parameter) const ;
 
       // Actual implementaion of the soft-constraints function.
       // Returns 0.0 if not overloaded.
       virtual double getSoftConstraintsValueImplementation(
         // The parameter to be evaluated
-        const arma::Col<ParameterType>& parameter) const noexcept;
+        const arma::Col<ParameterType>& parameter) const ;
 
       // Actual implementaion of the objective function.
       // Note: the number of dimensions of the parameter is checked beforehand.
       virtual double getObjectiveValueImplementation(
         // The parameter to be evaluated
-        const arma::Col<ParameterType>& parameter) const noexcept = 0;
+        const arma::Col<ParameterType>& parameter) const  = 0;
 
       // Several caches used to avoid redundant computations.
       std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> cachedObjectiveValues_;
@@ -235,7 +235,7 @@ namespace mant {
       // lessen confusion later on.
       template <typename Archive>
       void serialize(
-          Archive& archive) noexcept {
+          Archive& archive)  {
         archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
         archive(cereal::make_nvp("lowerBounds", lowerBounds_));
         archive(cereal::make_nvp("upperBounds", upperBounds_));
@@ -250,7 +250,7 @@ namespace mant {
 
   template <>
   OptimisationProblem<double>::OptimisationProblem(
-      const unsigned int& numberOfDimensions) noexcept;
+      const unsigned int& numberOfDimensions) ;
 
   template <>
   void OptimisationProblem<double>::setParameterTranslation(
@@ -266,11 +266,11 @@ namespace mant {
 
   template <>
   arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
-      const arma::Col<double>& parameter) const noexcept;
+      const arma::Col<double>& parameter) const ;
 
   template <typename ParameterType>
   OptimisationProblem<ParameterType>::OptimisationProblem(
-      const unsigned int& numberOfDimensions) noexcept
+      const unsigned int& numberOfDimensions) 
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
@@ -413,12 +413,12 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  unsigned int OptimisationProblem<ParameterType>::getNumberOfDimensions() const noexcept {
+  unsigned int OptimisationProblem<ParameterType>::getNumberOfDimensions() const  {
     return numberOfDimensions_;
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getLowerBounds() const noexcept {
+  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getLowerBounds() const  {
     return lowerBounds_;
   }
 
@@ -433,7 +433,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getUpperBounds() const noexcept {
+  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getUpperBounds() const  {
     return upperBounds_;
   }
 
@@ -449,39 +449,39 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setObjectiveValueTranslation(
-      const double& objectiveValueTranslation) noexcept {
+      const double& objectiveValueTranslation)  {
     objectiveValueTranslation_ = objectiveValueTranslation;
   }
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScale(
-      const double& objectiveValueScale) noexcept {
+      const double& objectiveValueScale)  {
     objectiveValueScale_ = objectiveValueScale;
   }
 
   template <typename ParameterType>
-  double OptimisationProblem<ParameterType>::getAcceptableObjectiveValue() const noexcept {
+  double OptimisationProblem<ParameterType>::getAcceptableObjectiveValue() const  {
     return acceptableObjectiveValue_;
   }
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setAcceptableObjectiveValue(
-      const double& acceptableObjectiveValue) noexcept {
+      const double& acceptableObjectiveValue)  {
     acceptableObjectiveValue_ = acceptableObjectiveValue;
   }
 
   template <typename ParameterType>
-  unsigned int OptimisationProblem<ParameterType>::getNumberOfEvaluations() const noexcept {
+  unsigned int OptimisationProblem<ParameterType>::getNumberOfEvaluations() const  {
     return numberOfEvaluations_;
   }
 
   template <typename ParameterType>
-  unsigned int OptimisationProblem<ParameterType>::getNumberOfDistinctEvaluations() const noexcept {
+  unsigned int OptimisationProblem<ParameterType>::getNumberOfDistinctEvaluations() const  {
     return numberOfDistinctEvaluations_;
   }
 
   template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::reset() noexcept {
+  void OptimisationProblem<ParameterType>::reset()  {
     numberOfEvaluations_ = 0;
     numberOfDistinctEvaluations_ = 0;
 
@@ -525,7 +525,7 @@ namespace mant {
 
   template <typename ParameterType>
   double OptimisationProblem<ParameterType>::getSoftConstraintsValueImplementation(
-      const arma::Col<ParameterType>& parameter) const noexcept {
+      const arma::Col<ParameterType>& parameter) const  {
     return 0.0;
   }
 }

@@ -7,13 +7,13 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_3PRPR : public KinematicMachine {
       public:
-        explicit ParallelKinematicMachine_3PRPR() noexcept;
+        explicit ParallelKinematicMachine_3PRPR() ;
         explicit ParallelKinematicMachine_3PRPR(
             const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions,
             const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
-            const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept;
+            const arma::Row<double>::fixed<3>& maximalActiveJointActuations) ;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
         ParallelKinematicMachine_3PRPR(const ParallelKinematicMachine_3PRPR&) = delete;

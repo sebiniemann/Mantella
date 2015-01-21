@@ -16,7 +16,7 @@ namespace mant {
    inline arma::Col<double> getVanDerCorputSequence(
        const unsigned int& base,
        const unsigned int& seed,
-       const unsigned int& numberOfColumms) noexcept;
+       const unsigned int& numberOfColumms) ;
 
    //
    // Implementation
@@ -42,7 +42,7 @@ namespace mant {
    inline arma::Col<double> getVanDerCorputSequence(
        const unsigned int& base,
        const unsigned int& seed,
-       const unsigned int& numberOfColumms) noexcept {
+       const unsigned int& numberOfColumms)  {
      arma::Col<double> sequence(numberOfColumms);
 
      for (std::size_t n = 0; n < numberOfColumms; ++n) {

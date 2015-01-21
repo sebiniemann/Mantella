@@ -9,7 +9,7 @@ namespace mant {
   class HillClimbing : public TrajectoryBasedAlgorithm<ParameterType, DistanceFunction> {
     public:
       explicit HillClimbing(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
 
       HillClimbing(const HillClimbing&) = delete;
       HillClimbing& operator=(const HillClimbing&) = delete;
@@ -17,26 +17,26 @@ namespace mant {
       void setMaximalStepSize(
           const ParameterType& maximalStepSize);
 
-      std::string to_string() const noexcept override;
+      std::string to_string() const  override;
 
     protected:
       ParameterType maximalStepSize_;
 
-      void optimiseImplementation() noexcept override;
+      void optimiseImplementation()  override;
 
-      void setDefaultMaximalStepSize(std::true_type) noexcept;
-      void setDefaultMaximalStepSize(std::false_type) noexcept;
+      void setDefaultMaximalStepSize(std::true_type) ;
+      void setDefaultMaximalStepSize(std::false_type) ;
   };
 
   template <typename ParameterType, class DistanceFunction>
   HillClimbing<ParameterType, DistanceFunction>::HillClimbing(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) 
     : TrajectoryBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
     setDefaultMaximalStepSize(std::is_floating_point<ParameterType>());
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void HillClimbing<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
+  void HillClimbing<ParameterType, DistanceFunction>::optimiseImplementation()  {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
@@ -76,19 +76,19 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  std::string HillClimbing<ParameterType, DistanceFunction>::to_string() const noexcept {
+  std::string HillClimbing<ParameterType, DistanceFunction>::to_string() const  {
     return "HillClimbing";
   }
 
   template <typename ParameterType, class DistanceFunction>
   void HillClimbing<ParameterType, DistanceFunction>::setDefaultMaximalStepSize(
-      std::true_type) noexcept {
+      std::true_type)  {
     setMaximalStepSize(this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10.0);
   }
 
   template <typename ParameterType, class DistanceFunction>
   void HillClimbing<ParameterType, DistanceFunction>::setDefaultMaximalStepSize(
-      std::false_type) noexcept {
+      std::false_type)  {
     setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10));
   }
 }

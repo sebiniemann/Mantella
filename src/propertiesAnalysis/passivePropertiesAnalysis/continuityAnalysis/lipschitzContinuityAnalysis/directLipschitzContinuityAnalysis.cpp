@@ -7,7 +7,7 @@
 namespace mant {
   template <>
   void DirectLipschitzContinuityAnalysis<double, EuclideanDistance>::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  {
     lipschitzConstant_ = 0.0;
 
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();

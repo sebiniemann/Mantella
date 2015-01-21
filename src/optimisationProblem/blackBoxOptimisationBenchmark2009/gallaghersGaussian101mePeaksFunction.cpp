@@ -12,7 +12,7 @@
 namespace mant {
   namespace bbob2009 {
     GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int& numberOfDimensions) 
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         weight_(101) {
       weight_.at(0) = 10.0;
@@ -22,7 +22,7 @@ namespace mant {
     }
 
     double GallaghersGaussian101mePeaksFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
+        const arma::Col<double>& parameter) const  {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 101; ++k) {
         const arma::Col<double>& parameterTransposition = parameter - localOptimaY101_.col(k);
@@ -32,7 +32,7 @@ namespace mant {
       return std::pow(getOscillationTransformation(10.0 - maximalValue), 2.0) + getPenality(parameter);
     }
 
-    std::string GallaghersGaussian101mePeaksFunction::to_string() const noexcept {
+    std::string GallaghersGaussian101mePeaksFunction::to_string() const  {
       return "GallaghersGaussian101mePeaksFunction";
     }
   }

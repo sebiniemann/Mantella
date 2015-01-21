@@ -5,7 +5,7 @@
 
 namespace mant {
   namespace robotic {
-    ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS() noexcept
+    ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS() 
       : ParallelKinematicMachine_6PUPS(
           arma::Mat<double>::fixed<3, 6>({
             -0.025561381023353, 0.086293776138137, 0.12,
@@ -40,7 +40,7 @@ namespace mant {
         const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
         const arma::Mat<double>::fixed<3, 6>& redundantJointEnds,
         const arma::Row<double>::fixed<6>& minimalActiveJointActuations,
-        const arma::Row<double>::fixed<6>& maximalActiveJointActuations) noexcept
+        const arma::Row<double>::fixed<6>& maximalActiveJointActuations) 
       : endEffectorJointsRelative_(relativeEndEffectorJoints),
         redundantJointStarts_(redundantJointStarts),
         redundantJointEnds_(redundantJointEnds),

@@ -11,25 +11,25 @@ namespace mant {
     class WeierstrassFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         explicit WeierstrassFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int& numberOfDimensions) ;
 
         WeierstrassFunction(const WeierstrassFunction&) = delete;
         WeierstrassFunction& operator=(const WeierstrassFunction&) = delete;
 
-        std::string to_string() const noexcept override;
+        std::string to_string() const  override;
 
       protected:
         double f0_;
         const arma::Col<double> delta_ = getScaling(std::sqrt(0.01));
 
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+            const arma::Col<double>& parameter) const  override;
 
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive) noexcept {
+            Archive& archive)  {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -41,7 +41,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<WeierstrassFunction>& construct) noexcept {
+            cereal::construct<WeierstrassFunction>& construct)  {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

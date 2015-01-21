@@ -7,7 +7,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType, DistanceFunction> {
     public:
-      explicit AdditiveSeparabilityAnalysis() noexcept;
+      explicit AdditiveSeparabilityAnalysis() ;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       AdditiveSeparabilityAnalysis(const AdditiveSeparabilityAnalysis&) = delete;
@@ -16,9 +16,9 @@ namespace mant {
       void setAdditiveSeparabilityMedianErrorThreshold(
           const double& additiveSeparabilityMedianErrorThreshold);
 
-      std::vector<arma::Col<unsigned int>> getSeparation() const noexcept;
+      std::vector<arma::Col<unsigned int>> getSeparation() const ;
 
-      bool isSeparable() const noexcept;
+      bool isSeparable() const ;
 
     protected:
       std::vector<arma::Col<unsigned int>> separation_;
@@ -28,7 +28,7 @@ namespace mant {
   };
 
   template <typename ParameterType, class DistanceFunction>
-  AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::AdditiveSeparabilityAnalysis() noexcept {
+  AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::AdditiveSeparabilityAnalysis()  {
     setAdditiveSeparabilityMedianErrorThreshold(0.75);
   }
 

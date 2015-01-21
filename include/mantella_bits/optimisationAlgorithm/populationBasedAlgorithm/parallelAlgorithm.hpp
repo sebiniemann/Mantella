@@ -20,31 +20,31 @@ namespace mant {
     public:
       explicit ParallelAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int& populationSize) ;
 
-      unsigned int getRank() const noexcept;
-      unsigned int getNumberOfNodes() const noexcept;
+      unsigned int getRank() const ;
+      unsigned int getNumberOfNodes() const ;
 
     protected:
       int rank_;
       int numberOfNodes_;
 
-      void optimiseImplementation() noexcept final override;
+      void optimiseImplementation()  final override;
 
-      virtual void parallelOptimiseImplementation() noexcept = 0;
+      virtual void parallelOptimiseImplementation()  = 0;
   };
 
   template <typename ParameterType, class DistanceFunction>
   ParallelAlgorithm<ParameterType, DistanceFunction>::ParallelAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int& populationSize) 
     : PopulationBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void ParallelAlgorithm<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
+  void ParallelAlgorithm<ParameterType, DistanceFunction>::optimiseImplementation()  {
     unsigned int serialisedOptimisationProblemSize;
     char* serialisedOptimisationProblemBuffer;
 
@@ -80,12 +80,12 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  unsigned int ParallelAlgorithm<ParameterType, DistanceFunction>::getRank() const noexcept {
+  unsigned int ParallelAlgorithm<ParameterType, DistanceFunction>::getRank() const  {
     return rank_;
   }
 
   template <typename ParameterType, class DistanceFunction>
-  unsigned int ParallelAlgorithm<ParameterType, DistanceFunction>::getNumberOfNodes() const noexcept {
+  unsigned int ParallelAlgorithm<ParameterType, DistanceFunction>::getNumberOfNodes() const  {
     return numberOfNodes_;
   }
 }

@@ -10,7 +10,7 @@ namespace mant {
       using ActivePropertiesAnalysis<ParameterType, DistanceFunction>::ActivePropertiesAnalysis;
 
       void setMaximalNumberOfIterations(
-          const unsigned int& maximalNumberOfIterations) noexcept;
+          const unsigned int& maximalNumberOfIterations) ;
 
     protected:
       unsigned int maximalNumberOfIterations_;
@@ -18,7 +18,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void ProportionalityAnalysis<ParameterType, DistanceFunction>::setMaximalNumberOfIterations(
-      const unsigned int& maximalNumberOfIterations) noexcept {
+      const unsigned int& maximalNumberOfIterations)  {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 }

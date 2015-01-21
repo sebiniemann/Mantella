@@ -13,12 +13,12 @@ namespace mant {
   class HammingDistance : public DistanceFunction<unsigned int> {
     protected:
       inline unsigned int getDistanceImplementation(
-          const arma::Col<unsigned int>& parameter) const noexcept override;
+          const arma::Col<unsigned int>& parameter) const  override;
 
       inline arma::Col<unsigned int> getNeighbourImplementation(
           const arma::Col<unsigned int>& parameter,
           const unsigned int& minimalDistance,
-          const unsigned int& maximalDistance) const noexcept override;
+          const unsigned int& maximalDistance) const  override;
   };
 
   //
@@ -26,14 +26,14 @@ namespace mant {
   //
 
   inline unsigned int HammingDistance::getDistanceImplementation(
-      const arma::Col<unsigned int>& parameter) const noexcept {
+      const arma::Col<unsigned int>& parameter) const  {
     return arma::accu(parameter != 0);
   }
 
   inline arma::Col<unsigned int> HammingDistance::getNeighbourImplementation(
       const arma::Col<unsigned int>& parameter,
       const unsigned int& minimalDistance,
-      const unsigned int& maximalDistance) const noexcept {
+      const unsigned int& maximalDistance) const  {
     if(minimalDistance > std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) {
           throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be lower than or equal to the absolute maximal distance (" + std::to_string(std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) + ").");
     }

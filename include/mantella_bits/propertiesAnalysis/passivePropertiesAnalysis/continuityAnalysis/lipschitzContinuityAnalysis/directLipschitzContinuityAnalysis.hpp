@@ -12,20 +12,20 @@ namespace mant {
 
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept override;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem)  override;
       void analyseImplementation(
-          const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  override;
       void analyseImplementation(
-          const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept override;
+          const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping)  override;
   };
 
   template <>
   void DirectLipschitzContinuityAnalysis<double, EuclideanDistance>::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) ;
 
   template <typename ParameterType, class DistanceFunction>
   void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem)  {
     this->lipschitzConstant_ = 0.0;
 
     const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
@@ -42,13 +42,13 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
-      const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  {
 
   }
 
   template <typename ParameterType, class DistanceFunction>
   void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
-      const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept {
+      const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping)  {
 
   }
 }

@@ -2,7 +2,7 @@
 
 namespace mant {
   void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  {
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     optimisationProblem->getObjectiveValue(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()));
@@ -28,12 +28,12 @@ namespace mant {
   }
 
   void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  {
 
   }
 
   void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
+      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping)  {
 
   }
 }

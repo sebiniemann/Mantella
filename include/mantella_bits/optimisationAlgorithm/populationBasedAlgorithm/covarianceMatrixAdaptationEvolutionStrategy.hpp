@@ -9,15 +9,15 @@ namespace mant {
       //TODO: which input parameters should be added to the constructor?
       explicit CovarianceMatrixAdaptationEvolutionStrategy(
         const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int& populationSize) ;
 
       CovarianceMatrixAdaptationEvolutionStrategy(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
       CovarianceMatrixAdaptationEvolutionStrategy& operator=(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
 
       void setStepsize(
-          const double& sigma) noexcept;
+          const double& sigma) ;
 
-      std::string to_string() const noexcept override;
+      std::string to_string() const  override;
 
     protected:
       double stepSize_;
@@ -28,7 +28,7 @@ namespace mant {
   template<class DistanceFunction>
   CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::CovarianceMatrixAdaptationEvolutionStrategy(
      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int& populationSize) 
   : PopulationBasedAlgorithm<double, DistanceFunction>(optimisationProblem, populationSize) {
     setStepsize(0.3);
   }
@@ -126,12 +126,12 @@ namespace mant {
 
   template<class DistanceFunction>
   void CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::setStepsize(
-      const double& sigma) noexcept {
+      const double& sigma)  {
     stepSize_ = sigma;
   }
 
   template<class DistanceFunction>
-  std::string CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::to_string() const noexcept {
+  std::string CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::to_string() const  {
     return "CovarianceMatrixAdaptationEvolutionStrategy";
   }
 }

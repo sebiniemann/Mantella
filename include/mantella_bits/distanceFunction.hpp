@@ -13,7 +13,7 @@ namespace mant {
       explicit DistanceFunction() = default;
 
       ParameterType getDistance(
-          const arma::Col<ParameterType>& parameter) const noexcept;
+          const arma::Col<ParameterType>& parameter) const ;
 
       ParameterType getDistance(
           const arma::Col<ParameterType>& firstParameter,
@@ -26,17 +26,17 @@ namespace mant {
 
     protected:
       virtual ParameterType getDistanceImplementation(
-          const arma::Col<ParameterType>& parameter) const noexcept = 0;
+          const arma::Col<ParameterType>& parameter) const  = 0;
 
       ParameterType getDistance(
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter,
-          std::true_type) const noexcept;
+          std::true_type) const ;
 
       ParameterType getDistance(
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter,
-          std::false_type) const noexcept;
+          std::false_type) const ;
 
       virtual arma::Col<ParameterType> getNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
@@ -46,7 +46,7 @@ namespace mant {
 
   template <typename ParameterType>
   ParameterType DistanceFunction<ParameterType>::getDistance(
-      const arma::Col<ParameterType>& parameter) const noexcept {
+      const arma::Col<ParameterType>& parameter) const  {
     return getDistanceImplementation(parameter);
   }
 
@@ -65,7 +65,7 @@ namespace mant {
   ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
-      std::true_type) const noexcept {
+      std::true_type) const  {
     return getDistanceImplementation(secondParameter - firstParameter);
   }
 
@@ -73,7 +73,7 @@ namespace mant {
   ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
-      std::false_type) const noexcept {
+      std::false_type) const  {
     return getDistanceImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter));
   }
 

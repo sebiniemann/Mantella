@@ -14,7 +14,7 @@ namespace mant {
       // Constructs an optimisation algorithm with the given problem to be optimised.
       explicit OptimisationAlgorithm(
           // The problem to be optimised
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       OptimisationAlgorithm(const OptimisationAlgorithm&) = delete;
@@ -23,40 +23,40 @@ namespace mant {
       // Starts the optimisation process.
       // Note: The best parameter and its objective value can be retrived via the corresponding
       // getter, after the optimisation process is finished or terminates.
-      void optimise() noexcept;
+      void optimise() ;
 
       // Returns the current number of iterations performed.
-      unsigned int getNumberOfIterations() const noexcept;
+      unsigned int getNumberOfIterations() const ;
 
       // Sets the maximal number of iterrations to be performed.
       // The optimisation process will terminate after reaching this limit.
-      void setMaximalNumberOfIterations(const unsigned int& maximalNumberOfIterations) noexcept;
+      void setMaximalNumberOfIterations(const unsigned int& maximalNumberOfIterations) ;
 
       // Returns the best parameter yet found.
       // Note: The best parameter is always selected in the following order.
       // 1 - Fulfills the interval-constraints
       // 2 - Has the lowest soft-constraint value yet found
       // 3 - Has the lowest objective value yet found
-      arma::Col<ParameterType> getBestParameter() const noexcept;
+      arma::Col<ParameterType> getBestParameter() const ;
 
       // Returns the objective value of the best parameter yet found.
-      double getBestSoftConstraintsValue() const noexcept;
+      double getBestSoftConstraintsValue() const ;
 
       // Returns the objective value of the best parameter yet found.
-      double getBestObjectiveValue() const noexcept;
+      double getBestObjectiveValue() const ;
 
       // Checks whether the currently best objective value satisfies the upper bound for an
       // acceptable objective value.
       // Returns true if the objective value is lower than or equal to the upper bound and false
       // otherwise.
-      bool isFinished() const noexcept;
+      bool isFinished() const ;
 
       // Checks whether the current number of iterations performed violates the maximal number of
       // iterations.
       // Returns true if the number of iterations is strictly lower than the maximal number of
       // iterations
       // and false otherwise.
-      bool isTerminated() const noexcept;
+      bool isTerminated() const ;
 
       // Provides a default deconstructor.
       virtual ~OptimisationAlgorithm() = default;
@@ -91,7 +91,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   OptimisationAlgorithm<ParameterType, DistanceFunction>::OptimisationAlgorithm(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) 
     : optimisationProblem_(optimisationProblem),
       numberOfIterations_(0),
       bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
@@ -101,7 +101,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void OptimisationAlgorithm<ParameterType, DistanceFunction>::optimise() noexcept {
+  void OptimisationAlgorithm<ParameterType, DistanceFunction>::optimise()  {
     // Resets the results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
@@ -113,38 +113,38 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  unsigned int OptimisationAlgorithm<ParameterType, DistanceFunction>::getNumberOfIterations() const noexcept {
+  unsigned int OptimisationAlgorithm<ParameterType, DistanceFunction>::getNumberOfIterations() const  {
     return numberOfIterations_;
   }
 
   template <typename ParameterType, class DistanceFunction>
   void OptimisationAlgorithm<ParameterType, DistanceFunction>::setMaximalNumberOfIterations(
-      const unsigned int& maximalNumberOfIterations) noexcept {
+      const unsigned int& maximalNumberOfIterations)  {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 
   template <typename ParameterType, class DistanceFunction>
-  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestParameter() const noexcept {
+  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestParameter() const  {
     return bestParameter_;
   }
 
   template <typename ParameterType, class DistanceFunction>
-  double OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestSoftConstraintsValue() const noexcept {
+  double OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestSoftConstraintsValue() const  {
     return bestSoftConstraintsValue_;
   }
 
   template <typename ParameterType, class DistanceFunction>
-  double OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestObjectiveValue() const noexcept {
+  double OptimisationAlgorithm<ParameterType, DistanceFunction>::getBestObjectiveValue() const  {
     return bestObjectiveValue_;
   }
 
   template <typename ParameterType, class DistanceFunction>
-  bool OptimisationAlgorithm<ParameterType, DistanceFunction>::isFinished() const noexcept {
+  bool OptimisationAlgorithm<ParameterType, DistanceFunction>::isFinished() const  {
     return (bestSoftConstraintsValue_ == 0.0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
   template <typename ParameterType, class DistanceFunction>
-  bool OptimisationAlgorithm<ParameterType, DistanceFunction>::isTerminated() const noexcept {
+  bool OptimisationAlgorithm<ParameterType, DistanceFunction>::isTerminated() const  {
     return (numberOfIterations_ >= maximalNumberOfIterations_);
   }
 }

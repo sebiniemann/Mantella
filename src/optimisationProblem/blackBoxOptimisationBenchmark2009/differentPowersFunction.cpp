@@ -7,12 +7,12 @@
 namespace mant {
   namespace bbob2009 {
     double DifferentPowersFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
+        const arma::Col<double>& parameter) const  {
       const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - translation_));
       return arma::norm(z % getScaling(arma::square(z)));
     }
 
-    std::string DifferentPowersFunction::to_string() const noexcept {
+    std::string DifferentPowersFunction::to_string() const  {
       return "DifferentPowersFunction";
     }
   }

@@ -13,7 +13,7 @@
 
 namespace mant {
   void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->getNumberOfDimensions());
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;

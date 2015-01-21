@@ -8,7 +8,7 @@ namespace mant {
   class TrajectoryBasedAlgorithm : public OptimisationAlgorithm<ParameterType, DistanceFunction> {
     public:
       explicit TrajectoryBasedAlgorithm(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
 
       void setInitialParameter(
           const arma::Col<ParameterType>& initialParameter);
@@ -19,7 +19,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   TrajectoryBasedAlgorithm<ParameterType, DistanceFunction>::TrajectoryBasedAlgorithm(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) 
     : OptimisationAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
     // TODO fix for unsigned int
     setInitialParameter(arma::randu<arma::Col<ParameterType>>(this->optimisationProblem_->getNumberOfDimensions()) % (this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) + this->optimisationProblem_->getLowerBounds());

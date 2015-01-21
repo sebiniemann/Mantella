@@ -8,7 +8,7 @@
 namespace mant {
   template <>
   OptimisationProblem<double>::OptimisationProblem(
-      const unsigned int& numberOfDimensions) noexcept
+      const unsigned int& numberOfDimensions) 
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
@@ -86,7 +86,7 @@ namespace mant {
 
   template <>
   arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
-      const arma::Col<double>& parameter) const noexcept {
+      const arma::Col<double>& parameter) const  {
     return parameterRotation_ * parameterScale_ % (parameter + parameterTranslation_);
   }
 }

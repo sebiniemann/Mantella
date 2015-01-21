@@ -10,7 +10,7 @@ namespace mant {
   class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double, DistanceFunction> {
     public:
       explicit HookeJeevesAlgorithm(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) ;
 
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
@@ -21,25 +21,25 @@ namespace mant {
       void setStepSizeDecrease(
           const arma::Col<double>& stepSizeDecrease);
 
-      std::string to_string() const noexcept override;
+      std::string to_string() const  override;
 
     protected:
       arma::Col<double> initialStepSize_;
       arma::Col<double> stepSizeDecrease_;
 
-      void optimiseImplementation() noexcept override;
+      void optimiseImplementation()  override;
   };
 
   template <class DistanceFunction>
   HookeJeevesAlgorithm<DistanceFunction>::HookeJeevesAlgorithm(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) 
     : TrajectoryBasedAlgorithm<double, DistanceFunction>(optimisationProblem) {
     setInitialStepSize(this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
     setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()) * 0.5);
   }
 
   template <class DistanceFunction>
-  void HookeJeevesAlgorithm<DistanceFunction>::optimiseImplementation() noexcept {
+  void HookeJeevesAlgorithm<DistanceFunction>::optimiseImplementation()  {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
@@ -132,7 +132,7 @@ namespace mant {
   }
 
   template <class DistanceFunction>
-  std::string HookeJeevesAlgorithm<DistanceFunction>::to_string() const noexcept {
+  std::string HookeJeevesAlgorithm<DistanceFunction>::to_string() const  {
     return "HookeJeevesAlgorithm";
   }
 }

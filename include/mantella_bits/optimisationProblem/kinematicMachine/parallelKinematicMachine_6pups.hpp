@@ -7,13 +7,13 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_6PUPS : public KinematicMachine {
       public:
-        explicit ParallelKinematicMachine_6PUPS() noexcept;
+        explicit ParallelKinematicMachine_6PUPS() ;
         explicit ParallelKinematicMachine_6PUPS(
             const arma::Mat<double>::fixed<3, 6>& relativeEndEffectorJoints,
             const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
             const arma::Mat<double>::fixed<3, 6>& redundantJointEnds,
             const arma::Row<double>::fixed<6>& minimalActiveJointActuations,
-            const arma::Row<double>::fixed<6>& maximalActiveJointActuations) noexcept;
+            const arma::Row<double>::fixed<6>& maximalActiveJointActuations) ;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
   //      ParallelKinematicMachine_6PUPS(const ParallelKinematicMachine_6PUPS&) = delete;

@@ -12,10 +12,10 @@ namespace mant {
   // std::to_string
   inline std::string to_string(
       // The class marked as printable.
-      const Printable& printable) noexcept;
+      const Printable& printable) ;
   inline std::string to_string(
       // A shared pointer to the class marked as printable.
-      const std::shared_ptr<Printable> printable) noexcept;
+      const std::shared_ptr<Printable> printable) ;
 
   // Checks whether the provided text ends with another string. This is usually used in this library
   // to check/filter for file endings.
@@ -23,25 +23,25 @@ namespace mant {
       // The text to be checked.
       const std::string& text,
       // The suffix searched for.
-      const std::string& ending) noexcept;
+      const std::string& ending) ;
 
   //
   // Implementation
   //
 
   inline std::string to_string(
-      const Printable& printable) noexcept {
+      const Printable& printable)  {
     return printable.to_string();
   }
 
   inline std::string to_string(
-      const std::shared_ptr<Printable> printable) noexcept {
+      const std::shared_ptr<Printable> printable)  {
     return printable->to_string();
   }
 
   inline bool endsWith(
       const std::string& text,
-      const std::string& ending) noexcept {
+      const std::string& ending)  {
     if (text.length() >= ending.length()) {
       return (text.compare(text.length() - ending.length(), ending.length(), ending) ==0);
     }

@@ -12,17 +12,17 @@ namespace mant {
         SphereFunction(const SphereFunction&) = delete;
         SphereFunction& operator=(const SphereFunction&) = delete;
 
-        std::string to_string() const noexcept override;
+        std::string to_string() const  override;
 
       protected:
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+            const arma::Col<double>& parameter) const  override;
 
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive) noexcept {
+            Archive& archive)  {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -31,7 +31,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<SphereFunction>& construct) noexcept {
+            cereal::construct<SphereFunction>& construct)  {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

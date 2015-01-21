@@ -13,7 +13,7 @@ namespace mant {
   class MultiResolutionGridSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {
     public:
       explicit MultiResolutionGridSearch(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
 
       MultiResolutionGridSearch(const MultiResolutionGridSearch&) = delete;
       MultiResolutionGridSearch& operator=(const MultiResolutionGridSearch&) = delete;
@@ -22,24 +22,24 @@ namespace mant {
           const arma::Col<double>& minimalSamplingDistances);
 
       void setMaximalSamplesPerResolution(
-          const unsigned int& maximalSamplesPerResolution) noexcept;
+          const unsigned int& maximalSamplesPerResolution) ;
 
       void setSamplingDistributionPerDimension(
           const arma::Col<double>& samplingDistributionPerDimension);
 
-      std::string to_string() const noexcept override;
+      std::string to_string() const  override;
 
     protected:
       arma::Col<ParameterType> minimalSamplingDistances_;
       unsigned int maximalSamplesPerResolution_;
       arma::Col<double> samplingDistributionPerDimension_;
 
-      void optimiseImplementation() noexcept override;
+      void optimiseImplementation()  override;
   };
 
   template <typename ParameterType, class DistanceFunction>
   MultiResolutionGridSearch<ParameterType, DistanceFunction>::MultiResolutionGridSearch(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) 
     : SamplingBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
     setMinimalSamplingDistances(arma::ones(this->optimisationProblem_->getNumberOfDimensions()) * 1e-3);
     setSamplingDistributionPerDimension(arma::ones(this->optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(this->optimisationProblem_->getNumberOfDimensions()));
@@ -47,7 +47,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void MultiResolutionGridSearch<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
+  void MultiResolutionGridSearch<ParameterType, DistanceFunction>::optimiseImplementation()  {
     unsigned int resolutionDepth = 0;
 
     std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash, IsKeyEqual>> samplesPerResolutions;
@@ -183,7 +183,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void MultiResolutionGridSearch<ParameterType, DistanceFunction>::setMaximalSamplesPerResolution(
-      const unsigned int& maximalSamplesPerResolution) noexcept {
+      const unsigned int& maximalSamplesPerResolution)  {
     maximalSamplesPerResolution_ = maximalSamplesPerResolution;
   }
 
@@ -200,7 +200,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  std::string MultiResolutionGridSearch<ParameterType, DistanceFunction>::to_string() const noexcept {
+  std::string MultiResolutionGridSearch<ParameterType, DistanceFunction>::to_string() const  {
     return "MultiResolutionGridSearch";
   }
 }

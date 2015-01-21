@@ -9,14 +9,14 @@ namespace mant {
     public:
       using PassivePropertiesAnalysis<ParameterType, DistanceFunction>::PassivePropertiesAnalysis;
 
-      arma::Col<double> getResiduals() const noexcept;
+      arma::Col<double> getResiduals() const ;
 
     protected:
       arma::Col<double> residuals_;
   };
 
   template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> FunctionModelAnalysis<ParameterType, DistanceFunction>::getResiduals() const noexcept {
+  arma::Col<double> FunctionModelAnalysis<ParameterType, DistanceFunction>::getResiduals() const  {
     return residuals_;
   }
 }

@@ -11,7 +11,7 @@ namespace mant {
     class BlackBoxOptimisationBenchmark2009 : public OptimisationProblem<double> {
       public:
         explicit BlackBoxOptimisationBenchmark2009(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int& numberOfDimensions) ;
 
         BlackBoxOptimisationBenchmark2009(const BlackBoxOptimisationBenchmark2009&) = delete;
         BlackBoxOptimisationBenchmark2009& operator=(const BlackBoxOptimisationBenchmark2009&) = delete;
@@ -45,29 +45,29 @@ namespace mant {
         arma::Mat<double> deltaC21_;
         arma::Mat<double> localOptimaY21_;
 
-        arma::Mat<double> getRandomDeltaC101() const noexcept;
-        arma::Mat<double> getRandomLocalOptimaY101() const noexcept;
-        arma::Mat<double> getRandomDeltaC21() const noexcept;
-        arma::Mat<double> getRandomLocalOptimaY21() const noexcept;
+        arma::Mat<double> getRandomDeltaC101() const ;
+        arma::Mat<double> getRandomLocalOptimaY101() const ;
+        arma::Mat<double> getRandomDeltaC21() const ;
+        arma::Mat<double> getRandomLocalOptimaY21() const ;
         arma::Col<double> getScaling(
-            const double& condition) const noexcept;
+            const double& condition) const ;
         arma::Col<double> getScaling(
-            const arma::Col<double>& condition) const noexcept;
+            const arma::Col<double>& condition) const ;
         arma::Col<double> getAsymmetricTransformation(
-            const double& beta, const arma::Col<double>& parameter) const noexcept;
+            const double& beta, const arma::Col<double>& parameter) const ;
         double getOscillationTransformation(
-            const double& value) const noexcept;
+            const double& value) const ;
         arma::Col<double> getOscillationTransformation(
-            const arma::Col<double>& parameter) const noexcept;
+            const arma::Col<double>& parameter) const ;
         double getPenality(
-            const arma::Col<double>& parameter) const noexcept;
+            const arma::Col<double>& parameter) const ;
 
         friend class cereal::access;
         BlackBoxOptimisationBenchmark2009() = default;
 
         template <typename Archive>
         void serialize(
-            Archive& archive) noexcept {
+            Archive& archive)  {
           archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
           archive(cereal::make_nvp("translation", translation_));
         }

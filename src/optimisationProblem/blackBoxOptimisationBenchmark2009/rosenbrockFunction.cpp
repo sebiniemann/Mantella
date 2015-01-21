@@ -7,7 +7,7 @@
 namespace mant {
   namespace bbob2009 {
     RosenbrockFunction::RosenbrockFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int& numberOfDimensions) 
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setTranslation(translation_);
     }
@@ -22,13 +22,13 @@ namespace mant {
     }
 
     double RosenbrockFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
+        const arma::Col<double>& parameter) const  {
       const arma::Col<double>& z = max_ * (parameter - translation_) + 1.0;
 
       return 100.0 * arma::accu(arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))) + arma::accu(arma::square(z.head(z.n_elem - 1) - 1.0));
     }
 
-    std::string RosenbrockFunction::to_string() const noexcept {
+    std::string RosenbrockFunction::to_string() const  {
       return "RosenbrockFunction";
     }
   }
