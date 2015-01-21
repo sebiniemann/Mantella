@@ -40,6 +40,7 @@ TEST_CASE("BBOB2009-AttractiveSectorFunction", "") {
     attractiveSectorFunction.setObjectiveValueTranslation(0);
     attractiveSectorFunction.setTranslation(translation);
     attractiveSectorFunction.setRotationR(rotationR);
+    attractiveSectorFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
