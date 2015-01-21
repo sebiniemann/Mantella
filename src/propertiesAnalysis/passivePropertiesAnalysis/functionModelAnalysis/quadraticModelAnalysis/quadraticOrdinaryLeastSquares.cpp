@@ -3,7 +3,7 @@
 namespace mant {
   void QuadraticOrdinaryLeastSquares::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
-    const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+    const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions() * (optimisationProblem->getNumberOfDimensions() + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
@@ -37,7 +37,7 @@ namespace mant {
   }
 
   void QuadraticOrdinaryLeastSquares::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
 
   }
 

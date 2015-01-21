@@ -50,8 +50,8 @@ namespace mant {
   void MultiResolutionGridSearch<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
     unsigned int resolutionDepth = 0;
 
-    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>> samplesPerResolutions;
-    samplesPerResolutions.insert({resolutionDepth, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>()});
+    std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash, IsKeyEqual>> samplesPerResolutions;
+    samplesPerResolutions.insert({resolutionDepth, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash, IsKeyEqual>()});
 
     double gridSoftCostraintsValueThreshold = std::numeric_limits<double>::infinity();
     double gridObjectiveValueThreshold = std::numeric_limits<double>::infinity();
@@ -165,7 +165,7 @@ namespace mant {
       gridUpperBounds = gridUpperBoundsCandidate;
 
       if(samplesPerResolutions.find(resolutionDepth) == samplesPerResolutions.end()) {
-        samplesPerResolutions.insert({resolutionDepth, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash<arma::Col<double>>, IsKeyEqual<arma::Col<double>>>()});
+        samplesPerResolutions.insert({resolutionDepth, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash, IsKeyEqual>()});
       }
     }
   }

@@ -14,7 +14,7 @@ namespace mant {
       void analyseImplementation(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept override;
       void analyseImplementation(
-          const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
       void analyseImplementation(
           const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
@@ -28,7 +28,7 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
     this->lipschitzConstant_ = 0.0;
 
-    const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
+    const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     DistanceFunction distanceFunction;
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
@@ -42,7 +42,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void DirectLipschitzContinuityAnalysis<ParameterType, DistanceFunction>::analyseImplementation(
-      const std::unordered_map<arma::Col<ParameterType>, double, Hash<arma::Col<ParameterType>>, IsKeyEqual<arma::Col<ParameterType>>>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
 
   }
 
