@@ -12,12 +12,17 @@
 namespace mant {
   arma::Mat<double> getRandomRotationMatrix(
       const unsigned int& numberOfDimensions) noexcept {
+    std::cout << "CCCCC" << std::endl;
     arma::Mat<double> Q;
+    std::cout << "DDDDD" << std::endl;
     arma::Mat<double> R;
+    std::cout << "EEEEE" << std::endl;
 
     if(arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions))) {
+      std::cout << "FFFFF" << std::endl;
       return Q * arma::sign(arma::diagmat(R));
     } else {
+      std::cout << "GGGGG" << std::endl;
       return arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
 
 //      const arma::Col<double>& angles = arma::datum::pi * arma::randu<arma::Col<double>>(numberOfDimensions);
@@ -37,6 +42,7 @@ namespace mant {
 
 //      return rotationMatrix;
     }
+    std::cout << "HHHHH" << std::endl;
   }
 
   arma::Col<unsigned int> getRandomPermutation(

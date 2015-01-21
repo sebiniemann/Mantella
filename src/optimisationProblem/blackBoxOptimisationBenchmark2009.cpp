@@ -9,6 +9,8 @@
 #include <mantella_bits/helper/rng.hpp>
 #include <mantella_bits/helper/random.hpp>
 
+#include <iostream>
+
 namespace mant {
   namespace bbob2009 {
     BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
@@ -25,7 +27,9 @@ namespace mant {
       setTranslation(translation);
 
       setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator) ? 1.0 : -1.0));
+      std::cout << "AAAAA" << std::endl;
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      std::cout << "BBBBB" << std::endl;
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
       setDeltaC101(getRandomDeltaC101());
       setLocalOptimaY101(getRandomLocalOptimaY101());
@@ -53,17 +57,24 @@ namespace mant {
 
     void BlackBoxOptimisationBenchmark2009::setRotationR(
         const arma::Mat<double>& rotationR) {
+      std::cout << "ZZZZZ" << std::endl;
       if (!rotationR.is_square()) {
+        std::cout << "WWWWW" << std::endl;
         throw std::logic_error("The rotation matrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must be square.");
       } else if (rotationR.n_rows != numberOfDimensions_) {
+        std::cout << "YYYYY" << std::endl;
         throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       } else if(arma::any(arma::vectorise(arma::abs(rotationR.i() - rotationR.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(rotationR))))))) {
+        std::cout << "RRRRR" << std::endl;
         throw std::logic_error("The rotation matrix must be orthonormal.");
       } else if(std::abs(std::abs(arma::det(rotationR)) - 1.0) > 1.0e-12) {
+        std::cout << "NNNNN" << std::endl;
         throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(rotationR)) + ") must be either 1 or -1.");
       }
+      std::cout << "HHHHH" << std::endl;
 
       rotationR_ = rotationR;
+      std::cout << "JJJJJ" << std::endl;
     }
 
     void BlackBoxOptimisationBenchmark2009::setRotationQ(
