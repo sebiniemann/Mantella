@@ -18,22 +18,24 @@ namespace mant {
     if(arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions))) {
       return Q * arma::sign(arma::diagmat(R));
     } else {
-      const arma::Col<double>& angles = arma::datum::pi * arma::randu<arma::Col<double>>(numberOfDimensions);
-      const arma::Col<double>& sineAngles = arma::sin(angles);
-      const arma::Col<double>& cosineAngles = arma::cos(angles);
+      return arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
 
-      arma::Mat<double> rotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
-      for(std::size_t n = 0; n < angles.n_elem; ++n) {
-        arma::Mat<double> subRotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
-        subRotationMatrix.at(0, 0) = sineAngles.at(n);
-        subRotationMatrix.at(0, n) = cosineAngles.at(n);
-        subRotationMatrix.at(n, 0) = cosineAngles.at(n);
-        subRotationMatrix.at(n, n) = -sineAngles.at(n);
+//      const arma::Col<double>& angles = arma::datum::pi * arma::randu<arma::Col<double>>(numberOfDimensions);
+//      const arma::Col<double>& sineAngles = arma::sin(angles);
+//      const arma::Col<double>& cosineAngles = arma::cos(angles);
 
-        rotationMatrix *= subRotationMatrix;
-      }
+//      arma::Mat<double> rotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
+//      for(std::size_t n = 0; n < angles.n_elem; ++n) {
+//        arma::Mat<double> subRotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
+//        subRotationMatrix.at(0, 0) = sineAngles.at(n);
+//        subRotationMatrix.at(0, n) = cosineAngles.at(n);
+//        subRotationMatrix.at(n, 0) = cosineAngles.at(n);
+//        subRotationMatrix.at(n, n) = -sineAngles.at(n);
 
-      return rotationMatrix;
+//        rotationMatrix *= subRotationMatrix;
+//      }
+
+//      return rotationMatrix;
     }
   }
 
