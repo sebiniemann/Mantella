@@ -7,11 +7,11 @@
 namespace mant {
   namespace bbob2009 {
     double EllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       return arma::dot(scaling_, arma::square(getOscillationTransformation(parameter - translation_)));
     }
 
-    std::string EllipsoidalFunction::to_string() const  {
+    std::string EllipsoidalFunction::to_string() const noexcept {
       return "EllipsoidalFunction";
     }
   }

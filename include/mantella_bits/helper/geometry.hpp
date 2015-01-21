@@ -11,7 +11,7 @@ namespace mant {
   // Generates a 2-dimensional right-handside rotation matrix.
   inline arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
       // Rotation around the x-axis.
-      const double& angle) ;
+      const double& angle) noexcept;
 
   // Generates a 3-dimensional right-handside rotation matrix.
   inline arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
@@ -20,7 +20,7 @@ namespace mant {
       // Rotation around the y-axis.
       const double& pitchAngle,
       // Rotation around the z-axis.
-      const double& yawAngle) ;
+      const double& yawAngle) noexcept;
 
   // Calculates the (lower) intersection points between two circles in a 2-dimensional space.
   // Note: Based on the usage of this helper function, we only considers cases with exactly two
@@ -56,7 +56,7 @@ namespace mant {
   //
 
   inline arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
-      const double& angle)  {
+      const double& angle) noexcept {
     double sineAngle = std::sin(angle);
     double cosineAngle = std::cos(angle);
 
@@ -69,7 +69,7 @@ namespace mant {
   inline arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
       const double& rollAngle,
       const double& pitchAngle,
-      const double& yawAngle)  {
+      const double& yawAngle) noexcept {
     double sineRollAngle = std::sin(rollAngle);
     double cosineRollAngle = std::cos(rollAngle);
     double sinePitchAngle = std::sin(pitchAngle);

@@ -8,24 +8,24 @@ namespace mant {
     class GallaghersGaussian101mePeaksFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         explicit GallaghersGaussian101mePeaksFunction(
-            const unsigned int& numberOfDimensions) ;
+            const unsigned int& numberOfDimensions) noexcept;
 
         GallaghersGaussian101mePeaksFunction(const GallaghersGaussian101mePeaksFunction&) = delete;
         GallaghersGaussian101mePeaksFunction& operator=(const GallaghersGaussian101mePeaksFunction&) = delete;
 
-        std::string to_string() const  override;
+        std::string to_string() const noexcept override;
 
       protected:
         arma::Col<double> weight_;
 
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("rotationR", rotationR_));
@@ -37,7 +37,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<GallaghersGaussian101mePeaksFunction>& construct)  {
+            cereal::construct<GallaghersGaussian101mePeaksFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

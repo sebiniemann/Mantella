@@ -9,7 +9,7 @@ namespace mant {
     public:
       explicit PopulationBasedAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
-          const unsigned int& populationSize) ;
+          const unsigned int& populationSize) noexcept;
 
       void setInitialPopulation(
           const arma::Mat<ParameterType>& initialPopulation);
@@ -22,7 +22,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   PopulationBasedAlgorithm<ParameterType, DistanceFunction>::PopulationBasedAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
-      const unsigned int& populationSize) 
+      const unsigned int& populationSize) noexcept
     : OptimisationAlgorithm<ParameterType, DistanceFunction>(optimisationProblem),
       populationSize_(populationSize) {
     // TODO fix for discrete problems

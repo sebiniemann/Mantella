@@ -10,7 +10,7 @@
 namespace mant {
   namespace bbob2009 {
     double StepEllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& zHat = delta_ % (rotationR_ * (parameter - translation_));
 
       arma::Col<double> zTilde(zHat);
@@ -27,7 +27,7 @@ namespace mant {
       return 0.1 * std::max(std::abs(zHat.at(0)) / 10000.0, arma::dot(scaling_, arma::square(rotationQ_ * zTilde))) + getPenality(parameter);
     }
 
-    std::string StepEllipsoidalFunction::to_string() const  {
+    std::string StepEllipsoidalFunction::to_string() const noexcept {
       return "StepEllipsoidalFunction";
     }
   }

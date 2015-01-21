@@ -7,13 +7,13 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_3PRUS : public KinematicMachine {
       public:
-        explicit ParallelKinematicMachine_3PRUS() ;
+        explicit ParallelKinematicMachine_3PRUS() noexcept;
         explicit ParallelKinematicMachine_3PRUS(
             const arma::Mat<double>::fixed<2, 3>& baseJointsAngles,
             const arma::Mat<double>::fixed<3, 3>& relativeEndEffectorJoints,
             const arma::Mat<double>::fixed<2, 3>& linkLengths,
             const arma::Mat<double>::fixed<3, 3>& redundantJointStarts,
-            const arma::Mat<double>::fixed<3, 3>& redundantJointEnds) ;
+            const arma::Mat<double>::fixed<3, 3>& redundantJointEnds) noexcept;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
         ParallelKinematicMachine_3PRUS(const ParallelKinematicMachine_3PRUS&) = delete;
@@ -21,15 +21,15 @@ namespace mant {
 
         std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const  override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
         arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const  override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
         double getPositionError(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const  override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
       protected:
         arma::Mat<double>::fixed<3, 3> endEffectorJointsRelative_;

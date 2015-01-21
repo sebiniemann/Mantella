@@ -11,12 +11,12 @@ namespace mant {
     class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         explicit BuecheRastriginFunction(
-            const unsigned int& numberOfDimensions) ;
+            const unsigned int& numberOfDimensions) noexcept;
 
         BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
         BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
 
-        std::string to_string() const  override;
+        std::string to_string() const noexcept override;
 
         void setTranslation(
             const arma::Col<double>& translation) override;
@@ -25,12 +25,12 @@ namespace mant {
         const arma::Col<double> scaling_ = getScaling(std::sqrt(10.0));
 
         double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
         friend class cereal::access;
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -39,7 +39,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<BuecheRastriginFunction>& construct)  {
+            cereal::construct<BuecheRastriginFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);

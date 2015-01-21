@@ -7,7 +7,7 @@
 
 namespace mant {
   void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions(), parameterToObjectiveValueMappings.size());
@@ -29,12 +29,12 @@ namespace mant {
   }
 
   void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
 
   }
 
   void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping)  {
+      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
 
   }
 }

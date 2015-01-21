@@ -7,7 +7,7 @@
 namespace mant {
   namespace bbob2009 {
     LinearSlope::LinearSlope(
-        const unsigned int& numberOfDimensions) 
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setOne(one_);
     }
@@ -24,7 +24,7 @@ namespace mant {
     }
 
     double LinearSlope::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = parameter;
 
       const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
@@ -33,7 +33,7 @@ namespace mant {
       return partiallyObjectiveValue_ - arma::dot(scaling_, z);
     }
 
-    std::string LinearSlope::to_string() const  {
+    std::string LinearSlope::to_string() const noexcept {
       return "LinearSlope";
     }
   }

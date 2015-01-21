@@ -10,14 +10,14 @@
 
 namespace mant {
   inline std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> getTwoSetsPartitions(
-      const unsigned int& numberOfElements) ;
+      const unsigned int& numberOfElements) noexcept;
 
   //
   // Implementation
   //
 
   inline std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> getTwoSetsPartitions(
-      const unsigned int& numberOfElements)  {
+      const unsigned int& numberOfElements) noexcept {
     arma::Col<unsigned int> elements = arma::linspace<arma::Col<unsigned int>>(0, numberOfElements - 1, numberOfElements);
 
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitions;

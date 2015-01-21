@@ -7,12 +7,12 @@
 namespace mant {
   namespace bbob2009 {
     double BentCigarFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = arma::square(rotationR_ * getAsymmetricTransformation(0.5, rotationR_ * (parameter - translation_)));
       return z.at(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
     }
 
-    std::string BentCigarFunction::to_string() const  {
+    std::string BentCigarFunction::to_string() const noexcept {
       return "BentCigarFunction";
     }
   }

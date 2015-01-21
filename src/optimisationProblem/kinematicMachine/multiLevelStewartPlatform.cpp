@@ -5,7 +5,7 @@
 
 namespace mant {
   namespace robotic {
-    MultiLevelStewartPlatform::MultiLevelStewartPlatform() 
+    MultiLevelStewartPlatform::MultiLevelStewartPlatform() noexcept
       : platformLevels_({
         ParallelKinematicMachine_6PUPS({
           0.0302769856567722, -0.0664251770004387, -0.009,
@@ -90,14 +90,14 @@ namespace mant {
     }
 
     MultiLevelStewartPlatform::MultiLevelStewartPlatform(
-        const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) 
+        const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) noexcept
       : platformLevels_(platformLevels) {
 
     }
 
     std::vector<arma::Mat<double>> MultiLevelStewartPlatform::getModelCharacterisation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const  {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisations;
 
       const std::vector<arma::Mat<double>>& modelCharacterisation = platformLevels_.at(0).getModelCharacterisation(endEffectorPose, {});
@@ -113,7 +113,7 @@ namespace mant {
 
     arma::Mat<double> MultiLevelStewartPlatform::getActuation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const  {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       arma::Mat<double> actuations;
 
       const arma::Mat<double>& actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
@@ -129,7 +129,7 @@ namespace mant {
 
     double MultiLevelStewartPlatform::getPositionError(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantActuationParameters) const  {
+        const arma::Mat<double>& redundantActuationParameters) const noexcept {
 
       double positionError = platformLevels_.at(0).getPositionError(endEffectorPose, {});
 

@@ -11,10 +11,10 @@ namespace mant {
 
     protected:
       void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  override;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
       void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  override;
+          const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
       void analyseImplementation(
-          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping)  override;
+          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
 }

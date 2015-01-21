@@ -7,7 +7,7 @@
 namespace mant {
   namespace bbob2009 {
     double KatsuuraFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));
 
       double product = 1.0;
@@ -26,7 +26,7 @@ namespace mant {
       return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0) + getPenality(parameter);
     }
 
-    std::string KatsuuraFunction::to_string() const  {
+    std::string KatsuuraFunction::to_string() const noexcept {
       return "KatsuuraFunction";
     }
   }

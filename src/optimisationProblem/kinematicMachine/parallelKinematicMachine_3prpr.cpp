@@ -5,7 +5,7 @@
 
 namespace mant {
   namespace robotic {
-    ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR() 
+    ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR() noexcept
       : ParallelKinematicMachine_3PRPR(
           arma::Mat<double>::fixed<2, 3>({
             -0.000066580445834, 0.106954081945581,
@@ -31,7 +31,7 @@ namespace mant {
         const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
         const arma::Mat<double>::fixed<2, 3>& redundantJointEnds,
         const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
-        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) 
+        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept
       : endEffectorJointRelativePositions_(endEffectorJointRelativePositions),
         redundantJointStartPositions_(redundantJointStarts),
         redundantJointEndPositions_(redundantJointEnds),

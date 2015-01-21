@@ -10,7 +10,7 @@ namespace mant {
   class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double, DistanceFunction> {
     public:
       explicit HookeJeevesAlgorithm(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) ;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
@@ -21,25 +21,25 @@ namespace mant {
       void setStepSizeDecrease(
           const arma::Col<double>& stepSizeDecrease);
 
-      std::string to_string() const  override;
+      std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> initialStepSize_;
       arma::Col<double> stepSizeDecrease_;
 
-      void optimiseImplementation()  override;
+      void optimiseImplementation() noexcept override;
   };
 
   template <class DistanceFunction>
   HookeJeevesAlgorithm<DistanceFunction>::HookeJeevesAlgorithm(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) 
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm<double, DistanceFunction>(optimisationProblem) {
     setInitialStepSize(this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
     setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()) * 0.5);
   }
 
   template <class DistanceFunction>
-  void HookeJeevesAlgorithm<DistanceFunction>::optimiseImplementation()  {
+  void HookeJeevesAlgorithm<DistanceFunction>::optimiseImplementation() noexcept {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
@@ -132,7 +132,7 @@ namespace mant {
   }
 
   template <class DistanceFunction>
-  std::string HookeJeevesAlgorithm<DistanceFunction>::to_string() const  {
+  std::string HookeJeevesAlgorithm<DistanceFunction>::to_string() const noexcept {
     return "HookeJeevesAlgorithm";
   }
 }
