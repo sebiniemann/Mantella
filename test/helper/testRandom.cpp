@@ -8,8 +8,8 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("Random rotation matrix", "") {
-  SECTION("2-dimensional rotation") {
+TEST_CASE("random: getRandomRotationMatrix", "") {
+  SECTION("Generates uniform distributed 2-dimensional rotation") {
     arma::Col<double>::fixed<10000> angles;
     for (std::size_t n = 0; n < angles.n_elem; ++n) {
       arma::Col<double>::fixed<2> rotatedUnitVector = mant::getRandomRotationMatrix(2) * arma::Col<double>::fixed<2>({-2, 1});
@@ -20,7 +20,7 @@ TEST_CASE("Random rotation matrix", "") {
     CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / angles.n_elem);
   }
 
-  SECTION("3-dimensional rotation") {
+  SECTION("Generates uniform distributed 3-dimensional rotation") {
     arma::Col<double>::fixed<10000> rollAngles;
     arma::Col<double>::fixed<10000> pitchAngles;
     arma::Col<double>::fixed<10000> yawAngles;
@@ -44,9 +44,9 @@ TEST_CASE("Random rotation matrix", "") {
   }
 }
 
-TEST_CASE("Random permutation", "") {
-  SECTION("Full permutation") {
-    arma::Mat<unsigned int>::fixed<10, 10000> permutations;
+TEST_CASE("random: getRandomPermutation(unsigned int, unsigned int)", "") {
+  SECTION("Generates uniform distributed partitial permutations") {
+    arma::Mat<unsigned int>::fixed<10, 40000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
       permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows));
     }
@@ -62,8 +62,14 @@ TEST_CASE("Random permutation", "") {
     }
   }
 
-  SECTION("Partial permutation") {
-    arma::Mat<unsigned int>::fixed<10, 40000> permutations;
+  SECTION("Throws an exception, if cycle size > number of elements") {
+    CHECK_THROWS_AS(mant::getRandomPermutation(10, 11), std::logic_error);
+  }
+}
+
+TEST_CASE("random: getRandomPermutation(unsigned int)", "") {
+  SECTION("Generates uniform distributed permutations") {
+    arma::Mat<unsigned int>::fixed<10, 10000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
       permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows + 1), static_cast<unsigned int>(permutations.n_rows));
     }
