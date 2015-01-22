@@ -19,9 +19,9 @@
 //
 // Configuration
 //
-#undef MANTELLA_BUILD_PARALLEL_VARIANTS
+#undef MANTELLA_USE_PARALLEL
 #if defined(MPI_SUCCESS)
-  #define MANTELLA_BUILD_PARALLEL_VARIANTS
+  #define MANTELLA_USE_PARALLEL
 #endif
 
 //
@@ -51,7 +51,7 @@
 #include <armadillo>
 
 // Cereal
-#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+#if defined(MANTELLA_USE_PARALLEL)
   #include <cereal/cereal.hpp>
   #include <cereal/access.hpp>
   #include <cereal/archives/json.hpp>
@@ -265,7 +265,7 @@
 #include <mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 
 // Parallel optimisation algorithms
-#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+#if defined(MANTELLA_USE_PARALLEL)
   // MPI
   #include <mpi.h>
 

@@ -17,7 +17,7 @@ namespace mant {
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
-#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+#if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
 
         template <typename Archive>
@@ -64,6 +64,6 @@ namespace mant {
   }
 }
 
-#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+#if defined(MANTELLA_USE_PARALLEL)
 // CEREAL_REGISTER_TYPE(mant::bbob2009::LunacekBiRastriginFunction);
 #endif

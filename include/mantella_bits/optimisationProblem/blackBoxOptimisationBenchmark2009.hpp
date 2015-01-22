@@ -63,7 +63,7 @@ namespace mant {
         inline double getPenality(
             const arma::Col<double>& parameter) const noexcept;
 
-#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+#if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
         BlackBoxOptimisationBenchmark2009() = default;
 
