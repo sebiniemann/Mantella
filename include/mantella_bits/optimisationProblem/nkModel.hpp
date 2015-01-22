@@ -3,7 +3,7 @@ namespace mant {
     public:
       inline explicit NKModel(
           const unsigned int& numberOfNeighbours,
-          const unsigned int& numberOfDimensions) ;
+          const unsigned int& numberOfDimensions) noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       NKModel(const NKModel&) = delete;
@@ -11,18 +11,18 @@ namespace mant {
 
     protected:
       inline double getObjectiveValueImplementation(
-          const arma::Col<unsigned int>& parameter) const  override;
+          const arma::Col<unsigned int>& parameter) const noexcept override;
   };
 
   inline NKModel::NKModel(
       const unsigned int& numberOfNeighbours,
-      const unsigned int& numberOfDimensions) 
+      const unsigned int& numberOfDimensions) noexcept
     : OptimisationProblem(numberOfDimensions){
 
   }
 
   inline double NKModel::getObjectiveValueImplementation(
-      const arma::Col<unsigned int>& parameter) const  {
+      const arma::Col<unsigned int>& parameter) const noexcept {
     return arma::sum(parameter);
   }
 }

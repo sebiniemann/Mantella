@@ -2,17 +2,13 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_6PUPS : public KinematicMachine {
       public:
-        inline explicit ParallelKinematicMachine_6PUPS() ;
+        inline explicit ParallelKinematicMachine_6PUPS() noexcept;
         inline explicit ParallelKinematicMachine_6PUPS(
             const arma::Mat<double>::fixed<3, 6>& relativeEndEffectorJoints,
             const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
             const arma::Mat<double>::fixed<3, 6>& redundantJointEnds,
             const arma::Row<double>::fixed<6>& minimalActiveJointActuations,
-            const arma::Row<double>::fixed<6>& maximalActiveJointActuations) ;
-
-        // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-  //      ParallelKinematicMachine_6PUPS(const ParallelKinematicMachine_6PUPS&) = delete;
-        ParallelKinematicMachine_6PUPS& operator=(const ParallelKinematicMachine_6PUPS&) = delete;
+            const arma::Row<double>::fixed<6>& maximalActiveJointActuations) noexcept;
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
@@ -40,7 +36,7 @@ namespace mant {
         arma::Mat<double> redundantJointAngles_;
     };
 
-    inline ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS()
+    inline ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS() noexcept
       : ParallelKinematicMachine_6PUPS(
           arma::Mat<double>::fixed<3, 6>({
             -0.025561381023353, 0.086293776138137, 0.12,
@@ -75,7 +71,7 @@ namespace mant {
         const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
         const arma::Mat<double>::fixed<3, 6>& redundantJointEnds,
         const arma::Row<double>::fixed<6>& minimalActiveJointActuations,
-        const arma::Row<double>::fixed<6>& maximalActiveJointActuations)
+        const arma::Row<double>::fixed<6>& maximalActiveJointActuations) noexcept
       : endEffectorJointsRelative_(relativeEndEffectorJoints),
         redundantJointStarts_(redundantJointStarts),
         redundantJointEnds_(redundantJointEnds),

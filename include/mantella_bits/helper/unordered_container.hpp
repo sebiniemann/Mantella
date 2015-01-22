@@ -9,10 +9,10 @@ namespace mant {
       Hash& operator=(const Hash&) = delete;
 
       inline std::size_t operator() (
-          const arma::Col<double>& key) const ;
+          const arma::Col<double>& key) const noexcept;
 
       inline std::size_t operator() (
-          const arma::Col<unsigned int>& key) const ;
+          const arma::Col<unsigned int>& key) const noexcept;
     };
 
   // Checks whether two keys of a custom type are equal.
@@ -26,11 +26,11 @@ namespace mant {
 
       inline bool operator() (
           const arma::Col<double>& firstKey,
-          const arma::Col<double>& secondKey) const ;
+          const arma::Col<double>& secondKey) const noexcept;
 
       inline bool operator() (
           const arma::Col<unsigned int>& firstKey,
-          const arma::Col<unsigned int>& secondKey) const ;
+          const arma::Col<unsigned int>& secondKey) const noexcept;
   };
 
   //
@@ -38,7 +38,7 @@ namespace mant {
   //
 
   inline std::size_t Hash::operator() (
-    const arma::Col<double>& key) const  {
+    const arma::Col<double>& key) const noexcept {
     // Start with the hash of the first value ...
     std::size_t hashedKey = std::hash<double>()(key.at(0));
 
@@ -52,7 +52,7 @@ namespace mant {
   }
 
   inline std::size_t Hash::operator() (
-    const arma::Col<unsigned int>& key) const  {
+    const arma::Col<unsigned int>& key) const noexcept {
     // Start with the hash of the first value ...
     std::size_t hashedKey = std::hash<unsigned int>()(key.at(0));
 
@@ -67,7 +67,7 @@ namespace mant {
 
   inline bool IsKeyEqual::operator() (
     const arma::Col<double>& firstKey,
-    const arma::Col<double>& secondKey) const  {
+    const arma::Col<double>& secondKey) const noexcept {
     // Returns true if all values of both column vectors are equal.
     // This will also check if both vectors have the same size.
     return arma::all(firstKey == secondKey);
@@ -75,7 +75,7 @@ namespace mant {
 
   inline bool IsKeyEqual::operator() (
     const arma::Col<unsigned int>& firstKey,
-    const arma::Col<unsigned int>& secondKey) const  {
+    const arma::Col<unsigned int>& secondKey) const noexcept {
     // Returns true if all values of both column vectors are equal.
     // This will also check if both vectors have the same size.
     return arma::all(firstKey == secondKey);

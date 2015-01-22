@@ -6,12 +6,12 @@ namespace mant {
 
     protected:
       void estimateImplementation(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem)  override;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept override;
   };
 
   template <typename ParameterType, class DistanceFunction>
   void MaximumLikelihoodEstimation<ParameterType, DistanceFunction>::estimateImplementation(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem)  {
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
 
     this->correlationAnalysis_->analyse(optimisationProblem);
     this->correlationCoefficients_.push_back(this->correlationAnalysis_->getCorrelationCoefficient());

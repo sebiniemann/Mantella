@@ -3,18 +3,18 @@ namespace mant {
     class GallaghersGaussian101mePeaksFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit GallaghersGaussian101mePeaksFunction(
-            const unsigned int& numberOfDimensions) ;
+            const unsigned int& numberOfDimensions) noexcept;
 
         GallaghersGaussian101mePeaksFunction(const GallaghersGaussian101mePeaksFunction&) = delete;
         GallaghersGaussian101mePeaksFunction& operator=(const GallaghersGaussian101mePeaksFunction&) = delete;
 
-        inline std::string to_string() const  override;
+        inline std::string to_string() const noexcept override;
 
       protected:
         arma::Col<double> weight_;
 
         inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
@@ -23,7 +23,7 @@ namespace mant {
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("rotationR", rotationR_));
@@ -35,7 +35,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<GallaghersGaussian101mePeaksFunction>& construct)  {
+            cereal::construct<GallaghersGaussian101mePeaksFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
@@ -50,7 +50,7 @@ namespace mant {
     };
 
     inline GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         weight_(101) {
       weight_.at(0) = 10.0;
@@ -60,7 +60,7 @@ namespace mant {
     }
 
     inline double GallaghersGaussian101mePeaksFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 101; ++k) {
         const arma::Col<double>& parameterTransposition = parameter - localOptimaY101_.col(k);
@@ -70,7 +70,7 @@ namespace mant {
       return std::pow(getOscillationTransformation(10.0 - maximalValue), 2.0) + getPenality(parameter);
     }
 
-    inline std::string GallaghersGaussian101mePeaksFunction::to_string() const  {
+    inline std::string GallaghersGaussian101mePeaksFunction::to_string() const noexcept {
       return "GallaghersGaussian101mePeaksFunction";
     }
   }

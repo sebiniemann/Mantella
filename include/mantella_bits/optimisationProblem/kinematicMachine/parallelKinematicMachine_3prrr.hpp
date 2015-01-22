@@ -2,12 +2,12 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_3PRRR : public KinematicMachine {
       public:
-        inline explicit ParallelKinematicMachine_3PRRR() ;
+        inline explicit ParallelKinematicMachine_3PRRR() noexcept;
         inline explicit ParallelKinematicMachine_3PRRR(
             const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
             const arma::Mat<double>::fixed<2, 3>& linkLengths,
             const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
-            const arma::Mat<double>::fixed<2, 3>& redundantJointEnds) ;
+            const arma::Mat<double>::fixed<2, 3>& redundantJointEnds) noexcept;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
         ParallelKinematicMachine_3PRRR(const ParallelKinematicMachine_3PRRR&) = delete;
@@ -15,15 +15,15 @@ namespace mant {
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const  override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const  override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
         inline double getPositionError(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const  override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
         arma::Mat<double>::fixed<2, 3> endEffectorJointsRelative_;
         arma::Mat<double>::fixed<2, 3> linkLengths_;
@@ -36,7 +36,7 @@ namespace mant {
         arma::Col<double> redundantJointAnglesCosine_;
     };
 
-    inline ParallelKinematicMachine_3PRRR::ParallelKinematicMachine_3PRRR()
+    inline ParallelKinematicMachine_3PRRR::ParallelKinematicMachine_3PRRR() noexcept
       : ParallelKinematicMachine_3PRRR(
           arma::Mat<double>::fixed<2, 3>({
             -0.000066580445834, 0.106954081945581,
@@ -61,7 +61,7 @@ namespace mant {
         const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
         const arma::Mat<double>::fixed<2, 3>& linkLengths,
         const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
-        const arma::Mat<double>::fixed<2, 3>& redundantJointEnds)
+        const arma::Mat<double>::fixed<2, 3>& redundantJointEnds) noexcept
       : endEffectorJointsRelative_(relativeEndEffectorJoints),
         linkLengths_(linkLengths),
         redundantJointStarts_(redundantJointStarts),
@@ -79,7 +79,7 @@ namespace mant {
 
     inline std::vector<arma::Mat<double>> ParallelKinematicMachine_3PRRR::getModelCharacterisation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const  {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisation;
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
@@ -112,7 +112,7 @@ namespace mant {
 
     inline arma::Mat<double> ParallelKinematicMachine_3PRRR::getActuation(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const  {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
 
       const arma::Mat<double>::fixed<2, 3>& baseJointPositions = modelCharacterisation.at(0);
@@ -130,7 +130,7 @@ namespace mant {
 
     inline double ParallelKinematicMachine_3PRRR::getPositionError(
         const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const  {
+        const arma::Mat<double>& redundantJointActuations) const noexcept {
       const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
 
       const arma::Mat<double>::fixed<2, 3>& baseJoints = modelCharacterisation.at(0);

@@ -5,15 +5,15 @@ namespace mant {
 
     protected:
       inline void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  override;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
       inline void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  override;
+          const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
       inline void analyseImplementation(
-          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping)  override;
+          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
 
   inline void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
     optimisationProblem->getObjectiveValue(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()));
@@ -39,12 +39,12 @@ namespace mant {
   }
 
   inline void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings)  {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
 
   }
 
   inline void LinearOrdinaryLeastSquares::analyseImplementation(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping)  {
+      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
 
   }
 }

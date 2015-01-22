@@ -3,7 +3,7 @@ namespace mant {
     class LinearSlope : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit LinearSlope(
-            const unsigned int& numberOfDimensions) ;
+            const unsigned int& numberOfDimensions) noexcept;
 
         LinearSlope(const LinearSlope&) = delete;
         LinearSlope& operator=(const LinearSlope&) = delete;
@@ -11,7 +11,7 @@ namespace mant {
         inline void setOne(
             const arma::Col<double>& one) override;
 
-        inline std::string to_string() const  override;
+        inline std::string to_string() const noexcept override;
 
       protected:
         arma::Col<double> xOpt_;
@@ -19,14 +19,14 @@ namespace mant {
         double partiallyObjectiveValue_;
 
         inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("one", one_));
@@ -38,7 +38,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<LinearSlope>& construct)  {
+            cereal::construct<LinearSlope>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
@@ -53,7 +53,7 @@ namespace mant {
     };
 
     inline LinearSlope::LinearSlope(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setOne(one_);
     }
@@ -70,7 +70,7 @@ namespace mant {
     }
 
     inline double LinearSlope::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = parameter;
 
       const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
@@ -79,7 +79,7 @@ namespace mant {
       return partiallyObjectiveValue_ - arma::dot(scaling_, z);
     }
 
-    inline std::string LinearSlope::to_string() const  {
+    inline std::string LinearSlope::to_string() const noexcept {
       return "LinearSlope";
     }
   }

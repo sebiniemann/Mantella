@@ -7,13 +7,13 @@ namespace mant {
         AttractiveSectorFunction(const AttractiveSectorFunction&) = delete;
         AttractiveSectorFunction& operator=(const AttractiveSectorFunction&) = delete;
 
-        inline std::string to_string() const  override;
+        inline std::string to_string() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 
         inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
@@ -43,16 +43,20 @@ namespace mant {
         }
 #endif
     };
+  
+    //
+    // Implementation
+    //
 
     inline double AttractiveSectorFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));
       z.elem(arma::find(z % translation_ > 0.0)) *= 100.0;
 
       return std::pow(getOscillationTransformation(std::pow(norm(z), 2.0)), 0.9);
     }
 
-    inline std::string AttractiveSectorFunction::to_string() const  {
+    inline std::string AttractiveSectorFunction::to_string() const noexcept {
       return "AttractiveSectorFunction";
     }
   }

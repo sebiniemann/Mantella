@@ -3,24 +3,24 @@ namespace mant {
   class ManhattanDistance : public DistanceFunction<ParameterType> {
     protected:
       ParameterType getDistanceImplementation(
-          const arma::Col<ParameterType>& parameter) const  override;
+          const arma::Col<ParameterType>& parameter) const noexcept override;
 
       arma::Col<ParameterType> getNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance) const  override;
-
-      arma::Col<ParameterType> getNeighbourImplementation(
-          const arma::Col<ParameterType>& parameter,
-          const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance,
-          std::true_type) const ;
+          const ParameterType& maximalDistance) const noexcept override;
 
       arma::Col<ParameterType> getNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance,
-          std::false_type) const ;
+          std::true_type) const noexcept;
+
+      arma::Col<ParameterType> getNeighbourImplementation(
+          const arma::Col<ParameterType>& parameter,
+          const ParameterType& minimalDistance,
+          const ParameterType& maximalDistance,
+          std::false_type) const noexcept;
   };
 
   //
@@ -29,7 +29,7 @@ namespace mant {
 
   template <typename ParameterType>
   ParameterType ManhattanDistance<ParameterType>::getDistanceImplementation(
-      const arma::Col<ParameterType>& parameter) const  {
+      const arma::Col<ParameterType>& parameter) const noexcept {
     return arma::norm(parameter, 1);
   }
 
@@ -38,7 +38,7 @@ namespace mant {
   arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
-      const ParameterType& maximalDistance) const  {
+      const ParameterType& maximalDistance) const noexcept {
     return getNeighbourImplementation(parameter, minimalDistance, maximalDistance, std::is_floating_point<ParameterType>());
   }
 
@@ -47,7 +47,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
-      std::true_type) const  {
+      std::true_type) const noexcept {
     return arma::normalise(2.0 * arma::randu(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
   }
 
@@ -56,7 +56,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
-      std::false_type) const  {
+      std::false_type) const noexcept {
 
   }
 }

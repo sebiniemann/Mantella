@@ -7,21 +7,21 @@ namespace mant {
         StepEllipsoidalFunction(const StepEllipsoidalFunction&) = delete;
         StepEllipsoidalFunction& operator=(const StepEllipsoidalFunction&) = delete;
 
-        inline std::string to_string() const  override;
+        inline std::string to_string() const noexcept override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(100.0);
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 
         inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -32,7 +32,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<StepEllipsoidalFunction>& construct)  {
+            cereal::construct<StepEllipsoidalFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
@@ -46,7 +46,7 @@ namespace mant {
     };
 
     inline double StepEllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& zHat = delta_ % (rotationR_ * (parameter - translation_));
 
       arma::Col<double> zTilde(zHat);
@@ -63,7 +63,7 @@ namespace mant {
       return 0.1 * std::max(std::abs(zHat.at(0)) / 10000.0, arma::dot(scaling_, arma::square(rotationQ_ * zTilde))) + getPenality(parameter);
     }
 
-    inline std::string StepEllipsoidalFunction::to_string() const  {
+    inline std::string StepEllipsoidalFunction::to_string() const noexcept {
       return "StepEllipsoidalFunction";
     }
   }

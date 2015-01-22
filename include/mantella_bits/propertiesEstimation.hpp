@@ -7,16 +7,16 @@ namespace mant {
           const std::shared_ptr<LipschitzContinuityAnalysis<ParameterType, DistanceFunction>> lipschitzContinuityAnalysis,
           const std::shared_ptr<LinearModelAnalysis<ParameterType, DistanceFunction>> linearModelAnalysis,
           const std::shared_ptr<QuadraticModelAnalysis<ParameterType, DistanceFunction>> quadraticModelAnalysis,
-          const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis) ;
+          const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis) noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       PropertiesEstimation(const PropertiesEstimation&) = delete;
       PropertiesEstimation& operator=(const PropertiesEstimation&) = delete;
 
       void estimate(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      std::size_t getNumberOfPropertySets() const ;
+      std::size_t getNumberOfPropertySets() const noexcept;
 
       double getCorrelationCoefficient(
           const std::size_t& propertiesSetIndex) const;
@@ -70,7 +70,7 @@ namespace mant {
       std::vector<double> plausibilities_;
 
       virtual void estimateImplementation(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem)  = 0;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept = 0;
   };
 
   template <typename ParameterType, class DistanceFunction>
@@ -79,7 +79,7 @@ namespace mant {
       const std::shared_ptr<LipschitzContinuityAnalysis<ParameterType, DistanceFunction>> lipschitzContinuityAnalysis,
       const std::shared_ptr<LinearModelAnalysis<ParameterType, DistanceFunction>> linearModelAnalysis,
       const std::shared_ptr<QuadraticModelAnalysis<ParameterType, DistanceFunction>> quadraticModelAnalysis,
-      const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis) 
+      const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis) noexcept
     : correlationAnalysis_(correlationAnalysis),
       lipschitzContinuityAnalysis_(lipschitzContinuityAnalysis),
       linearModelAnalysis_(linearModelAnalysis),
@@ -93,12 +93,12 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void PropertiesEstimation<ParameterType, DistanceFunction>::estimate(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem)  {
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
     return estimateImplementation(optimisationProblem);
   }
 
   template <typename ParameterType, class DistanceFunction>
-  std::size_t PropertiesEstimation<ParameterType, DistanceFunction>::getNumberOfPropertySets() const  {
+  std::size_t PropertiesEstimation<ParameterType, DistanceFunction>::getNumberOfPropertySets() const noexcept {
     return numberOfPropertySets_;
   }
 

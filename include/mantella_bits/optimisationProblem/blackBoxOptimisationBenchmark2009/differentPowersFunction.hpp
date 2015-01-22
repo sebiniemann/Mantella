@@ -7,18 +7,18 @@ namespace mant {
         DifferentPowersFunction(const DifferentPowersFunction&) = delete;
         DifferentPowersFunction& operator=(const DifferentPowersFunction&) = delete;
 
-        inline std::string to_string() const  override;
+        inline std::string to_string() const noexcept override;
 
       protected:
         inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -28,7 +28,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<DifferentPowersFunction>& construct)  {
+            cereal::construct<DifferentPowersFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
@@ -41,12 +41,12 @@ namespace mant {
     };
 
     inline double DifferentPowersFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - translation_));
       return arma::norm(z % getScaling(arma::square(z)));
     }
 
-    inline std::string DifferentPowersFunction::to_string() const  {
+    inline std::string DifferentPowersFunction::to_string() const noexcept {
       return "DifferentPowersFunction";
     }
   }

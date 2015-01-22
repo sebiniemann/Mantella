@@ -2,7 +2,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class LinearModelAnalysis : public FunctionModelAnalysis<ParameterType, DistanceFunction> {
     public:
-      explicit LinearModelAnalysis() ;
+      explicit LinearModelAnalysis() noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       LinearModelAnalysis(const LinearModelAnalysis&) = delete;
@@ -11,9 +11,9 @@ namespace mant {
       void setLinearModelMedianErrorThreshold(
           const double& linearModelMedianErrorThreshold);
 
-      arma::Col<double> getLinearModelEstimator() const ;
+      arma::Col<double> getLinearModelEstimator() const noexcept;
 
-      bool isLinear() const ;
+      bool isLinear() const noexcept;
 
     protected:
       arma::Col<double> linearModelEstimator_;
@@ -23,13 +23,13 @@ namespace mant {
   };
 
   template <typename ParameterType, class DistanceFunction>
-  LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() 
+  LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() noexcept
     : isLinear_(false) {
     setLinearModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> LinearModelAnalysis<ParameterType, DistanceFunction>::getLinearModelEstimator() const  {
+  arma::Col<double> LinearModelAnalysis<ParameterType, DistanceFunction>::getLinearModelEstimator() const noexcept {
     return linearModelEstimator_;
   }
 
@@ -44,7 +44,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  bool LinearModelAnalysis<ParameterType, DistanceFunction>::isLinear() const  {
+  bool LinearModelAnalysis<ParameterType, DistanceFunction>::isLinear() const noexcept {
     return isLinear_;
   }
 }

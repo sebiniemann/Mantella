@@ -3,7 +3,7 @@ namespace mant {
     class BlackBoxOptimisationBenchmark2009 : public OptimisationProblem<double> {
       public:
         inline explicit BlackBoxOptimisationBenchmark2009(
-            const unsigned int& numberOfDimensions) ;
+            const unsigned int& numberOfDimensions) noexcept;
 
         BlackBoxOptimisationBenchmark2009(const BlackBoxOptimisationBenchmark2009&) = delete;
         BlackBoxOptimisationBenchmark2009& operator=(const BlackBoxOptimisationBenchmark2009&) = delete;
@@ -37,31 +37,31 @@ namespace mant {
         arma::Mat<double> deltaC21_;
         arma::Mat<double> localOptimaY21_;
 
-        inline arma::Mat<double> getRandomDeltaC101() const ;
+        inline arma::Mat<double> getRandomDeltaC101() const noexcept;
 
-        inline arma::Mat<double> getRandomLocalOptimaY101() const ;
+        inline arma::Mat<double> getRandomLocalOptimaY101() const noexcept;
 
-        inline arma::Mat<double> getRandomDeltaC21() const ;
+        inline arma::Mat<double> getRandomDeltaC21() const noexcept;
 
-        inline arma::Mat<double> getRandomLocalOptimaY21() const ;
-
-        inline arma::Col<double> getScaling(
-            const double& condition) const ;
+        inline arma::Mat<double> getRandomLocalOptimaY21() const noexcept;
 
         inline arma::Col<double> getScaling(
-            const arma::Col<double>& condition) const ;
+            const double& condition) const noexcept;
+
+        inline arma::Col<double> getScaling(
+            const arma::Col<double>& condition) const noexcept;
 
         inline arma::Col<double> getAsymmetricTransformation(
-            const double& beta, const arma::Col<double>& parameter) const ;
+            const double& beta, const arma::Col<double>& parameter) const noexcept;
 
         inline double getOscillationTransformation(
-            const double& value) const ;
+            const double& value) const noexcept;
 
         inline arma::Col<double> getOscillationTransformation(
-            const arma::Col<double>& parameter) const ;
+            const arma::Col<double>& parameter) const noexcept;
 
         inline double getPenality(
-            const arma::Col<double>& parameter) const ;
+            const arma::Col<double>& parameter) const noexcept;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
@@ -69,7 +69,7 @@ namespace mant {
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
           archive(cereal::make_nvp("translation", translation_));
         }
@@ -77,7 +77,7 @@ namespace mant {
     };
 
     inline BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
@@ -190,7 +190,7 @@ namespace mant {
       localOptimaY21_ = localOptimaY21;
     }
 
-    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomDeltaC101() const  {
+    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomDeltaC101() const noexcept {
       arma::Mat<double> deltaC101(numberOfDimensions_, 101);
       deltaC101.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
@@ -202,7 +202,7 @@ namespace mant {
       return deltaC101;
     }
 
-    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomDeltaC21() const  {
+    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomDeltaC21() const noexcept {
       arma::Mat<double> deltaC21(numberOfDimensions_, 21);
       deltaC21.col(0) = getScaling(std::sqrt(1000.0)) / std::pow(1000.0, 0.25);
 
@@ -214,14 +214,14 @@ namespace mant {
       return deltaC21;
     }
 
-    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomLocalOptimaY101() const  {
+    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomLocalOptimaY101() const noexcept {
       arma::Mat<double> localOptimaY101 = arma::randu<arma::Mat<double>>(numberOfDimensions_, 101) * 8.0 - 4.0;
       localOptimaY101.col(0) = 0.8 * localOptimaY101.col(0);
 
       return localOptimaY101;
     }
 
-    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomLocalOptimaY21() const  {
+    inline arma::Mat<double> BlackBoxOptimisationBenchmark2009::getRandomLocalOptimaY21() const noexcept {
       arma::Mat<double> localOptimaY21 = arma::randu<arma::Mat<double>>(numberOfDimensions_, 21) * 9.8 - 4.9;
       localOptimaY21.col(0) = 0.8 * localOptimaY21.col(0);
 
@@ -229,7 +229,7 @@ namespace mant {
     }
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark2009::getScaling(
-        const double& condition) const  {
+        const double& condition) const noexcept {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
       for (auto& scale : scaling) {
@@ -240,7 +240,7 @@ namespace mant {
     }
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark2009::getScaling(
-        const arma::Col<double>& condition) const  {
+        const arma::Col<double>& condition) const noexcept {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
       for (std::size_t n = 0; n < scaling.n_elem; ++n) {
@@ -252,7 +252,7 @@ namespace mant {
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark2009::getAsymmetricTransformation(
         const double& beta,
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> asymmetricTransformation(parameter.n_elem);
       const arma::Col<double>& spacing = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
@@ -270,7 +270,7 @@ namespace mant {
     }
 
     inline double BlackBoxOptimisationBenchmark2009::getOscillationTransformation(
-        const double& value) const  {
+        const double& value) const noexcept {
       if (value != 0.0) {
         double c1;
         double c2;
@@ -290,7 +290,7 @@ namespace mant {
     }
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark2009::getOscillationTransformation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> oscillate(parameter.n_elem);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
@@ -301,7 +301,7 @@ namespace mant {
     }
 
     inline double BlackBoxOptimisationBenchmark2009::getPenality(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       double penality = 0.0;
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {

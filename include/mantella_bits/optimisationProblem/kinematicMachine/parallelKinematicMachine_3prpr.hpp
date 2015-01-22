@@ -2,13 +2,13 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_3PRPR : public KinematicMachine {
       public:
-        inline explicit ParallelKinematicMachine_3PRPR() ;
+        inline explicit ParallelKinematicMachine_3PRPR() noexcept;
         inline explicit ParallelKinematicMachine_3PRPR(
             const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions,
             const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
-            const arma::Row<double>::fixed<3>& maximalActiveJointActuations) ;
+            const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
         ParallelKinematicMachine_3PRPR(const ParallelKinematicMachine_3PRPR&) = delete;
@@ -41,7 +41,7 @@ namespace mant {
         arma::Row<double> redundantJointAngleCosines_;
     };
 
-    inline ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR()
+    inline ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR() noexcept
       : ParallelKinematicMachine_3PRPR(
           arma::Mat<double>::fixed<2, 3>({
             -0.000066580445834, 0.106954081945581,
@@ -67,7 +67,7 @@ namespace mant {
         const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
         const arma::Mat<double>::fixed<2, 3>& redundantJointEnds,
         const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
-        const arma::Row<double>::fixed<3>& maximalActiveJointActuations)
+        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept
       : endEffectorJointRelativePositions_(endEffectorJointRelativePositions),
         redundantJointStartPositions_(redundantJointStarts),
         redundantJointEndPositions_(redundantJointEnds),

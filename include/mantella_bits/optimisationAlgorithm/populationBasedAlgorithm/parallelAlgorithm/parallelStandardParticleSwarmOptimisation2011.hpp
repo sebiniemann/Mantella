@@ -4,23 +4,23 @@ namespace mant {
     public:
       explicit ParallelStandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-          const unsigned int& populationSize) ;
+          const unsigned int& populationSize) noexcept;
 
       ParallelStandardParticleSwarmOptimisation2011(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
       ParallelStandardParticleSwarmOptimisation2011& operator=(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
 
       void setNeighbourhoodProbability(
-          const double& neighbourhoodProbability) ;
+          const double& neighbourhoodProbability) noexcept;
       void setAcceleration(
-          const double& acceleration) ;
+          const double& acceleration) noexcept;
       void setLocalAttraction(
-          const double& localAttraction) ;
+          const double& localAttraction) noexcept;
       void setGlobalAttraction(
-          const double& globalAttraction) ;
+          const double& globalAttraction) noexcept;
       void setCommunicationSteps(
-          const unsigned int& communicationSteps) ;
+          const unsigned int& communicationSteps) noexcept;
 
-      std::string to_string() const  override;
+      std::string to_string() const noexcept override;
 
     protected:
       double neighbourhoodProbability_;
@@ -30,13 +30,13 @@ namespace mant {
 
       unsigned int communicationSteps_;
 
-      void parallelOptimiseImplementation()  override;
+      void parallelOptimiseImplementation() noexcept override;
   };
 
   template <class DistanceFunction>
   ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize) 
+      const unsigned int& populationSize) noexcept
     : ParallelAlgorithm<double, DistanceFunction>(optimisationProblem, populationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(this->populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));
@@ -46,7 +46,7 @@ namespace mant {
   }
 
   template <class DistanceFunction>
-  void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::parallelOptimiseImplementation()  {
+  void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::parallelOptimiseImplementation() noexcept {
     arma::Mat<double> localParticles = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
     localParticles.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     localParticles.each_col() += this->optimisationProblem_->getLowerBounds();
@@ -199,36 +199,36 @@ namespace mant {
 
   template <class DistanceFunction>
   void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::setNeighbourhoodProbability(
-      const double& neighbourhoodProbability)  {
+      const double& neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
   template <class DistanceFunction>
   void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::setAcceleration(
-      const double& acceleration)  {
+      const double& acceleration) noexcept {
     acceleration_ = acceleration;
   }
 
   template <class DistanceFunction>
   void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::setLocalAttraction(
-      const double& localAttraction)  {
+      const double& localAttraction) noexcept {
     localAttraction_ = localAttraction;
   }
 
   template <class DistanceFunction>
   void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::setGlobalAttraction(
-      const double& globalAttraction)  {
+      const double& globalAttraction) noexcept {
     globalAttraction_ = globalAttraction;
   }
 
   template <class DistanceFunction>
   void ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::setCommunicationSteps(
-      const unsigned int& communicationSteps)  {
+      const unsigned int& communicationSteps) noexcept {
     communicationSteps_ = communicationSteps;
   }
 
   template <class DistanceFunction>
-  std::string ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::to_string() const  {
+  std::string ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::to_string() const noexcept {
     return "ParallelStandardParticleSwarmOptimisation2011";
   }
 }

@@ -2,7 +2,7 @@ namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class SeparabilityAnalysis : public ActivePropertiesAnalysis<ParameterType, DistanceFunction> {
     public:
-      explicit SeparabilityAnalysis() 
+      explicit SeparabilityAnalysis() noexcept
         : maximalNumberOfIterations_(1000.0) {
 
       }
@@ -12,7 +12,7 @@ namespace mant {
       SeparabilityAnalysis& operator=(const SeparabilityAnalysis&) = delete;
 
       void setMaximalNumberOfIterations(
-          const unsigned int& maximalNumberOfIterations) ;
+          const unsigned int& maximalNumberOfIterations) noexcept;
 
     protected:
       unsigned int maximalNumberOfIterations_;
@@ -20,7 +20,7 @@ namespace mant {
 
   template <typename ParameterType, class DistanceFunction>
   void SeparabilityAnalysis<ParameterType, DistanceFunction>::setMaximalNumberOfIterations(
-      const unsigned int& maximalNumberOfIterations)  {
+      const unsigned int& maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 }

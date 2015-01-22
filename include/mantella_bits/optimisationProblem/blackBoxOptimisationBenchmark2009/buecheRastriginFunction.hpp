@@ -3,12 +3,12 @@ namespace mant {
     class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit BuecheRastriginFunction(
-            const unsigned int& numberOfDimensions) ;
+            const unsigned int& numberOfDimensions) noexcept;
 
         BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
         BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
 
-        inline std::string to_string() const  override;
+        inline std::string to_string() const noexcept override;
 
         inline void setTranslation(
             const arma::Col<double>& translation) override;
@@ -17,13 +17,13 @@ namespace mant {
         const arma::Col<double> scaling_ = getScaling(std::sqrt(10.0));
 
         inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const  override;
+            const arma::Col<double>& parameter) const noexcept override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -32,7 +32,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<BuecheRastriginFunction>& construct)  {
+            cereal::construct<BuecheRastriginFunction>& construct) noexcept {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
@@ -44,7 +44,7 @@ namespace mant {
     };
 
     inline BuecheRastriginFunction::BuecheRastriginFunction(
-        const unsigned int& numberOfDimensions)
+        const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setTranslation(translation_);
     }
@@ -62,7 +62,7 @@ namespace mant {
     }
 
     inline double BuecheRastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const  {
+        const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = scaling_ % getOscillationTransformation(parameter - translation_);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
         if (z.at(n) > 0.0) {
@@ -73,7 +73,7 @@ namespace mant {
       return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0) + 100.0 * getPenality(parameter);
     }
 
-    inline std::string BuecheRastriginFunction::to_string() const  {
+    inline std::string BuecheRastriginFunction::to_string() const noexcept {
       return "BuecheRastriginFunction";
     }
   }

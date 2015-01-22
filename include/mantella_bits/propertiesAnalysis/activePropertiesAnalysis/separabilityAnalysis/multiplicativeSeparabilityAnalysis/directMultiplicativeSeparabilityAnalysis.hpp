@@ -5,11 +5,11 @@ namespace mant {
 
     protected:
       inline void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  override;
+          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
   };
 
   inline void DirectMultiplicativeSeparabilityAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem)  {
+      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->getNumberOfDimensions());
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;

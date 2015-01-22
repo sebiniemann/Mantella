@@ -3,7 +3,7 @@ namespace mant {
   class GridSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {
     public:
       explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       GridSearch(const GridSearch&) = delete;
       GridSearch& operator=(const GridSearch&) = delete;
@@ -11,23 +11,23 @@ namespace mant {
       void setSamplingFactors(
           const arma::Col<double>& samplingFactors);
 
-      std::string to_string() const  override;
+      std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> samplingFactors_;
 
-      void optimiseImplementation()  override;
+      void optimiseImplementation() noexcept override;
   };
 
   template <typename ParameterType, class DistanceFunction>
   GridSearch<ParameterType, DistanceFunction>::GridSearch(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) 
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
     setSamplingFactors(arma::ones(this->optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(this->optimisationProblem_->getNumberOfDimensions()));
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void GridSearch<ParameterType, DistanceFunction>::optimiseImplementation()  {
+  void GridSearch<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
     const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
     const arma::Col<unsigned int>& numberOfSamples_ = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(this->maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->optimisationProblem_->getNumberOfDimensions())));
 
@@ -83,7 +83,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  std::string GridSearch<ParameterType, DistanceFunction>::to_string() const  {
+  std::string GridSearch<ParameterType, DistanceFunction>::to_string() const noexcept {
     return "GridSearch";
   }
 }

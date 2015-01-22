@@ -3,26 +3,26 @@ namespace mant {
   class RandomSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {
     public:
       explicit RandomSearch(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) ;
+          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       RandomSearch(const RandomSearch&) = delete;
       RandomSearch& operator=(const RandomSearch&) = delete;
 
-      std::string to_string() const  override;
+      std::string to_string() const noexcept override;
 
     protected:
-      void optimiseImplementation()  override;
+      void optimiseImplementation() noexcept override;
   };
 
   template <typename ParameterType, class DistanceFunction>
   RandomSearch<ParameterType, DistanceFunction>::RandomSearch(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) 
+      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : SamplingBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
 
   }
 
   template <typename ParameterType, class DistanceFunction>
-  void RandomSearch<ParameterType, DistanceFunction>::optimiseImplementation()  {
+  void RandomSearch<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
@@ -39,7 +39,7 @@ namespace mant {
   }
 
   template <typename ParameterType, class DistanceFunction>
-  std::string RandomSearch<ParameterType, DistanceFunction>::to_string() const  {
+  std::string RandomSearch<ParameterType, DistanceFunction>::to_string() const noexcept {
     return "RandomSearch";
   }
 }

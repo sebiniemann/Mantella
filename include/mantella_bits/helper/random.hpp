@@ -1,20 +1,20 @@
 namespace mant {
   inline arma::Mat<double> getRandomRotationMatrix(
-      const unsigned int& numberOfDimensions) ;
+      const unsigned int& numberOfDimensions) noexcept;
 
   inline arma::Col<unsigned int> getRandomPermutation(
       const unsigned int& numberOfElements,
       const unsigned int& cycleLength);
 
   inline arma::Col<unsigned int> getRandomPermutation(
-      const unsigned int& numberOfElements) ;
+      const unsigned int& numberOfElements) noexcept;
 
   //
   // Implementation
   //
 
   inline arma::Mat<double> getRandomRotationMatrix(
-      const unsigned int& numberOfDimensions)  {
+      const unsigned int& numberOfDimensions) noexcept {
     arma::Mat<double> Q;
     arma::Mat<double> R;
 
@@ -61,7 +61,7 @@ namespace mant {
   }
 
   inline arma::Col<unsigned int> getRandomPermutation(
-      const unsigned int& numberOfElements)  {
+      const unsigned int& numberOfElements) noexcept {
     return getRandomPermutation(numberOfElements, numberOfElements);
   }
 }
