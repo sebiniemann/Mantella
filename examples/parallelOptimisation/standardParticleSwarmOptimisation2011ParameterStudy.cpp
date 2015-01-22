@@ -6,9 +6,6 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
-
 // Cereal
 #include <cereal/archives/json.hpp>
 #include <cereal/types/polymorphic.hpp>
@@ -75,9 +72,9 @@ int main (const int argc, const char* argv[]) {
           for(auto neighbourhoodParameter : neighbourhoodParameters) {
             optimisationAlgorithm.setNeighbourhoodProbability(neighbourhoodParameter);
 
-             boost::filesystem::path filepath = boost::filesystem::path("./parameterisation_prob" + mant::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(maximalLocalAttractionParameter) + "_global" + std::to_string(maximalGlobalAttractionParameter) + "_acc" + std::to_string(maximalAccelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
+             std::string filepath = "./parameterisation_prob" + mant::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(maximalLocalAttractionParameter) + "_global" + std::to_string(maximalGlobalAttractionParameter) + "_acc" + std::to_string(maximalAccelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat";
 
-             if(!boost::filesystem::exists(filepath)) {
+             if(!mant::testDirectory(filepath)) {
               arma::Mat<double> results(iterations, 6 + numberOfDimensions);
               for(std::size_t n = 0; n < iterations; ++n) {
                 optimisationAlgorithm.optimise();

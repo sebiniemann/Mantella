@@ -7,13 +7,10 @@
 #include <stdexcept>
 #include <iostream>
 
-// Boost
-#include <boost/filesystem.hpp>
-
 // Mantella
 #include <mantella>
 
-boost::filesystem::path testDirectory;
+std::string testDirectory;
 
 int main(const int argc, const char* argv[]) {
   try {
@@ -21,10 +18,10 @@ int main(const int argc, const char* argv[]) {
       throw std::invalid_argument("The location of the test directory must be added to the command line.");
     }
 
-    testDirectory = boost::filesystem::path(argv[1]);
+    testDirectory = argv[1];
 
-    if (!boost::filesystem::exists(testDirectory)) {
-      throw std::invalid_argument("The speficied test directory (" + testDirectory.string() + ") does not exists.");
+    if (!mant::file_exists(testDirectory)) {
+      throw std::invalid_argument("The speficied test directory (" + testDirectory + ") does not exists.");
     }
 
     mant::Rng::setSeed(1234567890);

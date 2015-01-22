@@ -7,9 +7,6 @@
 #include <iostream>
 #include <cmath>
 
-// Boost
-#include <boost/filesystem.hpp>
-
 // Armadillo
 #include <armadillo>
 

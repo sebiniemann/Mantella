@@ -8,9 +8,6 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
-
 // Mantella
 #include <mantella>
 
@@ -18,16 +15,16 @@ extern boost::filesystem::path testDirectory;
 
 TEST_CASE("BBOB2009-CompositeGriewankRosenbrockFunctionF8F2", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
+    mant::bbob2009::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedCompositeGriewankRosenbrockFunctionF8F2,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedCompositeGriewankRosenbrockFunctionF8F2,dim" + std::to_string(numberOfDimensions) +".mat");
 
     compositeGriewankRosenbrockFunctionF8F2.setObjectiveValueTranslation(0);
     compositeGriewankRosenbrockFunctionF8F2.setRotationR(rotationR);

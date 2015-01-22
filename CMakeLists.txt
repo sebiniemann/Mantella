@@ -167,12 +167,10 @@ if(BUILD_LIBRARY)
       # Locate third party libraries and headers
       find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
       find_package(Catch REQUIRED) # Catch (header only)
-      find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED) # Boost (system, filesystem)
 
       # Include third party headers
       include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
       include_directories(${CATCH_INCLUDE_DIRS}) # Catch
-      include_directories(${Boost_INCLUDE_DIRS}) # Boost
 
       # Include headers
       include_directories(${PROJECT_SOURCE_DIR}/test) # MANTELLA tests
@@ -320,7 +318,6 @@ if(BUILD_LIBRARY)
 
       # Link against third party libraries
       target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
-      target_link_libraries(libTest ${Boost_LIBRARIES}) # Boost
 
       add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
   endif()
