@@ -2,23 +2,23 @@ namespace mant {
   namespace bbob2009 {
     class LinearSlope : public BlackBoxOptimisationBenchmark2009 {
       public:
-        explicit LinearSlope(
+        inline explicit LinearSlope(
             const unsigned int& numberOfDimensions) ;
 
         LinearSlope(const LinearSlope&) = delete;
         LinearSlope& operator=(const LinearSlope&) = delete;
 
-        void setOne(
+        inline void setOne(
             const arma::Col<double>& one) override;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         arma::Col<double> xOpt_;
         arma::Col<double> scaling_;
         double partiallyObjectiveValue_;
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -51,6 +51,37 @@ namespace mant {
         }
 #endif
     };
+
+    inline LinearSlope::LinearSlope(
+        const unsigned int& numberOfDimensions)
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
+      setOne(one_);
+    }
+
+    inline void LinearSlope::setOne(const arma::Col<double>& one) {
+      if (one.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the one vector (" + std::to_string(one.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      }
+
+      one_ = one;
+      xOpt_ = 5.0 * one_;
+      scaling_ = arma::sign(one_) % getScaling(10.0);
+      partiallyObjectiveValue_ = 5.0 * arma::accu(arma::abs(scaling_));
+    }
+
+    inline double LinearSlope::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      arma::Col<double> z = parameter;
+
+      const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
+      z.elem(outOfBound) = xOpt_.elem(outOfBound);
+
+      return partiallyObjectiveValue_ - arma::dot(scaling_, z);
+    }
+
+    inline std::string LinearSlope::to_string() const  {
+      return "LinearSlope";
+    }
   }
 }
 

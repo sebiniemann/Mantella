@@ -7,12 +7,12 @@ namespace mant {
         EllipsoidalFunctionRotated(const EllipsoidalFunctionRotated&) = delete;
         EllipsoidalFunctionRotated& operator=(const EllipsoidalFunctionRotated&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(1000000.0);
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -41,6 +41,15 @@ namespace mant {
         }
 #endif
     };
+
+    inline double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      return arma::dot(scaling_, arma::square(getOscillationTransformation(rotationR_ * (parameter - translation_))));
+    }
+
+    inline std::string EllipsoidalFunctionRotated::to_string() const  {
+      return "EllipsoidalFunctionRotated";
+    }
   }
 }
 

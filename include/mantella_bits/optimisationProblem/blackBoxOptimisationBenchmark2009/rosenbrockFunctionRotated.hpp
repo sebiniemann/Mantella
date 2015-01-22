@@ -7,12 +7,12 @@ namespace mant {
         RosenbrockFunctionRotated(const RosenbrockFunctionRotated&) = delete;
         RosenbrockFunctionRotated& operator=(const RosenbrockFunctionRotated&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -39,6 +39,17 @@ namespace mant {
         }
 #endif
     };
+
+    inline double RosenbrockFunctionRotated::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = max_ * rotationR_ * parameter + 0.5;
+
+      return 100.0 * arma::accu(arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))) + arma::accu(arma::square(z.head(z.n_elem - 1) - 1.0));
+    }
+
+    inline std::string RosenbrockFunctionRotated::to_string() const  {
+      return "RosenbrockFunctionRotated";
+    }
   }
 }
 

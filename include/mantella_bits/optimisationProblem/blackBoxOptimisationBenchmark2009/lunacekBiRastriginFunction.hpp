@@ -7,14 +7,14 @@ namespace mant {
         LunacekBiRastriginFunction(const LunacekBiRastriginFunction&) = delete;
         LunacekBiRastriginFunction& operator=(const LunacekBiRastriginFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(100.0));
         const double s_ = 1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1);
         const double mu1_ = -std::sqrt(5.25 / s_);
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -45,6 +45,18 @@ namespace mant {
         }
 #endif
     };
+
+    inline double LunacekBiRastriginFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& xHat = 2.0 * arma::sign(one_) % parameter;
+      const arma::Col<double>& z = rotationQ_ * (delta_ % (rotationR_ * (xHat - 2.5)));
+
+      return std::min(arma::accu(arma::square(xHat - 2.5)), static_cast<double>(numberOfDimensions_) + s_ * arma::accu(arma::square(xHat - mu1_))) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + 10000.0 * getPenality(parameter);
+    }
+
+    inline std::string LunacekBiRastriginFunction::to_string() const  {
+      return "LunacekBiRastriginFunction";
+    }
   }
 }
 

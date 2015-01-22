@@ -7,12 +7,12 @@ namespace mant {
         RastriginFunctionRotated(const RastriginFunctionRotated&) = delete;
         RastriginFunctionRotated& operator=(const RastriginFunctionRotated&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -43,6 +43,17 @@ namespace mant {
         }
 #endif
     };
+
+    inline double RastriginFunctionRotated::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = rotationR_ * (delta_ % (rotationQ_ * getAsymmetricTransformation(0.2, getOscillationTransformation(rotationR_ * (parameter - translation_)))));
+
+      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+    }
+
+    inline std::string RastriginFunctionRotated::to_string() const  {
+      return "RastriginFunctionRotated";
+    }
   }
 }
 

@@ -7,12 +7,12 @@ namespace mant {
         KatsuuraFunction(const KatsuuraFunction&) = delete;
         KatsuuraFunction& operator=(const KatsuuraFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(100.0));
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -43,6 +43,30 @@ namespace mant {
         }
 #endif
     };
+
+    inline double KatsuuraFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));
+
+      double product = 1.0;
+      for (std::size_t n = 0; n < z.n_elem; ++n) {
+          const double& value = z.at(n);
+
+          double sum = 0.0;
+          for (unsigned int k = 1; k < 33; ++k) {
+              const double& power = std::pow(2.0, k);
+              sum += std::abs(power * value - std::round(power * value)) / power;
+          }
+
+          product *= std::pow(1.0 + static_cast<double>(n + 1) * sum, (10.0 / std::pow(numberOfDimensions_, 1.2)));
+      }
+
+      return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0) + getPenality(parameter);
+    }
+
+    inline std::string KatsuuraFunction::to_string() const  {
+      return "KatsuuraFunction";
+    }
   }
 }
 

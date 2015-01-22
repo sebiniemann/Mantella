@@ -2,21 +2,21 @@ namespace mant {
   namespace bbob2009 {
     class RosenbrockFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
-        explicit RosenbrockFunction(
+        inline explicit RosenbrockFunction(
             const unsigned int& numberOfDimensions) ;
 
         RosenbrockFunction(const RosenbrockFunction&) = delete;
         RosenbrockFunction& operator=(const RosenbrockFunction&) = delete;
 
-        void setTranslation(
+        inline void setTranslation(
             const arma::Col<double>& translation) override;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -42,6 +42,32 @@ namespace mant {
         }
 #endif
     };
+
+    inline RosenbrockFunction::RosenbrockFunction(
+        const unsigned int& numberOfDimensions)
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
+      setTranslation(translation_);
+    }
+
+    inline void RosenbrockFunction::setTranslation(
+        const arma::Col<double>& translation) {
+      if (translation.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+      }
+
+      translation_ = 0.75 * translation;
+    }
+
+    inline double RosenbrockFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = max_ * (parameter - translation_) + 1.0;
+
+      return 100.0 * arma::accu(arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))) + arma::accu(arma::square(z.head(z.n_elem - 1) - 1.0));
+    }
+
+    inline std::string RosenbrockFunction::to_string() const  {
+      return "RosenbrockFunction";
+    }
   }
 }
 

@@ -7,10 +7,10 @@ namespace mant {
         BentCigarFunction(const BentCigarFunction&) = delete;
         BentCigarFunction& operator=(const BentCigarFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -39,6 +39,16 @@ namespace mant {
         }
 #endif
     };
+
+    inline double BentCigarFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = arma::square(rotationR_ * getAsymmetricTransformation(0.5, rotationR_ * (parameter - translation_)));
+      return z.at(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
+    }
+
+    inline std::string BentCigarFunction::to_string() const  {
+      return "BentCigarFunction";
+    }
   }
 }
 

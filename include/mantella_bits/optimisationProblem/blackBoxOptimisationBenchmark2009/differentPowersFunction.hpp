@@ -7,10 +7,10 @@ namespace mant {
         DifferentPowersFunction(const DifferentPowersFunction&) = delete;
         DifferentPowersFunction& operator=(const DifferentPowersFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -39,6 +39,16 @@ namespace mant {
         }
 #endif
     };
+
+    inline double DifferentPowersFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - translation_));
+      return arma::norm(z % getScaling(arma::square(z)));
+    }
+
+    inline std::string DifferentPowersFunction::to_string() const  {
+      return "DifferentPowersFunction";
+    }
   }
 }
 

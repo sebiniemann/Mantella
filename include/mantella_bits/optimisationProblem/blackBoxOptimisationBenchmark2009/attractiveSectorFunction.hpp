@@ -7,12 +7,12 @@ namespace mant {
         AttractiveSectorFunction(const AttractiveSectorFunction&) = delete;
         AttractiveSectorFunction& operator=(const AttractiveSectorFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -43,6 +43,18 @@ namespace mant {
         }
 #endif
     };
+
+    inline double AttractiveSectorFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));
+      z.elem(arma::find(z % translation_ > 0.0)) *= 100.0;
+
+      return std::pow(getOscillationTransformation(std::pow(norm(z), 2.0)), 0.9);
+    }
+
+    inline std::string AttractiveSectorFunction::to_string() const  {
+      return "AttractiveSectorFunction";
+    }
   }
 }
 

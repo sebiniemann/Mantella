@@ -2,19 +2,19 @@ namespace mant {
   namespace bbob2009 {
     class WeierstrassFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
-        explicit WeierstrassFunction(
+        inline explicit WeierstrassFunction(
             const unsigned int& numberOfDimensions) ;
 
         WeierstrassFunction(const WeierstrassFunction&) = delete;
         WeierstrassFunction& operator=(const WeierstrassFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
         double f0_;
         const arma::Col<double> delta_ = getScaling(std::sqrt(0.01));
 
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -49,6 +49,33 @@ namespace mant {
         }
 #endif
     };
+
+    inline WeierstrassFunction::WeierstrassFunction(
+        const unsigned int& numberOfDimensions)
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
+      f0_ = 0.0;
+      for (unsigned int k = 0; k < 12; ++k) {
+        f0_ += std::pow(0.5, k) * cos(2.0 * arma::datum::pi * pow(3.0, k) * 0.5);
+      }
+    }
+
+    inline double WeierstrassFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = rotationR_ * (delta_ % (rotationQ_ * getOscillationTransformation(rotationR_ * (parameter - translation_))));
+
+      double sum = 0.0;
+      for (std::size_t n = 0; n < parameter.n_elem; ++n) {
+        for (unsigned int k = 0; k < 12; ++k) {
+          sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z.at(n) + 0.5));
+        }
+      }
+
+      return 10 * (std::pow(sum / static_cast<double>(numberOfDimensions_) - f0_, 3) + getPenality(parameter) / static_cast<double>(numberOfDimensions_));
+    }
+
+    inline std::string WeierstrassFunction::to_string() const  {
+      return "WeierstrassFunction";
+    }
   }
 }
 

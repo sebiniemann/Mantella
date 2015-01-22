@@ -7,10 +7,10 @@ namespace mant {
         SphereFunction(const SphereFunction&) = delete;
         SphereFunction& operator=(const SphereFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -37,6 +37,15 @@ namespace mant {
         }
 #endif
     };
+
+    inline double SphereFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      return std::pow(arma::norm(parameter - translation_), 2.0);
+    }
+
+    inline std::string SphereFunction::to_string() const  {
+      return "SphereFunction";
+    }
   }
 }
 

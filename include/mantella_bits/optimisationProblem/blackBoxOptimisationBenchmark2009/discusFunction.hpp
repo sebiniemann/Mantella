@@ -7,10 +7,10 @@ namespace mant {
         DiscusFunction(const DiscusFunction&) = delete;
         DiscusFunction& operator=(const DiscusFunction&) = delete;
 
-        std::string to_string() const  override;
+        inline std::string to_string() const  override;
 
       protected:
-        double getObjectiveValueImplementation(
+        inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -39,6 +39,16 @@ namespace mant {
         }
 #endif
     };
+
+    inline double DiscusFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const  {
+      const arma::Col<double>& z = arma::square(getOscillationTransformation(rotationR_ * (parameter - translation_)));
+      return 1000000.0 * z.at(0) + arma::accu(z.tail(z.n_elem - 1));
+    }
+
+    inline std::string DiscusFunction::to_string() const  {
+      return "DiscusFunction";
+    }
   }
 }
 
