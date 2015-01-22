@@ -17,6 +17,7 @@
 #pragma once
 
 // Serial algorithms
+#include <mantella_bits/helper/filesystem.hpp>
 #include <mantella_bits/distanceFunction.hpp>
 #include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 #include <mantella_bits/distanceFunction/hammingDistance.hpp>
