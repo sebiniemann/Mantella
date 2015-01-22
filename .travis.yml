@@ -63,7 +63,7 @@ install:
   - rm -Rf armadillo armadillo.tar.gz
 
   # Cereal
-  - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.0.0.tar.gz
+  - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.1.0.tar.gz
   - mkdir cereal
   - tar -xzf cereal.tar.gz -C ./cereal --strip-components=1
   - sudo cp -R cereal/include/cereal /usr/local/include/
