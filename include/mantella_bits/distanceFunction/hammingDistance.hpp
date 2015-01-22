@@ -1,14 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cmath>
-#include <algorithm>
-
-// Mantella
-#include <mantella_bits/distanceFunction.hpp>
-#include <mantella_bits/helper/rng.hpp>
-#include <mantella_bits/helper/random.hpp>
-
 namespace mant {
   class HammingDistance : public DistanceFunction<unsigned int> {
     protected:

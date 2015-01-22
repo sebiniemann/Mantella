@@ -1,7 +1,3 @@
-#pragma once
-
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
-
 namespace mant {
   template<class DistanceFunction>
   class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedAlgorithm<double, DistanceFunction> {

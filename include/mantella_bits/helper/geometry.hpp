@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <stdexcept>
-#include <cmath>
-
-// Armadillo
-#include <armadillo>
-
 namespace mant {
   // Generates a 2-dimensional right-handside rotation matrix.
   inline arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(

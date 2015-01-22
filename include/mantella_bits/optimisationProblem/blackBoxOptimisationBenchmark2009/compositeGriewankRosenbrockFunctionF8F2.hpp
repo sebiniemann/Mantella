@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <algorithm>
-#include <cmath>
-
-// Mantella
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp>
-
 namespace mant {
   namespace bbob2009 {
     class CompositeGriewankRosenbrockFunctionF8F2 : public BlackBoxOptimisationBenchmark2009 {

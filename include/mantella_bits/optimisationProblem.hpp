@@ -1,19 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <unordered_map>
-
-// Armadillo
-#include <armadillo>
-
-// Cereal
-#include <cereal/access.hpp>
-
-// Mantella
-#include <mantella_bits/helper/cereal.hpp>
-#include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/helper/unordered_container.hpp>
-
 namespace mant {
   // Base class of all optimisation problems in this library. Provides access to all usually
   // needed informations.

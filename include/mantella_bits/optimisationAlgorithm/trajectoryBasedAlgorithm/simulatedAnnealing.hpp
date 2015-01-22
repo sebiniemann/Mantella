@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cmath>
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
-#include <mantella_bits/helper/rng.hpp>
-
 // TODO Add restarting
 namespace mant {
   template <typename ParameterType, class DistanceFunction>

@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class RandomSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {

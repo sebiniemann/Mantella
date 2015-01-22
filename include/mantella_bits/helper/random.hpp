@@ -1,17 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cstdlib>
-#include <cmath>
-#include <stdexcept>
-#include <algorithm>
-
-// Armadillo
-#include <armadillo>
-
-// Mantella
-#include <mantella_bits/helper/rng.hpp>
-
 namespace mant {
   inline arma::Mat<double> getRandomRotationMatrix(
       const unsigned int& numberOfDimensions) ;

@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <vector>
-
-// Mantella
-#include <mantella_bits/optimisationProblem/kinematicMachine.hpp>
-#include <mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
-
 namespace mant {
   namespace robotic {
     class MultiLevelStewartPlatform : public KinematicMachine {

@@ -1,9 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
-
 namespace mant {
   class LinearOrdinaryLeastSquares : public LinearModelAnalysis<double, EuclideanDistance> {
     public:

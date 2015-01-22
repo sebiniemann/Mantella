@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cstdlib>
-#include <functional>
-
-// Armadillo
-#include <armadillo>
-
 namespace mant {
   // Calculates a hash value for custom types.
   class Hash {

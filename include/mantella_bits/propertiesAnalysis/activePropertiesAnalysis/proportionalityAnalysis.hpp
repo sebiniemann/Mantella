@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class ProportionalityAnalysis : public ActivePropertiesAnalysis<ParameterType, DistanceFunction> {

@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <memory>
-
-// Mantella
-#include <mantella_bits/helper/printable.hpp>
-
 namespace mant {
   // Returns the string representation of a class marked as printable;
   // The underscore within the name is intended, in order to be constistent with Standard Library's

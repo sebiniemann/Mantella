@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <vector>
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class GridSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {

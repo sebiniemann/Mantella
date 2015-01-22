@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <stdexcept>
-
-// Armadillo
-#include <armadillo>
-
 namespace mant {
   template <typename ParameterType>
   class DistanceFunction {

@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
-
 // TODO Add restarting
 namespace mant {
   template <typename ParameterType, class DistanceFunction>

@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class QuadraticModelAnalysis : public FunctionModelAnalysis<ParameterType, DistanceFunction> {

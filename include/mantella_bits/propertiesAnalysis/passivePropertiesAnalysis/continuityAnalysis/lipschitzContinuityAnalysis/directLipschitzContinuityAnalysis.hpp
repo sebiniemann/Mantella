@@ -1,9 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class DirectLipschitzContinuityAnalysis : public LipschitzContinuityAnalysis<ParameterType, DistanceFunction> {

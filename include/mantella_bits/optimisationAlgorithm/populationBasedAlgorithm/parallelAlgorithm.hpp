@@ -1,19 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <sstream>
-
-// Cereal
-#include <cereal/cereal.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/types/polymorphic.hpp>
-
-// MPI
-#include <mpi.h>
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class ParallelAlgorithm : public PopulationBasedAlgorithm<ParameterType, DistanceFunction> {

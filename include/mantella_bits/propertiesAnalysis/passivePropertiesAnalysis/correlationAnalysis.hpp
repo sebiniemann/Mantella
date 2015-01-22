@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
     class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType, DistanceFunction> {

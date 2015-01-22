@@ -1,15 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cmath>
-#include <random>
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
-#include <mantella_bits/helper/random.hpp>
-#include <mantella_bits/helper/rng.hpp>
-
 namespace mant {
   template<class DistanceFunction>
   class StandardParticleSwarmOptimisation2011 : public PopulationBasedAlgorithm<double, DistanceFunction> {

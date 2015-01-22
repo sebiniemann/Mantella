@@ -1,9 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
-
 namespace mant {
   class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double, EuclideanDistance> {
     public:

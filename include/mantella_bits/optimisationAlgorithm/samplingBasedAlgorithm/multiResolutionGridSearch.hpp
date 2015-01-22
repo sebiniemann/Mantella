@@ -1,13 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <vector>
-#include <map>
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
-#include <mantella_bits/helper/unordered_container.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class MultiResolutionGridSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {

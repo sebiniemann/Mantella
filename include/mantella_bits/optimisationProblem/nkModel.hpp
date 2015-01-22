@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/optimisationProblem.hpp>
-
 namespace mant {
   class NKModel : public OptimisationProblem<unsigned int> {
     public:

@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/optimisationProblem/kinematicMachine.hpp>
-
 namespace mant {
   namespace robotic {
     class ParallelKinematicMachine_4PRUS : public KinematicMachine {

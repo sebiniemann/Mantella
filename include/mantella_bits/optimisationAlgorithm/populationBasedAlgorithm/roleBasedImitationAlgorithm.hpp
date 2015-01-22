@@ -1,11 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
-#include <mantella_bits/helper/random.hpp>
-#include <mantella_bits/helper/rng.hpp>
-
 namespace mant {
   template<class DistanceFunction>
   class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double, DistanceFunction> {

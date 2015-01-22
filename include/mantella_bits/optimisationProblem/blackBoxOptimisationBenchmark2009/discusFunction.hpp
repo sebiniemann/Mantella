@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp>
-
 namespace mant {
   namespace bbob2009 {
     class DiscusFunction : public BlackBoxOptimisationBenchmark2009 {

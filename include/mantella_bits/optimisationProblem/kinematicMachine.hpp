@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <vector>
-
-// Armadillo
-#include <armadillo>
-
 namespace mant {
   namespace robotic {
     class KinematicMachine {

@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class MultiplicativeSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType, DistanceFunction> {

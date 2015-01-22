@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <memory>
-
-// Mantella
-#include <mantella_bits/optimisationProblem.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class PropertiesAnalysis {

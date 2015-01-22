@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <utility>
-
-// Mantella
-#include <mantella_bits/propertiesAnalysis.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class PassivePropertiesAnalysis : public PropertiesAnalysis<ParameterType, DistanceFunction> {

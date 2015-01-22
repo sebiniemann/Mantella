@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cstdlib>
-#include <stdexcept>
-
-// Armadillo
-#include <armadillo>
-
 namespace mant {
    inline arma::Mat<double> getHaltonSequence(
        const arma::Col<unsigned int>& base,

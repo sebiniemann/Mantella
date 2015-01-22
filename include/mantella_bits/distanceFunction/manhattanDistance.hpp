@@ -1,9 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/distanceFunction.hpp>
-#include <mantella_bits/helper/rng.hpp>
-
 namespace mant {
   template <typename ParameterType>
   class ManhattanDistance : public DistanceFunction<ParameterType> {

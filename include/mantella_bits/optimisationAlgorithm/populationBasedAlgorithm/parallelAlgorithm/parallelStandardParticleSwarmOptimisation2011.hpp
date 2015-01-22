@@ -1,21 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <array>
-#include <vector>
-#include <cmath>
-#include <random>
-#include <algorithm>
-#include <limits>
-
-// MPI
-#include <mpi.h>
-
-// Mantella
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
-#include <mantella_bits/helper/random.hpp>
-#include <mantella_bits/helper/rng.hpp>
-
 namespace mant {
   template <class DistanceFunction>
   class ParallelStandardParticleSwarmOptimisation2011 : public ParallelAlgorithm<double, DistanceFunction> {

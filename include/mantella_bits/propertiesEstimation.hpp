@@ -1,18 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <memory>
-#include <vector>
-
-// Mantella
-#include <mantella_bits/propertiesEstimation.hpp>
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp>
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp>
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp>
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp>
-#include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp>
-#include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class PropertiesEstimation {

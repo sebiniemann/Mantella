@@ -1,8 +1,3 @@
-#pragma once
-
-// Mantella
-#include <mantella_bits/propertiesEstimation.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class MaximumLikelihoodEstimation : public PropertiesEstimation<ParameterType, DistanceFunction> {

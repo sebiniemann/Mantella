@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <random>
-
-// Armadillo
-#include <armadillo>
-
 namespace mant {
   class Rng {
     public:

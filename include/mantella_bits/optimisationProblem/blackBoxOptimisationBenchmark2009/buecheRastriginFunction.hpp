@@ -1,11 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <cmath>
-
-// Mantella
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp>
-
 namespace mant {
   namespace bbob2009 {
     class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark2009 {

@@ -1,12 +1,3 @@
-#pragma once
-
-// C++ Standard Library
-#include <memory>
-
-// Mantella
-#include <mantella_bits/optimisationProblem.hpp>
-#include <mantella_bits/helper/printable.hpp>
-
 namespace mant {
   template <typename ParameterType, class DistanceFunction>
   class OptimisationAlgorithm : public Printable {
