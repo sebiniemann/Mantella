@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("BBOB2009-GallaghersGaussian101mePeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
+    mant::bbob2009::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

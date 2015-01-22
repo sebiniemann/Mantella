@@ -11,7 +11,7 @@
 // Mantella
 #include <mantella>
 
-extern boost::filesystem::path testDirectory;
+extern std::string testDirectory;
 
 TEST_CASE("BBOB2009-DifferentPowersFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {

@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("BBOB2009-LunacekBiRastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::LunacekBiRastriginFunction lunacekBiRastriginFunction(numberOfDimensions);
+    mant::bbob2009::LunacekBiRastriginFunction lunacekBiRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");

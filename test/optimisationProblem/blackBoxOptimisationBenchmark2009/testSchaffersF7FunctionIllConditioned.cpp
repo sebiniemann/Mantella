@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("BBOB2009-SchaffersF7FunctionIllConditioned", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
+    mant::bbob2009::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
