@@ -38,6 +38,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double SphereFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       return std::pow(arma::norm(parameter - translation_), 2.0);

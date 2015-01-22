@@ -14,6 +14,10 @@ namespace mant {
       arma::Mat<ParameterType> initialPopulation_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   PopulationBasedAlgorithm<ParameterType, DistanceFunction>::PopulationBasedAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,

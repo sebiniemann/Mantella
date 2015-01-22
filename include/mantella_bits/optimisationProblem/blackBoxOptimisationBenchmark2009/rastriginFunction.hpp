@@ -40,6 +40,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double RastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = delta_ % getAsymmetricTransformation(0.2, getOscillationTransformation(parameter - translation_));

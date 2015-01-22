@@ -40,6 +40,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double RosenbrockFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = max_ * rotationR_ * parameter + 0.5;

@@ -45,6 +45,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double StepEllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& zHat = delta_ % (rotationR_ * (parameter - translation_));

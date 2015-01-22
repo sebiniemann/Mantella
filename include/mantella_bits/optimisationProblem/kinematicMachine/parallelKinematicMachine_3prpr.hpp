@@ -41,6 +41,10 @@ namespace mant {
         arma::Row<double> redundantJointAngleCosines_;
     };
 
+    //
+    // Implementation
+    //
+
     inline ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR() noexcept
       : ParallelKinematicMachine_3PRPR(
           arma::Mat<double>::fixed<2, 3>({

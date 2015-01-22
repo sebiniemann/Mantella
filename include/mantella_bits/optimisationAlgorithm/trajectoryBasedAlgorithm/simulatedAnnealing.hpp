@@ -26,6 +26,10 @@ namespace mant {
       void setDefaultMaximalStepSize(std::false_type) noexcept;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   SimulatedAnnealing<ParameterType, DistanceFunction>::SimulatedAnnealing(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept

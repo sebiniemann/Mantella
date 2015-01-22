@@ -44,6 +44,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double KatsuuraFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = rotationQ_ * (delta_ % (rotationR_ * (parameter - translation_)));

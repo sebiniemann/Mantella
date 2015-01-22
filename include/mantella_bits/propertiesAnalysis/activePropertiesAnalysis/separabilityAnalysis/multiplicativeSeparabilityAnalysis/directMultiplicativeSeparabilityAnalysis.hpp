@@ -8,6 +8,10 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   inline void DirectMultiplicativeSeparabilityAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->getNumberOfDimensions());

@@ -13,6 +13,10 @@ namespace mant {
       double lipschitzConstant_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::LipschitzContinuityAnalysis() noexcept
     : lipschitzConstant_(0.0) {

@@ -40,6 +40,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double DiscusFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = arma::square(getOscillationTransformation(rotationR_ * (parameter - translation_)));

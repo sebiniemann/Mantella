@@ -22,6 +22,10 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept = 0;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   PropertiesAnalysis<ParameterType, DistanceFunction>::PropertiesAnalysis() noexcept
     : plausibility_(0.0),

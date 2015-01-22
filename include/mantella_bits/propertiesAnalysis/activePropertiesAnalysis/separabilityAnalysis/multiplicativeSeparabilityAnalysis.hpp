@@ -22,6 +22,10 @@ namespace mant {
       double additiveSeparabilityMedianErrorThreshold_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   MultiplicativeSeparabilityAnalysis<ParameterType, DistanceFunction>::MultiplicativeSeparabilityAnalysis() noexcept {
     setAdditiveSeparabilityMedianErrorThreshold(0.75);

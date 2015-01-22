@@ -13,6 +13,10 @@ namespace mant {
       double correlationCoefficient_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   CorrelationAnalysis<ParameterType, DistanceFunction>::CorrelationAnalysis() noexcept
     : correlationCoefficient_(0.0) {

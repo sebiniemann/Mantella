@@ -22,6 +22,10 @@ namespace mant {
       double linearModelMedianErrorThreshold_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() noexcept
     : isLinear_(false) {

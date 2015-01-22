@@ -24,6 +24,10 @@ namespace mant {
       void optimiseImplementation() noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   template <class DistanceFunction>
   HookeJeevesAlgorithm<DistanceFunction>::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept

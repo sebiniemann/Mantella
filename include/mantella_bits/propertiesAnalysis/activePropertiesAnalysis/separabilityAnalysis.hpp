@@ -18,6 +18,10 @@ namespace mant {
       unsigned int maximalNumberOfIterations_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   void SeparabilityAnalysis<ParameterType, DistanceFunction>::setMaximalNumberOfIterations(
       const unsigned int& maximalNumberOfIterations) noexcept {

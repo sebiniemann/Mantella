@@ -19,6 +19,10 @@ namespace mant {
       void optimiseImplementation() noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   GridSearch<ParameterType, DistanceFunction>::GridSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept

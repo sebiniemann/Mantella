@@ -44,6 +44,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double RastriginFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = rotationR_ * (delta_ % (rotationQ_ * getAsymmetricTransformation(0.2, getOscillationTransformation(rotationR_ * (parameter - translation_)))));

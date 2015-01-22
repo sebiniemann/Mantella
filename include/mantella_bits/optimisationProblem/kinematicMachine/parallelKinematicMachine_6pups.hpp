@@ -36,6 +36,10 @@ namespace mant {
         arma::Mat<double> redundantJointAngles_;
     };
 
+    //
+    // Implementation
+    //
+
     inline ParallelKinematicMachine_6PUPS::ParallelKinematicMachine_6PUPS() noexcept
       : ParallelKinematicMachine_6PUPS(
           arma::Mat<double>::fixed<3, 6>({

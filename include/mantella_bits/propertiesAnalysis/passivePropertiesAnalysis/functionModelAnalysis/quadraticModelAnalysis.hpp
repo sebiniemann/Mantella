@@ -22,6 +22,10 @@ namespace mant {
       double quadraticModelMedianErrorThreshold_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   QuadraticModelAnalysis<ParameterType, DistanceFunction>::QuadraticModelAnalysis() noexcept
     : isQuadratic_(false) {

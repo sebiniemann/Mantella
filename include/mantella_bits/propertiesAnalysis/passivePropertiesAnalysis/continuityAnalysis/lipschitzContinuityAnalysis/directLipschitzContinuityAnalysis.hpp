@@ -13,6 +13,10 @@ namespace mant {
           const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   template <>
   inline void DirectLipschitzContinuityAnalysis<double, EuclideanDistance>::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;

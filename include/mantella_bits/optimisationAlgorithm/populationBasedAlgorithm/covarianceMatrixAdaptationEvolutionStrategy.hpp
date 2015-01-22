@@ -21,6 +21,10 @@ namespace mant {
       void optimiseImplementation() override;
   };
 
+  //
+  // Implementation
+  //
+
   template<class DistanceFunction>
   CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::CovarianceMatrixAdaptationEvolutionStrategy(
      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,

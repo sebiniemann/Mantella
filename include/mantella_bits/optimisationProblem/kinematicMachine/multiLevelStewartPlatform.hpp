@@ -27,6 +27,10 @@ namespace mant {
         const std::vector<ParallelKinematicMachine_6PUPS> platformLevels_;
     };
 
+    //
+    // Implementation
+    //
+
     inline MultiLevelStewartPlatform::MultiLevelStewartPlatform() noexcept
       : platformLevels_({
         ParallelKinematicMachine_6PUPS({

@@ -40,6 +40,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double DifferentPowersFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - translation_));

@@ -49,6 +49,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),

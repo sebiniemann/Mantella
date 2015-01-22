@@ -12,6 +12,10 @@ namespace mant {
           const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   inline void FitnessDistanceCorrelationAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();

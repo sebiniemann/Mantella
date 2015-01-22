@@ -14,6 +14,10 @@ namespace mant {
           const arma::Col<unsigned int>& parameter) const noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   inline NKModel::NKModel(
       const unsigned int& numberOfNeighbours,
       const unsigned int& numberOfDimensions) noexcept

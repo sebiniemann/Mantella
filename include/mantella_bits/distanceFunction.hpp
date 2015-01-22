@@ -36,6 +36,10 @@ namespace mant {
           const ParameterType& maximalDistance) const = 0;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType>
   ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& parameter) const noexcept {

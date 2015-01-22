@@ -235,6 +235,10 @@ namespace mant {
 #endif
   };
 
+  //
+  // Implementation
+  //
+
   template <>
   inline OptimisationProblem<double>::OptimisationProblem(
       const unsigned int& numberOfDimensions) noexcept;

@@ -12,6 +12,10 @@ namespace mant {
       arma::Col<ParameterType> initialParameter_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   TrajectoryBasedAlgorithm<ParameterType, DistanceFunction>::TrajectoryBasedAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept

@@ -63,6 +63,10 @@ namespace mant {
       arma::Col<double> getVelocity() noexcept;
   };
 
+  //
+  // Implementation
+  //
+
   template<class DistanceFunction>
   StandardParticleSwarmOptimisation2011<DistanceFunction>::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,

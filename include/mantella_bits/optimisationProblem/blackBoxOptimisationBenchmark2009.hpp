@@ -76,6 +76,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
         const unsigned int& numberOfDimensions) noexcept
       : OptimisationProblem(numberOfDimensions) {

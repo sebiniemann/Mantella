@@ -18,6 +18,10 @@ namespace mant {
       virtual void parallelOptimiseImplementation() noexcept = 0;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   ParallelAlgorithm<ParameterType, DistanceFunction>::ParallelAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,

@@ -33,6 +33,10 @@ namespace mant {
       void parallelOptimiseImplementation() noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   template <class DistanceFunction>
   ParallelStandardParticleSwarmOptimisation2011<DistanceFunction>::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,

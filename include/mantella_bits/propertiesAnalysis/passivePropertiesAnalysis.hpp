@@ -17,6 +17,10 @@ namespace mant {
           const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept = 0;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   void PassivePropertiesAnalysis<ParameterType, DistanceFunction>::analyse(
       const std::pair<arma::Col<ParameterType>, double>& parameterToObjectiveValueMapping) noexcept {

@@ -80,6 +80,10 @@ namespace mant {
       virtual void optimiseImplementation() = 0;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   OptimisationAlgorithm<ParameterType, DistanceFunction>::OptimisationAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept

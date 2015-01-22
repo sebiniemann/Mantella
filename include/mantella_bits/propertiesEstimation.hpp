@@ -73,6 +73,10 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept = 0;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   PropertiesEstimation<ParameterType, DistanceFunction>::PropertiesEstimation(
       const std::shared_ptr<CorrelationAnalysis<ParameterType, DistanceFunction>> correlationAnalysis,

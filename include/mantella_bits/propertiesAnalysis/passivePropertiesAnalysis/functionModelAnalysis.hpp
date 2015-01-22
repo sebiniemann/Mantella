@@ -10,6 +10,10 @@ namespace mant {
       arma::Col<double> residuals_;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   arma::Col<double> FunctionModelAnalysis<ParameterType, DistanceFunction>::getResiduals() const noexcept {
     return residuals_;

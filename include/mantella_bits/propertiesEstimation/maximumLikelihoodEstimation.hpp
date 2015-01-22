@@ -9,6 +9,10 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept override;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   void MaximumLikelihoodEstimation<ParameterType, DistanceFunction>::estimateImplementation(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {

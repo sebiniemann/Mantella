@@ -40,6 +40,10 @@ namespace mant {
         arma::Mat<double> redundantJointAngles_;
     };
 
+    //
+    // Implementation
+    //
+
     inline ParallelKinematicMachine_4PRUS::ParallelKinematicMachine_4PRUS()
       : ParallelKinematicMachine_4PRUS(
           arma::Mat<double>::fixed<2, 4>({

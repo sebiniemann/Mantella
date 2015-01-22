@@ -23,6 +23,10 @@ namespace mant {
       void setDefaultMaximalStepSize(std::false_type) noexcept;
   };
 
+  //
+  // Implementation
+  //
+
   template <typename ParameterType, class DistanceFunction>
   HillClimbing<ParameterType, DistanceFunction>::HillClimbing(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept

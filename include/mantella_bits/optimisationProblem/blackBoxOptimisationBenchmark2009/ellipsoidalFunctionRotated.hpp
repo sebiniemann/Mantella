@@ -42,6 +42,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       return arma::dot(scaling_, arma::square(getOscillationTransformation(rotationR_ * (parameter - translation_))));

@@ -43,6 +43,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline RosenbrockFunction::RosenbrockFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {

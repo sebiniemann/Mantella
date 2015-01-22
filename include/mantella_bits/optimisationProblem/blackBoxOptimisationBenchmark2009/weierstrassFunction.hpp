@@ -50,6 +50,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline WeierstrassFunction::WeierstrassFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {

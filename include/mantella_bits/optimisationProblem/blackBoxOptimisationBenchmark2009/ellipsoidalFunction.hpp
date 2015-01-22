@@ -39,6 +39,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double EllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       return arma::dot(scaling_, arma::square(getOscillationTransformation(parameter - translation_)));

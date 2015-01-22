@@ -52,6 +52,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline LinearSlope::LinearSlope(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {

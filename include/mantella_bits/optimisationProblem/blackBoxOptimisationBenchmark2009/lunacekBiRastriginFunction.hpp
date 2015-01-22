@@ -46,6 +46,10 @@ namespace mant {
 #endif
     };
 
+    //
+    // Implementation
+    //
+
     inline double LunacekBiRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& xHat = 2.0 * arma::sign(one_) % parameter;
