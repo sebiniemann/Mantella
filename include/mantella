@@ -20,7 +20,7 @@
 // Configuration
 //
 #undef MANTELLA_BUILD_PARALLEL_VARIANTS
-#if defined(CEREAL_NVP) && defined(MPI_SUCCESS)
+#if defined(MPI_SUCCESS)
   #define MANTELLA_BUILD_PARALLEL_VARIANTS
 #endif
 
