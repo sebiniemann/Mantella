@@ -75,7 +75,7 @@ if(BUILD_LIBRARY)
   
   # Locate third party libraries and headers
   find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
-  find_package(Cereal REQUIRED) # Cereal (header only)
+  find_package(Cereal) # Cereal (header only)
   find_package(MPI 3.0.0) # MPI
 
   if(MPI_C_FOUND)
