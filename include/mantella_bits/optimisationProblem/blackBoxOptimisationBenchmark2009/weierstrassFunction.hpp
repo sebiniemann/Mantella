@@ -20,8 +20,6 @@ namespace mant {
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
-        // TODO Add a default constructor to calculate f0 and remove it from cereal
-
         template <typename Archive>
         void serialize(
             Archive& archive) noexcept {
