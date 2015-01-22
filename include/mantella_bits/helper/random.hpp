@@ -15,28 +15,12 @@ namespace mant {
 
   inline arma::Mat<double> getRandomRotationMatrix(
       const unsigned int& numberOfDimensions)  {
-    std::cout << "CCCCC" << std::endl;
     arma::Mat<double> Q;
-    std::cout << "DDDDD" << std::endl;
     arma::Mat<double> R;
-    std::cout << "EEEEE" << std::endl;
 
     if(arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions))) {
-      std::cout << "FFFFF" << std::endl;
-      std::cout << R << std::endl;
-      std::cout << "UUUUU" << std::endl;
-      std::cout << Q << std::endl;
-      std::cout << "IIIII" << std::endl;
-      std::cout << arma::diagmat(R) << std::endl;
-      std::cout << "OOOOO" << std::endl;
-      std::cout << arma::sign(arma::diagmat(R)) << std::endl;
-      std::cout << "PPPPP" << std::endl;
-      std::cout << Q * arma::sign(arma::diagmat(R)) << std::endl;
-      std::cout << "VVVVV" << std::endl;
-
       return Q * arma::sign(arma::diagmat(R));
     } else {
-      std::cout << "GGGGG" << std::endl;
       return arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
 
 //      const arma::Col<double>& angles = arma::datum::pi * arma::randu<arma::Col<double>>(numberOfDimensions);
@@ -56,7 +40,6 @@ namespace mant {
 
 //      return rotationMatrix;
     }
-    std::cout << "HHHHH" << std::endl;
   }
 
   inline arma::Col<unsigned int> getRandomPermutation(
