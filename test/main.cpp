@@ -24,7 +24,7 @@ int main(const int argc, const char* argv[]) {
       throw std::invalid_argument("The speficied test directory (" + testDirectory + ") does not exists.");
     }
 
-    mant::Rng::setSeed(1234567890);
+    mant::Rng::setSeed(123456789);
 
     return Catch::Session().run();
   } catch(const std::exception& exception) {
