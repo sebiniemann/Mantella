@@ -49,10 +49,6 @@ if(NOT EXECUTABLE_OUTPUT_PATH)
   set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 endif()
 
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-endif()
-
 # Enable C++11 features
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -82,80 +78,11 @@ if(BUILD_LIBRARY)
   find_package(Cereal REQUIRED) # Cereal (header only)
   find_package(MPI 3.0.0) # MPI
 
-  # Include third party headers
-  include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
-  include_directories(${CEREAL_INCLUDE_DIRS}) # Cereal
-
-  # Source files without MPI usage (serial algorithms only)
-  # All paths must start with "src/"
-  set(MANTELLA_LIBRARY_SOURCES
-    src/optimisationProblem.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/attractiveSectorFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/bentCigarFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/buecheRastriginFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/compositeGriewankRosenbrockFunctionF8F2.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/differentPowersFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/discusFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/ellipsoidalFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/ellipsoidalFunctionRotated.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/gallaghersGaussian101mePeaksFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/gallaghersGaussian21hiPeaksFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/katsuuraFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/linearSlope.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/lunacekBiRastriginFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/rastriginFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/rastriginFunctionRotated.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/rosenbrockFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/rosenbrockFunctionRotated.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/schaffersF7Function.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/schaffersF7FunctionIllConditioned.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/schwefelFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/sharpRidgeFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/sphereFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/stepEllipsoidalFunction.cpp
-    src/optimisationProblem/blackBoxOptimisationBenchmark2009/weierstrassFunction.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prpr.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prrr.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prus.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_3pups.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_4prus.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.cpp
-    src/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.cpp
-    src/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.cpp
-    src/optimisationProblem/nkModel.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.cpp
-    src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.cpp
-    src/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis/directMultiplicativeSeparabilityAnalysis.cpp
-    src/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.cpp
-  )
-
   if(MPI_C_FOUND)
     message(STATUS "NOTICE: Compile with MPI support (adding parallel algorithms).")
-
-    include_directories(${MPI_C_INCLUDE_PATH}) # MPI C-bindings
-
-    # Compile the optimisation library with MPI support (parallel algorithms)
-    add_library(mantella SHARED
-      ${MANTELLA_LIBRARY_SOURCES}
-    )
-
-    # Link against third party libraries
-    target_link_libraries(mantella ${MPI_C_LIBRARIES}) # MPI C-bindings
   else()
     message(STATUS "NOTICE: Compile without MPI support (serial algorithms only).")
-
-    # Compile the optimisation library without MPI support (serial algorithms only)
-    add_library(mantella SHARED
-      ${MANTELLA_LIBRARY_SOURCES}
-    )
   endif()
-
-  # Link against third party libraries
-  target_link_libraries(mantella ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
   # -----------
   # BUILD TESTS
@@ -300,9 +227,9 @@ if(BUILD_LIBRARY)
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testSphereFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testStepEllipsoidalFunction.cpp
         test/optimisationProblem/blackBoxOptimisationBenchmark2015/testWeierstrassFunction.cpp
-#	test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
-       # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
-       # test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
+#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
+#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
+#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
         test/helper/testGeometry.cpp
         test/helper/testPrintable.cpp
         test/helper/testQuasiRandomSequence.cpp
@@ -324,18 +251,7 @@ if(BUILD_LIBRARY)
     set(INSTALL_INCLUDE_DIR "include")
   endif()
 
-  if(NOT INSTALL_LIB_DIR)
-    set(INSTALL_LIB_DIR "lib")
-  endif()
-
-  set_property(TARGET mantella PROPERTY VERSION ${MANTELLA_VERSION})
-  set_property(TARGET mantella PROPERTY SOVERSION ${MANTELLA_MAJOR})
-
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
-
-  install(TARGETS mantella
-    ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
-    LIBRARY DESTINATION ${INSTALL_LIB_DIR})
 
 #  include(CMakePackageConfigHelpers)
 #  write_basic_package_version_file("${PROJECT_SOURCE_DIR}/MANTELLAConfigVersion.cmake" VERSION ${MANTELLA_VERSION} COMPATIBILITY AnyNewerVersion)
