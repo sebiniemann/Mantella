@@ -1,1 +1,0 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2010/rosenbrockFunction.hpp>

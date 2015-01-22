@@ -1,1 +1,0 @@
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>

@@ -1,1 +1,0 @@
-#include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp>

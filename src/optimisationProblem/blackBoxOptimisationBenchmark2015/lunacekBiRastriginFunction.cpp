@@ -1,1 +1,0 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/lunacekBiRastriginFunction.hpp>

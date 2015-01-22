@@ -1,1 +1,0 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/compositeGriewankRosenbrockFunctionF8F2.hpp>

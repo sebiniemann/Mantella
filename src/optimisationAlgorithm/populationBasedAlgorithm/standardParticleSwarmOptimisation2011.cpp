@@ -1,1 +1,0 @@
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
