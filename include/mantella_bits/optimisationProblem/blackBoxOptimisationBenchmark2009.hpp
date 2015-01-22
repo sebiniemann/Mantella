@@ -54,6 +54,7 @@ namespace mant {
         double getPenality(
             const arma::Col<double>& parameter) const ;
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
         BlackBoxOptimisationBenchmark2009() = default;
 
@@ -63,6 +64,7 @@ namespace mant {
           archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
           archive(cereal::make_nvp("translation", translation_));
         }
+#endif
     };
   }
 }

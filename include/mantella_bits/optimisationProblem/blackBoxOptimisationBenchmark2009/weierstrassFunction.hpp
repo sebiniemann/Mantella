@@ -17,7 +17,10 @@ namespace mant {
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
+
+        // TODO Add a default constructor to calculate f0 and remove it from cereal
 
         template <typename Archive>
         void serialize(
@@ -44,6 +47,11 @@ namespace mant {
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
           archive(cereal::make_nvp("f0", construct->f0_));
         }
+#endif
     };
   }
 }
+
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+// CEREAL_REGISTER_TYPE(mant::bbob2009::WeierstrassFunction);
+#endif

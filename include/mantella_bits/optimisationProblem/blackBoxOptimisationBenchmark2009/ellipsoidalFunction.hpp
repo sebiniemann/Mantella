@@ -15,6 +15,7 @@ namespace mant {
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
         template <typename Archive>
@@ -35,6 +36,11 @@ namespace mant {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
           archive(cereal::make_nvp("translation", construct->translation_));
         }
+#endif
     };
   }
 }
+
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+// CEREAL_REGISTER_TYPE(mant::bbob2009::EllipsoidalFunction);
+#endif

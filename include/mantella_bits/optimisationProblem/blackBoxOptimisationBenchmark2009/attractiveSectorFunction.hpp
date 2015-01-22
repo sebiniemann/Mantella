@@ -15,11 +15,12 @@ namespace mant {
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
         template <typename Archive>
         void serialize(
-            Archive& archive)  {
+            Archive& archive) {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("translation", translation_));
@@ -30,7 +31,7 @@ namespace mant {
         template <typename Archive>
         static void load_and_construct(
             Archive& archive,
-            cereal::construct<AttractiveSectorFunction>& construct)  {
+            cereal::construct<AttractiveSectorFunction>& construct) {
           unsigned int numberOfDimensions;
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
@@ -40,6 +41,11 @@ namespace mant {
           archive(cereal::make_nvp("rotationR", construct->rotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
+#endif
     };
   }
 }
+
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+// CEREAL_REGISTER_TYPE(mant::bbob2009::AttractiveSectorFunction);
+#endif

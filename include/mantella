@@ -17,6 +17,25 @@
 #pragma once
 
 // Serial algorithms
+//
+// Configuration
+//
+#undef MANTELLA_BUILD_PARALLEL_VARIANTS
+#if defined(CEREAL_NVP) && defined(MPI_SUCCESS)
+  #define MANTELLA_BUILD_PARALLEL_VARIANTS
+#endif
+
+// Cereal
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+  #include <cereal/cereal.hpp>
+  #include <cereal/access.hpp>
+  #include <cereal/archives/json.hpp>
+  #include <cereal/types/base_class.hpp>
+  #include <cereal/types/vector.hpp>
+  #include <cereal/types/polymorphic.hpp>
+
+  #include <mantella_bits/helper/cereal.hpp>
+#endif
 #include <mantella_bits/helper/filesystem.hpp>
 #include <mantella_bits/distanceFunction.hpp>
 #include <mantella_bits/distanceFunction/euclideanDistance.hpp>
@@ -192,18 +211,12 @@
 #include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp>
 #include <mantella_bits/propertiesEstimation.hpp>
 #include <mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
-#include <mantella_bits/helper/cereal.hpp>
-#include <mantella_bits/helper/geometry.hpp>
-#include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/helper/quasiRandomSequence.hpp>
-#include <mantella_bits/helper/random.hpp>
-#include <mantella_bits/helper/rng.hpp>
-#include <mantella_bits/helper/setTheory.hpp>
-#include <mantella_bits/helper/string.hpp>
-#include <mantella_bits/helper/unordered_container.hpp>
 
-// Parallel algorithms
-#ifdef MPI_SUCCESS
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
+// Parallel optimisation algorithms
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+  // MPI
+  #include <mpi.h>
+
+  #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
+  #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
 #endif

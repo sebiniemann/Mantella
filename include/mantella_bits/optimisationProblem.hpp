@@ -209,6 +209,8 @@ namespace mant {
       std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> cachedIsSatisfyingSoftConstraints_;
       std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> cachedIsSatisfyingConstraints_;
 
+
+ #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
       // Gives cereal access to otherwise protected constructors, functions and fields.
       friend class cereal::access;
       // Cereal uses a default constructor and will afterwards update the fields directly.
@@ -230,6 +232,7 @@ namespace mant {
         archive(cereal::make_nvp("objectiveValueScale", objectiveValueScale_));
         archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
       }
+#endif
   };
 
   template <>

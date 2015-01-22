@@ -21,6 +21,7 @@ namespace mant {
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
 
         template <typename Archive>
@@ -48,6 +49,11 @@ namespace mant {
           archive(cereal::make_nvp("scaling", construct->scaling_));
           archive(cereal::make_nvp("partiallyObjectiveValue", construct->partiallyObjectiveValue_));
         }
+#endif
     };
   }
 }
+
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+// CEREAL_REGISTER_TYPE(mant::bbob2009::LinearSlope);
+#endif

@@ -16,7 +16,10 @@ namespace mant {
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const  override;
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
         friend class cereal::access;
+
+        // TODO Add a default constructor to calculate the weight and remove it from cereal
 
         template <typename Archive>
         void serialize(
@@ -43,7 +46,11 @@ namespace mant {
           archive(cereal::make_nvp("localOptimaY21", construct->localOptimaY21_));
           archive(cereal::make_nvp("weight", construct->weight_));
         }
+#endif
     };
   }
 }
 
+#if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
+// CEREAL_REGISTER_TYPE(mant::bbob2009::GallaghersGaussian21hiPeaksFunction);
+#endif
