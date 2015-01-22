@@ -9,7 +9,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("geometry: get2DRotationMatrix", "") {
+TEST_CASE("geometry: get2DRotationMatrix(...)", "") {
   const std::array<double, 15>& angles = {{0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0}};
 
   for (const auto& angle : angles) {
@@ -22,7 +22,7 @@ TEST_CASE("geometry: get2DRotationMatrix", "") {
   }
 }
 
-TEST_CASE("geometry: get3DRotationMatrix", "") {
+TEST_CASE("geometry: get3DRotationMatrix(...)", "") {
   const std::array<double, 14>& rollAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -45, 276, -56, -45.89}};
   const std::array<double, 14>& pitchAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -90, -89, 78, -245}};
   const std::array<double, 14>& yawAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -225, -310, -90, 345}};
@@ -54,7 +54,7 @@ TEST_CASE("geometry: get3DRotationMatrix", "") {
   }
 }
 
-TEST_CASE("geometry: getCircleCircleIntersection(arma::Col<double>, double, arma::Col<double>, double)", "") {
+TEST_CASE("geometry: getCircleCircleIntersection(...)", "") {
   arma::Col<double>::fixed<2> expected;
 
   expected = {-2.5522451636, 1.8231290303};
@@ -64,7 +64,7 @@ TEST_CASE("geometry: getCircleCircleIntersection(arma::Col<double>, double, arma
   compare(mant::getCircleCircleIntersection({1.8, -2.5}, 4.0, {-3.0, 2.0}, 3.0), expected);
 }
 
-TEST_CASE("geometry: getCircleCircleIntersection(arma::Col<double>, double, arma::Col<double>, arma::Col<double>, double)", "") {
+TEST_CASE("geometry: getCircleSphereIntersection(...)", "") {
   arma::Col<double>::fixed<3> expected;
 
   expected = {-2.095, 1.1962336728, 0.0};
