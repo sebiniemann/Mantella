@@ -30,10 +30,6 @@ add_executable(parallelSPSO11
   parallelSPSO11.cpp
 )
 
-# Link against Mantella
-target_link_libraries(parallelSPSO11 mantella)
-# target_link_libraries(parallelSPSO11 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libhop.so")
-
 # Link against third party libraries
 target_link_libraries(parallelSPSO11 ${ARMADILLO_LIBRARIES}) # Armadillo C++
 target_link_libraries(parallelSPSO11 ${MPI_C_LIBRARIES}) # MPI C-bindings

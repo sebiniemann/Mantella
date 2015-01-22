@@ -28,8 +28,5 @@ add_executable(CMAES
   CMAES.cpp
 )
 
-# Link against Mantella
-target_link_libraries(CMAES mantella)
-
 # Link against third party libraries
 target_link_libraries(CMAES ${ARMADILLO_LIBRARIES}) # Armadillo C++

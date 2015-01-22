@@ -310,12 +310,6 @@ if(BUILD_LIBRARY)
         test/helper/testString.cpp
       )
 
-      # Add MANTELLA library directory
-      link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}) # MANTELLA
-
-      # Link against MANTELLA library
-      target_link_libraries(libTest mantella) # MANTELLA
-
       # Link against third party libraries
       target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
 

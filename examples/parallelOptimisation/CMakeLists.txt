@@ -32,9 +32,6 @@ add_executable(standardParticleSwarmOptimisation2011ParameterStudy
   standardParticleSwarmOptimisation2011ParameterStudy.cpp
 )
 
-# Link against Mantella
-target_link_libraries(standardParticleSwarmOptimisation2011ParameterStudy mantella)
-
 # Link against third party libraries
 target_link_libraries(standardParticleSwarmOptimisation2011ParameterStudy ${ARMADILLO_LIBRARIES}) # Armadillo C++
 target_link_libraries(standardParticleSwarmOptimisation2011ParameterStudy ${MPI_C_LIBRARIES}) # MPI C-bindings

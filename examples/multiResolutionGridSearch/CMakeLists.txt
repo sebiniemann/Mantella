@@ -28,8 +28,5 @@ add_executable(experimentalMultiResolutionGriSearch
   main.cpp
 )
 
-# Link against Mantella
-target_link_libraries(experimentalMultiResolutionGriSearch mantella)
-
 # Link against third party libraries
 target_link_libraries(experimentalMultiResolutionGriSearch ${ARMADILLO_LIBRARIES}) # Armadillo C++

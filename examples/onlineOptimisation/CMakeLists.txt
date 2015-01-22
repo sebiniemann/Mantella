@@ -28,8 +28,5 @@ add_executable(exampleOnlineOptimisation
   main.cpp
 )
 
-# Link against Mantella
-target_link_libraries(exampleOnlineOptimisation mantella)
-
 # Link against third party libraries
 target_link_libraries(exampleOnlineOptimisation ${ARMADILLO_LIBRARIES}) # Armadillo C++
