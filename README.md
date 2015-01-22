@@ -16,7 +16,7 @@ Getting started
 - CMake 2.8.8
 - GCC 4.8.1 (or any other C++11 feature complete compiler)
 - Armadillo C++ 4.600.0
-- Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
+- Cereal 1.1.0
 
 #### Only needed for parallel algorithms
 - MPI 3.0.0
