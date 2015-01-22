@@ -48,7 +48,7 @@ TEST_CASE("random: getRandomPermutation(unsigned int, unsigned int)", "") {
   SECTION("Generates uniform distributed partitial permutations") {
     arma::Mat<unsigned int>::fixed<10, 40000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows));
+      permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows) + 1, static_cast<unsigned int>(permutations.n_rows));
     }
 
     arma::Col<unsigned int> centers(permutations.n_rows);
@@ -71,7 +71,7 @@ TEST_CASE("random: getRandomPermutation(unsigned int)", "") {
   SECTION("Generates uniform distributed permutations") {
     arma::Mat<unsigned int>::fixed<10, 10000> permutations;
     for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows + 1), static_cast<unsigned int>(permutations.n_rows));
+      permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows));
     }
 
     arma::Col<unsigned int> centers(permutations.n_rows);
