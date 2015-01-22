@@ -18,13 +18,13 @@ TEST_CASE("quasiRandomSequence: getHaltonSequence(...)", "") {
   compare(mant::getHaltonSequence({2, 3}, {0, 0}, 5), expected);
 
   expected = {
-    3.0/4.0, 1.0/9.0,
-    1.0/8.0, 4.0/9.0,
-    5.0/8.0, 7.0/9.0,
-    3.0/8.0, 2.0/9.0,
-    7.0/8.0, 5.0/9.0,
+    3.0/4.0, 4.0/9.0,
+    1.0/8.0, 7.0/9.0,
+    5.0/8.0, 2.0/9.0,
+    3.0/8.0, 5.0/9.0,
+    7.0/8.0, 8.0/9.0,
   };
-  compare(mant::getHaltonSequence({2, 3}, {3, 3}, 5), expected);
+  compare(mant::getHaltonSequence({2, 3}, {3, 4}, 5), expected);
 
   CHECK_THROWS_AS(mant::getHaltonSequence({1}, {3, 3}, 5), std::logic_error);
   CHECK_THROWS_AS(mant::getHaltonSequence({4, 5}, {3}, 6), std::logic_error);
