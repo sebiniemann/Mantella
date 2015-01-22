@@ -272,6 +272,16 @@ endif()
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
   include/mantella
+  include/mantella_bits/helper/rng.hpp
+  include/mantella_bits/helper/cereal.hpp
+  include/mantella_bits/helper/filesystem.hpp
+  include/mantella_bits/helper/geometry.hpp
+  include/mantella_bits/helper/printable.hpp
+  include/mantella_bits/helper/quasiRandomSequence.hpp
+  include/mantella_bits/helper/random.hpp
+  include/mantella_bits/helper/setTheory.hpp
+  include/mantella_bits/helper/string.hpp
+  include/mantella_bits/helper/unordered_container.hpp
   include/mantella_bits/distanceFunction.hpp
   include/mantella_bits/distanceFunction/euclideanDistance.hpp
   include/mantella_bits/distanceFunction/hammingDistance.hpp
@@ -451,13 +461,4 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
   include/mantella_bits/propertiesEstimation.hpp
   include/mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
-  include/mantella_bits/helper/cereal.hpp
-  include/mantella_bits/helper/geometry.hpp
-  include/mantella_bits/helper/printable.hpp
-  include/mantella_bits/helper/quasiRandomSequence.hpp
-  include/mantella_bits/helper/random.hpp
-  include/mantella_bits/helper/rng.hpp
-  include/mantella_bits/helper/setTheory.hpp
-  include/mantella_bits/helper/string.hpp
-  include/mantella_bits/helper/unordered_container.hpp
 )
