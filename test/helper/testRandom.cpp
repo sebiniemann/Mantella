@@ -58,7 +58,7 @@ TEST_CASE("random: getRandomPermutation(unsigned int, unsigned int)", "") {
 
     for (std::size_t n = 0; n < permutations.n_rows; ++n) {
       arma::Row<unsigned int> histogram = arma::hist(permutations.row(n), centers);
-      CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
+      CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
     }
   }
 
@@ -81,7 +81,7 @@ TEST_CASE("random: getRandomPermutation(unsigned int)", "") {
 
     for (std::size_t n = 0; n < permutations.n_rows; ++n) {
       arma::Row<unsigned int> histogram = arma::hist(permutations.row(n), centers);
-      CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
+      CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
     }
   }
 }
