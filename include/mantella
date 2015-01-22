@@ -16,7 +16,6 @@
 //------------------------------------------------------------------------------
 #pragma once
 
-// Serial algorithms
 //
 // Configuration
 //
@@ -24,6 +23,32 @@
 #if defined(CEREAL_NVP) && defined(MPI_SUCCESS)
   #define MANTELLA_BUILD_PARALLEL_VARIANTS
 #endif
+
+//
+// Prerequirements
+//
+
+// C++ Standard Library
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <cstdlib>
+#include <cstdio>
+#include <functional>
+#include <limits>
+#include <map>
+#include <memory>
+#include <random>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+// Armadillo
+#include <armadillo>
 
 // Cereal
 #if defined(MANTELLA_BUILD_PARALLEL_VARIANTS)
@@ -36,12 +61,33 @@
 
   #include <mantella_bits/helper/cereal.hpp>
 #endif
+
+
+//
+// Mantella
+//
+
+// Random number generator
+#include <mantella_bits/helper/rng.hpp>
+
+// Helper
 #include <mantella_bits/helper/filesystem.hpp>
+#include <mantella_bits/helper/geometry.hpp>
+#include <mantella_bits/helper/printable.hpp>
+#include <mantella_bits/helper/quasiRandomSequence.hpp>
+#include <mantella_bits/helper/random.hpp>
+#include <mantella_bits/helper/setTheory.hpp>
+#include <mantella_bits/helper/string.hpp>
+#include <mantella_bits/helper/unordered_container.hpp>
+
+// Distance functions
 #include <mantella_bits/distanceFunction.hpp>
 #include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 #include <mantella_bits/distanceFunction/hammingDistance.hpp>
 #include <mantella_bits/distanceFunction/infinityNorm.hpp>
 #include <mantella_bits/distanceFunction/manhattanDistance.hpp>
+
+// Optimisation problems
 #include <mantella_bits/optimisationProblem.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2009/attractiveSectorFunction.hpp>
@@ -175,6 +221,8 @@
 #include <mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp>
 #include <mantella_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp>
 #include <mantella_bits/optimisationProblem/nkModel.hpp>
+
+// Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
@@ -188,6 +236,8 @@
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+
+// Properties analysis
 #include <mantella_bits/propertiesAnalysis.hpp>
 #include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp>
 #include <mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp>
@@ -209,6 +259,8 @@
 #include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp>
 #include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp>
 #include <mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp>
+
+// Properties estimation
 #include <mantella_bits/propertiesEstimation.hpp>
 #include <mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 
