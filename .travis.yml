@@ -78,11 +78,6 @@ install:
   - rm -Rf catch catch.tar.gz
 #  - sudo apt-get install -qq catch  
 
-  # Boost (filesystem)
-  # Needed until Travis CI updates to Ubuntu 14.04+
-  - sudo apt-get install -qq libboost-filesystem1.54-dev
-#  - sudo apt-get install -qq libboost-filesystem-
-
   # LCOV
   # Needed until Travis CI updates to Ubuntu 14.04+
   # - if [ "$CXX" == "g++-4.8" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
