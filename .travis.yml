@@ -10,47 +10,36 @@ env:
    - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
 
 before_install:
-  - if [ "$CXX" == "g++" ]; then export USING_GCC=1; fi
-  - if [ "$CXX" == "clang++" ]; then export USING_CLANG=1; fi
-
-  # GCC / Clang
+  # GCC / Clang (Needed until Travis CI updates to Ubuntu 14.04+)
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   
-  # Clang
-  - if [ -n "$USING_CLANG" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
+  # Clang (Needed until Travis CI updates to Ubuntu 14.04+)
+  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
 
-  # Needed until Travis CI updates to Ubuntu 14.04+
-  # Boost (filesystem)
-  - sudo add-apt-repository -y ppa:boost-latest/ppa
+  # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
+  - sudo add-apt-repository -y ppa:kalakris/cmake
 
   - sudo apt-get update -qq
 
 install:
   # GCC
-  - if [ -n "$USING_GCC" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
-  - if [ -n "$USING_GCC" ]; then export CXX="g++-4.8"; fi
+  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq --force-yes g++-4.9; fi
+  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90; fi
+  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90; fi
+  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90; fi
   
   # Clang
-  - if [ -n "$USING_CLANG" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
-  - if [ -n "$USING_CLANG" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
-  - if [ -n "$USING_CLANG" ]; then export CXX="clang++-3.4"; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.4 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.4 90; fi
   
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
-  - wget -O cmake.tar.gz http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz
-  - mkdir cmake
-  - tar -xzf cmake.tar.gz -C ./cmake --strip-components=1
-  - cd cmake
-  - ./bootstrap
-  - make
-  - sudo make install
-  - cd ..
-  - rm -Rf cmake cmake.tar.gz
-  
-  # MPI (this will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
-  - sudo apt-get install -qq libmpich2-dev
+  - sudo apt-get install -qq cmake
   
   # Armadillo C++
-  - sudo apt-get install -qq libopenblas-dev
+  - sudo apt-get install -qq libblas-dev
+#  - sudo apt-get install -qq libopenblas-dev
   - sudo apt-get install -qq liblapack-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.600.3.tar.gz
   - mkdir armadillo
@@ -62,6 +51,16 @@ install:
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
 
+  # Catch
+  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/3e0c5018123e7e32b3c35f4169cbdca4bcb8f332.tar.gz
+  - mkdir catch
+  - tar -xzf catch.tar.gz -C ./catch --strip-components=1
+  - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
+  - rm -Rf catch catch.tar.gz
+  
+  # MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
+  - sudo apt-get install -qq libmpich2-dev
+  
   # Cereal
   - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.1.0.tar.gz
   - mkdir cereal
@@ -69,28 +68,18 @@ install:
   - sudo cp -R cereal/include/cereal /usr/local/include/
   - rm -Rf cereal cereal.tar.gz
 
-  # Catch
-  # Needed until Travis CI updates to Ubuntu 14.04+
-  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/3e0c5018123e7e32b3c35f4169cbdca4bcb8f332.tar.gz
-  - mkdir catch
-  - tar -xzf catch.tar.gz -C ./catch --strip-components=1
-  - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
-  - rm -Rf catch catch.tar.gz
-#  - sudo apt-get install -qq catch  
-
-  # LCOV
-  # Needed until Travis CI updates to Ubuntu 14.04+
-  # - if [ "$CXX" == "g++-4.8" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
-  # - if [ "$CXX" == "g++-4.8" ]; then mkdir lcov; fi
-  # - if [ "$CXX" == "g++-4.8" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
-  # - if [ "$CXX" == "g++-4.8" ]; then cd lcov; fi
-  # - if [ "$CXX" == "g++-4.8" ]; then sudo make install; fi
-  # - if [ "$CXX" == "g++-4.8" ]; then cd ..; fi
-  # - if [ "$CXX" == "g++-4.8" ]; then rm -Rf lcov lcov.tar.gz; fi
+  # LCOV (Needed until Travis CI updates to Ubuntu 14.04+)
+  - if [ "$CXX" == "g++" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
+  - if [ "$CXX" == "g++" ]; then mkdir lcov; fi
+  - if [ "$CXX" == "g++" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
+  - if [ "$CXX" == "g++" ]; then cd lcov; fi
+  - if [ "$CXX" == "g++" ]; then sudo make install; fi
+  - if [ "$CXX" == "g++" ]; then cd ..; fi
+  - if [ "$CXX" == "g++" ]; then rm -Rf lcov lcov.tar.gz; fi
 #  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi
 
   # LCOV to Coveralls conversion + upload
-  # - if [ "$CXX" == "g++-4.8" ]; then gem install coveralls-lcov; fi
+  - if [ "$CXX" == "g++" ]; then gem install coveralls-lcov; fi
   
 addons:
   coverity_scan:
@@ -102,16 +91,14 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  - cmake -DBUILD_ALL=On .
-  # - if [ "$CXX" == "g++" ]; then cmake -DBUILD_ALL=On -DMEASURE_CODE_COVERAGE=On .; fi
-  # - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_ALL=On .; fi
+  - if [ "$CXX" == "g++" ]; then cmake -DBUILD_ALL=On -DMEASURE_CODE_COVERAGE=On .; fi
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_ALL=On .; fi
   - make
   - sudo make install
   
 after_success:
-  # - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
-  # - if [ "$CXX" == "g++" ]; then lcov --directory . --capture --output-file coverage.info; fi
-  # - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
-  # - if [ "$CXX" == "g++" ]; then lcov --list coverage.info; fi
-  # - if [ "$CXX" == "g++" ]; then coveralls-lcov coverage.info; fi
-
+  - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
+  - if [ "$CXX" == "g++" ]; then lcov --directory . --capture --output-file coverage.info; fi
+  - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
+  - if [ "$CXX" == "g++" ]; then lcov --list coverage.info; fi
+  - if [ "$CXX" == "g++" ]; then coveralls-lcov coverage.info; fi
