@@ -84,7 +84,7 @@ namespace mant {
     double distance = arma::norm(secondCenter - firstCenter);
 
     if (distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
-      throw std::runtime_error("Only intersections with exactly two intersections are considered valid.");
+      throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
     }
 
     double cosine = (std::pow(firstRadius, 2) - std::pow(secondRadius, 2) + std::pow(distance, 2)) / (2 * distance);
@@ -108,7 +108,7 @@ namespace mant {
     double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
 
     if (std::abs(innerDistance) >= sphereRadius) {
-      throw std::runtime_error("Only intersections with exactly two intersections are considered valid.");
+      throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
     }
 
     arma::Col<double>::fixed<3> innerCenter = sphereCenter + innerDistance * circleNormal;

@@ -97,7 +97,7 @@ namespace mant {
       std::vector<arma::Mat<double>> modelCharacterisation;
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
-        throw std::runtime_error("All values for the actuation of redundantion joints must be between [0, 1].");
+        throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
 
       const arma::Col<double>::fixed<3>& endEffector = endEffectorPose.subvec(0, 2);

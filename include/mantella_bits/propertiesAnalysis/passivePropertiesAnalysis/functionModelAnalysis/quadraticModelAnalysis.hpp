@@ -42,7 +42,7 @@ namespace mant {
   void QuadraticModelAnalysis<ParameterType, DistanceFunction>::setQuadraticModelMedianErrorThreshold(
       const double& quadraticModelMedianErrorThreshold) {
     if(quadraticModelMedianErrorThreshold < 0 || quadraticModelMedianErrorThreshold > 1) {
-      throw std::runtime_error("The quadratic model MeanError threshold (" + std::to_string(quadraticModelMedianErrorThreshold) + ") must be within 0 and 1.");
+      throw std::logic_error("The quadratic model MeanError threshold (" + std::to_string(quadraticModelMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
     quadraticModelMedianErrorThreshold_ = quadraticModelMedianErrorThreshold;

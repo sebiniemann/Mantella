@@ -35,7 +35,7 @@ namespace mant {
   void MultiplicativeSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityMedianErrorThreshold(
       const double& additiveSeparabilityMedianErrorThreshold) {
     if(additiveSeparabilityMedianErrorThreshold < 0 || additiveSeparabilityMedianErrorThreshold > 1) {
-      throw std::runtime_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMedianErrorThreshold) + ") must be within 0 and 1.");
+      throw std::logic_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
     additiveSeparabilityMedianErrorThreshold_ = additiveSeparabilityMedianErrorThreshold;

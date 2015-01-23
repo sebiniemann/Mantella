@@ -41,7 +41,7 @@ namespace mant {
   void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelMedianErrorThreshold(
       const double& linearModelMedianErrorThreshold) {
     if(linearModelMedianErrorThreshold < 0 || linearModelMedianErrorThreshold > 1) {
-      throw std::runtime_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMedianErrorThreshold) + ") must be within 0 and 1.");
+      throw std::logic_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMedianErrorThreshold) + ") must be within 0 and 1.");
     }
 
     linearModelMedianErrorThreshold_ = linearModelMedianErrorThreshold;
