@@ -6,9 +6,9 @@ Mantella 0.9.0
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master)
 
 
-The Mantella C++ optimisation library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
+Mantella is a modern, header-only C++ optimisation library. It provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive, parallalised solvers, focusing on recent multi-cores architectures and high performance clusters. 
 
-Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
+Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for highly efficient linear algebra calculations.
 
 Getting started
 ---------------
@@ -30,7 +30,6 @@ cd path/to/project
 mkdir build
 cd build
 cmake ..
-make
 sudo make install
 ```
 
