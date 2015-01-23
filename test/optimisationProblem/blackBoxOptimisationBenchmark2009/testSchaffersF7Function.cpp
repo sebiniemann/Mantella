@@ -43,6 +43,6 @@ TEST_CASE("bbob2009::SchaffersF7Function", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "SchaffersF7Function");
+    CHECK(mant::bbob2009::SchaffersF7Function(5).to_string() == "SchaffersF7Function");
   }
 }

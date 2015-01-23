@@ -35,6 +35,6 @@ TEST_CASE("bbob2012::CompositeGriewankRosenbrockFunctionF8F2", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2012::AttractiveSectorFunction(5).to_string() == "CompositeGriewankRosenbrockFunctionF8F2");
+    CHECK(mant::bbob2012::CompositeGriewankRosenbrockFunctionF8F2(5).to_string() == "CompositeGriewankRosenbrockFunctionF8F2");
   }
 }
