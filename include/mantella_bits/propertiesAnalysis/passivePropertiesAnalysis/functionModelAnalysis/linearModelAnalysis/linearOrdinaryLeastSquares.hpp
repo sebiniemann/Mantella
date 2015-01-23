@@ -34,6 +34,7 @@ namespace mant {
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
     try {
+      // TODO Avoid try catch (and search for others)
       linearModelEstimator_ = (parameters * parameters.t()).i() * parameters * objectiveValues;
       residuals_ = objectiveValues - parameters.t() * linearModelEstimator_;
     } catch (const std::runtime_error& exception ) {
