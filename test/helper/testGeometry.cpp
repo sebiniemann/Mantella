@@ -69,8 +69,17 @@ TEST_CASE("geometry: getCircleCircleIntersection(...)", "") {
     compare(mant::getCircleCircleIntersection({1.8, -2.5}, 4.0, {-3.0, 2.0}, 3.0), expected);
   }
 
-  expected = {-0.1804143359, 0.9753358195};
-  compare(mant::getCircleCircleIntersection({1.8, -2.5}, 4.0, {-3.0, 2.0}, 3.0), expected);
+  SECTION("Throws an exception, if both centers are on the same spot") {
+    CHECK_THROWS_AS(mant::getCircleCircleIntersection({-2.0, 3.0}, 1.3, {-2.0, 3.0}, 1.3), std::logic_error);
+  }
+
+  SECTION("Throws an exception, if the circles are to far apart") {
+    CHECK_THROWS_AS(mant::getCircleCircleIntersection({-8.0, 3.0}, 1.3, {-2.0, 3.0}, 1.3), std::logic_error);
+  }
+
+  SECTION("Throws an exception, if a circle is enclosed by the other one") {
+    CHECK_THROWS_AS(mant::getCircleCircleIntersection({-2.0, 2.8}, 0.3, {-2.0, 3.0}, 1.3), std::logic_error);
+  }
 }
 
 TEST_CASE("geometry: getCircleSphereIntersection(...)", "") {
