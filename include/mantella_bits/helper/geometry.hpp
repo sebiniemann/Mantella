@@ -114,8 +114,8 @@ namespace mant {
     if(circleRadius <= 0) {
       throw std::logic_error("The radius of the circle (" + std::to_string(circleRadius) + ") must be strict greater than 0.");
     } else if(sphereRadius <= 0) {
-      throw std::logic_error("The radius of the sphere (" + std::to_string(sphereRadius) +" must be strict greater than 0.");
-    } else if (std::abs(innerDistance) >= sphereRadius) {
+      throw std::logic_error("The radius of the sphere (" + std::to_string(sphereRadius) + ") must be strict greater than 0.");
+    } else if (innerDistance == 0 || std::abs(innerDistance) >= sphereRadius) {
       throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
     }
 
