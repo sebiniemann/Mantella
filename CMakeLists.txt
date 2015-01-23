@@ -120,7 +120,6 @@ if(BUILD_TEST)
   # All paths must start with "test/"
   add_executable(libraryTestCases
     test/main.cpp
-    test/helper.cpp
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
@@ -270,6 +269,7 @@ endif()
 # Qt Creator workaround
 # ---------------------
 add_custom_target(QtWorkaround SOURCES
+  # Library
   include/mantella
   include/mantella_bits/helper/rng.hpp
   include/mantella_bits/helper/cereal.hpp
@@ -460,4 +460,6 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
   include/mantella_bits/propertiesEstimation.hpp
   include/mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
+  # Tests
+  test/helper.hpp
 )
