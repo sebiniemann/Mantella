@@ -43,6 +43,6 @@ TEST_CASE("bbob2010::SharpRidgeFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "SharpRidgeFunction");
+    CHECK(mant::bbob2010::SharpRidgeFunction(5).to_string() == "SharpRidgeFunction");
   }
 }

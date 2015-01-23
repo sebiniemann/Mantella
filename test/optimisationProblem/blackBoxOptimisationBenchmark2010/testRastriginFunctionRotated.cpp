@@ -43,6 +43,6 @@ TEST_CASE("bbob2010::RastriginFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "RastriginFunctionRotated");
+    CHECK(mant::bbob2010::RastriginFunctionRotated(5).to_string() == "RastriginFunctionRotated");
   }
 }

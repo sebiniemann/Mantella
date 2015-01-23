@@ -35,6 +35,6 @@ TEST_CASE("bbob2013::SphereFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "SphereFunction");
+    CHECK(mant::bbob2013::SphereFunction(5).to_string() == "SphereFunction");
   }
 }

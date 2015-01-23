@@ -43,6 +43,6 @@ TEST_CASE("bbob2013::LunacekBiRastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "LunacekBiRastriginFunction");
+    CHECK(mant::bbob2013::LunacekBiRastriginFunction(5).to_string() == "LunacekBiRastriginFunction");
   }
 }

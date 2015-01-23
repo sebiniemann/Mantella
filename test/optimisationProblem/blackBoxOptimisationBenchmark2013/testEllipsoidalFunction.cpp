@@ -35,6 +35,6 @@ TEST_CASE("bbob2013::EllipsoidalFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "EllipsoidalFunction");
+    CHECK(mant::bbob2013::EllipsoidalFunction(5).to_string() == "EllipsoidalFunction");
   }
 }

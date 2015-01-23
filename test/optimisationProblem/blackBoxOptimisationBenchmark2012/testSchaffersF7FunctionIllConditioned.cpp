@@ -43,6 +43,6 @@ TEST_CASE("bbob2012::SchaffersF7FunctionIllConditioned", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "SchaffersF7FunctionIllConditioned");
+    CHECK(mant::bbob2012::AttractiveSectorFunction(5).to_string() == "SchaffersF7FunctionIllConditioned");
   }
 }

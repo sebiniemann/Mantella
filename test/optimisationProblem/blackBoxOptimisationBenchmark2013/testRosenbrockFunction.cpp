@@ -43,6 +43,6 @@ TEST_CASE("bbob2013::RosenbrockFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "RosenbrockFunction");
+    CHECK(mant::bbob2013::RosenbrockFunction(5).to_string() == "RosenbrockFunction");
   }
 }

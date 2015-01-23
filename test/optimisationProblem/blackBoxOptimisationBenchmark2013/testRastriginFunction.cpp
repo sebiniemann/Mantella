@@ -35,6 +35,6 @@ TEST_CASE("bbob2013::RastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "RastriginFunction");
+    CHECK(mant::bbob2013::RastriginFunction(5).to_string() == "RastriginFunction");
   }
 }

@@ -39,6 +39,6 @@ TEST_CASE("bbob2009::DifferentPowersFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "DifferentPowersFunction");
+    CHECK(mant::bbob2009::DifferentPowersFunction(5).to_string() == "DifferentPowersFunction");
   }
 }

@@ -35,6 +35,6 @@ TEST_CASE("bbob2012::SchwefelFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "SchwefelFunction");
+    CHECK(mant::bbob2012::SchwefelFunction(5).to_string() == "SchwefelFunction");
   }
 }

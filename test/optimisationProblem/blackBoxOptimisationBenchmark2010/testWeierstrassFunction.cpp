@@ -43,6 +43,6 @@ TEST_CASE("bbob2010::WeierstrassFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "WeierstrassFunction");
+    CHECK(mant::bbob2010::WeierstrassFunction(5).to_string() == "WeierstrassFunction");
   }
 }

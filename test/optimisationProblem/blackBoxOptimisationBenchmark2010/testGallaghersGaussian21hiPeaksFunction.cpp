@@ -43,7 +43,7 @@ TEST_CASE("bbob2010::GallaghersGaussian21hiPeaksFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "GallaghersGaussian21hiPeaksFunction");
+    CHECK(mant::bbob2010::AttractiveSectorFunction(5).to_string() == "GallaghersGaussian21hiPeaksFunction");
   }
 }
 

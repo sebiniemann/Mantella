@@ -39,7 +39,7 @@ TEST_CASE("bbob2010::BentCigarFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "BentCigarFunction");
+    CHECK(mant::bbob2010::BentCigarFunction(5).to_string() == "BentCigarFunction");
   }
 }
 

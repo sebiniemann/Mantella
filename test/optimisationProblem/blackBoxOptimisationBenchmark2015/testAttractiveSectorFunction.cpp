@@ -43,7 +43,7 @@ TEST_CASE("bbob2015::AttractiveSectorFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "AttractiveSectorFunction");
+    CHECK(mant::bbob2015::AttractiveSectorFunction(5).to_string() == "AttractiveSectorFunction");
   }
 }
 
