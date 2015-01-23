@@ -121,6 +121,11 @@ if(BUILD_TEST)
   add_executable(libTest
     test/main.cpp
     test/helper.cpp
+    test/helper/testGeometry.cpp
+    test/helper/testPrintable.cpp
+    test/helper/testQuasiRandomSequence.cpp
+    test/helper/testRandom.cpp
+    test/helper/testString.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBuecheRastriginFunction.cpp
@@ -244,12 +249,7 @@ if(BUILD_TEST)
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
-    test/helper/testGeometry.cpp
-    test/helper/testPrintable.cpp
-    test/helper/testQuasiRandomSequence.cpp
-    test/helper/testRandom.cpp
     test/helper/testRng.cpp
-    test/helper/testString.cpp
   )
 
   # Link against third party libraries
