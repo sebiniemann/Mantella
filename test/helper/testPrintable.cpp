@@ -12,7 +12,7 @@ class TestPrintable : public mant::Printable {
 };
 
 TEST_CASE("printable: Printable", "") {
-  SECTION("Return specified class name") {
+  SECTION("Returns the specified class name.") {
     TestPrintable testPrintable;
 
     CHECK(testPrintable.to_string() == "ThisIsTestPrintable");
