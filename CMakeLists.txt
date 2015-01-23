@@ -82,6 +82,12 @@ if(MPI_C_FOUND AND CEREAL_FOUND)
 else()
   message(STATUS "NOTICE: Could not find MPI and/or Cereal (excluding cluser computation support).")
 endif()
+
+
+message(STATUS "")
+message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive (or use *sudo make install* as a shortcut).")
+message(STATUS "")
+
 # ----------
 # INSTALLING
 # ----------
