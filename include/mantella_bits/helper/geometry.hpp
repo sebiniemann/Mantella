@@ -83,7 +83,11 @@ namespace mant {
       const double& secondRadius) {
     double distance = arma::norm(secondCenter - firstCenter);
 
-    if (distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
+    if(firstRadius <= 0) {
+      throw std::logic_error("The radius of the first circle (" + std::to_string(firstRadius) +" must be strict greater than 0.");
+    } else if(secondRadius <= 0) {
+      throw std::logic_error("The radius of the second circle (" + std::to_string(secondRadius) +" must be strict greater than 0.");
+    } else if (distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
       throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
     }
 
@@ -107,7 +111,11 @@ namespace mant {
     // Distance between the spheres center and the intersection circle within the sphere
     double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
 
-    if (std::abs(innerDistance) >= sphereRadius) {
+    if(circleRadius <= 0) {
+      throw std::logic_error("The radius of the circle (" + std::to_string(circleRadius) +" must be strict greater than 0.");
+    } else if(sphereRadius <= 0) {
+      throw std::logic_error("The radius of the sphere (" + std::to_string(sphereRadius) +" must be strict greater than 0.");
+    } else if (std::abs(innerDistance) >= sphereRadius) {
       throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
     }
 
