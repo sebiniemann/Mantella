@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2012-LinearSlope", "") {
+TEST_CASE("bbob2012::LinearSlope", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2013::LinearSlope linearSlope(numberOfDimensions);
 

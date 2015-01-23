@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2009-GallaghersGaussian21hiPeaksFunction", "") {
+TEST_CASE("bbob2009::GallaghersGaussian21hiPeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2009::GallaghersGaussian21hiPeaksFunction gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
 

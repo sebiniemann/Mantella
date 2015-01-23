@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2012-SchwefelFunction", "") {
+TEST_CASE("bbob2012::SchwefelFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2013::SchwefelFunction schwefelFunction(numberOfDimensions);
 

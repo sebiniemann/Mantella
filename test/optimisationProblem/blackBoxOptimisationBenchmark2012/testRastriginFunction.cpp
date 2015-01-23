@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2012-RastriginFunction", "") {
+TEST_CASE("bbob2012::RastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2013::RastriginFunction rastriginFunction(numberOfDimensions);
 

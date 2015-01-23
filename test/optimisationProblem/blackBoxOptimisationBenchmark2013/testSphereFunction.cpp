@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2013-SphereFunction", "") {
+TEST_CASE("bbob2013::SphereFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2013::SphereFunction sphereFunction(numberOfDimensions);
 

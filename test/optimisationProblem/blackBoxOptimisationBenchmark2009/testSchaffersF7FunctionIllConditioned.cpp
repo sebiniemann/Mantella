@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2009-SchaffersF7FunctionIllConditioned", "") {
+TEST_CASE("bbob2009::SchaffersF7FunctionIllConditioned", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2009::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
 

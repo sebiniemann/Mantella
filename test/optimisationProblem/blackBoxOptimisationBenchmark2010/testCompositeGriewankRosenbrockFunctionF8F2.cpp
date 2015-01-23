@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2010-CompositeGriewankRosenbrockFunctionF8F2", "") {
+TEST_CASE("bbob2010::CompositeGriewankRosenbrockFunctionF8F2", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2013::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
 

@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("BBOB2012-RosenbrockFunctionRotated", "") {
+TEST_CASE("bbob2012::RosenbrockFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob2013::RosenbrockFunctionRotated rosenbrockFunctionRotated(numberOfDimensions);
 
