@@ -118,7 +118,7 @@ if(BUILD_TEST)
 
   # Compile the optimisation library tests
   # All paths must start with "test/"
-  add_executable(libTest
+  add_executable(libraryTestCases
     test/main.cpp
     test/helper.cpp
     test/helper/testGeometry.cpp
@@ -253,9 +253,7 @@ if(BUILD_TEST)
   )
 
   # Link against third party libraries
-  target_link_libraries(libTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
-
-  add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
+  target_link_libraries(libraryTestCases ${ARMADILLO_LIBRARIES}) # Armadillo C++
 endif()
 
 # --------------
