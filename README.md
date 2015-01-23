@@ -26,11 +26,8 @@ Getting started
 
 ### Installation
 ```bash
-cd path/to/project
-mkdir build
-cd build
-cmake ..
-sudo make install
+git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+sudo cp -R Mantella/include/* /usr/local/include/
 ```
 
 Future plans
