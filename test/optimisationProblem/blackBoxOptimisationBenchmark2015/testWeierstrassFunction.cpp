@@ -41,4 +41,8 @@ TEST_CASE("BBOB2015-WeierstrassFunction", "") {
       CHECK(weierstrassFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "WeierstrassFunction");
+  }
 }

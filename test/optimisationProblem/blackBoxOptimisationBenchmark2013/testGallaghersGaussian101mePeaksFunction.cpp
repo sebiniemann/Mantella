@@ -41,5 +41,9 @@ TEST_CASE("BBOB2013-GallaghersGaussian101mePeaksFunction", "") {
       CHECK(gallaghersGaussian101mePeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "GallaghersGaussian101mePeaksFunction");
+  }
 }
 

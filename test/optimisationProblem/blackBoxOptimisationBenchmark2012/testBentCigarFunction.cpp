@@ -37,5 +37,9 @@ TEST_CASE("BBOB2012-BentCigarFunction", "") {
       CHECK(bentCigarFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2009::AttractiveSectorFunction(5).to_string() == "BentCigarFunction");
+  }
 }
 
