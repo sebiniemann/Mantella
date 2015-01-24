@@ -120,6 +120,7 @@ if(BUILD_TEST)
   # All paths must start with "test/"
   add_executable(libraryTestCases
     test/main.cpp
+    test/helper/testRng.cpp
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
@@ -249,7 +250,6 @@ if(BUILD_TEST)
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
-    test/helper/testRng.cpp
   )
 
   # Link against third party libraries
