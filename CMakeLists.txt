@@ -124,6 +124,7 @@ if(BUILD_TEST)
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
+    test/helper/testSetTheory.cpp
     test/helper/testString.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
