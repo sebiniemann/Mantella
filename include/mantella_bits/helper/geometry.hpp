@@ -109,22 +109,28 @@ namespace mant {
       const arma::Col<double>::fixed<3>& sphereCenter,
       const double& sphereRadius) {
     // Distance between the spheres center and the intersection circle within the sphere
-    double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
+    const double& innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
 
     if(circleRadius <= 0) {
       throw std::logic_error("The radius of the circle (" + std::to_string(circleRadius) + ") must be strict greater than 0.");
     } else if(sphereRadius <= 0) {
       throw std::logic_error("The radius of the sphere (" + std::to_string(sphereRadius) + ") must be strict greater than 0.");
-    } else if (innerDistance == 0 || std::abs(innerDistance) >= sphereRadius) {
-      throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
+    } else if (std::abs(innerDistance) >= sphereRadius) {
+      throw std::logic_error("Only intersections with exactly two solutions are considered valid.");
     }
 
-    arma::Col<double>::fixed<3> innerCenter = sphereCenter + innerDistance * circleNormal;
-    double innerRadius = std::sqrt(std::pow(sphereRadius, 2) - std::pow(innerDistance, 2));
-    arma::Col<double>::fixed<3> normal = arma::normalise(arma::cross(innerCenter - circleCenter, circleNormal));
+    const arma::Col<double>::fixed<3>& innerCenter = sphereCenter + innerDistance * circleNormal;
+    const double& innerRadius = std::sqrt(std::pow(sphereRadius, 2) - std::pow(innerDistance, 2));
 
-    double distance = arma::norm(innerCenter - circleCenter);
-    double intersectionDistance = (std::pow(circleRadius, 2) - std::pow(innerRadius, 2) + std::pow(distance, 2)) / (2 * distance);
+    const double& distance = arma::norm(innerCenter - circleCenter);
+
+    if (distance == 0 || distance >= circleRadius + innerRadius || distance <= std::max(circleRadius, innerRadius) - std::min(circleRadius, innerRadius)) {
+      throw std::logic_error("Only intersections with exactly two solutions are considered valid.");
+    }
+
+    const arma::Col<double>::fixed<3>& normal = arma::normalise(arma::cross(innerCenter - circleCenter, circleNormal));
+
+    const double& intersectionDistance = (std::pow(circleRadius, 2) - std::pow(innerRadius, 2) + std::pow(distance, 2)) / (2 * distance);
 
     return circleCenter + intersectionDistance / distance * (innerCenter - circleCenter) + normal * std::sqrt(std::pow(circleRadius, 2) - std::pow(intersectionDistance, 2));
   }
