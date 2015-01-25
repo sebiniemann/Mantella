@@ -52,7 +52,7 @@ TEST_CASE("setTheory: getTwoSetsPartitions(...)", "") {
       const std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>& expectedPartition = expected.at(n);
       bool found = false;
       for(std::size_t k = 0; k < actual.size(); ++k) {
-        const std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>& actualPartition = actual.at(n);
+        const std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>& actualPartition = actual.at(k);
         if(actualPartition.first.n_elem == expectedPartition.first.n_elem &&
            all(arma::sort(actualPartition.first) == expectedPartition.first) &&
            all(arma::sort(actualPartition.second) == expectedPartition.second)) {
