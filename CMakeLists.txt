@@ -29,12 +29,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 
 # Provide custom build management options
-option(BUILD_TEST "Build tests" OFF)
+option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_ALL "Build all" OFF)
 
 if(BUILD_ALL)
-  set(BUILD_TEST ON)
+  set(BUILD_TESTS ON)
   set(BUILD_EXAMPLES ON)
 endif()
 
@@ -102,7 +102,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_D
 # BUILD TESTS
 # -----------
 
-if(BUILD_TEST)
+if(BUILD_TESTS)
   message(STATUS "NOTICE: Configuring tests")
 
   # Locate third party libraries and headers
