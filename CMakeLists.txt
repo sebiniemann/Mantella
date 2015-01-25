@@ -121,6 +121,7 @@ if(BUILD_TESTS)
   add_executable(libraryTestCases
     test/main.cpp
     test/helper/testRng.cpp
+    test/helper/testFilesystem.cpp
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
