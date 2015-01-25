@@ -12,7 +12,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <hop>
+#include <mantella>
 
 int main (const int argc, const char* argv[]) {
   if (argc < 4) {
@@ -27,62 +27,62 @@ int main (const int argc, const char* argv[]) {
   arma::field<std::string> list;
   list.load("parameterisations.mat");
 
-      std::shared_ptr<hop::OptimisationProblem> optimisationProblem;
+      std::shared_ptr<mant::OptimisationProblem> optimisationProblem;
       unsigned int numberOfDimensions = std::stoi(list.at(parameterisationRow, 1));
 
       if(list.at(parameterisationRow, 0) == "SphereFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::SphereFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::SphereFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "EllipsoidalFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::EllipsoidalFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::EllipsoidalFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "RastriginFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::RastriginFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::RastriginFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "BuecheRastriginFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::BuecheRastriginFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::BuecheRastriginFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "LinearSlope"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::LinearSlope(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::LinearSlope(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "AttractiveSectorFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::AttractiveSectorFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::AttractiveSectorFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "StepEllipsoidalFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::StepEllipsoidalFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::StepEllipsoidalFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "RosenbrockFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::RosenbrockFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::RosenbrockFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "RosenbrockFunctionRotated"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::RosenbrockFunctionRotated(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::RosenbrockFunctionRotated(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "EllipsoidalFunctionRotated"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::EllipsoidalFunctionRotated(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::EllipsoidalFunctionRotated(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "DiscusFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::DiscusFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::DiscusFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "BentCigarFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::BentCigarFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::BentCigarFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "SharpRidgeFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::SharpRidgeFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::SharpRidgeFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "DifferentPowersFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::DifferentPowersFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::DifferentPowersFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "RastriginFunctionRotated"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::RastriginFunctionRotated(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::RastriginFunctionRotated(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "WeierstrassFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::WeierstrassFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::WeierstrassFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "SchaffersF7Function"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::SchaffersF7Function(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::SchaffersF7Function(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "SchaffersF7FunctionIllConditioned"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::SchaffersF7FunctionIllConditioned(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::SchaffersF7FunctionIllConditioned(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "CompositeGriewankRosenbrockFunctionF8F2"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "SchwefelFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::SchwefelFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::SchwefelFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "GallaghersGaussian21hiPeaksFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::GallaghersGaussian21hiPeaksFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::GallaghersGaussian21hiPeaksFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "GallaghersGaussian101mePeaksFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::GallaghersGaussian101mePeaksFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::GallaghersGaussian101mePeaksFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "KatsuuraFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::KatsuuraFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::KatsuuraFunction(numberOfDimensions));
       } else if(list.at(parameterisationRow, 0) == "LunacekBiRastriginFunction"){
-          optimisationProblem = std::shared_ptr<hop::OptimisationProblem>(new hop::LunacekBiRastriginFunction(numberOfDimensions));
+          optimisationProblem = std::shared_ptr<mant::OptimisationProblem>(new mant::LunacekBiRastriginFunction(numberOfDimensions));
       } else {
          throw std::runtime_error("Unsupported optimisation problem: " + list.at(parameterisationRow, 0));
       }
 
-      hop::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, (std::stoi(list.at(parameterisationRow, 2))));
+      mant::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, (std::stoi(list.at(parameterisationRow, 2))));
       optimisationAlgorithm.setMaximalNumberOfIterations(10000);
       optimisationAlgorithm.setLocalAttraction(std::stod(list.at(parameterisationRow, 3)));
       optimisationAlgorithm.setGlobalAttraction(std::stod(list.at(parameterisationRow, 4)));

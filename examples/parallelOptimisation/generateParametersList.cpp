@@ -11,7 +11,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <hop>
+#include <mantella>
 
 int main (const int argc, const char* argv[]) {
   if (argc < 4) {
@@ -24,41 +24,41 @@ int main (const int argc, const char* argv[]) {
   unsigned int numberOfDimensions = std::stoi(argv[2]);
   unsigned int populationSize = std::stoi(argv[3]);
 
-  std::array<std::shared_ptr<hop::OptimisationProblem>, 24> optimisationProblems({
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SphereFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::EllipsoidalFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RastriginFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::BuecheRastriginFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::LinearSlope(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::AttractiveSectorFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::StepEllipsoidalFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RosenbrockFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RosenbrockFunctionRotated(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::EllipsoidalFunctionRotated(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::DiscusFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::BentCigarFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SharpRidgeFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::DifferentPowersFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::RastriginFunctionRotated(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::WeierstrassFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SchaffersF7Function(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SchaffersF7FunctionIllConditioned(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::SchwefelFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::GallaghersGaussian101mePeaksFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::GallaghersGaussian21hiPeaksFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::KatsuuraFunction(numberOfDimensions)),
-    std::shared_ptr<hop::OptimisationProblem>(new hop::LunacekBiRastriginFunction(numberOfDimensions)),
+  std::array<std::shared_ptr<mant::OptimisationProblem>, 24> optimisationProblems({
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SphereFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::EllipsoidalFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RastriginFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::BuecheRastriginFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::LinearSlope(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::AttractiveSectorFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::StepEllipsoidalFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RosenbrockFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RosenbrockFunctionRotated(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::EllipsoidalFunctionRotated(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::DiscusFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::BentCigarFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SharpRidgeFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::DifferentPowersFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::RastriginFunctionRotated(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::WeierstrassFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SchaffersF7Function(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SchaffersF7FunctionIllConditioned(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::SchwefelFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::GallaghersGaussian101mePeaksFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::GallaghersGaussian21hiPeaksFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::KatsuuraFunction(numberOfDimensions)),
+    std::shared_ptr<mant::OptimisationProblem>(new mant::LunacekBiRastriginFunction(numberOfDimensions)),
   });
 
-  std::shared_ptr<hop::OptimisationProblem> optimisationProblem = optimisationProblems.at(optimisationProblemIndex);
+  std::shared_ptr<mant::OptimisationProblem> optimisationProblem = optimisationProblems.at(optimisationProblemIndex);
 
   arma::Col<double> localAttractionParameters = arma::linspace(0, 2, 10);
   arma::Col<double> globalAttractionParameters = arma::linspace(0, 2, 10);
   arma::Col<double> accelerationParameters = arma::linspace(0, 2, 10);
   arma::Col<double> neighbourhoodParameters = arma::linspace(0.1, 1, 5);
 
-  hop::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, populationSize);
+  mant::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, populationSize);
   optimisationAlgorithm.setMaximalNumberOfIterations(10000);
 
   std::fstream parameterisationsFile;
@@ -80,7 +80,7 @@ int main (const int argc, const char* argv[]) {
         for(auto neighbourhoodParameter : neighbourhoodParameters) {
           optimisationAlgorithm.setNeighbourhoodProbability(neighbourhoodParameter);
 
-          boost::filesystem::path filepath = boost::filesystem::path("/data/shuka/OnlineOptimisation/bin/parameters/parameterisation_prob" + hop::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(localAttractionParameter) + "_global" + std::to_string(globalAttractionParameter) + "_acc" + std::to_string(accelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
+          boost::filesystem::path filepath = boost::filesystem::path("/data/shuka/OnlineOptimisation/bin/parameters/parameterisation_prob" + mant::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(localAttractionParameter) + "_global" + std::to_string(globalAttractionParameter) + "_acc" + std::to_string(accelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat");
 
           if(!boost::filesystem::exists(filepath)) {
             // TODO Add exception
@@ -117,8 +117,8 @@ int main (const int argc, const char* argv[]) {
     bestParameteristation = minisedBestObjectiveValueDifference(bestParameteristationIndex, arma::span(3, 6));
   }
 
-  parameterisations.insert({std::make_tuple(hop::to_string(optimisationProblem), numberOfDimensions, populationSize), bestParameteristation.t()});
-  parameterisationsFile << hop::to_string(optimisationProblem) << " " << numberOfDimensions << " " << populationSize << " " << bestParameteristation.at(0) << " " << bestParameteristation.at(1) << " " << bestParameteristation.at(2) << " " << bestParameteristation.at(3) << std::endl;
+  parameterisations.insert({std::make_tuple(mant::to_string(optimisationProblem), numberOfDimensions, populationSize), bestParameteristation.t()});
+  parameterisationsFile << mant::to_string(optimisationProblem) << " " << numberOfDimensions << " " << populationSize << " " << bestParameteristation.at(0) << " " << bestParameteristation.at(1) << " " << bestParameteristation.at(2) << " " << bestParameteristation.at(3) << std::endl;
 
   parameterisationsFile.close();
 

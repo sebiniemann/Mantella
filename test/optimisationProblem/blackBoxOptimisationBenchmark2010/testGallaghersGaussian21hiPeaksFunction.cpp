@@ -8,32 +8,29 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
+// Mantella
+#include <mantella>
 
-// HOP
-#include <hop>
+extern std::string testDirectory;
 
-extern boost::filesystem::path testDirectory;
-
-TEST_CASE("BBOB2010-GallaghersGaussian21hiPeaksFunction", "") {
+TEST_CASE("bbob2010::GallaghersGaussian21hiPeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2013::GallaghersGaussian21hiPeaksFunction gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
+    mant::bbob2013::GallaghersGaussian21hiPeaksFunction gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> deltaC21;
-    deltaC21.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/deltaC21,dim" + std::to_string(numberOfDimensions) +".mat");
+    deltaC21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/deltaC21,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> localOptimaY21;
-    localOptimaY21.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/localOptimaY21,dim" + std::to_string(numberOfDimensions) +".mat");
+    localOptimaY21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/localOptimaY21,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     gallaghersGaussian21hiPeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian21hiPeaksFunction.setRotationR(rotationR);
@@ -43,6 +40,10 @@ TEST_CASE("BBOB2010-GallaghersGaussian21hiPeaksFunction", "") {
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(gallaghersGaussian21hiPeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
+  }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2010::GallaghersGaussian21hiPeaksFunction(5).to_string() == "GallaghersGaussian21hiPeaksFunction");
   }
 }
 

@@ -8,26 +8,23 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
+// Mantella
+#include <mantella>
 
-// HOP
-#include <hop>
+extern std::string testDirectory;
 
-extern boost::filesystem::path testDirectory;
-
-TEST_CASE("BBOB2015-LinearSlope", "") {
+TEST_CASE("bbob2015::LinearSlope", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2015::LinearSlope linearSlope(numberOfDimensions);
+    mant::bbob2015::LinearSlope linearSlope(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> one;
-    one.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/one,dim" + std::to_string(numberOfDimensions) +".mat");
+    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/one,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
 
     linearSlope.setObjectiveValueTranslation(0);
     linearSlope.setOne(one);
@@ -35,5 +32,9 @@ TEST_CASE("BBOB2015-LinearSlope", "") {
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
+  }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2015::LinearSlope(5).to_string() == "LinearSlope");
   }
 }

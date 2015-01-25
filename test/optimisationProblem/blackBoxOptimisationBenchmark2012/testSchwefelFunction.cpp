@@ -8,26 +8,23 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
+// Mantella
+#include <mantella>
 
-// HOP
-#include <hop>
+extern std::string testDirectory;
 
-extern boost::filesystem::path testDirectory;
-
-TEST_CASE("BBOB2012-SchwefelFunction", "") {
+TEST_CASE("bbob2012::SchwefelFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2013::SchwefelFunction schwefelFunction(numberOfDimensions);
+    mant::bbob2013::SchwefelFunction schwefelFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> one;
-    one.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/one,dim" + std::to_string(numberOfDimensions) +".mat");
+    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/one,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schwefelFunction.setObjectiveValueTranslation(0);
     schwefelFunction.setOne(one);
@@ -35,5 +32,9 @@ TEST_CASE("BBOB2012-SchwefelFunction", "") {
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
+  }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2012::SchwefelFunction(5).to_string() == "SchwefelFunction");
   }
 }

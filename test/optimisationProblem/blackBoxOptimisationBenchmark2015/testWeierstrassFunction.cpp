@@ -8,32 +8,29 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
+// Mantella
+#include <mantella>
 
-// HOP
-#include <hop>
+extern std::string testDirectory;
 
-extern boost::filesystem::path testDirectory;
-
-TEST_CASE("BBOB2015-WeierstrassFunction", "") {
+TEST_CASE("bbob2015::WeierstrassFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2015::WeierstrassFunction weierstrassFunction(numberOfDimensions);
+    mant::bbob2015::WeierstrassFunction weierstrassFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> translation;
-    translation.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> rotationQ;
-    rotationQ.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedWeierstrassFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedWeierstrassFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     weierstrassFunction.setObjectiveValueTranslation(0);
     weierstrassFunction.setTranslation(translation);
@@ -43,5 +40,9 @@ TEST_CASE("BBOB2015-WeierstrassFunction", "") {
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(weierstrassFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
+  }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2015::WeierstrassFunction(5).to_string() == "WeierstrassFunction");
   }
 }

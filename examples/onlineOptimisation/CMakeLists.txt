@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # -------------
 message(STATUS "NOTICE: Configuring experiemental online optimisation applications.")
 
-# Include Mantrella headers
+# Include Mantella headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
@@ -27,9 +27,6 @@ include_directories(${ARMADILLO_INCLUDE_DIRS}) # Armadillo C++
 add_executable(exampleOnlineOptimisation
   main.cpp
 )
-
-# Link against Mantrella
-target_link_libraries(exampleOnlineOptimisation mantrella)
 
 # Link against third party libraries
 target_link_libraries(exampleOnlineOptimisation ${ARMADILLO_LIBRARIES}) # Armadillo C++

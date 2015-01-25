@@ -8,26 +8,23 @@
 // Armadillo
 #include <armadillo>
 
-// Boost
-#include <boost/filesystem.hpp>
+// Mantella
+#include <mantella>
 
-// HOP
-#include <hop>
+extern std::string testDirectory;
 
-extern boost::filesystem::path testDirectory;
-
-TEST_CASE("BBOB2009-RastriginFunction", "") {
+TEST_CASE("bbob2009::RastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    hop::bbob2013::RastriginFunction rastriginFunction(numberOfDimensions);
+    mant::bbob2009::RastriginFunction rastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> translation;
-    translation.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory.string() + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rastriginFunction.setObjectiveValueTranslation(0);
     rastriginFunction.setTranslation(translation);
@@ -35,5 +32,9 @@ TEST_CASE("BBOB2009-RastriginFunction", "") {
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
+  }
+
+  SECTION("Returns the specified class name.") {
+    CHECK(mant::bbob2009::RastriginFunction(5).to_string() == "RastriginFunction");
   }
 }

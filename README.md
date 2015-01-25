@@ -1,12 +1,14 @@
-![Mantella](http://sebastianniemann.github.io/OnlineOptimisation/images/Mantella.png)
+![Mantella](http://sebastianniemann.github.io/Mantella/assets/image/logo.png)
 
 Mantella 0.9.0
 ====================================
-[![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/OnlineOptimisation.png?branch=master)](https://travis-ci.org/SebastianNiemann/OnlineOptimisation) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![TODO](https://badge.waffle.io/sebastianniemann/onlineoptimisation.png?label=waffle:todo&title=ToDo)](https://waffle.io/sebastianniemann/onlineoptimisation)
 
-The Mantella C++ optimisation library provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive solvers and highly parallalised variants, efficiently used on recent multi-cores and high performance clusters. 
+[![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master)
 
-Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for high efficient linear algebra calculations as well as [Cereal](http://uscilab.github.io/cereal/) (developed by Shane Grant and Randolph Voorhies, iLab, USA) for serialisation and reproducibility.
+
+Mantella is a modern, header-only C++ optimisation library. It provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive, parallalised solvers, focusing on recent multi-cores architectures and high performance clusters. 
+
+Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for highly efficient linear algebra calculations.
 
 Getting started
 ---------------
@@ -14,23 +16,18 @@ Getting started
 - CMake 2.8.8
 - GCC 4.8.1 (or any other C++11 feature complete compiler)
 - Armadillo C++ 4.600.0
-- Cereal 1.0.0 (or develop, in case this bug affects you: https://github.com/USCiLab/cereal/issues/94)
 
 #### Only needed for parallel algorithms
 - MPI 3.0.0
+- Cereal 1.1.0
 
 #### Only needed for tests
 - Catch (development version)
-- Boost filesystem 1.54
 
 ### Installation
 ```bash
-cd path/to/project
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
+git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+sudo cp -R Mantella/include/* /usr/local/include/
 ```
 
 Future plans
@@ -43,14 +40,14 @@ Future plans
   - ~~Adding a grid search algorithm~~ **(done)**
   - Adding a multi resolution grid search algorithm
 - **Planned for 1.1.0**
-  - Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen
+  - ~~Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen~~ **(done)**
   - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
   - Adding the Nelder–Mead method, developed by John Nelder and Roger Mead
   - Adding parallel (MPI-based) sample-based algorithms
 - **Planned for 1.2.0**
-  - Adding a seperate website (besides this readme on Github), including a user documentation and a *getting started*
+  - Adding a seperate website (besides this README on Github), including a user documentation and a *getting started*
 - **Backlog**
-  - Adding the black-boxoptimisation benchmark 2015 (waiting for more information from Nikolaus Hansen)
+  - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
 
 Implemented features
 --------------------
@@ -76,7 +73,7 @@ Support of real-world robotic optimisation problems
     - Parallel kinematic machine 6(P)RPR
     - Multi-level Stewart platforms
 
-Full support of the [black-box optimisation benchmark 2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013-downloads), developed by Nikolaus Hansen et al., INRIA, France
+Full support of the [black-box optimisation benchmark (from 2009–2015)](http://coco.gforge.inria.fr), developed by Nikolaus Hansen et al., INRIA, France
 - **Separable functions**
   - Sphere function
   - Ellipsoidal function

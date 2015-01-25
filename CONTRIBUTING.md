@@ -1,5 +1,5 @@
-Contributing to OnlineOptimisation
-==================================
+Contributing to Mantella
+========================
 - [Question or Problem?](#question)
 - [Issues and Bugs](#issue)
 - [Feature Requests](#feature)
@@ -9,24 +9,24 @@ Contributing to OnlineOptimisation
 
 <a name="question"></a> Got a Problem or Question?
 --------------------------------------------------
-If you have a question about how to use the OnlineOptimisation framework, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/onlineoptimisation).
+If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella).
 
 <a name="issue"></a> Found an Issue or Bug?
 -------------------------------------------
-If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues).
+If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues).
 
 You are welcomed to submit a pull request with your fix afterwards, if possible. **Please see our coding and commit guidelines below.**
 
 <a name="feature"></a> Requesting a Feature?
 --------------------------------------------
-If you are missing some features within the OnlineOptimisation framework feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues) labelled `feature request`.
+If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues) labelled `feature request`.
 
 Note that a submitting a pull request providing the needed changes to introduced your requested feature usually speeds up the process. **Please see our coding and commit guidelines below.**
 
 <a name="coding"></a> Coding Guidelines
 ---------------------------------------
-- Everything must be **thoroughly tested**.
-- All methods must be **documented**, regardless of the code visibility. And do not forget about inline comments for the complicated stuff.
+- Everything should be **thoroughly tested**.
+- All methods must be **documented**, regardless of the code visibility.
 - We usually follow the [Google Style Guides](https://code.google.com/p/google-styleguide/).
 
 <a name="commit"></a> Commit Guidelines
@@ -91,27 +91,3 @@ The signature should start with `Signed-off-by:` and include your real name (no 
 ```
 Signed-off-by: Random J Developer <random@developer.example.org>
 ```
-
-<a name="development"></a> Development Notes
---------------------------------------------
-We strive for an agile development process with monthly sprint meetings. New tasks are added any time via the [Github Issue Tracker](https://github.com/SebastianNiemann/OnlineOptimisation/issues) and assigned in the beginning of each sprint via [Waffle.io](https://waffle.io/sebastianniemann/onlineoptimisation). 
-
-We make use of three kinds of branches:
-- master
-- `<user story branch>`
-- `<hotfix branch>`
-
-### Master
-The main development branch, including the current state of the next release. Small changes may be pushed directly into this branch. The last task of each sprint is releasing the latests changes into `tag`.
-
-**Lifetime:** Infinite
-
-### User Story Branch
-Each sprint may add several, individual `<user story branches>`. After completion of all tasks, each `<user story branch>` is merged into the `master` branch and removed afterwards.
-
-**Lifetime:** Preferable one sprint
-
-### Hotfix Branch
-Based on the latests release in `tag` and removed after releasing the hotfix.
-
-**Lifetime:** Very short, a few days at most

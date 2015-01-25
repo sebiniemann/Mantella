@@ -2,22 +2,22 @@
 #include <memory>
 #include <iostream>
 
-#include <hop>
+#include <mantella>
 
 int main(int argc, char* argv[]) {
   try {
-    hop::Rng::setRandomSeed();
+    mant::Rng::setRandomSeed();
 
-    hop::MaximumLikelihoodEstimation<double, hop::EuclideanDistance> propertiesEstimation(
-      std::shared_ptr<hop::CorrelationAnalysis<double, hop::EuclideanDistance>>(new hop::FitnessDistanceCorrelationAnalysis()),
-      std::shared_ptr<hop::LipschitzContinuityAnalysis<double, hop::EuclideanDistance>>(new hop::DirectLipschitzContinuityAnalysis()),
-      std::shared_ptr<hop::LinearModelAnalysis<double, hop::EuclideanDistance>>(new hop::LinearOrdinaryLeastSquares()),
-      std::shared_ptr<hop::QuadraticModelAnalysis<double, hop::EuclideanDistance>>(new hop::QuadraticOrdinaryLeastSquares()),
-      std::shared_ptr<hop::AdditiveSeparabilityAnalysis<double, hop::EuclideanDistance>>(new hop::DirectAdditiveSeparabilityAnalysis()));
+    mant::MaximumLikelihoodEstimation<double, mant::EuclideanDistance> propertiesEstimation(
+      std::shared_ptr<mant::CorrelationAnalysis<double, mant::EuclideanDistance>>(new mant::FitnessDistanceCorrelationAnalysis()),
+      std::shared_ptr<mant::LipschitzContinuityAnalysis<double, mant::EuclideanDistance>>(new mant::DirectLipschitzContinuityAnalysis<double, mant::EuclideanDistance>()),
+      std::shared_ptr<mant::LinearModelAnalysis<double, mant::EuclideanDistance>>(new mant::LinearOrdinaryLeastSquares()),
+      std::shared_ptr<mant::QuadraticModelAnalysis<double, mant::EuclideanDistance>>(new mant::QuadraticOrdinaryLeastSquares()),
+      std::shared_ptr<mant::AdditiveSeparabilityAnalysis<double, mant::EuclideanDistance>>(new mant::DirectAdditiveSeparabilityAnalysis()));
 
-    std::shared_ptr<hop::OptimisationProblem<double>> optimisationProblem(new hop::bbob2013::SphereFunction(4));
+    std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(4));
 
-    hop::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
+    mant::HookeJeevesAlgorithm<mant::EuclideanDistance> optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
 
     std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;

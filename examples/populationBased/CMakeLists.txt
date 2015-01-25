@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # -------------
 message(STATUS "NOTICE: Configuring populationbased online optimisation applications.")
 
-# Include Mantrella headers
+# Include Mantella headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Locate third party libraries and headers
@@ -30,9 +30,6 @@ add_executable(CMAES
 add_executable(MCS
   MCS.cpp
 )
-
-# Link against Mantrella
-target_link_libraries(CMAES mantrella)
 
 # Link against third party libraries
 target_link_libraries(CMAES ${ARMADILLO_LIBRARIES}) # Armadillo C++
