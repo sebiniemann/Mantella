@@ -29,16 +29,16 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
 
 # Provide custom build management options
-option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_EXAMPLES "Build examples" OFF)
-option(BUILD_ALL "Build all" OFF)
-
-if(BUILD_ALL)
-  set(BUILD_TESTS ON)
-  set(BUILD_EXAMPLES ON)
-endif()
 
 # Build options used only during development
+option(BUILD_TESTS "Build tests" OFF)
+option(RUN_TESTS "Run (and build) tests" OFF)
+if(RUN_TESTS)
+  set(BUILD_TESTS ON)
+endif()
+mark_as_advanced(BUILD_TESTS RUN_TESTS)
+
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 mark_as_advanced(MEASURE_CODE_COVERAGE)
 
@@ -255,7 +255,9 @@ if(BUILD_TESTS)
   # Link against third party libraries
   target_link_libraries(libraryTestCases ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
-  if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+  if(RUN_TESTS)
+    message(STATUS "NOTICE: Automatically runs all tests after building them.")
+
     add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
   endif()
 endif()
