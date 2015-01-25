@@ -11,7 +11,7 @@
 TEST_CASE("Rng", "") {
   SECTION("Getting a working generator.") {
     arma::Col<double>::fixed<1000> values;
-    for (std::size_t n = 0; n < values.n_cols; ++n) {
+    for (std::size_t n = 0; n < values.n_elem; ++n) {
       values.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
     }
 
@@ -25,13 +25,13 @@ TEST_CASE("Rng", "") {
 
     SECTION("Works with the C++ standard library.") {
       arma::Col<double>::fixed<10> expectedValues;
-      for (std::size_t n = 0; n < expectedValues.n_cols; ++n) {
+      for (std::size_t n = 0; n < expectedValues.n_elem; ++n) {
         expectedValues.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
       }
 
       mant::Rng::setSeed(seed);
       arma::Col<double>::fixed<10> actualValues;
-      for (std::size_t n = 0; n < actualValues.n_cols; ++n) {
+      for (std::size_t n = 0; n < actualValues.n_elem; ++n) {
         actualValues.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
       }
 
@@ -55,7 +55,7 @@ TEST_CASE("Rng", "") {
 
     SECTION("Works with the C++ standard library.") {
       arma::Col<double>::fixed<1000> values;
-      for (std::size_t n = 0; n < values.n_cols; ++n) {
+      for (std::size_t n = 0; n < values.n_elem; ++n) {
         values.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
       }
 
