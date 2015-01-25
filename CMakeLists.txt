@@ -440,6 +440,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/multilevelCoordinateSearch.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp

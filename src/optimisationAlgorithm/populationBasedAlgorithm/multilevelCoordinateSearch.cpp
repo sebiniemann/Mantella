@@ -1,4 +1,7 @@
-#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm/MultilevelCoordinateSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/multilevelCoordinateSearch.hpp>
+#include <armadillo_bits/fn_min.hpp>
+
+#include "mantella_bits/optimisationAlgorithm.hpp"
 
 
 ////COMMENTS
@@ -6,19 +9,21 @@
 //some variables have been renamed, there original name is noted in the header file (if they are renamed).
 //there are a LOT of unexplained numbers in matlab where it's not clear if they have to be decremented to fit arrays starting at 0...
 //numberOfIterations counting should be looked at, currently just called on every matlabs "ncall" increase
-namespace hop {
-
+namespace mant {
+template<class DistanceFunction>
   MultilevelCoordinateSearch::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize, arma::Mat<double> boundaries, unsigned int boxDivisions, arma::Mat<double> hess, arma::Col<arma::uword> initialPointIndex, unsigned int maxLocalSearchSteps, double localStopThreshold)
-  : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize), boxDivisions_(boxDivisions), boundaries_(boundaries),
+  : PopulationBasedAlgorithm<double,DistanceFunction>(optimisationProblem, populationSize), boxDivisions_(boxDivisions), boundaries_(boundaries),
   maxLocalSearchSteps_(maxLocalSearchSteps), localStopThreshold_(localStopThreshold), hess_(hess), initialPointIndex_(initialPointIndex) {
 
     //assigning standard values for variables. Can't do in header-file since dependend on input variable "boundaries"
     hess_ = arma::ones(boundaries.col(0).n_elem);
     boxDivisions_ = 50 * boundaries.col(0).n_elem + 10;
+    
+    optimisationProblem_
 
     //for convenience
-    unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
+    unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
 
     //length of u or v and thus length of hess should equal numberOfDimensions
     if (numberOfDimensions != boundaries.col(0).n_elem) {
@@ -374,7 +379,7 @@ namespace hop {
           pointsInBasketValue.rows(nbasket0_+1,nbasket_) = arma::sort(pointsInBasketValue.rows(nbasket0_+1,nbasket_));
           
           for(int j = nbasket0_+1; j < nbasket_; j++) {
-            baseVertex_ pointsInBasket.col(j);
+            baseVertex_ = pointsInBasket.col(j);
             //TODO: Something is strange/wrong here. Variable should be "f1", 
             //but f1 is already a vector. Why is he overwriting it in matlab??
             double f1new = pointsInBasketValue(j);

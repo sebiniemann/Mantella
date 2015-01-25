@@ -1,10 +1,12 @@
 #pragma once
 
-#include <hop_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
 
-namespace hop {
+namespace mant {
 
-  class MultilevelCoordinateSearch : public PopulationBasedAlgorithm<double> {
+  
+template<class DistanceFunction>
+  class MultilevelCoordinateSearch : public PopulationBasedAlgorithm<double, DistanceFunction> {
   public:
     //lower boundaries are expected in the first col of "boundaries", upper boundaries in the second col of "boundaries.
     //initialPointIndex is the index inside initialPopulation_ which is used as the starting point.

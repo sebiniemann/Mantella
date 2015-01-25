@@ -1,5 +1,5 @@
 #include <armadillo>
-#include <hop>
+#include <mantella>
 
 int main(int argc, char** argv) {
   
