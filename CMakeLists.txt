@@ -254,6 +254,10 @@ if(BUILD_TESTS)
 
   # Link against third party libraries
   target_link_libraries(libraryTestCases ${ARMADILLO_LIBRARIES}) # Armadillo C++
+
+  if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
+  endif()
 endif()
 
 # --------------
