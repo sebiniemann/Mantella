@@ -1,26 +1,23 @@
 #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/multilevelCoordinateSearch.hpp>
-#include <armadillo_bits/fn_min.hpp>
-
-#include "mantella_bits/optimisationAlgorithm.hpp"
-
 
 ////COMMENTS
 //step1_ is used at a lot of places where matrix/column sizes arent calculable in advance (since size is dynamic in matlab).
 //some variables have been renamed, there original name is noted in the header file (if they are renamed).
 //there are a LOT of unexplained numbers in matlab where it's not clear if they have to be decremented to fit arrays starting at 0...
 //numberOfIterations counting should be looked at, currently just called on every matlabs "ncall" increase
+//localsearch call needs to corrected
 namespace mant {
-template<class DistanceFunction>
-  MultilevelCoordinateSearch::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize, arma::Mat<double> boundaries, unsigned int boxDivisions, arma::Mat<double> hess, arma::Col<arma::uword> initialPointIndex, unsigned int maxLocalSearchSteps, double localStopThreshold)
-  : PopulationBasedAlgorithm<double,DistanceFunction>(optimisationProblem, populationSize), boxDivisions_(boxDivisions), boundaries_(boundaries),
-  maxLocalSearchSteps_(maxLocalSearchSteps), localStopThreshold_(localStopThreshold), hess_(hess), initialPointIndex_(initialPointIndex) {
 
-    //assigning standard values for variables. Can't do in header-file since dependend on input variable "boundaries"
-    hess_ = arma::ones(boundaries.col(0).n_elem);
-    boxDivisions_ = 50 * boundaries.col(0).n_elem + 10;
-    
-    optimisationProblem_
+  template<class DistanceFunction>
+  MultilevelCoordinateSearch::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
+      const unsigned int& populationSize, arma::Mat<double> boundaries, arma::Mat<double> hess, arma::Col<arma::uword> initialPointIndex, unsigned int boxDivisions, unsigned int maxLocalSearchSteps, double localStopThreshold)
+  : PopulationBasedAlgorithm<double, DistanceFunction>(optimisationProblem, populationSize), setLocalSearch(HillClimbing<double, DistanceFunction>(optimisationProblem_)), boxDivisions_(boxDivisions), boundaries_(boundaries),
+  maxLocalSearchSteps_(maxLocalSearchSteps), initialPointIndex_(initialPointIndex) {
+
+    //assigning standard values for variables. Can't do in header-file since dependent on input variable "boundaries"
+    if(boxDivisions_ == 0) {
+      boxDivisions_ = 50 * boundaries.col(0).n_elem + 10;
+    }
 
     //for convenience
     unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
@@ -127,15 +124,14 @@ template<class DistanceFunction>
     initBoxes();
   }
 
-  void MultilevelCoordinateSearch::optimiseImplementation() {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::optimiseImplementation() {
     //for convenience
-    unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
+    unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
 
-    double f0min = bestObjectiveValue_;
     //TODO: find better value than step1_...
-
-    arma::Mat<double> pointsInBasket = arma::Mat<double>(numberOfDimensions, step1_); //xmin
-    arma::Col<double> pointsInBasketValue = arma::Col<double>(step1_); //fmi
+    pointsInBasket_ = arma::Mat<double>(numberOfDimensions, step1_); //xmin
+    pointsInBasketValue_ = arma::Col<double>(step1_); //fmi
 
     // s- the vector record is updated, and the minimal level s containing non-split boxes is computed
     unsigned int minimalLevel = startSweep();
@@ -144,155 +140,13 @@ template<class DistanceFunction>
     //Which makes sense, since we cannot calculate anything if we cannot divide further.
     while (!isFinished() && !isTerminated() && minimalLevel < boxDivisions_) {
       unsigned int par = record_(minimalLevel); //the best box at level s is the current box
-      //vertex.m START
-      //TODO: check if populationSize_ comparisons need to be '-1'd
-      arma::Col<double> x = arma::Col<double>(numberOfDimensions, arma::datum::inf);
-      arma::Col<double> y = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+
       arma::Col<double> x1 = arma::Col<double>(numberOfDimensions, arma::datum::inf);
       arma::Col<double> x2 = arma::Col<double>(numberOfDimensions, arma::datum::inf);
       arma::Col<double> f1 = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
       arma::Col<double> f2 = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
       arma::Col<arma::uword> n0 = arma::Col<arma::uword>(numberOfDimensions, arma::fill::zeros);
-      double fold = boxBaseVertexFunctionValues_(0, par);
-      unsigned int mVertex = par;
-      while (mVertex > 1) {
-        double i = std::abs(isplit_(ipar_(mVertex)));
-        n0(i) = n0(i) + 1;
-        //matlab checks for 1, since it's index use 0
-        if (ichild_(mVertex) == 0) {
-          if (x(i) == arma::datum::inf || x(i) == z_(0, ipar_(mVertex))) {
-            //matlab passes 2, but it's used as an index so we need to use 1
-            vert1(i, 1, mVertex, x, x1, x2, f1, f2);
-          } else {
-            updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, boxBaseVertexFunctionValues_(0, ipar_(mVertex)));
-            fold = boxBaseVertexFunctionValues_(0, ipar_(mVertex));
-            //matlab passes 1, but it's used as an index so we need to use 0
-            vert2(i, 0, mVertex, x, x1, x2, f1, f2);
-          }
-          //matlab checks for 2, since it's index use 1
-        } else if (ichild_(mVertex) >= 1) {
-          updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, boxBaseVertexFunctionValues_(0, ipar_(mVertex)));
-          fold = boxBaseVertexFunctionValues_(0, ipar_(mVertex));
-          if (x(i) == arma::datum::inf || x(i) == z_(1, ipar_(mVertex))) {
-            //matlab passes 1, but it's used as an index so we need to use 0
-            vert1(i, 0, mVertex, x, x1, x2, f1, f2);
-          } else {
-            //matlab passes 2, but it's used as an index so we need to use 1
-            vert2(i, 1, mVertex, x, x1, x2, f1, f2);
-          }
-        }
-        //matlab checks for 1/2, since it's index use 0/1
-        //original matlab code: 1 <= ichild(m) & ichild(m) <= 2 & y(i) == Inf
-        if ((ichild_(mVertex) == 0 || ichild_(mVertex) == 1) && y(i) == arma::datum::inf) {
-          y(i) = splitByGoldenSectionRule(z_(0, ipar_(mVertex)), z_(1, ipar_(mVertex)), boxBaseVertexFunctionValues_(0, ipar_(mVertex)), boxBaseVertexFunctionValues_(1, ipar_(mVertex)));
-        }
-        //box m was generated by splitting according to the init. list
-        if (ichild_(mVertex) < 0) {
-          int j1 = 0;
-          int j2 = 0;
-          int j3 = 0;
-          int k = 0;
-          if (boundaries_.col(0)(i) < x0_(i, 0)) {
-            //TODO: since these are indexes too they also might need to be decremented
-            //the if also needs to be adjusted. same in else below.
-            j1 = std::ceil(std::abs(ichild_(mVertex)) / 2.0);
-            j2 = std::floor(std::abs(ichild_(mVertex)) / 2.0);
-            if ((std::abs(ichild_(mVertex)) / 2.0 < j1 && j1 > 1) || j1 == populationSize_) {
-              j3 = -1;
-            } else {
-              //TODO: this probably needs to be 0. same below. 
-              //but -1 should be correct (since that is a pseudoindex to recognize initlist boxes)
-              j3 = 0;
-            }
-          } else {
-            j1 = std::floor(std::abs(ichild_(mVertex)) / 2.0) + 1;
-            j2 = std::ceil(std::abs(ichild_(mVertex)) / 2.0);
-            if ((std::abs(ichild_(mVertex)) / 2.0 + 1) > j1 && j1 < populationSize_) {
-              j3 = 0;
-            } else {
-              j3 = -1;
-            }
-          }
-          //box m was generated in the init. procedure
-          if (isplit_(ipar_(mVertex)) < 0) {
-            k = i;
-            //box m was generated by a later split according to the init.list
-            //k points to the corresponding function values  
-          } else {
-            //matlab passes 2, but it's used as an index so we need to use 1
-            k = z_(1, ipar_(mVertex));
-          }
-          if (j1 != initialPointIndex_(i) || (x(i) != arma::datum::inf && x(i) != x0_(i, (initialPointIndex_(i))))) {
-            updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, initListEvaluations_(initialPointIndex_(i), k));
-            fold = initListEvaluations_(initialPointIndex_(i), k);
-          }
-          if (x(i) == arma::datum::inf || x(i) == x0_(i, j1)) {
-            x(i) = x0_(i, j1);
-            if (x1(i) == arma::datum::inf) {
-              vert3(i, j1, mVertex, k, x1, x2, f1, f2);
-            } else if (x2(i) == arma::datum::inf && x1(i) != x0_(i, j1 + j3)) {
-              x2(i) = x0_(i, j1 + j3);
-              f2(i) = f2(i) + initListEvaluations_(j1 + j3, k);
-            } else if (x2(i) == arma::datum::inf) {
-              //matlab checks for 1, since it's index use 0
-              if (j1 != 0 && j1 != populationSize_) {
-                x2(i) = x0_(i, j1 - j3);
-                f2(i) = f2(i) + initListEvaluations_(j1 - j3, k);
-              } else {
-                x2(i) = x0_(i, j1 + 2 * j3);
-                f2(i) = f2(i) + initListEvaluations_(j1 + 2 * j3, k);
-              }
-            }
-          } else {
-            if (x1(i) == arma::datum::inf) {
-              x1(i) = x0_(i, j1);
-              f1(i) = f1(i) + initListEvaluations_(j1, k);
-              if (x(i) != x0_(i, j1 + j3)) {
-                x2(i) = x0_(i, j1 + j3);
-                f2(i) = f2(i) + initListEvaluations_(j1 + j3, k);
-              }
-            } else if (x2(i) == arma::datum::inf) {
-              if (x1(i) != x0_(i, j1)) {
-                x2(i) = x0_(i, j1);
-                f2(i) = f2(i) + initListEvaluations_(j1, k);
-              } else if (x(i) != x0_(i, j1 + j3)) {
-                x2(i) = x0_(i, j1 + j3);
-                f2(i) = f2(i) + initListEvaluations_(j1 + j3, k);
-              } else {
-                //matlab checks for 1, since it's index use 0
-                if (j1 != 0 && j1 != populationSize_) {
-                  x2(i) = x0_(i, j1 - j3);
-                  f2(i) = f2(i) + initListEvaluations_(j1 - j3, k);
-                } else {
-                  x2(i) = x0_(i, j1 + 2 * j3);
-                  f2(i) = f2(i) + initListEvaluations_(j1 + 2 * j3, k);
-                }
-              }
-            }
-          }
-          if (y(i) == arma::datum::inf) {
-            //TODO: why is there an index check for 0 in matlab?!!?
-            if (j2 == 0) {
-              y(i) = boundaries_.col(0)(i);
-            } else if (j2 == populationSize_) {
-              y(i) = boundaries_.col(1)(i);
-            } else {
-              y(i) = splitByGoldenSectionRule(x0_(i, j2), x0_(i, j2 + 1), initListEvaluations_(j2, k), initListEvaluations_(j2 + 1, k));
-            }
-          }
-        }
-        mVertex = ipar_(mVertex);
-      }
-      for (int i = 0; i < numberOfDimensions; i++) {
-        if (x(i) == arma::datum::inf) {
-          x(i) = x0_(i, initialPointIndex_(i));
-          vert3(i, initialPointIndex_(i), mVertex, i, x1, x2, f1, f2);
-        }
-        if (y(i) == arma::datum::inf) {
-          y(i) = oppositeVertex_(i);
-        }
-      }
-      //vertex.m END
+      vertex(par, x1, x2, f1, f2, n0);
 
       bool doSplit = false; //splt
       if (minimalLevel > 2 * numberOfDimensions * (arma::min(n0) + 1)) {
@@ -303,7 +157,7 @@ template<class DistanceFunction>
         if (nogain_(par)) {
           doSplit = false;
         } else {
-          arma::Col<double> expectedGain = expectedGainOfSplit(par, numberOfDimensions, n0, x1, x, f1, f2); //e
+          arma::Col<double> expectedGain = expectedGainOfSplit(par, numberOfDimensions, n0, x1, x2, f1, f2); //e
           //index again so use 0, matlab=1
           double fexp = boxBaseVertexFunctionValues_(0, par) + arma::min(expectedGain);
           if (fexp < bestObjectiveValue_) {
@@ -323,76 +177,132 @@ template<class DistanceFunction>
           //index again so use 1, matlab=2
           z_(1, par) = m_;
           //little different than matlab, if this returns true = isFinished() | isTerminated()
-          if (splitByInitList(i, minimalLevel, par, n0, x1, x2, pointsInBasket, pointsInBasketValue)) {
+          if (splitByInitList(i, minimalLevel, par, n0, x1, x2, pointsInBasket_, pointsInBasketValue_)) {
             break; //should break out of major while loop
           }
         } else {
           //index again so use 0, matlab=1
           z_(0, par) = baseVertex_(i);
           //little different than matlab, if this returns true = isFinished() | isTerminated()
-          if (split(i, minimalLevel, par, n0, x1, x2, pointsInBasket, pointsInBasketValue)) {
+          if (split(i, minimalLevel, par, n0, x1, x2, pointsInBasket_, pointsInBasketValue_)) {
             break;
           }
         }
         //if the pre-assigned size of the `large' arrays has already been exceeded, these arrays are made larger
-        if(nboxes_ > dim) {
+        if (nboxes_ > dim) {
           //TODO: are the additional elements automatically set to zero? if not, need to do that
-          isplit_.resize(nboxes_+step);
-          level_.resize(nboxes_+step);
-          ipar_.resize(nboxes_+step);
-          ichild_.resize(nboxes_+step);
-          z_.resize(z_.n_rows, nboxes_+step);
-          nogain_.resize(nboxes_+step);
-          boxBaseVertexFunctionValues_.resize(z_.n_rows, nboxes_+step);
-          dim = nboxes_+step;
+          isplit_.resize(nboxes_ + step);
+          level_.resize(nboxes_ + step);
+          ipar_.resize(nboxes_ + step);
+          ichild_.resize(nboxes_ + step);
+          z_.resize(z_.n_rows, nboxes_ + step);
+          nogain_.resize(nboxes_ + step);
+          boxBaseVertexFunctionValues_.resize(z_.n_rows, nboxes_ + step);
+          dim = nboxes_ + step;
         }
-        if(isFinished() || isTerminated()) {
+        if (isFinished() || isTerminated()) {
           break;
         }
       } else {//no splitting, increase the level by 1
-        if(minimalLevel+1 < boxDivisions_) {
-          level_(par) = minimalLevel+1;
+        if (minimalLevel + 1 < boxDivisions_) {
+          level_(par) = minimalLevel + 1;
           //index again so use 0, matlab=1
-          updateRecord(par,minimalLevel+1,boxBaseVertexFunctionValues_.row(0));
+          updateRecord(par, minimalLevel + 1, boxBaseVertexFunctionValues_.row(0));
         } else {
           level_(par) = 0;
           nbasket_++;
-          pointsInBasket.col(nbasket_) = baseVertex_;
+          pointsInBasket_.col(nbasket_) = baseVertex_;
           //index again so use 0, matlab=1
-          pointsInBasketValue(nbasket_) = boxBaseVertexFunctionValues_(0, par);
+          pointsInBasketValue_(nbasket_) = boxBaseVertexFunctionValues_(0, par);
         }
       }
       //of prepare for splitting
       minimalLevel++;
-      while(minimalLevel < boxDivisions_) {
-        if(record_(minimalLevel) == 0) {
+      while (minimalLevel < boxDivisions_) {
+        if (record_(minimalLevel) == 0) {
           minimalLevel++;
         } else {
           break;
         }
       }
       //if smax is reached, a new sweep is started 
-      if(minimalLevel==boxDivisions_) {
-        if(maxLocalSearchSteps_ > 0) {
+      if (minimalLevel == boxDivisions_) {
+        if (maxLocalSearchSteps_ > 0) {
           //original matlab sort: [fmi(nbasket0+1:nbasket),j] = sort(fmi(nbasket0+1:nbasket));
           //the j is never used, so we don't retrieve the sort-index
-          pointsInBasketValue.rows(nbasket0_+1,nbasket_) = arma::sort(pointsInBasketValue.rows(nbasket0_+1,nbasket_));
-          
-          for(int j = nbasket0_+1; j < nbasket_; j++) {
-            baseVertex_ = pointsInBasket.col(j);
-            //TODO: Something is strange/wrong here. Variable should be "f1", 
-            //but f1 is already a vector. Why is he overwriting it in matlab??
-            double f1new = pointsInBasketValue(j);
-            if(checkLocationNotUsed()) {
-              
+          pointsInBasketValue_.rows(nbasket0_ + 1, nbasket_) = arma::sort(pointsInBasketValue_.rows(nbasket0_ + 1, nbasket_));
+
+          for (int j = nbasket0_ + 1; j < nbasket_; j++) {
+            //programmatically it seems dumb to overwrite a global variable, but they do it in matlab.
+            baseVertex_ = pointsInBasket_.col(j);
+
+            if (checkLocationNotUsed(baseVertex_)) {
+              //unfortunately multiple return values of primitives are needed later, so we have to use pointers
+              //TODO: Something is strange/wrong here.
+              //f1 is already a vector earlier. Why is he overwriting it in matlab??
+              std::shared_ptr<double> f1(new double(pointsInBasketValue_(j)));
+
+              addLocation(baseVertex_);
+
+              bool isInside = pointInsideDomainOfAttraction(baseVertex_, f1, nbasket0_);
+              if (isFinished() || isTerminated()) {
+                return;
+              }
+              if (isInside) {
+                ///////////////////////////TODO: TEMPORARY WORKAROUND FOR LSEARCH///////////////////////////
+                arma::Col<double> xminTemp(numberOfDimensions, arma::fill::zeros);
+                double fmiTemp = 10;
+
+                if (fmiTemp < bestObjectiveValue_) {
+                  bestObjectiveValue_ = fmiTemp;
+                  bestParameter_ = xminTemp;
+                  if (isFinished() || isTerminated()) {
+                    nbasket0_++;
+                    nbasket_ = nbasket0_;
+                    pointsInBasket_.col(nbasket_) = xminTemp;
+                    pointsInBasketValue_(nbasket_) = fmiTemp;
+                    return;
+                  }
+                }
+                bool candidateInside = candidateInsideDomainOfAttraction(xminTemp, fmiTemp, nbasket0_);
+                if (candidateInside) {
+                  nbasket0_++;
+                  pointsInBasket_.col(nbasket0_) = xminTemp;
+                  pointsInBasketValue_(nbasket0_) = fmiTemp;
+                  //TODO: this check seems redundant, should check if it ever gets called
+                  if (pointsInBasketValue_(nbasket0_) < bestObjectiveValue_) {
+                    bestObjectiveValue_ = pointsInBasketValue_(nbasket0_);
+                    bestParameter_ = pointsInBasket_.col(nbasket0_);
+                    if (isFinished() || isTerminated()) {
+                      nbasket_ = nbasket0_;
+                      return;
+                    }
+                  }
+                }
+              }
             }
           }
+          nbasket_ = nbasket0_;
+          if (isFinished() || isTerminated()) {
+            return;
+          }
         }
+        minimalLevel = startSweep();
       }
     }
+    //TODO: In matlab there is something done that looks like cleanup, i don't think we care about that
+    /*
+    if local,
+      if length(fmi) > nbasket
+        xmin(:,nbasket+1:length(fmi)) = [];
+        fmi(nbasket+1:length(fmi)) = [];
+      end
+    end
+     * */
   }
 
-  void MultilevelCoordinateSearch::initBoxes() {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::initBoxes() {
     //for convenience
     unsigned int numberOfDimensions = optimisationProblem_->getNumberOfDimensions();
 
@@ -526,11 +436,13 @@ template<class DistanceFunction>
     }
   }
 
-  std::string MultilevelCoordinateSearch::to_string() const noexcept {
+  template<class DistanceFunction>
+  std::string MultilevelCoordinateSearch<DistanceFunction>::to_string() const noexcept {
     return "MultilevelCoordinateSearch";
   }
 
-  void MultilevelCoordinateSearch::genBox(int nbox, int par, int level, int nchild, double baseVertexFunctionValue) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::genBox(int nbox, int par, int level, int nchild, double baseVertexFunctionValue) {
     ipar_(nbox) = par;
     level_(nbox) = level;
     //TODO: nchild probably needs to be decremented by 1, or all calls to genBox's nchild
@@ -538,7 +450,8 @@ template<class DistanceFunction>
     boxBaseVertexFunctionValues_(0, nbox) = baseVertexFunctionValue;
   }
 
-  arma::Col<double> MultilevelCoordinateSearch::quadraticPolynomialInterpolation(arma::Col<double> supportPoints, arma::Col<double> functionValues) {
+  template<class DistanceFunction>
+  arma::Col<double> MultilevelCoordinateSearch<DistanceFunction>::quadraticPolynomialInterpolation(arma::Col<double> supportPoints, arma::Col<double> functionValues) {
     arma::Col<double> d(3);
     d(0) = functionValues(0);
     d(1) = (functionValues(1) - functionValues(0)) / (supportPoints(1) - supportPoints(0));
@@ -547,7 +460,8 @@ template<class DistanceFunction>
     return d;
   }
 
-  double MultilevelCoordinateSearch::minimumQuadraticPolynomial(double a, double b, arma::Col<double> d, arma::Mat<double> x0_fragment) {
+  template<class DistanceFunction>
+  double MultilevelCoordinateSearch<DistanceFunction>::minimumQuadraticPolynomial(double a, double b, arma::Col<double> d, arma::Mat<double> x0_fragment) {
     double x = 0;
     if (d(2) == 0) {
       if (d(1) == 0) {
@@ -571,11 +485,13 @@ template<class DistanceFunction>
     return x;
   }
 
-  double MultilevelCoordinateSearch::quadraticPolynomial(double x, arma::Col<double> d, arma::Mat<double> x0_fragment) {
+  template<class DistanceFunction>
+  double MultilevelCoordinateSearch<DistanceFunction>::quadraticPolynomial(double x, arma::Col<double> d, arma::Mat<double> x0_fragment) {
     return d(0) + d(1)*(x - x0_fragment(0)) + d(2)*(x - x0_fragment(0))*(x - x0_fragment(1));
   }
 
-  double MultilevelCoordinateSearch::splitByGoldenSectionRule(double x1, double x2, double f1, double f2) {
+  template<class DistanceFunction>
+  double MultilevelCoordinateSearch<DistanceFunction>::splitByGoldenSectionRule(double x1, double x2, double f1, double f2) {
     if (f1 <= f2) {
       return x1 + 0.5 * (-1 + std::sqrt(5))*(x2 - x1);
     } else {
@@ -583,7 +499,8 @@ template<class DistanceFunction>
     }
   }
 
-  void MultilevelCoordinateSearch::splitByRank(unsigned int par, unsigned int numberOfDimensions, arma::Col<arma::uword> n0) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::splitByRank(unsigned int par, unsigned int numberOfDimensions, arma::Col<arma::uword> n0) {
     //index again so use 0, matlab=1 for all 3 variables
     int isplit = 0;
     int n1 = n0(0);
@@ -604,7 +521,8 @@ template<class DistanceFunction>
     }
   }
 
-  double MultilevelCoordinateSearch::splitBySubint(double x, double y) {
+  template<class DistanceFunction>
+  double MultilevelCoordinateSearch<DistanceFunction>::splitBySubint(double x, double y) {
     double x2 = y;
     if (x == 0 && std::abs(y) > 1000) {
       x2 = std::copysign(1.0, y);
@@ -616,7 +534,8 @@ template<class DistanceFunction>
     return x + 2 * (x2 - x) / 3.0;
   }
 
-  bool MultilevelCoordinateSearch::splitByInitList(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Mat<double> pointsInBasket, arma::Col<double> pointsInBasketValue) {
+  template<class DistanceFunction>
+  bool MultilevelCoordinateSearch<DistanceFunction>::splitByInitList(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Mat<double> pointsInBasket, arma::Col<double> pointsInBasketValue) {
     initListEvaluations_.col(m_).zeros();
     for (int j = 0; j < populationSize_; j++) {
       if (j != initialPointIndex_(splittingIndex)) {
@@ -686,7 +605,7 @@ template<class DistanceFunction>
           baseVertex_(splittingIndex) = x0_(splittingIndex, j);
           nbasket_++;
           pointsInBasket.col(nbasket_) = baseVertex_;
-          pointsInBasketValue(nbasket_) = initListEvaluations_.col(m_)(j);
+          pointsInBasketValue_(nbasket_) = initListEvaluations_.col(m_)(j);
         }
         nchild++;
         if (initListEvaluations_.col(m_)(j + 1) < initListEvaluations_.col(m_)(j) || minimalLevel + 2 < boxDivisions_) {
@@ -703,7 +622,7 @@ template<class DistanceFunction>
           baseVertex_(splittingIndex) = x0_(splittingIndex, j + 1);
           nbasket_++;
           pointsInBasket.col(nbasket_) = baseVertex_;
-          pointsInBasketValue(nbasket_) = initListEvaluations_.col(m_)(j + 1);
+          pointsInBasketValue_(nbasket_) = initListEvaluations_.col(m_)(j + 1);
         }
       }
       if (x0_(splittingIndex, populationSize_) < boundaries_.col(1)(splittingIndex)) {//in that case the box at the boundary gets level s + 1
@@ -718,12 +637,13 @@ template<class DistanceFunction>
         baseVertex_(splittingIndex) = x0_(splittingIndex, j);
         nbasket_++;
         pointsInBasket.col(nbasket_) = baseVertex_;
-        pointsInBasketValue(nbasket_) = initListEvaluations_.col(m_)(j);
+        pointsInBasketValue_(nbasket_) = initListEvaluations_.col(m_)(j);
       }
     }
   }
 
-  bool MultilevelCoordinateSearch::split(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Mat<double> pointsInBasket, arma::Col<double> pointsInBasketValue) {
+  template<class DistanceFunction>
+  bool MultilevelCoordinateSearch<DistanceFunction>::split(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Mat<double> pointsInBasket, arma::Col<double> pointsInBasketValue) {
     //index again so use 1, matlab=2
     baseVertex_(splittingIndex) = z_(1);
     //index again so use 1, matlab=2
@@ -762,7 +682,7 @@ template<class DistanceFunction>
           nbasket_ = nbasket_ + 1;
           pointsInBasket.col(nbasket_) = baseVertex_;
           //index again so use 1, matlab=2
-          pointsInBasketValue(nbasket_) = boxBaseVertexFunctionValues_(1, par);
+          pointsInBasketValue_(nbasket_) = boxBaseVertexFunctionValues_(1, par);
         }
 
       } else {
@@ -778,7 +698,7 @@ template<class DistanceFunction>
           nbasket_ = nbasket_ + 1;
           pointsInBasket.col(nbasket_) = baseVertex_;
           //index again so use 0, matlab=1
-          pointsInBasketValue(nbasket_) = boxBaseVertexFunctionValues_(0, par);
+          pointsInBasketValue_(nbasket_) = boxBaseVertexFunctionValues_(0, par);
         }
         nboxes_++;
         //index again so use 1, matlab=2
@@ -811,7 +731,7 @@ template<class DistanceFunction>
             nbasket_ = nbasket_ + 1;
             pointsInBasket.col(nbasket_) = baseVertex_;
             //index again so use 1, matlab=2
-            pointsInBasketValue(nbasket_) = boxBaseVertexFunctionValues_(1, par);
+            pointsInBasketValue_(nbasket_) = boxBaseVertexFunctionValues_(1, par);
           }
         }
       }
@@ -821,18 +741,19 @@ template<class DistanceFunction>
       nbasket_ = nbasket_ + 1;
       pointsInBasket.col(nbasket_) = baseVertex_;
       //index again so use 0, matlab=1
-      pointsInBasketValue(nbasket_) = boxBaseVertexFunctionValues_(0, par);
+      pointsInBasketValue_(nbasket_) = boxBaseVertexFunctionValues_(0, par);
 
       //index again so use 1, matlab=2
       baseVertex_(splittingIndex) = z_(par, 1);
       nbasket_ = nbasket_ + 1;
       pointsInBasket.col(nbasket_) = baseVertex_;
       //index again so use 1, matlab=2
-      pointsInBasketValue(nbasket_) = boxBaseVertexFunctionValues_(1, par);
+      pointsInBasketValue_(nbasket_) = boxBaseVertexFunctionValues_(1, par);
     }
   }
 
-  arma::Col<double> MultilevelCoordinateSearch::expectedGainOfSplit(unsigned int par, unsigned int numberOfDimensions, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+  template<class DistanceFunction>
+  arma::Col<double> MultilevelCoordinateSearch<DistanceFunction>::expectedGainOfSplit(unsigned int par, unsigned int numberOfDimensions, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
     double emin = arma::datum::inf;
     arma::Col<double> expectedGain = arma::Col<double>(numberOfDimensions);
     for (int i = 0; i < numberOfDimensions; i++) {
@@ -869,7 +790,8 @@ template<class DistanceFunction>
     return expectedGain;
   }
 
-  unsigned int MultilevelCoordinateSearch::startSweep() {
+  template<class DistanceFunction>
+  unsigned int MultilevelCoordinateSearch<DistanceFunction>::startSweep() {
     record_ = arma::Col<arma::uword>(boxDivisions_ - 1, arma::fill::zeros);
     unsigned int s = boxDivisions_;
     for (unsigned int i = 0; i < nboxes_; i++) {
@@ -887,7 +809,159 @@ template<class DistanceFunction>
     return s;
   }
 
-  void MultilevelCoordinateSearch::vert1(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::vertex(unsigned int par, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2, arma::Col<arma::uword> n0) {
+    //for convenience
+    unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+
+    //TODO: check if populationSize_ comparisons need to be '-1'd
+    baseVertex_ = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+    oppositeVertex_ = arma::Col<double>(numberOfDimensions, arma::datum::inf);
+
+
+    double fold = boxBaseVertexFunctionValues_(0, par);
+    unsigned int mVertex = par;
+    while (mVertex > 1) {
+      double i = std::abs(isplit_(ipar_(mVertex)));
+      n0(i) = n0(i) + 1;
+      //matlab checks for 1, since it's index use 0
+      if (ichild_(mVertex) == 0) {
+        if (baseVertex_(i) == arma::datum::inf || baseVertex_(i) == z_(0, ipar_(mVertex))) {
+          //matlab passes 2, but it's used as an index so we need to use 1
+          vert1(i, 1, mVertex, baseVertex_, x1, x2, f1, f2);
+        } else {
+          updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, boxBaseVertexFunctionValues_(0, ipar_(mVertex)));
+          fold = boxBaseVertexFunctionValues_(0, ipar_(mVertex));
+          //matlab passes 1, but it's used as an index so we need to use 0
+          vert2(i, 0, mVertex, baseVertex_, x1, x2, f1, f2);
+        }
+        //matlab checks for 2, since it's index use 1
+      } else if (ichild_(mVertex) >= 1) {
+        updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, boxBaseVertexFunctionValues_(0, ipar_(mVertex)));
+        fold = boxBaseVertexFunctionValues_(0, ipar_(mVertex));
+        if (baseVertex_(i) == arma::datum::inf || baseVertex_(i) == z_(1, ipar_(mVertex))) {
+          //matlab passes 1, but it's used as an index so we need to use 0
+          vert1(i, 0, mVertex, baseVertex_, x1, x2, f1, f2);
+        } else {
+          //matlab passes 2, but it's used as an index so we need to use 1
+          vert2(i, 1, mVertex, baseVertex_, x1, x2, f1, f2);
+        }
+      }
+      //matlab checks for 1/2, since it's index use 0/1
+      //original matlab code: 1 <= ichild(m) & ichild(m) <= 2 & y(i) == Inf
+      if ((ichild_(mVertex) == 0 || ichild_(mVertex) == 1) && oppositeVertex_(i) == arma::datum::inf) {
+        oppositeVertex_(i) = splitByGoldenSectionRule(z_(0, ipar_(mVertex)), z_(1, ipar_(mVertex)), boxBaseVertexFunctionValues_(0, ipar_(mVertex)), boxBaseVertexFunctionValues_(1, ipar_(mVertex)));
+      }
+      //box m was generated by splitting according to the init. list
+      if (ichild_(mVertex) < 0) {
+        int j1 = 0;
+        int j2 = 0;
+        int j3 = 0;
+        int k = 0;
+        if (boundaries_.col(0)(i) < x0_(i, 0)) {
+          //TODO: since these are indexes too they also might need to be decremented
+          //the if also needs to be adjusted. same in else below.
+          j1 = std::ceil(std::abs(ichild_(mVertex)) / 2.0);
+          j2 = std::floor(std::abs(ichild_(mVertex)) / 2.0);
+          if ((std::abs(ichild_(mVertex)) / 2.0 < j1 && j1 > 1) || j1 == populationSize_) {
+            j3 = -1;
+          } else {
+            //TODO: this probably needs to be 0. same below. 
+            //but -1 should be correct (since that is a pseudoindex to recognize initlist boxes)
+            j3 = 0;
+          }
+        } else {
+          j1 = std::floor(std::abs(ichild_(mVertex)) / 2.0) + 1;
+          j2 = std::ceil(std::abs(ichild_(mVertex)) / 2.0);
+          if ((std::abs(ichild_(mVertex)) / 2.0 + 1) > j1 && j1 < populationSize_) {
+            j3 = 0;
+          } else {
+            j3 = -1;
+          }
+        }
+        //box m was generated in the init. procedure
+        if (isplit_(ipar_(mVertex)) < 0) {
+          k = i;
+          //box m was generated by a later split according to the init.list
+          //k points to the corresponding function values  
+        } else {
+          //matlab passes 2, but it's used as an index so we need to use 1
+          k = z_(1, ipar_(mVertex));
+        }
+        if (j1 != initialPointIndex_(i) || (baseVertex_(i) != arma::datum::inf && baseVertex_(i) != x0_(i, (initialPointIndex_(i))))) {
+          updtf(numberOfDimensions, i, fold, x1, x2, f1, f2, initListEvaluations_(initialPointIndex_(i), k));
+          fold = initListEvaluations_(initialPointIndex_(i), k);
+        }
+        if (baseVertex_(i) == arma::datum::inf || baseVertex_(i) == x0_(i, j1)) {
+          baseVertex_(i) = x0_(i, j1);
+          if (x1(i) == arma::datum::inf) {
+            vert3(i, j1, mVertex, k, x1, x2, f1, f2);
+          } else if (x2(i) == arma::datum::inf && x1(i) != x0_(i, j1 + j3)) {
+            x2(i) = x0_(i, j1 + j3);
+            f2(i) = f2(i) + initListEvaluations_(j1 + j3, k);
+          } else if (x2(i) == arma::datum::inf) {
+            //matlab checks for 1, since it's index use 0
+            if (j1 != 0 && j1 != populationSize_) {
+              x2(i) = x0_(i, j1 - j3);
+              f2(i) = f2(i) + initListEvaluations_(j1 - j3, k);
+            } else {
+              x2(i) = x0_(i, j1 + 2 * j3);
+              f2(i) = f2(i) + initListEvaluations_(j1 + 2 * j3, k);
+            }
+          }
+        } else {
+          if (x1(i) == arma::datum::inf) {
+            x1(i) = x0_(i, j1);
+            f1(i) = f1(i) + initListEvaluations_(j1, k);
+            if (baseVertex_(i) != x0_(i, j1 + j3)) {
+              x2(i) = x0_(i, j1 + j3);
+              f2(i) = f2(i) + initListEvaluations_(j1 + j3, k);
+            }
+          } else if (x2(i) == arma::datum::inf) {
+            if (x1(i) != x0_(i, j1)) {
+              x2(i) = x0_(i, j1);
+              f2(i) = f2(i) + initListEvaluations_(j1, k);
+            } else if (baseVertex_(i) != x0_(i, j1 + j3)) {
+              x2(i) = x0_(i, j1 + j3);
+              f2(i) = f2(i) + initListEvaluations_(j1 + j3, k);
+            } else {
+              //matlab checks for 1, since it's index use 0
+              if (j1 != 0 && j1 != populationSize_) {
+                x2(i) = x0_(i, j1 - j3);
+                f2(i) = f2(i) + initListEvaluations_(j1 - j3, k);
+              } else {
+                x2(i) = x0_(i, j1 + 2 * j3);
+                f2(i) = f2(i) + initListEvaluations_(j1 + 2 * j3, k);
+              }
+            }
+          }
+        }
+        if (oppositeVertex_(i) == arma::datum::inf) {
+          //TODO: why is there an index check for 0 in matlab?!!?
+          if (j2 == 0) {
+            oppositeVertex_(i) = boundaries_.col(0)(i);
+          } else if (j2 == populationSize_) {
+            oppositeVertex_(i) = boundaries_.col(1)(i);
+          } else {
+            oppositeVertex_(i) = splitByGoldenSectionRule(x0_(i, j2), x0_(i, j2 + 1), initListEvaluations_(j2, k), initListEvaluations_(j2 + 1, k));
+          }
+        }
+      }
+      mVertex = ipar_(mVertex);
+    }
+    for (int i = 0; i < numberOfDimensions; i++) {
+      if (baseVertex_(i) == arma::datum::inf) {
+        baseVertex_(i) = x0_(i, initialPointIndex_(i));
+        vert3(i, initialPointIndex_(i), mVertex, i, x1, x2, f1, f2);
+      }
+      if (oppositeVertex_(i) == arma::datum::inf) {
+        oppositeVertex_(i) = oppositeVertex_(i);
+      }
+    }
+  }
+
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::vert1(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
     int j1 = 0;
     //matlab checks for 1, since it's index use 0
     if (j == 0) {
@@ -906,7 +980,8 @@ template<class DistanceFunction>
     }
   }
 
-  void MultilevelCoordinateSearch::vert2(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::vert2(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
     int j1 = 0;
     //matlab checks for 1, since it's index use 0
     if (j == 0) {
@@ -931,7 +1006,8 @@ template<class DistanceFunction>
     }
   }
 
-  void MultilevelCoordinateSearch::vert3(int updateIndex, unsigned int j, unsigned int m, unsigned int f0Index, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::vert3(int updateIndex, unsigned int j, unsigned int m, unsigned int f0Index, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) {
     int k1 = 0;
     int k2 = 0;
     //matlab checks for 1, since it's index use 0
@@ -954,7 +1030,8 @@ template<class DistanceFunction>
     f2(updateIndex) = f2(updateIndex) + boxBaseVertexFunctionValues_(k2);
   }
 
-  void MultilevelCoordinateSearch::updtf(unsigned int numberOfDimensions, unsigned int splittingIndex, double fold, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2, double baseVertexValueCurrentBox) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::updtf(unsigned int numberOfDimensions, unsigned int splittingIndex, double fold, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2, double baseVertexValueCurrentBox) {
     for (int i = 0; i < numberOfDimensions; i++) {
       if (i != splittingIndex) {
         if (x1(i) == arma::datum::inf) {
@@ -968,7 +1045,8 @@ template<class DistanceFunction>
     //updtf.m sets fold = f here. since the inputvalue fold never gets changed, this doesn't actually belong here.
   }
 
-  arma::Col<double> MultilevelCoordinateSearch::subint(double x, double y) {
+  template<class DistanceFunction>
+  arma::Col<double> MultilevelCoordinateSearch<DistanceFunction>::subint(double x, double y) {
     int x2 = y;
     int f = 1000;
     if (f * std::abs(x) < 1) {
@@ -985,7 +1063,8 @@ template<class DistanceFunction>
     return arma::Col<double>(x + (x2 - x) / 10.0, x2);
   }
 
-  void MultilevelCoordinateSearch::updateRecord(unsigned int label, int level, arma::Col<double> f) {
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::updateRecord(unsigned int label, int level, arma::Col<double> f) {
     if (record_.n_elem < level) {
       record_(level) = label;
     } else if (record_(level) == 0) {
@@ -994,23 +1073,156 @@ template<class DistanceFunction>
       record_(level) = label;
     }
   }
-  
-  bool MultilevelCoordinateSearch::checkLocationNotUsed() {
-      for(int i = 0; i < nloc_; i++) {
-        if(baseVertex_ == xloc_.col(i)) {
-          return false;
-        }
+
+  template<class DistanceFunction>
+  bool MultilevelCoordinateSearch<DistanceFunction>::checkLocationNotUsed(arma::Col<double> location) {
+    for (int i = 0; i < nloc_; i++) {
+      //TODO: This might not work correctly
+      if (location == xloc_.col(i)) {
+        return false;
       }
-      return true;
     }
-  
-  void MultilevelCoordinateSearch::addLocation(arma::Col<double> loc) {
+    return true;
+  }
+
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::addLocation(arma::Col<double> loc) {
     nloc_++;
-    if(xloc_.n_cols < nloc_) {
+    if (xloc_.n_cols < nloc_) {
       xloc_.resize(xloc_.n_cols + step);
       xloc_.col(nloc_) = loc;
     } else {
       xloc_.col(nloc_) = loc;
     }
   }
-}
+
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::setLocalSearch(const std::shared_ptr<OptimisationAlgorithm<double, DistanceFunction>> localSearch) {
+    localSearch_ = localSearch;
+  }
+
+  template<class DistanceFunction>
+  bool MultilevelCoordinateSearch<DistanceFunction>::pointInsideDomainOfAttraction(arma::Col<double> loc, std::shared_ptr<double> valueAtLoc, double nbasket) {
+    if (nbasket == 0) {
+      return true;
+    }
+    arma::Col<double> distancesToLoc(nbasket);
+    for (int k = 0; k < nbasket; k++) {
+      distancesToLoc(k) = arma::norm(loc - pointsInBasket_.col(k));
+    }
+    arma::Col<double> sortedDistances = arma::sort_index(distancesToLoc);
+    for (int k = 0; k < nbasket; k++) {
+      int i = sortedDistances(k);
+      if (pointsInBasketValue_(i) <= *valueAtLoc) {
+        arma::Col<double> p = pointsInBasket_(i) - loc;
+        arma::Col<double> y1 = loc + (1 / 3.0) * p;
+        double f1 = this->optimisationProblem_->getObjectiveValue(y1);
+        numberOfIterations_++;
+        if (f1 <= *valueAtLoc) {
+          arma::Col<double> y2 = loc + (2 / 3.0) * p;
+          double f2 = this->optimisationProblem_->getObjectiveValue(y2);
+          if (f2 > std::max(f1, pointsInBasketValue_(i))) {
+            if (f1 < *valueAtLoc) {
+              loc = y1;
+              *valueAtLoc = f1;
+              if (*valueAtLoc < bestObjectiveValue_) {
+                bestObjectiveValue_ = *valueAtLoc;
+                bestParameter_ = loc;
+                if (isFinished() || isTerminated()) {
+                  return false;
+                }
+              }
+            }
+          } else {
+            if (f1 < std::min(f2, pointsInBasketValue_(i))) {
+              *valueAtLoc = f1;
+              loc = y1;
+              if (*valueAtLoc < bestObjectiveValue_) {
+                bestObjectiveValue_ = *valueAtLoc;
+                bestParameter_ = loc;
+                if (isFinished() || isTerminated()) {
+                  return false;
+                }
+              }
+            } else if (f2 < std::min(f1, pointsInBasketValue_(i))) {
+              *valueAtLoc = f2;
+              loc = y2;
+              if (*valueAtLoc < bestObjectiveValue_) {
+                bestObjectiveValue_ = *valueAtLoc;
+                bestParameter_ = loc;
+                if (isFinished() || isTerminated()) {
+                  return false;
+                }
+              }
+            } else {
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  template<class DistanceFunction>
+  bool MultilevelCoordinateSearch<DistanceFunction>::candidateInsideDomainOfAttraction(arma::Col<double> candidate, double valueAtCandidate, double nbasket) {
+    if (nbasket == 0) {
+      return true;
+    }
+    arma::Col<double> distancesToCandidate(nbasket);
+    for (int k = 0; k < nbasket; k++) {
+      distancesToCandidate(k) = arma::norm(candidate - pointsInBasket_.col(k));
+    }
+    arma::Col<double> sortedDistances = arma::sort_index(distancesToCandidate);
+    for (int k = 0; k < nbasket; k++) {
+      int i = sortedDistances(k);
+      arma::Col<double> p = pointsInBasket_.col(i) - candidate;
+      arma::Col<double> y1 = candidate + (1 / 3.0) * p;
+      double f1 = this->optimisationProblem_->getObjectiveValue(y1);
+      numberOfIterations_++;
+      if (f1 <= std::max(pointsInBasketValue_(i), valueAtCandidate)) {
+        arma::Col<double> y2 = candidate + (2 / 3.0) * p;
+        double f2 = this->optimisationProblem_->getObjectiveValue(y2);
+        numberOfIterations_++;
+        if (f2 <= std::max(f1, pointsInBasketValue_(i))) {
+          if (valueAtCandidate < std::min(std::min(f1, f2), pointsInBasketValue_(i))) {
+            pointsInBasketValue_(i) = valueAtCandidate;
+            pointsInBasket_.col(i) = candidate;
+            if (valueAtCandidate < bestObjectiveValue_) {
+              bestObjectiveValue_ = *valueAtCandidate;
+              bestParameter_ = candidate;
+              if (isFinished() || isTerminated()) {
+                return false;
+              }
+            }
+            return false;
+          } else if (f1 < std::min(std::min(candidate, f2), pointsInBasketValue_(i))) {
+            pointsInBasketValue_(i) = f1;
+            pointsInBasket_.col(i) = y1;
+            if (valueAtCandidate < bestObjectiveValue_) {
+              bestObjectiveValue_ = *valueAtCandidate;
+              bestParameter_ = candidate;
+              if (isFinished() || isTerminated()) {
+                return false;
+              }
+            }
+            return false;
+          } else if (f2 < std::min(std::min(candidate, f1), pointsInBasketValue_(i))) {
+            pointsInBasketValue_(i) = f2;
+            pointsInBasket_.col(i) = y2;
+            if (valueAtCandidate < bestObjectiveValue_) {
+              bestObjectiveValue_ = *valueAtCandidate;
+              bestParameter_ = candidate;
+              if (isFinished() || isTerminated()) {
+                return false;
+              }
+            }
+            return false;
+          } else {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }

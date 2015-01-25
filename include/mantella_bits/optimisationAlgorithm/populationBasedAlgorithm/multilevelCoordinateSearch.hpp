@@ -1,22 +1,21 @@
-#pragma once
-
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
-
 namespace mant {
 
-  
-template<class DistanceFunction>
+  template<class DistanceFunction>
   class MultilevelCoordinateSearch : public PopulationBasedAlgorithm<double, DistanceFunction> {
   public:
     //lower boundaries are expected in the first col of "boundaries", upper boundaries in the second col of "boundaries.
     //initialPointIndex is the index inside initialPopulation_ which is used as the starting point.
-    explicit MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem, const unsigned int& populationSize, arma::Mat<double> boundaries, unsigned int boxDivisions, arma::Mat<double> hess, arma::Col<arma::uword> initialPointIndex, unsigned int maxLocalSearchSteps = 50, double localStopThreshold = arma::datum::eps);
+    explicit MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem, const unsigned int& populationSize, arma::Mat<double> boundaries, arma::Col<arma::uword> initialPointIndex, unsigned int boxDivisions = 0, unsigned int maxLocalSearchSteps = 50) noexcept;
     MultilevelCoordinateSearch(const MultilevelCoordinateSearch&) = delete;
     MultilevelCoordinateSearch& operator=(const MultilevelCoordinateSearch&) = delete;
+
+    void setLocalSearch(const std::shared_ptr<OptimisationAlgorithm<double, DistanceFunction>> localSearch) noexcept;
 
     std::string to_string() const noexcept override;
   protected:
     void optimiseImplementation() override;
+
+    const std::shared_ptr<OptimisationAlgorithm<double, DistanceFunction>> localSearch_;
 
     unsigned int step1_ = 10000;
     unsigned int step = 1000; //TODO: could be moved to constructor as a definable variable
@@ -25,8 +24,6 @@ template<class DistanceFunction>
     unsigned int boxDivisions_; //smax
     arma::Mat<double> boundaries_; //u,v - with u=col(0) and v=col(1)
     unsigned int maxLocalSearchSteps_; //local
-    double localStopThreshold_; //gamma
-    arma::Mat<double> hess_;
 
     arma::Col<arma::uword> isplit_;
     arma::Col<arma::uword> level_;
@@ -58,6 +55,9 @@ template<class DistanceFunction>
     void initBoxes(); //initbox.m
     arma::Col<arma::uword> variabilityRanking_; //p
 
+    arma::Mat<double> pointsInBasket_; //xmin
+    arma::Col<double> pointsInBasketValue_; //fmi
+
     //helper methods
     void genBox(int nbox, int par, int level, int nchild, double baseVertexFunctionValue); //genbox.m
 
@@ -87,13 +87,16 @@ template<class DistanceFunction>
     //children and inserts its children and their parameters in the list
     //returns isFinished() || isTerminated()
     bool split(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Mat<double> pointsInBasket, arma::Col<double> pointsInBasketValue);
-    
+
     //exgain.m 
     //determines the splitting index, the splitting value and the expected 
     //gain vector e for (potentially) splitting a box by expected gain
     arma::Col<double> expectedGainOfSplit(unsigned int par, unsigned int numberOfDimensions, arma::Col<arma::uword> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2);
 
     unsigned int startSweep(); //strtsw.m
+
+    //vertex.m 
+    void vertex(unsigned int par, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2, arma::Col<arma::uword> n0);
 
     void vert1(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2); //vert1.m
 
@@ -102,24 +105,40 @@ template<class DistanceFunction>
     void vert3(int updateIndex, unsigned int j, unsigned int m, unsigned int f0Index, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2); //vert3.m
 
     void updtf(unsigned int numberOfDimensions, unsigned int splittingIndex, double fold, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2, double baseVertexValueCurrentBox); //updtf.m
-    
+
     //subint.m 
     //computes for real x and real or infinite y two points x1 and x2 in 
     //[min(x,y),max(x,y)] that are neither too close nor too far away from x
     arma::Col<double> subint(double x, double y);
-    
+
     //updtrec.m 
     //updates the pointer record(s) to the best non-split box at level s.
     //f=vector containing the base vertex function values of the already defined boxes
     void updateRecord(unsigned int label, int level, arma::Col<double> f);
-    
+
     //chkloc.m 
     //checks whether a point has already been used as starting point for a local search
-    bool checkLocationNotUsed();
-    
+    bool checkLocationNotUsed(arma::Col<double> location);
+
     //addloc.m 
     //adds a new point to the list of starting points for local search
     void addLocation(arma::Col<double> loc);
+
+    //basket.m 
+    //checks whether a candidate for local search lies in the 'domain of 
+    //attraction' of a point in the 'shopping basket'
+    bool pointInsideDomainOfAttraction(arma::Col<double> loc, std::shared_ptr<double> valueAtLoc,double nbasket);
+
+    //basket1.m 
+    //checks whether a candidate for local search lies in the 'domain of 
+    //attraction' of a point in the 'shopping basket'
+    bool candidateInsideDomainOfAttraction(arma::Col<double> candidate, double valueAtCandidate,double nbasket);
   };
+
+  //
+  // Implementation
+  //
+
+
 }
 
