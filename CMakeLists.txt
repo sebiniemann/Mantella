@@ -139,6 +139,7 @@ if(BUILD_TESTS)
     test/helper/testRandom.cpp
     test/helper/testSetTheory.cpp
     test/helper/testString.cpp
+    test/helper/testUnorderedContainer.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBuecheRastriginFunction.cpp
