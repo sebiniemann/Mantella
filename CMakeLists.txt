@@ -129,7 +129,7 @@ if(BUILD_TESTS)
 
   # Compile the optimisation library tests
   # All paths must start with "test/"
-  add_executable(libraryTestCases
+  add_executable(libraryTest
     test/main.cpp
     test/helper/testRng.cpp
     test/helper/testFilesystem.cpp
@@ -266,7 +266,7 @@ if(BUILD_TESTS)
   )
 
   # Link against third party libraries
-  target_link_libraries(libraryTestCases ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
   if(RUN_TESTS)
     message(STATUS "NOTICE: Automatically runs all tests after building them.")
