@@ -116,6 +116,17 @@ if(BUILD_TESTS)
   # Include headers
   include_directories(${PROJECT_SOURCE_DIR}/test) # MANTELLA tests
 
+  set(MANTELLA_TEST_PARALLEL
+#    test/helper/testCereal.cpp
+  )
+
+  if(NOT MPI_C_FOUND OR NOT CEREAL_FOUND)
+    set(MANTELLA_TEST_PARALLEL "")
+    message(STATUS "NOTICE: Found MPI and Cereal (adding cluster computation test cases).")
+  else()
+    message(STATUS "NOTICE: Could not find MPI and/or Cereal (excluding cluser computation test cases).")
+  endif()
+
   # Compile the optimisation library tests
   # All paths must start with "test/"
   add_executable(libraryTestCases
@@ -251,6 +262,7 @@ if(BUILD_TESTS)
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
+    ${MANTELLA_TEST_PARALLEL}
   )
 
   # Link against third party libraries
