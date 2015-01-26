@@ -209,7 +209,6 @@ namespace mant {
       std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> cachedIsSatisfyingSoftConstraints_;
       std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> cachedIsSatisfyingConstraints_;
 
-
  #if defined(MANTELLA_USE_PARALLEL)
       // Gives cereal access to otherwise protected constructors, functions and fields.
       friend class cereal::access;
