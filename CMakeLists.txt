@@ -14,7 +14,7 @@
 #   Daniel Kiechle - Developer / Software tester
 #   Oskar Pusz - Developer
 #------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
 # Mantella, C++ optimisation framework
 project(Mantella CXX C)
