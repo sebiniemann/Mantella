@@ -13,21 +13,42 @@ Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) 
 Getting started
 ---------------
 ### Prerequirements (newer version should also work)
-- CMake 2.8.8
-- GCC 4.8.1 (or any other C++11 feature complete compiler)
-- Armadillo C++ 4.600.0
-
-#### Only needed for parallel algorithms
-- MPI 3.0.0
-- Cereal 1.1.0
-
-#### Only needed for tests
-- Catch (development version)
+- GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler
+- CMake 2.8.8 (http://www.cmake.org/download/)
+- Armadillo C++ 4.600.0 (http://arma.sourceforge.net/download.html)
 
 ### Installation
 ```bash
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
 sudo cp -R Mantella/include/* /usr/local/include/
+```
+
+### Usage
+```cpp
+#include <iostream>
+#include <mantella>
+
+int main() {
+  // 1. Setup the optimisation problem.
+  unsigned int numberOfDimensions = 4;
+  std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(numberOfDimensions));
+
+  // 2. Run the solver.
+  mant::HookeJeevesAlgorithm<mant::EuclideanDistance> optimisationAlgorithm(optimisationProblem);
+  optimisationAlgorithm.optimise();
+
+  // 3. Get your results!
+  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;
+  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << std::endl;
+  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << std::endl;
+  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
+  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
+  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << std::endl;
+  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
+  std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
+    
+  return 1;
+}
 ```
 
 Future plans
