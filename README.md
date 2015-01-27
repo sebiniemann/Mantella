@@ -14,7 +14,6 @@ Getting started
 ---------------
 ### Prerequirements (newer version should also work)
 - GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler
-- CMake 2.8.8 (http://www.cmake.org/download/)
 - Armadillo C++ 4.600.0 (http://arma.sourceforge.net/download.html)
 
 ### Installation
