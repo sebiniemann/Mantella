@@ -140,6 +140,12 @@ if(BUILD_TESTS)
     test/helper/testSetTheory.cpp
     test/helper/testString.cpp
     test/helper/testUnorderedContainer.cpp
+    test/testDistanceFunction.cpp
+    test/distanceFunction/testEuclideanDistance.cpp
+    test/distanceFunction/testHammingDistance.cpp
+    test/distanceFunction/testInfinityNorm.cpp
+    test/distanceFunction/testManhattanDistance.cpp
+    test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBuecheRastriginFunction.cpp
@@ -260,6 +266,9 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark2015/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2015/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2015/testWeierstrassFunction.cpp
+    test/testOptimisationAlgorithm.cpp
+    test/testPropertiesAnalysis.cpp
+    test/testPropertiesEstimation.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
