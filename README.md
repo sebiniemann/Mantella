@@ -6,7 +6,7 @@ Version 0.9.0
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master)
 
 
-Mantella is a modern, header-only C++ optimisation library. It provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive, parallalised solvers, focusing on recent multi-cores architectures and high performance clusters. 
+Mantella is a modern, header-only C++ optimisation library, supporting Linux, Windows and Mac OS X. It provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive, parallalised solvers, focusing on recent multi-cores architectures and high performance clusters. 
 
 Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for highly efficient linear algebra calculations.
 
@@ -16,9 +16,9 @@ Getting started
 - GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler
 - Armadillo C++ 4.600.0 (http://arma.sourceforge.net/download.html)
 
-Installing Armadillo C++ 4.600.0
+Installing Armadillo C++ 4.600.0 on Ubuntu (visit http://arma.sourceforge.net/download.html to find installation instructions for other operating systems):
 ```bash
-sudo apt-get install libopenblas-dev liblapack-dev
+sudo apt-get install libblas-dev liblapack-dev
 wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.600.3.tar.gz
 tar -xzf armadillo-4.600.3.tar.gz
 cd armadillo-4.600.3
@@ -28,6 +28,7 @@ sudo make install
 ``` 
 
 ### Installation
+Mantella is a header-only library, downloading the latest stable version and placing the header files into a directory standardly searched by your compiler finishes the installation.
 ```bash
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
 sudo cp -R Mantella/include/* /usr/local/include/
@@ -65,6 +66,9 @@ int main() {
 Compile and build an executable from your source.
 ```bash
 c++ -std=c++11 hellp.cpp -larmadillo -o hello
+# In case armadillo and mantella were not installed/placed into 
+# standardly included/searched system direcories, use the following
+c++ -std=c++11 hellp.cpp -L/path/to/armaillo/lib -larmadillo -I/path/to/armadillo/include -I/path/to/mantella/include -o hello
 ```
 
 Run your application.
