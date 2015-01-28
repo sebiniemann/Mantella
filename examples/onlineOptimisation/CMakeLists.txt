@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
 # Experiemental online optimisation applications
 project(ExperiementalOnlineOptimisation CXX)

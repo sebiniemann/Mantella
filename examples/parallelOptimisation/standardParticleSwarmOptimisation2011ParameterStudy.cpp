@@ -74,7 +74,7 @@ int main (const int argc, const char* argv[]) {
 
              std::string filepath = "./parameterisation_prob" + mant::to_string(optimisationProblem) + "_dim" + std::to_string(numberOfDimensions)+ "_pop" + std::to_string(populationSize) + "_local" + std::to_string(maximalLocalAttractionParameter) + "_global" + std::to_string(maximalGlobalAttractionParameter) + "_acc" + std::to_string(maximalAccelerationParameter) + "_neigh" + std::to_string(neighbourhoodParameter) + ".mat";
 
-             if(!mant::file_exists(filepath)) {
+             if(!mant::fileExists(filepath)) {
               arma::Mat<double> results(iterations, 6 + numberOfDimensions);
               for(std::size_t n = 0; n < iterations; ++n) {
                 optimisationAlgorithm.optimise();

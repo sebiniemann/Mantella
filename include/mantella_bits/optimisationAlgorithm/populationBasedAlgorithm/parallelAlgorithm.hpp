@@ -36,6 +36,7 @@ namespace mant {
     unsigned int serialisedOptimisationProblemSize;
     char* serialisedOptimisationProblemBuffer;
 
+    // TODO Will this also work in binary form?
     if (rank_ == 0) {
       std::ostringstream output; {
         cereal::JSONOutputArchive archive(output);

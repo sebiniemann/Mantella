@@ -14,7 +14,7 @@
 #   Daniel Kiechle - Developer / Software tester
 #   Oskar Pusz - Developer
 #------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
 # Mantella, C++ optimisation framework
 project(Mantella CXX C)
@@ -116,17 +116,30 @@ if(BUILD_TESTS)
   # Include headers
   include_directories(${PROJECT_SOURCE_DIR}/test) # MANTELLA tests
 
+  set(MANTELLA_TEST_PARALLEL
+#    test/helper/testCereal.cpp
+  )
+
+  if(NOT MPI_C_FOUND OR NOT CEREAL_FOUND)
+    set(MANTELLA_TEST_PARALLEL "")
+    message(STATUS "NOTICE: Found MPI and Cereal (adding cluster computation test cases).")
+  else()
+    message(STATUS "NOTICE: Could not find MPI and/or Cereal (excluding cluser computation test cases).")
+  endif()
+
   # Compile the optimisation library tests
   # All paths must start with "test/"
-  add_executable(libraryTestCases
+  add_executable(libraryTest
     test/main.cpp
     test/helper/testRng.cpp
+    test/helper/testFilesystem.cpp
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
     test/helper/testSetTheory.cpp
     test/helper/testString.cpp
+    test/helper/testUnorderedContainer.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBuecheRastriginFunction.cpp
@@ -250,10 +263,11 @@ if(BUILD_TESTS)
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
+    ${MANTELLA_TEST_PARALLEL}
   )
 
   # Link against third party libraries
-  target_link_libraries(libraryTestCases ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
   if(RUN_TESTS)
     message(STATUS "NOTICE: Automatically runs all tests after building them.")
@@ -287,7 +301,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/helper/random.hpp
   include/mantella_bits/helper/setTheory.hpp
   include/mantella_bits/helper/string.hpp
-  include/mantella_bits/helper/unordered_container.hpp
+  include/mantella_bits/helper/unorderedContainer.hpp
   include/mantella_bits/distanceFunction.hpp
   include/mantella_bits/distanceFunction/euclideanDistance.hpp
   include/mantella_bits/distanceFunction/hammingDistance.hpp

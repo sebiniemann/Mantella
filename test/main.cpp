@@ -20,7 +20,7 @@ int main(const int argc, const char* argv[]) {
 
     testDirectory = argv[1];
 
-    if (!mant::file_exists(testDirectory)) {
+    if (!mant::fileExists(testDirectory)) {
       throw std::invalid_argument("The speficied test directory (" + testDirectory + ") does not exists.");
     }
 
