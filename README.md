@@ -1,7 +1,7 @@
-![Mantella](http://sebastianniemann.github.io/Mantella/assets/image/logo.png)
+![Mantella](http://sebastianniemann.github.io/Mantella/assets/image/mantella.png)
 
-Mantella 0.9.0
-====================================
+Version 0.9.0
+=============
 
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master)
 
