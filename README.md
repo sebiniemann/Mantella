@@ -16,6 +16,16 @@ Getting started
 - GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler
 - Armadillo C++ 4.600.0 (http://arma.sourceforge.net/download.html)
 
+```bash
+sudo apt-get install libopenblas-dev liblapack-dev
+wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.600.3.tar.gz
+tar -xzf armadillo-4.600.3.tar.gz
+cd armadillo-4.600.3
+cmake .
+make
+sudo make install
+``` 
+
 ### Installation
 ```bash
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
@@ -23,6 +33,7 @@ sudo cp -R Mantella/include/* /usr/local/include/
 ```
 
 ### Usage
+Create a new source file called **hello.cpp** on your computer.
 ```cpp
 #include <iostream>
 #include <mantella>
@@ -48,6 +59,30 @@ int main() {
     
   return 1;
 }
+```
+
+Compile and build an executable from your source.
+```bash
+c++ -std=c++11 hellp.cpp -larmadillo -o hello
+```
+
+Run your application.
+```bash
+./hello
+```
+Output (may vary due to random initialied problems and algorithms):
+```
+isFinished: 1
+isTerminated: 0
+numberOfIterations: 263
+numberOfEvaluations: 263
+numberOfDistinctEvaluations: 195
+bestSoftConstraintsValue: 0
+bestObjectiveValueDelta: -4.81944e-09
+bestParameter:    2.7208
+  -0.8456
+   2.2640
+   2.3872
 ```
 
 Future plans
