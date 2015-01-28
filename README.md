@@ -85,25 +85,6 @@ bestParameter:    2.7208
    2.3872
 ```
 
-Future plans
-------------
-- **Planned for 1.0.0**
-  - ~~Adding robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
-  - ~~Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)~~ **(done)**
-  - Adding the Role-based imitation algorithm, developed by Emre Çakar
-  - ~~Set installation of parallised implementations to be optional~~ **(done)**
-  - ~~Adding a grid search algorithm~~ **(done)**
-  - Adding a multi resolution grid search algorithm
-- **Planned for 1.1.0**
-  - ~~Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen~~ **(done)**
-  - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
-  - Adding the Nelder–Mead method, developed by John Nelder and Roger Mead
-  - Adding parallel (MPI-based) sample-based algorithms
-- **Planned for 1.2.0**
-  - Adding a seperate website (besides this README on Github), including a user documentation and a *getting started*
-- **Backlog**
-  - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
-
 Implemented features
 --------------------
 ### Optimisation Algorithms
@@ -158,6 +139,25 @@ Full support of the [black-box optimisation benchmark (from 2009–2015)](http:/
   - Gallagher's Gaussian 21-hi peaks function
   - Katsuura function
   - Lunacek bi-Rastrigin function
+
+Roadmap
+-------
+- **Planned for 1.0.0**
+  - ~~Adding robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
+  - ~~Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)~~ **(done)**
+  - Adding the Role-based imitation algorithm, developed by Emre Çakar
+  - ~~Set installation of parallised implementations to be optional~~ **(done)**
+  - ~~Adding a grid search algorithm~~ **(done)**
+  - Adding a multi resolution grid search algorithm
+- **Planned for 1.1.0**
+  - ~~Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen~~ **(done)**
+  - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
+  - Adding the Nelder–Mead method, developed by John Nelder and Roger Mead
+  - Adding parallel (MPI-based) sample-based algorithms
+- **Planned for 1.2.0**
+  - Adding a seperate website (besides this README on Github), including a user documentation and a *getting started*
+- **Backlog**
+  - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
 
 License
 -------
