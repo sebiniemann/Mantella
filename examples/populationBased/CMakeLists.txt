@@ -33,3 +33,4 @@ add_executable(MCS
 
 # Link against third party libraries
 target_link_libraries(CMAES ${ARMADILLO_LIBRARIES}) # Armadillo C++
+target_link_libraries(MCS ${ARMADILLO_LIBRARIES}) # Armadillo C++

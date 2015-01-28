@@ -1,10 +1,4 @@
-// C++ Standard Library
-#include <cstdlib>
-#include <memory>
-#include <iostream>
-#include <limits>
-
-// Mantella
+#include <armadillo>
 #include <mantella>
 
 int main(int argc, char** argv) {
@@ -14,7 +8,7 @@ int main(int argc, char** argv) {
   
   unsigned int popSize = 3;
   arma::Mat<double> boundaries(numberOfDimensions,2);
-  arma::Col<arma::uword> initialPointIndex = arma::Col<arma::uword>(numberOfDimensions,2);
+  arma::Col<arma::uword> initialPointIndex(numberOfDimensions,2);
   
   mant::MultilevelCoordinateSearch<mant::EuclideanDistance> optAlgo(optProblem,popSize,boundaries,initialPointIndex);
 }

@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
     std::shared_ptr<mant::bbob2013::BlackBoxOptimisationBenchmark2013> optProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
     optProblem->setTranslation(arma::zeros<arma::Col<double>>(optProblem->getNumberOfDimensions()));
-
+    
     //std::shared_ptr<mant::OptimisationProblem> optProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
 
     mant::CovarianceMatrixAdaptationEvolutionStrategy<mant::EuclideanDistance> optAlgo(optProblem, lambda);
