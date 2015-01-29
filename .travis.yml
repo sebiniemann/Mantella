@@ -58,7 +58,7 @@ install:
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
   - cmake .
-  - make
+  - make-j 4
   - sudo make install
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
@@ -99,13 +99,13 @@ addons:
       name: "SebastianNiemann/Mantella"
     notification_email: niemann@sra.uni-hannover.de
     build_command_prepend: "cov-configure --compiler gcc-4.8 --template; cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON ."
-    build_command: "make"
+    build_command: "make -j 4"
     branch_pattern: coverity_scan
 
 script:
   - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON .; fi
-  - make
+  - make -j 4
   - sudo make install
   
 after_success:
