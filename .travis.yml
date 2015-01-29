@@ -1,5 +1,8 @@
 language: cpp
 
+os:
+  - linux
+
 compiler:
   - clang
   - gcc
@@ -8,6 +11,15 @@ env:
   global:
    # Encrypted COVERITY_SCAN_TOKEN
    - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
+
+matrix:
+    # Covertiy scan should only run once (and only with gcc).
+    exclude:
+        - compiler: clang
+          env: COVERITY_SCAN=1
+    # It also might fail, because of the limited accepted requests per week.
+    allow_failures:
+        - env: COVERITY_SCAN=1
 
 before_install:
   # GCC / Clang (Needed until Travis CI updates to Ubuntu 14.04+)
@@ -91,14 +103,14 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  - if [ "$CXX" == "g++" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON .; fi
   - make
   - sudo make install
   
 after_success:
-  - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
-  - if [ "$CXX" == "g++" ]; then lcov --directory . --capture --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --list coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then coveralls-lcov coverage.info; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then lcov --directory . --capture --output-file coverage.info; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then lcov --list coverage.info; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then coveralls-lcov coverage.info; fi
