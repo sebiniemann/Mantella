@@ -9,17 +9,20 @@ compiler:
 
 env:
   global:
-   # Encrypted COVERITY_SCAN_TOKEN
-   - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
+    # Encrypted COVERITY_SCAN_TOKEN
+    - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
+  matrix:
+    - env: COVERITY_SCAN=1
+
 
 matrix:
-    # Covertiy scan should only run once (and only with gcc).
-    exclude:
-        - compiler: gcc
-          env: COVERITY_SCAN=1
-    # It also might fail, because of the limited accepted requests per week.
-    allow_failures:
-        - env: COVERITY_SCAN=1
+  # Covertiy scan should only run once (and only with gcc).
+  exclude:
+    - compiler: gcc
+      env: COVERITY_SCAN=1
+  # It also might fail, because of the limited accepted requests per week.
+  allow_failures:
+    - env: COVERITY_SCAN=1
 
 before_install:
   # GCC / Clang (Needed until Travis CI updates to Ubuntu 14.04+)
