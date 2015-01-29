@@ -58,7 +58,7 @@ install:
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
   - cmake .
-  - make-j 4
+  - make -j 4
   - sudo make install
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
