@@ -15,7 +15,7 @@ env:
 matrix:
     # Covertiy scan should only run once (and only with gcc).
     exclude:
-        - compiler: clang
+        - compiler: gcc
           env: COVERITY_SCAN=1
     # It also might fail, because of the limited accepted requests per week.
     allow_failures:
@@ -81,17 +81,17 @@ install:
   - rm -Rf cereal cereal.tar.gz
 
   # LCOV (Needed until Travis CI updates to Ubuntu 14.04+)
-  - if [ "$CXX" == "g++" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
-  - if [ "$CXX" == "g++" ]; then mkdir lcov; fi
-  - if [ "$CXX" == "g++" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
-  - if [ "$CXX" == "g++" ]; then cd lcov; fi
-  - if [ "$CXX" == "g++" ]; then sudo make install; fi
-  - if [ "$CXX" == "g++" ]; then cd ..; fi
-  - if [ "$CXX" == "g++" ]; then rm -Rf lcov lcov.tar.gz; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then wget -O lcov.tar.gz http://downloads.sourceforge.net/ltp/lcov-1.11.tar.gz; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then mkdir lcov; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then cd lcov; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then sudo make install; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then cd ..; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then rm -Rf lcov lcov.tar.gz; fi
 #  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi
 
   # LCOV to Coveralls conversion + upload
-  - if [ "$CXX" == "g++" ]; then gem install coveralls-lcov; fi
+  - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then gem install coveralls-lcov; fi
   
 addons:
   coverity_scan:
@@ -104,7 +104,7 @@ addons:
 
 script:
   - if [ "$CXX" == "g++" ] && [ -z "${COVERITY_SCAN}" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON .; fi
+  - if [ "$CXX" == "clang++" ] && [ -z "${COVERITY_SCAN}" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON .; fi
   - make -j 4
   - sudo make install
   
