@@ -33,7 +33,7 @@ namespace mant {
       virtual arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance) const = 0;
+          const ParameterType& maximalDistance) const noexcept = 0;
   };
 
   //
