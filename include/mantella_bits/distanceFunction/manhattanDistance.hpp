@@ -48,7 +48,7 @@ namespace mant {
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
       std::true_type) const noexcept {
-    return arma::normalise(2.0 * arma::randu(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
+    return arma::normalise(2.0 * arma::randu<arma::Col<double>>(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
   }
 
   template <typename ParameterType>
