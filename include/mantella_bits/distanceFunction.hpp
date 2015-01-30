@@ -91,8 +91,8 @@ namespace mant {
    const arma::Col<ParameterType>& neighbour = getRandomNeighbourImplementation(parameter, minimalDistance, maximalDistance);
 
    assert(parameter.n_elem == neighbour.n_elem);
-   assert(getDistanceImplementation(parameter, neighbour) >= minimalDistance);
-   assert(getDistanceImplementation(parameter, neighbour) <= maximalDistance);
+   assert(getDistance(parameter, neighbour) >= minimalDistance);
+   assert(getDistance(parameter, neighbour) <= maximalDistance);
 
     return neighbour;
   }
