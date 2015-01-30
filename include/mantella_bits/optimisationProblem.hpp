@@ -380,9 +380,7 @@ namespace mant {
       // The result was not found, compute it.
       const double& result = getSoftConstraintsValueImplementation(parameter);
 
-      if(result < 0) {
-        throw std::logic_error("The soft constraint value (" + std::to_string(result) + ") must be greater than or equal to 0.");
-      }
+      assert(result >= 0);
 
       cachedSoftConstraintsValues_.insert({parameter, result});
       return result;
