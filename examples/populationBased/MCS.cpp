@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
   try {
-    unsigned int numberOfDimensions = 10;
+    unsigned int numberOfDimensions = 2;
 
     std::shared_ptr<mant::bbob2013::BlackBoxOptimisationBenchmark2013> optProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
     optProblem->setTranslation(arma::zeros<arma::Col<double>>(optProblem->getNumberOfDimensions()));
@@ -26,8 +26,8 @@ int main(int argc, char** argv) {
     results.at(5) = optAlgo.isTerminated();
     results(arma::span(6, 6 + numberOfDimensions - 1)) = optAlgo.getBestParameter();
 
-    std::cout << results.at(2) << std::endl;
-    std::cout << results.at(3) << std::endl;
+    std::cout << "number of iterations: " << results.at(2) << std::endl;
+    std::cout << "bestvalue - acceptablevalue: " << results.at(3) << std::endl;
 
     //    std::cout << results << std::endl;
     //
