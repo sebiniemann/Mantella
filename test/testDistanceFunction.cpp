@@ -32,7 +32,7 @@ unsigned int MockDistanceFunction<unsigned int>::getDistanceImplementation(
   return arma::accu(parameter);
 }
 
-template <ParameterType>
+template <typename ParameterType>
 arma::Col<ParameterType> MockDistanceFunction<ParameterType>::getRandomNeighbourImplementation(
     const arma::Col<ParameterType>& parameter,
     const ParameterType& minimalDistance,
