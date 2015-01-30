@@ -33,6 +33,7 @@
 // C++ Standard Library
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
