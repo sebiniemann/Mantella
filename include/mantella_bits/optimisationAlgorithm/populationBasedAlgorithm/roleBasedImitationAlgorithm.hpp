@@ -33,9 +33,9 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
     : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize),
-      maximalNeighbourhoodConvergence_(this->populationSize_),
+      stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)),
       neighbourhoodSize_(0),
-      stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)) {
+      maximalNeighbourhoodConvergence_(this->populationSize_) {
 
   }
 
