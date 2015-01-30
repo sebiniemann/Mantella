@@ -3,7 +3,7 @@
 #include <helper.hpp>
 
 // C++ Standard Library
-#include <random>
+#include <cmath>
 
 // Mantella
 #include <mantella>
@@ -32,20 +32,14 @@ unsigned int MockDistanceFunction<unsigned int>::getDistanceImplementation(
   return arma::accu(parameter);
 }
 
-template <>
-arma::Col<double> MockDistanceFunction<double>::getRandomNeighbourImplementation(
-    const arma::Col<double>& parameter,
-    const double& minimalDistance,
-    const double& maximalDistance) const noexcept {
-  return arma::ones<arma::Col<double>>(parameter.n_elem);
-}
-
-template <>
-arma::Col<unsigned int> MockDistanceFunction<unsigned int>::getRandomNeighbourImplementation(
-    const arma::Col<unsigned int>& parameter,
-    const unsigned int& minimalDistance,
-    const unsigned int& maximalDistance) const noexcept {
-  return arma::ones<arma::Col<unsigned int>>(parameter.n_elem);
+template <ParameterType>
+arma::Col<ParameterType> MockDistanceFunction<ParameterType>::getRandomNeighbourImplementation(
+    const arma::Col<ParameterType>& parameter,
+    const ParameterType& minimalDistance,
+    const ParameterType& maximalDistance) const noexcept {
+  arma::Col<ParameterType> result = parameter;
+  result.at(0) += std::floor(maximalDistance + minimalDistance / 2.0);
+  return result;
 }
 
 TEST_CASE("DistanceFunction<double>", "") {
