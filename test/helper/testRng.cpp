@@ -15,7 +15,7 @@ TEST_CASE("Rng", "") {
       values.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
     }
 
-    arma::Col<unsigned int> histogram = arma::histc(values, arma::linspace<arma::Col<double>>(0, 1, 11));
+    arma::Col<unsigned int> histogram = arma::hist(values, arma::linspace<arma::Col<double>>(0.05, 0.95, 10));
     CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / values.n_elem);
   }
 
@@ -59,14 +59,14 @@ TEST_CASE("Rng", "") {
         values.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
       }
 
-      arma::Col<unsigned int> histogram = arma::histc(values, arma::linspace<arma::Col<double>>(0, 1, 11));
+      arma::Col<unsigned int> histogram = arma::hist(values, arma::linspace<arma::Col<double>>(0.05, 0.95, 10));
       CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / values.n_elem);
     }
 
     SECTION("Works with Armadillo.") {
       arma::Col<double>::fixed<1000> values = arma::randu<arma::Col<double>>(1000);
 
-      arma::Col<unsigned int> histogram = arma::histc(values, arma::linspace<arma::Col<double>>(0, 1, 11));
+      arma::Col<unsigned int> histogram = arma::hist(values, arma::linspace<arma::Col<double>>(0.05, 0.95, 10));
       CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / values.n_elem);
     }
   }
