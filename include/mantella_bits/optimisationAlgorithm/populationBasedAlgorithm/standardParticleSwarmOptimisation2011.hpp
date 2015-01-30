@@ -56,7 +56,7 @@ namespace mant {
 
       inline void initialiseSwarm() noexcept;
 
-      inline arma::Mat<unsigned int> getNeighbourhoodTopology() noexcept;
+      inline arma::Mat<unsigned int> getRandomNeighbourhoodTopology() noexcept;
 
       inline double getAcceleration() noexcept;
       inline arma::Col<double> getVelocity() noexcept;
@@ -84,7 +84,7 @@ namespace mant {
 
     while(!this->isFinished() && !this->isTerminated()) {
       if (randomizeTopology_) {
-        topology_ = getNeighbourhoodTopology();
+        topology_ = getRandomNeighbourhoodTopology();
         randomizeTopology_ = false;
       }
 
@@ -185,7 +185,7 @@ namespace mant {
     return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
-  inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011::getNeighbourhoodTopology() noexcept {
+  inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011::getRandomNeighbourhoodTopology() noexcept {
     arma::Mat<unsigned int> topology = (arma::randu<arma::Mat<double>>(this->populationSize_, this->populationSize_) <= neighbourhoodProbability_);
     topology.diag() += 1.0;
 

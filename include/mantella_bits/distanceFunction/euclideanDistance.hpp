@@ -7,7 +7,7 @@ namespace mant {
       inline double getDistanceImplementation(
           const arma::Col<double>& parameter) const noexcept override;
 
-      inline arma::Col<double> getNeighbourImplementation(
+      inline arma::Col<double> getRandomNeighbourImplementation(
           const arma::Col<double>& parameter,
           const double& minimalDistance,
           const double& maximalDistance) const noexcept override;
@@ -22,7 +22,7 @@ namespace mant {
     return arma::norm(parameter);
   }
 
-  inline arma::Col<double> EuclideanDistance::getNeighbourImplementation(
+  inline arma::Col<double> EuclideanDistance::getRandomNeighbourImplementation(
       const arma::Col<double>& parameter,
       const double& minimalDistance,
       const double& maximalDistance) const noexcept {

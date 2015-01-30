@@ -4,7 +4,7 @@ namespace mant {
       inline unsigned int getDistanceImplementation(
           const arma::Col<unsigned int>& parameter) const noexcept override;
 
-      inline arma::Col<unsigned int> getNeighbourImplementation(
+      inline arma::Col<unsigned int> getRandomNeighbourImplementation(
           const arma::Col<unsigned int>& parameter,
           const unsigned int& minimalDistance,
           const unsigned int& maximalDistance) const noexcept override;
@@ -19,7 +19,7 @@ namespace mant {
     return arma::accu(parameter != 0);
   }
 
-  inline arma::Col<unsigned int> HammingDistance::getNeighbourImplementation(
+  inline arma::Col<unsigned int> HammingDistance::getRandomNeighbourImplementation(
       const arma::Col<unsigned int>& parameter,
       const unsigned int& minimalDistance,
       const unsigned int& maximalDistance) const noexcept {

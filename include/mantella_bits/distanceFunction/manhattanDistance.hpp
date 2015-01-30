@@ -5,18 +5,18 @@ namespace mant {
       ParameterType getDistanceImplementation(
           const arma::Col<ParameterType>& parameter) const noexcept override;
 
-      arma::Col<ParameterType> getNeighbourImplementation(
+      arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance) const noexcept override;
 
-      arma::Col<ParameterType> getNeighbourImplementation(
+      arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance,
           std::true_type) const noexcept;
 
-      arma::Col<ParameterType> getNeighbourImplementation(
+      arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance,
@@ -35,15 +35,15 @@ namespace mant {
 
   // TODO Minus / int / unsigned int
   template <typename ParameterType>
-  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
+  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance) const noexcept {
-    return getNeighbourImplementation(parameter, minimalDistance, maximalDistance, std::is_floating_point<ParameterType>());
+    return getRandomNeighbourImplementation(parameter, minimalDistance, maximalDistance, std::is_floating_point<ParameterType>());
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
+  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
@@ -52,7 +52,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
+  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,

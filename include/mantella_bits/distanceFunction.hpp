@@ -11,7 +11,7 @@ namespace mant {
           const arma::Col<ParameterType>& firstParameter,
           const arma::Col<ParameterType>& secondParameter) const;
 
-      arma::Col<ParameterType> getNeighbour(
+      arma::Col<ParameterType> getRandomNeighbour(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance) const;
@@ -30,7 +30,7 @@ namespace mant {
           const arma::Col<ParameterType>& secondParameter,
           std::false_type) const noexcept;
 
-      virtual arma::Col<ParameterType> getNeighbourImplementation(
+      virtual arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance) const = 0;
@@ -74,7 +74,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> DistanceFunction<ParameterType>::getNeighbour(
+  arma::Col<ParameterType> DistanceFunction<ParameterType>::getRandomNeighbour(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance) const {
