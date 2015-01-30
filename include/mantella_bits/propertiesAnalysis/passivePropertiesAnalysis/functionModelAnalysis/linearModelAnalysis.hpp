@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class LinearModelAnalysis : public FunctionModelAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class LinearModelAnalysis : public FunctionModelAnalysis<ParameterType> {
     public:
       explicit LinearModelAnalysis() noexcept;
 
@@ -26,19 +26,19 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  LinearModelAnalysis<ParameterType, DistanceFunction>::LinearModelAnalysis() noexcept
+  template <typename ParameterType>
+  LinearModelAnalysis<ParameterType>::LinearModelAnalysis() noexcept
     : isLinear_(false) {
     setLinearModelMedianErrorThreshold(0.25);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> LinearModelAnalysis<ParameterType, DistanceFunction>::getLinearModelEstimator() const noexcept {
+  template <typename ParameterType>
+  arma::Col<double> LinearModelAnalysis<ParameterType>::getLinearModelEstimator() const noexcept {
     return linearModelEstimator_;
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void LinearModelAnalysis<ParameterType, DistanceFunction>::setLinearModelMedianErrorThreshold(
+  template <typename ParameterType>
+  void LinearModelAnalysis<ParameterType>::setLinearModelMedianErrorThreshold(
       const double& linearModelMedianErrorThreshold) {
     if(linearModelMedianErrorThreshold < 0 || linearModelMedianErrorThreshold > 1) {
       throw std::logic_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMedianErrorThreshold) + ") must be within 0 and 1.");
@@ -47,8 +47,8 @@ namespace mant {
     linearModelMedianErrorThreshold_ = linearModelMedianErrorThreshold;
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  bool LinearModelAnalysis<ParameterType, DistanceFunction>::isLinear() const noexcept {
+  template <typename ParameterType>
+  bool LinearModelAnalysis<ParameterType>::isLinear() const noexcept {
     return isLinear_;
   }
 }

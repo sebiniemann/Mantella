@@ -47,7 +47,7 @@ int main() {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(numberOfDimensions));
 
   // 2. Run the solver.
-  mant::HookeJeevesAlgorithm<mant::EuclideanDistance> optimisationAlgorithm(optimisationProblem);
+  mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
   optimisationAlgorithm.optimise();
 
   // 3. Get your results!

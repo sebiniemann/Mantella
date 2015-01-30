@@ -1,40 +1,37 @@
 namespace mant {
-  template<class DistanceFunction>
-  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedAlgorithm<double, DistanceFunction> {
+  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedAlgorithm<double> {
     public:
       //TODO: which input parameters should be added to the constructor?
-      explicit CovarianceMatrixAdaptationEvolutionStrategy(
+      inline explicit CovarianceMatrixAdaptationEvolutionStrategy(
         const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
       CovarianceMatrixAdaptationEvolutionStrategy(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
       CovarianceMatrixAdaptationEvolutionStrategy& operator=(const CovarianceMatrixAdaptationEvolutionStrategy&) = delete;
 
-      void setStepsize(
+      inline void setStepsize(
           const double& sigma) noexcept;
 
-      std::string to_string() const noexcept override;
+      inline std::string to_string() const noexcept override;
 
     protected:
       double stepSize_;
 
-      void optimiseImplementation() override;
+      inline void optimiseImplementation() override;
   };
 
   //
   // Implementation
   //
 
-  template<class DistanceFunction>
-  CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::CovarianceMatrixAdaptationEvolutionStrategy(
+  inline CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-  : PopulationBasedAlgorithm<double, DistanceFunction>(optimisationProblem, populationSize) {
+  : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize) {
     setStepsize(0.3);
   }
 
-  template<class DistanceFunction>
-  void CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::optimiseImplementation() {
+  inline void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
     unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
     arma::Col<double> objectiveValues = arma::randu<arma::Col<double>>(numberOfDimensions);
 
@@ -124,14 +121,12 @@ namespace mant {
     //LOOP END
   }
 
-  template<class DistanceFunction>
-  void CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::setStepsize(
+  inline void CovarianceMatrixAdaptationEvolutionStrategy::setStepsize(
       const double& sigma) noexcept {
     stepSize_ = sigma;
   }
 
-  template<class DistanceFunction>
-  std::string CovarianceMatrixAdaptationEvolutionStrategy<DistanceFunction>::to_string() const noexcept {
+  inline std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const noexcept {
     return "CovarianceMatrixAdaptationEvolutionStrategy";
   }
 }

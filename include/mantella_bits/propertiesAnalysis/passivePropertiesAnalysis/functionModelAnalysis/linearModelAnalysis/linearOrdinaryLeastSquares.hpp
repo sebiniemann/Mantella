@@ -1,7 +1,7 @@
 namespace mant {
-  class LinearOrdinaryLeastSquares : public LinearModelAnalysis<double, EuclideanDistance> {
+  class LinearOrdinaryLeastSquares : public LinearModelAnalysis<double> {
     public:
-      using LinearModelAnalysis<double, EuclideanDistance>::LinearModelAnalysis;
+      using LinearModelAnalysis<double>::LinearModelAnalysis;
 
     protected:
       inline void analyseImplementation(

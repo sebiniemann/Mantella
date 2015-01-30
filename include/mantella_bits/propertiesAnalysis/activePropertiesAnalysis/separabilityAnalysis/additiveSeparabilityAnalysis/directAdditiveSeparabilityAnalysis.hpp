@@ -1,7 +1,7 @@
 namespace mant {
-  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis<double, EuclideanDistance> {
+  class DirectAdditiveSeparabilityAnalysis : public AdditiveSeparabilityAnalysis<double> {
     public:
-      using AdditiveSeparabilityAnalysis<double, EuclideanDistance>::AdditiveSeparabilityAnalysis;
+      using AdditiveSeparabilityAnalysis<double>::AdditiveSeparabilityAnalysis;
 
     protected:
       inline void analyseImplementation(

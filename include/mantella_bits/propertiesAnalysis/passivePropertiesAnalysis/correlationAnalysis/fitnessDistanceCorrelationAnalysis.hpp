@@ -1,5 +1,5 @@
 namespace mant {
-  class FitnessDistanceCorrelationAnalysis : public CorrelationAnalysis<double, EuclideanDistance> {
+  class FitnessDistanceCorrelationAnalysis : public CorrelationAnalysis<double> {
     public:
       using CorrelationAnalysis::CorrelationAnalysis;
 

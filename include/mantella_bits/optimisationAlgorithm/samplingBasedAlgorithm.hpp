@@ -1,7 +1,7 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class SamplingBasedAlgorithm : public OptimisationAlgorithm<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class SamplingBasedAlgorithm : public OptimisationAlgorithm<ParameterType> {
     public:
-      using OptimisationAlgorithm<ParameterType, DistanceFunction>::OptimisationAlgorithm;
+      using OptimisationAlgorithm<ParameterType>::OptimisationAlgorithm;
   };
 }

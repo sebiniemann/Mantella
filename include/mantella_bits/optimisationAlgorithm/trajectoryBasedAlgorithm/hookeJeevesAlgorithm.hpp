@@ -1,43 +1,40 @@
 // TODO Add restarting
 namespace mant {
-  template <class DistanceFunction>
-  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double, DistanceFunction> {
+  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double> {
     public:
-      explicit HookeJeevesAlgorithm(
+      inline explicit HookeJeevesAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
       HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
       HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
 
-      void setInitialStepSize(
+      inline void setInitialStepSize(
           const arma::Col<double>& initialStepSize);
 
-      void setStepSizeDecrease(
+      inline void setStepSizeDecrease(
           const arma::Col<double>& stepSizeDecrease);
 
-      std::string to_string() const noexcept override;
+      inline std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> initialStepSize_;
       arma::Col<double> stepSizeDecrease_;
 
-      void optimiseImplementation() noexcept override;
+      inline void optimiseImplementation() noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template <class DistanceFunction>
-  HookeJeevesAlgorithm<DistanceFunction>::HookeJeevesAlgorithm(
+  inline HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : TrajectoryBasedAlgorithm<double, DistanceFunction>(optimisationProblem) {
+    : TrajectoryBasedAlgorithm<double>(optimisationProblem) {
     setInitialStepSize(this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
     setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()) * 0.5);
   }
 
-  template <class DistanceFunction>
-  void HookeJeevesAlgorithm<DistanceFunction>::optimiseImplementation() noexcept {
+  inline void HookeJeevesAlgorithm::optimiseImplementation() noexcept {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
@@ -105,8 +102,7 @@ namespace mant {
     }
   }
 
-  template <class DistanceFunction>
-  void HookeJeevesAlgorithm<DistanceFunction>::setInitialStepSize(
+  inline void HookeJeevesAlgorithm::setInitialStepSize(
       const arma::Col<double>& initialStepSize) {
     if(initialStepSize.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
       throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
@@ -117,8 +113,7 @@ namespace mant {
     initialStepSize_ = initialStepSize;
   }
 
-  template <class DistanceFunction>
-  void HookeJeevesAlgorithm<DistanceFunction>::setStepSizeDecrease(
+  inline void HookeJeevesAlgorithm::setStepSizeDecrease(
       const arma::Col<double>& stepSizeDecrease) {
     if(stepSizeDecrease.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
       throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
@@ -129,8 +124,7 @@ namespace mant {
     stepSizeDecrease_ = stepSizeDecrease;
   }
 
-  template <class DistanceFunction>
-  std::string HookeJeevesAlgorithm<DistanceFunction>::to_string() const noexcept {
+  inline std::string HookeJeevesAlgorithm::to_string() const noexcept {
     return "HookeJeevesAlgorithm";
   }
 }

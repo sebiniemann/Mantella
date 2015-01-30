@@ -1,48 +1,45 @@
 namespace mant {
-  template<class DistanceFunction>
-  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double, DistanceFunction> {
+  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double> {
     public:
-      explicit RoleBasedImitationAlgorithm(
+      inline explicit RoleBasedImitationAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
       RoleBasedImitationAlgorithm(const RoleBasedImitationAlgorithm&) = delete;
       RoleBasedImitationAlgorithm& operator=(const RoleBasedImitationAlgorithm&) = delete;
 
-      void setNeighbourhoodSize(
+      inline void setNeighbourhoodSize(
           const unsigned int& neighbourhoodSize) noexcept;
-      void setStepSize(
+      inline void setStepSize(
           const double& stepSize) noexcept;
-      void setMaximalNeighbourhoodConvergence(
+      inline void setMaximalNeighbourhoodConvergence(
           const arma::Col<double>& maximalNeighbourhoodConvergence) noexcept;
 
-      std::string to_string() const noexcept override;
+      inline std::string to_string() const noexcept override;
 
     protected:
       arma::Col<double> stepSize_;
       unsigned int neighbourhoodSize_;
       arma::Col<double> maximalNeighbourhoodConvergence_;
 
-      void optimiseImplementation() noexcept override;
+      inline void optimiseImplementation() noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template<class DistanceFunction>
-  RoleBasedImitationAlgorithm<DistanceFunction>::RoleBasedImitationAlgorithm(
+  inline RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm<double, EuclideanDistance>(optimisationProblem, populationSize),
+    : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize),
       maximalNeighbourhoodConvergence_(this->populationSize_),
       neighbourhoodSize_(0),
       stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)) {
 
   }
 
-  template<class DistanceFunction>
-  void RoleBasedImitationAlgorithm<DistanceFunction>::optimiseImplementation() noexcept {
+  inline void RoleBasedImitationAlgorithm::optimiseImplementation() noexcept {
     arma::Mat<double> agents = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
     agents.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     agents.each_col() += this->optimisationProblem_->getLowerBounds();
@@ -138,20 +135,17 @@ namespace mant {
     }
   }
 
-  template<class DistanceFunction>
-  void RoleBasedImitationAlgorithm<DistanceFunction>::setNeighbourhoodSize(
+  inline void RoleBasedImitationAlgorithm::setNeighbourhoodSize(
       const unsigned int& neighbourhoodSize) noexcept {
     neighbourhoodSize_ = neighbourhoodSize;
   }
 
-  template<class DistanceFunction>
-  void RoleBasedImitationAlgorithm<DistanceFunction>::setMaximalNeighbourhoodConvergence(
+  inline void RoleBasedImitationAlgorithm::setMaximalNeighbourhoodConvergence(
       const arma::Col<double>& maximalNeighbourhoodConvergence) noexcept {
     maximalNeighbourhoodConvergence_ = maximalNeighbourhoodConvergence;
   }
 
-  template<class DistanceFunction>
-  std::string RoleBasedImitationAlgorithm<DistanceFunction>::to_string() const noexcept {
+  inline std::string RoleBasedImitationAlgorithm::to_string() const noexcept {
     return "RoleBasedImitationAlgorithm";
   }
 }

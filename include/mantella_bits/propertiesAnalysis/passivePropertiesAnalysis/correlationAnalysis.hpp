@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-    class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+    class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType> {
     public:
       explicit CorrelationAnalysis() noexcept;
 
@@ -17,14 +17,14 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  CorrelationAnalysis<ParameterType, DistanceFunction>::CorrelationAnalysis() noexcept
+  template <typename ParameterType>
+  CorrelationAnalysis<ParameterType>::CorrelationAnalysis() noexcept
     : correlationCoefficient_(0.0) {
 
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  double CorrelationAnalysis<ParameterType, DistanceFunction>::getCorrelationCoefficient() const noexcept {
+  template <typename ParameterType>
+  double CorrelationAnalysis<ParameterType>::getCorrelationCoefficient() const noexcept {
     return correlationCoefficient_;
   }
 }

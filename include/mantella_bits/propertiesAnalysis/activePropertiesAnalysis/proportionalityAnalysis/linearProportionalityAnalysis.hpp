@@ -1,7 +1,7 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class LinearProportionalityAnalysis : public ProportionalityAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class LinearProportionalityAnalysis : public ProportionalityAnalysis<ParameterType> {
     public:
-      using ProportionalityAnalysis<ParameterType, DistanceFunction>::ProportionalityAnalysis;
+      using ProportionalityAnalysis<ParameterType>::ProportionalityAnalysis;
   };
 }

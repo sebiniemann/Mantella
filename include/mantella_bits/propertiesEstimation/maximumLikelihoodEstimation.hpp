@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class MaximumLikelihoodEstimation : public PropertiesEstimation<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class MaximumLikelihoodEstimation : public PropertiesEstimation<ParameterType> {
     public:
-      using PropertiesEstimation<ParameterType, DistanceFunction>::PropertiesEstimation;
+      using PropertiesEstimation<ParameterType>::PropertiesEstimation;
 
     protected:
       void estimateImplementation(
@@ -13,8 +13,8 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  void MaximumLikelihoodEstimation<ParameterType, DistanceFunction>::estimateImplementation(
+  template <typename ParameterType>
+  void MaximumLikelihoodEstimation<ParameterType>::estimateImplementation(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
 
     this->correlationAnalysis_->analyse(optimisationProblem);

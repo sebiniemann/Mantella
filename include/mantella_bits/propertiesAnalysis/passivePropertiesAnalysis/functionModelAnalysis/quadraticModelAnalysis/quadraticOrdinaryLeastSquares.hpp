@@ -1,7 +1,7 @@
 namespace mant {
-  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double, EuclideanDistance> {
+  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double> {
     public:
-      using QuadraticModelAnalysis<double, EuclideanDistance>::QuadraticModelAnalysis;
+      using QuadraticModelAnalysis<double>::QuadraticModelAnalysis;
 
     protected:
       inline void analyseImplementation(

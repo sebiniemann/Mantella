@@ -1,13 +1,13 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
+  template <typename ParameterType>
   class PropertiesEstimation {
     public:
       explicit PropertiesEstimation(
-          const std::shared_ptr<CorrelationAnalysis<ParameterType, DistanceFunction>> correlationAnalysis,
-          const std::shared_ptr<LipschitzContinuityAnalysis<ParameterType, DistanceFunction>> lipschitzContinuityAnalysis,
-          const std::shared_ptr<LinearModelAnalysis<ParameterType, DistanceFunction>> linearModelAnalysis,
-          const std::shared_ptr<QuadraticModelAnalysis<ParameterType, DistanceFunction>> quadraticModelAnalysis,
-          const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis) noexcept;
+          const std::shared_ptr<CorrelationAnalysis<ParameterType>> correlationAnalysis,
+          const std::shared_ptr<LipschitzContinuityAnalysis<ParameterType>> lipschitzContinuityAnalysis,
+          const std::shared_ptr<LinearModelAnalysis<ParameterType>> linearModelAnalysis,
+          const std::shared_ptr<QuadraticModelAnalysis<ParameterType>> quadraticModelAnalysis,
+          const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType>> additiveSeparabilityAnalysis) noexcept;
 
       // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
       PropertiesEstimation(const PropertiesEstimation&) = delete;
@@ -43,11 +43,11 @@ namespace mant {
           const std::size_t& propertiesSetIndex) const;
 
     protected:
-      std::shared_ptr<CorrelationAnalysis<ParameterType, DistanceFunction>> correlationAnalysis_;
-      std::shared_ptr<LipschitzContinuityAnalysis<ParameterType, DistanceFunction>> lipschitzContinuityAnalysis_;
-      std::shared_ptr<LinearModelAnalysis<ParameterType, DistanceFunction>> linearModelAnalysis_;
-      std::shared_ptr<QuadraticModelAnalysis<ParameterType, DistanceFunction>> quadraticModelAnalysis_;
-      std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis_;
+      std::shared_ptr<CorrelationAnalysis<ParameterType>> correlationAnalysis_;
+      std::shared_ptr<LipschitzContinuityAnalysis<ParameterType>> lipschitzContinuityAnalysis_;
+      std::shared_ptr<LinearModelAnalysis<ParameterType>> linearModelAnalysis_;
+      std::shared_ptr<QuadraticModelAnalysis<ParameterType>> quadraticModelAnalysis_;
+      std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType>> additiveSeparabilityAnalysis_;
 
       std::size_t numberOfPropertySets_;
 
@@ -77,13 +77,13 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  PropertiesEstimation<ParameterType, DistanceFunction>::PropertiesEstimation(
-      const std::shared_ptr<CorrelationAnalysis<ParameterType, DistanceFunction>> correlationAnalysis,
-      const std::shared_ptr<LipschitzContinuityAnalysis<ParameterType, DistanceFunction>> lipschitzContinuityAnalysis,
-      const std::shared_ptr<LinearModelAnalysis<ParameterType, DistanceFunction>> linearModelAnalysis,
-      const std::shared_ptr<QuadraticModelAnalysis<ParameterType, DistanceFunction>> quadraticModelAnalysis,
-      const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>> additiveSeparabilityAnalysis) noexcept
+  template <typename ParameterType>
+  PropertiesEstimation<ParameterType>::PropertiesEstimation(
+      const std::shared_ptr<CorrelationAnalysis<ParameterType>> correlationAnalysis,
+      const std::shared_ptr<LipschitzContinuityAnalysis<ParameterType>> lipschitzContinuityAnalysis,
+      const std::shared_ptr<LinearModelAnalysis<ParameterType>> linearModelAnalysis,
+      const std::shared_ptr<QuadraticModelAnalysis<ParameterType>> quadraticModelAnalysis,
+      const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType>> additiveSeparabilityAnalysis) noexcept
     : correlationAnalysis_(correlationAnalysis),
       lipschitzContinuityAnalysis_(lipschitzContinuityAnalysis),
       linearModelAnalysis_(linearModelAnalysis),
@@ -95,55 +95,55 @@ namespace mant {
 
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void PropertiesEstimation<ParameterType, DistanceFunction>::estimate(
+  template <typename ParameterType>
+  void PropertiesEstimation<ParameterType>::estimate(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
     return estimateImplementation(optimisationProblem);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  std::size_t PropertiesEstimation<ParameterType, DistanceFunction>::getNumberOfPropertySets() const noexcept {
+  template <typename ParameterType>
+  std::size_t PropertiesEstimation<ParameterType>::getNumberOfPropertySets() const noexcept {
     return numberOfPropertySets_;
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  double PropertiesEstimation<ParameterType, DistanceFunction>::getCorrelationCoefficient(
+  template <typename ParameterType>
+  double PropertiesEstimation<ParameterType>::getCorrelationCoefficient(
       const std::size_t& propertiesSetIndex) const {
     return correlationCoefficients_.at(propertiesSetIndex);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  bool PropertiesEstimation<ParameterType, DistanceFunction>::isLinear(
+  template <typename ParameterType>
+  bool PropertiesEstimation<ParameterType>::isLinear(
       const std::size_t& propertiesSetIndex) const {
     return isLinear_.at(propertiesSetIndex);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> PropertiesEstimation<ParameterType, DistanceFunction>::getLinearModelEstimator(
+  template <typename ParameterType>
+  arma::Col<double> PropertiesEstimation<ParameterType>::getLinearModelEstimator(
       const std::size_t& propertiesSetIndex) const {
     return linearModelEstimators_.at(propertiesSetIndex);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  bool PropertiesEstimation<ParameterType, DistanceFunction>::isQuadratic(
+  template <typename ParameterType>
+  bool PropertiesEstimation<ParameterType>::isQuadratic(
       const std::size_t& propertiesSetIndex) const {
     return isQuadratic_.at(propertiesSetIndex);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> PropertiesEstimation<ParameterType, DistanceFunction>::getQuadraticModelEstimator(
+  template <typename ParameterType>
+  arma::Col<double> PropertiesEstimation<ParameterType>::getQuadraticModelEstimator(
       const std::size_t& propertiesSetIndex) const {
     return quadraticModelEstimators_.at(propertiesSetIndex);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  double PropertiesEstimation<ParameterType, DistanceFunction>::getLipschitzConstant(
+  template <typename ParameterType>
+  double PropertiesEstimation<ParameterType>::getLipschitzConstant(
       const std::size_t& propertiesSetIndex) const {
     return lipschitzConstants_.at(propertiesSetIndex);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  bool PropertiesEstimation<ParameterType, DistanceFunction>::isSeparable(
+  template <typename ParameterType>
+  bool PropertiesEstimation<ParameterType>::isSeparable(
       const std::size_t& propertiesSetIndex) const {
     return isSeparable_.at(propertiesSetIndex);
   }

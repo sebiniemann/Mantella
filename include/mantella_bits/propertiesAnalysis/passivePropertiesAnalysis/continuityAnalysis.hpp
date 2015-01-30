@@ -1,7 +1,7 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class ContinuityAnalysis : public PassivePropertiesAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class ContinuityAnalysis : public PassivePropertiesAnalysis<ParameterType> {
     public:
-      using PassivePropertiesAnalysis<ParameterType, DistanceFunction>::PassivePropertiesAnalysis;
+      using PassivePropertiesAnalysis<ParameterType>::PassivePropertiesAnalysis;
   };
 }

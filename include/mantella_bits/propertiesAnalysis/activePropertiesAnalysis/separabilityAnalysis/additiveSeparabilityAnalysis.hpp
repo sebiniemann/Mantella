@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType> {
     public:
       explicit AdditiveSeparabilityAnalysis() noexcept;
 
@@ -26,13 +26,13 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::AdditiveSeparabilityAnalysis() noexcept {
+  template <typename ParameterType>
+  AdditiveSeparabilityAnalysis<ParameterType>::AdditiveSeparabilityAnalysis() noexcept {
     setAdditiveSeparabilityMedianErrorThreshold(0.75);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void AdditiveSeparabilityAnalysis<ParameterType, DistanceFunction>::setAdditiveSeparabilityMedianErrorThreshold(
+  template <typename ParameterType>
+  void AdditiveSeparabilityAnalysis<ParameterType>::setAdditiveSeparabilityMedianErrorThreshold(
       const double& additiveSeparabilityMedianErrorThreshold) {
     if(additiveSeparabilityMedianErrorThreshold < 0 || additiveSeparabilityMedianErrorThreshold > 1) {
       throw std::logic_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMedianErrorThreshold) + ") must be within 0 and 1.");

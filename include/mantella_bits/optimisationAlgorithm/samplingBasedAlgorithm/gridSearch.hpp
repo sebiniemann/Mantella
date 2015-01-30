@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class GridSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class GridSearch : public SamplingBasedAlgorithm<ParameterType> {
     public:
       explicit GridSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
@@ -23,15 +23,15 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  GridSearch<ParameterType, DistanceFunction>::GridSearch(
+  template <typename ParameterType>
+  GridSearch<ParameterType>::GridSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
+    : SamplingBasedAlgorithm<ParameterType>(optimisationProblem) {
     setSamplingFactors(arma::ones(this->optimisationProblem_->getNumberOfDimensions()) / static_cast<double>(this->optimisationProblem_->getNumberOfDimensions()));
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void GridSearch<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
+  template <typename ParameterType>
+  void GridSearch<ParameterType>::optimiseImplementation() noexcept {
     const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
     const arma::Col<unsigned int>& numberOfSamples_ = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(this->maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->optimisationProblem_->getNumberOfDimensions())));
 
@@ -74,8 +74,8 @@ namespace mant {
     }
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void GridSearch<ParameterType, DistanceFunction>::setSamplingFactors(
+  template <typename ParameterType>
+  void GridSearch<ParameterType>::setSamplingFactors(
       const arma::Col<double>& samplingFactors) {
     if(samplingFactors.n_elem != this->optimisationProblem_->getNumberOfDimensions()) {
       throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
@@ -86,8 +86,8 @@ namespace mant {
     samplingFactors_ = samplingFactors;
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  std::string GridSearch<ParameterType, DistanceFunction>::to_string() const noexcept {
+  template <typename ParameterType>
+  std::string GridSearch<ParameterType>::to_string() const noexcept {
     return "GridSearch";
   }
 }

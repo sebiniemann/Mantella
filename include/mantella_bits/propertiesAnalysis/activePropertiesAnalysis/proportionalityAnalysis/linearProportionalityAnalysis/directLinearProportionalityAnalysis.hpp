@@ -1,7 +1,7 @@
 namespace mant {
-  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis<double, EuclideanDistance> {
+  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis<double> {
     public:
-      using LinearProportionalityAnalysis<double, EuclideanDistance>::LinearProportionalityAnalysis;
+      using LinearProportionalityAnalysis<double>::LinearProportionalityAnalysis;
 
     protected:
       void analyseImplementation(

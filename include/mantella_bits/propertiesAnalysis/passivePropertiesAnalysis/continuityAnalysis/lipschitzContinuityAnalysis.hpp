@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType> {
     public:
       explicit LipschitzContinuityAnalysis() noexcept;
 
@@ -17,14 +17,14 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::LipschitzContinuityAnalysis() noexcept
+  template <typename ParameterType>
+  LipschitzContinuityAnalysis<ParameterType>::LipschitzContinuityAnalysis() noexcept
     : lipschitzConstant_(0.0) {
 
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  double LipschitzContinuityAnalysis<ParameterType, DistanceFunction>::getLipschitzConstant() const noexcept {
+  template <typename ParameterType>
+  double LipschitzContinuityAnalysis<ParameterType>::getLipschitzConstant() const noexcept {
     return lipschitzConstant_;
   }
 }

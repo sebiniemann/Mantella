@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class RandomSearch : public SamplingBasedAlgorithm<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class RandomSearch : public SamplingBasedAlgorithm<ParameterType> {
     public:
       explicit RandomSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
@@ -18,15 +18,15 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  RandomSearch<ParameterType, DistanceFunction>::RandomSearch(
+  template <typename ParameterType>
+  RandomSearch<ParameterType>::RandomSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm<ParameterType, DistanceFunction>(optimisationProblem) {
+    : SamplingBasedAlgorithm<ParameterType>(optimisationProblem) {
 
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void RandomSearch<ParameterType, DistanceFunction>::optimiseImplementation() noexcept {
+  template <typename ParameterType>
+  void RandomSearch<ParameterType>::optimiseImplementation() noexcept {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
@@ -42,8 +42,8 @@ namespace mant {
     };
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  std::string RandomSearch<ParameterType, DistanceFunction>::to_string() const noexcept {
+  template <typename ParameterType>
+  std::string RandomSearch<ParameterType>::to_string() const noexcept {
     return "RandomSearch";
   }
 }

@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class PopulationBasedAlgorithm : public OptimisationAlgorithm<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class PopulationBasedAlgorithm : public OptimisationAlgorithm<ParameterType> {
     public:
       explicit PopulationBasedAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
@@ -18,11 +18,11 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  PopulationBasedAlgorithm<ParameterType, DistanceFunction>::PopulationBasedAlgorithm(
+  template <typename ParameterType>
+  PopulationBasedAlgorithm<ParameterType>::PopulationBasedAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : OptimisationAlgorithm<ParameterType, DistanceFunction>(optimisationProblem),
+    : OptimisationAlgorithm<ParameterType>(optimisationProblem),
       populationSize_(populationSize) {
     // TODO fix for discrete problems
     arma::Mat<ParameterType> population = arma::randu<arma::Mat<ParameterType>>(this->optimisationProblem_->getNumberOfDimensions(), populationSize_);
@@ -32,8 +32,8 @@ namespace mant {
     setInitialPopulation(population);
   }
 
-  template <typename ParameterType, class DistanceFunction>
-  void PopulationBasedAlgorithm<ParameterType, DistanceFunction>::setInitialPopulation(
+  template <typename ParameterType>
+  void PopulationBasedAlgorithm<ParameterType>::setInitialPopulation(
       const arma::Mat<ParameterType>& initialPopulation) {
     if(initialPopulation.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
       throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");

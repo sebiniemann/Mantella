@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType, class DistanceFunction>
-  class FunctionModelAnalysis : public PassivePropertiesAnalysis<ParameterType, DistanceFunction> {
+  template <typename ParameterType>
+  class FunctionModelAnalysis : public PassivePropertiesAnalysis<ParameterType> {
     public:
-      using PassivePropertiesAnalysis<ParameterType, DistanceFunction>::PassivePropertiesAnalysis;
+      using PassivePropertiesAnalysis<ParameterType>::PassivePropertiesAnalysis;
 
       arma::Col<double> getResiduals() const noexcept;
 
@@ -14,8 +14,8 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class DistanceFunction>
-  arma::Col<double> FunctionModelAnalysis<ParameterType, DistanceFunction>::getResiduals() const noexcept {
+  template <typename ParameterType>
+  arma::Col<double> FunctionModelAnalysis<ParameterType>::getResiduals() const noexcept {
     return residuals_;
   }
 }
