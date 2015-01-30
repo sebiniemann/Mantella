@@ -54,7 +54,11 @@ namespace mant {
       throw std::logic_error("The number of dimensions of the first parameter (" + std::to_string(firstParameter.n_elem) + ") must match the number of dimensions of the second parameter (" + std::to_string(secondParameter.n_elem) + ").");
     }
 
-    return getDistance(firstParameter, secondParameter, std::is_floating_point<ParameterType>());
+    const double& distance = getDistance(firstParameter, secondParameter, std::is_floating_point<ParameterType>());
+
+    assert(distance >= 0);
+
+    return distance;
   }
 
   template <typename ParameterType>
@@ -84,6 +88,12 @@ namespace mant {
       throw std::logic_error("The maximal distance (" + std::to_string(maximalDistance) + ") must be greater than or equal to the minimal distance (" + std::to_string(minimalDistance) + ").");
     }
 
-    return getNeighbourImplementation(parameter, minimalDistance, maximalDistance);
+   const arma::Col<ParameterType>& neighbour = getRandomNeighbourImplementation(parameter, minimalDistance, maximalDistance);
+
+   assert(parameter.n_elem == neighbour.n_elem);
+   assert(getDistanceImplementation(parameter, neighbour) >= minimalDistance);
+   assert(getDistanceImplementation(parameter, neighbour) <= maximalDistance);
+
+    return neighbour;
   }
 }
