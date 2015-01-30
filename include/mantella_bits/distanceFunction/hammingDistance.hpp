@@ -7,7 +7,7 @@ namespace mant {
       inline arma::Col<unsigned int> getRandomNeighbourImplementation(
           const arma::Col<unsigned int>& parameter,
           const unsigned int& minimalDistance,
-          const unsigned int& maximalDistance) const noexcept override;
+          const unsigned int& maximalDistance) const override;
   };
 
   //
@@ -22,7 +22,9 @@ namespace mant {
   inline arma::Col<unsigned int> HammingDistance::getRandomNeighbourImplementation(
       const arma::Col<unsigned int>& parameter,
       const unsigned int& minimalDistance,
-      const unsigned int& maximalDistance) const noexcept {
+      const unsigned int& maximalDistance) const {
+    assert(minimalDistance <= maximalDistance);
+
     if(minimalDistance > std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) {
           throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be lower than or equal to the absolute maximal distance (" + std::to_string(std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) + ").");
     }
