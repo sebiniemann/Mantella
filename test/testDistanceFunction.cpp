@@ -48,14 +48,17 @@ TEST_CASE("DistanceFunction<double>", "") {
   SECTION("Testing getRandomNeighbour(..)") {
     SECTION("Selected random neighbour remains unchanged, considering an unrestricted minimal distance.") {
       compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<double>>(1), 0.0, 2.3), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<double>>(1), 0.0, 2.3));
+      compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<double>>(5), 0.0, 11.32), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<double>>(5), 0.0, 11.32));
     }
 
     SECTION("Selected random neighbour remains unchanged, considering an unrestricted minimal distance.") {
       compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<double>>(1), 0.5, 2.3), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<double>>(1), 0.5, 2.3));
+      compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<double>>(5), 5.4, 9.31), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<double>>(5), 5.4, 9.31));
     }
 
     SECTION("Selected random neighbour remains unchanged, considering an equal minimal and maximal distance.") {
       compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<double>>(1), 3.0, 3.0), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<double>>(1), 1.0, 1.0));
+      compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<double>>(5), 6.14, 6.14), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<double>>(5), 6.14, 6.14));
     }
 
     SECTION("Throws an exception, if minimal distance < 0.") {
@@ -88,14 +91,17 @@ TEST_CASE("DistanceFunction<unsigned int>", "") {
   SECTION("Testing getRandomNeighbour(..)") {
     SECTION("Selected random neighbour remains unchanged, considering an unrestricted minimal distance.") {
       compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<unsigned int>>(1), 0, 2), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<unsigned int>>(1), 0, 2));
+      compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<unsigned int>>(5), 0, 12), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<unsigned int>>(5), 0, 12));
     }
 
     SECTION("Selected random neighbour remains unchanged, considering an unrestricted minimal distance.") {
       compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<unsigned int>>(1), 1, 2), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<unsigned int>>(1), 1, 2));
+      compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<unsigned int>>(5), 11, 22), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<unsigned int>>(5), 11, 22));
     }
 
     SECTION("Selected random neighbour remains unchanged, considering an equal minimal and maximal distance.") {
       compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<unsigned int>>(1), 3, 3), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<unsigned int>>(1), 3, 3));
+      compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<unsigned int>>(5), 71, 71), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<unsigned int>>(5), 71, 71));
     }
 
     SECTION("Throws an exception, if minimal distance > maximal distance.") {
