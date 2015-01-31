@@ -1,15 +1,15 @@
 # Project specific
-bin
-/build
-/lib
+bin/
+build/
+lib/
 
 # Qt Designer
 *.autosave
-*.user.*
+*.user*
 *.cbp
 
 # Netbeans
-/nbproject
+nbproject/
 
 # CMake
 CMakeCache.txt
