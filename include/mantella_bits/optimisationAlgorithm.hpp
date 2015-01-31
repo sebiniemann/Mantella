@@ -165,6 +165,6 @@ namespace mant {
   template <typename ParameterType>
   void OptimisationAlgorithm<ParameterType>::setDefaultDistanceFunction(
       std::false_type) noexcept {
-    setDistanceFunction(new ManhattanDistance<ParameterType>);
+    setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new ManhattanDistance<ParameterType>));
   }
 }

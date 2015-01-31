@@ -60,12 +60,12 @@ namespace mant {
   template <typename ParameterType>
   void PropertiesAnalysis<ParameterType>::setDefaultDistanceFunction(
       std::true_type) noexcept {
-    setDistanceFunction(new EuclideanDistance);
+    setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new EuclideanDistance));
   }
 
   template <typename ParameterType>
   void PropertiesAnalysis<ParameterType>::setDefaultDistanceFunction(
       std::false_type) noexcept {
-    setDistanceFunction(new ManhattanDistance<ParameterType>);
+    setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new ManhattanDistance<ParameterType>));
   }
 }
