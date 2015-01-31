@@ -32,13 +32,23 @@ unsigned int MockDistanceFunction<unsigned int>::getDistanceImplementation(
   return arma::accu(parameter);
 }
 
-template <typename ParameterType>
-arma::Col<ParameterType> MockDistanceFunction<ParameterType>::getRandomNeighbourImplementation(
-    const arma::Col<ParameterType>& parameter,
-    const ParameterType& minimalDistance,
-    const ParameterType& maximalDistance) const noexcept {
-  arma::Col<ParameterType> result = parameter;
-  result.at(0) += std::floor(maximalDistance + minimalDistance / 2.0);
+template <>
+arma::Col<double> MockDistanceFunction<double>::getRandomNeighbourImplementation(
+    const arma::Col<double>& parameter,
+    const double& minimalDistance,
+    const double& maximalDistance) const noexcept {
+  arma::Col<double> result = parameter;
+  result.at(0) += (maximalDistance + minimalDistance) / 2.0;
+  return result;
+}
+
+template <>
+arma::Col<unsigned int> MockDistanceFunction<unsigned int>::getRandomNeighbourImplementation(
+    const arma::Col<unsigned int>& parameter,
+    const unsigned int& minimalDistance,
+    const unsigned int& maximalDistance) const noexcept {
+  arma::Col<unsigned int> result = parameter;
+  result.at(0) += std::floor((maximalDistance + minimalDistance) / 2.0);
   return result;
 }
 
@@ -57,7 +67,7 @@ TEST_CASE("DistanceFunction<double>", "") {
     }
 
     SECTION("Selected random neighbour remains unchanged, considering an equal minimal and maximal distance.") {
-      compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<double>>(1), 3.0, 3.0), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<double>>(1), 1.0, 1.0));
+      compare(distanceFunction.getRandomNeighbour(arma::zeros<arma::Col<double>>(1), 3.0, 3.0), distanceFunction.getRandomNeighbourImplementation(arma::zeros<arma::Col<double>>(1), 3.0, 3.0));
       compare(distanceFunction.getRandomNeighbour(arma::ones<arma::Col<double>>(5), 6.14, 6.14), distanceFunction.getRandomNeighbourImplementation(arma::ones<arma::Col<double>>(5), 6.14, 6.14));
     }
 
