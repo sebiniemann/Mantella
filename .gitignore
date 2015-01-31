@@ -7,15 +7,47 @@ bin
 *.autosave
 *.user.*
 *.cbp
-cmake_install.cmake
-CMakeCache.txt
-CMakeLists.txt.user
-Makefile
-CMakeFiles
 
 # Netbeans
 /nbproject
 
+# CMake
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# C++
+## Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+## Precompiled Headers
+*.gch
+*.pch
+
+## Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+## Fortran module files
+*.mod
+
+## Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+## Executables
+*.exe
+*.out
+*.app
+
 # Jekyll
-.sass-cache
-_site
+_site/
+.sass-cache/
