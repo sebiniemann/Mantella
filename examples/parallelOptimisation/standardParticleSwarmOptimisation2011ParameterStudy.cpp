@@ -57,7 +57,7 @@ int main (const int argc, const char* argv[]) {
 
     unsigned int iterations = 30;
 
-    mant::StandardParticleSwarmOptimisation2011<mant::EuclideanDistance> optimisationAlgorithm(optimisationProblem, populationSize);
+    mant::StandardParticleSwarmOptimisation2011 optimisationAlgorithm(optimisationProblem, populationSize);
     optimisationAlgorithm.setMaximalNumberOfIterations(10000);
 
     for(auto maximalLocalAttractionParameter : maximalLocalAttractionParameters) {

@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
 
     //std::shared_ptr<mant::OptimisationProblem> optProblem(new mant::bbob2013::SphereFunction(numberOfDimensions));
     
-    mant::CovarianceMatrixAdaptationEvolutionStrategy<mant::EuclideanDistance> optAlgo(optProblem, lambda);
+    mant::CovarianceMatrixAdaptationEvolutionStrategy optAlgo(optProblem, lambda);
 
     optAlgo.optimise();
 

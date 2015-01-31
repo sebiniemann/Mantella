@@ -8,16 +8,16 @@ int main(int argc, char* argv[]) {
   try {
     mant::Rng::setRandomSeed();
 
-    mant::MaximumLikelihoodEstimation<double, mant::EuclideanDistance> propertiesEstimation(
-      std::shared_ptr<mant::CorrelationAnalysis<double, mant::EuclideanDistance>>(new mant::FitnessDistanceCorrelationAnalysis()),
-      std::shared_ptr<mant::LipschitzContinuityAnalysis<double, mant::EuclideanDistance>>(new mant::DirectLipschitzContinuityAnalysis<double, mant::EuclideanDistance>()),
-      std::shared_ptr<mant::LinearModelAnalysis<double, mant::EuclideanDistance>>(new mant::LinearOrdinaryLeastSquares()),
-      std::shared_ptr<mant::QuadraticModelAnalysis<double, mant::EuclideanDistance>>(new mant::QuadraticOrdinaryLeastSquares()),
-      std::shared_ptr<mant::AdditiveSeparabilityAnalysis<double, mant::EuclideanDistance>>(new mant::DirectAdditiveSeparabilityAnalysis()));
+    mant::MaximumLikelihoodEstimation<double> propertiesEstimation(
+      std::shared_ptr<mant::CorrelationAnalysis<double>>(new mant::FitnessDistanceCorrelationAnalysis()),
+      std::shared_ptr<mant::LipschitzContinuityAnalysis<double>>(new mant::DirectLipschitzContinuityAnalysis<double>()),
+      std::shared_ptr<mant::LinearModelAnalysis<double>>(new mant::LinearOrdinaryLeastSquares()),
+      std::shared_ptr<mant::QuadraticModelAnalysis<double>>(new mant::QuadraticOrdinaryLeastSquares()),
+      std::shared_ptr<mant::AdditiveSeparabilityAnalysis<double>>(new mant::DirectAdditiveSeparabilityAnalysis()));
 
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(4));
 
-    mant::HookeJeevesAlgorithm<mant::EuclideanDistance> optimisationAlgorithm(optimisationProblem);
+    mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
 
     std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;

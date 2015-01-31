@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2013::SphereFunction(2));
     optimisationProblem->setAcceptableObjectiveValue(-std::numeric_limits<double>::infinity());
 
-    mant::MultiResolutionGridSearch<double, mant::EuclideanDistance> multiResolutionGridSearch(optimisationProblem);
+    mant::MultiResolutionGridSearch<double> multiResolutionGridSearch(optimisationProblem);
     multiResolutionGridSearch.setMaximalNumberOfIterations(100000);
     multiResolutionGridSearch.optimise();
 
