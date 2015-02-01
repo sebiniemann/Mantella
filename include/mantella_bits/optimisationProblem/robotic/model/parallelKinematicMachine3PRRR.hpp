@@ -1,6 +1,6 @@
 namespace mant {
   namespace robotic {
-    class ParallelKinematicMachine3PRRR : public ParallelKinematicMachine {
+    class ParallelKinematicMachine3PRRR {
       public:
         inline explicit ParallelKinematicMachine3PRRR() noexcept;
         inline explicit ParallelKinematicMachine3PRRR(
@@ -15,15 +15,15 @@ namespace mant {
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
         inline double getPositionError(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
         arma::Mat<double>::fixed<2, 3> endEffectorJointsRelative_;
         arma::Mat<double>::fixed<2, 3> linkLengths_;

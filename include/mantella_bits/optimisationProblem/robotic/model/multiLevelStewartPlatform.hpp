@@ -1,6 +1,6 @@
 namespace mant {
   namespace robotic {
-    class MultiLevelStewartPlatform : public ParallelKinematicMachine {
+    class MultiLevelStewartPlatform {
       public:
         inline explicit MultiLevelStewartPlatform() noexcept;
 
@@ -13,15 +13,15 @@ namespace mant {
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
         inline double getPositionError(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept override;
+            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
       protected:
         const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;

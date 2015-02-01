@@ -1,6 +1,6 @@
 namespace mant {
   namespace robotic {
-    class ParallelKinematicMachine3PUPS : public ParallelKinematicMachine {
+    class ParallelKinematicMachine3PUPS {
       public:
         inline explicit ParallelKinematicMachine3PUPS() noexcept;
         inline explicit ParallelKinematicMachine3PUPS(
@@ -16,15 +16,15 @@ namespace mant {
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const override;
+            const arma::Mat<double>& redundantJointActuations) const;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const override;
+            const arma::Mat<double>& redundantJointActuations) const;
 
         inline double getPositionError(
             const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const override;
+            const arma::Mat<double>& redundantJointActuations) const;
 
       protected:
         arma::Mat<double>::fixed<3, 3> endEffectorJointsRelative_;
