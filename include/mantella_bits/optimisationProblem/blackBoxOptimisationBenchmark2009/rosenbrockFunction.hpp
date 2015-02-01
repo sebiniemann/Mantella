@@ -5,9 +5,6 @@ namespace mant {
         inline explicit RosenbrockFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        RosenbrockFunction(const RosenbrockFunction&) = delete;
-        RosenbrockFunction& operator=(const RosenbrockFunction&) = delete;
-
         inline void setTranslation(
             const arma::Col<double>& translation) override;
 

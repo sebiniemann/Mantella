@@ -19,10 +19,6 @@ namespace mant {
         // The number of dimensions
         const unsigned int& numberOfDimensions) noexcept;
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      OptimisationProblem(const OptimisationProblem&) = delete;
-      OptimisationProblem& operator=(const OptimisationProblem&) = delete;
-
       // Checks for each dimension whether the parameter is greater than or equal to the lower
       // bound.
       // Returns 0 for each dimension where the constraint is violated and 1 otherwise.

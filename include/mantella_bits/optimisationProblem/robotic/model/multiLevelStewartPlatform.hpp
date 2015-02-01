@@ -7,10 +7,6 @@ namespace mant {
         inline explicit MultiLevelStewartPlatform(
             const std::vector<ParallelKinematicMachine6PUPS>& platformLevels) noexcept;
 
-        // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-        MultiLevelStewartPlatform(const MultiLevelStewartPlatform&) = delete;
-        MultiLevelStewartPlatform& operator=(const MultiLevelStewartPlatform&) = delete;
-
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const noexcept;

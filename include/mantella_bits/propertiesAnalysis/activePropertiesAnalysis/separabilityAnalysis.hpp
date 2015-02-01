@@ -7,10 +7,6 @@ namespace mant {
 
       }
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      SeparabilityAnalysis(const SeparabilityAnalysis&) = delete;
-      SeparabilityAnalysis& operator=(const SeparabilityAnalysis&) = delete;
-
       void setMaximalNumberOfIterations(
           const unsigned int& maximalNumberOfIterations) noexcept;
 

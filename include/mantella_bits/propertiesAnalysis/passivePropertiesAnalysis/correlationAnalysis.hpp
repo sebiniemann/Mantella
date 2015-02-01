@@ -4,9 +4,6 @@ namespace mant {
     public:
       explicit CorrelationAnalysis() noexcept;
 
-      CorrelationAnalysis(const CorrelationAnalysis&) = delete;
-      CorrelationAnalysis& operator=(const CorrelationAnalysis&) = delete;
-
       double getCorrelationCoefficient() const noexcept;
 
     protected:

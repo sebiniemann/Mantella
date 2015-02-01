@@ -10,10 +10,6 @@ namespace mant {
             const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
             const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept;
 
-        // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-        ParallelKinematicMachine3PRPR(const ParallelKinematicMachine3PRPR&) = delete;
-        ParallelKinematicMachine3PRPR& operator=(const ParallelKinematicMachine3PRPR&) = delete;
-
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;

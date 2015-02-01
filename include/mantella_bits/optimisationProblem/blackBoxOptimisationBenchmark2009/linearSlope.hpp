@@ -5,9 +5,6 @@ namespace mant {
         inline explicit LinearSlope(
             const unsigned int& numberOfDimensions) noexcept;
 
-        LinearSlope(const LinearSlope&) = delete;
-        LinearSlope& operator=(const LinearSlope&) = delete;
-
         inline void setOne(
             const arma::Col<double>& one) override;
 

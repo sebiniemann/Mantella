@@ -5,9 +5,6 @@ namespace mant {
       explicit RandomSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      RandomSearch(const RandomSearch&) = delete;
-      RandomSearch& operator=(const RandomSearch&) = delete;
-
       std::string to_string() const noexcept override;
 
     protected:

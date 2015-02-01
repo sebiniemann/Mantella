@@ -4,9 +4,6 @@ namespace mant {
     public:
       explicit LipschitzContinuityAnalysis() noexcept;
 
-      LipschitzContinuityAnalysis(const LipschitzContinuityAnalysis&) = delete;
-      LipschitzContinuityAnalysis& operator=(const LipschitzContinuityAnalysis&) = delete;
-
       double getLipschitzConstant() const noexcept;
 
     protected:

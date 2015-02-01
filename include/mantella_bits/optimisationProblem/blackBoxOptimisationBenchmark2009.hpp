@@ -5,9 +5,6 @@ namespace mant {
         inline explicit BlackBoxOptimisationBenchmark2009(
             const unsigned int& numberOfDimensions) noexcept;
 
-        BlackBoxOptimisationBenchmark2009(const BlackBoxOptimisationBenchmark2009&) = delete;
-        BlackBoxOptimisationBenchmark2009& operator=(const BlackBoxOptimisationBenchmark2009&) = delete;
-
         inline virtual void setTranslation(
             const arma::Col<double>& translation);
         inline virtual void setOne(

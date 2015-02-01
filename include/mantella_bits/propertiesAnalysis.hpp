@@ -4,10 +4,6 @@ namespace mant {
     public:
       explicit PropertiesAnalysis() noexcept;
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      PropertiesAnalysis(const PropertiesAnalysis&) = delete;
-      PropertiesAnalysis& operator=(const PropertiesAnalysis&) = delete;
-
       void analyse(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 

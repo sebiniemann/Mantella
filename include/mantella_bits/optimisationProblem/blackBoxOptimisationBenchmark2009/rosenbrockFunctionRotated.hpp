@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        RosenbrockFunctionRotated(const RosenbrockFunctionRotated&) = delete;
-        RosenbrockFunctionRotated& operator=(const RosenbrockFunctionRotated&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

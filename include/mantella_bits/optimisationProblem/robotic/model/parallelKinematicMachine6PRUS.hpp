@@ -10,10 +10,6 @@ namespace mant {
             const arma::Mat<double>::fixed<3, 6>& redundantJointStarts,
             const arma::Mat<double>::fixed<3, 6>& redundantJointEnds) noexcept;
 
-        // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-        ParallelKinematicMachine6PRUS(const ParallelKinematicMachine6PRUS&) = delete;
-        ParallelKinematicMachine6PRUS& operator=(const ParallelKinematicMachine6PRUS&) = delete;
-
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const noexcept;

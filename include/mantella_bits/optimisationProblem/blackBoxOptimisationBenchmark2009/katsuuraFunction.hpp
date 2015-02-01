@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        KatsuuraFunction(const KatsuuraFunction&) = delete;
-        KatsuuraFunction& operator=(const KatsuuraFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

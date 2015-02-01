@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        LunacekBiRastriginFunction(const LunacekBiRastriginFunction&) = delete;
-        LunacekBiRastriginFunction& operator=(const LunacekBiRastriginFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

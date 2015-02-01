@@ -5,9 +5,6 @@ namespace mant {
         inline explicit GallaghersGaussian101mePeaksFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        GallaghersGaussian101mePeaksFunction(const GallaghersGaussian101mePeaksFunction&) = delete;
-        GallaghersGaussian101mePeaksFunction& operator=(const GallaghersGaussian101mePeaksFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

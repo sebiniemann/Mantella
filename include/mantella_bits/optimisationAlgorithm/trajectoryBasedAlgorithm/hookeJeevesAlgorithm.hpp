@@ -5,9 +5,6 @@ namespace mant {
       inline explicit HookeJeevesAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
 
-      HookeJeevesAlgorithm(const HookeJeevesAlgorithm&) = delete;
-      HookeJeevesAlgorithm& operator=(const HookeJeevesAlgorithm&) = delete;
-
       inline void setInitialStepSize(
           const arma::Col<double>& initialStepSize);
 

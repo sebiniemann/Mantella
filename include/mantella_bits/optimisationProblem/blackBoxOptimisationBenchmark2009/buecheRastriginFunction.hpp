@@ -5,9 +5,6 @@ namespace mant {
         inline explicit BuecheRastriginFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        BuecheRastriginFunction(const BuecheRastriginFunction&) = delete;
-        BuecheRastriginFunction& operator=(const BuecheRastriginFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
         inline void setTranslation(

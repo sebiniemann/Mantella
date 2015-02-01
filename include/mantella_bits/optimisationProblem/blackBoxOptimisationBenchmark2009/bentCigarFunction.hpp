@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        BentCigarFunction(const BentCigarFunction&) = delete;
-        BentCigarFunction& operator=(const BentCigarFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

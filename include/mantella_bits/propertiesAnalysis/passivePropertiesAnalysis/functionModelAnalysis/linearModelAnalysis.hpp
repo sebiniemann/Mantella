@@ -4,10 +4,6 @@ namespace mant {
     public:
       explicit LinearModelAnalysis() noexcept;
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      LinearModelAnalysis(const LinearModelAnalysis&) = delete;
-      LinearModelAnalysis& operator=(const LinearModelAnalysis&) = delete;
-
       void setLinearModelMedianErrorThreshold(
           const double& linearModelMedianErrorThreshold);
 

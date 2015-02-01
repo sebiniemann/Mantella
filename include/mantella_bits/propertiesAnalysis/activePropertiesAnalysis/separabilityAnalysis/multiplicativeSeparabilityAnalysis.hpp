@@ -4,10 +4,6 @@ namespace mant {
     public:
       explicit MultiplicativeSeparabilityAnalysis() noexcept;
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      MultiplicativeSeparabilityAnalysis(const MultiplicativeSeparabilityAnalysis&) = delete;
-      MultiplicativeSeparabilityAnalysis& operator=(const MultiplicativeSeparabilityAnalysis&) = delete;
-
       void setAdditiveSeparabilityMedianErrorThreshold(
           const double& additiveSeparabilityMedianErrorThreshold);
 

@@ -9,10 +9,6 @@ namespace mant {
           const std::shared_ptr<QuadraticModelAnalysis<ParameterType>> quadraticModelAnalysis,
           const std::shared_ptr<AdditiveSeparabilityAnalysis<ParameterType>> additiveSeparabilityAnalysis) noexcept;
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      PropertiesEstimation(const PropertiesEstimation&) = delete;
-      PropertiesEstimation& operator=(const PropertiesEstimation&) = delete;
-
       void estimate(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 

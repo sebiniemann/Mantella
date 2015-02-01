@@ -4,10 +4,6 @@ namespace mant {
     public:
       explicit QuadraticModelAnalysis() noexcept;
 
-      // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-      QuadraticModelAnalysis(const QuadraticModelAnalysis&) = delete;
-      QuadraticModelAnalysis& operator=(const QuadraticModelAnalysis&) = delete;
-
       void setQuadraticModelMedianErrorThreshold(
           const double& quadraticModelMedianErrorThreshold);
 

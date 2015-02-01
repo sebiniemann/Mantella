@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        CompositeGriewankRosenbrockFunctionF8F2(const CompositeGriewankRosenbrockFunctionF8F2&) = delete;
-        CompositeGriewankRosenbrockFunctionF8F2& operator=(const CompositeGriewankRosenbrockFunctionF8F2&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

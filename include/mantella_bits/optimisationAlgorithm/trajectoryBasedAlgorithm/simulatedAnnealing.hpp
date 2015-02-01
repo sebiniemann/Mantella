@@ -6,9 +6,6 @@ namespace mant {
       explicit SimulatedAnnealing(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      SimulatedAnnealing(const SimulatedAnnealing&) = delete;
-      SimulatedAnnealing& operator=(const SimulatedAnnealing&) = delete;
-
       void setMaximalStepSize(
           const ParameterType& maximalStepSize);
 

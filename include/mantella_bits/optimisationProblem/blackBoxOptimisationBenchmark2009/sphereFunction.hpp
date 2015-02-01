@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        SphereFunction(const SphereFunction&) = delete;
-        SphereFunction& operator=(const SphereFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

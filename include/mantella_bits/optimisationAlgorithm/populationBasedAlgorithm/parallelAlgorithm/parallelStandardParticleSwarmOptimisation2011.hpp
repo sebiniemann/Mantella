@@ -5,9 +5,6 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
-      ParallelStandardParticleSwarmOptimisation2011(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
-      ParallelStandardParticleSwarmOptimisation2011& operator=(const ParallelStandardParticleSwarmOptimisation2011&) = delete;
-
       inline void setNeighbourhoodProbability(
           const double& neighbourhoodProbability) noexcept;
       inline void setAcceleration(

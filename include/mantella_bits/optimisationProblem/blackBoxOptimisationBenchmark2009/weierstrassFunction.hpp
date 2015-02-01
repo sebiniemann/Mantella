@@ -5,9 +5,6 @@ namespace mant {
         inline explicit WeierstrassFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        WeierstrassFunction(const WeierstrassFunction&) = delete;
-        WeierstrassFunction& operator=(const WeierstrassFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

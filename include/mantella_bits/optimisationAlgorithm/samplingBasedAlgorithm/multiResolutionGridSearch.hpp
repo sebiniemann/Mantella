@@ -5,9 +5,6 @@ namespace mant {
       explicit MultiResolutionGridSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      MultiResolutionGridSearch(const MultiResolutionGridSearch&) = delete;
-      MultiResolutionGridSearch& operator=(const MultiResolutionGridSearch&) = delete;
-
       void setMinimalSamplingDistances(
           const arma::Col<double>& minimalSamplingDistances);
 

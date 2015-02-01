@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        SharpRidgeFunction(const SharpRidgeFunction&) = delete;
-        SharpRidgeFunction& operator=(const SharpRidgeFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

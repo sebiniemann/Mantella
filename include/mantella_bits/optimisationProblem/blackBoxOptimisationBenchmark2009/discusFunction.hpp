@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        DiscusFunction(const DiscusFunction&) = delete;
-        DiscusFunction& operator=(const DiscusFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

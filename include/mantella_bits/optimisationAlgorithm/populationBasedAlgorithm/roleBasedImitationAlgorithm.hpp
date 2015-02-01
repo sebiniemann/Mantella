@@ -5,9 +5,6 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
-      RoleBasedImitationAlgorithm(const RoleBasedImitationAlgorithm&) = delete;
-      RoleBasedImitationAlgorithm& operator=(const RoleBasedImitationAlgorithm&) = delete;
-
       inline void setNeighbourhoodSize(
           const unsigned int& neighbourhoodSize) noexcept;
       inline void setStepSize(

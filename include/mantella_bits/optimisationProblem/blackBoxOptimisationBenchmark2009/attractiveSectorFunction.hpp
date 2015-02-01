@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        AttractiveSectorFunction(const AttractiveSectorFunction&) = delete;
-        AttractiveSectorFunction& operator=(const AttractiveSectorFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

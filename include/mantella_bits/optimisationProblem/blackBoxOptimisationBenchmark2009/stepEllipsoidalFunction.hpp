@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        StepEllipsoidalFunction(const StepEllipsoidalFunction&) = delete;
-        StepEllipsoidalFunction& operator=(const StepEllipsoidalFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

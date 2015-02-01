@@ -6,9 +6,6 @@ namespace mant {
       explicit HillClimbing(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      HillClimbing(const HillClimbing&) = delete;
-      HillClimbing& operator=(const HillClimbing&) = delete;
-
       void setMaximalStepSize(
           const ParameterType& maximalStepSize);
 

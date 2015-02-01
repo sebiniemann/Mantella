@@ -6,8 +6,6 @@ namespace mant {
 
       Hash(const Hash&) = default;
 
-      Hash& operator=(const Hash&) = delete;
-
       inline std::size_t operator() (
           const arma::Col<double>& key) const noexcept;
 
@@ -21,8 +19,6 @@ namespace mant {
       explicit IsKeyEqual() = default;
 
       IsKeyEqual(const IsKeyEqual&) = default;
-
-      IsKeyEqual& operator=(const IsKeyEqual&) = delete;
 
       inline bool operator() (
           const arma::Col<double>& firstKey,

@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        SchwefelFunction(const SchwefelFunction&) = delete;
-        SchwefelFunction& operator=(const SchwefelFunction&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:

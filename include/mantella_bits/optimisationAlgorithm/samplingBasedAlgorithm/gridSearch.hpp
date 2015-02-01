@@ -5,9 +5,6 @@ namespace mant {
       explicit GridSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      GridSearch(const GridSearch&) = delete;
-      GridSearch& operator=(const GridSearch&) = delete;
-
       void setSamplingFactors(
           const arma::Col<double>& samplingFactors);
 

@@ -4,9 +4,6 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        SchaffersF7Function(const SchaffersF7Function&) = delete;
-        SchaffersF7Function& operator=(const SchaffersF7Function&) = delete;
-
         inline std::string to_string() const noexcept override;
 
       protected:
