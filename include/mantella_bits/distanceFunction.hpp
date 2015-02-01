@@ -16,6 +16,9 @@ namespace mant {
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance) const;
 
+      // Provides a default deconstructor.
+      virtual ~OptimisationProblem() = default;
+
     protected:
       virtual ParameterType getDistanceImplementation(
           const arma::Col<ParameterType>& parameter) const noexcept = 0;

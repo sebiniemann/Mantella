@@ -38,6 +38,9 @@ namespace mant {
       double getPlausibility(
           const std::size_t& propertiesSetIndex) const;
 
+      // Provides a default deconstructor.
+      virtual ~OptimisationProblem() = default;
+
     protected:
       std::shared_ptr<CorrelationAnalysis<ParameterType>> correlationAnalysis_;
       std::shared_ptr<LipschitzContinuityAnalysis<ParameterType>> lipschitzContinuityAnalysis_;
