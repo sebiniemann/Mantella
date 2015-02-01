@@ -1,9 +1,9 @@
 namespace mant {
   namespace robotic {
-    class ParallelKinematicMachine_3PRPR : public KinematicMachine {
+    class ParallelKinematicMachine3PRPR : public KinematicMachine {
       public:
-        inline explicit ParallelKinematicMachine_3PRPR() noexcept;
-        inline explicit ParallelKinematicMachine_3PRPR(
+        inline explicit ParallelKinematicMachine3PRPR() noexcept;
+        inline explicit ParallelKinematicMachine3PRPR(
             const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions,
@@ -11,8 +11,8 @@ namespace mant {
             const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
-        ParallelKinematicMachine_3PRPR(const ParallelKinematicMachine_3PRPR&) = delete;
-        ParallelKinematicMachine_3PRPR& operator=(const ParallelKinematicMachine_3PRPR&) = delete;
+        ParallelKinematicMachine3PRPR(const ParallelKinematicMachine3PRPR&) = delete;
+        ParallelKinematicMachine3PRPR& operator=(const ParallelKinematicMachine3PRPR&) = delete;
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
@@ -45,8 +45,8 @@ namespace mant {
     // Implementation
     //
 
-    inline ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR() noexcept
-      : ParallelKinematicMachine_3PRPR(
+    inline ParallelKinematicMachine3PRPR::ParallelKinematicMachine3PRPR() noexcept
+      : ParallelKinematicMachine3PRPR(
           arma::Mat<double>::fixed<2, 3>({
             -0.000066580445834, 0.106954081945581,
             -0.092751709777083, -0.053477040972790,
@@ -66,7 +66,7 @@ namespace mant {
 
     }
 
-    inline ParallelKinematicMachine_3PRPR::ParallelKinematicMachine_3PRPR(
+    inline ParallelKinematicMachine3PRPR::ParallelKinematicMachine3PRPR(
         const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
         const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
         const arma::Mat<double>::fixed<2, 3>& redundantJointEnds,
@@ -88,7 +88,7 @@ namespace mant {
       }
     }
 
-    inline std::vector<arma::Mat<double>> ParallelKinematicMachine_3PRPR::getModelCharacterisation(
+    inline std::vector<arma::Mat<double>> ParallelKinematicMachine3PRPR::getModelCharacterisation(
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
@@ -115,7 +115,7 @@ namespace mant {
       return modelCharacterisation;
     }
 
-    inline arma::Mat<double> ParallelKinematicMachine_3PRPR::getActuation(
+    inline arma::Mat<double> ParallelKinematicMachine3PRPR::getActuation(
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
@@ -126,7 +126,7 @@ namespace mant {
       return arma::sqrt(arma::sum(arma::square(endEffectorJoints - baseJoints)));
     }
 
-    inline double ParallelKinematicMachine_3PRPR::getPositionError(
+    inline double ParallelKinematicMachine3PRPR::getPositionError(
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
