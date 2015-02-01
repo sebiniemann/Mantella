@@ -226,7 +226,6 @@
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine6PRUS.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine6PUPS.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/multiLevelStewartPlatform.hpp>
-#include <mantella_bits/optimisationProblem/nkModel.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
