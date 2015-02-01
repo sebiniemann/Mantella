@@ -220,6 +220,9 @@
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PRPR.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PRRR.hpp>
+#include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PRUS.hpp>
+#include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PUPS.hpp>
+#include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine4PRUS.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine6PRUS.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine6PUPS.hpp>
 #include <mantella_bits/optimisationProblem/parallelKinematicMachine/multiLevelStewartPlatform.hpp>
