@@ -442,15 +442,15 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/sphereFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/stepEllipsoidalFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/weierstrassFunction.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PRPR.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PRRR.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PRUS.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine3PUPS.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine4PRUS.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine6PRUS.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/parallelKinematicMachine6PUPS.hpp
-  include/mantella_bits/optimisationProblem/parallelKinematicMachine/multiLevelStewartPlatform.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRPR.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRRR.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine4PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
+  include/mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp
   include/mantella_bits/optimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
