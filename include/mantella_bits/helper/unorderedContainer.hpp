@@ -2,10 +2,6 @@ namespace mant {
   // Calculates a hash value for custom types.
   class Hash {
     public:
-      explicit Hash() = default;
-
-      Hash(const Hash&) = default;
-
       inline std::size_t operator() (
           const arma::Col<double>& key) const noexcept;
 
@@ -16,10 +12,6 @@ namespace mant {
   // Checks whether two keys of a custom type are equal.
   class IsKeyEqual {
     public:
-      explicit IsKeyEqual() = default;
-
-      IsKeyEqual(const IsKeyEqual&) = default;
-
       inline bool operator() (
           const arma::Col<double>& firstKey,
           const arma::Col<double>& secondKey) const noexcept;
