@@ -17,7 +17,7 @@ namespace mant {
           const ParameterType& maximalDistance) const;
 
       // Provides a default deconstructor.
-      virtual ~OptimisationProblem() = default;
+      virtual ~DistanceFunction() = default;
 
     protected:
       virtual ParameterType getDistanceImplementation(

@@ -13,7 +13,7 @@ namespace mant {
       double getPlausibility() const noexcept;
 
       // Provides a default deconstructor.
-      virtual ~OptimisationProblem() = default;
+      virtual ~PropertiesAnalysis() = default;
 
     protected:
       double plausibility_;

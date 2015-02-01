@@ -39,7 +39,7 @@ namespace mant {
           const std::size_t& propertiesSetIndex) const;
 
       // Provides a default deconstructor.
-      virtual ~OptimisationProblem() = default;
+      virtual ~PropertiesEstimation() = default;
 
     protected:
       std::shared_ptr<CorrelationAnalysis<ParameterType>> correlationAnalysis_;
