@@ -1,6 +1,6 @@
 namespace mant {
   namespace robotic {
-    class ParallelKinematicMachine4PRUS : public KinematicMachine {
+    class ParallelKinematicMachine4PRUS : public ParallelKinematicMachine {
       public:
         inline explicit ParallelKinematicMachine4PRUS() noexcept;
         inline explicit ParallelKinematicMachine4PRUS(

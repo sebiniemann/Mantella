@@ -1,11 +1,11 @@
 namespace mant {
   namespace robotic {
-    class MultiLevelStewartPlatform : public KinematicMachine {
+    class MultiLevelStewartPlatform : public ParallelKinematicMachine {
       public:
         inline explicit MultiLevelStewartPlatform() noexcept;
 
         inline explicit MultiLevelStewartPlatform(
-            const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) noexcept;
+            const std::vector<ParallelKinematicMachine6PUPS>& platformLevels) noexcept;
 
         // Copy constructors are not used in this library and deleted to avoid unintended/any usage.
         MultiLevelStewartPlatform(const MultiLevelStewartPlatform&) = delete;
@@ -24,7 +24,7 @@ namespace mant {
             const arma::Mat<double>& redundantJointActuations) const noexcept override;
 
       protected:
-        const std::vector<ParallelKinematicMachine_6PUPS> platformLevels_;
+        const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
     };
 
     //
@@ -33,7 +33,7 @@ namespace mant {
 
     inline MultiLevelStewartPlatform::MultiLevelStewartPlatform() noexcept
       : platformLevels_({
-        ParallelKinematicMachine_6PUPS({
+        ParallelKinematicMachine6PUPS({
           0.0302769856567722, -0.0664251770004387, -0.009,
           0.0423873979048716, -0.0594332272290012, -0.009,
           0.0423873979048716, 0.0594332272290012, -0.009,
@@ -59,7 +59,7 @@ namespace mant {
         }, {
           0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148
         }),
-        ParallelKinematicMachine_6PUPS({
+        ParallelKinematicMachine6PUPS({
           0.0302769856567722, -0.0664251770004387, -0.009,
           0.0423873979048716, -0.0594332272290012, -0.009,
           0.0423873979048716, 0.0594332272290012, -0.009,
@@ -85,7 +85,7 @@ namespace mant {
         }, {
           0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148
         }),
-        ParallelKinematicMachine_6PUPS({
+        ParallelKinematicMachine6PUPS({
           0.0302769856567722, -0.0664251770004387, -0.009,
           0.0423873979048716, -0.0594332272290012, -0.009,
           0.0423873979048716, 0.0594332272290012, -0.009,
@@ -116,7 +116,7 @@ namespace mant {
     }
 
     inline MultiLevelStewartPlatform::MultiLevelStewartPlatform(
-        const std::vector<ParallelKinematicMachine_6PUPS>& platformLevels) noexcept
+        const std::vector<ParallelKinematicMachine6PUPS>& platformLevels) noexcept
       : platformLevels_(platformLevels) {
 
     }

@@ -1,6 +1,6 @@
 namespace mant {
   namespace robotic {
-    class KinematicMachine {
+    class ParallelKinematicMachine {
       public:
         virtual std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
@@ -14,7 +14,7 @@ namespace mant {
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const = 0;
 
-        virtual ~KinematicMachine() = default;
+        virtual ~ParallelKinematicMachine() = default;
     };
 
     // TODO Add Opt. implementation
