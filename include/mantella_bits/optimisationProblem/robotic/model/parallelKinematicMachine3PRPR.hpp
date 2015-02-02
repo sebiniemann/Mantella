@@ -30,8 +30,8 @@ namespace mant {
             const arma::Mat<double>::fixed<2, 3>& redundantJointPositionEnds) noexcept;
 
         inline std::vector<arma::Mat<double>::fixed<2, 3>> getModel(
-            const arma::Row<double>::fixed<3>& endEffectorPose,
-            const arma::Col<double>& redundantJointActuations) const;
+            const arma::Col<double>::fixed<3>& endEffectorPose,
+            const arma::Row<double>& redundantJointActuations) const;
 
         inline arma::Row<double>::fixed<3> getActuation(
             const arma::Col<double>::fixed<3>& endEffectorPose,
@@ -46,13 +46,13 @@ namespace mant {
             const arma::Row<double>& redundantJointActuations) const;
 
       protected:
+        arma::Row<double>::fixed<3> minimalActiveJointActuations_;
+        arma::Row<double>::fixed<3> maximalActiveJointActuations_;
+
         arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
 
         arma::Mat<double>::fixed<2, 3> redundantJointStartPositions_;
         arma::Mat<double>::fixed<2, 3> redundantJointEndPositions_;
-
-        arma::Row<double>::fixed<3> minimalActiveJointActuations_;
-        arma::Row<double>::fixed<3> maximalActiveJointActuations_;
 
         arma::Mat<double>::fixed<2, 3> redundantJointStartToEndPositions_;
 
@@ -143,8 +143,8 @@ namespace mant {
     }
 
     inline std::vector<arma::Mat<double>::fixed<2, 3>> ParallelKinematicMachine3PRPR::getModel(
-        const arma::Row<double>::fixed<3>& endEffectorPose,
-        const arma::Col<double>& redundantJointActuations) const {
+        const arma::Col<double>::fixed<3>& endEffectorPose,
+        const arma::Row<double>& redundantJointActuations) const {
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
