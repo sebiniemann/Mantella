@@ -26,19 +26,19 @@ namespace mant {
 
         inline std::vector<arma::Mat<double>::fixed<2, 3>> getModel(
             const arma::Col<double>::fixed<3>& endEffectorPose,
-            const arma::Col<double>& redundantJointActuations) const;
+            const arma::Row<double>& redundantJointActuations) const;
 
         inline arma::Col<double>::fixed<3> getActuation(
             const arma::Col<double>::fixed<3>& endEffectorPose,
-            const arma::Col<double>& redundantJointActuations) const;
+            const arma::Row<double>& redundantJointActuations) const;
 
         inline arma::Col<double>::fixed<3> getEndEffectorPose(
             const arma::Col<double>::fixed<3>& actuations,
-            const arma::Col<double>& redundantJointActuations) const;
+            const arma::Row<double>& redundantJointActuations) const;
 
         inline double getEndEffectorPoseAccuracy(
             const arma::Col<double>::fixed<3>& endEffectorPose,
-            const arma::Col<double>& redundantJointActuations) const;
+            const arma::Row<double>& redundantJointActuations) const;
 
         arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
         arma::Mat<double>::fixed<2, 3> linkLengths_;
@@ -49,8 +49,8 @@ namespace mant {
         arma::Mat<double>::fixed<2, 3> redundantJointStartToEndPositions_;
 
         arma::Col<unsigned int> redundantJointIndicies_;
-        arma::Col<double> redundantJointAngleSines_;
-        arma::Col<double> redundantJointAngleCosines_;
+        arma::Row<double> redundantJointAngleSines_;
+        arma::Row<double> redundantJointAngleCosines_;
     };
 
     //
@@ -130,7 +130,7 @@ namespace mant {
 
     inline std::vector<arma::Mat<double>::fixed<2, 3>> ParallelKinematicMachine3PRRR::getModel(
         const arma::Col<double>::fixed<3>& endEffectorPose,
-        const arma::Col<double>& redundantJointActuations) const {
+        const arma::Row<double>& redundantJointActuations) const {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
@@ -163,7 +163,7 @@ namespace mant {
 
     inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRRR::getActuation(
         const arma::Col<double>::fixed<3>& endEffectorPose,
-        const arma::Col<double>& redundantJointActuations) const {
+        const arma::Row<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>::fixed<2, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
 
       const arma::Mat<double>::fixed<2, 3>& baseJointPositions = model.at(0);
@@ -181,14 +181,14 @@ namespace mant {
 
     inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRRR::getEndEffectorPose(
         const arma::Col<double>::fixed<3>& actuations,
-        const arma::Col<double>& redundantJointActuations) const {
+        const arma::Row<double>& redundantJointActuations) const {
       // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
       return {0, 0, 0};
     }
 
     inline double ParallelKinematicMachine3PRRR::getEndEffectorPoseAccuracy(
         const arma::Col<double>::fixed<3>& endEffectorPose,
-        const arma::Col<double>& redundantJointActuations) const {
+        const arma::Row<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>::fixed<2, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
 
       const arma::Mat<double>::fixed<2, 3>& baseJoints = model.at(0);
