@@ -9,10 +9,10 @@ namespace mant {
         inline void setLinkLengths(
             const arma::Mat<double>::fixed<2, 3>& linkLengths) noexcept;
 
-        inline arma::Col<double>::fixed<2, 3> getEndEffectorJointPositions() const noexcept;
+        inline arma::Mat<double>::fixed<2, 3> getEndEffectorJointPositions() const noexcept;
 
         inline void setEndEffectorJointPositions(
-            const arma::Col<double>::fixed<2, 3>& endEffectorJointPositions) noexcept;
+            const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions) noexcept;
 
         inline arma::Mat<double>::fixed<2, 3> getRedundantJointPositionStarts() const noexcept;
 
@@ -101,12 +101,12 @@ namespace mant {
       linkLengths_ = linkLengths;
     }
 
-    inline arma::Col<double>::fixed<2, 3> ParallelKinematicMachine3PRRR::getEndEffectorJointPositions() const noexcept {
+    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRRR::getEndEffectorJointPositions() const noexcept {
       return endEffectorJointPositions_;
     }
 
     inline void ParallelKinematicMachine3PRRR::setEndEffectorJointPositions(
-        const arma::Col<double>::fixed<2, 3>& endEffectorJointPositions) noexcept {
+        const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions) noexcept {
       endEffectorJointPositions_ = endEffectorJointPositions;
     }
 
