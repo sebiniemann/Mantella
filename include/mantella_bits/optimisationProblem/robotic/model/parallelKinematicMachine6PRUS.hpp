@@ -13,14 +13,37 @@ namespace mant {
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const noexcept;
+        inline arma::Mat<double>::fixed<2, 6> getLinkLengths() const noexcept;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const noexcept;
+        inline void setLinkLengths(
+            const arma::Mat<double>::fixed<2, 6>& linkLengths) noexcept;
 
         inline double getPositionError(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const noexcept;
+        inline arma::Mat<double>::fixed<3, 6> getEndEffectorJointPositions() const noexcept;
+
+        inline void setEndEffectorJointPositions(
+            const arma::Mat<double>::fixed<3, 6>& endEffectorJointPositions) noexcept;
+
+        inline arma::Mat<double>::fixed<3, 6> getRedundantJointStartPositions() const noexcept;
+
+        inline void setRedundantJointStartPositions(
+            const arma::Mat<double>::fixed<3, 6>& redundantJointStartPositions) noexcept;
+
+        inline arma::Mat<double>::fixed<3, 6> getRedundantJointEndPositions() const noexcept;
+
+        inline void setRedundantJointEndPositions(
+            const arma::Mat<double>::fixed<3, 6>& redundantJointEndPositions) noexcept;
+
+        inline arma::Mat<double>::fixed<2, 6> getBaseJointAngles() const noexcept;
+
+        inline void setBaseJointAngles(
+            const arma::Mat<double>::fixed<2, 6>& baseJointAngles) noexcept;
+
 
       protected:
         arma::Mat<double>::fixed<3, 6> endEffectorJointsRelative_;
@@ -116,6 +139,50 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const noexcept {
       std::vector<arma::Mat<double>> modelCharacterisation;
+    inline arma::Mat<double>::fixed<2, 6> ParallelKinematicMachine6PRUS::getLinkLengths() const noexcept {
+      return linkLengths_;
+    }
+
+    inline void ParallelKinematicMachine6PRUS::setLinkLengths(
+        const arma::Mat<double>::fixed<2, 6>& linkLengths) noexcept {
+      linkLengths_ = linkLengths;
+    }
+
+    inline arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PRUS::getEndEffectorJointPositions() const noexcept {
+      return endEffectorJointPositions_;
+    }
+
+    inline void ParallelKinematicMachine6PRUS::setEndEffectorJointPositions(
+        const arma::Mat<double>::fixed<3, 6>& endEffectorJointPositions) noexcept {
+      endEffectorJointPositions_ = endEffectorJointPositions;
+    }
+
+    inline arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PRUS::getRedundantJointStartPositions() const noexcept {
+      return redundantJointStartPositions_;
+    }
+
+    inline void ParallelKinematicMachine6PRUS::setRedundantJointStartPositions(
+        const arma::Mat<double>::fixed<3, 6>& redundantJointStartPositions) noexcept {
+      redundantJointStartPositions_ = redundantJointStartPositions;
+    }
+
+    inline arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PRUS::getRedundantJointEndPositions() const noexcept {
+      return redundantJointEndPositions_;
+    }
+
+    inline void ParallelKinematicMachine6PRUS::setRedundantJointEndPositions(
+        const arma::Mat<double>::fixed<3, 6>& redundantJointEndPositions) noexcept {
+      redundantJointEndPositions_ = redundantJointEndPositions;
+    }
+
+    inline arma::Mat<double>::fixed<2, 6> ParallelKinematicMachine6PRUS::getBaseJointAngles() const noexcept {
+      return baseJointAngles_;
+    }
+
+    inline void ParallelKinematicMachine6PRUS::setBaseJointAngles(
+        const arma::Mat<double>::fixed<2, 6>& baseJointAngles) noexcept {
+      baseJointAngles_ = baseJointAngles;
+    }
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
