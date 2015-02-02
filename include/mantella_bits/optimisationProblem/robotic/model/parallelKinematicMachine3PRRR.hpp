@@ -183,6 +183,7 @@ namespace mant {
         const arma::Col<double>::fixed<3>& actuations,
         const arma::Col<double>& redundantJointActuations) const {
       // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
+      return nullptr;
     }
 
     inline double ParallelKinematicMachine3PRRR::getEndEffectorPoseAccuracy(
