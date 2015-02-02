@@ -23,7 +23,6 @@ namespace mant {
         inline void setEndEffectorJointPositions(
             const arma::Col<double>::fixed<2, 3>& endEffectorJointPositions) noexcept;
 
-        arma::Mat<double>::fixed<2, 3> endEffectorJointsRelative_;
         inline arma::Mat<double>::fixed<2, 3> getRedundantJointPositionStarts() const noexcept;
 
         inline void setRedundantJointPositionStarts(
@@ -53,12 +52,14 @@ namespace mant {
         arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
         arma::Mat<double>::fixed<2, 3> linkLengths_;
 
-        arma::Mat<double>::fixed<2, 3> redundantJointStarts_;
-        arma::Mat<double>::fixed<2, 3> redundantJointEnds_;
-        arma::Mat<double>::fixed<2, 3> redundantJointsStartToEnd_;
+        arma::Mat<double>::fixed<2, 3> redundantJointPositionStarts_;
+        arma::Mat<double>::fixed<2, 3> redundantJointPositionEnds_;
+
+        arma::Mat<double>::fixed<2, 3> redundantJointPositionStartToEnds_;
+
         arma::Col<unsigned int> redundantJointIndicies_;
-        arma::Col<double> redundantJointAnglesSine_;
-        arma::Col<double> redundantJointAnglesCosine_;
+        arma::Col<double> redundantJointAngleSines_;
+        arma::Col<double> redundantJointAngleCosines_;
     };
 
     //
