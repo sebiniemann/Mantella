@@ -3,11 +3,6 @@ namespace mant {
     class ParallelKinematicMachine3PRPR {
       public:
         inline explicit ParallelKinematicMachine3PRPR() noexcept;
-        inline explicit ParallelKinematicMachine3PRPR(
-            const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
-            const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
-            const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions,
-            const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
 
         inline arma::Row<double>::fixed<3> getMinimalActiveJointActuations() const noexcept;
 
@@ -64,42 +59,31 @@ namespace mant {
     // Implementation
     //
 
-    inline ParallelKinematicMachine3PRPR::ParallelKinematicMachine3PRPR() noexcept
-      : ParallelKinematicMachine3PRPR(
-          arma::Mat<double>::fixed<2, 3>({
-            -0.000066580445834, 0.106954081945581,
-            -0.092751709777083, -0.053477040972790,
-            0.092818290222917, -0.053477040972790}),
-          arma::Mat<double>::fixed<2, 3>({
-            0.1, 1.0392,
-            0.0, 0.8,
-            1.2, 0.8}),
-          arma::Mat<double>::fixed<2, 3>({
-            1.1, 1.0392,
-            0.0, -0.2,
-            1.2, -0.2}),
-          arma::Row<double>::fixed<3>({
-            0.1, 0.1, 0.1}),
-          arma::Row<double>::fixed<3>({
-            1.2, 1.2, 1.2})) {
+    inline ParallelKinematicMachine3PRPR::ParallelKinematicMachine3PRPR() noexcept {
+      setMinimalActiveJointActuations({0.1, 0.1, 0.1});
+      setMinimalActiveJointActuations({1.2, 1.2, 1.2});
 
-    }
+      setEndEffectorJointPositions({
+        -0.000066580445834, 0.106954081945581,
+        -0.092751709777083, -0.053477040972790,
+        0.092818290222917, -0.053477040972790});
 
-    inline ParallelKinematicMachine3PRPR::ParallelKinematicMachine3PRPR(
-        const arma::Mat<double>::fixed<2, 3>& endEffectorJointRelativePositions,
-        const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
-        const arma::Mat<double>::fixed<2, 3>& redundantJointEnds,
-        const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
-        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept
-      : endEffectorJointRelativePositions_(endEffectorJointRelativePositions),
-        redundantJointStartPositions_(redundantJointStarts),
-        redundantJointEndPositions_(redundantJointEnds),
-        minimalActiveJointActuations_(minimalActiveJointActuations),
-        maximalActiveJointActuations_(maximalActiveJointActuations),
-        redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
-        redundantJointAngleSines_(redundantJointIndicies_.n_elem),
-        redundantJointAngleCosines_(redundantJointIndicies_.n_elem) {
+      setRedundantJointPositionStarts({
+        0.1, 1.0392,
+        0.0, 0.8,
+        1.2, 0.8});
+
+      setRedundantJointPositionEnds({
+        1.1, 1.0392,
+        0.0, -0.2,
+        1.2, -0.2});
+
+      redundantJointStartToEndPositions_ = redundantJointEndPositions_ - redundantJointStartPositions_;
+      redundantJointIndicies_ = arma::find(arma::any(redundantJointStartToEndPositions_));
+
+      redundantJointAngleSines_.set_size(redundantJointIndicies_.n_elem);
+      redundantJointAngleCosines_.set_size(redundantJointIndicies_.n_elem);
+
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const double redundantJointAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
         redundantJointAngleSines_.at(n) = std::sin(redundantJointAngle);
