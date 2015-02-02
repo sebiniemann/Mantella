@@ -43,15 +43,20 @@ namespace mant {
             const arma::Row<double>& redundantJointActuations) const;
 
       protected:
-        arma::Mat<double>::fixed<3, 6> endEffectorJointsRelative_;
-        arma::Mat<double>::fixed<3, 6> linkLengths_;
+        arma::Mat<double>::fixed<2, 6> linkLengths_;
 
-        arma::Cube<double>::fixed<3, 3, 6> baseJointsRotation_;
-        arma::Mat<double>::fixed<3, 6> baseJointsNormal_;
+        arma::Mat<double>::fixed<3, 6> endEffectorJointPositions_;
 
-        arma::Mat<double>::fixed<3, 6> redundantJointStarts_;
-        arma::Mat<double>::fixed<3, 6> redundantJointEnds_;
-        arma::Mat<double>::fixed<3, 6> redundantJointsStartToEnd_;
+        arma::Mat<double>::fixed<3, 6> redundantJointStartPositions_;
+        arma::Mat<double>::fixed<3, 6> redundantJointEndPositions_;
+
+        arma::Mat<double>::fixed<2, 6> baseJointAngles_;
+
+        arma::Mat<double>::fixed<3, 6> redundantJointStartToEndPositions_;
+
+        arma::Cube<double>::fixed<3, 3, 6> baseJointRotations_;
+        arma::Mat<double>::fixed<3, 6> baseJointNormals_;
+
         arma::Col<unsigned int> redundantJointIndicies_;
         arma::Mat<double> redundantJointAngles_;
     };
@@ -178,18 +183,18 @@ namespace mant {
       const double& endEffectorPitchAngle = endEffectorPose.at(4);
       const double& endEffectorYawAngle = endEffectorPose.at(5);
 
-      arma::Mat<double>::fixed<3, 6> baseJoints = redundantJointStarts_;
+      arma::Mat<double>::fixed<3, 6> baseJoints = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
+        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<3, 6> endEffectorJoints = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelative_;
+      arma::Mat<double>::fixed<3, 6> endEffectorJoints = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
       endEffectorJoints.each_col() += endEffectorPosition;
 
       arma::Mat<double>::fixed<3, 6> passiveJoints;
       for (std::size_t n = 0; n < baseJoints.n_cols; ++n) {
-        passiveJoints.col(n) = getCircleSphereIntersection(baseJoints.col(n), linkLengths_.at(0, n), baseJointsNormal_.col(n), endEffectorJoints.col(n), linkLengths_.at(1, n));
+        passiveJoints.col(n) = getCircleSphereIntersection(baseJoints.col(n), linkLengths_.at(0, n), baseJointNormals_.col(n), endEffectorJoints.col(n), linkLengths_.at(1, n));
       }
 
       std::vector<arma::Mat<double>::fixed<3, 6>> model;
@@ -235,7 +240,7 @@ namespace mant {
 
       arma::Mat<double>::fixed<3, 6> relativeBaseToPassiveJoints = passiveJoints - baseJoints;
       for (std::size_t n = 0; n < relativeBaseToPassiveJoints.n_cols; ++n) {
-        relativeBaseToPassiveJoints.col(n) = baseJointsRotation_.slice(n) * relativeBaseToPassiveJoints.col(n);
+        relativeBaseToPassiveJoints.col(n) = baseJointRotations_.slice(n) * relativeBaseToPassiveJoints.col(n);
       }
 
       const arma::Mat<double>::fixed<3, 6>& baseToEndEffectorJoints = endEffectorJoints - baseJoints;
