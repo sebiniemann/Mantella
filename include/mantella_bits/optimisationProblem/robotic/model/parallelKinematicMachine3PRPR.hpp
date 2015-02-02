@@ -41,15 +41,16 @@ namespace mant {
             const arma::Mat<double>& redundantJointActuations) const;
 
       protected:
-        arma::Mat<double>::fixed<2, 3> endEffectorJointRelativePositions_;
+        arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
 
         arma::Mat<double>::fixed<2, 3> redundantJointStartPositions_;
         arma::Mat<double>::fixed<2, 3> redundantJointEndPositions_;
 
-        arma::Row<double>::fixed<6> minimalActiveJointActuations_;
-        arma::Row<double>::fixed<6> maximalActiveJointActuations_;
+        arma::Row<double>::fixed<3> minimalActiveJointActuations_;
+        arma::Row<double>::fixed<3> maximalActiveJointActuations_;
 
         arma::Mat<double>::fixed<2, 3> redundantJointStartToEndPositions_;
+
         arma::Col<unsigned int> redundantJointIndicies_;
         arma::Row<double> redundantJointAngleSines_;
         arma::Row<double> redundantJointAngleCosines_;
