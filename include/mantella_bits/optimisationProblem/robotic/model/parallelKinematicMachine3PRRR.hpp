@@ -14,15 +14,15 @@ namespace mant {
         inline void setEndEffectorJointPositions(
             const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions) noexcept;
 
-        inline arma::Mat<double>::fixed<2, 3> getRedundantJointPositionStarts() const noexcept;
+        inline arma::Mat<double>::fixed<2, 3> getRedundantJointStartPositions() const noexcept;
 
-        inline void setRedundantJointPositionStarts(
-            const arma::Mat<double>::fixed<2, 3>& redundantJointPositionStarts) noexcept;
+        inline void setRedundantJointStartPositions(
+            const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions) noexcept;
 
-        inline arma::Mat<double>::fixed<2, 3> getRedundantJointPositionEnds() const noexcept;
+        inline arma::Mat<double>::fixed<2, 3> getRedundantJointEndPositions() const noexcept;
 
-        inline void setRedundantJointPositionEnds(
-            const arma::Mat<double>::fixed<2, 3>& redundantJointPositionEnds) noexcept;
+        inline void setRedundantJointEndPositions(
+            const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions) noexcept;
 
         inline std::vector<arma::Mat<double>::fixed<2, 3>> getModel(
             const arma::Col<double>::fixed<3>& endEffectorPose,
@@ -43,10 +43,10 @@ namespace mant {
         arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
         arma::Mat<double>::fixed<2, 3> linkLengths_;
 
-        arma::Mat<double>::fixed<2, 3> redundantJointPositionStarts_;
-        arma::Mat<double>::fixed<2, 3> redundantJointPositionEnds_;
+        arma::Mat<double>::fixed<2, 3> redundantJointStartPositions_;
+        arma::Mat<double>::fixed<2, 3> redundantJointEndPositions_;
 
-        arma::Mat<double>::fixed<2, 3> redundantJointPositionStartToEnds_;
+        arma::Mat<double>::fixed<2, 3> redundantJointStartToEndPositions_;
 
         arma::Col<unsigned int> redundantJointIndicies_;
         arma::Col<double> redundantJointAngleSines_;
@@ -68,25 +68,25 @@ namespace mant {
         0.6, 0.6,
         0.6, 0.6});
 
-      setRedundantJointPositionStarts({
+      setRedundantJointStartPositions({
         0.1, 1.0392,
         0.0, 0.8,
         1.2, 0.8
       });
 
-      setRedundantJointPositionEnds({
+      setRedundantJointEndPositions({
         1.1, 1.0392,
         0.0, -0.2,
         1.2, -0.2});
 
-      redundantJointPositionStartToEnds_ = redundantJointPositionEnds_ - redundantJointPositionStarts_;
-      redundantJointIndicies_ = arma::find(arma::any(redundantJointPositionStartToEnds_));
+      redundantJointStartToEndPositions_ = redundantJointEndPositions_ - redundantJointStartPositions_;
+      redundantJointIndicies_ = arma::find(arma::any(redundantJointStartToEndPositions_));
 
       redundantJointAngleSines_.set_size(redundantJointIndicies_.n_elem);
       redundantJointAngleCosines_.set_size(redundantJointIndicies_.n_elem);
 
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double redundantJointAngle = std::atan2(redundantJointPositionStartToEnds_.at(1, n), redundantJointPositionStartToEnds_.at(0, n));
+        const double redundantJointAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
         redundantJointAngleSines_.at(n) = std::sin(redundantJointAngle);
         redundantJointAngleCosines_.at(n) = std::cos(redundantJointAngle);
       }
@@ -110,22 +110,22 @@ namespace mant {
       endEffectorJointPositions_ = endEffectorJointPositions;
     }
 
-    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRRR::getRedundantJointPositionStarts() const noexcept {
-      return redundantJointPositionStarts_;
+    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRRR::getRedundantJointStartPositions() const noexcept {
+      return redundantJointStartPositions_;
     }
 
-    inline void ParallelKinematicMachine3PRRR::setRedundantJointPositionStarts(
-        const arma::Mat<double>::fixed<2, 3>& redundantJointPositionStarts) noexcept {
-      redundantJointPositionStarts_ = redundantJointPositionStarts;
+    inline void ParallelKinematicMachine3PRRR::setRedundantJointStartPositions(
+        const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions) noexcept {
+      redundantJointStartPositions_ = redundantJointStartPositions;
     }
 
-    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRRR::getRedundantJointPositionEnds() const noexcept {
-      return redundantJointPositionEnds_;
+    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRRR::getRedundantJointEndPositions() const noexcept {
+      return redundantJointEndPositions_;
     }
 
-    inline void ParallelKinematicMachine3PRRR::setRedundantJointPositionEnds(
-        const arma::Mat<double>::fixed<2, 3>& redundantJointPositionEnds) noexcept {
-      redundantJointPositionEnds_ = redundantJointPositionEnds;
+    inline void ParallelKinematicMachine3PRRR::setRedundantJointEndPositions(
+        const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions) noexcept {
+      redundantJointEndPositions_ = redundantJointEndPositions;
     }
 
     inline std::vector<arma::Mat<double>::fixed<2, 3>> ParallelKinematicMachine3PRRR::getModel(
@@ -138,10 +138,10 @@ namespace mant {
       const arma::Col<double>::fixed<2>& endEffectorPosition = endEffectorPose.subvec(0, 1);
       const double& endEffectorAngle = endEffectorPose.at(2);
 
-      arma::Mat<double>::fixed<2, 3> baseJoints = redundantJointPositionStarts_;
+      arma::Mat<double>::fixed<2, 3> baseJoints = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointPositionStartToEnds_.col(redundantJointIndex);
+        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
       arma::Mat<double>::fixed<2, 3> endEffectorJoints = get2DRotationMatrix(endEffectorAngle) * endEffectorJointPositions_;
