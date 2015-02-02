@@ -3,16 +3,7 @@ namespace mant {
     class ParallelKinematicMachine4PRUS {
       public:
         inline explicit ParallelKinematicMachine4PRUS() noexcept;
-        inline explicit ParallelKinematicMachine4PRUS(
-            const arma::Mat<double>::fixed<2, 4>& baseJointsAngles,
-            const arma::Mat<double>::fixed<3, 4>& relativeEndEffectorJoints,
-            const arma::Mat<double>::fixed<2, 4>& linkLengths,
-            const arma::Mat<double>::fixed<3, 4>& redundantJointStarts,
-            const arma::Mat<double>::fixed<3, 4>& redundantJointEnds) noexcept;
 
-        inline std::vector<arma::Mat<double>> getModelCharacterisation(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
         inline arma::Mat<double>::fixed<2, 4> getLinkLengths() const noexcept;
 
         inline arma::Mat<double> getActuation(
@@ -63,65 +54,54 @@ namespace mant {
     // Implementation
     //
 
-    inline ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS() noexcept
-      : ParallelKinematicMachine4PRUS(
-          arma::Mat<double>::fixed<2, 4>({
-            0.0, 0.0,
-            0.0, 1.570796326794897,
-            0.0, 3.141592653589793,
-            0.0, 4.712388980384690}),
+    inline ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS() noexcept {
+      setLinkLengths({
+        0.24, 0.56,
+        0.24, 0.56,
+        0.24, 0.56,
+        0.24, 0.56});
 
-          arma::Mat<double>::fixed<3, 4>({
-            0.073, 0.0, 0.0,
-            0.0, 0.073, 0.0,
-            -0.073, 0.0, 0.0,
-            0.0, -0.073, 0.0}),
+      setEndEffectorJointPositions({
+        0.073, 0.0, 0.0,
+        0.0, 0.073, 0.0,
+        -0.073, 0.0, 0.0,
+        0.0, -0.073, 0.0});
 
-          arma::Mat<double>::fixed<2, 4>({
-            0.24, 0.56,
-            0.24, 0.56,
-            0.24, 0.56,
-            0.24, 0.56}),
+      setRedundantJointStartPositions({
+        0.364, 0.0, -0.6,
+        0.0, 0.364, -0.6,
+        -0.364, 0.0, -0.6,
+        0.0, -0.364, -0.6});
 
-          arma::Mat<double>::fixed<3, 4>({
-            0.364, 0.0, -0.6,
-            0.0, 0.364, -0.6,
-            -0.364, 0.0, -0.6,
-            0.0, -0.364, -0.6}),
+      setRedundantJointEndPositions({
+        0.364, 0.0, 0.2,
+        0.0, 0.364, 0.2,
+        -0.364, 0.0, 0.2,
+        0.0, -0.364, 0.2});
 
-          arma::Mat<double>::fixed<3, 4>({
-            0.364, 0.0, 0.2,
-            0.0, 0.364, 0.2,
-            -0.364, 0.0, 0.2,
-            0.0, -0.364, 0.2})) {
+      setBaseJointAngles({
+        0.0, 0.0,
+        0.0, 1.570796326794897,
+        0.0, 3.141592653589793,
+        0.0, 4.712388980384690});
 
-    }
+      redundantJointStartToEndPositions_ = redundantJointEndPositions_ - redundantJointStartPositions_;
+      redundantJointIndicies_ = arma::find(arma::any(redundantJointStartToEndPositions_));
 
-    inline ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS(
-        const arma::Mat<double>::fixed<2, 4>& baseJointsAngles,
-        const arma::Mat<double>::fixed<3, 4>& relativeEndEffectorJoints,
-        const arma::Mat<double>::fixed<2, 4>& linkLengths,
-        const arma::Mat<double>::fixed<3, 4>& redundantJointStarts,
-        const arma::Mat<double>::fixed<3, 4>& redundantJointEnds) noexcept
-      : endEffectorJointsRelative_(relativeEndEffectorJoints),
-        linkLengths_(linkLengths),
-        redundantJointStarts_(redundantJointStarts),
-        redundantJointEnds_(redundantJointEnds),
-        redundantJointsStartToEnd_(redundantJointEnds_ - redundantJointStarts_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointsStartToEnd_))),
-        redundantJointAngles_(3, redundantJointIndicies_.n_elem) {
+      redundantJointAngles_.set_size(3, redundantJointIndicies_.n_elem);
+
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double& redundantJointXAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
-        const double& redundantJointYAngle = std::atan2(redundantJointsStartToEnd_.at(2, n), redundantJointsStartToEnd_.at(1, n));
+        const double& redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
+        const double& redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_.at(2, n), redundantJointStartToEndPositions_.at(1, n));
         redundantJointAngles_.col(n) = arma::Col<double>::fixed<3>({std::cos(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointYAngle)});
       }
 
-      for (std::size_t n = 0; n < baseJointsAngles.n_cols; ++n) {
-        baseJointsRotation_.slice(n) = get3DRotationMatrix(redundantJointAngles_.at(0, n), 0, redundantJointAngles_.at(1, n));
+      for (std::size_t n = 0; n < baseJointAngles_.n_cols; ++n) {
+        baseJointRotations_.slice(n) = get3DRotationMatrix(redundantJointAngles_.at(0, n), 0, redundantJointAngles_.at(1, n));
       }
 
-      for (std::size_t n = 0; n < baseJointsRotation_.n_slices; ++n) {
-        baseJointsNormal_.col(n) = arma::normalise(arma::cross(baseJointsRotation_.slice(n).col(0), baseJointsRotation_.slice(n).col(2)));
+      for (std::size_t n = 0; n < baseJointRotations_.n_slices; ++n) {
+        baseJointNormals_.col(n) = arma::normalise(arma::cross(baseJointRotations_.slice(n).col(0), baseJointRotations_.slice(n).col(2)));
       }
     }
 
