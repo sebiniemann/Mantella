@@ -8,11 +8,34 @@ namespace mant {
             const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
             const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions,
             const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
+
+        inline arma::Row<double>::fixed<3> getMinimalActiveJointActuations() const noexcept;
+
+        inline void setMinimalActiveJointActuations(
+            const arma::Row<double>::fixed<3>& minimalActiveJointActuations) noexcept;
+
+        inline arma::Row<double>::fixed<3> getMaximalActiveJointActuations() const noexcept;
+
+        inline void setMaximalActiveJointActuations(
             const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept;
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
+        inline arma::Mat<double>::fixed<2, 3> getEndEffectorJointPositions() const noexcept;
+
+        inline void setEndEffectorJointPositions(
+            const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions) noexcept;
+
+        inline arma::Mat<double>::fixed<2, 3> getRedundantJointPositionStarts() const noexcept;
+
+        inline void setRedundantJointPositionStarts(
+            const arma::Mat<double>::fixed<2, 3>& redundantJointPositionStarts) noexcept;
+
+        inline arma::Mat<double>::fixed<2, 3> getRedundantJointPositionEnds() const noexcept;
+
+        inline void setRedundantJointPositionEnds(
+            const arma::Mat<double>::fixed<2, 3>& redundantJointPositionEnds) noexcept;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
@@ -88,6 +111,50 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
+    inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PRPR::getMinimalActiveJointActuations() const noexcept {
+      return minimalActiveJointActuations_;
+    }
+
+    inline void ParallelKinematicMachine3PRPR::setMinimalActiveJointActuations(
+        const arma::Row<double>::fixed<3>& minimalActiveJointActuations) noexcept {
+      minimalActiveJointActuations_ = minimalActiveJointActuations;
+    }
+
+    inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PRPR::getMaximalActiveJointActuations() const noexcept {
+      return maximalActiveJointActuations_;
+    }
+
+    inline void ParallelKinematicMachine3PRPR::setMaximalActiveJointActuations(
+        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept {
+      maximalActiveJointActuations_ = maximalActiveJointActuations;
+    }
+
+    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRPR::getEndEffectorJointPositions() const noexcept {
+      return endEffectorJointPositions_;
+    }
+
+    inline void ParallelKinematicMachine3PRPR::setEndEffectorJointPositions(
+        const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions) noexcept {
+      endEffectorJointPositions_ = endEffectorJointPositions;
+    }
+
+    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRPR::getRedundantJointPositionStarts() const noexcept {
+      return redundantJointStartPositions_;
+    }
+
+    inline void ParallelKinematicMachine3PRPR::setRedundantJointPositionStarts(
+        const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions) noexcept {
+      redundantJointStartPositions_ = redundantJointStartPositions;
+    }
+
+    inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRPR::getRedundantJointPositionEnds() const noexcept {
+      return redundantJointEndPositions_;
+    }
+
+    inline void ParallelKinematicMachine3PRPR::setRedundantJointPositionEnds(
+        const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions) noexcept {
+      redundantJointEndPositions_ = redundantJointEndPositions;
+    }
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
