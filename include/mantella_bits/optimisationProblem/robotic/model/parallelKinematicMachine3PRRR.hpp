@@ -3,11 +3,6 @@ namespace mant {
     class ParallelKinematicMachine3PRRR {
       public:
         inline explicit ParallelKinematicMachine3PRRR() noexcept;
-        inline explicit ParallelKinematicMachine3PRRR(
-            const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
-            const arma::Mat<double>::fixed<2, 3>& linkLengths,
-            const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
-            const arma::Mat<double>::fixed<2, 3>& redundantJointEnds) noexcept;
 
         inline arma::Mat<double>::fixed<2, 3> getLinkLengths() const noexcept;
 
@@ -70,44 +65,38 @@ namespace mant {
     // Implementation
     //
 
-    inline ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR() noexcept
-      : ParallelKinematicMachine3PRRR(
-          arma::Mat<double>::fixed<2, 3>({
-            -0.000066580445834, 0.106954081945581,
-            -0.092751709777083, -0.053477040972790,
-            0.092818290222917, -0.053477040972790}),
-          arma::Mat<double>::fixed<2, 3>({
-            0.6, 0.6,
-            0.6, 0.6,
-            0.6, 0.6}),
-          arma::Mat<double>::fixed<2, 3>({
-            0.1, 1.0392,
-            0.0, 0.8,
-            1.2, 0.8}),
-          arma::Mat<double>::fixed<2, 3>({
-            1.1, 1.0392,
-            0.0, -0.2,
-            1.2, -0.2})) {
+    inline ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR() noexcept {
+      setLinkLengths({
+        -0.000066580445834, 0.106954081945581,
+        -0.092751709777083, -0.053477040972790,
+        0.092818290222917, -0.053477040972790});
 
-    }
+      setEndEffectorJointPositions({
+        0.6, 0.6,
+        0.6, 0.6,
+        0.6, 0.6});
 
-    inline ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR(
-        const arma::Mat<double>::fixed<2, 3>& relativeEndEffectorJoints,
-        const arma::Mat<double>::fixed<2, 3>& linkLengths,
-        const arma::Mat<double>::fixed<2, 3>& redundantJointStarts,
-        const arma::Mat<double>::fixed<2, 3>& redundantJointEnds) noexcept
-      : endEffectorJointsRelative_(relativeEndEffectorJoints),
-        linkLengths_(linkLengths),
-        redundantJointStarts_(redundantJointStarts),
-        redundantJointEnds_(redundantJointEnds),
-        redundantJointsStartToEnd_(redundantJointEnds_ - redundantJointStarts_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointsStartToEnd_))),
-        redundantJointAnglesSine_(redundantJointIndicies_.n_elem),
-        redundantJointAnglesCosine_(redundantJointIndicies_.n_elem) {
+      setRedundantJointPositionStarts({
+        0.1, 1.0392,
+        0.0, 0.8,
+        1.2, 0.8
+      });
+
+      setRedundantJointPositionEnds({
+        1.1, 1.0392,
+        0.0, -0.2,
+        1.2, -0.2});
+
+      redundantJointPositionStartToEnds_ = redundantJointEnds_ - redundantJointStarts_;
+      redundantJointIndicies_ = arma::find(arma::any(redundantJointsStartToEnd_));
+
+      redundantJointAngleSines_.set_size(redundantJointIndicies_.n_elem);
+      redundantJointAngleCosines_.set_size(redundantJointIndicies_.n_elem);
+
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double redundantJointAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
-        redundantJointAnglesSine_.at(n) = std::sin(redundantJointAngle);
-        redundantJointAnglesCosine_.at(n) = std::cos(redundantJointAngle);
+        const double redundantJointAngle = std::atan2(redundantJointPositionStartToEnds_.at(1, n), redundantJointPositionStartToEnds_.at(0, n));
+        redundantJointAngleSines_.at(n) = std::sin(redundantJointAngle);
+        redundantJointAngleCosines_.at(n) = std::cos(redundantJointAngle);
       }
     }
 
