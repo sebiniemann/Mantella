@@ -40,8 +40,9 @@ namespace mant {
             const arma::Col<double>::fixed<3>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
-        arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
         arma::Mat<double>::fixed<2, 3> linkLengths_;
+
+        arma::Mat<double>::fixed<2, 3> endEffectorJointPositions_;
 
         arma::Mat<double>::fixed<2, 3> redundantJointStartPositions_;
         arma::Mat<double>::fixed<2, 3> redundantJointEndPositions_;
