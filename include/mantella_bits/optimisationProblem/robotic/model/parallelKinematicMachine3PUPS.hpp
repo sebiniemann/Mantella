@@ -3,11 +3,6 @@ namespace mant {
     class ParallelKinematicMachine3PUPS {
       public:
         inline explicit ParallelKinematicMachine3PUPS() noexcept;
-        inline explicit ParallelKinematicMachine3PUPS(
-            const arma::Mat<double>::fixed<3, 3>& relativeEndEffectorJoints,
-            const arma::Mat<double>::fixed<3, 3>& redundantJointStarts,
-            const arma::Mat<double>::fixed<3, 3>& redundantJointEnds,
-            const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
 
         inline arma::Row<double>::fixed<3> getMinimalActiveJointActuations() const noexcept;
 
@@ -59,41 +54,30 @@ namespace mant {
     // Implementation
     //
 
-    inline ParallelKinematicMachine3PUPS::ParallelKinematicMachine3PUPS() noexcept
-      : ParallelKinematicMachine3PUPS(
-          arma::Mat<double>::fixed<3, 3>({
-            -0.025561381023353, 0.086293776138137, 0.12,
-            0.087513292835791, -0.021010082747031, 0.12,
-            -0.061951911812438, -0.065283693391106, 0.12}),
-          arma::Mat<double>::fixed<3, 3>({
-            -0.463708870031622, 0.417029254828353, -0.346410161513775,
-            0.593012363818459, 0.193069033993384, -0.346410161513775,
-            -0.129303493786837, -0.610098288821738, -0.346410161513775}),
-          arma::Mat<double>::fixed<3, 3>({
-            -0.247202519085512, 0.292029254828353, 0.086602540378444,
-            0.376506012872349, 0.068069033993384, 0.086602540378444,
-            -0.129303493786837, -0.360098288821738, 0.086602540378444}),
-          arma::Row<double>::fixed<3>({
-            0.39, 0.39, 0.39}),
-          arma::Row<double>::fixed<3>({
-            0.95, 0.95, 0.95})) {
+    inline ParallelKinematicMachine3PUPS::ParallelKinematicMachine3PUPS() noexcept {
+      setMinimalActiveJointActuations({0.39, 0.39, 0.39});
+      setMaximalActiveJointActuations({0.95, 0.95, 0.95});
 
-    }
+      setEndEffectorJointPositions({
+        -0.025561381023353, 0.086293776138137, 0.12,
+        0.087513292835791, -0.021010082747031, 0.12,
+        -0.061951911812438, -0.065283693391106, 0.12});
 
-    inline ParallelKinematicMachine3PUPS::ParallelKinematicMachine3PUPS(
-        const arma::Mat<double>::fixed<3, 3>& relativeEndEffectorJoints,
-        const arma::Mat<double>::fixed<3, 3>& redundantJointStarts,
-        const arma::Mat<double>::fixed<3, 3>& redundantJointEnds,
-        const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
-        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept
-      : endEffectorJointsRelative_(relativeEndEffectorJoints),
-        redundantJointStarts_(redundantJointStarts),
-        redundantJointEnds_(redundantJointEnds),
-        minimalActiveJointActuations_(minimalActiveJointActuations),
-        maximalActiveJointActuations_(maximalActiveJointActuations),
-        redundantJointsStartToEnd_(redundantJointEnds_ - redundantJointStarts_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointsStartToEnd_))),
-        redundantJointAngles_(3, redundantJointIndicies_.n_elem) {
+      setRedundantJointStartPositions({
+        -0.463708870031622, 0.417029254828353, -0.346410161513775,
+        0.593012363818459, 0.193069033993384, -0.346410161513775,
+        -0.129303493786837, -0.610098288821738, -0.346410161513775});
+
+      setRedundantJointEndPositions({
+        -0.247202519085512, 0.292029254828353, 0.086602540378444,
+        0.376506012872349, 0.068069033993384, 0.086602540378444,
+        -0.129303493786837, -0.360098288821738, 0.086602540378444});
+
+      redundantJointStartToEndPositions_ = redundantJointEndPositions_ - redundantJointStartPositions_;
+      redundantJointIndicies_ = arma::find(arma::any(redundantJointStartToEndPositions_));
+
+      redundantJointAngles_.set_size(3, redundantJointIndicies_.n_elem);
+
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const double& redundantJointXAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
         const double& redundantJointYAngle = std::atan2(redundantJointsStartToEnd_.at(2, n), redundantJointsStartToEnd_.at(1, n));
