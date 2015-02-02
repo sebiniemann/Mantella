@@ -21,14 +21,11 @@ namespace mant {
 
         inline arma::Mat<double>::fixed<3, 3> getRedundantJointStartPositions() const noexcept;
 
-        arma::Mat<double>::fixed<3, 3> endEffectorJointsRelative_;
         inline void setRedundantJointStartPositions(
             const arma::Mat<double>::fixed<3, 3>& redundantJointStartPositions) noexcept;
 
         inline arma::Mat<double>::fixed<3, 3> getRedundantJointEndPositions() const noexcept;
 
-        arma::Mat<double>::fixed<3, 3> redundantJointStarts_;
-        arma::Mat<double>::fixed<3, 3> redundantJointEnds_;
         inline void setRedundantJointEndPositions(
             const arma::Mat<double>::fixed<3, 3>& redundantJointEndPositions) noexcept;
 
@@ -52,7 +49,13 @@ namespace mant {
         arma::Row<double>::fixed<3> minimalActiveJointActuations_;
         arma::Row<double>::fixed<3> maximalActiveJointActuations_;
 
-        arma::Mat<double>::fixed<3, 3> redundantJointsStartToEnd_;
+        arma::Mat<double>::fixed<3, 3> endEffectorJointPositions_;
+
+        arma::Mat<double>::fixed<3, 3> redundantJointStartPositions_;
+        arma::Mat<double>::fixed<3, 3> redundantJointEndPositions_;
+
+        arma::Mat<double>::fixed<3, 3> redundantJointStartToEndPositions_;
+
         arma::Col<unsigned int> redundantJointIndicies_;
         arma::Mat<double> redundantJointAngles_;
     };
@@ -86,8 +89,8 @@ namespace mant {
       redundantJointAngles_.set_size(3, redundantJointIndicies_.n_elem);
 
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double& redundantJointXAngle = std::atan2(redundantJointsStartToEnd_.at(1, n), redundantJointsStartToEnd_.at(0, n));
-        const double& redundantJointYAngle = std::atan2(redundantJointsStartToEnd_.at(2, n), redundantJointsStartToEnd_.at(1, n));
+        const double& redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
+        const double& redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_.at(2, n), redundantJointStartToEndPositions_.at(1, n));
         redundantJointAngles_.col(n) = arma::Col<double>::fixed<3>({std::cos(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointYAngle)});
       }
     }
@@ -150,13 +153,13 @@ namespace mant {
       const double& endEffectorPitchAngle = endEffectorPose.at(4);
       const double& endEffectorYawAngle = endEffectorPose.at(5);
 
-      arma::Mat<double>::fixed<3, 3> baseJoints = redundantJointStarts_;
+      arma::Mat<double>::fixed<3, 3> baseJoints = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
+        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<3, 3> endEffectorJoints = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelative_;
+      arma::Mat<double>::fixed<3, 3> endEffectorJoints = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
       endEffectorJoints.each_col() += endEffectorPosition;
 
       std::vector<arma::Mat<double>::fixed<3, 3>> model;
