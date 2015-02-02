@@ -181,7 +181,7 @@ namespace mant {
       return arma::sqrt(arma::sum(arma::square(endEffectorJoints - baseJoints)));
     }
 
-    inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRRR::getEndEffectorPose(
+    inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRPR::getEndEffectorPose(
         const arma::Col<double>::fixed<3>& actuations,
         const arma::Row<double>& redundantJointActuations) const {
       // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
