@@ -37,6 +37,9 @@ namespace mant {
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
+        inline arma::Col<double>::fixed<6> getEndEffectorPose(
+            const arma::Row<double>::fixed<6>& actuations,
+            const arma::Row<double>& redundantJointActuations) const;
 
         inline double getEndEffectorPoseAccuracy(
             const arma::Col<double>::fixed<6>& endEffectorPose,
@@ -224,6 +227,12 @@ namespace mant {
       return actuation;
     }
 
+    inline arma::Col<double>::fixed<6> ParallelKinematicMachine6PRUS::getEndEffectorPose(
+        const arma::Row<double>::fixed<6>& actuations,
+        const arma::Row<double>& redundantJointActuations) const {
+      // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
+      return {0, 0, 0, 0, 0, 0};
+    }
 
     inline double ParallelKinematicMachine6PRUS::getEndEffectorPoseAccuracy(
         const arma::Col<double>::fixed<6>& endEffectorPose,
