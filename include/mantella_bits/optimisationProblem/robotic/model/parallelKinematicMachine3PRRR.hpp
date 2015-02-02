@@ -79,8 +79,8 @@ namespace mant {
         0.0, -0.2,
         1.2, -0.2});
 
-      redundantJointPositionStartToEnds_ = redundantJointEnds_ - redundantJointStarts_;
-      redundantJointIndicies_ = arma::find(arma::any(redundantJointsStartToEnd_));
+      redundantJointPositionStartToEnds_ = redundantJointPositionEnds_ - redundantJointPositionStarts_;
+      redundantJointIndicies_ = arma::find(arma::any(redundantJointPositionStartToEnds_));
 
       redundantJointAngleSines_.set_size(redundantJointIndicies_.n_elem);
       redundantJointAngleCosines_.set_size(redundantJointIndicies_.n_elem);
@@ -138,13 +138,13 @@ namespace mant {
       const arma::Col<double>::fixed<2>& endEffectorPosition = endEffectorPose.subvec(0, 1);
       const double& endEffectorAngle = endEffectorPose.at(2);
 
-      arma::Mat<double>::fixed<2, 3> baseJoints = redundantJointStarts_;
+      arma::Mat<double>::fixed<2, 3> baseJoints = redundantJointPositionStarts_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointsStartToEnd_.col(redundantJointIndex);
+        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointPositionStartToEnds_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<2, 3> endEffectorJoints = get2DRotationMatrix(endEffectorAngle) * endEffectorJointsRelative_;
+      arma::Mat<double>::fixed<2, 3> endEffectorJoints = get2DRotationMatrix(endEffectorAngle) * endEffectorJointPositions_;
       endEffectorJoints.each_col() += endEffectorPosition;
 
       arma::Mat<double>::fixed<2, 3> passiveJoints;
@@ -190,7 +190,7 @@ namespace mant {
         const arma::Col<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>::fixed<2, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<2, 3>& baseJoints = modelCharacterisation.at(0);
+      const arma::Mat<double>::fixed<2, 3>& baseJoints = model.at(0);
 
       const arma::Mat<double>::fixed<2, 3>& endEffectorJoints = model.at(2);
       arma::Mat<double>::fixed<2, 3> endEffectorJointsRotated = endEffectorJoints;
@@ -207,7 +207,7 @@ namespace mant {
       inverseKinematic.diag() = forwardKinematic.row(0) % baseToPassiveJoints.row(1) - forwardKinematic.row(1) % baseToPassiveJoints.row(0);
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        inverseKinematic.at(n, 3 + n) = -(forwardKinematic.at(redundantJointIndex, 0) * redundantJointAnglesCosine_.at(n) + forwardKinematic.at(redundantJointIndex, 1) * redundantJointAnglesSine_.at(n));
+        inverseKinematic.at(n, 3 + n) = -(forwardKinematic.at(redundantJointIndex, 0) * redundantJointAngleCosines_.at(n) + forwardKinematic.at(redundantJointIndex, 1) * redundantJointAngleSines_.at(n));
       }
 
       return -1.0 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));
