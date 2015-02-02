@@ -3,21 +3,12 @@ namespace mant {
     class ParallelKinematicMachine3PRUS {
       public:
         inline explicit ParallelKinematicMachine3PRUS() noexcept;
-        inline std::vector<arma::Mat<double>> getModelCharacterisation(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
 
         inline arma::Mat<double>::fixed<2, 3> getLinkLengths() const noexcept;
 
-        inline arma::Mat<double> getActuation(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
         inline void setLinkLengths(
             const arma::Mat<double>::fixed<2, 3>& linkLengths) noexcept;
 
-        inline double getPositionError(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
         inline arma::Mat<double>::fixed<3, 3> getEndEffectorJointPositions() const noexcept;
 
         inline void setEndEffectorJointPositions(
@@ -37,6 +28,22 @@ namespace mant {
 
         inline void setBaseJointAngles(
             const arma::Mat<double>::fixed<2, 3>& baseJointAngles) noexcept;
+
+        inline std::vector<arma::Mat<double>::fixed<3, 3>> getModel(
+            const arma::Col<double>::fixed<6>& endEffectorPose,
+            const arma::Row<double>& redundantJointActuations) const;
+
+        inline arma::Row<double>::fixed<3> getActuation(
+            const arma::Col<double>::fixed<6>& endEffectorPose,
+            const arma::Row<double>& redundantJointActuations) const;
+
+        inline arma::Col<double>::fixed<6> getEndEffectorPose(
+            const arma::Row<double>::fixed<3>& actuations,
+            const arma::Row<double>& redundantJointActuations) const;
+
+        inline double getEndEffectorPoseAccuracy(
+            const arma::Col<double>::fixed<6>& endEffectorPose,
+            const arma::Row<double>& redundantJointActuations) const;
 
       protected:
         arma::Mat<double>::fixed<3, 3> endEffectorJointsRelative_;
@@ -103,10 +110,6 @@ namespace mant {
       }
     }
 
-    inline std::vector<arma::Mat<double>> ParallelKinematicMachine3PRUS::getModelCharacterisation(
-        const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
-      std::vector<arma::Mat<double>> modelCharacterisation;
     inline arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRUS::getLinkLengths() const noexcept {
       return linkLengths_;
     }
@@ -152,6 +155,9 @@ namespace mant {
       baseJointAngles_ = baseJointAngles;
     }
 
+    inline std::vector<arma::Mat<double>::fixed<3, 3>> ParallelKinematicMachine3PRUS::getModel(
+        const arma::Col<double>::fixed<6>& endEffectorPose,
+        const arma::Row<double>& redundantJointActuations) const {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
@@ -179,16 +185,16 @@ namespace mant {
       modelCharacterisation.push_back(endEffectorJoints);
       modelCharacterisation.push_back(passiveJoints);
 
-      return modelCharacterisation;
+      return model;
     }
 
-    inline arma::Mat<double> ParallelKinematicMachine3PRUS::getActuation(
-        const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
-      const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
+    inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PRUS::getActuation(
+        const arma::Col<double>::fixed<6>& endEffectorPose,
+        const arma::Row<double>& redundantJointActuations) const {
+      const std::vector<arma::Mat<double>::fixed<3, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<3, 3>& baseJointPositions = modelCharacterisation.at(0);
-      const arma::Mat<double>::fixed<3, 3>& passiveJointPositions = modelCharacterisation.at(2);
+      const arma::Mat<double>::fixed<3, 3>& baseJointPositions = model.at(0);
+      const arma::Mat<double>::fixed<3, 3>& passiveJointPositions = model.at(1);
 
       const arma::Mat<double>::fixed<3, 3>& baseToPassiveJointPositions = passiveJointPositions - baseJointPositions;
 
@@ -200,18 +206,25 @@ namespace mant {
       return actuation;
     }
 
-    inline double ParallelKinematicMachine3PRUS::getPositionError(
-        const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
-      const std::vector<arma::Mat<double>>& modelCharacterisation = getModelCharacterisation(endEffectorPose, redundantJointActuations);
+    inline arma::Col<double>::fixed<6> ParallelKinematicMachine3PRUS::getEndEffectorPose(
+        const arma::Row<double>::fixed<3>& actuations,
+        const arma::Row<double>& redundantJointActuations) const {
+      // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
+      return {0, 0, 0, 0, 0, 0};
+    }
 
-      const arma::Mat<double>::fixed<3, 3>& baseJoints = modelCharacterisation.at(0);
+    inline double ParallelKinematicMachine3PRUS::getEndEffectorPoseAccuracy(
+        const arma::Col<double>::fixed<6>& endEffectorPose,
+        const arma::Row<double>& redundantJointActuations) const {
+      const std::vector<arma::Mat<double>::fixed<3, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<3, 3>& endEffectorJoints = modelCharacterisation.at(1);
+      const arma::Mat<double>::fixed<3, 3>& baseJoints = model.at(0);
+
+      const arma::Mat<double>::fixed<3, 3>& endEffectorJoints = model.at(2);
       arma::Mat<double>::fixed<3, 3> endEffectorJointsRotated = endEffectorJoints;
       endEffectorJointsRotated.each_col() -= endEffectorPose.subvec(0, 2);
 
-      const arma::Mat<double>::fixed<3, 3>& passiveJoints = modelCharacterisation.at(2);
+      const arma::Mat<double>::fixed<3, 3>& passiveJoints = model.at(1);
 
       arma::Mat<double>::fixed<3, 3> relativeBaseToPassiveJoints = passiveJoints - baseJoints;
       for (std::size_t n = 0; n < relativeBaseToPassiveJoints.n_cols; ++n) {
