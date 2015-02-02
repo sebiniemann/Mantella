@@ -4,138 +4,126 @@ namespace mant {
       public:
         inline explicit MultiLevelStewartPlatform() noexcept;
 
-        inline explicit MultiLevelStewartPlatform(
-            const std::vector<ParallelKinematicMachine6PUPS>& platformLevels) noexcept;
-
-        inline std::vector<arma::Mat<double>> getModelCharacterisation(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
+        inline std::vector<arma::Cube<double>::fixed<3, 6, 2>> getModel(
+            const arma::Col<double>::fixed<6>& endEffectorPose,
+            const arma::Mat<double>& redundantJointActuations) const;
 
         inline arma::Mat<double> getActuation(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
+            const arma::Col<double>::fixed<6>& endEffectorPose,
+            const arma::Mat<double>& redundantJointActuations) const;
 
-        inline double getPositionError(
-            const arma::Col<double>& endEffectorPose,
-            const arma::Mat<double>& redundantJointActuations) const noexcept;
+        inline double getEndEffectorPoseAccuracy(
+            const arma::Col<double>::fixed<6>& endEffectorPose,
+            const arma::Mat<double>& redundantJointActuations) const;
 
       protected:
-        const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
+        std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
     };
 
     //
     // Implementation
     //
 
-    inline MultiLevelStewartPlatform::MultiLevelStewartPlatform() noexcept
-      : platformLevels_({
-        ParallelKinematicMachine6PUPS({
-          0.0302769856567722, -0.0664251770004387, -0.009,
-          0.0423873979048716, -0.0594332272290012, -0.009,
-          0.0423873979048716, 0.0594332272290012, -0.009,
-          0.0302769856567722, 0.0664251770004387, -0.009,
-          -0.0726643835616438, 0.0069919497714374, -0.009,
-          -0.0726643835616438, -0.0069919497714374, -0.009
-        }, {
-         -0.0302769856567722, -0.0664251770004387, 0.009,
-         0.0726643835616438, -0.0069919497714374, 0.009,
-         0.0726643835616438, 0.0069919497714374, 0.009,
-         -0.0302769856567722, 0.0664251770004387, 0.009,
-         -0.0423873979048716, 0.0594332272290012, 0.009,
-         -0.0423873979048716,-0.0594332272290012, 0.009
-       }, {
-          -0.0302769856567722, -0.0664251770004387, 0.009,
-          0.0726643835616438, -0.0069919497714374, 0.009,
-          0.0726643835616438, 0.0069919497714374, 0.009,
-          -0.0302769856567722, 0.0664251770004387, 0.009,
-          -0.0423873979048716, 0.0594332272290012, 0.009,
-          -0.0423873979048716,-0.0594332272290012, 0.009
-        }, {
-          0.2148, 0.2148, 0.2148, 0.2148, 0.2148, 0.2148
-        }, {
-          0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148
-        }),
-        ParallelKinematicMachine6PUPS({
-          0.0302769856567722, -0.0664251770004387, -0.009,
-          0.0423873979048716, -0.0594332272290012, -0.009,
-          0.0423873979048716, 0.0594332272290012, -0.009,
-          0.0302769856567722, 0.0664251770004387, -0.009,
-          -0.0726643835616438, 0.0069919497714374, -0.009,
-          -0.0726643835616438, -0.0069919497714374, -0.009
-        }, {
-         -0.0302769856567722, -0.0664251770004387, 0.009,
-         0.0726643835616438, -0.0069919497714374, 0.009,
-         0.0726643835616438, 0.0069919497714374, 0.009,
-         -0.0302769856567722, 0.0664251770004387, 0.009,
-         -0.0423873979048716, 0.0594332272290012, 0.009,
-         -0.0423873979048716,-0.0594332272290012, 0.009
-       }, {
-          -0.0302769856567722, -0.0664251770004387, 0.009,
-          0.0726643835616438, -0.0069919497714374, 0.009,
-          0.0726643835616438, 0.0069919497714374, 0.009,
-          -0.0302769856567722, 0.0664251770004387, 0.009,
-          -0.0423873979048716, 0.0594332272290012, 0.009,
-          -0.0423873979048716,-0.0594332272290012, 0.009
-        }, {
-          0.2148, 0.2148, 0.2148, 0.2148, 0.2148, 0.2148
-        }, {
-          0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148
-        }),
-        ParallelKinematicMachine6PUPS({
-          0.0302769856567722, -0.0664251770004387, -0.009,
-          0.0423873979048716, -0.0594332272290012, -0.009,
-          0.0423873979048716, 0.0594332272290012, -0.009,
-          0.0302769856567722, 0.0664251770004387, -0.009,
-          -0.0726643835616438, 0.0069919497714374, -0.009,
-          -0.0726643835616438, -0.0069919497714374, -0.009
-        }, {
-         -0.0302769856567722, -0.0664251770004387, 0.009,
-         0.0726643835616438, -0.0069919497714374, 0.009,
-         0.0726643835616438, 0.0069919497714374, 0.009,
-         -0.0302769856567722, 0.0664251770004387, 0.009,
-         -0.0423873979048716, 0.0594332272290012, 0.009,
-         -0.0423873979048716,-0.0594332272290012, 0.009
-       }, {
-          -0.0302769856567722, -0.0664251770004387, 0.009,
-          0.0726643835616438, -0.0069919497714374, 0.009,
-          0.0726643835616438, 0.0069919497714374, 0.009,
-          -0.0302769856567722, 0.0664251770004387, 0.009,
-          -0.0423873979048716, 0.0594332272290012, 0.009,
-          -0.0423873979048716,-0.0594332272290012, 0.009
-        }, {
-          0.2148, 0.2148, 0.2148, 0.2148, 0.2148, 0.2148
-        }, {
-          0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148
-        })
-      }) {
+    inline MultiLevelStewartPlatform::MultiLevelStewartPlatform() noexcept {
+      ParallelKinematicMachine6PUPS firstPlatformLevel;
+      firstPlatformLevel.setMinimalActiveJointActuations({0.2148, 0.2148, 0.2148, 0.2148, 0.2148, 0.2148});
+      firstPlatformLevel.setMaximalActiveJointActuations({0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148});
+      firstPlatformLevel.setEndEffectorJointPositions({
+        0.0302769856567722, -0.0664251770004387, -0.009,
+        0.0423873979048716, -0.0594332272290012, -0.009,
+        0.0423873979048716, 0.0594332272290012, -0.009,
+        0.0302769856567722, 0.0664251770004387, -0.009,
+        -0.0726643835616438, 0.0069919497714374, -0.009,
+        -0.0726643835616438, -0.0069919497714374, -0.009});
+      firstPlatformLevel.setRedundantJointStartPositions({
+        -0.0302769856567722, -0.0664251770004387, 0.009,
+        0.0726643835616438, -0.0069919497714374, 0.009,
+        0.0726643835616438, 0.0069919497714374, 0.009,
+        -0.0302769856567722, 0.0664251770004387, 0.009,
+        -0.0423873979048716, 0.0594332272290012, 0.009,
+        -0.0423873979048716,-0.0594332272290012, 0.009});
+      firstPlatformLevel.setRedundantJointEndPositions({
+        -0.0302769856567722, -0.0664251770004387, 0.009,
+        0.0726643835616438, -0.0069919497714374, 0.009,
+        0.0726643835616438, 0.0069919497714374, 0.009,
+        -0.0302769856567722, 0.0664251770004387, 0.009,
+        -0.0423873979048716, 0.0594332272290012, 0.009,
+        -0.0423873979048716,-0.0594332272290012, 0.009});
 
+      platformLevels_.push_back(firstPlatformLevel);
+
+      ParallelKinematicMachine6PUPS secondPlatformLevel;
+      secondPlatformLevel.setMinimalActiveJointActuations({0.2148, 0.2148, 0.2148, 0.2148, 0.2148, 0.2148});
+      secondPlatformLevel.setMaximalActiveJointActuations({0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148});
+      secondPlatformLevel.setEndEffectorJointPositions({
+        0.0302769856567722, -0.0664251770004387, -0.009,
+        0.0423873979048716, -0.0594332272290012, -0.009,
+        0.0423873979048716, 0.0594332272290012, -0.009,
+        0.0302769856567722, 0.0664251770004387, -0.009,
+        -0.0726643835616438, 0.0069919497714374, -0.009,
+        -0.0726643835616438, -0.0069919497714374, -0.009});
+      secondPlatformLevel.setRedundantJointStartPositions({
+        -0.0302769856567722, -0.0664251770004387, 0.009,
+        0.0726643835616438, -0.0069919497714374, 0.009,
+        0.0726643835616438, 0.0069919497714374, 0.009,
+        -0.0302769856567722, 0.0664251770004387, 0.009,
+        -0.0423873979048716, 0.0594332272290012, 0.009,
+        -0.0423873979048716,-0.0594332272290012, 0.009});
+      secondPlatformLevel.setRedundantJointEndPositions({
+        -0.0302769856567722, -0.0664251770004387, 0.009,
+        0.0726643835616438, -0.0069919497714374, 0.009,
+        0.0726643835616438, 0.0069919497714374, 0.009,
+        -0.0302769856567722, 0.0664251770004387, 0.009,
+        -0.0423873979048716, 0.0594332272290012, 0.009,
+        -0.0423873979048716,-0.0594332272290012, 0.009});
+
+      platformLevels_.push_back(secondPlatformLevel);
+
+      ParallelKinematicMachine6PUPS thirdPlatformLevel;
+      thirdPlatformLevel.setMinimalActiveJointActuations({0.2148, 0.2148, 0.2148, 0.2148, 0.2148, 0.2148});
+      thirdPlatformLevel.setMaximalActiveJointActuations({0.3148, 0.3148, 0.3148, 0.3148, 0.3148, 0.3148});
+      thirdPlatformLevel.setEndEffectorJointPositions({
+        0.0302769856567722, -0.0664251770004387, -0.009,
+        0.0423873979048716, -0.0594332272290012, -0.009,
+        0.0423873979048716, 0.0594332272290012, -0.009,
+        0.0302769856567722, 0.0664251770004387, -0.009,
+        -0.0726643835616438, 0.0069919497714374, -0.009,
+        -0.0726643835616438, -0.0069919497714374, -0.009});
+      thirdPlatformLevel.setRedundantJointStartPositions({
+        -0.0302769856567722, -0.0664251770004387, 0.009,
+        0.0726643835616438, -0.0069919497714374, 0.009,
+        0.0726643835616438, 0.0069919497714374, 0.009,
+        -0.0302769856567722, 0.0664251770004387, 0.009,
+        -0.0423873979048716, 0.0594332272290012, 0.009,
+        -0.0423873979048716,-0.0594332272290012, 0.009});
+      thirdPlatformLevel.setRedundantJointEndPositions({
+        -0.0302769856567722, -0.0664251770004387, 0.009,
+        0.0726643835616438, -0.0069919497714374, 0.009,
+        0.0726643835616438, 0.0069919497714374, 0.009,
+        -0.0302769856567722, 0.0664251770004387, 0.009,
+        -0.0423873979048716, 0.0594332272290012, 0.009,
+        -0.0423873979048716,-0.0594332272290012, 0.009});
+
+      platformLevels_.push_back(thirdPlatformLevel);
     }
 
-    inline MultiLevelStewartPlatform::MultiLevelStewartPlatform(
-        const std::vector<ParallelKinematicMachine6PUPS>& platformLevels) noexcept
-      : platformLevels_(platformLevels) {
+    inline std::vector<arma::Cube<double>::fixed<3, 6, 2>> MultiLevelStewartPlatform::getModel(
+        const arma::Col<double>::fixed<6>& endEffectorPose,
+        const arma::Mat<double>& redundantJointActuations) const {
+      std::vector<arma::Cube<double>::fixed<3, 6, 2>> models;
 
-    }
-
-    inline std::vector<arma::Mat<double>> MultiLevelStewartPlatform::getModelCharacterisation(
-        const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
-      std::vector<arma::Mat<double>> modelCharacterisations;
-
-      const std::vector<arma::Mat<double>>& modelCharacterisation = platformLevels_.at(0).getModelCharacterisation(endEffectorPose, {});
-      modelCharacterisations.insert(modelCharacterisations.end(), modelCharacterisation.begin(), modelCharacterisation.end());
+      models.push_back(platformLevels_.at(0).getModel(endEffectorPose, {}));
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        const std::vector<arma::Mat<double>>& modelCharacterisation = platformLevels_.at(n).getModelCharacterisation(redundantJointActuations.col(n), {});
-        modelCharacterisations.insert(modelCharacterisations.end(), modelCharacterisation.begin(), modelCharacterisation.end());
+        models.push_back(platformLevels_.at(n).getModel(redundantJointActuations.col(n), {}));
       }
 
-      return modelCharacterisations;
+      return models;
     }
 
     inline arma::Mat<double> MultiLevelStewartPlatform::getActuation(
-        const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantJointActuations) const noexcept {
+        const arma::Col<double>::fixed<6>& endEffectorPose,
+        const arma::Mat<double>& redundantJointActuations) const {
       arma::Mat<double> actuations;
 
       const arma::Mat<double>& actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
@@ -149,14 +137,14 @@ namespace mant {
       return actuations;
     }
 
-    inline double MultiLevelStewartPlatform::getPositionError(
-        const arma::Col<double>& endEffectorPose,
-        const arma::Mat<double>& redundantActuationParameters) const noexcept {
+    inline double MultiLevelStewartPlatform::getEndEffectorPoseAccuracy(
+        const arma::Col<double>::fixed<6>& endEffectorPose,
+        const arma::Mat<double>& redundantActuationParameters) const {
 
-      double positionError = platformLevels_.at(0).getPositionError(endEffectorPose, {});
+      double positionError = platformLevels_.at(0).getEndEffectorPoseAccuracy(endEffectorPose, {});
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        positionError += platformLevels_.at(n).getPositionError(redundantActuationParameters.col(n), {});
+        positionError += platformLevels_.at(n).getEndEffectorPoseAccuracy(redundantActuationParameters.col(n), {});
       }
 
       return positionError;
