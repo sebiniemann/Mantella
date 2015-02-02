@@ -166,6 +166,7 @@ namespace mant {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
+      // TODO Check number of redundantJointActuations vs redudantant elements
 
       const arma::Col<double>::fixed<3>& endEffectorPosition = endEffectorPose.subvec(0, 2);
       const double& endEffectorRollAngle = endEffectorPose.at(3);
