@@ -28,12 +28,12 @@ namespace mant {
             const arma::Col<double>::fixed<3>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
-        inline arma::Col<double>::fixed<3> getActuation(
+        inline arma::Row<double>::fixed<3> getActuation(
             const arma::Col<double>::fixed<3>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
         inline arma::Col<double>::fixed<3> getEndEffectorPose(
-            const arma::Col<double>::fixed<3>& actuations,
+            const arma::Row<double>::fixed<3>& actuations,
             const arma::Row<double>& redundantJointActuations) const;
 
         inline double getEndEffectorPoseAccuracy(
@@ -161,7 +161,7 @@ namespace mant {
       return model;
     }
 
-    inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRRR::getActuation(
+    inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PRRR::getActuation(
         const arma::Col<double>::fixed<3>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
       const std::vector<arma::Mat<double>::fixed<2, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
@@ -180,7 +180,7 @@ namespace mant {
     }
 
     inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRRR::getEndEffectorPose(
-        const arma::Col<double>::fixed<3>& actuations,
+        const arma::Row<double>::fixed<3>& actuations,
         const arma::Row<double>& redundantJointActuations) const {
       // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
       return {0, 0, 0};
