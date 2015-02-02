@@ -8,25 +8,44 @@ namespace mant {
             const arma::Mat<double>::fixed<3, 3>& redundantJointStarts,
             const arma::Mat<double>::fixed<3, 3>& redundantJointEnds,
             const arma::Row<double>::fixed<3>& minimalActiveJointActuations,
+
+        inline arma::Row<double>::fixed<3> getMinimalActiveJointActuations() const noexcept;
+
+        inline void setMinimalActiveJointActuations(
+            const arma::Row<double>::fixed<3>& minimalActiveJointActuations) noexcept;
+
+        inline arma::Row<double>::fixed<3> getMaximalActiveJointActuations() const noexcept;
+
+        inline void setMaximalActiveJointActuations(
             const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept;
 
         inline std::vector<arma::Mat<double>> getModelCharacterisation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
+        inline arma::Mat<double>::fixed<3, 3> getEndEffectorJointPositions() const noexcept;
 
         inline arma::Mat<double> getActuation(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
+        inline void setEndEffectorJointPositions(
+            const arma::Mat<double>::fixed<3, 3>& endEffectorJointPositions) noexcept;
 
         inline double getPositionError(
             const arma::Col<double>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
+        inline arma::Mat<double>::fixed<3, 3> getRedundantJointStartPositions() const noexcept;
 
       protected:
         arma::Mat<double>::fixed<3, 3> endEffectorJointsRelative_;
+        inline void setRedundantJointStartPositions(
+            const arma::Mat<double>::fixed<3, 3>& redundantJointStartPositions) noexcept;
+
+        inline arma::Mat<double>::fixed<3, 3> getRedundantJointEndPositions() const noexcept;
 
         arma::Mat<double>::fixed<3, 3> redundantJointStarts_;
         arma::Mat<double>::fixed<3, 3> redundantJointEnds_;
+        inline void setRedundantJointEndPositions(
+            const arma::Mat<double>::fixed<3, 3>& redundantJointEndPositions) noexcept;
 
         arma::Row<double>::fixed<3> minimalActiveJointActuations_;
         arma::Row<double>::fixed<3> maximalActiveJointActuations_;
@@ -86,6 +105,50 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Mat<double>> modelCharacterisation;
+    inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PUPS::getMinimalActiveJointActuations() const noexcept {
+      return minimalActiveJointActuations_;
+    }
+
+    inline void ParallelKinematicMachine3PUPS::setMinimalActiveJointActuations(
+        const arma::Row<double>::fixed<3>& minimalActiveJointActuations) noexcept {
+      minimalActiveJointActuations_ = minimalActiveJointActuations;
+    }
+
+    inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PUPS::getMaximalActiveJointActuations() const noexcept {
+      return maximalActiveJointActuations_;
+    }
+
+    inline void ParallelKinematicMachine3PUPS::setMaximalActiveJointActuations(
+        const arma::Row<double>::fixed<3>& maximalActiveJointActuations) noexcept {
+      maximalActiveJointActuations_ = maximalActiveJointActuations;
+    }
+
+    inline arma::Mat<double>::fixed<3, 3> ParallelKinematicMachine3PUPS::getEndEffectorJointPositions() const noexcept {
+      return endEffectorJointPositions_;
+    }
+
+    inline void ParallelKinematicMachine3PUPS::setEndEffectorJointPositions(
+        const arma::Mat<double>::fixed<3, 3>& endEffectorJointPositions) noexcept {
+      endEffectorJointPositions_ = endEffectorJointPositions;
+    }
+
+    inline arma::Mat<double>::fixed<3, 3> ParallelKinematicMachine3PUPS::getRedundantJointStartPositions() const noexcept {
+      return redundantJointStartPositions_;
+    }
+
+    inline void ParallelKinematicMachine3PUPS::setRedundantJointStartPositions(
+        const arma::Mat<double>::fixed<3, 3>& redundantJointStartPositions) noexcept {
+      redundantJointStartPositions_ = redundantJointStartPositions;
+    }
+
+    inline arma::Mat<double>::fixed<3, 3> ParallelKinematicMachine3PUPS::getRedundantJointEndPositions() const noexcept {
+      return redundantJointEndPositions_;
+    }
+
+    inline void ParallelKinematicMachine3PUPS::setRedundantJointEndPositions(
+        const arma::Mat<double>::fixed<3, 3>& redundantJointEndPositions) noexcept {
+      redundantJointEndPositions_ = redundantJointEndPositions;
+    }
 
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
