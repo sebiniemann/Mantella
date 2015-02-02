@@ -37,6 +37,10 @@ namespace mant {
             const arma::Col<double>::fixed<3>& endEffectorPose,
             const arma::Col<double>& redundantJointActuations) const;
 
+        inline arma::Col<double>::fixed<3> getEndEffectorPose(
+            const arma::Col<double>::fixed<3>& actuations,
+            const arma::Col<double>& redundantJointActuations) const;
+
         inline double getEndEffectorPoseAccuracy(
             const arma::Col<double>::fixed<3>& endEffectorPose,
             const arma::Col<double>& redundantJointActuations) const;
@@ -163,7 +167,7 @@ namespace mant {
       model.push_back(baseJointPositions);
       model.push_back(endEffectorJointPositions);
 
-      return modelCharacterisation;
+      return model;
     }
 
     inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRPR::getActuation(
@@ -175,6 +179,13 @@ namespace mant {
       const arma::Mat<double>::fixed<2, 3>& endEffectorJoints = model.at(1);
 
       return arma::sqrt(arma::sum(arma::square(endEffectorJoints - baseJoints)));
+    }
+
+    inline arma::Col<double>::fixed<3> ParallelKinematicMachine3PRRR::getEndEffectorPose(
+        const arma::Col<double>::fixed<3>& actuations,
+        const arma::Row<double>& redundantJointActuations) const {
+      // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
+      return {0, 0, 0};
     }
 
     inline double ParallelKinematicMachine3PRPR::getEndEffectorPoseAccuracy(
