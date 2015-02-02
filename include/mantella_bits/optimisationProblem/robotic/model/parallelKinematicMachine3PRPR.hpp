@@ -29,7 +29,7 @@ namespace mant {
         inline void setRedundantJointEndPositions(
             const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions) noexcept;
 
-        inline std::vector<arma::Mat<double>::fixed<2, 3>> getModel(
+        inline arma::Cube<double>::fixed<2, 3, 2> getModel(
             const arma::Col<double>::fixed<3>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
@@ -142,31 +142,27 @@ namespace mant {
       redundantJointEndPositions_ = redundantJointEndPositions;
     }
 
-    inline std::vector<arma::Mat<double>::fixed<2, 3>> ParallelKinematicMachine3PRPR::getModel(
+    inline arma::Cube<double>::fixed<2, 3, 2> ParallelKinematicMachine3PRPR::getModel(
         const arma::Col<double>::fixed<3>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
-
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
       // TODO Check number of redundantJointActuations vs redudantant elements
 
+      arma::Cube<double>::fixed<2, 3, 2> model;
+
       const arma::Col<double>::fixed<2>& endEffectorPosition = endEffectorPose.subvec(0, 1);
       const double& endEffectorAngle = endEffectorPose.at(2);
 
-      arma::Mat<double>::fixed<2, 3> baseJointPositions = redundantJointStartPositions_;
+      model.slice(0) = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        baseJointPositions.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
+        model.slice(0).col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<2, 3> endEffectorJointPositions = get2DRotationMatrix(endEffectorAngle) * endEffectorJointPositions_;
-      endEffectorJointPositions.each_col() += endEffectorPosition;
-
-      std::vector<arma::Mat<double>::fixed<2, 3>> model;
-
-      model.push_back(baseJointPositions);
-      model.push_back(endEffectorJointPositions);
+      model.slice(1) = get2DRotationMatrix(endEffectorAngle) * endEffectorJointPositions_;
+      model.slice(1).each_col() += endEffectorPosition;
 
       return model;
     }
@@ -174,10 +170,10 @@ namespace mant {
     inline arma::Row<double>::fixed<3> ParallelKinematicMachine3PRPR::getActuation(
         const arma::Col<double>::fixed<3>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
-      const std::vector<arma::Mat<double>::fixed<2, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
+      const arma::Cube<double>::fixed<2, 3, 2>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<2, 3>& baseJoints = model.at(0);
-      const arma::Mat<double>::fixed<2, 3>& endEffectorJoints = model.at(1);
+      const arma::Mat<double>::fixed<2, 3>& baseJoints = model.slice(0);
+      const arma::Mat<double>::fixed<2, 3>& endEffectorJoints = model.slice(1);
 
       return arma::sqrt(arma::sum(arma::square(endEffectorJoints - baseJoints)));
     }
@@ -192,11 +188,11 @@ namespace mant {
     inline double ParallelKinematicMachine3PRPR::getEndEffectorPoseAccuracy(
         const arma::Col<double>::fixed<3>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
-      const std::vector<arma::Mat<double>::fixed<2, 3>>& model = getModel(endEffectorPose, redundantJointActuations);
+      const arma::Cube<double>::fixed<2, 3, 2>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<2, 3>& baseJointPositions = model.at(1);
+      const arma::Mat<double>::fixed<2, 3>& baseJointPositions = model.slice(1);
 
-      const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions = model.at(1);
+      const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions = model.slice(1);
       arma::Mat<double>::fixed<2, 3> endEffectorJointPositionsRotated = endEffectorJointPositions;
       endEffectorJointPositionsRotated.each_col() -= endEffectorPose.subvec(0, 1);
 

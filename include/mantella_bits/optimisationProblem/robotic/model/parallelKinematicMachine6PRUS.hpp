@@ -29,7 +29,7 @@ namespace mant {
         inline void setBaseJointAngles(
             const arma::Mat<double>::fixed<2, 6>& baseJointAngles) noexcept;
 
-        inline std::vector<arma::Mat<double>::fixed<3, 6>> getModel(
+        inline arma::Cube<double>::fixed<3, 6, 3> getModel(
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
@@ -70,12 +70,12 @@ namespace mant {
 
     inline ParallelKinematicMachine6PRUS::ParallelKinematicMachine6PRUS() noexcept {
       setLinkLengths({
-                       0.24, 0.56,
-                       0.24, 0.56,
-                       0.24, 0.56,
-                       0.24, 0.56,
-                       0.24, 0.56,
-                       0.24, 0.56});
+        0.24, 0.56,
+        0.24, 0.56,
+        0.24, 0.56,
+        0.24, 0.56,
+        0.24, 0.56,
+        0.24, 0.56});
 
       setEndEffectorJointPositions({
         -0.027346281319362, 0.067684421383375, 0.0,
@@ -174,37 +174,32 @@ namespace mant {
       baseJointAngles_ = baseJointAngles;
     }
 
-    inline std::vector<arma::Mat<double>::fixed<3, 6>> ParallelKinematicMachine6PRUS::getModel(
+    inline arma::Cube<double>::fixed<3, 6, 3> ParallelKinematicMachine6PRUS::getModel(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
 
+      arma::Cube<double>::fixed<3, 6, 3> model;
+
       const arma::Col<double>::fixed<3>& endEffectorPosition = endEffectorPose.subvec(0, 2);
       const double& endEffectorRollAngle = endEffectorPose.at(3);
       const double& endEffectorPitchAngle = endEffectorPose.at(4);
       const double& endEffectorYawAngle = endEffectorPose.at(5);
 
-      arma::Mat<double>::fixed<3, 6> baseJoints = redundantJointStartPositions_;
+      model.slice(0) = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
         const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        baseJoints.col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
+        model.slice(0).col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      arma::Mat<double>::fixed<3, 6> endEffectorJoints = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
-      endEffectorJoints.each_col() += endEffectorPosition;
+      model.slice(2) = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
+      model.slice(2).each_col() += endEffectorPosition;
 
-      arma::Mat<double>::fixed<3, 6> passiveJoints;
-      for (std::size_t n = 0; n < baseJoints.n_cols; ++n) {
-        passiveJoints.col(n) = getCircleSphereIntersection(baseJoints.col(n), linkLengths_.at(0, n), baseJointNormals_.col(n), endEffectorJoints.col(n), linkLengths_.at(1, n));
+      for (std::size_t n = 0; n < model.slice(0).n_cols; ++n) {
+        model.slice(1).col(n) = getCircleSphereIntersection(model.slice(0).col(n), linkLengths_.at(0, n), baseJointNormals_.col(n), model.slice(2).col(n), linkLengths_.at(1, n));
       }
-
-      std::vector<arma::Mat<double>::fixed<3, 6>> model;
-
-      model.push_back(baseJoints);
-      model.push_back(passiveJoints);
-      model.push_back(endEffectorJoints);
 
       return model;
     }
@@ -212,10 +207,10 @@ namespace mant {
     inline arma::Row<double>::fixed<6> ParallelKinematicMachine6PRUS::getActuation(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
-      const std::vector<arma::Mat<double>::fixed<3, 6>>& model = getModel(endEffectorPose, redundantJointActuations);
+      const arma::Cube<double>::fixed<3, 6, 3>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<3, 6>& baseJointPositions = model.at(0);
-      const arma::Mat<double>::fixed<3, 6>& passiveJointPositions = model.at(1);
+      const arma::Mat<double>::fixed<3, 6>& baseJointPositions = model.slice(0);
+      const arma::Mat<double>::fixed<3, 6>& passiveJointPositions = model.slice(1);
 
       const arma::Mat<double>::fixed<3, 6>& baseToPassiveJointPositions = passiveJointPositions - baseJointPositions;
 
@@ -237,15 +232,15 @@ namespace mant {
     inline double ParallelKinematicMachine6PRUS::getEndEffectorPoseAccuracy(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
-      const std::vector<arma::Mat<double>::fixed<3, 6>>& model = getModel(endEffectorPose, redundantJointActuations);
+      const arma::Cube<double>::fixed<3, 6, 3>& model = getModel(endEffectorPose, redundantJointActuations);
 
-      const arma::Mat<double>::fixed<3, 6>& baseJoints = model.at(0);
+      const arma::Mat<double>::fixed<3, 6>& baseJoints = model.slice(0);
 
-      const arma::Mat<double>::fixed<3, 6>& endEffectorJoints = model.at(2);
+      const arma::Mat<double>::fixed<3, 6>& endEffectorJoints = model.slice(2);
       arma::Mat<double>::fixed<3, 6> endEffectorJointsRotated = endEffectorJoints;
       endEffectorJointsRotated.each_col() -= endEffectorPose.subvec(0, 2);
 
-      const arma::Mat<double>::fixed<3, 6>& passiveJoints = model.at(1);
+      const arma::Mat<double>::fixed<3, 6>& passiveJoints = model.slice(1);
 
       arma::Mat<double>::fixed<3, 6> relativeBaseToPassiveJoints = passiveJoints - baseJoints;
       for (std::size_t n = 0; n < relativeBaseToPassiveJoints.n_cols; ++n) {
