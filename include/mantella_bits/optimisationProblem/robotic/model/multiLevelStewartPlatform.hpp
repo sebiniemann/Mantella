@@ -140,7 +140,6 @@ namespace mant {
     inline double MultiLevelStewartPlatform::getEndEffectorPoseAccuracy(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Mat<double>& redundantActuationParameters) const {
-
       double positionError = platformLevels_.at(0).getEndEffectorPoseAccuracy(endEffectorPose, {});
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
