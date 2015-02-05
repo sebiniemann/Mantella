@@ -1,38 +1,32 @@
 # Site settings
 baseurl: http://SebastianNiemann.github.io/Mantella
 
-# The title must match the project name
-title: Mantella 
-subtitle: Mantella is an efficiency-focused, modern C++ library for analysing and solving optimisation problems.
-description: Mantella is an efficiency-focused, modern C++ library for analysing and solving optimisation problems on multi-cores and high performance clusters.
-  
+# Note, it is not required for the title to match the project name
+title: Mantella
+subtitle: An efficiency-focused, modern C++ library for analysing and solving optimisation problems.
+description: Mantella is an efficiency-focused, modern C++ library for analysing and solving optimisation problems.
 author: Core Mantella team
+  
+project_name: Mantella
 github-url: https://github.com/SebastianNiemann/Mantella
 
-# Main site navigation
 navigation:
-# Linking to the index site is hard coded within the layout
-#  - title: About
-#  url: /
- - title: Getting Started
-   url: getting-started
- - title: License
-   url: license
- - title: API Reference
-   url: api-reference
- - title: Questions
-   url: questions
+- Get Started
+- License
+- API Reference
+- Questions
+
 collections:
 - entries
 
-# Removes the need of .html suffixes
+# Avoids the need of .html suffixes
 permalink: pretty
   
-# SASS
-sass:
-  sass_dir: _sass
-  style: :compressed
-
 # Parse Markdown inside HTML blocks
 kramdown:
   parse_block_html: true
+
+# Provide SASS files as compressed CSS files
+sass:
+  sass_dir: _sass
+  style: :compressed
