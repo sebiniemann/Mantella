@@ -29,13 +29,15 @@ body {
  * Turn the `.navbar` at the top of the docs purple.
  */
 
-.custom-nav {
-  margin-bottom: 0;
-  background-color: none;
-  border-bottom: 1px solid $secondary-color;
+.landing-page > .custom-nav {
+  background-color: transparent;
 }
 
 .custom-nav {
+  margin-bottom: 0;
+  background-color: $secondary-background-color;
+  border-bottom: 1px solid $secondary-color;
+  
   .navbar-brand {
     font-weight: 600;
     color: $primary-color;
@@ -66,11 +68,15 @@ body {
  * Separated section of content at the bottom of all pages, save the homepage.
  */
 
+.landing-page > .custom-footer {
+  background-color: transparent;
+}
+
 .custom-footer {
   padding-top: 20px;
   padding-bottom: 30px;
   color: $secondary-color-dark;
-  background-color: none;
+  background-color: $secondary-background-color;
   text-align: center;
   border-top: 1px solid $secondary-color;
 }

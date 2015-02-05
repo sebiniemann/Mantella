@@ -31,7 +31,7 @@
     <link rel="shortcut icon" href="./favicon.ico">
   </head>
   </head>
-  <body>
+  <body{% if page.category == 'landing-page' %} class="landing-page"{% endif %}>
     <a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
     
     <!-- Main navigation -->
@@ -50,7 +50,7 @@
           <ul class="nav navbar-nav">
           {% for title in site.navigation %}
               {% assign link = title | slugify %}
-              <li {% if page.url contains link %}class="active"{% endif %}>
+              <li{% if page.url contains link %} class="active"{% endif %}>
                   <a href="{{ site.baseurl }}/{{ link }}">{{ title }}</a>
               </li>
           {% endfor %}
