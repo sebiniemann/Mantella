@@ -9,14 +9,16 @@ layout: base
   </div>
 </div>
 
-<div class="container custom-docs-container">
+{% assign entries = site.entries | where: 'category', page.category | sort: 'name', 'first' %}
+
+<div class="container custom-container">
   <div class="row">
     <div class="col-md-3" role="complementary">
-      <nav class="custom-docs-sidebar hidden-print hidden-xs hidden-sm">
-        <ul class="nav custom-docs-sidenav">
-          {% for post in site.categories[page.category] %}
+      <nav class="custom-sidebar hidden-print hidden-xs hidden-sm">
+        <ul class="nav custom-sidenav">
+          {% for entry in entries %}
             <li>
-              <a href="#{{ post.title | downcase | replace: ' ', '-' }}">{{ post.title }}</a>
+              <a href="#{{ entry.title | slugify }}">{{ entry.title }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -25,11 +27,11 @@ layout: base
     <main class="col-md-9" role="main">
       {{ content }}
       
-      {% for post in site.categories[page.category] %}
-        <section class="custom-docs-section">
-          <h1 id="{{ post.title | downcase | replace: ' ', '-' }}" class="page-header">{{ post.title }}</h1>
+          {% for entry in entries %}
+        <section class="custom-section">
+          <h1 id="{{ entry.title | slugify }}" class="page-header">{{ entry.title }}</h1>
           
-          {{ post.content }}
+          {{ entry.content }}
         </section>
       {% endfor %}
     </main>

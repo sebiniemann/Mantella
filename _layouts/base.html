@@ -48,13 +48,10 @@
         </div>
         <nav class="collapse navbar-collapse custom-navbar-collapse">
           <ul class="nav navbar-nav">
-          {% for link in site.navigation %}
-              {% assign active = nil %}
-              {% if page.url contains link.url %}
-                  {% assign active = 'active' %}
-              {% endif %}
-              <li class="{{ active }}">
-                  <a href="{{ site.baseurl }}/{{ link.url }}">{{ link.title }}</a>
+          {% for title in site.navigation %}
+              {% assign link = title | slugify %}
+              <li {% if page.url contains link %}class="active"{% endif %}>
+                  <a href="{{ site.baseurl }}/{{ link }}">{{ title }}</a>
               </li>
           {% endfor %}
           </ul>
@@ -76,7 +73,7 @@
           <br />
           Code licensed under <a href="http://opensource.org/licenses/MIT" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
         <p>
-          Currently v0.9.0 · <a href="{{ site.github-url }}/issues" target="_blank">{{ site.title }} Issues</a> <!--· <a href="{{ site.github-url }}/blob/master/CHANGELOG.md">Changelog</a>--> · <a href="{{ site.baseurl }}/impressum">Impressum</a>
+          Currently v0.9.0 · <a href="{{ site.github-url }}/issues" target="_blank">{{ site.title }} Issues</a> <!--· <a href="{{ site.github-url }}/blob/master/CHANGELOG.md">Changelog</a>--> · <a href="{{ site.baseurl }}/contact">Impressum</a>
         </p>
       </div>
     </footer>
