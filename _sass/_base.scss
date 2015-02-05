@@ -18,8 +18,8 @@ body {
     font-size: $base-font-size;
     line-height: $base-line-height;
     font-weight: 300;
-    color: $text-color;
-    background-color: $background-color;
+    color: $primary-text-color;
+    background-color: $primary-background-color;
     -webkit-text-size-adjust: 100%;
 }
 
@@ -91,6 +91,10 @@ h1, h2, h3, h4, h5, h6 {
 a {
     color: $link-color;
     text-decoration: none;
+    &:hover, &:focus, &:active {
+      color: $primary-text-color;
+      text-decoration: underline;
+    }
 }
 
 
@@ -99,8 +103,8 @@ a {
  * Blockquotes
  */
 blockquote {
-    color: $gray-color;
-    border-left: 4px solid $gray-color-light;
+    color: $secondary-color-dark;
+    border-left: 4px solid $secondary-color;
     padding-left: $spacing-unit / 2;
     font-size: 18px;
     letter-spacing: -1px;
@@ -119,9 +123,9 @@ blockquote {
 pre,
 code {
     font-size: 15px;
-    border: 1px solid $gray-color-light;
+    border: 1px solid $secondary-color;
     border-radius: 3px;
-    background-color: #eef;
+    background-color: $primary-background-color;
 }
 
 code {
@@ -167,7 +171,7 @@ pre {
         vertical-align: middle;
 
         path {
-            fill: $gray-color;
+            fill: $secondary-color;
         }
     }
 }

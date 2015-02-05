@@ -5,48 +5,21 @@
  * details, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-/*
- * Scaffolding
- *
- * Update the basics of our documents to prep for docs content.
- */
-
 body {
-  position: relative;
+  background-color: $primary-background-color;
   /* For scrollspy */
-}
-
-/* Keep code small in tables on account of limited space */
-
-.table code {
-  font-size: 13px;
-  font-weight: normal;
+  position: relative;
 }
 
 /* Outline button for use within the docs */
-
 .btn-outline {
-  color: $primary-color;
-  background-color: transparent;
-  border-color: $primary-color;
-  &:hover, &:focus, &:active {
-    color: #fff;
-    background-color: $primary-color;
-    border-color: $primary-color;
-  }
-}
-
-/* Inverted outline button (white on dark) */
-
-.btn-outline-inverse {
-  color: #fff;
-  background-color: transparent;
-  border-color: #cdbfe3;
+  color: $secondary-text-color;
+  background-color: $primary-color;
   &:hover, &:focus, &:active {
     color: $primary-color;
     text-shadow: none;
-    background-color: #fff;
-    border-color: #fff;
+    background-color: $secondary-color-light;
+    border-color: $secondary-color;
   }
 }
 
@@ -56,47 +29,33 @@ body {
  * Turn the `.navbar` at the top of the docs purple.
  */
 
-.custom-docs-nav {
+.custom-nav {
   margin-bottom: 0;
-  background-color: #fff;
-  border-bottom: 0;
+  background-color: none;
+  border-bottom: 1px solid $secondary-color;
 }
 
-.custom-home-nav .custom-nav-b {
-  display: none;
-}
-
-.custom-docs-nav {
+.custom-nav {
   .navbar-brand {
-    font-weight: 500;
+    font-weight: 600;
     color: $primary-color;
   }
   .navbar-nav > {
     li > a {
       font-weight: 500;
       color: $primary-color;
-      &:hover {
-        color: #111;
-        background-color: #f9f9f9;
+      &:hover, &:focus, &:active {
+        color: $secondary-text-color;
+        background-color: $primary-color;
       }
     }
     .active > a {
-      color: #111;
-      background-color: #f9f9f9;
-      &:hover {
-        color: #111;
-        background-color: #f9f9f9;
+      color: $primary-text-color;
+      background-color: $secondary-color-light;
+      &:hover, &:focus, &:active {
+        color: $primary-text-color;
+        background-color: $secondary-color-light;
       }
-    }
-  }
-  .navbar-toggle .icon-bar {
-    background-color: $primary-color;
-  }
-  .navbar-header .navbar-toggle {
-    border-color: #fff;
-    &:hover, &:focus {
-      background-color: #f9f9f9;
-      border-color: #f9f9f9;
     }
   }
 }
@@ -107,31 +66,17 @@ body {
  * Separated section of content at the bottom of all pages, save the homepage.
  */
 
-.custom-docs-footer {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  margin-top: 100px;
-  color: #777;
-  background-color: #fdfdfd;
+.custom-footer {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  color: $secondary-color-dark;
+  background-color: none;
   text-align: center;
-  border-top: 1px solid #e5e5e5;
-}
-
-.custom-docs-footer-links {
-  padding-left: 0;
-  margin-top: 20px;
-  color: #999;
-  li {
-    display: inline;
-    padding: 0 2px;
-    &:first-child {
-      padding-left: 0;
-    }
-  }
+  border-top: 1px solid $secondary-color;
 }
 
 @media (min-width: 768px) {
-  .custom-docs-footer p {
+  .custom-footer p {
     margin-bottom: 0;
   }
 }
@@ -144,65 +89,53 @@ body {
 
 /* Share masthead with page headers */
 
-.custom-docs-masthead, .custom-docs-header {
+.custom-masthead, .custom-header {
   position: relative;
-  padding: 30px 15px;
+  padding: 20px 15px;
   text-align: center;
-  color: $primary-color-dark;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  background-color: $primary-color-light;
-  background-repeat: repeat-x;
 }
 
 /* Masthead (headings and download button) */
 
-.custom-docs-masthead {
-  background-image: -webkit-gradient(linear, left top, left bottom, from($primary-color), to($primary-color-light));
-  background-image: -webkit-linear-gradient(top, $primary-color 0%, $primary-color-light 100%);
-  background-image: -o-linear-gradient(top, $primary-color 0%, $primary-color-light 100%);
-  background-image: linear-gradient(to bottom, $primary-color 0%, $primary-color-light 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$primary-color', endColorstr='$primary-color-light', GradientType=0);
+.custom-masthead {
+  background-color: $secondary-background-color;
+  color: $primary-text-color;
   
-  .custom-docs-booticon {
+  .custom-booticon {
     margin: 0 auto 30px;
   }
   h1 {
     font-weight: 300;
     font-family:'Nunito', sans-serif;
     line-height: 1;
-    color: #fff;
   }
   .lead {
     margin: 0 auto 30px;
     font-size: 20px;
-    color: #fff;
-  }
-  .version {
-    margin-top: -15px;
-    margin-bottom: 30px;
   }
   .btn {
     width: 100%;
     padding: 15px 30px;
+    margin: 0 20px;
     font-size: 20px;
   }
 }
 
 @media (min-width: 480px) {
-  .custom-docs-masthead .btn {
+  .custom-masthead .btn {
     width: auto;
   }
 }
 
 @media (min-width: 480px) {
-  .custom-docs-masthead .btn {
+  .custom-masthead .btn {
     width: auto;
   }
 }
 
 @media (min-width: 768px) {
-  .custom-docs-masthead {
-    padding: 80px 0;
+  .custom-masthead {
     h1 {
       font-size: 100px;
     }
@@ -213,7 +146,7 @@ body {
 }
 
 @media (min-width: 992px) {
-  .custom-docs-masthead .lead {
+  .custom-masthead .lead {
     width: 80%;
     font-size: 30px;
   }
@@ -227,12 +160,14 @@ body {
 
 /* Page headers */
 
-.custom-docs-header {
+.custom-header {
+  background-color: $primary-color;
+  color: $primary-color-dark;
   font-size: 20px;
-  
+ 
   h1 {
     margin-top: 0;
-    color: #fff;
+    color: $secondary-text-color;
   }
   p {
     margin-bottom: 0;
@@ -245,8 +180,7 @@ body {
 }
 
 @media (min-width: 768px) {
-  .custom-docs-header {
-    padding-top: 60px;
+  .custom-header {
     font-size: 24px;
     text-align: left;
     h1 {
@@ -257,7 +191,7 @@ body {
 }
 
 @media (min-width: 992px) {
-  .custom-docs-header {
+  .custom-header {
     h1, p {
       margin-right: 380px;
     }
@@ -270,14 +204,15 @@ body {
  * Main content location.
  */
  
-.custom-docs-container main {
+.custom-container main {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 0 0 4px 4px;
-  background-color: #fdfdfd;
+  background-color: $secondary-background-color;
+  margin-bottom: 20px;
 }
 
 @media (min-width: 768px) {
-  .custom-docs-container main, .custom-docs-container .row > div {
+  .custom-container main, .custom-container .row > div {
     padding-top: 20px;
   }
 }
@@ -291,36 +226,36 @@ body {
 
 /* By default it's not affixed in mobile views, so undo that */
 
-.custom-docs-sidebar.affix {
+.custom-sidebar.affix {
   position: static;
 }
 
 @media (min-width: 768px) {
-  .custom-docs-sidebar {
+  .custom-sidebar {
     padding-left: 20px;
   }
 }
 
 /* First level of nav */
 
-.custom-docs-sidenav {
+.custom-sidenav {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 /* All levels of nav */
 
-.custom-docs-sidebar .nav {
+.custom-sidebar .nav {
   > {
     li > a {
       display: block;
       padding: 4px 20px;
       font-size: 16px;
       font-weight: 500;
-      color: #999;
+      color: $secondary-color-dark;
       &:hover, &:focus {
         text-decoration: none;
-        background-color: $gray-color-lighter;
+        color: $link-color;
       }
     }
     .active {
@@ -362,7 +297,7 @@ body {
 
 /* Show and affix the side nav when space allows it */
 @media (min-width: 992px) {
-  .custom-docs-sidebar {
+  .custom-sidebar {
     .nav > .active > ul {
       display: block;
     }
@@ -377,12 +312,12 @@ body {
     &.affix-bottom {
       position: absolute;
       /* Undo the static from mobile first approach */
-      .custom-docs-sidenav {
+      .custom-sidenav {
         margin-top: 0;
         margin-bottom: 0;
       }
     }
-    &.affix .custom-docs-sidenav {
+    &.affix .custom-sidenav {
       margin-top: 0;
       margin-bottom: 0;
     }
@@ -392,7 +327,7 @@ body {
 
 @media (min-width: 1200px) {
   /* Widen the fixed sidebar again */
-  .custom-docs-sidebar {
+  .custom-sidebar {
     &.affix-bottom, &.affix {
       width: 263px;
     }
@@ -407,7 +342,7 @@ body {
 
 /* Space things out */
 
-.custom-docs-section {
+.custom-section {
   margin-bottom: 60px;
   &:last-child {
     margin-bottom: 0;
@@ -431,7 +366,7 @@ h1[id] {
 .custom-callout {
   padding: 20px;
   margin: 20px 0;
-  border: 1px solid #eee;
+  border: 1px solid $secondary-color;
   border-left-width: 5px;
   border-radius: 3px;
   h4 {
@@ -504,21 +439,6 @@ h1[id] {
 /* Framework colors */
 
 .color-swatches {
-  .gray-darker {
-    background-color: $gray-color-darker;
-  }
-  .gray-dark {
-    background-color: $gray-color-dark;
-  }
-  .gray {
-    background-color: $gray-color;
-  }
-  .gray-light {
-    background-color: $gray-color-light;
-  }
-  .gray-lighter {
-    background-color: $gray-color-lighter;
-  }
   .brand-primary {
     background-color: $primary-color;
   }
@@ -534,12 +454,6 @@ h1[id] {
   .brand-info {
     background-color: $info-color;
   }
-  .custom-primary-color-light {
-    background-color: $primary-color-light;
-  }
-  .custom-primary-color-dark {
-    background-color: $primary-color-dark;
-  }
 }
 
 /* Docs colors */
@@ -553,8 +467,8 @@ h1[id] {
 .highlight {
   padding: 9px 14px;
   margin-bottom: 14px;
-  background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
+  background-color: $primary-background-color;
+  border: 1px solid $secondary-color;
   border-radius: 4px;
   pre {
     padding: 0;
@@ -567,7 +481,7 @@ h1[id] {
     overflow:auto;
     code {
       font-size: inherit;
-      color: #333;
+      color: $secondary-color-dark;
       /* Effectively the base text color */
       &:first-child {
         display: inline-block;
@@ -580,7 +494,7 @@ h1[id] {
 code {
   padding: 2px 4px;
   font-size: 90%;
-  color: #c7254e;
-  background-color: #f9f2f4;
+  color: $primary-color;
+  background-color: $primary-background-color;
   border: none;
 }
