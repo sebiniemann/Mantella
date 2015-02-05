@@ -22,6 +22,8 @@ navigation:
    url: api-reference
  - title: Questions
    url: questions
+collections:
+- entries
 
 # Removes the need of .html suffixes
 permalink: pretty

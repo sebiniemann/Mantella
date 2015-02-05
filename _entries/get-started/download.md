@@ -1,6 +1,6 @@
 ---
 title: Download
-category: getting-started
+category: get-started
 ---
 
 Mantella (currently v0.9.0) can easily be [downloaded from our GitHub project page](https://github.com/SebastianNiemann/OnlineOptimisation/archive/master.zip).

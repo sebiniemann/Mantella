@@ -1,6 +1,6 @@
 ---
 title: Installation
-category: getting-started
+category: get-started
 ---
 
 <div class="custom-callout custom-callout-warning" id="jquery-required">
