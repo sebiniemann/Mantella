@@ -362,7 +362,6 @@ body {
 /* Space things out */
 
 .custom-section {
-  margin-bottom: 60px;
   &:last-child {
     margin-bottom: 0;
   }
@@ -489,22 +488,26 @@ h1[id] {
   background-color: $primary-background-color;
   border: 1px solid $secondary-color;
   border-radius: 4px;
+  
   pre {
     padding: 0;
     margin-top: 0;
     margin-bottom: 0;
-    word-break: normal;
-    white-space: nowrap;
     background-color: transparent;
     border: 0;
-    overflow:auto;
+    overflow-x: auto;
     code {
-      font-size: inherit;
+      font-size: 0.9em;
+      white-space: pre;
       color: $secondary-color-dark;
       /* Effectively the base text color */
       &:first-child {
         display: inline-block;
         padding-right: 45px;
+      }
+      * {
+        word-break: keep-all;
+        white-space: nowrap;
       }
     }
   }
