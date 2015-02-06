@@ -1,4 +1,4 @@
-![Mantella](http://sebastianniemann.github.io/Mantella/assets/image/mantella.png)
+![Mantella](http://sebastianniemann.github.io/Mantella/assets/images/logo_with_name.png)
 
 Version 0.9.0
 =============
@@ -25,7 +25,7 @@ cd armadillo-4.600.3
 cmake .
 make
 sudo make install
-``` 
+```
 
 ### Installation
 Mantella is a header-only library, downloading the latest stable version and placing the header files into a directory standardly searched by your compiler finishes the installation.
