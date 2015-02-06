@@ -4,7 +4,7 @@ category: get-started
 ---
 
 Create a new source file called **hello.cpp** on your computer.
-{% highlight cpp linenos %}
+{% highlight cpp %}
 #include <iostream>
 #include <mantella>
 
