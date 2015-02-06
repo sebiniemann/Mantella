@@ -254,12 +254,6 @@ body {
   position: static;
 }
 
-@media (min-width: 768px) {
-  .custom-sidebar {
-    padding-left: 20px;
-  }
-}
-
 /* First level of nav */
 
 .custom-sidenav {
@@ -270,6 +264,7 @@ body {
 /* All levels of nav */
 
 .custom-sidebar .nav {
+  margin-left: 0;
   > {
     li > a {
       display: block;
