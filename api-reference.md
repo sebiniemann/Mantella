@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: api-reference
 category: api-reference
 
 title: API Reference
