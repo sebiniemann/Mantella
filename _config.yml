@@ -11,13 +11,13 @@ project_name: Mantella
 github-url: https://github.com/SebastianNiemann/Mantella
 
 navigation:
-- Get Started
-- API Reference
-- License
-- Questions
+ - Get Started
+ - API Reference
+ - License
+ - Questions
 
 collections:
-- entries
+ - entries
 
 # Avoids the need of .html suffixes
 permalink: pretty
