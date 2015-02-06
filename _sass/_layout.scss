@@ -159,6 +159,24 @@ body {
 }
 
 /*
+ * Table of contents
+ *
+ * Only used at the top of the API refernece
+ */
+
+.toc  {
+  li {
+    margin-top: 7px;
+  }
+  
+  @media (min-width: 768px) {
+    > ul > li {
+      margin-top: 15px;
+    }
+  }
+}
+
+/*
  * Page headers
  *
  * Jumbotron-esque headers at the top of every page that's not the homepage.
