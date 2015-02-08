@@ -76,7 +76,7 @@ Run your application.
 ```bash
 ./hello
 ```
-Output (may vary due to random initialied problems and algorithms):
+Output (may vary due to random initialised problems and algorithms):
 ```
 isFinished: 1
 isTerminated: 0
