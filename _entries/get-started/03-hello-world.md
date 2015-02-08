@@ -44,7 +44,7 @@ Run your application.
 ./hello
 {% endhighlight %}
 
-Output (may vary due to random initialied problems and algorithms):
+Output (may vary due to random initialised problems and algorithms):
 {% highlight text %}
 isFinished: 1
 isTerminated: 0
