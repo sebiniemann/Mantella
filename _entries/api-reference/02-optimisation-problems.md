@@ -52,6 +52,8 @@ sub-navigation:
 
 ### Sphere Function
 
+$$f(x) = \sqrt{\sum_{i = 1}^{n} (x_i - x^\text{opt}_i)^2} + f_\text{opt} $$
+
 ### Step Ellipsoidal Function
 
 ### Weierstrass Function
