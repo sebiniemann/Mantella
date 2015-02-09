@@ -28,12 +28,12 @@ sudo make install
 ```
 
 ### Installation
-Mantella is a header-only library, downloading the latest stable version and placing the header files into a directory standardly searched by your compiler finishes the installation.
+Mantella is a header-only library, you just need to download the latest stable version and place the header files into a directory standardly searched by your compiler.
 ```bash
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
 sudo cp -R Mantella/include/* /usr/local/include/
 ```
-**Done.** You can now start creating applications with Mantella.
+**Installation completed.** You can now start creating applications with Mantella.
 
 ### Usage
 Create a new source file called **hello.cpp** on your computer.
