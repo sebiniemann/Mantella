@@ -6,42 +6,42 @@ sub-navigation:
  - Active Properties Analysis
 ---
 
-<h2 id="passive-properties-analysis">Passive Properties Analysis</h2>
+<h2 id="passive-property-analysis">Passive Property Analysis</h2>
 
-### Correlation Analysis
+<h3 id="correlation-analysis">Correlation Analysis</h3>
 
-#### Fitness Distance Correlation Analysis
+<h4 id="fitness-distance-correlation-analysis">Fitness Distance Correlation Analysis</h4>
 
-### Function Model Analysis
+<h3 id="function-model-analysis">Function Model Analysis</h3>
 
-#### Linear Model Analysis
+<h4 id="linear-function-model-analysis">Linear Function Model Analysis</h4>
 
-##### Linear Ordinary Least Squares Analysis
+<h5 id="ordinary-least-squares-linear-function-model-anaylsis">Ordinary Least Squares Linear Function Model Analysis</h5>
 
-#### Quadratic Model Analysis
+<h4 id="quadratic-function-model-anaylsis">Quadratic Function Model Analysis</h4>
 
-##### Quadratic Ordinary Least Squares Analysis
+<h5 id="ordinary-least-squares-quadratic-function-model-anaylsis">Ordinary Least Squares Quadratic Function Model Analysis</h5>
 
-### Continuity Analysis
+<h3 id="continuity-analysis">Continuity Analysis</h3>
 
-#### Lipschitz Continuity Analysis
+<h4 id="lipschitz-continuity-analysis">Lipschitz Continuity Analysis</h4>
 
-##### Direct Lipschitz Continuity Analysis
-         
-<h2 id="active-properties-analysis">Active Properties Analysis</h2>
+<h5 id="direct-lipschitz-continuity-analysis">Direct Lipschitz Continuity Analysis</h5>
 
-### Separability Analysis
+<h2 id="active-properties-analysis">Active Property Analysis</h2>
 
-#### Additive Separability Analysis
+<h3 id="separability-analysis">Separability Analysis</h3>
 
-##### Direct Additive Separability Analysis
-         
-#### Multiplicative Separability Analysis
+<h4 id="additive-separability-analysis">Additive Separability Analysis</h4>
 
-##### Direct Multiplicative Separability Analysis
+<h5 id="direct-additive-separability-analysis">Direct Additive Separability Analysis</h5>
 
-### Proportionality Analysis
+<h4 id="multiplicative-separability-analysis">Multiplicative Separability Analysis</h4>
 
-#### Linear Proportionality Analysis
+<h5 id="direct-multiplicative-separability-analysis">Direct Multiplicative Separability Analysis</h5>
 
-##### Direct Linear Proportionality Analysis
+<h3 id="proportionality-analysis">Proportionality Analysis</h3>
+
+<h4 id="linear-proportionality-analysis">Linear Proportionality Analysis</h4>
+
+<h5 id="direct-linear-proportionality-analysis">Direct Linear Proportionality Analysis</h5>

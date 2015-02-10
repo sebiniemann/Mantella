@@ -3,22 +3,24 @@ title: Helper
 category: api-reference
 ---
 
-### Random Number Generator
+<h3 id="random-number-generator">Random Number Generator</h3>
 
-### Filesystem
+<h3 id="random-number-generator">Filesystem</h3>
 
-### Geometry
+<h3 id="random-number-generator">Geometry</h3>
 
-### Quasi Random Sequences
+<h3 id="quasi-random-sequences">Quasi Random Sequences</h3>
 
-### Random Matrix/Vector Generator
+<h3 id="random-matrix-vector-generator">Random Matrix/Vector Generators</h3>
 
-### Set Theory
+<h3 id="regression">Regression</h3>
 
-### Trajectory
+<h3 id="set-theory">Set Theory</h3>
 
-### Printable
+<h3 id="trajectories</h3>">Trajectories</h3>
 
-### String
+<h3 id="printable">Printable</h3>
 
-### Unordered Container
+<h3 id="string">String</h3>
+
+<h3 id="unordered-container">Unordered Container</h3>
