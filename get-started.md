@@ -4,6 +4,11 @@ category: get-started
 
 title: Get Started
 subtitle: First steps with Mantella, from download to productive usage.
+
+table_of_contents:
+  Prerequirements:
+  Installation:
+  Hello World:
 ---
 
 <div class="custom-callout custom-callout-warning" id="jquery-required">
