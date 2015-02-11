@@ -164,13 +164,9 @@ body {
  * Only used at the top of the API refernece
  */
 
-.toc  {
-  li {
-    margin-top: 7px;
-  }
-  
+.toc {
   @media (min-width: 768px) {
-    > ul > li {
+    > li {
       margin-top: 15px;
     }
   }
