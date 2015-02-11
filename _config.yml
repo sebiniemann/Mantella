@@ -16,9 +16,6 @@ navigation:
  - License
  - Questions
 
-collections:
- - entries
-
 # Avoids the need of .html suffixes
 permalink: pretty
   
