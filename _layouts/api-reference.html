@@ -47,7 +47,7 @@ layout: base
                 {% for second_level in first_level[1] %}
                   <li>
                     <a href="#{{ second_level[0] | slugify }}">{{ second_level[0] }}</a>
-                    {% if first_level[1] != empty %}
+                    {% if second_level[1] != empty %}
                       <ul>
                         {% for third_level in second_level[1] %}
                           <li>
