@@ -514,4 +514,17 @@ code {
 .custom-specifier-noexcept {
   background-color: $info-color;
 }
+
+dl {
+  dt, dd {
+    padding: 2px 0;
+  }
+  
+  dt {
+    width: 80px;
+  }
+  
+  dd {
+    margin-left: 100px;
+  }
 }
