@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-    class CorrelationAnalysis : public PassivePropertiesAnalysis<ParameterType> {
+    class CorrelationAnalysis : public PassivePropertyAnalysis<ParameterType> {
     public:
       explicit CorrelationAnalysis() noexcept;
 

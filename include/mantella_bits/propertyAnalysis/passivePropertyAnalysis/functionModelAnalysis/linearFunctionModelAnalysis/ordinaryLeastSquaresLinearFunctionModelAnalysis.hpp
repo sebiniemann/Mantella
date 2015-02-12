@@ -1,7 +1,7 @@
 namespace mant {
-  class LinearOrdinaryLeastSquares : public LinearModelAnalysis<double> {
+  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public LinearFunctionModelAnalysis<double> {
     public:
-      using LinearModelAnalysis<double>::LinearModelAnalysis;
+      using LinearFunctionModelAnalysis<double>::LinearFunctionModelAnalysis;
 
     protected:
       inline void analyseImplementation(
@@ -16,7 +16,7 @@ namespace mant {
   // Implementation
   //
 
-  inline void LinearOrdinaryLeastSquares::analyseImplementation(
+  inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
@@ -43,12 +43,12 @@ namespace mant {
     }
   }
 
-  inline void LinearOrdinaryLeastSquares::analyseImplementation(
+  inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
       const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
 
   }
 
-  inline void LinearOrdinaryLeastSquares::analyseImplementation(
+  inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
       const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
 
   }

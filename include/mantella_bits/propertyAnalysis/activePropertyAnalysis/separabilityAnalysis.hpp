@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-  class SeparabilityAnalysis : public ActivePropertiesAnalysis<ParameterType> {
+  class SeparabilityAnalysis : public ActivePropertyAnalysis<ParameterType> {
     public:
       explicit SeparabilityAnalysis() noexcept
         : maximalNumberOfIterations_(1000.0) {

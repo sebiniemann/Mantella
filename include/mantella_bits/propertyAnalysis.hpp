@@ -1,8 +1,8 @@
 namespace mant {
   template <typename ParameterType>
-  class PropertiesAnalysis {
+  class PropertyAnalysis {
     public:
-      explicit PropertiesAnalysis() noexcept;
+      explicit PropertyAnalysis() noexcept;
 
       void analyse(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
@@ -13,7 +13,7 @@ namespace mant {
       double getPlausibility() const noexcept;
 
       // Provides a default deconstructor.
-      virtual ~PropertiesAnalysis() = default;
+      virtual ~PropertyAnalysis() = default;
 
     protected:
       double plausibility_;
@@ -32,13 +32,13 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  PropertiesAnalysis<ParameterType>::PropertiesAnalysis() noexcept
+  PropertyAnalysis<ParameterType>::PropertyAnalysis() noexcept
     : plausibility_(0.0) {
     setDefaultDistanceFunction(std::is_floating_point<ParameterType>());
   }
 
   template <typename ParameterType>
-  void PropertiesAnalysis<ParameterType>::analyse(
+  void PropertyAnalysis<ParameterType>::analyse(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
     plausibility_ = 0.0;
 
@@ -46,24 +46,24 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  double PropertiesAnalysis<ParameterType>::getPlausibility() const noexcept {
+  double PropertyAnalysis<ParameterType>::getPlausibility() const noexcept {
     return plausibility_;
   }
 
   template <typename ParameterType>
-  void PropertiesAnalysis<ParameterType>::setDistanceFunction(
+  void PropertyAnalysis<ParameterType>::setDistanceFunction(
       std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept {
     distanceFunction_ = distanceFunction;
   }
 
   template <typename ParameterType>
-  void PropertiesAnalysis<ParameterType>::setDefaultDistanceFunction(
+  void PropertyAnalysis<ParameterType>::setDefaultDistanceFunction(
       std::true_type) noexcept {
     setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new EuclideanDistance));
   }
 
   template <typename ParameterType>
-  void PropertiesAnalysis<ParameterType>::setDefaultDistanceFunction(
+  void PropertyAnalysis<ParameterType>::setDefaultDistanceFunction(
       std::false_type) noexcept {
     setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new ManhattanDistance<ParameterType>));
   }

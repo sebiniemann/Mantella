@@ -1,8 +1,8 @@
 namespace mant {
   template <typename ParameterType>
-  class LinearModelAnalysis : public FunctionModelAnalysis<ParameterType> {
+  class LinearFunctionModelAnalysis : public FunctionModelAnalysis<ParameterType> {
     public:
-      explicit LinearModelAnalysis() noexcept;
+      explicit LinearFunctionModelAnalysis() noexcept;
 
       void setLinearModelMedianErrorThreshold(
           const double& linearModelMedianErrorThreshold);
@@ -23,18 +23,18 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  LinearModelAnalysis<ParameterType>::LinearModelAnalysis() noexcept
+  LinearFunctionModelAnalysis<ParameterType>::LinearFunctionModelAnalysis() noexcept
     : isLinear_(false) {
     setLinearModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType>
-  arma::Col<double> LinearModelAnalysis<ParameterType>::getLinearModelEstimator() const noexcept {
+  arma::Col<double> LinearFunctionModelAnalysis<ParameterType>::getLinearModelEstimator() const noexcept {
     return linearModelEstimator_;
   }
 
   template <typename ParameterType>
-  void LinearModelAnalysis<ParameterType>::setLinearModelMedianErrorThreshold(
+  void LinearFunctionModelAnalysis<ParameterType>::setLinearModelMedianErrorThreshold(
       const double& linearModelMedianErrorThreshold) {
     if(linearModelMedianErrorThreshold < 0 || linearModelMedianErrorThreshold > 1) {
       throw std::logic_error("The quadratic model MeanError threshold (" + std::to_string(linearModelMedianErrorThreshold) + ") must be within 0 and 1.");
@@ -44,7 +44,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool LinearModelAnalysis<ParameterType>::isLinear() const noexcept {
+  bool LinearFunctionModelAnalysis<ParameterType>::isLinear() const noexcept {
     return isLinear_;
   }
 }

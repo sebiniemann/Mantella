@@ -1,8 +1,8 @@
 namespace mant {
   template <typename ParameterType>
-  class ProportionalityAnalysis : public ActivePropertiesAnalysis<ParameterType> {
+  class ProportionalityAnalysis : public ActivePropertyAnalysis<ParameterType> {
     public:
-      using ActivePropertiesAnalysis<ParameterType>::ActivePropertiesAnalysis;
+      using ActivePropertyAnalysis<ParameterType>::ActivePropertyAnalysis;
 
       void setMaximalNumberOfIterations(
           const unsigned int& maximalNumberOfIterations) noexcept;

@@ -1,8 +1,8 @@
 namespace mant {
   template <typename ParameterType>
-  class QuadraticModelAnalysis : public FunctionModelAnalysis<ParameterType> {
+  class QuadraticFunctionModelAnalysis : public FunctionModelAnalysis<ParameterType> {
     public:
-      explicit QuadraticModelAnalysis() noexcept;
+      explicit QuadraticFunctionModelAnalysis() noexcept;
 
       void setQuadraticModelMedianErrorThreshold(
           const double& quadraticModelMedianErrorThreshold);
@@ -23,19 +23,19 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  QuadraticModelAnalysis<ParameterType>::QuadraticModelAnalysis() noexcept
+  QuadraticFunctionModelAnalysis<ParameterType>::QuadraticFunctionModelAnalysis() noexcept
     : isQuadratic_(false) {
     setQuadraticModelMedianErrorThreshold(0.25);
   }
 
   template <typename ParameterType>
-  arma::Col<double> QuadraticModelAnalysis<ParameterType>::getQuadraticModelEstimator() const noexcept {
+  arma::Col<double> QuadraticFunctionModelAnalysis<ParameterType>::getQuadraticModelEstimator() const noexcept {
     return quadraticModelEstimator_;
   }
 
   // TODO Be more strict with runtime/logic_erros
   template <typename ParameterType>
-  void QuadraticModelAnalysis<ParameterType>::setQuadraticModelMedianErrorThreshold(
+  void QuadraticFunctionModelAnalysis<ParameterType>::setQuadraticModelMedianErrorThreshold(
       const double& quadraticModelMedianErrorThreshold) {
     if(quadraticModelMedianErrorThreshold < 0 || quadraticModelMedianErrorThreshold > 1) {
       throw std::logic_error("The quadratic model MeanError threshold (" + std::to_string(quadraticModelMedianErrorThreshold) + ") must be within 0 and 1.");
@@ -45,7 +45,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool QuadraticModelAnalysis<ParameterType>::isQuadratic() const noexcept {
+  bool QuadraticFunctionModelAnalysis<ParameterType>::isQuadratic() const noexcept {
     return isQuadratic_;
   }
 }

@@ -1,5 +1,5 @@
 namespace mant {
-  class QuadraticOrdinaryLeastSquares : public QuadraticModelAnalysis<double> {
+  class OrdinaryLeastSquaresQuadraticFunctionModelAnalysis : public QuadraticFunctionModelAnalysis<double> {
     public:
       using QuadraticModelAnalysis<double>::QuadraticModelAnalysis;
 
@@ -16,7 +16,7 @@ namespace mant {
   // Implementation
   //
 
-  inline void QuadraticOrdinaryLeastSquares::analyseImplementation(
+  inline void OrdinaryLeastSquaresQuadraticFunctionModelAnalysis::analyseImplementation(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
 
@@ -52,12 +52,12 @@ namespace mant {
     }
   }
 
-  inline void QuadraticOrdinaryLeastSquares::analyseImplementation(
+  inline void OrdinaryLeastSquaresQuadraticFunctionModelAnalysis::analyseImplementation(
       const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
 
   }
 
-  inline void QuadraticOrdinaryLeastSquares::analyseImplementation(
+  inline void OrdinaryLeastSquaresQuadraticFunctionModelAnalysis::analyseImplementation(
       const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
 
   }
