@@ -60,6 +60,20 @@ body {
       }
     }
   }
+  
+  .navbar-toggle .icon-bar {
+    background-color: $primary-color;
+  }
+  
+  .navbar-header .navbar-toggle {
+    border-color: transparent;
+  }
+  
+  .navbar-header .navbar-toggle:hover,
+  .navbar-header .navbar-toggle:focus {
+    background-color: $secondary-color-light;
+    border-color: $secondary-color;
+  }
 }
 
 /*
