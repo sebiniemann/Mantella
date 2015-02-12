@@ -444,55 +444,6 @@ h1[id] {
 }
 
 /*
- * Color swatches
- *
- * Color swatches and associated values for our grayscale and brand colors.
- */
-
-.color-swatches {
-  margin: 0 -5px;
-  overflow: hidden;
-  /* clearfix */
-}
-
-.color-swatch {
-  float: left;
-  width: 60px;
-  height: 60px;
-  margin: 0 5px;
-  border-radius: 3px;
-}
-
-@media (min-width: 768px) {
-  .color-swatch {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-/* Framework colors */
-
-.color-swatches {
-  .brand-primary {
-    background-color: $primary-color;
-  }
-  .brand-success {
-    background-color: $success-color;
-  }
-  .brand-warning {
-    background-color: $warning-color;
-  }
-  .brand-danger {
-    background-color: $danger-color;
-  }
-  .brand-info {
-    background-color: $info-color;
-  }
-}
-
-/* Docs colors */
-
-/*
  * Code snippets
  *
  * Generated via Pygments and Jekyll, these are snippets of HTML, CSS, and JS.
