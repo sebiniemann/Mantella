@@ -488,10 +488,30 @@ code {
   border: none;
 }
 
-.property {
+.custom-property {
   padding: 2px 4px;
   font-size: 90%;
   color: #fff;
   background-color: #333;
   border-radius: 3px;
+}
+
+.custom-specifier {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #fff;
+  border-radius: 3px;
+}
+
+.custom-specifier-override {
+  background-color: $danger-color;
+}
+
+.custom-specifier-virtual {
+  background-color: $warning-color;
+}
+
+.custom-specifier-noexcept {
+  background-color: $info-color;
+}
 }
