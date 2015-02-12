@@ -11,7 +11,7 @@ table_of_contents:
   Hello World:
 ---
 
-<div class="custom-callout custom-callout-warning" id="jquery-required">
+<div class="custom-callout custom-callout-info">
 ### Is my OS supported?
 
 We are activly supporting all big operation systems (Unix and Linux variants, Mac OS X and Windows), provided all necessarily dependencies are already installed.
