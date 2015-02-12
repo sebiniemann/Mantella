@@ -250,6 +250,12 @@ body {
     padding-top: 20px;
   }
 }
+
+@media (min-width: 1440px) {
+  .container {
+    width: 1290px;
+  }
+}
  
 /*
  * Side navigation
