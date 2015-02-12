@@ -101,3 +101,34 @@ table_of_contents:
     String:
     Unordered Containers:
 ---
+
+<div class="custom-callout custom-callout-info">
+### Can the interface ... be used for my problem?
+
+While we use many commen interfaces for continuous and discrete optimisation problems, some calculations will only sense for one of them.
+
+<dl class="dl-horizontal" markdown="0">
+  <dt><span class="custom-property">continous</span></dt>
+  <dd>These interfaces can be used for continuous optimisation problems.</dd>
+  
+  <dt><span class="custom-property">discrete</span></dt>
+  <dd>These interfaces can be used for discrete optimisation problems.</dd>
+</dl>
+
+Interfaces marked with both specifiers can be used for both problem types.
+</div>
+
+<div class="custom-callout custom-callout-info">
+### Notable C++ specifier
+
+<dl class="dl-horizontal" markdown="0">
+  <dt><span class="custom-specifier custom-specifier-virtual">virtual</span></dt>
+  <dd>The implementation of this interface will be overwritten by its child classes.</dd>
+  
+  <dt><span class="custom-specifier custom-specifier-override">override</span></dt>
+  <dd>This function did not introduce a new interface, but overrides a derived interface.</dd>
+  
+  <dt><span class="custom-specifier custom-specifier-noexcept">noexcept</span></dt>
+  <dd>This interface wont throw any exception, as it accepts all possible inputs.</dd>
+</dl>
+</div>
