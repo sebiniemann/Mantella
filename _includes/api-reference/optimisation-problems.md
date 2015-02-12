@@ -1,36 +1,36 @@
-.isSatisfyingLowerBounds( X )
-.isSatisfyingUpperBounds( X )
-.isSatisfyingSoftConstraints( X )
-.isSatisfyingConstraints( X )
+**.isSatisfyingLowerBounds( X )**
+**.isSatisfyingUpperBounds( X )**
+**.isSatisfyingSoftConstraints( X )**
+**.isSatisfyingConstraints( X )**
   
-.getSoftConstraintsValue( X )
-.getObjectiveValue( X )
+**.getSoftConstraintsValue( X )**
+**.getObjectiveValue( X )**
   
-.getNumberOfDimensions()
+**.getNumberOfDimensions()**
   
-.getLowerBounds()
-.setLowerBounds( L )
-.getUpperBounds()
-.setUpperBounds( U )
+**.getLowerBounds()**
+**.setLowerBounds( L )**
+**.getUpperBounds()**
+**.setUpperBounds( U )**
 
-.setParameterTranslation( T )
-.setParameterScale( S )
-.setParameterRotation( R )
+**.setParameterTranslation( T )**
+**.setParameterScale( S )**
+**.setParameterRotation( R )**
 
-.setObjectiveValueTranslation( T );
-.setObjectiveValueScale( S )
+**.setObjectiveValueTranslation( T )**
+**.setObjectiveValueScale( S )**
 
-.getAcceptableObjectiveValue()
-.setAcceptableObjectiveValue( F )
+**.getAcceptableObjectiveValue()**
+**.setAcceptableObjectiveValue( F )**
 
-.getNumberOfEvaluations()
-.getNumberOfDistinctEvaluations()
+**.getNumberOfEvaluations()**
+**.getNumberOfDistinctEvaluations()**
 
-.reset()
+**.reset()**
 
-.getCachedObjectiveValues()
-.getCachedSoftConstraintsValues()
-.getCachedIsSatisfyingLowerBounds()
-.getCachedIsSatisfyingUpperBounds()
-.getCachedIsSatisfyingSoftConstraints()
-.getCachedIsSatisfyingConstraints()
+**.getCachedObjectiveValues()**
+**.getCachedSoftConstraintsValues()**
+**.getCachedIsSatisfyingLowerBounds()**
+**.getCachedIsSatisfyingUpperBounds()**
+**.getCachedIsSatisfyingSoftConstraints()**
+**.getCachedIsSatisfyingConstraints()**
