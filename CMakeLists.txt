@@ -281,16 +281,6 @@ if(BUILD_TESTS)
   endif()
 endif()
 
-# --------------
-# BUILD EXAMPLES
-# -------------
-if(BUILD_EXAMPLES)
-  message(STATUS "NOTICE: Configuring applications.")
-
-  # Add applications build script
-  add_subdirectory("./examples")
-endif()
-
 # ---------------------
 # Qt Creator workaround
 # ---------------------
