@@ -468,6 +468,14 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/mantella_bits/property.hpp
+  include/mantella_bits/property/correlation.hpp
+  include/mantella_bits/property/lipschitzContinuity.hpp
+  include/mantella_bits/property/linearFunctionModel.hpp
+  include/mantella_bits/property/quadraticFunctionModel.hpp
+  include/mantella_bits/property/additiveSeparability.hpp
+  include/mantella_bits/property/multiplicativeSeparability.hpp
+  include/mantella_bits/property/linearProportionality.hpp
   include/mantella_bits/propertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/correlationAnalysis.hpp
