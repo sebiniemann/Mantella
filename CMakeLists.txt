@@ -275,7 +275,7 @@ if(BUILD_TESTS)
   target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
   if(RUN_TESTS)
-    message(STATUS "NOTICE: Automatically runs all tests after building them.")
+    message(STATUS "NOTICE: Automatically running all tests after building them.")
 
     add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
   endif()
