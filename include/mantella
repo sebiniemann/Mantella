@@ -20,9 +20,7 @@
 // Configuration
 //
 
-// TODO Rebuild this in the same style as catch
-#undef MANTELLA_USE_PARALLEL
-#if defined(MPI_SUCCESS)
+#if !defined(MANTELLA_USE_PARALLEL) && defined(MPI_SUCCESS)
   #define MANTELLA_USE_PARALLEL
 #endif
 
