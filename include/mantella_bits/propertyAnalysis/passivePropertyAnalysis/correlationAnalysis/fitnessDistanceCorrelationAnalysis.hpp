@@ -5,11 +5,7 @@ namespace mant {
 
     protected:
       inline void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
-      inline void analyseImplementation(
           const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
-      inline void analyseImplementation(
-          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
 
   //
@@ -17,10 +13,8 @@ namespace mant {
   //
 
   inline void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
-    const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
-
-    arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions(), parameterToObjectiveValueMappings.size());
+      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
+    arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 
     unsigned int n = 0;
@@ -36,15 +30,5 @@ namespace mant {
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
     correlationCoefficient_ = arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
-  }
-
-  inline void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
-
-  }
-
-  inline void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
-
   }
 }

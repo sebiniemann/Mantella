@@ -5,11 +5,7 @@ namespace mant {
 
     protected:
       inline void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
-      inline void analyseImplementation(
           const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
-      inline void analyseImplementation(
-          const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept override;
   };
 
   //
@@ -17,12 +13,8 @@ namespace mant {
   //
 
   inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
-    const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings = optimisationProblem->getCachedObjectiveValues();
-
-    optimisationProblem->getObjectiveValue(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()));
-
-    arma::Mat<double> parameters(optimisationProblem->getNumberOfDimensions() + 1, parameterToObjectiveValueMappings.size());
+      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
+    arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 
     std::size_t n = 0;
@@ -41,15 +33,5 @@ namespace mant {
       linearModelEstimator_ = {};
       residuals_ = {};
     }
-  }
-
-  inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
-
-  }
-
-  inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
-      const std::pair<arma::Col<double>, double>& parameterToObjectiveValueMapping) noexcept {
-
   }
 }
