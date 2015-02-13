@@ -74,7 +74,7 @@ namespace mant {
 
 //        bool skip = false;
 //        for(const auto& dimension : dimensions) {
-//          if(singlePartitions.find(dimension) != singlePartitions.end()) {
+//          if(singlePartitions.find(dimension) != singlePartitions.cend()) {
 //            skip = true;
 //            break;
 //          }
@@ -88,7 +88,7 @@ namespace mant {
 //          std::pair<unsigned int, unsigned int> pairedDimension = {n, (n + 1) % dimensions.n_elem};
 
 //          const auto& cachePosition = pairedDimensions.find(pairedDimension);
-//          if (cachePosition == pairedDimensions.end()) {
+//          if (cachePosition == pairedDimensions.cend()) {
 //            pairedDimensions.insert({pairedDimension, 1});
 //          } else {
 //            ++cachePosition->second;

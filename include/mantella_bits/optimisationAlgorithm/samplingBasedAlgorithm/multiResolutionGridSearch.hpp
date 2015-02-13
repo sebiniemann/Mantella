@@ -155,7 +155,7 @@ namespace mant {
       gridLowerBounds = gridLowerBoundsCandidate;
       gridUpperBounds = gridUpperBoundsCandidate;
 
-      if(samplesPerResolutions.find(resolutionDepth) == samplesPerResolutions.end()) {
+      if(samplesPerResolutions.find(resolutionDepth) == samplesPerResolutions.cend()) {
         samplesPerResolutions.insert({resolutionDepth, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash, IsKeyEqual>()});
       }
     }

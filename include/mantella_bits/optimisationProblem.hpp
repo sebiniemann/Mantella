@@ -292,7 +292,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingLowerBounds_.end()) {
+    if (cachePosition == cachedIsSatisfyingLowerBounds_.cend()) {
       // The result was not found, compute it.
       const arma::Col<unsigned int>& result = (parameter >= lowerBounds_);
       cachedIsSatisfyingLowerBounds_.insert({parameter, result});
@@ -312,7 +312,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingUpperBounds_.end()) {
+    if (cachePosition == cachedIsSatisfyingUpperBounds_.cend()) {
       // The result was not found, compute it.
       const arma::Col<unsigned int>& result = (parameter <= upperBounds_);
       cachedIsSatisfyingUpperBounds_.insert({parameter, result});
@@ -332,7 +332,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedIsSatisfyingSoftConstraints_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingSoftConstraints_.end()) {
+    if (cachePosition == cachedIsSatisfyingSoftConstraints_.cend()) {
       // The result was not found, compute it.
       const bool& result = (getSoftConstraintsValue(parameter) == 0);
       cachedIsSatisfyingSoftConstraints_.insert({parameter, result});
@@ -352,7 +352,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedIsSatisfyingConstraints_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingConstraints_.end()) {
+    if (cachePosition == cachedIsSatisfyingConstraints_.cend()) {
       // The result was not found, compute it.
       const bool& result = (all(isSatisfyingLowerBounds(parameter)) && all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
       cachedIsSatisfyingConstraints_.insert({parameter, result});
@@ -372,7 +372,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedSoftConstraintsValues_.find(parameter);
-    if (cachePosition == cachedSoftConstraintsValues_.end()) {
+    if (cachePosition == cachedSoftConstraintsValues_.cend()) {
       // The result was not found, compute it.
       const double& result = getSoftConstraintsValueImplementation(parameter);
 
@@ -398,7 +398,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedObjectiveValues_.find(parameter);
-    if (cachePosition == cachedObjectiveValues_.end()) {
+    if (cachePosition == cachedObjectiveValues_.cend()) {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
@@ -424,7 +424,7 @@ namespace mant {
 
     // Check if the result is already cached.
     const auto& cachePosition = cachedObjectiveValues_.find(parameter);
-    if (cachePosition == cachedObjectiveValues_.end()) {
+    if (cachePosition == cachedObjectiveValues_.cend()) {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
