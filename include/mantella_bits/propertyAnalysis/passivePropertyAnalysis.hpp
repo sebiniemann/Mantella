@@ -19,8 +19,6 @@ namespace mant {
   template <typename ParameterType>
   void PassivePropertyAnalysis<ParameterType>::analyse(
       const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMapping) noexcept {
-    PropertyAnalysis<ParameterType>::plausibility_ = 0.0;
-
     analyseImplementation(parameterToObjectiveValueMapping);
   }
 }

@@ -7,14 +7,10 @@ namespace mant {
       void setDistanceFunction(
           std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
 
-      double getPlausibility() const noexcept;
-
       // Provides a default deconstructor.
       virtual ~PropertyAnalysis() = default;
 
     protected:
-      double plausibility_;
-
       std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction_;
 
       void setDefaultDistanceFunction(std::true_type) noexcept;
@@ -26,14 +22,8 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  PropertyAnalysis<ParameterType>::PropertyAnalysis() noexcept
-    : plausibility_(0.0) {
+  PropertyAnalysis<ParameterType>::PropertyAnalysis() noexcept {
     setDefaultDistanceFunction(std::is_floating_point<ParameterType>());
-  }
-
-  template <typename ParameterType>
-  double PropertyAnalysis<ParameterType>::getPlausibility() const noexcept {
-    return plausibility_;
   }
 
   template <typename ParameterType>
