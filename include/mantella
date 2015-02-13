@@ -276,7 +276,6 @@
 
 // Properties estimation
 #include <mantella_bits/propertiesEstimation.hpp>
-#include <mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp>
 
 // Parallel optimisation algorithms
 #if defined(MANTELLA_USE_PARALLEL)
