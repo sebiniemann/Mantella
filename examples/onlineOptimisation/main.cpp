@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     mant::MaximumLikelihoodEstimation<double> propertiesEstimation(
       std::shared_ptr<mant::CorrelationAnalysis<double>>(new mant::FitnessDistanceCorrelationAnalysis()),
       std::shared_ptr<mant::LipschitzContinuityAnalysis<double>>(new mant::DirectLipschitzContinuityAnalysis<double>()),
-      std::shared_ptr<mant::LinearModelAnalysis<double>>(new mant::LinearOrdinaryLeastSquares()),
+      std::shared_ptr<mant::LinearFunctionModelAnalysis<double>>(new mant::LinearOrdinaryLeastSquares()),
       std::shared_ptr<mant::QuadraticModelAnalysis<double>>(new mant::QuadraticOrdinaryLeastSquares()),
       std::shared_ptr<mant::AdditiveSeparabilityAnalysis<double>>(new mant::DirectAdditiveSeparabilityAnalysis()));
 
