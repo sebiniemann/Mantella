@@ -4,9 +4,6 @@ namespace mant {
     public:
       explicit PropertyAnalysis() noexcept;
 
-      void analyse(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
-
       void setDistanceFunction(
           std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
 
@@ -22,9 +19,6 @@ namespace mant {
 
       void setDefaultDistanceFunction(std::true_type) noexcept;
       void setDefaultDistanceFunction(std::false_type) noexcept;
-
-      virtual void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept = 0;
   };
 
   //
@@ -35,14 +29,6 @@ namespace mant {
   PropertyAnalysis<ParameterType>::PropertyAnalysis() noexcept
     : plausibility_(0.0) {
     setDefaultDistanceFunction(std::is_floating_point<ParameterType>());
-  }
-
-  template <typename ParameterType>
-  void PropertyAnalysis<ParameterType>::analyse(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
-    plausibility_ = 0.0;
-
-    analyseImplementation(optimisationProblem);
   }
 
   template <typename ParameterType>
