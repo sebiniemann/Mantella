@@ -27,10 +27,6 @@ set(MANTELLA_VERSION "${MANTELLA_MAJOR}.${MANTELLA_MINOR}.${MANTELLA_PATCH}")
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
 
-
-# Provide custom build management options
-option(BUILD_EXAMPLES "Build examples" OFF)
-
 # Build options used only during development
 option(BUILD_TESTS "Build tests" OFF)
 option(RUN_TESTS "Run (and build) tests" OFF)
