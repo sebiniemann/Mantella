@@ -78,14 +78,14 @@ table_of_contents:
     Passive Property Analyses:
       Correlation Analyses:
         Fitness Distance Correlation Analysis:
+      Continuity Analyses:
+        Lipschitz Continuity Analyses:
+          Direct Lipschitz Continuity Analysis:
       Function Model Analyses:
         Linear Function Model Analyses:
           Ordinary Least Squares Linear Function Model Analysis:
         Quadratic Function Model Analyses:
           Ordinary Least Squares Quadratic Function Model Analysis:
-      Continuity Analyses:
-        Lipschitz Continuity Analyses:
-          Direct Lipschitz Continuity Analysis:
     Active Property Analyses:
       Separability Analyses:
         Additive Separability Analyses:
