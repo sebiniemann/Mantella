@@ -1,7 +1,7 @@
 namespace mant {
-  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public LinearFunctionModelAnalysis<double> {
+  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public LinearFunctionModelAnalysis {
     public:
-      using LinearFunctionModelAnalysis<double>::LinearFunctionModelAnalysis;
+      using LinearFunctionModelAnalysis::LinearFunctionModelAnalysis;
 
     protected:
       inline void analyseImplementation(
@@ -26,12 +26,9 @@ namespace mant {
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
     try {
-      // TODO Avoid try catch (and search for others)
-      linearModelEstimator_ = (parameters * parameters.t()).i() * parameters * objectiveValues;
-      residuals_ = objectiveValues - parameters.t() * linearModelEstimator_;
-    } catch (const std::runtime_error& exception ) {
-      linearModelEstimator_ = {};
-      residuals_ = {};
+      property_.setCoefficients((parameters * parameters.t()).i() * parameters * objectiveValues);
+    } catch (...) {
+      property_.setCoefficients(arma::pinv(parameters * parameters.t()) * parameters * objectiveValues);
     }
   }
 }

@@ -7,7 +7,7 @@ namespace mant {
           const unsigned int& populationSize) noexcept;
 
       inline void setStepsize(
-          const double& sigma) noexcept;
+          const double sigma) noexcept;
 
       inline std::string to_string() const noexcept override;
 
@@ -119,7 +119,7 @@ namespace mant {
   }
 
   inline void CovarianceMatrixAdaptationEvolutionStrategy::setStepsize(
-      const double& sigma) noexcept {
+      const double sigma) noexcept {
     stepSize_ = sigma;
   }
 

@@ -2,12 +2,12 @@ namespace mant {
   template <typename ParameterType>
   class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType> {
     public:
-      explicit LipschitzContinuityAnalysis() noexcept;
+      using ContinuityAnalysis<ParameterType>::ContinuityAnalysis;
 
-      double getLipschitzConstant() const noexcept;
+      LipschitzContinuityProperty<ParameterType> getProperty() const noexcept;
 
     protected:
-      double lipschitzConstant_;
+      LipschitzContinuityProperty<ParameterType> property_;
   };
 
   //
@@ -15,13 +15,7 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  LipschitzContinuityAnalysis<ParameterType>::LipschitzContinuityAnalysis() noexcept
-    : lipschitzConstant_(0.0) {
-
-  }
-
-  template <typename ParameterType>
-  double LipschitzContinuityAnalysis<ParameterType>::getLipschitzConstant() const noexcept {
-    return lipschitzConstant_;
+  LipschitzContinuityProperty<ParameterType> LipschitzContinuityAnalysis<ParameterType>::getProperty() const noexcept {
+    return property_;
   }
 }

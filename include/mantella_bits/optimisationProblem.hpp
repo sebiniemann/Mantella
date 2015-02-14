@@ -72,7 +72,7 @@ namespace mant {
       // Note: It is not checked, whether it is strictly greater than the lower bound or not.
       void setLowerBounds(
         // The new lower bounds
-        const arma::Col<ParameterType>& lowerBounds);
+        const arma::Col<ParameterType> lowerBounds);
 
       // Returns the upper bounds of the search space
       arma::Col<ParameterType> getUpperBounds() const noexcept;
@@ -81,7 +81,7 @@ namespace mant {
       // Note: It is not checked, whether it is strictly greater than the lower bound or not.
       void setUpperBounds(
         // The new upper bounds
-        const arma::Col<ParameterType>& upperBounds);
+        const arma::Col<ParameterType> upperBounds);
 
       // Sets the translation (i.e. shift) which is added (not substracted) to the parameter before
       // any other computation.
@@ -89,20 +89,20 @@ namespace mant {
       // set.
       void setParameterTranslation(
         // The new translation of the parameter space
-          const arma::Col<ParameterType>& parameterTranslation);
+          const arma::Col<ParameterType> parameterTranslation);
 
       // Sets the scaling which is multiplied to the parameter after its translation.
       // Reflections due to negative values are permitted.
       // Note: The scaling is always based on the same origin and will not add up is multiple set.
       void setParameterScale(
         // The new scaling of the parameter space
-        const arma::Col<ParameterType>& parameterScale);
+        const arma::Col<ParameterType> parameterScale);
 
       // Sets the rotation which is multiplied to the parameter after the scaling.
       // Note: The rotation is always based on the same origin and will not add up is multiple set.
       void setParameterRotation(
         // The new rotation of the parameter space
-        const arma::Mat<ParameterType>& parameterRotation);
+        const arma::Mat<ParameterType> parameterRotation);
 
       // Sets the translation (i.e. shift) which is added to the objective value after its
       // computation.
@@ -110,13 +110,13 @@ namespace mant {
       // set.
       void setObjectiveValueTranslation(
         // The new translation of the objective value space
-        const double& objectiveValueTranslation) noexcept;
+        const double objectiveValueTranslation) noexcept;
 
       // Sets the scaling which is multiplied to the objective value after its translation.
       // Note: The scaling is always based on the same origin and will not add up is multiple set.
       void setObjectiveValueScale(
         // The new scaling of the objective value space
-        const double& objectiveValueScale) noexcept;
+        const double objectiveValueScale) noexcept;
 
       // Returns the upper limit for an objective value to be acceptable. The optimisation process
       // is usually finished after reaching this threshold.
@@ -127,7 +127,7 @@ namespace mant {
       // is usually finished after reaching this threshold.
       // Note: The objective value must not be reachable.
       void setAcceptableObjectiveValue(
-          const double& acceptableObjectiveValue) noexcept;
+          const double acceptableObjectiveValue) noexcept;
 
       // Returns the number of objective function evaluations.
       // Note: The value includes retrival from cache and actual computation.
@@ -237,15 +237,15 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
-      const arma::Col<double>& parameterTranslation);
+      const arma::Col<double> parameterTranslation);
 
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
-      const arma::Mat<double>& parameterRotation);
+      const arma::Mat<double> parameterRotation);
 
   template <>
   inline void OptimisationProblem<double>::setParameterScale(
-      const arma::Col<double>& parameterScale);
+      const arma::Col<double> parameterScale);
 
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
@@ -442,7 +442,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setLowerBounds(
-      const arma::Col<ParameterType>& lowerBounds) {
+      const arma::Col<ParameterType> lowerBounds) {
     if (lowerBounds.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the lower bound (" + std::to_string(lowerBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
@@ -457,7 +457,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setUpperBounds(
-      const arma::Col<ParameterType>& upperBounds) {
+      const arma::Col<ParameterType> upperBounds) {
     if (upperBounds.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the upper bound (" + std::to_string(upperBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
@@ -467,7 +467,7 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
-      const arma::Col<double>& parameterTranslation) {
+      const arma::Col<double> parameterTranslation) {
     if (parameterTranslation.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter translation (" + std::to_string(parameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
@@ -477,7 +477,7 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
-      const arma::Mat<double>& parameterRotation) {
+      const arma::Mat<double> parameterRotation) {
     if (!parameterRotation.is_square()) {
       throw std::logic_error("The rotation matrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must be square.");
     } else if (parameterRotation.n_rows != numberOfDimensions_) {
@@ -493,7 +493,7 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterScale(
-      const arma::Col<double>& parameterScale) {
+      const arma::Col<double> parameterScale) {
     if (parameterScale.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter scale (" + std::to_string(parameterScale.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
@@ -503,13 +503,13 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setObjectiveValueTranslation(
-      const double& objectiveValueTranslation) noexcept {
+      const double objectiveValueTranslation) noexcept {
     objectiveValueTranslation_ = objectiveValueTranslation;
   }
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScale(
-      const double& objectiveValueScale) noexcept {
+      const double objectiveValueScale) noexcept {
     objectiveValueScale_ = objectiveValueScale;
   }
 
@@ -520,7 +520,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setAcceptableObjectiveValue(
-      const double& acceptableObjectiveValue) noexcept {
+      const double acceptableObjectiveValue) noexcept {
     acceptableObjectiveValue_ = acceptableObjectiveValue;
   }
 

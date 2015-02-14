@@ -6,11 +6,11 @@ namespace mant {
           const unsigned int& populationSize) noexcept;
 
       inline void setNeighbourhoodSize(
-          const unsigned int& neighbourhoodSize) noexcept;
+          const unsigned int neighbourhoodSize) noexcept;
       inline void setStepSize(
-          const double& stepSize) noexcept;
+          const double stepSize) noexcept;
       inline void setMaximalNeighbourhoodConvergence(
-          const arma::Col<double>& maximalNeighbourhoodConvergence) noexcept;
+          const arma::Col<double> maximalNeighbourhoodConvergence) noexcept;
 
       inline std::string to_string() const noexcept override;
 
@@ -133,12 +133,12 @@ namespace mant {
   }
 
   inline void RoleBasedImitationAlgorithm::setNeighbourhoodSize(
-      const unsigned int& neighbourhoodSize) noexcept {
+      const unsigned int neighbourhoodSize) noexcept {
     neighbourhoodSize_ = neighbourhoodSize;
   }
 
   inline void RoleBasedImitationAlgorithm::setMaximalNeighbourhoodConvergence(
-      const arma::Col<double>& maximalNeighbourhoodConvergence) noexcept {
+      const arma::Col<double> maximalNeighbourhoodConvergence) noexcept {
     maximalNeighbourhoodConvergence_ = maximalNeighbourhoodConvergence;
   }
 

@@ -6,7 +6,7 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       void setSamplingFactors(
-          const arma::Col<double>& samplingFactors);
+          const arma::Col<double> samplingFactors);
 
       std::string to_string() const noexcept override;
 
@@ -73,7 +73,7 @@ namespace mant {
 
   template <typename ParameterType>
   void GridSearch<ParameterType>::setSamplingFactors(
-      const arma::Col<double>& samplingFactors) {
+      const arma::Col<double> samplingFactors) {
     if(samplingFactors.n_elem != this->optimisationProblem_->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     } else if(arma::sum(samplingFactors) != 1.0) {

@@ -29,6 +29,6 @@ namespace mant {
 
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
-    correlationCoefficient_ = arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
+    property_.setCorrelationCoefficient(arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues)));
   }
 }

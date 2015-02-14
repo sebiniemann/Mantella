@@ -2,12 +2,12 @@ namespace mant {
   template <typename ParameterType>
     class CorrelationAnalysis : public PassivePropertyAnalysis<ParameterType> {
     public:
-      explicit CorrelationAnalysis() noexcept;
+      using PassivePropertyAnalysis<ParameterType>::PassivePropertyAnalysis;
 
-      double getCorrelationCoefficient() const noexcept;
+      CorrelationProperty<ParameterType> getProperty() const noexcept;
 
     protected:
-      double correlationCoefficient_;
+      CorrelationProperty<ParameterType> property_;
   };
 
   //
@@ -15,13 +15,7 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  CorrelationAnalysis<ParameterType>::CorrelationAnalysis() noexcept
-    : correlationCoefficient_(0.0) {
-
-  }
-
-  template <typename ParameterType>
-  double CorrelationAnalysis<ParameterType>::getCorrelationCoefficient() const noexcept {
-    return correlationCoefficient_;
+  CorrelationProperty<ParameterType> CorrelationAnalysis<ParameterType>::getProperty() const noexcept {
+    return property_;
   }
 }

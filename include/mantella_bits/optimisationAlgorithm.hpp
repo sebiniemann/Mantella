@@ -21,7 +21,7 @@ namespace mant {
       // Sets the maximal number of iterrations to be performed.
       // The optimisation process will terminate after reaching this limit.
       void setMaximalNumberOfIterations(
-          const unsigned int& maximalNumberOfIterations) noexcept;
+          const unsigned int maximalNumberOfIterations) noexcept;
 
       // Returns the best parameter yet found.
       // Note: The best parameter is always selected in the following order.
@@ -123,7 +123,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationAlgorithm<ParameterType>::setMaximalNumberOfIterations(
-      const unsigned int& maximalNumberOfIterations) noexcept {
+      const unsigned int maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 

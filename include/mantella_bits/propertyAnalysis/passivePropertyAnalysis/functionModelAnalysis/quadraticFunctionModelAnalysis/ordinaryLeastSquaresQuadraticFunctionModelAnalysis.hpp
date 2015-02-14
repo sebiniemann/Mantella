@@ -1,7 +1,7 @@
 namespace mant {
-  class OrdinaryLeastSquaresQuadraticFunctionModelAnalysis : public QuadraticFunctionModelAnalysis<double> {
+  class OrdinaryLeastSquaresQuadraticFunctionModelAnalysis : public QuadraticFunctionModelAnalysis {
     public:
-      using QuadraticFunctionModelAnalysis<double>::QuadraticFunctionModelAnalysis;
+      using QuadraticFunctionModelAnalysis::QuadraticFunctionModelAnalysis;
 
     protected:
       inline void analyseImplementation(
@@ -37,12 +37,9 @@ namespace mant {
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
     try {
-      // TODO Avoid try catch (and search for others)
-      quadraticModelEstimator_ = (parameters * parameters.t()).i() * parameters * objectiveValues;
-      residuals_ = objectiveValues - parameters.t() * quadraticModelEstimator_;
-    } catch (const std::runtime_error& exception ) {
-      quadraticModelEstimator_ = {};
-      residuals_ = {};
+      property_.setCoefficients((parameters * parameters.t()).i() * parameters * objectiveValues);
+    } catch (...) {
+      property_.setCoefficients(arma::pinv(parameters * parameters.t()) * parameters * objectiveValues);
     }
   }
 }

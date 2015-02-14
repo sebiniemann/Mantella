@@ -5,7 +5,7 @@ namespace mant {
       using ActivePropertyAnalysis<ParameterType>::ActivePropertyAnalysis;
 
       void setMaximalNumberOfIterations(
-          const unsigned int& maximalNumberOfIterations) noexcept;
+          const unsigned int maximalNumberOfIterations) noexcept;
 
     protected:
       unsigned int maximalNumberOfIterations_;
@@ -17,7 +17,7 @@ namespace mant {
 
   template <typename ParameterType>
   void ProportionalityAnalysis<ParameterType>::setMaximalNumberOfIterations(
-      const unsigned int& maximalNumberOfIterations) noexcept {
+      const unsigned int maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 }

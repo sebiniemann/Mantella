@@ -6,15 +6,15 @@ namespace mant {
           const unsigned int& populationSize) noexcept;
 
       inline void setNeighbourhoodProbability(
-          const double& neighbourhoodProbability) noexcept;
+          const double neighbourhoodProbability) noexcept;
       inline void setAcceleration(
-          const double& acceleration) noexcept;
+          const double acceleration) noexcept;
       inline void setLocalAttraction(
-          const double& localAttraction) noexcept;
+          const double localAttraction) noexcept;
       inline void setGlobalAttraction(
-          const double& globalAttraction) noexcept;
+          const double globalAttraction) noexcept;
       inline void setCommunicationSteps(
-          const unsigned int& communicationSteps) noexcept;
+          const unsigned int communicationSteps) noexcept;
 
       inline std::string to_string() const noexcept override;
 
@@ -196,27 +196,27 @@ namespace mant {
   }
 
   inline void ParallelStandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
-      const double& neighbourhoodProbability) noexcept {
+      const double neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
   inline void ParallelStandardParticleSwarmOptimisation2011::setAcceleration(
-      const double& acceleration) noexcept {
+      const double acceleration) noexcept {
     acceleration_ = acceleration;
   }
 
   inline void ParallelStandardParticleSwarmOptimisation2011::setLocalAttraction(
-      const double& localAttraction) noexcept {
+      const double localAttraction) noexcept {
     localAttraction_ = localAttraction;
   }
 
   inline void ParallelStandardParticleSwarmOptimisation2011::setGlobalAttraction(
-      const double& globalAttraction) noexcept {
+      const double globalAttraction) noexcept {
     globalAttraction_ = globalAttraction;
   }
 
   inline void ParallelStandardParticleSwarmOptimisation2011::setCommunicationSteps(
-      const unsigned int& communicationSteps) noexcept {
+      const unsigned int communicationSteps) noexcept {
     communicationSteps_ = communicationSteps;
   }
 

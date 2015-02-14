@@ -8,7 +8,7 @@ namespace mant {
       inline static std::mt19937_64& getGenerator() noexcept;
 
       inline static void setSeed(
-          const unsigned int& seed) noexcept;
+          const unsigned int seed) noexcept;
 
       inline static void setRandomSeed() noexcept;
 
@@ -28,7 +28,7 @@ namespace mant {
   }
 
   inline void Rng::setSeed(
-      const unsigned int& seed) noexcept {
+      const unsigned int seed) noexcept {
    seed_() = seed;
 
     getGenerator().seed(seed_());

@@ -6,7 +6,7 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       void setInitialParameter(
-          const arma::Col<ParameterType>& initialParameter);
+          const arma::Col<ParameterType> initialParameter);
 
     protected:
       arma::Col<ParameterType> initialParameter_;
@@ -26,7 +26,7 @@ namespace mant {
 
   template <typename ParameterType>
   void TrajectoryBasedAlgorithm<ParameterType>::setInitialParameter(
-      const arma::Col<ParameterType>& initialParameter) {
+      const arma::Col<ParameterType> initialParameter) {
     if(initialParameter.n_elem != this->optimisationProblem_->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the initial parameter (" + std::to_string(initialParameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     }

@@ -6,7 +6,7 @@ namespace mant {
             const unsigned int& numberOfDimensions) noexcept;
 
         inline void setOne(
-            const arma::Col<double>& one) override;
+            const arma::Col<double> one) override;
 
         inline std::string to_string() const noexcept override;
 
@@ -59,7 +59,7 @@ namespace mant {
       setOne(one_);
     }
 
-    inline void LinearSlope::setOne(const arma::Col<double>& one) {
+    inline void LinearSlope::setOne(const arma::Col<double> one) {
       if (one.n_elem != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the one vector (" + std::to_string(one.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }

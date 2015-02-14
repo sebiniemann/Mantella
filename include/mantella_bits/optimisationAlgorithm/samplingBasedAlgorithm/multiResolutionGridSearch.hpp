@@ -6,13 +6,13 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       void setMinimalSamplingDistances(
-          const arma::Col<double>& minimalSamplingDistances);
+          const arma::Col<double> minimalSamplingDistances);
 
       void setMaximalSamplesPerResolution(
-          const unsigned int& maximalSamplesPerResolution) noexcept;
+          const unsigned int maximalSamplesPerResolution) noexcept;
 
       void setSamplingDistributionPerDimension(
-          const arma::Col<double>& samplingDistributionPerDimension);
+          const arma::Col<double> samplingDistributionPerDimension);
 
       std::string to_string() const noexcept override;
 
@@ -164,7 +164,7 @@ namespace mant {
 
   template <typename ParameterType>
   void MultiResolutionGridSearch<ParameterType>::setMinimalSamplingDistances(
-      const arma::Col<double>& minimalSamplingDistances) {
+      const arma::Col<double> minimalSamplingDistances) {
     if(minimalSamplingDistances.n_elem != this->optimisationProblem_->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the sampling distances (" + std::to_string(minimalSamplingDistances.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     }
@@ -174,13 +174,13 @@ namespace mant {
 
   template <typename ParameterType>
   void MultiResolutionGridSearch<ParameterType>::setMaximalSamplesPerResolution(
-      const unsigned int& maximalSamplesPerResolution) noexcept {
+      const unsigned int maximalSamplesPerResolution) noexcept {
     maximalSamplesPerResolution_ = maximalSamplesPerResolution;
   }
 
   template <typename ParameterType>
   void MultiResolutionGridSearch<ParameterType>::setSamplingDistributionPerDimension(
-      const arma::Col<double>& samplingDistributionPerDimension) {
+      const arma::Col<double> samplingDistributionPerDimension) {
     if(samplingDistributionPerDimension.n_elem != this->optimisationProblem_->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the sampling distributions (" + std::to_string(samplingDistributionPerDimension.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     } else if(arma::sum(samplingDistributionPerDimension) != 1.0) {

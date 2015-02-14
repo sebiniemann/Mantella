@@ -8,7 +8,7 @@ namespace mant {
         inline std::string to_string() const noexcept override;
 
         inline void setTranslation(
-            const arma::Col<double>& translation) override;
+            const arma::Col<double> translation) override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(std::sqrt(10.0));
@@ -51,7 +51,7 @@ namespace mant {
     }
 
     inline void BuecheRastriginFunction::setTranslation(
-        const arma::Col<double>& translation) {
+        const arma::Col<double> translation) {
       if (translation.n_elem != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }

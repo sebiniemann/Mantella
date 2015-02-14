@@ -5,7 +5,7 @@ namespace mant {
         explicit PoseAccuracy(const Model& model) noexcept;
 
         void setEndEffectorTrajectory(
-            const arma::Mat<double>& endEffectorTrajectory) noexcept;
+            const arma::Mat<double> endEffectorTrajectory) noexcept;
 
       protected:
         Model model_;
@@ -25,7 +25,7 @@ namespace mant {
 
     template <class Model>
     void PoseAccuracy<Model>::setEndEffectorTrajectory(
-        const arma::Mat<double>& endEffectorTrajectory) noexcept {
+        const arma::Mat<double> endEffectorTrajectory) noexcept {
       endEffectorTrajectory_ = endEffectorTrajectory;
     }
 

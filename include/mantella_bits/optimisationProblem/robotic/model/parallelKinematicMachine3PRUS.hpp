@@ -7,27 +7,27 @@ namespace mant {
         inline arma::Mat<double>::fixed<2, 3> getLinkLengths() const noexcept;
 
         inline void setLinkLengths(
-            const arma::Mat<double>::fixed<2, 3>& linkLengths) noexcept;
+            const arma::Mat<double>::fixed<2, 3> linkLengths) noexcept;
 
         inline arma::Mat<double>::fixed<3, 3> getEndEffectorJointPositions() const noexcept;
 
         inline void setEndEffectorJointPositions(
-            const arma::Mat<double>::fixed<3, 3>& endEffectorJointPositions) noexcept;
+            const arma::Mat<double>::fixed<3, 3> endEffectorJointPositions) noexcept;
 
         inline arma::Mat<double>::fixed<3, 3> getRedundantJointStartPositions() const noexcept;
 
         inline void setRedundantJointStartPositions(
-            const arma::Mat<double>::fixed<3, 3>& redundantJointStartPositions) noexcept;
+            const arma::Mat<double>::fixed<3, 3> redundantJointStartPositions) noexcept;
 
         inline arma::Mat<double>::fixed<3, 3> getRedundantJointEndPositions() const noexcept;
 
         inline void setRedundantJointEndPositions(
-            const arma::Mat<double>::fixed<3, 3>& redundantJointEndPositions) noexcept;
+            const arma::Mat<double>::fixed<3, 3> redundantJointEndPositions) noexcept;
 
         inline arma::Mat<double>::fixed<2, 3> getBaseJointAngles() const noexcept;
 
         inline void setBaseJointAngles(
-            const arma::Mat<double>::fixed<2, 3>& baseJointAngles) noexcept;
+            const arma::Mat<double>::fixed<2, 3> baseJointAngles) noexcept;
 
         inline arma::Cube<double>::fixed<3, 3, 3> getModel(
             const arma::Col<double>::fixed<6>& endEffectorPose,
@@ -119,7 +119,7 @@ namespace mant {
     }
 
     inline void ParallelKinematicMachine3PRUS::setLinkLengths(
-        const arma::Mat<double>::fixed<2, 3>& linkLengths) noexcept {
+        const arma::Mat<double>::fixed<2, 3> linkLengths) noexcept {
       linkLengths_ = linkLengths;
     }
 
@@ -128,7 +128,7 @@ namespace mant {
     }
 
     inline void ParallelKinematicMachine3PRUS::setEndEffectorJointPositions(
-        const arma::Mat<double>::fixed<3, 3>& endEffectorJointPositions) noexcept {
+        const arma::Mat<double>::fixed<3, 3> endEffectorJointPositions) noexcept {
       endEffectorJointPositions_ = endEffectorJointPositions;
     }
 
@@ -137,7 +137,7 @@ namespace mant {
     }
 
     inline void ParallelKinematicMachine3PRUS::setRedundantJointStartPositions(
-        const arma::Mat<double>::fixed<3, 3>& redundantJointStartPositions) noexcept {
+        const arma::Mat<double>::fixed<3, 3> redundantJointStartPositions) noexcept {
       redundantJointStartPositions_ = redundantJointStartPositions;
     }
 
@@ -146,7 +146,7 @@ namespace mant {
     }
 
     inline void ParallelKinematicMachine3PRUS::setRedundantJointEndPositions(
-        const arma::Mat<double>::fixed<3, 3>& redundantJointEndPositions) noexcept {
+        const arma::Mat<double>::fixed<3, 3> redundantJointEndPositions) noexcept {
       redundantJointEndPositions_ = redundantJointEndPositions;
     }
 
@@ -155,7 +155,7 @@ namespace mant {
     }
 
     inline void ParallelKinematicMachine3PRUS::setBaseJointAngles(
-        const arma::Mat<double>::fixed<2, 3>& baseJointAngles) noexcept {
+        const arma::Mat<double>::fixed<2, 3> baseJointAngles) noexcept {
       baseJointAngles_ = baseJointAngles;
     }
 

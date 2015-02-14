@@ -6,17 +6,17 @@ namespace mant {
           const unsigned int& populationSize) noexcept;
 
       inline void setNeighbourhoodProbability(
-          const double& neighbourhoodProbability) noexcept;
+          const double neighbourhoodProbability) noexcept;
 
       inline void setMaximalAcceleration(
-          const double& maximalAcceleration) noexcept;
+          const double maximalAcceleration) noexcept;
       inline void setMaximalLocalAttraction(
-          const double& maximalLocalAttraction) noexcept;
+          const double maximalLocalAttraction) noexcept;
       inline void setMaximalGlobalAttraction(
-          const double& maximalGlobalAttraction) noexcept;
+          const double maximalGlobalAttraction) noexcept;
 
       inline void setMaximalSwarmConvergence(
-          const double& maximalSwarmConvergence) noexcept;
+          const double maximalSwarmConvergence) noexcept;
 
       inline std::string to_string() const noexcept override;
 
@@ -190,27 +190,27 @@ namespace mant {
   }
 
   inline void StandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
-      const double& neighbourhoodProbability) noexcept {
+      const double neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
   inline void StandardParticleSwarmOptimisation2011::setMaximalAcceleration(
-      const double& maximalAcceleration) noexcept {
+      const double maximalAcceleration) noexcept {
     maximalAcceleration_ = maximalAcceleration;
   }
 
   inline void StandardParticleSwarmOptimisation2011::setMaximalLocalAttraction(
-      const double& maximalLocalAttraction) noexcept {
+      const double maximalLocalAttraction) noexcept {
     maximalLocalAttraction_ = maximalLocalAttraction;
   }
 
   inline void StandardParticleSwarmOptimisation2011::setMaximalGlobalAttraction(
-      const double& maximalGlobalAttraction) noexcept {
+      const double maximalGlobalAttraction) noexcept {
     maximalGlobalAttraction_ = maximalGlobalAttraction;
   }
 
   inline void StandardParticleSwarmOptimisation2011::setMaximalSwarmConvergence(
-      const double& maximalSwarmConvergence) noexcept {
+      const double maximalSwarmConvergence) noexcept {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 

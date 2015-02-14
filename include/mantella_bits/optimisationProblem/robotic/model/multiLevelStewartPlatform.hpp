@@ -2,6 +2,7 @@ namespace mant {
   namespace robotic {
     class MultiLevelStewartPlatform {
       public:
+        // TODO Add setter
         inline explicit MultiLevelStewartPlatform() noexcept;
 
         inline std::vector<arma::Cube<double>::fixed<3, 6, 2>> getModel(

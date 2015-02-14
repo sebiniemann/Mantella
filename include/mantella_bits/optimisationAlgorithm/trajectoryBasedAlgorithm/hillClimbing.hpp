@@ -7,7 +7,7 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       void setMaximalStepSize(
-          const ParameterType& maximalStepSize);
+          const ParameterType maximalStepSize);
 
       std::string to_string() const noexcept override;
 
@@ -63,7 +63,7 @@ namespace mant {
 
   template <typename ParameterType>
   void HillClimbing<ParameterType>::setMaximalStepSize(
-      const ParameterType& maximalStepSize) {
+      const ParameterType maximalStepSize) {
     if (maximalStepSize <= 0) {
       throw std::logic_error("The maximal step size must be strict greater than 0.");
     }

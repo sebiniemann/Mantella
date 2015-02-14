@@ -6,21 +6,28 @@ namespace mant {
             const unsigned int& numberOfDimensions) noexcept;
 
         inline virtual void setTranslation(
-            const arma::Col<double>& translation);
+            const arma::Col<double> translation);
+
         inline virtual void setOne(
-            const arma::Col<double>& one);
+            const arma::Col<double> one);
+
         inline virtual void setRotationR(
-            const arma::Mat<double>& rotationR);
+            const arma::Mat<double> rotationR);
+
         inline virtual void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+            const arma::Mat<double> rotationQ);
+
         inline virtual void setDeltaC101(
-            const arma::Mat<double>& deltaC101);
+            const arma::Mat<double> deltaC101);
+
         inline virtual void setLocalOptimaY101(
-            const arma::Mat<double>& localOptimaY101);
+            const arma::Mat<double> localOptimaY101);
+
         inline virtual void setDeltaC21(
-            const arma::Mat<double>& deltaC21);
+            const arma::Mat<double> deltaC21);
+
         inline virtual void setLocalOptimaY21(
-            const arma::Mat<double>& localOptimaY21);
+            const arma::Mat<double> localOptimaY21);
 
         virtual ~BlackBoxOptimisationBenchmark2009() = default;
 
@@ -100,7 +107,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setTranslation(
-        const arma::Col<double>& translation) {
+        const arma::Col<double> translation) {
       if (translation.n_elem != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }
@@ -109,7 +116,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setOne(
-        const arma::Col<double>& one) {
+        const arma::Col<double> one) {
       if (one.n_elem != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the one vector (" + std::to_string(one.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }
@@ -118,7 +125,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setRotationR(
-        const arma::Mat<double>& rotationR) {
+        const arma::Mat<double> rotationR) {
       if (!rotationR.is_square()) {
         throw std::logic_error("The rotation matrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must be square.");
       } else if (rotationR.n_rows != numberOfDimensions_) {
@@ -133,7 +140,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
+        const arma::Mat<double> rotationQ) {
       if (!rotationQ.is_square()) {
         throw std::logic_error("The rotation matrix (" + std::to_string(rotationQ.n_rows) + ", " + std::to_string(rotationQ.n_cols) + ") must be square.");
       } else if (rotationQ.n_rows != numberOfDimensions_) {
@@ -148,7 +155,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setDeltaC101(
-        const arma::Mat<double>& deltaC101) {
+        const arma::Mat<double> deltaC101) {
       if (deltaC101.n_rows != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of each delta (" + std::to_string(deltaC101.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       } else if (deltaC101.n_cols != 101) {
@@ -159,7 +166,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setLocalOptimaY101(
-        const arma::Mat<double>& localOptimaY101) {
+        const arma::Mat<double> localOptimaY101) {
     if (localOptimaY101.n_rows != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of each local optimum (" + std::to_string(localOptimaY101.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     } else if (localOptimaY101.n_cols != 101) {
@@ -170,7 +177,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setDeltaC21(
-        const arma::Mat<double>& deltaC21) {
+        const arma::Mat<double> deltaC21) {
       if (deltaC21.n_rows != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of each delta (" + std::to_string(deltaC21.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       } else if (deltaC21.n_cols != 21) {
@@ -181,7 +188,7 @@ namespace mant {
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setLocalOptimaY21(
-        const arma::Mat<double>& localOptimaY21) {
+        const arma::Mat<double> localOptimaY21) {
       if (localOptimaY21.n_rows != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of each local optimum (" + std::to_string(localOptimaY21.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       } else if (localOptimaY21.n_cols != 21) {

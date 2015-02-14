@@ -7,7 +7,7 @@ namespace mant {
           const unsigned int& populationSize) noexcept;
 
       void setInitialPopulation(
-          const arma::Mat<ParameterType>& initialPopulation);
+          const arma::Mat<ParameterType> initialPopulation);
 
     protected:
       unsigned int populationSize_;
@@ -34,7 +34,7 @@ namespace mant {
 
   template <typename ParameterType>
   void PopulationBasedAlgorithm<ParameterType>::setInitialPopulation(
-      const arma::Mat<ParameterType>& initialPopulation) {
+      const arma::Mat<ParameterType> initialPopulation) {
     if(initialPopulation.n_rows != this->optimisationProblem_->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     }

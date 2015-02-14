@@ -49,9 +49,9 @@ namespace mant {
             optimisationProblem->getObjectiveValue(candidateC);
       }
 
-      if (arma::median(differences) < additiveSeparabilityMedianErrorThreshold_) {
+//      if (arma::median(differences) < additiveSeparabilityMedianErrorThreshold_) {
         partitions.push_back({partitionCandidate.first, partitionCandidate.second});
-      }
+//      }
     }
 
     std::unordered_set<unsigned int> singlePartitions;
