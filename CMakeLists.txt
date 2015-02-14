@@ -484,6 +484,8 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
   include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
   include/mantella_bits/propertiesEstimation.hpp
+  include/mantella_bits/propertiesEstimation/shapeEstimation.hpp
+  include/mantella_bits/propertiesEstimation/dimensionalityEstimation.hpp
   # Tests
   test/helper.hpp
 )
