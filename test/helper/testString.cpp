@@ -19,9 +19,21 @@ TEST_CASE("string: to_string(Printable)", "") {
   }
 }
 
-TEST_CASE("string: to_string(shared_ptr<Printable>)", "") {
+TEST_CASE("string: to_string(Printable*)", "") {
   SECTION("Returns the specified class name.") {
+    mant::Printable* testPrintable = new TestPrintable;
+
+    CHECK(mant::to_string(testPrintable) == "ThisIsTestPrintable");
+  }
+
+  SECTION("Will also work with std::shared_ptr.") {
     std::shared_ptr<mant::Printable> testPrintable = std::shared_ptr<mant::Printable>(new TestPrintable);
+
+    CHECK(mant::to_string(testPrintable) == "ThisIsTestPrintable");
+  }
+
+  SECTION("Will also work with std::unique_ptr.") {
+    std::unique_ptr<mant::Printable> testPrintable = std::unique_ptr<mant::Printable>(new TestPrintable);
 
     CHECK(mant::to_string(testPrintable) == "ThisIsTestPrintable");
   }
