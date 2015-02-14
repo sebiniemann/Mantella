@@ -26,8 +26,6 @@ namespace mant {
     return isSeparable_;
   }
 
-  // TODO Grant public access to const member files?
-  // TODO const bool oder const bool& (memory / compiler optimisation)
   template <typename ParameterType>
   void AdditiveSeparability<ParameterType>::isSeparable(const bool isSeparable) noexcept {
     isSeparable_ = isSeparable;
