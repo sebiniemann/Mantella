@@ -7,7 +7,7 @@ namespace mant {
       const Printable& printable) noexcept;
   inline std::string to_string(
       // A shared pointer to the class marked as printable.
-      const std::shared_ptr<Printable> printable) noexcept;
+      const Printable* printable) noexcept;
 
   // Checks whether the provided text ends with another string. This is usually used in this library
   // to check/filter for file endings.
@@ -27,7 +27,7 @@ namespace mant {
   }
 
   inline std::string to_string(
-      const std::shared_ptr<Printable> printable) noexcept {
+      const Printable* printable) noexcept {
     return printable->to_string();
   }
 

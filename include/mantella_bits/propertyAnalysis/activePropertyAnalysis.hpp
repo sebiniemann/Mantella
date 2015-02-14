@@ -5,16 +5,16 @@ namespace mant {
       using PropertyAnalysis<ParameterType>::PropertyAnalysis;
 
       void analyse(
-          const std::shared_ptr<OptimisationProblem<ParameterType>>) noexcept;
+          const OptimisationProblem<ParameterType>*) noexcept;
 
     protected:
       virtual void analyseImplementation(
-          const std::shared_ptr<OptimisationProblem<ParameterType>>) noexcept = 0;
+          const OptimisationProblem<ParameterType>*) noexcept = 0;
   };
 
   template <typename ParameterType>
   void ActivePropertyAnalysis<ParameterType>::analyse(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
+      const OptimisationProblem<ParameterType>* optimisationProblem) noexcept {
     analyseImplementation(optimisationProblem);
   }
 }
