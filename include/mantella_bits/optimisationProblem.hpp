@@ -14,6 +14,9 @@ namespace mant {
   template <typename ParameterType>
   class OptimisationProblem : public Printable {
     public:
+      // The number of dimensions to be optimised
+      const unsigned int numberOfDimensions_;
+
       // Constructs an optimisation problem with the given number of dimensions to be optimised.
       explicit OptimisationProblem(
         // The number of dimensions
@@ -61,9 +64,6 @@ namespace mant {
       double getObjectiveValue(
         // The parameter to be evaluated
         const arma::Col<ParameterType>& parameter);
-
-      // Returns the number of dimensions to be optimised
-      unsigned int getNumberOfDimensions() const noexcept;
 
       // Returns the lower bounds of the search space.
       arma::Col<ParameterType> getLowerBounds() const noexcept;
@@ -152,9 +152,6 @@ namespace mant {
       virtual ~OptimisationProblem() = default;
 
     protected:
-      // The number of dimensions to be optimised
-      const unsigned int numberOfDimensions_;
-
       // The lower bound of tthe search space
       arma::Col<ParameterType> lowerBounds_;
       // The upper bound of the search space
@@ -436,11 +433,6 @@ namespace mant {
       // Return the found result.
       return cachePosition->second;
     }
-  }
-
-  template <typename ParameterType>
-  unsigned int OptimisationProblem<ParameterType>::getNumberOfDimensions() const noexcept {
-    return numberOfDimensions_;
   }
 
   template <typename ParameterType>

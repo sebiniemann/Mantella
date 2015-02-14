@@ -14,7 +14,7 @@ namespace mant {
 
   inline void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
       OptimisationProblem<double>* optimisationProblem) noexcept {
-    std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->getNumberOfDimensions());
+    std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->numberOfDimensions_);
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;
     for (const auto& partitionCandidate : partitionCandidates) {
@@ -26,19 +26,19 @@ namespace mant {
         arma::Col<double> secondPartA = arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem);
         arma::Col<double> secondPartB = arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem);
 
-        arma::Col<double> candidateA(optimisationProblem->getNumberOfDimensions(), arma::fill::zeros);
+        arma::Col<double> candidateA(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateA.elem(partitionCandidate.first) = firstPartA;
         candidateA.elem(partitionCandidate.second) = secondPartA;
 
-        arma::Col<double> candidateB(optimisationProblem->getNumberOfDimensions(), arma::fill::zeros);
+        arma::Col<double> candidateB(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateB.elem(partitionCandidate.first) = firstPartA;
         candidateB.elem(partitionCandidate.second) = secondPartB;
 
-        arma::Col<double> candidateC(optimisationProblem->getNumberOfDimensions(), arma::fill::zeros);
+        arma::Col<double> candidateC(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateC.elem(partitionCandidate.first) = firstPartB;
         candidateC.elem(partitionCandidate.second) = secondPartA;
 
-        arma::Col<double> candidateD(optimisationProblem->getNumberOfDimensions(), arma::fill::zeros);
+        arma::Col<double> candidateD(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateD.elem(partitionCandidate.first) = firstPartB;
         candidateD.elem(partitionCandidate.second) = secondPartB;
 

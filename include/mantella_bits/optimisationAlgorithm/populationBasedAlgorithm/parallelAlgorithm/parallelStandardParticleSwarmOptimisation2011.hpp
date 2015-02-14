@@ -45,16 +45,16 @@ namespace mant {
   }
 
   void ParallelStandardParticleSwarmOptimisation2011::parallelOptimiseImplementation() noexcept {
-    arma::Mat<double> localParticles = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
+    arma::Mat<double> localParticles = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
     localParticles.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     localParticles.each_col() += this->optimisationProblem_->getLowerBounds();
 
-    arma::Mat<double> localVelocities = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
+    arma::Mat<double> localVelocities = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
     localVelocities.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     localVelocities.each_col() += this->optimisationProblem_->getLowerBounds();
     localVelocities -= localParticles;
 
-    arma::Mat<double> localBestSolutions(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_ * this->numberOfNodes_);
+    arma::Mat<double> localBestSolutions(this->optimisationProblem_->numberOfDimensions_, this->populationSize_ * this->numberOfNodes_);
     localBestSolutions.cols(this->rank_ * this->populationSize_, (this->rank_ + 1) * this->populationSize_ - 1) = localParticles;
 
     arma::Col<double> localBestObjectiveValues(this->populationSize_ * this->numberOfNodes_);
@@ -72,10 +72,10 @@ namespace mant {
     arma::Mat<double> localBestSolutionsSend = localBestSolutions.cols(this->rank_ * this->populationSize_, (this->rank_ + 1) * this->populationSize_ - 1);
     MPI_Allgather(
           localBestSolutionsSend.memptr(),
-          this->populationSize_ * this->optimisationProblem_->getNumberOfDimensions(),
+          this->populationSize_ * this->optimisationProblem_->numberOfDimensions_,
           MPI_DOUBLE,
           localBestSolutions.memptr(),
-          this->populationSize_ * this->optimisationProblem_->getNumberOfDimensions(),
+          this->populationSize_ * this->optimisationProblem_->numberOfDimensions_,
           MPI_DOUBLE,
           MPI_COMM_WORLD);
 
@@ -125,7 +125,7 @@ namespace mant {
             attractionCenter = (localAttraction_ * (localBestSolutions.col(this->rank_ * this->populationSize_ + k) - particle) + globalAttraction_ * (localBestSolutions.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
           }
 
-          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator()) * arma::norm(attractionCenter) + attractionCenter;
+          arma::Col<double> velocityCandidate = acceleration_ * localVelocities.col(k) + arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->numberOfDimensions_)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator()) * arma::norm(attractionCenter) + attractionCenter;
           arma::Col<double> solutionCandidate = particle + velocityCandidate;
 
           arma::Col<unsigned int> belowLowerBound = arma::find(solutionCandidate < this->optimisationProblem_->getLowerBounds());
@@ -167,10 +167,10 @@ namespace mant {
       arma::Mat<double> localBestSolutionsSend = localBestSolutions.cols(this->rank_ * this->populationSize_, (this->rank_ + 1) * this->populationSize_ - 1);
       MPI_Allgather(
             localBestSolutionsSend.memptr(),
-            this->populationSize_ * this->optimisationProblem_->getNumberOfDimensions(),
+            this->populationSize_ * this->optimisationProblem_->numberOfDimensions_,
             MPI_DOUBLE,
             localBestSolutions.memptr(),
-            this->populationSize_ * this->optimisationProblem_->getNumberOfDimensions(),
+            this->populationSize_ * this->optimisationProblem_->numberOfDimensions_,
             MPI_DOUBLE,
             MPI_COMM_WORLD);
 

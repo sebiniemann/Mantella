@@ -37,7 +37,7 @@ namespace mant {
   }
 
   inline void RoleBasedImitationAlgorithm::optimiseImplementation() noexcept {
-    arma::Mat<double> agents = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
+    arma::Mat<double> agents = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
     agents.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     agents.each_col() += this->optimisationProblem_->getLowerBounds();
 
@@ -68,7 +68,7 @@ namespace mant {
         arma::Col<double> currentSolution = agents.col(k);
         double currentObjectiveValue = objectiveValues.at(k);
 
-        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->optimisationProblem_->getNumberOfDimensions(), std::uniform_int_distribution<unsigned int>(0, this->optimisationProblem_->getNumberOfDimensions())(Rng::getGenerator()));
+        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->optimisationProblem_->numberOfDimensions_, std::uniform_int_distribution<unsigned int>(0, this->optimisationProblem_->numberOfDimensions_)(Rng::getGenerator()));
 
         arma::Col<unsigned int> neighbourIndicies = getRandomPermutation(this->populationSize_ - 1, neighbourhoodSize_);
         neighbourIndicies.elem(arma::find(neighbourIndicies >= k)) += 1;

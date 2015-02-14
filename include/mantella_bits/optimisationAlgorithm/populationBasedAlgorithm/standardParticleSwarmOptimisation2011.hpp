@@ -143,11 +143,11 @@ namespace mant {
   }
 
   inline void StandardParticleSwarmOptimisation2011::initialiseSwarm() noexcept {
-    particles_ = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
+    particles_ = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
     particles_.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     particles_.each_col() += this->optimisationProblem_->getLowerBounds();
 
-    velocities_ = arma::randu<arma::Mat<double>>(this->optimisationProblem_->getNumberOfDimensions(), this->populationSize_);
+    velocities_ = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
     velocities_.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     velocities_.each_col() += this->optimisationProblem_->getLowerBounds();
     velocities_ -= particles_;
@@ -179,7 +179,7 @@ namespace mant {
   }
 
   inline arma::Col<double> StandardParticleSwarmOptimisation2011::getVelocity() noexcept {
-    return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->getNumberOfDimensions())) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
+    return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->numberOfDimensions_)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
   inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011::getRandomNeighbourhoodTopology() noexcept {

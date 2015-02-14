@@ -29,7 +29,7 @@ namespace mant {
   }
 
   inline void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
-    unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    unsigned int numberOfDimensions = this->optimisationProblem_->numberOfDimensions_;
     arma::Col<double> objectiveValues = arma::randu<arma::Col<double>>(numberOfDimensions);
 
     //init selection parameters

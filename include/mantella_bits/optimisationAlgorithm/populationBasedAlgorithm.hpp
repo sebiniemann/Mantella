@@ -25,7 +25,7 @@ namespace mant {
     : OptimisationAlgorithm<ParameterType>(optimisationProblem),
       populationSize_(populationSize) {
     // TODO fix for discrete problems
-    arma::Mat<ParameterType> population = arma::randu<arma::Mat<ParameterType>>(this->optimisationProblem_->getNumberOfDimensions(), populationSize_);
+    arma::Mat<ParameterType> population = arma::randu<arma::Mat<ParameterType>>(this->optimisationProblem_->numberOfDimensions_, populationSize_);
     population.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
     population.each_col() += this->optimisationProblem_->getLowerBounds();
 
@@ -35,8 +35,8 @@ namespace mant {
   template <typename ParameterType>
   void PopulationBasedAlgorithm<ParameterType>::setInitialPopulation(
       const arma::Mat<ParameterType>& initialPopulation) {
-    if(initialPopulation.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
+    if(initialPopulation.n_rows != this->optimisationProblem_->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     }
 
     initialPopulation_ = initialPopulation;

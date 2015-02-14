@@ -28,7 +28,7 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : TrajectoryBasedAlgorithm<double>(optimisationProblem) {
     setInitialStepSize(this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
-    setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->getNumberOfDimensions()) * 0.5);
+    setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 0.5);
   }
 
   inline void HookeJeevesAlgorithm::optimiseImplementation() noexcept {
@@ -49,7 +49,7 @@ namespace mant {
       reduceStepSize = true;
 
       arma::Col<double> candidateParameter = this->bestParameter_;
-      for (std::size_t n = 0; n < this->optimisationProblem_->getNumberOfDimensions(); ++n) {
+      for (std::size_t n = 0; n < this->optimisationProblem_->numberOfDimensions_; ++n) {
         candidateParameter.at(n) += stepSize.at(n);
 
         if(this->optimisationProblem_->getUpperBounds().at(n) < candidateParameter.at(n)) {
@@ -101,8 +101,8 @@ namespace mant {
 
   inline void HookeJeevesAlgorithm::setInitialStepSize(
       const arma::Col<double>& initialStepSize) {
-    if(initialStepSize.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
+    if(initialStepSize.n_rows != this->optimisationProblem_->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     } else if (arma::any(initialStepSize <= 0)) {
       throw std::logic_error("The initial step size must be strict greater than 0.");
     }
@@ -112,8 +112,8 @@ namespace mant {
 
   inline void HookeJeevesAlgorithm::setStepSizeDecrease(
       const arma::Col<double>& stepSizeDecrease) {
-    if(stepSizeDecrease.n_rows != this->optimisationProblem_->getNumberOfDimensions()) {
-      throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->getNumberOfDimensions()) + ").");
+    if(stepSizeDecrease.n_rows != this->optimisationProblem_->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
     } else if(arma::any(stepSizeDecrease <= 0) || arma::any(stepSizeDecrease >= 1)) {
       throw std::logic_error("The step size decrease must be strict greater than 0 and strict lower than 1.");
     }
