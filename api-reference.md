@@ -96,7 +96,8 @@ table_of_contents:
         Linear Proportionality Analyses:
           Direct Linear Proportionality Analysis:
   Properties Estimations:
-    Maximum Likelihood Estimation:
+    Function Shape Estimation:
+    Dimensionality Estimation:
   Helpers:
     Random Number Generator:
     Filesystem:
