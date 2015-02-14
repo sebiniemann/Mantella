@@ -1,7 +1,9 @@
 namespace mant {
   template <typename ParameterType>
-  class AdditiveSeparability : public Property<ParameterType> {
+  class AdditiveSeparabilityProperty : public SeparabilityProperty<ParameterType> {
     public:
+      using SeparabilityProperty<ParameterType>::SeparabilityProperty;
+
       bool isSeparable() const noexcept;
 
       void isSeparable(const bool isSeparable) noexcept;
@@ -9,7 +11,7 @@ namespace mant {
       std::vector<arma::Col<unsigned int>> getSeparation() const noexcept;
 
       void setSeparation(
-          const std::vector<arma::Col<unsigned int>>& separation);
+          const std::vector<arma::Col<unsigned int>> separation);
 
     protected:
       bool isSeparable_;
@@ -22,23 +24,23 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  bool AdditiveSeparability<ParameterType>::isSeparable() const noexcept {
+  bool AdditiveSeparabilityProperty<ParameterType>::isSeparable() const noexcept {
     return isSeparable_;
   }
 
   template <typename ParameterType>
-  void AdditiveSeparability<ParameterType>::isSeparable(const bool isSeparable) noexcept {
+  void AdditiveSeparabilityProperty<ParameterType>::isSeparable(const bool isSeparable) noexcept {
     isSeparable_ = isSeparable;
   }
 
   template <typename ParameterType>
-  std::vector<arma::Col<unsigned int>> AdditiveSeparability<ParameterType>::getSeparation() const noexcept {
+  std::vector<arma::Col<unsigned int>> AdditiveSeparabilityProperty<ParameterType>::getSeparation() const noexcept {
     return separation_;
   }
 
   template <typename ParameterType>
-  void AdditiveSeparability<ParameterType>::setSeparation(
-      const std::vector<arma::Col<unsigned int>>& separation) {
+  void AdditiveSeparabilityProperty<ParameterType>::setSeparation(
+      const std::vector<arma::Col<unsigned int>> separation) {
     separation_ = separation;
   }
 }
