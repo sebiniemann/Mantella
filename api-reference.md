@@ -63,8 +63,17 @@ table_of_contents:
     Infinity Norm:
     Manhattan Distance:
   Properties:
-    Continuous Properties:
-    Discrete Properties:
+    Correlation Property:
+    Continuity Properties:
+      Lipschitz Continuity Property:
+    Function Model Properties:
+      Linear Function Model Property:
+      Quadratic Function Model Property:
+    Separability Properties:
+      Additive Separability Property:
+      Multiplicative Separability Property:
+    Proportionality Properties:
+      Linear Proportionality Property:
   Property Analyses:
     Passive Property Analyses:
       Correlation Analyses:
