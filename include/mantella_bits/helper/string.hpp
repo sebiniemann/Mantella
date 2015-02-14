@@ -29,7 +29,7 @@ namespace mant {
       const std::string& text,
       const std::string& ending) noexcept {
     if (text.length() >= ending.length()) {
-      return (text.compare(text.length() - ending.length(), ending.length(), ending) ==0);
+      return (text.compare(text.length() - ending.length(), ending.length(), ending) == 0);
     }
 
     return false;
