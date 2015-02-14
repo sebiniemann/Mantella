@@ -1,25 +1,27 @@
 namespace mant {
-  class LinearFunctionModel : public Property<double> {
+  class LinearFunctionModelProperty : public FunctionModelProperty<double> {
     public:
-      inline arma::Col<double> getCoefficents() const noexcept;
+      using FunctionModelProperty<double>::FunctionModelProperty;
 
-      inline void setCoefficents(
-          const arma::Col<double>& coefficents) noexcept;
+      inline arma::Col<double> getCoefficients() const noexcept;
+
+      inline void setCoefficients(
+          const arma::Col<double> coefficients) noexcept;
 
     protected:
-      arma::Col<double> coefficents_;
+      arma::Col<double> coefficients_;
   };
 
   //
   // Implementation
   //
 
-  arma::Col<double> LinearFunctionModel::getCoefficents() const noexcept {
-    return coefficents_;
+  arma::Col<double> LinearFunctionModelProperty::getCoefficients() const noexcept {
+    return coefficients_;
   }
 
-  void LinearFunctionModel::setCoefficents(
-      const arma::Col<double>& coefficents) noexcept {
-    coefficents_ = coefficents;
+  void LinearFunctionModelProperty::setCoefficients(
+      const arma::Col<double> coefficients) noexcept {
+    coefficients_ = coefficients;
   }
 }

@@ -1,29 +1,31 @@
 namespace mant {
-  class QuadraticFunctionModel : public Property<double> {
+  class QuadraticFunctionModelProperty : public FunctionModelProperty<double> {
     public:
-      inline arma::Mat<double> getCoefficents() const noexcept;
+      using FunctionModelProperty<double>::FunctionModelProperty;
 
-      inline void setCoefficents(
-          const arma::Mat<double>& coefficents);
+      inline arma::Mat<double> getCoefficients() const noexcept;
+
+      inline void setCoefficients(
+          const arma::Mat<double> coefficients);
 
     protected:
-      arma::Mat<double> coefficents_;
+      arma::Mat<double> coefficients_;
   };
 
   //
   // Implementation
   //
 
-  arma::Mat<double> QuadraticFunctionModel::getCoefficents() const noexcept {
-    return coefficents_;
+  arma::Mat<double> QuadraticFunctionModelProperty::getCoefficients() const noexcept {
+    return coefficients_;
   }
 
-  void QuadraticFunctionModel::setCoefficents(
-      const arma::Mat<double>& coefficents) {
-    if(!coefficents.is_square()) {
+  void QuadraticFunctionModelProperty::setCoefficients(
+      const arma::Mat<double> coefficients) {
+    if(!coefficients.is_square()) {
       // TODO Throw an exception
     }
 
-    coefficents_ = coefficents;
+    coefficients_ = coefficients;
   }
 }
