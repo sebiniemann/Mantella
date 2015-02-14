@@ -2,8 +2,6 @@ namespace mant {
   template <typename ParameterType>
   class DistanceFunction {
     public:
-      explicit DistanceFunction() = default;
-
       ParameterType getDistance(
           const arma::Col<ParameterType>& parameter) const noexcept;
 
