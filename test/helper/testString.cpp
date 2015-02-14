@@ -31,12 +31,6 @@ TEST_CASE("string: to_string(Printable*)", "") {
 
     CHECK(mant::to_string(testPrintable) == "ThisIsTestPrintable");
   }
-
-  SECTION("Will also work with std::unique_ptr.") {
-    std::unique_ptr<mant::Printable> testPrintable = std::unique_ptr<mant::Printable>(new TestPrintable);
-
-    CHECK(mant::to_string(testPrintable) == "ThisIsTestPrintable");
-  }
 }
 
 TEST_CASE("string: endsWith", "") {
