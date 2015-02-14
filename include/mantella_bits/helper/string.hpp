@@ -3,9 +3,9 @@ namespace mant {
   inline std::string to_string(
       const Printable& printable) noexcept;
 
-  // Added to support polymorphic types (e.g. std::shared_ptr<OptimisationProblem>, ...).
+  // Added to support polymorphic types (e.g. std::shared_ptr<OptimisationProblem>).
   inline std::string to_string(
-      const Printable* printable) noexcept;
+      const std::shared_ptr<Printable> printable) noexcept;
 
   inline bool endsWith(
       const std::string& text,
@@ -21,7 +21,7 @@ namespace mant {
   }
 
   inline std::string to_string(
-      const Printable* printable) noexcept {
+      const std::shared_ptr<Printable> printable) noexcept {
     return printable->to_string();
   }
 

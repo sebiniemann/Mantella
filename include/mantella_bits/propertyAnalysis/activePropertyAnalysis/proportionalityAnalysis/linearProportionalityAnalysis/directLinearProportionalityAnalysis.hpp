@@ -5,6 +5,6 @@ namespace mant {
 
     protected:
       void analyseImplementation(
-          OptimisationProblem<double>* optimisationProblem) noexcept override;
+          std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
   };
 }
