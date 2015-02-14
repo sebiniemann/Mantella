@@ -5,6 +5,6 @@ namespace mant {
 
     protected:
       void analyseImplementation(
-          const OptimisationProblem<double>* optimisationProblem) noexcept override;
+          OptimisationProblem<double>* optimisationProblem) noexcept override;
   };
 }

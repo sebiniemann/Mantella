@@ -5,7 +5,7 @@ namespace mant {
 
     protected:
       inline void analyseImplementation(
-          const OptimisationProblem<double>* optimisationProblem) noexcept override;
+          OptimisationProblem<double>* optimisationProblem) noexcept override;
   };
 
   //
@@ -13,7 +13,7 @@ namespace mant {
   //
 
   inline void DirectAdditiveSeparabilityAnalysis::analyseImplementation(
-      const OptimisationProblem<double>* optimisationProblem) noexcept {
+      OptimisationProblem<double>* optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->getNumberOfDimensions());
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;
