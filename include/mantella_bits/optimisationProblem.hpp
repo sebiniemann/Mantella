@@ -153,7 +153,7 @@ namespace mant {
 
     protected:
       // The number of dimensions to be optimised
-      unsigned int numberOfDimensions_;
+      const unsigned int numberOfDimensions_;
 
       // The lower bound of tthe search space
       arma::Col<ParameterType> lowerBounds_;
