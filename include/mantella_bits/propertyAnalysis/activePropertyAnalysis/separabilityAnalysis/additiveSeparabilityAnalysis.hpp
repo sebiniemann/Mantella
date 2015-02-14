@@ -2,20 +2,12 @@ namespace mant {
   template <typename ParameterType>
   class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType> {
     public:
-      explicit AdditiveSeparabilityAnalysis() noexcept;
+      using SeparabilityAnalysis<ParameterType>::SeparabilityAnalysis;
 
-      void setAdditiveSeparabilityMedianErrorThreshold(
-          const double& additiveSeparabilityMedianErrorThreshold);
-
-      std::vector<arma::Col<unsigned int>> getSeparation() const noexcept;
-
-      bool isSeparable() const noexcept;
+      AdditiveSeparabilityProperty<ParameterType> getProperty() const noexcept;
 
     protected:
-      std::vector<arma::Col<unsigned int>> separation_;
-      bool isSeparable_;
-
-      double additiveSeparabilityMedianErrorThreshold_;
+      AdditiveSeparabilityProperty<ParameterType> property_;
   };
 
   //
@@ -23,17 +15,7 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  AdditiveSeparabilityAnalysis<ParameterType>::AdditiveSeparabilityAnalysis() noexcept {
-    setAdditiveSeparabilityMedianErrorThreshold(0.75);
-  }
-
-  template <typename ParameterType>
-  void AdditiveSeparabilityAnalysis<ParameterType>::setAdditiveSeparabilityMedianErrorThreshold(
-      const double& additiveSeparabilityMedianErrorThreshold) {
-    if(additiveSeparabilityMedianErrorThreshold < 0 || additiveSeparabilityMedianErrorThreshold > 1) {
-      throw std::logic_error("The additive separability error threshold (" + std::to_string(additiveSeparabilityMedianErrorThreshold) + ") must be within 0 and 1.");
-    }
-
-    additiveSeparabilityMedianErrorThreshold_ = additiveSeparabilityMedianErrorThreshold;
+  AdditiveSeparabilityProperty<ParameterType> AdditiveSeparabilityAnalysis<ParameterType>::getProperty() const noexcept {
+    return property_;
   }
 }
