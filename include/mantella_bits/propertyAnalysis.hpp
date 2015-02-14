@@ -5,7 +5,7 @@ namespace mant {
       explicit PropertyAnalysis() noexcept;
 
       void setDistanceFunction(
-          std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
+          const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
 
       // Provides a default deconstructor.
       virtual ~PropertyAnalysis() = default;
@@ -28,7 +28,7 @@ namespace mant {
 
   template <typename ParameterType>
   void PropertyAnalysis<ParameterType>::setDistanceFunction(
-      std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept {
+      const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept {
     distanceFunction_ = distanceFunction;
   }
 

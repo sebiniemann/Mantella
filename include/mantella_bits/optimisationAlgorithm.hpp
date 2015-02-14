@@ -13,7 +13,7 @@ namespace mant {
       void optimise() noexcept;
 
       void setDistanceFunction(
-          std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
+          const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
 
       // Returns the current number of iterations performed.
       unsigned int getNumberOfIterations() const noexcept;
@@ -112,7 +112,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationAlgorithm<ParameterType>::setDistanceFunction(
-      std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept {
+      const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept {
     distanceFunction_ = distanceFunction;
   }
 
