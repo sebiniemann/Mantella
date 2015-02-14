@@ -1,7 +1,7 @@
 namespace mant {
   template <typename ParameterType>
-  class ContinuityAnalysis : public PassivePropertyAnalysis<ParameterType> {
+  class ContinuityProperty : public Property<ParameterType> {
     public:
-      using PassivePropertyAnalysis<ParameterType>::PassivePropertyAnalysis;
+      using Property<ParameterType>::Property;
   };
 }
