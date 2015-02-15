@@ -490,7 +490,7 @@ code {
   border: none;
 }
 
-.custom-property {
+.custom-label-property {
   padding: 2px 4px;
   font-size: 90%;
   color: #fff;
@@ -498,22 +498,15 @@ code {
   border-radius: 3px;
 }
 
-.custom-specifier {
-  padding: 2px 4px;
-  font-size: 90%;
-  color: #fff;
-  border-radius: 3px;
-}
-
-.custom-specifier-override {
+.custom-label-override {
   background-color: $danger-color;
 }
 
-.custom-specifier-virtual {
+.custom-label-virtual {
   background-color: $warning-color;
 }
 
-.custom-specifier-noexcept {
+.custom-label-noexcept {
   background-color: $info-color;
 }
 
