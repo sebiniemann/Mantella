@@ -1,5 +1,8 @@
 namespace mant {
   class HammingDistance : public DistanceFunction<unsigned int> {
+    public:
+      using DistanceFunction<unsigned int>::DistanceFunction;
+
     protected:
       inline unsigned int getDistanceImplementation(
           const arma::Col<unsigned int>& parameter) const noexcept override;
