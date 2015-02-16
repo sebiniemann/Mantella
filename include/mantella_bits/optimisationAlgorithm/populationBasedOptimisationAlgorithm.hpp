@@ -1,8 +1,8 @@
 namespace mant {
   template <typename ParameterType>
-  class PopulationBasedAlgorithm : public OptimisationAlgorithm<ParameterType> {
+  class PopulationBasedOptimisationAlgorithm : public OptimisationAlgorithm<ParameterType> {
     public:
-      explicit PopulationBasedAlgorithm(
+      explicit PopulationBasedOptimisationAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
           const unsigned int& populationSize) noexcept;
 
@@ -19,7 +19,7 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  PopulationBasedAlgorithm<ParameterType>::PopulationBasedAlgorithm(
+  PopulationBasedOptimisationAlgorithm<ParameterType>::PopulationBasedOptimisationAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
       const unsigned int& populationSize) noexcept
     : OptimisationAlgorithm<ParameterType>(optimisationProblem),
@@ -33,7 +33,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void PopulationBasedAlgorithm<ParameterType>::setInitialPopulation(
+  void PopulationBasedOptimisationAlgorithm<ParameterType>::setInitialPopulation(
       const arma::Mat<ParameterType> initialPopulation) {
     if(initialPopulation.n_rows != this->optimisationProblem_->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");

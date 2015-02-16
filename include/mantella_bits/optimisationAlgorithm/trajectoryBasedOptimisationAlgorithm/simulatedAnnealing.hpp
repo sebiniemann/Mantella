@@ -1,9 +1,9 @@
 // TODO Add restarting
 namespace mant {
   template <typename ParameterType>
-  class HillClimbing : public TrajectoryBasedAlgorithm<ParameterType> {
+  class SimulatedAnnealing : public TrajectoryBasedOptimisationAlgorithm<ParameterType> {
     public:
-      explicit HillClimbing(
+      explicit SimulatedAnnealing(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
       void setMaximalStepSize(
@@ -13,6 +13,9 @@ namespace mant {
 
     protected:
       ParameterType maximalStepSize_;
+
+      virtual bool isAcceptableState(
+          const double& candidateObjectiveValue) noexcept;
 
       void optimiseImplementation() noexcept override;
 
@@ -25,24 +28,25 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  HillClimbing<ParameterType>::HillClimbing(
+  SimulatedAnnealing<ParameterType>::SimulatedAnnealing(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : TrajectoryBasedAlgorithm<ParameterType>(optimisationProblem) {
+    : TrajectoryBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
     setDefaultMaximalStepSize(std::is_floating_point<ParameterType>());
   }
 
   template <typename ParameterType>
-  void HillClimbing<ParameterType>::optimiseImplementation() noexcept {
+  void SimulatedAnnealing<ParameterType>::optimiseImplementation() noexcept {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
     this->bestSoftConstraintsValue_ = this->optimisationProblem_->getSoftConstraintsValue(this->initialParameter_);
     this->bestObjectiveValue_ = this->optimisationProblem_->getObjectiveValue(this->initialParameter_);
 
+    arma::Col<double> state = this->bestParameter_;
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      arma::Col<ParameterType> candidateParameter = this->distanceFunction_.getRandomNeighbour(this->bestParameter_, 0, maximalStepSize_);
+      arma::Col<ParameterType> candidateParameter = this->distanceFunction_.getRandomNeighbour(state, 0, maximalStepSize_);
 
       const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < this->optimisationProblem_->getLowerBounds());
       const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > this->optimisationProblem_->getUpperBounds());
@@ -54,15 +58,25 @@ namespace mant {
       const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
 
       if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
+        state = candidateParameter;
+
         this->bestParameter_ = candidateParameter;
         this->bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
         this->bestObjectiveValue_ = candidateObjectiveValue;
+      } else if(isAcceptableState(candidateObjectiveValue)) {
+        state = candidateParameter;
       }
     }
   }
 
   template <typename ParameterType>
-  void HillClimbing<ParameterType>::setMaximalStepSize(
+  bool SimulatedAnnealing<ParameterType>::isAcceptableState(
+      const double& candidateObjectiveValue) noexcept {
+    return std::exp((this->bestObjectiveValue_ - candidateObjectiveValue) / (this->numberOfIterations_ / this->maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
+  }
+
+  template <typename ParameterType>
+  void SimulatedAnnealing<ParameterType>::setMaximalStepSize(
       const ParameterType maximalStepSize) {
     if (maximalStepSize <= 0) {
       throw std::logic_error("The maximal step size must be strict greater than 0.");
@@ -72,18 +86,18 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::string HillClimbing<ParameterType>::to_string() const noexcept {
-    return "HillClimbing";
+  std::string SimulatedAnnealing<ParameterType>::to_string() const noexcept {
+    return "SimulatedAnnealing";
   }
 
   template <typename ParameterType>
-  void HillClimbing<ParameterType>::setDefaultMaximalStepSize(
+  void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
       std::true_type) noexcept {
     setMaximalStepSize(this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10.0);
   }
 
   template <typename ParameterType>
-  void HillClimbing<ParameterType>::setDefaultMaximalStepSize(
+  void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
       std::false_type) noexcept {
     setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10));
   }

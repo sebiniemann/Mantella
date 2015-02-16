@@ -265,9 +265,9 @@ if(BUILD_TESTS)
     test/testOptimisationAlgorithm.cpp
     test/testPropertyAnalysis.cpp
     test/testPropertiesEstimation.cpp
-#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
-#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
-#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
+#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
+#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
+#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeeves.cpp
     ${MANTELLA_TEST_PARALLEL}
   )
 
@@ -440,20 +440,20 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
   include/mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp
   include/mantella_bits/optimisationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/multiResolutionGridSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/roleBasedImitationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
   include/mantella_bits/property.hpp
   include/mantella_bits/property/correlationProperty.hpp
   include/mantella_bits/property/continuityProperty.hpp

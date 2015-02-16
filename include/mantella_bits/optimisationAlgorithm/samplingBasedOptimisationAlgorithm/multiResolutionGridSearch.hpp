@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-  class MultiResolutionGridSearch : public SamplingBasedAlgorithm<ParameterType> {
+  class MultiResolutionGridSearch : public SamplingBasedOptimisationAlgorithm<ParameterType> {
     public:
       explicit MultiResolutionGridSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
@@ -31,7 +31,7 @@ namespace mant {
   template <typename ParameterType>
   MultiResolutionGridSearch<ParameterType>::MultiResolutionGridSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm<ParameterType>(optimisationProblem) {
+    : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
     setMinimalSamplingDistances(arma::ones(this->optimisationProblem_->numberOfDimensions_) * 1e-3);
     setSamplingDistributionPerDimension(arma::ones(this->optimisationProblem_->numberOfDimensions_) / static_cast<double>(this->optimisationProblem_->numberOfDimensions_));
     setMaximalSamplesPerResolution(11);

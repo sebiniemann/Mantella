@@ -228,18 +228,18 @@
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/multiResolutionGridSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/roleBasedImitationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 
 // Property
 #include <mantella_bits/property.hpp>

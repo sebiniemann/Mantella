@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-  class RandomSearch : public SamplingBasedAlgorithm<ParameterType> {
+  class RandomSearch : public SamplingBasedOptimisationAlgorithm<ParameterType> {
     public:
       explicit RandomSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
@@ -18,7 +18,7 @@ namespace mant {
   template <typename ParameterType>
   RandomSearch<ParameterType>::RandomSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm<ParameterType>(optimisationProblem) {
+    : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
 
   }
 

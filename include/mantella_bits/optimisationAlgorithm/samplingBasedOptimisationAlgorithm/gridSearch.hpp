@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-  class GridSearch : public SamplingBasedAlgorithm<ParameterType> {
+  class GridSearch : public SamplingBasedOptimisationAlgorithm<ParameterType> {
     public:
       explicit GridSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
@@ -23,7 +23,7 @@ namespace mant {
   template <typename ParameterType>
   GridSearch<ParameterType>::GridSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedAlgorithm<ParameterType>(optimisationProblem) {
+    : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
     setSamplingFactors(arma::ones(this->optimisationProblem_->numberOfDimensions_) / static_cast<double>(this->optimisationProblem_->numberOfDimensions_));
   }
 

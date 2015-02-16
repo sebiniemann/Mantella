@@ -1,5 +1,5 @@
 namespace mant {
-  class StandardParticleSwarmOptimisation2011 : public PopulationBasedAlgorithm<double> {
+  class StandardParticleSwarmOptimisation2011 : public PopulationBasedOptimisationAlgorithm<double> {
     public:
       inline explicit StandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
@@ -66,7 +66,7 @@ namespace mant {
   inline StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize),
+    : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize),
       localBestObjectiveValues_(this->populationSize_),
       randomizeTopology_(true) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(this->populationSize_), 3.0));

@@ -1,6 +1,6 @@
 // TODO Add restarting
 namespace mant {
-  class HookeJeevesAlgorithm : public TrajectoryBasedAlgorithm<double> {
+  class HookeJeevesAlgorithm : public TrajectoryBasedOptimisationAlgorithm<double> {
     public:
       inline explicit HookeJeevesAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
@@ -26,7 +26,7 @@ namespace mant {
 
   inline HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : TrajectoryBasedAlgorithm<double>(optimisationProblem) {
+    : TrajectoryBasedOptimisationAlgorithm<double>(optimisationProblem) {
     setInitialStepSize(this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
     setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 0.5);
   }

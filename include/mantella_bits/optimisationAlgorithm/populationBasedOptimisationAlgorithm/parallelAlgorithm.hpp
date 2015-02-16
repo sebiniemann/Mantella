@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-  class ParallelAlgorithm : public PopulationBasedAlgorithm<ParameterType> {
+  class ParallelAlgorithm : public PopulationBasedOptimisationAlgorithm<ParameterType> {
     public:
       explicit ParallelAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
@@ -26,7 +26,7 @@ namespace mant {
   ParallelAlgorithm<ParameterType>::ParallelAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm<ParameterType>(optimisationProblem, populationSize) {
+    : PopulationBasedOptimisationAlgorithm<ParameterType>(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }

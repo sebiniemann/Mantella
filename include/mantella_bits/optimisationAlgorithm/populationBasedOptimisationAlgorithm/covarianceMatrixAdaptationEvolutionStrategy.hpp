@@ -1,5 +1,5 @@
 namespace mant {
-  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedAlgorithm<double> {
+  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedOptimisationAlgorithm<double> {
     public:
       //TODO: which input parameters should be added to the constructor?
       inline explicit CovarianceMatrixAdaptationEvolutionStrategy(
@@ -24,7 +24,7 @@ namespace mant {
   inline CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-  : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize) {
+  : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize) {
     setStepsize(0.3);
   }
 

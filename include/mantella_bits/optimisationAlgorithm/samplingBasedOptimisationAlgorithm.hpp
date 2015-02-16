@@ -1,6 +1,6 @@
 namespace mant {
   template <typename ParameterType>
-  class SamplingBasedAlgorithm : public OptimisationAlgorithm<ParameterType> {
+  class SamplingBasedOptimisationAlgorithm : public OptimisationAlgorithm<ParameterType> {
     public:
       using OptimisationAlgorithm<ParameterType>::OptimisationAlgorithm;
   };

@@ -1,5 +1,5 @@
 namespace mant {
-  class RoleBasedImitationAlgorithm : public PopulationBasedAlgorithm<double> {
+  class RoleBasedImitationAlgorithm : public PopulationBasedOptimisationAlgorithm<double> {
     public:
       inline explicit RoleBasedImitationAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
@@ -29,7 +29,7 @@ namespace mant {
   inline RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-    : PopulationBasedAlgorithm<double>(optimisationProblem, populationSize),
+    : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize),
       stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)),
       neighbourhoodSize_(0),
       maximalNeighbourhoodConvergence_(this->populationSize_) {
