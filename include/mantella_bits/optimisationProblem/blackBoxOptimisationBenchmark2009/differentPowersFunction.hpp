@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         inline double getObjectiveValueImplementation(
@@ -47,7 +47,7 @@ namespace mant {
       return arma::norm(z % getScaling(arma::square(z)));
     }
 
-    inline std::string DifferentPowersFunction::to_string() const noexcept {
+    inline std::string DifferentPowersFunction::toString() const noexcept {
       return "DifferentPowersFunction";
     }
   }

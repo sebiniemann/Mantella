@@ -11,7 +11,7 @@ namespace mant {
       inline void setStepSizeDecrease(
           const arma::Col<double> stepSizeDecrease);
 
-      inline std::string to_string() const noexcept override;
+      inline std::string toString() const noexcept override;
 
     protected:
       arma::Col<double> initialStepSize_;
@@ -121,7 +121,7 @@ namespace mant {
     stepSizeDecrease_ = stepSizeDecrease;
   }
 
-  inline std::string HookeJeevesAlgorithm::to_string() const noexcept {
+  inline std::string HookeJeevesAlgorithm::toString() const noexcept {
     return "HookeJeevesAlgorithm";
   }
 }

@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(1000.0));
@@ -53,7 +53,7 @@ namespace mant {
       return std::pow(arma::mean(s % (1.0 + arma::square(arma::sin(50.0 * arma::pow(s, 0.4))))), 2.0) + 10.0 * getPenality(parameter);
     }
 
-    inline std::string SchaffersF7FunctionIllConditioned::to_string() const noexcept {
+    inline std::string SchaffersF7FunctionIllConditioned::toString() const noexcept {
       return "SchaffersF7FunctionIllConditioned";
     }
   }

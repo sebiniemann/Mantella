@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         inline double getObjectiveValueImplementation(
@@ -44,7 +44,7 @@ namespace mant {
       return std::pow(arma::norm(parameter - translation_), 2.0);
     }
 
-    inline std::string SphereFunction::to_string() const noexcept {
+    inline std::string SphereFunction::toString() const noexcept {
       return "SphereFunction";
     }
   }

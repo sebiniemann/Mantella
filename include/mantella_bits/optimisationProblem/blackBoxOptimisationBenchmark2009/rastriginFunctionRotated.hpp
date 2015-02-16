@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
@@ -52,7 +52,7 @@ namespace mant {
       return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
     }
 
-    inline std::string RastriginFunctionRotated::to_string() const noexcept {
+    inline std::string RastriginFunctionRotated::toString() const noexcept {
       return "RastriginFunctionRotated";
     }
   }

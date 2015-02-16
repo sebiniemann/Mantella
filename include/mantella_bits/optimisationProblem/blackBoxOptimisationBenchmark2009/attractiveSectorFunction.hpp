@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
@@ -53,7 +53,7 @@ namespace mant {
       return std::pow(getOscillationTransformation(std::pow(norm(z), 2.0)), 0.9);
     }
 
-    inline std::string AttractiveSectorFunction::to_string() const noexcept {
+    inline std::string AttractiveSectorFunction::toString() const noexcept {
       return "AttractiveSectorFunction";
     }
   }

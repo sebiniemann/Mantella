@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(100.0));
@@ -65,7 +65,7 @@ namespace mant {
       return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0) + getPenality(parameter);
     }
 
-    inline std::string KatsuuraFunction::to_string() const noexcept {
+    inline std::string KatsuuraFunction::toString() const noexcept {
       return "KatsuuraFunction";
     }
   }

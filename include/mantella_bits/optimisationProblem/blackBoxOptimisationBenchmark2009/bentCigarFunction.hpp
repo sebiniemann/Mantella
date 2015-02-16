@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         inline double getObjectiveValueImplementation(
@@ -47,7 +47,7 @@ namespace mant {
       return z.at(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
     }
 
-    inline std::string BentCigarFunction::to_string() const noexcept {
+    inline std::string BentCigarFunction::toString() const noexcept {
       return "BentCigarFunction";
     }
   }

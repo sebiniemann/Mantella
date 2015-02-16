@@ -8,7 +8,7 @@ namespace mant {
       void setSamplingFactors(
           const arma::Col<double> samplingFactors);
 
-      std::string to_string() const noexcept override;
+      std::string toString() const noexcept override;
 
     protected:
       arma::Col<double> samplingFactors_;
@@ -84,7 +84,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::string GridSearch<ParameterType>::to_string() const noexcept {
+  std::string GridSearch<ParameterType>::toString() const noexcept {
     return "GridSearch";
   }
 }

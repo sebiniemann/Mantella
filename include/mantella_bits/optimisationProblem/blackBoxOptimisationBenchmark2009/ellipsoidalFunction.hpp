@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> scaling_ = getScaling(1000000.0);
@@ -45,7 +45,7 @@ namespace mant {
       return arma::dot(scaling_, arma::square(getOscillationTransformation(parameter - translation_)));
     }
 
-    inline std::string EllipsoidalFunction::to_string() const noexcept {
+    inline std::string EllipsoidalFunction::toString() const noexcept {
       return "EllipsoidalFunction";
     }
   }

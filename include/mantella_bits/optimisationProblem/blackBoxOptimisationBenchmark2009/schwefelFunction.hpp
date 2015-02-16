@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         arma::Col<double> delta_ = getScaling(std::sqrt(10));
@@ -55,7 +55,7 @@ namespace mant {
       return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getPenality(z / 100.0);
     }
 
-    inline std::string SchwefelFunction::to_string() const noexcept {
+    inline std::string SchwefelFunction::toString() const noexcept {
       return "SchwefelFunction";
     }
   }

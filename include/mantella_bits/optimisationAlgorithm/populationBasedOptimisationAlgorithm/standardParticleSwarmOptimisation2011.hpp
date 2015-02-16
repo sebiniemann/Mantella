@@ -18,7 +18,7 @@ namespace mant {
       inline void setMaximalSwarmConvergence(
           const double maximalSwarmConvergence) noexcept;
 
-      inline std::string to_string() const noexcept override;
+      inline std::string toString() const noexcept override;
 
     protected:
       double neighbourhoodProbability_;
@@ -214,7 +214,7 @@ namespace mant {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 
-  inline std::string StandardParticleSwarmOptimisation2011::to_string() const noexcept {
+  inline std::string StandardParticleSwarmOptimisation2011::toString() const noexcept {
     return "StandardParticleSwarmOptimisation2011";
   }
 }

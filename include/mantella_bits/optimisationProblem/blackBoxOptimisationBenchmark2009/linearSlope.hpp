@@ -8,7 +8,7 @@ namespace mant {
         inline void setOne(
             const arma::Col<double> one) override;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         arma::Col<double> xOpt_;
@@ -80,7 +80,7 @@ namespace mant {
       return partiallyObjectiveValue_ - arma::dot(scaling_, z);
     }
 
-    inline std::string LinearSlope::to_string() const noexcept {
+    inline std::string LinearSlope::toString() const noexcept {
       return "LinearSlope";
     }
   }

@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> delta_ = getScaling(std::sqrt(10.0));
@@ -51,7 +51,7 @@ namespace mant {
       return std::pow(z.at(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
     }
 
-    inline std::string SharpRidgeFunction::to_string() const noexcept {
+    inline std::string SharpRidgeFunction::toString() const noexcept {
       return "SharpRidgeFunction";
     }
   }

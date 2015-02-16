@@ -12,7 +12,7 @@ namespace mant {
       inline void setMaximalNeighbourhoodConvergence(
           const arma::Col<double> maximalNeighbourhoodConvergence) noexcept;
 
-      inline std::string to_string() const noexcept override;
+      inline std::string toString() const noexcept override;
 
     protected:
       arma::Col<double> stepSize_;
@@ -142,7 +142,7 @@ namespace mant {
     maximalNeighbourhoodConvergence_ = maximalNeighbourhoodConvergence;
   }
 
-  inline std::string RoleBasedImitationAlgorithm::to_string() const noexcept {
+  inline std::string RoleBasedImitationAlgorithm::toString() const noexcept {
     return "RoleBasedImitationAlgorithm";
   }
 }

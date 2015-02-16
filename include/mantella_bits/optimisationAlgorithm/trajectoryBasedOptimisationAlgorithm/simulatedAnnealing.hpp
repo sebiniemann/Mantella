@@ -9,7 +9,7 @@ namespace mant {
       void setMaximalStepSize(
           const ParameterType maximalStepSize);
 
-      std::string to_string() const noexcept override;
+      std::string toString() const noexcept override;
 
     protected:
       ParameterType maximalStepSize_;
@@ -86,7 +86,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::string SimulatedAnnealing<ParameterType>::to_string() const noexcept {
+  std::string SimulatedAnnealing<ParameterType>::toString() const noexcept {
     return "SimulatedAnnealing";
   }
 

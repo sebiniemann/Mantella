@@ -16,7 +16,7 @@ namespace mant {
       inline void setCommunicationSteps(
           const unsigned int communicationSteps) noexcept;
 
-      inline std::string to_string() const noexcept override;
+      inline std::string toString() const noexcept override;
 
     protected:
       double neighbourhoodProbability_;
@@ -220,7 +220,7 @@ namespace mant {
     communicationSteps_ = communicationSteps;
   }
 
-  inline std::string ParallelStandardParticleSwarmOptimisation2011::to_string() const noexcept {
+  inline std::string ParallelStandardParticleSwarmOptimisation2011::toString() const noexcept {
     return "ParallelStandardParticleSwarmOptimisation2011";
   }
 }

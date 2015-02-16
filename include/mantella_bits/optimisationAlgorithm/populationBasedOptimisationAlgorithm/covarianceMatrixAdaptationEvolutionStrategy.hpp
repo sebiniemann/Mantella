@@ -9,7 +9,7 @@ namespace mant {
       inline void setStepsize(
           const double sigma) noexcept;
 
-      inline std::string to_string() const noexcept override;
+      inline std::string toString() const noexcept override;
 
     protected:
       double stepSize_;
@@ -123,7 +123,7 @@ namespace mant {
     stepSize_ = sigma;
   }
 
-  inline std::string CovarianceMatrixAdaptationEvolutionStrategy::to_string() const noexcept {
+  inline std::string CovarianceMatrixAdaptationEvolutionStrategy::toString() const noexcept {
     return "CovarianceMatrixAdaptationEvolutionStrategy";
   }
 }

@@ -14,7 +14,7 @@ namespace mant {
       void setSamplingDistributionPerDimension(
           const arma::Col<double> samplingDistributionPerDimension);
 
-      std::string to_string() const noexcept override;
+      std::string toString() const noexcept override;
 
     protected:
       arma::Col<ParameterType> minimalSamplingDistances_;
@@ -191,7 +191,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::string MultiResolutionGridSearch<ParameterType>::to_string() const noexcept {
+  std::string MultiResolutionGridSearch<ParameterType>::toString() const noexcept {
     return "MultiResolutionGridSearch";
   }
 }

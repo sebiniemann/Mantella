@@ -4,7 +4,7 @@ namespace mant {
       public:
         using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
@@ -48,7 +48,7 @@ namespace mant {
       return 100.0 * arma::accu(arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))) + arma::accu(arma::square(z.head(z.n_elem - 1) - 1.0));
     }
 
-    inline std::string RosenbrockFunctionRotated::to_string() const noexcept {
+    inline std::string RosenbrockFunctionRotated::toString() const noexcept {
       return "RosenbrockFunctionRotated";
     }
   }

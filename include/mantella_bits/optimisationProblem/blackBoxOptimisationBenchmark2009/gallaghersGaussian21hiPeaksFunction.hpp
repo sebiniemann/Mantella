@@ -5,7 +5,7 @@ namespace mant {
         inline explicit GallaghersGaussian21hiPeaksFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         arma::Col<double> weight_;
@@ -69,7 +69,7 @@ namespace mant {
       return std::pow(getOscillationTransformation(10.0 - maximalValue), 2.0) + getPenality(parameter);
     }
 
-    inline std::string GallaghersGaussian21hiPeaksFunction::to_string() const noexcept {
+    inline std::string GallaghersGaussian21hiPeaksFunction::toString() const noexcept {
       return "GallaghersGaussian21hiPeaksFunction";
     }
   }

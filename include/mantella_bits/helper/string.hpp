@@ -17,12 +17,12 @@ namespace mant {
 
   inline std::string to_string(
       const Printable& printable) noexcept {
-    return printable.to_string();
+    return printable.toString();
   }
 
   inline std::string to_string(
       const std::shared_ptr<Printable> printable) noexcept {
-    return printable->to_string();
+    return printable->toString();
   }
 
   inline bool endsWith(

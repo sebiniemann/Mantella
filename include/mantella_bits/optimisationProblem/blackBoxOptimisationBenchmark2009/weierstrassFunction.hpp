@@ -5,7 +5,7 @@ namespace mant {
         inline explicit WeierstrassFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
         double f0_;
@@ -72,7 +72,7 @@ namespace mant {
       return 10 * (std::pow(sum / static_cast<double>(numberOfDimensions_) - f0_, 3) + getPenality(parameter) / static_cast<double>(numberOfDimensions_));
     }
 
-    inline std::string WeierstrassFunction::to_string() const noexcept {
+    inline std::string WeierstrassFunction::toString() const noexcept {
       return "WeierstrassFunction";
     }
   }

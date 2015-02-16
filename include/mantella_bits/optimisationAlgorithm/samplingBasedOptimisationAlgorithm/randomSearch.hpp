@@ -5,7 +5,7 @@ namespace mant {
       explicit RandomSearch(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
 
-      std::string to_string() const noexcept override;
+      std::string toString() const noexcept override;
 
     protected:
       void optimiseImplementation() noexcept override;
@@ -40,7 +40,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::string RandomSearch<ParameterType>::to_string() const noexcept {
+  std::string RandomSearch<ParameterType>::toString() const noexcept {
     return "RandomSearch";
   }
 }
