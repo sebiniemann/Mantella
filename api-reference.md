@@ -100,6 +100,7 @@ table_of_contents:
     Dimensionality Estimation:
   Helpers:
     Random Number Generator:
+    Cereal:
     Filesystem:
     Geometry:
     Quasi Random Sequences:
