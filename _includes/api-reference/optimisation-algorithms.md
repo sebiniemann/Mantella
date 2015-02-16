@@ -1,14 +1,26 @@
-.optimise()
-  
-.setDistanceFunction( D )
+**.optimise()**
+{% include noexcept %}
 
-.setMaximalNumberOfIterations( N )
+**.setDistanceFunction( D )**
+{% include noexcept %}
 
-.getNumberOfIterations()
+**.setMaximalNumberOfIterations( N )**
+{% include noexcept %}
 
-.getBestParameter()
-.getBestSoftConstraintsValue()
-.getBestObjectiveValue()
-
-.isFinished()
-.isTerminated()
+**.getBestParameter()**
+{% include noexcept %}
+<br />
+**.getBestSoftConstraintsValue()**
+{% include noexcept %}
+<br />
+**.getBestObjectiveValue()**
+{% include noexcept %}
+<br />
+**.getNumberOfIterations()**
+{% include noexcept %}
+<br />
+**.isFinished()**
+{% include noexcept %}
+<br />
+**.isTerminated()**
+{% include noexcept %}
