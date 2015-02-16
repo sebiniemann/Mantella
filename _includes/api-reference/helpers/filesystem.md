@@ -1,0 +1,3 @@
+**fileExists( P )**
+{% include noexcept %}
+
