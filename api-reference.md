@@ -118,27 +118,21 @@ table_of_contents:
 While we use many commen interfaces for continuous and discrete optimisation problems, some calculations will only sense for one of them.
 
 <dl class="dl-horizontal" markdown="0">
-  <dt><span class="label custom-label-property">continous</span></dt>
-  <dd>These interfaces can be used for continuous optimisation problems.</dd>
+  <dt>{% include continuous-only %}</dt>
+  <dd>These interfaces can only be used for continuous optimisation problems.</dd>
   
-  <dt><span class="label custom-label-property">discrete</span></dt>
-  <dd>These interfaces can be used for discrete optimisation problems.</dd>
+  <dt>{% include discrete-only %}</dt>
+  <dd>These interfaces can only be used for discrete optimisation problems.</dd>
 </dl>
 
-Interfaces marked with both specifiers can be used for both problem types.
+Interfaces marked without any specifiers can be used for all problem types.
 </div>
 
 <div class="custom-callout custom-callout-info">
-### Notable C++ specifier
+### Notable interface guarantees
 
 <dl class="dl-horizontal" markdown="0">
-  <dt><span class="label custom-label-virtual">virtual</span></dt>
-  <dd>The implementation of this interface will be overwritten by its child classes.</dd>
-  
-  <dt><span class="label custom-label-override">override</span></dt>
-  <dd>This function did not introduce a new interface, but overrides a derived interface.</dd>
-  
-  <dt><span class="label custom-label-noexcept">noexcept</span></dt>
+  <dt>{% include noexcept %}</dt>
   <dd>This interface wont throw any exception, as it accepts all possible inputs.</dd>
 </dl>
 </div>

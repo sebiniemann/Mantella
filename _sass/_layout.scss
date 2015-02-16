@@ -490,22 +490,17 @@ code {
   border: none;
 }
 
-.custom-label-property,
-.custom-label-override,
-.custom-label-virtual,
+.custom-label-continuous,
+.custom-label-discrete,
 .custom-label-noexcept {
   font-size: 12px;
 }
 
-.custom-label-property {
-  background-color: #333;
-}
-
-.custom-label-override {
+.custom-label-continuous {
   background-color: $danger-color;
 }
 
-.custom-label-virtual {
+.custom-label-discrete {
   background-color: $warning-color;
 }
 
