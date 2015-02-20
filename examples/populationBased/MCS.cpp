@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     std::cout << "creating MCS object" << std::endl;
     mant::MultilevelCoordinateSearch<mant::EuclideanDistance> optAlgo(optProblem, popSize, initialPointIndex);
     
-    optAlgo.setMaximalNumberOfIterations(5);
+    optAlgo.setMaximalNumberOfIterations(20);
     std::cout << "starting optimise" << std::endl;
     optAlgo.optimise();
     std::cout << "optimise done" << std::endl;
