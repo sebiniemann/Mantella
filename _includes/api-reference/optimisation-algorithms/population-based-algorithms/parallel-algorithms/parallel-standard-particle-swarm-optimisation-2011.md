@@ -1,6 +1,9 @@
 **Constructor( F, P )**
 {% include noexcept %}
 
+**.optimise()**
+{% include noexcept %}
+
 **.setNeighbourhoodProbability( P )**
 {% include noexcept %}
 

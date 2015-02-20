@@ -1,2 +1,2 @@
-**.to_string()**
+**.toString()**
 {% include noexcept %}

@@ -1,6 +1,9 @@
 **Constructor( F, P )**
 {% include noexcept %}
 
+**.optimise()**
+{% include noexcept %}
+
 **setNeighbourhoodSize( N )**
 {% include noexcept %}
 
