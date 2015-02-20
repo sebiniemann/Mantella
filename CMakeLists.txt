@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 project(MantellaExamples CXX)
 
 # Add additional cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 # Build options
 option(RUN_EXAMPLES "Run examples" OFF)
