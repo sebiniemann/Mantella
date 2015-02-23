@@ -46,10 +46,11 @@ find_package(Mantella 0.9.0 REQUIRED) # Mantella (header only)
 include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
 include_directories(${MANTELLA_INCLUDE_DIR}) # Mantella tests
 
-file(GLOB EXAMPLES RELATIVE _include/*.cpp)
-foreach(exampleFile ${EXAMPLES} )
+file(GLOB EXAMPLES examples/*.cpp)
+foreach(exampleFile ${EXAMPLES})
   string(REPLACE ".cpp" "" exampleName ${exampleFile})
-  add_executable( ${exampleName} ${exampleFile} )
+
+  add_executable(${exampleName} ${exampleFile})
     
   # Link against third party libraries
   target_link_libraries(${exampleName} ${ARMADILLO_LIBRARIES}) # Armadillo C++
