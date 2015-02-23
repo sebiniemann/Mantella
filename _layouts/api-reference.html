@@ -88,12 +88,38 @@ layout: base
         {% capture content %}{% include {{first_level_ref}}.md %}{% endcapture %}
         {{ content | markdownify }}
         
+        {% for file in site.static_files %}
+          {% capture example_ref %}/examples/{{ first_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
+          {% if file.path == example_ref %}
+            {% highlight cpp %}
+            {% include_relative {{example_ref}} %}
+            {% endhighlight %}
+
+            {% highlight text %}
+            {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
+            {% endhighlight %}
+          {% endif %}
+        {% endfor %}
+        
         {% for second_level in first_level[1] %}
           <h2 id="{{ second_level[0] | slugify }}" class="page-header">{{ second_level[0] }}</h2>
           <div class="second-level">
             {% capture second_level_ref %}{{ first_level_ref }}/{{ second_level[0] | slugify }}{% endcapture %}
             {% capture content %}{% include {{second_level_ref}}.md %}{% endcapture %}
             {{ content | markdownify }}
+        
+            {% for file in site.static_files %}
+              {% capture example_ref %}/examples/{{ second_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
+              {% if file.path == example_ref %}
+                {% highlight cpp %}
+                {% include_relative {{example_ref}} %}
+                {% endhighlight %}
+
+                {% highlight text %}
+                {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
+                {% endhighlight %}
+              {% endif %}
+            {% endfor %}
           
             {% for third_level in second_level[1] %}
               <h3 id="{{ third_level[0] | slugify }}" class="page-header">{{ third_level[0] }}</h3>
@@ -101,6 +127,19 @@ layout: base
                 {% capture third_level_ref %}{{ second_level_ref }}/{{ third_level[0] | slugify }}{% endcapture %}
                 {% capture content %}{% include {{third_level_ref}}.md %}{% endcapture %}
                 {{ content | markdownify }}
+        
+                {% for file in site.static_files %}
+                  {% capture example_ref %}/examples/{{ third_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
+                  {% if file.path == example_ref %}
+                    {% highlight cpp %}
+                    {% include_relative {{example_ref}} %}
+                    {% endhighlight %}
+
+                    {% highlight text %}
+                    {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
+                    {% endhighlight %}
+                  {% endif %}
+                {% endfor %}
           
                 {% for fourth_level in third_level[1] %}
                   <h4 id="{{ fourth_level[0] | slugify }}" class="page-header">{{ fourth_level[0] }}</h4>
@@ -108,6 +147,19 @@ layout: base
                     {% capture fourth_level_ref %}{{ third_level_ref }}/{{ fourth_level[0] | slugify }}{% endcapture %}
                     {% capture content %}{% include {{fourth_level_ref}}.md %}{% endcapture %}
                     {{ content | markdownify }}
+        
+                    {% for file in site.static_files %}
+                      {% capture example_ref %}/examples/{{ fourth_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
+                      {% if file.path == example_ref %}
+                        {% highlight cpp %}
+                        {% include_relative {{example_ref}} %}
+                        {% endhighlight %}
+
+                        {% highlight text %}
+                        {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
+                        {% endhighlight %}
+                      {% endif %}
+                    {% endfor %}
           
                     {% for fifth_level in fourth_level[1] %}
                       <h5 id="{{ fifth_level[0] | slugify }}" class="page-header">{{ fifth_level[0] }}</h5>
@@ -115,6 +167,19 @@ layout: base
                         {% capture fifth_level_ref %}{{ fourth_level_ref }}/{{ fifth_level[0] | slugify }}{% endcapture %}
                         {% capture content %}{% include {{fifth_level_ref}}.md %}{% endcapture %}
                         {{ content | markdownify }}
+        
+                        {% for file in site.static_files %}
+                          {% capture example_ref %}/examples/{{ fifth_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
+                          {% if file.path == example_ref %}
+                            {% highlight cpp %}
+                            {% include_relative {{example_ref}} %}
+                            {% endhighlight %}
+
+                            {% highlight text %}
+                            {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
+                            {% endhighlight %}
+                          {% endif %}
+                        {% endfor %}
                       </div>
                     {% endfor %}
                   </div>
