@@ -40,7 +40,7 @@ message(STATUS "NOTICE: Configuring examples")
 
 # Locate Mantella and third party libraries and headers
 find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
-find_package(Mantella REQUIRED) # Mantella (header only)
+find_package(Mantella 0.9.0 REQUIRED) # Mantella (header only)
 
 # Include Mantella and third party headers
 include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
