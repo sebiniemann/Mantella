@@ -141,12 +141,12 @@ namespace mant {
       // clearing the caches.
       void reset() noexcept;
 
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedObjectiveValues() const;
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedSoftConstraintsValues() const;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> getCachedIsSatisfyingLowerBounds() const;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> getCachedIsSatisfyingUpperBounds() const;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> getCachedIsSatisfyingSoftConstraints() const;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> getCachedIsSatisfyingConstraints() const;
+      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedObjectiveValues() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedSoftConstraintsValues() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> getCachedIsSatisfyingLowerBounds() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> getCachedIsSatisfyingUpperBounds() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> getCachedIsSatisfyingSoftConstraints() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> getCachedIsSatisfyingConstraints() const noexcept;
 
       // Provides a default deconstructor.
       virtual ~OptimisationProblem() = default;
@@ -548,32 +548,32 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const {
+  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const noexcept {
     return cachedObjectiveValues_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedSoftConstraintsValues() const {
+  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedSoftConstraintsValues() const noexcept {
     return cachedSoftConstraintsValues_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const {
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const noexcept {
     return cachedIsSatisfyingLowerBounds_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const {
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const noexcept {
     return cachedIsSatisfyingUpperBounds_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingSoftConstraints() const {
+  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingSoftConstraints() const noexcept {
     return cachedIsSatisfyingSoftConstraints_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const {
+  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const noexcept {
     return cachedIsSatisfyingConstraints_;
   }
 
