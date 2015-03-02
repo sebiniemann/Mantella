@@ -104,7 +104,7 @@ $$F_\text{scaled}(X) := F(S \circ X), \circ := \text{element-wise multiplication
 **<small>void</small> .setParameterRotation( <small>arma::Mat&lt;T&gt;</small> R )** {% include continuous-only %}
 
 - Rotates the search space along the parameter axis by a rotation matrix *R*.
-- The rotation matrix must be orthonormal (\(R^{t} = R{^{-1}\) with determinant 1 or -1.
+- The rotation matrix must be orthonormal (\\(R^{t} = R^{-1}\\)) with determinant 1 or -1.
 - If used together with translation and scaling, the parameter is first scaled, then translated and lastly rotated.
 - The default value is an indentity matrix (no rotation)
 
