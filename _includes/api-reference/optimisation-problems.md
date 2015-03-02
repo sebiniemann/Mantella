@@ -150,7 +150,7 @@ $$F_\text{scaled}(X) := S \cdot F(X)$$
 **<small>double</small> .getObjectiveValue( <small>arma::Col&lt;T&gt;</small> X )**
 
 - Calculates the objective value for the parameter *X*.
-- The result is not re-calculated if mutiple invoked with the same parameter, but retrieved from cache instead.
+- The result is not re-calculated if repeatedly invoked with the same parameter, but retrieved from cache instead.
 
 ---
 <a name="optimisation-problems-getNumberOfEvaluations"></a>
@@ -205,4 +205,4 @@ numberOfDistinctEvaluations: 3
 **<small>std::unordered_map&lt;arma::Col&lt;T&gt;, double, mant::Hash, mant::IsEqual&gt;</small> .getCachedObjectiveValues()** {% include noexcept %}
 
 - Returns the cached mapping of parameters to objective values.
-- Caches each new request to `.getObjectiveValue(...)`.
+- Caches all new request to `.getObjectiveValue(...)`.
