@@ -19,4 +19,4 @@ S &:= 100 \left(\sum_{i = 1}^{N - 1} (Z_{i}^{2} - Z_{i + 1})\right)^{2}+\left(\s
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns the name of the problem, i.e. *Composite-Griewank-Rosenbrock-function-f8f2*.
+- Returns a filesystem friendly name of the problem, i.e. *composite-griewank-rosenbrock-function-f8f2*.

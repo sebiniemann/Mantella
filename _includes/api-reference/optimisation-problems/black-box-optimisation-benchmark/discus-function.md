@@ -23,4 +23,4 @@ Z &:= T_\text{oscillated}\left(R \cdot \left(X - X^\text{opt}\right)\right)\\
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns the name of the problem, i.e. *Discus-function*.
+- Returns a filesystem friendly name of the problem, i.e. *discus-function*.

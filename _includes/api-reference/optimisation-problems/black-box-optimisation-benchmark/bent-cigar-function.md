@@ -22,4 +22,4 @@ Z &:= \left(R \cdot T_\text{asymmetric}^{0.5} \cdot \left(R \cdot \left(X - X^\t
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns the name of the problem, i.e. *Bent-cigar-function*.
+- Returns a filesystem friendly name of the problem, i.e. *bent-cigar-function*.

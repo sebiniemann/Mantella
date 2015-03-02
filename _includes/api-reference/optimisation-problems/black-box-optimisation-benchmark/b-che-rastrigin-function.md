@@ -26,4 +26,4 @@ X_{i} & \text{otherwise}
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns the name of the problem, i.e. *Bueche-Rastrigin-function*.
+- Returns a filesystem friendly name of the problem, i.e. *bueche-rastrigin-function*.

@@ -24,4 +24,4 @@ S &:= T_\text{scaled}(\tilde{Z})
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns the name of the problem, i.e. *Different-powers-function*.
+- Returns a filesystem friendly name of the problem, i.e. *different-powers-function*.

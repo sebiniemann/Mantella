@@ -32,4 +32,4 @@ Z_{i} & \text{otherwise}
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns the name of the problem, i.e. *Attractive-sector-function*.
+- Returns a filesystem friendly name of the problem, i.e. *attractive-sector-function*.
