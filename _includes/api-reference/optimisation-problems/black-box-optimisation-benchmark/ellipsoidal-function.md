@@ -1,8 +1,18 @@
-**Constructor( N )**
-{% include noexcept %}
+$$F(X) :=  T_\text{scaled}^{1000000000000} \cdot T_{oscillated}\left(\left(X - X^\text{opt}\right)\right)^{2}$$
 
-**.getObjectiveValue( X )**
-{% include noexcept %}
+**EllipsoidalFunction( <small>unsigned int</small> N )**
 
-**.toString()**
-{% include noexcept %}
+- Creates an *N*-dimensional optimisation problem instance of this class.
+- The problem must have at least 1 dimension.
+
+---
+**<small>void</small> .setXOpt( <small>arma::Col&lt;T&gt;</small> X )**
+
+- Parameterises the transition by variable \\(X^\text{opt}\\).
+
+---
+**<small>std::string</small> .toString()** {% include noexcept %}
+
+- Returns a filesystem friendly name of the problem, i.e. *ellipsoidal-function*.
+
+
