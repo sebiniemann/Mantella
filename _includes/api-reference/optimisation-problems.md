@@ -195,7 +195,7 @@ numberOfDistinctEvaluations: 3
 
 ---
 <a name="optimisation-problems-reset"></a>
-**<small>void</small> .reset()**
+**<small>void</small> .reset()** {% include noexcept %}
 
 - Resets all counters and caches.
 - All other settings (lower and upper bounds, translations, scaling, ...) remain as set.
