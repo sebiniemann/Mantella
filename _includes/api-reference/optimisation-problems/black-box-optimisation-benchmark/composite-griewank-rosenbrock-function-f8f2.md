@@ -1,8 +1,8 @@
 $$\begin{align}
-F(X) &:= 10 \left(\frac{\sum_{i = 1}^{N} \frac{S_i}{4000} - \cos{S_i}}{N} + 1\right)\\
+F(X) &:= 10 \left( \frac{\sum_{i = 1}^{N} \frac{S_i}{4000} - \cos{S_i}}{N} + 1 \right)\\
 M &:= \max{1, \frac{\sqrt{n}}{8}}\\
 Z &:= M \cdot R \cdot X + 0.5\\
-S &:= 100 \left(\sum_{i = 1}^{N - 1} (Z_{i}^{2} - Z_{i + 1})\right)^{2}+\left(\sum_{i = 1}^{N-1} (1 - Z_{i})\right)^{2}
+S &:= 100 \left( \sum_{i = 1}^{N - 1} \left( Z_{i}^{2} - Z_{i + 1} \right) \right)^{2} + \left( \sum_{i = 1}^{N-1} \left( 1 - Z_{i} \right) \right)^{2}
 \end{align}$$
 
 **CompositeGriewankRosenbrockFunctionF8F2( <small>unsigned int</small> N )**

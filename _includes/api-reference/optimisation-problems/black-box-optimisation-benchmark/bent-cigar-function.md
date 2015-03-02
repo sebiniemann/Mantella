@@ -1,6 +1,6 @@
 $$\begin{align}
 F(X) &:= Z_{1} + 1000000 \sum_{i = 2}^{N} Z_{i}\\
-Z &:= \left(R \cdot T_\text{asymmetric}^{0.5} \cdot \left(R \cdot \left(X - X^\text{opt}\right)\right)\right)^{2}\\
+Z &:= \left( R \cdot T_\text{asymmetric}^{0.5} \cdot \left( R \cdot \left( X - X^\text{opt} \right) \right) \right)^{2}\\
 \end{align}$$
 
 **BentCigarFunction( <small>unsigned int</small> N )**

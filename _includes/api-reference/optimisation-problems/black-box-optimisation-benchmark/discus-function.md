@@ -1,6 +1,6 @@
 $$\begin{align}
-F(X) &:= 1000000Z_{1} + \sum_{i = 2}^{N} Z_{i}\\
-Z &:= T_\text{oscillated}\left(R \cdot \left(X - X^\text{opt}\right)\right)^{2}
+F(X) &:= 1000000 Z_{1} + \sum_{i = 2}^{N} Z_{i}\\
+Z &:= T_\text{oscillated} \left( R \cdot \left( X - X^\text{opt} \right) \right)^{2}
 \end{align}$$
 
 **DiscusFunction( <small>unsigned int</small> N )**

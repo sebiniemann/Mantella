@@ -1,4 +1,4 @@
-$$F(X) :=  T_\text{scaled}^{1000000000000} \cdot T_{oscillated}\left(\left(X - X^\text{opt}\right)\right)^{2}$$
+$$F(X) :=  T_\text{scaled}^{1000000} \cdot T_{oscillated} \left( X - X^\text{opt} \right)^{2}$$
 
 **EllipsoidalFunction( <small>unsigned int</small> N )**
 

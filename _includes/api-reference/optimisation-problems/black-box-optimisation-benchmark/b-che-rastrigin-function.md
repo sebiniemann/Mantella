@@ -1,6 +1,6 @@
 $$\begin{align}
-F(X) &:= 10 n - \sum_{i = 1}^{n} \left(\cos{2 \pi S_{i}}\right) + ||S||_{2}^{2} + 100 \cdot F_\text{penality}(X)\\
-Z &:= T_\text{scaled}^{10} \cdot T_\text{oscillated}\left(X - X^\text{opt}\right)\\
+F(X) &:= 10 n - \sum_{i = 1}^{n} \left( \cos{2 \pi S_{i}} \right) + \left\Vert S \right\Vert_{2}^{2} + 100 \cdot F_\text{penality}(X)\\
+Z &:= T_\text{scaled}^{100} \cdot T_\text{oscillated} \left( X - X^\text{opt} \right)\\
 S_{i} &:= \begin{cases}
 10 Z_{i} & \text{if } i \text{ is odd and } Z_{i} > 0\\
 Z_{i} & \text{otherwise}
