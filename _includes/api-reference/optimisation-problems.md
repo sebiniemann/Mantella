@@ -87,7 +87,7 @@ C :=&\ \text{The sum of all (soft-)constraints.}\\
 - If used together with scaling and rotation, the parameter is first scaled, then translated and lastly rotated.
 - The default value is a zero vector (no translation)
 
-$$F_\text{translated}(X) = F(X + T)$$
+$$F_\text{translated}(X) := F(X + T)$$
 
 ---
 <a name="optimisation-problems-setParameterScale"></a>
@@ -97,7 +97,7 @@ $$F_\text{translated}(X) = F(X + T)$$
 - If used together with translation and rotation, the parameter is first scaled, then translated and lastly rotated.
 - The default value is a vector of ones (no scaling)
 
-$$F_\text{scaled}(X) = F(S .* X), .* := \text{element-wise multiplication}$$
+$$F_\text{scaled}(X) := F(S \circ X), \circ := \text{element-wise multiplication}$$
 
 ---
 <a name="optimisation-problems-setParameterRotation"></a>
@@ -108,7 +108,7 @@ $$F_\text{scaled}(X) = F(S .* X), .* := \text{element-wise multiplication}$$
 - If used together with translation and scaling, the parameter is first scaled, then translated and lastly rotated.
 - The default value is an indentity matrix (no rotation)
 
-$$F_\text{rotated}(X) = F(R * X)$$
+$$F_\text{rotated}(X) := F(R \cdot X)$$
 
 ---
 <a name="optimisation-problems-setObjectiveValueTranslation"></a>
@@ -118,7 +118,7 @@ $$F_\text{rotated}(X) = F(R * X)$$
 - If used together with scaling, the parameter is first scaled and then translated.
 - The default value is 0 (no translation)
 
-$$F_\text{translated}(X) = F(X) + T$$
+$$F_\text{translated}(X) := F(X) + T$$
 
 ---
 <a name="optimisation-problems-setObjectiveValueScale"></a>
@@ -128,7 +128,7 @@ $$F_\text{translated}(X) = F(X) + T$$
 - If used together with scaling, the parameter is first scaled and then translated.
 - The default value is 1 (no scaling)
 
-$$F_\text{scaled}(X) = S * F(X)$$
+$$F_\text{scaled}(X) := S \cdot F(X)$$
 
 ---
 <a name="optimisation-problems-setAcceptableObjectiveValue"></a>
