@@ -1,8 +1,7 @@
 $$\begin{align}
 F(X) &:= \left||\prod_{i = 1}^{N} |Z_i| S_i\right||_{2}\\
 Z &:= R \cdot \left(X - X^\text{opt}\right)\\
-\tilde{Z}_{i} &:= Z_{i}^{2}\\
-S &:= T_\text{scaled}(\tilde{Z})
+S &:= T_\text{scaled}(Z^{2})
 \end{align}$$
 
 **DifferentPowersFunction( <small>unsigned int</small> N )**
