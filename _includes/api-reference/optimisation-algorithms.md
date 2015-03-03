@@ -1,26 +1,38 @@
-**.optimise()**
-{% include noexcept %}
+Abstract base class for all optimisation algorithms.<br>
+*Note:* All optimisation algorithms are implemented to minimise the objective value.
 
-**.setDistanceFunction( D )**
-{% include noexcept %}
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>void</small> .setDistanceFunction( <small>std::shared_ptr&lt;mant::DistanceFunction&gt;</small> D )** {% include noexcept %}
 
-**.setMaximalNumberOfIterations( N )**
-{% include noexcept %}
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>void</small> .setMaximalNumberOfIterations( <small>unsigned int</small> N )** {% include noexcept %}
 
-**.getBestParameter()**
-{% include noexcept %}
-<br />
-**.getBestSoftConstraintsValue()**
-{% include noexcept %}
-<br />
-**.getBestObjectiveValue()**
-{% include noexcept %}
-<br />
-**.getNumberOfIterations()**
-{% include noexcept %}
-<br />
-**.isFinished()**
-{% include noexcept %}
-<br />
-**.isTerminated()**
-{% include noexcept %}
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>void</small> .optimise()** {% include noexcept %}
+
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>arma::Col&lt;T&gt;</small> .getBestParameter()** {% include noexcept %}
+
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>double</small> .getBestSoftConstraintsValue()** {% include noexcept %}
+
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>double</small> .getBestObjectiveValue()** {% include noexcept %}
+
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>unsigned int</small> .getNumberOfIterations()** {% include noexcept %}
+
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>bool</small> .isFinished()** {% include noexcept %}
+
+---
+<a name="optimisation-algorithms-optimise"></a>
+**<small>bool</small> .isTerminated()** {% include noexcept %}
