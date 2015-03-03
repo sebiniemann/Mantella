@@ -14,7 +14,7 @@ $$F(X) :=  T_\text{scaled}^{1000000} \cdot T_{oscillated} \left( R \cdot \left( 
 **<small>void</small> .setR( <small>arma::Mat&lt;T&gt;</small> R )**
 
 - Parameterises the rotation by variable \\(R\\).
-- The rotation matrix must be orthonormal (\\(R^{t} = R^{-1}\\)) with determinant 1 or -1.
+- The rotation matrix must be orthonormal \\(\left( R^{t} = R^{-1} \right)\\) with determinant 1 or -1.
 
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}

@@ -21,13 +21,13 @@ Z_{i} & \text{otherwise}
 **<small>void</small> .setR( <small>arma::Mat&lt;T&gt;</small> R )**
 
 - Parameterises the rotation by variable \\(R\\).
-- The rotation matrix must be orthonormal (\\(R^{t} = R^{-1}\\)) with determinant 1 or -1.
+- The rotation matrix must be orthonormal \\(\left( R^{t} = R^{-1} \right)\\) with determinant 1 or -1.
 
 ---
 **<small>void</small> .setQ( <small>arma::Mat&lt;T&gt;</small> Q )**
 
 - Parameterises the rotation by variable \\(Q\\).
-- The rotation matrix must be orthonormal (\\(Q^{t} = Q^{-1}\\)) with determinant 1 or -1.
+- The rotation matrix must be orthonormal \\(\left( Q^{t} = Q^{-1} \right)\\) with determinant 1 or -1.
 
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
