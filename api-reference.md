@@ -24,17 +24,17 @@ table_of_contents:
     Black-box Optimisation Benchmark:
       Attractive Sector Function:
       Bent Cigar Function:
-      Büche Rastrigin Function:
-      Composite Griewank Rosenbrock Function F8F2:
+      Büche-Rastrigin Function:
+      Composite Griewank-Rosenbrock Function F8F2:
       Different Powers Function:
       Discus Function:
       Ellipsoidal Function:
       Ellipsoidal Function (rotated):
-      Gallaghers Gaussian 101-me Peaks Function:
-      Gallaghers Gaussian 21-hi Peaks Function:
+      Gallagher's Gaussian 101-me Peaks Function:
+      Gallagher's Gaussian 21-hi Peaks Function:
       Katsuura Function:
       Linear Slope:
-      Lunacek Bi Rastrigin Function:
+      Lunacek bi-Rastrigin Function:
       Rastrigin Function:
       Rastrigin Function (rotated):
       Rosenbrock Function:
