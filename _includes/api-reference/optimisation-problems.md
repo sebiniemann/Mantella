@@ -5,11 +5,11 @@ $$\min_{X \in [L, U]} F(X) + C(X)$$
 
 
 $$\begin{align}
-L :=&\ \text{The lower bound of the search space.}\\
-U :=&\ \text{The upper bound of the search space.}\\
-F :=&\ \text{Any objective function, e.g. the sphere function.}\\
-C :=&\ \text{The sum of all (soft-)constraints.}\\
-    &\ \text{This is always positive and only 0 if X satisfies all constraints.}\end{align}$$
+F &:= \text{Any objective function, e.g. the sphere function.}\\
+C &:= \text{The sum of all (soft-)constraints (always positive and only 0 if X satisfies all constraints).}\\
+L &:= \text{The lower bound of the search space.}\\
+U &:= \text{The upper bound of the search space.}
+\end{align}$$
 
 - Constraints handling<br>
   <a href="#optimisation-problems-setLowerBounds">setLowerBounds</a>, <a href="#optimisation-problems-setUpperBounds">setUpperBounds</a>, <a href="#optimisation-problems-getLowerBounds">getLowerBounds</a>, <a href="#optimisation-problems-getUpperBounds">getUpperBounds</a>, <a href="#optimisation-problems-getSoftConstraintsValue">getSoftConstraintsValue</a>, <a href="#optimisation-problems-isSatisfyingLowerBounds">isSatisfyingLowerBounds</a>, <a href="#optimisation-problems-isSatisfyingUpperBounds">isSatisfyingUpperBounds</a>, <a href="#optimisation-problems-isSatisfyingSoftConstraints">isSatisfyingSoftConstraints</a>, <a href="#optimisation-problems-isSatisfyingConstraints">isSatisfyingConstraints</a>
