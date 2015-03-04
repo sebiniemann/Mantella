@@ -2,7 +2,7 @@ $$\begin{align}
 F(X) &:= T_\text{oscillated} \left( \left\Vert S \right\Vert_{2}^{2} \right)^{0.9} \\
 Z &:= Q \cdot T_\text{scaled}^{100} \cdot R \left( X - X^\text{opt} \right)\\
 S_i &:= \begin{cases}
-100 Z_{i} & \text{if } Z_{i} \times X_{i}^\text{opt} > 0 \\
+100 Z_{i} & \text{if } Z_{i} \cdot X_{i}^\text{opt} > 0 \\
 Z_{i} & \text{otherwise}
 \end{cases}
 \end{align}$$
