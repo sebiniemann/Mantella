@@ -3,7 +3,6 @@ Abstract base class for all optimisation problems.<br>
 
 $$\min_{X \in [L, U]} F(X) + C(X)$$
 
-
 $$\begin{align}
 F &:= \text{Any objective function, e.g. the sphere function.}\\
 C &:= \text{The sum of all (soft-)constraints (always positive and only 0 if X satisfies all constraints).}\\
