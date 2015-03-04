@@ -8,7 +8,7 @@ A_i &:= \begin{cases}
 \text{Uniformly drawn from } \left\{ 1000^{\frac{2j}{19}} : j \in \left\{ 0, \ldots, 19 \right\} \right\} \text{ without replacement} & \text{for } i = 2, \ldots, 21 \\
 1000 & \text{for  } i = 1
 \end{cases}\\
-C_{i} &:= T_\text{scaled}^{A_i} \cdot A_{i}^{-\frac{1}{4}}\\
+C_{i} &:= T_\text{scaled}^sqrt{A_i} \cdot A_{i}^{-\frac{1}{4}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -4.9, 4.9 \right]^{N} & \text{for } i = 2, \ldots, 21 \\
 \text{Uniformly drawn from } \left[ -3.92, 3.92 \right]^{N} & \text{for  } i = 1

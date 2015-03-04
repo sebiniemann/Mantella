@@ -1,6 +1,6 @@
 $$\begin{align}
 F(X) &:= \frac{10}{N^{2}} \left( \prod_{i=1}^{N}\left( 1 + i \sum_{j=1}^{32} \frac{\left| 2^{j}Z_i - \left[2^{j}Z_{i}\right]\right|}{2^j} \right)^{\frac{10}{N^{1.2}}} - 1 \right) + F_\text{penality}(X) \\
-Z &:= Q \cdot T_\text{scaled}^{10000} \cdot R \left( X - X^\text{opt} \right)\\
+Z &:= Q \cdot T_\text{scaled}^{10} \cdot R \cdot \left( X - X^\text{opt} \right)\\
 [\cdot] &:= \text{nearest integer value}
 \end{align}$$
 
