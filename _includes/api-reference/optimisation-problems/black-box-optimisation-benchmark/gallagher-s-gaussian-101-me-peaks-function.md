@@ -8,7 +8,7 @@ A_i &:= \begin{cases}
 \text{Uniformly drawn from } \left\{ 1000^{\frac{2j}{99}} : j \in \left\{ 0, \ldots, 99 \right\} \right\} \text{ without replacement} & \text{for } i = 2, \ldots, 101 \\
 1000 & \text{for  } i = 1
 \end{cases}\\
-C_{i} &:= \frac{T_\text{scaled}^{A_i}}{A_{i}^{\frac{1}{4}}}\\
+C_{i} &:= T_\text{scaled}^{A_i} \cdot A_{i}^{-\frac{1}{4}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
 \text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for  } i = 1
