@@ -1,2 +1,3 @@
-**.getPlausibility()**
-{% include noexcept %}
+
+---
+<small>double</small> **.getPlausibility()** {% include noexcept %}
