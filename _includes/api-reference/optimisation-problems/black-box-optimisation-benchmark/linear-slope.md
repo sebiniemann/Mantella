@@ -1,11 +1,12 @@
 $$\begin{align}
-F(X) &:=  - S \cdot Z + \sum_{i=1}^{N} 5 \left| S_i \right|\\
+F(X) &:= F_0 - S \cdot Z\\
 O &:= \text{Uniformly choosen from } \{(5,5,\ldots,5), (-5,-5,\ldots,-5)\}\\
 S_i &:= T_{\text{scaled}, i}^\sqrt{10} \cdot \operatorname{sign}(O_i) \\
 Z_i &:= \begin{cases}
 X_i & \text{if } X_{i} \cdot O_i < 25 \\
 O_i & \text{otherwise}
-\end{cases}
+\end{cases}\\
+F_0 &:= \sum_{i=1}^{N} 5 \left| S_i \right|
 \end{align}$$
 
 **LinearSlope( <small>unsigned int</small> N )**
