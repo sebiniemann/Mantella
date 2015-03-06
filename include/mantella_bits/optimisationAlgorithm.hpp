@@ -47,7 +47,7 @@ namespace mant {
       // Returns true if the number of iterations is strictly lower than the maximal number of
       // iterations
       // and false otherwise.
-      bool isTerminated() const noexcept;
+      virtual bool isTerminated() const noexcept;
 
       // Provides a default deconstructor.
       virtual ~OptimisationAlgorithm() = default;
