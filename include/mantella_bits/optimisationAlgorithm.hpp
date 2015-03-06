@@ -10,7 +10,7 @@ namespace mant {
       // Starts the optimisation process.
       // Note: The best parameter and its objective value can be retrived via the corresponding
       // getter, after the optimisation process is finished or terminates.
-      void optimise() noexcept;
+      void optimise();
 
       void setDistanceFunction(
           const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
@@ -99,7 +99,11 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::optimise() noexcept {
+  void OptimisationAlgorithm<ParameterType>::optimise() {
+    if(arma::any(optimisationProblem->getUpperBound() < optimisationProblem->getLowerBound())) {
+      throw std::logic_error("The upper bound of the optimisation problem must be greater than or equal to its lower bound.");
+    }
+    
     // Resets the results, counters and caches
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
