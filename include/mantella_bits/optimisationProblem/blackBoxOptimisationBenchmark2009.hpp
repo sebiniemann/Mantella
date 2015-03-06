@@ -5,8 +5,8 @@ namespace mant {
         inline explicit BlackBoxOptimisationBenchmark2009(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline virtual void setTranslation(
-            const arma::Col<double> translation);
+        inline virtual void setXOpt(
+            const arma::Col<double> xOpt);
 
         inline virtual void setOne(
             const arma::Col<double> one);
@@ -32,7 +32,7 @@ namespace mant {
         virtual ~BlackBoxOptimisationBenchmark2009() = default;
 
       protected:
-        arma::Col<double> translation_;
+        arma::Col<double> xOpt_;
         arma::Col<double> one_;
         arma::Mat<double> rotationR_;
         arma::Mat<double> rotationQ_;
@@ -75,7 +75,7 @@ namespace mant {
         void serialize(
             Archive& archive) noexcept {
           archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
-          archive(cereal::make_nvp("translation", translation_));
+          archive(cereal::make_nvp("xOpt", xOpt_));
         }
 #endif
     };
@@ -93,9 +93,9 @@ namespace mant {
 
       setAcceptableObjectiveValue(objectiveValueTranslation_ + 1.0e-8);
 
-      arma::Col<double> translation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
-      translation.elem(arma::find(translation == 0)).fill(-1.0e5);
-      setTranslation(translation);
+      arma::Col<double> xOpt = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
+      xOpt.elem(arma::find(xOpt == 0)).fill(-1.0e5);
+      setXOpt(xOpt);
 
       setOne(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));
@@ -106,13 +106,13 @@ namespace mant {
       setLocalOptimaY21(getRandomLocalOptimaY21());
     }
 
-    inline void BlackBoxOptimisationBenchmark2009::setTranslation(
-        const arma::Col<double> translation) {
-      if (translation.n_elem != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the translation (" + std::to_string(translation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    inline void BlackBoxOptimisationBenchmark2009::setXOpt(
+        const arma::Col<double> xOpt) {
+      if (xOpt.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the x^opt variable (" + std::to_string(xOpt.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }
 
-      translation_ = translation;
+      xOpt_ = xOpt;
     }
 
     inline void BlackBoxOptimisationBenchmark2009::setOne(
