@@ -1,8 +1,31 @@
-**Constructor( N )**
-{% include noexcept %}
+$$\begin{align}
+F(X) &:= Z_1^2 + 100 \left\Vert \left(Z_2, \ldots, Z_N \right) \right\Vert_2\\
+Z &:= Q \cdot T_\text{scaled}^\sqrt{10} \cdot R \cdot \left( X - X^\text{opt} \right)
+\end{align}$$
 
-**.getObjectiveValue( X )**
-{% include noexcept %}
+**SharpRidgeFunction( <small>unsigned int</small> N )**
 
-**.toString()**
-{% include noexcept %}
+- Creates an *N*-dimensional optimisation problem instance of this class.
+- The problem must have at least 1 dimension.
+
+---
+**<small>void</small> .setXOpt( <small>arma::Col&lt;T&gt;</small> X )**
+
+- Parameterises the transition by variable \\(X^\text{opt}\\).
+
+---
+**<small>void</small> .setR( <small>arma::Mat&lt;T&gt;</small> R )**
+
+- Parameterises the rotation by variable \\(R\\).
+- The rotation matrix must be orthonormal \\(\left( R^{t} = R^{-1} \right)\\) with determinant 1 or -1.
+
+---
+**<small>void</small> .setQ( <small>arma::Mat&lt;T&gt;</small> Q )**
+
+- Parameterises the rotation by variable \\(Q\\).
+- The rotation matrix must be orthonormal \\(\left( Q^{t} = Q^{-1} \right)\\) with determinant 1 or -1.
+
+---
+**<small>std::string</small> .toString()** {% include noexcept %}
+
+- Returns a filesystem friendly name of the problem, i.e. *sharp-ridge-function*.
