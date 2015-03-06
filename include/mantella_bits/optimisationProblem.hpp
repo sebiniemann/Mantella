@@ -7,6 +7,19 @@ namespace mant {
       explicit OptimisationProblem(
         const unsigned int& numberOfDimensions) noexcept;
 
+      void setLowerBounds(
+        const arma::Col<ParameterType> lowerBounds);
+
+      void setUpperBounds(
+        const arma::Col<ParameterType> upperBounds);
+
+      arma::Col<ParameterType> getLowerBounds() const noexcept;
+
+      arma::Col<ParameterType> getUpperBounds() const noexcept;
+
+      double getSoftConstraintsValue(
+        const arma::Col<ParameterType>& parameter);
+
       arma::Col<unsigned int> isSatisfyingLowerBounds(
         const arma::Col<ParameterType>& parameter);
 
@@ -18,22 +31,6 @@ namespace mant {
 
       bool isSatisfyingConstraints(
         const arma::Col<ParameterType>& parameter);
-
-      double getSoftConstraintsValue(
-        const arma::Col<ParameterType>& parameter);
-
-      double getObjectiveValue(
-        const arma::Col<ParameterType>& parameter);
-
-      arma::Col<ParameterType> getLowerBounds() const noexcept;
-
-      void setLowerBounds(
-        const arma::Col<ParameterType> lowerBounds);
-
-      arma::Col<ParameterType> getUpperBounds() const noexcept;
-
-      void setUpperBounds(
-        const arma::Col<ParameterType> upperBounds);
 
       void setParameterTranslation(
           const arma::Col<ParameterType> parameterTranslation);
@@ -49,11 +46,14 @@ namespace mant {
 
       void setObjectiveValueScale(
         const double objectiveValueScale) noexcept;
-        
-      double getAcceptableObjectiveValue() const noexcept;
       
       void setAcceptableObjectiveValue(
           const double acceptableObjectiveValue) noexcept;
+        
+      double getAcceptableObjectiveValue() const noexcept;
+
+      double getObjectiveValue(
+        const arma::Col<ParameterType>& parameter);
 
       unsigned int getNumberOfEvaluations() const noexcept;
 
