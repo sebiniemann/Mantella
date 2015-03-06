@@ -5,7 +5,7 @@ Installing Armadillo C++ 4.600.0 on Ubuntu (visit the [Armadillo's download page
 
 {% highlight bash %}
 sudo apt-get install libblas-dev liblapack-dev
-wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.600.3.tar.gz
+wget http://downloads.sourceforge.net/project/arma/armadillo-4.600.3.tar.gz
 tar -xzf armadillo-4.600.3.tar.gz
 cd armadillo-4.600.3
 cmake .
