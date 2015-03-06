@@ -16,6 +16,10 @@
 //------------------------------------------------------------------------------
 #pragma once
 
+#define MANTELLA_VERSION_MAJOR 0
+#define MANTELLA_VERSION_MINOR 9
+#define MANTELLA_VERSION_PATCH 0
+
 //
 // Configuration
 //
