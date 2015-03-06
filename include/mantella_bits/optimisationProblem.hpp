@@ -492,7 +492,7 @@ namespace mant {
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
       const arma::Col<double>& parameter) const noexcept {
-    return parameterRotation_ * parameterScale_ % (parameter + parameterTranslation_);
+    return parameterRotation_ * (parameter + (parameterScale_ % parameterTranslation_));
   }
 
   template <typename ParameterType>
