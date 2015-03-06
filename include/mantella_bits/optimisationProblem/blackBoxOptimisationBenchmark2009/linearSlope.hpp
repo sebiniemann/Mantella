@@ -13,7 +13,7 @@ namespace mant {
       protected:
         arma::Col<double> xOpt_;
         arma::Col<double> scaling_;
-        double partiallyObjectiveValue_;
+        double f0_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -29,7 +29,7 @@ namespace mant {
           archive(cereal::make_nvp("one", one_));
           archive(cereal::make_nvp("xOpt", xOpt_));
           archive(cereal::make_nvp("scaling", scaling_));
-          archive(cereal::make_nvp("partiallyObjectiveValue", partiallyObjectiveValue_));
+          archive(cereal::make_nvp("partiallyObjectiveValue", f0_));
         }
 
         template <typename Archive>
@@ -44,7 +44,7 @@ namespace mant {
           archive(cereal::make_nvp("one", construct->one_));
           archive(cereal::make_nvp("xOpt", construct->xOpt_));
           archive(cereal::make_nvp("scaling", construct->scaling_));
-          archive(cereal::make_nvp("partiallyObjectiveValue", construct->partiallyObjectiveValue_));
+          archive(cereal::make_nvp("partiallyObjectiveValue", construct->f0_));
         }
 #endif
     };
@@ -67,7 +67,7 @@ namespace mant {
       one_ = one;
       xOpt_ = 5.0 * one_;
       scaling_ = arma::sign(one_) % getScaling(10.0);
-      partiallyObjectiveValue_ = 5.0 * arma::accu(arma::abs(scaling_));
+      f0_ = 5.0 * arma::accu(arma::abs(scaling_));
     }
 
     inline double LinearSlope::getObjectiveValueImplementation(
@@ -77,7 +77,7 @@ namespace mant {
       const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
       z.elem(outOfBound) = xOpt_.elem(outOfBound);
 
-      return partiallyObjectiveValue_ - arma::dot(scaling_, z);
+      return f0_ - arma::dot(scaling_, z);
     }
 
     inline std::string LinearSlope::toString() const noexcept {
