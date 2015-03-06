@@ -46,7 +46,7 @@ namespace mant {
       const arma::Col<double>& z = max_ * rotationR_ * parameter + 0.5;
       const arma::Col<double>& s = 100.0 * arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)) + arma::square(1.0 - z.head(z.n_elem - 1));
 
-      return 10.0 * arma::mean(s / 4000.0 - arma::cos(s)) + 10.0;
+      return 10.0 * (arma::mean(s / 4000.0 - arma::cos(s)) + 1);
     }
 
     inline std::string CompositeGriewankRosenbrockFunctionF8F2::toString() const noexcept {

@@ -43,7 +43,7 @@ namespace mant {
 
     inline double SchwefelFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& xOpt = arma::abs(4.2096874633 * one_);
+      const arma::Col<double>& xOpt = 4.2096874633 * arma::abs(one_);
       const arma::Col<double>& xHat = 2.0 * one_ % parameter;
 
       arma::Col<double> zHat(xHat.n_elem);

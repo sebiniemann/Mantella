@@ -54,7 +54,7 @@ namespace mant {
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       f0_ = 0.0;
       for (unsigned int k = 0; k < 12; ++k) {
-        f0_ += std::pow(0.5, k) * cos(2.0 * arma::datum::pi * pow(3.0, k) * 0.5);
+        f0_ += std::pow(0.5, k) * cos(arma::datum::pi * pow(3.0, k));
       }
     }
 
