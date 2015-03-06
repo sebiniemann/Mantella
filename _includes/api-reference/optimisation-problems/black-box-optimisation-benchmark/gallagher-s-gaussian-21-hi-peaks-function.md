@@ -27,9 +27,9 @@ Y_i &:= \begin{cases}
 - The rotation matrix must be orthonormal \\(\left( R^{t} = R^{-1} \right)\\) with determinant 1 or -1.
 
 ---
-**<small>void</small> .setA( <small>arma::Col&lt;T&gt;</small> A )**
+**<small>void</small> .setC( <small>arma::Col&lt;T&gt;</small> A )**
 
-- Parameterises the scaling parameter \\(A\\) used in the definition of variable \\(C\\).
+- Parameterises the scaling parameter \\(A\\), only used in the definition of variable \\(C\\).
 
 ---
 **<small>void</small> .setY( <small>arma::Mat&lt;T&gt;</small> Y )**
