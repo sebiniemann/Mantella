@@ -11,7 +11,7 @@ A_i &:= \begin{cases}
 C_{i} &:= T_\text{scaled}^\sqrt{A_i} \cdot A_{i}^{-\frac{1}{4}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
-\text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for  } i = 1
+\text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for } i = 1
 \end{cases}
 \end{align}$$
 
