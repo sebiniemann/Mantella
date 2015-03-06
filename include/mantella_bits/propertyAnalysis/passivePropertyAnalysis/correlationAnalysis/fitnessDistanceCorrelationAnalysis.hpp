@@ -5,7 +5,7 @@ namespace mant {
 
     protected:
       inline void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -13,7 +13,7 @@ namespace mant {
   //
 
   inline void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept {
     arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 

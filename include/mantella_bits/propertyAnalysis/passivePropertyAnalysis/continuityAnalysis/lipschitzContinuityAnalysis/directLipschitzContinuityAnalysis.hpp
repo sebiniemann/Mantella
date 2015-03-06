@@ -6,7 +6,7 @@ namespace mant {
 
     protected:
       void analyseImplementation(
-          const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -15,7 +15,7 @@ namespace mant {
 
   template <typename ParameterType>
   void DirectLipschitzContinuityAnalysis<ParameterType>::analyseImplementation(
-      const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept {
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<ParameterType>& parameter = n->first;
       const double& objectiveValue = n->second;

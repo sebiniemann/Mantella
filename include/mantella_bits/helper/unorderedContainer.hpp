@@ -10,7 +10,7 @@ namespace mant {
     };
 
   // Checks whether two keys of a custom type are equal.
-  class IsKeyEqual {
+  class IsEqual {
     public:
       inline bool operator() (
           const arma::Col<double>& firstKey,
@@ -53,7 +53,7 @@ namespace mant {
     return hashedKey;
   }
 
-  inline bool IsKeyEqual::operator() (
+  inline bool IsEqual::operator() (
     const arma::Col<double>& firstKey,
     const arma::Col<double>& secondKey) const noexcept {
     // Returns true if all values of both column vectors are equal.
@@ -61,7 +61,7 @@ namespace mant {
     return arma::all(firstKey == secondKey);
   }
 
-  inline bool IsKeyEqual::operator() (
+  inline bool IsEqual::operator() (
     const arma::Col<unsigned int>& firstKey,
     const arma::Col<unsigned int>& secondKey) const noexcept {
     // Returns true if all values of both column vectors are equal.

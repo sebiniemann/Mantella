@@ -141,12 +141,12 @@ namespace mant {
       // clearing the caches.
       void reset() noexcept;
 
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedObjectiveValues() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> getCachedSoftConstraintsValues() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> getCachedIsSatisfyingLowerBounds() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> getCachedIsSatisfyingUpperBounds() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> getCachedIsSatisfyingSoftConstraints() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> getCachedIsSatisfyingConstraints() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> getCachedObjectiveValues() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> getCachedSoftConstraintsValues() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> getCachedIsSatisfyingLowerBounds() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> getCachedIsSatisfyingUpperBounds() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> getCachedIsSatisfyingSoftConstraints() const noexcept;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> getCachedIsSatisfyingConstraints() const noexcept;
 
       // Provides a default deconstructor.
       virtual ~OptimisationProblem() = default;
@@ -195,12 +195,12 @@ namespace mant {
         const arma::Col<ParameterType>& parameter) const noexcept = 0;
 
       // Several caches used to avoid redundant computations.
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> cachedObjectiveValues_;
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> cachedSoftConstraintsValues_;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> cachedIsSatisfyingLowerBounds_;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> cachedIsSatisfyingUpperBounds_;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> cachedIsSatisfyingSoftConstraints_;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> cachedIsSatisfyingConstraints_;
+      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> cachedObjectiveValues_;
+      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> cachedSoftConstraintsValues_;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> cachedIsSatisfyingLowerBounds_;
+      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> cachedIsSatisfyingUpperBounds_;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> cachedIsSatisfyingSoftConstraints_;
+      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> cachedIsSatisfyingConstraints_;
 
  #if defined(MANTELLA_USE_PARALLEL)
       // Gives cereal access to otherwise protected constructors, functions and fields.
@@ -548,32 +548,32 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const noexcept {
+  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const noexcept {
     return cachedObjectiveValues_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedSoftConstraintsValues() const noexcept {
+  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedSoftConstraintsValues() const noexcept {
     return cachedSoftConstraintsValues_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const noexcept {
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const noexcept {
     return cachedIsSatisfyingLowerBounds_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const noexcept {
+  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const noexcept {
     return cachedIsSatisfyingUpperBounds_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingSoftConstraints() const noexcept {
+  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingSoftConstraints() const noexcept {
     return cachedIsSatisfyingSoftConstraints_;
   }
 
   template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsKeyEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const noexcept {
+  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const noexcept {
     return cachedIsSatisfyingConstraints_;
   }
 
