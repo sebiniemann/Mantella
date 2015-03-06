@@ -80,7 +80,7 @@ U &:= \text{The upper bound of the search space.}
 
 ---
 <a name="optimisation-problems-setParameterTranslation"></a>
-**<small>void</small> .setParameterTranslation( <small>arma::Col&lt;T&gt;</small> T )**
+**<small>void</small> .setParameterTranslation( <small>arma::Col&lt;T&gt;</small> T )** {% include continuous-only %}
 
 - Translates (i.e. shifts) the search space along the parameter axis.
 - If used together with scaling and rotation, the parameter is first scaled, then translated and lastly rotated.
