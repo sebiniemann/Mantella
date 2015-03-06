@@ -142,11 +142,6 @@ namespace mant {
       void reset() noexcept;
 
       std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> getCachedObjectiveValues() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> getCachedSoftConstraintsValues() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> getCachedIsSatisfyingLowerBounds() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> getCachedIsSatisfyingUpperBounds() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> getCachedIsSatisfyingSoftConstraints() const noexcept;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> getCachedIsSatisfyingConstraints() const noexcept;
 
       // Provides a default deconstructor.
       virtual ~OptimisationProblem() = default;
@@ -196,11 +191,6 @@ namespace mant {
 
       // Several caches used to avoid redundant computations.
       std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> cachedObjectiveValues_;
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> cachedSoftConstraintsValues_;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> cachedIsSatisfyingLowerBounds_;
-      std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> cachedIsSatisfyingUpperBounds_;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> cachedIsSatisfyingSoftConstraints_;
-      std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> cachedIsSatisfyingConstraints_;
 
  #if defined(MANTELLA_USE_PARALLEL)
       // Gives cereal access to otherwise protected constructors, functions and fields.
@@ -287,17 +277,7 @@ namespace mant {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedIsSatisfyingLowerBounds_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingLowerBounds_.cend()) {
-      // The result was not found, compute it.
-      const arma::Col<unsigned int>& result = (parameter >= lowerBounds_);
-      cachedIsSatisfyingLowerBounds_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
+    return (parameter >= lowerBounds_);
   }
 
   template <typename ParameterType>
@@ -307,17 +287,7 @@ namespace mant {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedIsSatisfyingUpperBounds_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingUpperBounds_.cend()) {
-      // The result was not found, compute it.
-      const arma::Col<unsigned int>& result = (parameter <= upperBounds_);
-      cachedIsSatisfyingUpperBounds_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
+    return (parameter <= upperBounds_);
   }
 
   template <typename ParameterType>
@@ -327,17 +297,7 @@ namespace mant {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedIsSatisfyingSoftConstraints_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingSoftConstraints_.cend()) {
-      // The result was not found, compute it.
-      const bool& result = (getSoftConstraintsValue(parameter) == 0);
-      cachedIsSatisfyingSoftConstraints_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
+    return (getSoftConstraintsValue(parameter) == 0);
   }
 
   template <typename ParameterType>
@@ -346,18 +306,8 @@ namespace mant {
     if (parameter.n_elem != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
-
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedIsSatisfyingConstraints_.find(parameter);
-    if (cachePosition == cachedIsSatisfyingConstraints_.cend()) {
-      // The result was not found, compute it.
-      const bool& result = (all(isSatisfyingLowerBounds(parameter)) && all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
-      cachedIsSatisfyingConstraints_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
+    
+    return (all(isSatisfyingLowerBounds(parameter)) && all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
 
   template <typename ParameterType>
@@ -367,20 +317,7 @@ namespace mant {
       throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     }
 
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedSoftConstraintsValues_.find(parameter);
-    if (cachePosition == cachedSoftConstraintsValues_.cend()) {
-      // The result was not found, compute it.
-      const double& result = getSoftConstraintsValueImplementation(parameter);
-
-      assert(result >= 0);
-
-      cachedSoftConstraintsValues_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
+    return getSoftConstraintsValueImplementation(parameter);
   }
 
   template <typename ParameterType>
@@ -550,31 +487,6 @@ namespace mant {
   template <typename ParameterType>
   std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const noexcept {
     return cachedObjectiveValues_;
-  }
-
-  template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedSoftConstraintsValues() const noexcept {
-    return cachedSoftConstraintsValues_;
-  }
-
-  template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingLowerBounds() const noexcept {
-    return cachedIsSatisfyingLowerBounds_;
-  }
-
-  template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, arma::Col<unsigned int>, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingUpperBounds() const noexcept {
-    return cachedIsSatisfyingUpperBounds_;
-  }
-
-  template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingSoftConstraints() const noexcept {
-    return cachedIsSatisfyingSoftConstraints_;
-  }
-
-  template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, bool, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedIsSatisfyingConstraints() const noexcept {
-    return cachedIsSatisfyingConstraints_;
   }
 
   template <>
