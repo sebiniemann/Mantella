@@ -113,10 +113,10 @@ namespace mant {
         const arma::Mat<double>& redundantJointActuations) const {
       std::vector<arma::Cube<double>::fixed<3, 6, 2>> models;
 
-      models.push_back(platformLevels_.at(0).getModel(endEffectorPose, {}));
+      models.push_back(platformLevels_(0).getModel(endEffectorPose, {}));
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        models.push_back(platformLevels_.at(n).getModel(redundantJointActuations.col(n), {}));
+        models.push_back(platformLevels_(n).getModel(redundantJointActuations.col(n), {}));
       }
 
       return models;
@@ -127,11 +127,11 @@ namespace mant {
         const arma::Mat<double>& redundantJointActuations) const {
       arma::Mat<double> actuations;
 
-      const arma::Mat<double>& actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
+      const arma::Mat<double>& actuation = platformLevels_(0).getActuation(endEffectorPose, {});
       actuations = arma::join_rows(actuations, actuation);
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        const arma::Mat<double>& actuation = platformLevels_.at(n).getActuation(redundantJointActuations.col(n), {});
+        const arma::Mat<double>& actuation = platformLevels_(n).getActuation(redundantJointActuations.col(n), {});
         actuations = arma::join_rows(actuations, actuation);
       }
 
@@ -141,10 +141,10 @@ namespace mant {
     inline double MultiLevelStewartPlatform::getEndEffectorPoseAccuracy(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Mat<double>& redundantActuationParameters) const {
-      double positionError = platformLevels_.at(0).getEndEffectorPoseAccuracy(endEffectorPose, {});
+      double positionError = platformLevels_(0).getEndEffectorPoseAccuracy(endEffectorPose, {});
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        positionError += platformLevels_.at(n).getEndEffectorPoseAccuracy(redundantActuationParameters.col(n), {});
+        positionError += platformLevels_(n).getEndEffectorPoseAccuracy(redundantActuationParameters.col(n), {});
       }
 
       return positionError;

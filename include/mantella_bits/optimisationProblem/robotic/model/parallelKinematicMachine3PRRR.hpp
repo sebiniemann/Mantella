@@ -87,9 +87,9 @@ namespace mant {
       redundantJointAngleCosines_.set_size(redundantJointIndicies_.n_elem);
 
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double redundantJointAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
-        redundantJointAngleSines_.at(n) = std::sin(redundantJointAngle);
-        redundantJointAngleCosines_.at(n) = std::cos(redundantJointAngle);
+        const double redundantJointAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
+        redundantJointAngleSines_(n) = std::sin(redundantJointAngle);
+        redundantJointAngleCosines_(n) = std::cos(redundantJointAngle);
       }
     }
 
@@ -140,19 +140,19 @@ namespace mant {
       arma::Cube<double>::fixed<2, 3, 3> model;
 
       const arma::Col<double>::fixed<2>& endEffectorPosition = endEffectorPose.subvec(0, 1);
-      const double& endEffectorAngle = endEffectorPose.at(2);
+      const double& endEffectorAngle = endEffectorPose(2);
 
       model.slice(0) = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
-        const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        model.slice(0).col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
+        const unsigned int& redundantJointIndex = redundantJointIndicies_(n);
+        model.slice(0).col(redundantJointIndex) += redundantJointActuations(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
       model.slice(2) = get2DRotationMatrix(endEffectorAngle) * endEffectorJointPositions_;
       model.slice(2).each_col() += endEffectorPosition;
 
       for (std::size_t n = 0; n < model.slice(0).n_cols; ++n) {
-        model.slice(1).col(n) = getCircleCircleIntersection(model.slice(0).col(n), linkLengths_.at(0, n), model.slice(2).col(n), linkLengths_.at(1, n));
+        model.slice(1).col(n) = getCircleCircleIntersection(model.slice(0).col(n), linkLengths_(0, n), model.slice(2).col(n), linkLengths_(1, n));
       }
 
       return model;
@@ -170,7 +170,7 @@ namespace mant {
 
       arma::Row<double>::fixed<3> actuation;
       for (std::size_t n = 0; n < baseToPassiveJointPositions.n_elem; ++n) {
-        actuation.at(n) = std::atan2(baseToPassiveJointPositions.at(1, n), baseToPassiveJointPositions.at(0, n));
+        actuation(n) = std::atan2(baseToPassiveJointPositions(1, n), baseToPassiveJointPositions(0, n));
       }
 
       return actuation;
@@ -204,8 +204,8 @@ namespace mant {
       arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = forwardKinematic.row(0) % baseToPassiveJoints.row(1) - forwardKinematic.row(1) % baseToPassiveJoints.row(0);
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        inverseKinematic.at(n, 3 + n) = -(forwardKinematic.at(redundantJointIndex, 0) * redundantJointAngleCosines_.at(n) + forwardKinematic.at(redundantJointIndex, 1) * redundantJointAngleSines_.at(n));
+        const unsigned int& redundantJointIndex = redundantJointIndicies_(n);
+        inverseKinematic(n, 3 + n) = -(forwardKinematic(redundantJointIndex, 0) * redundantJointAngleCosines_(n) + forwardKinematic(redundantJointIndex, 1) * redundantJointAngleSines_(n));
       }
 
       return -1.0 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));

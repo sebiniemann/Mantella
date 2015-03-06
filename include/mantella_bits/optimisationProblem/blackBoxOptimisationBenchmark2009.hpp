@@ -252,7 +252,7 @@ namespace mant {
       arma::Col<double> scaling = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
       for (std::size_t n = 0; n < scaling.n_elem; ++n) {
-        scaling.at(n) = std::pow(condition.at(n), scaling.at(n));
+        scaling(n) = std::pow(condition(n), scaling(n));
       }
 
       return scaling;
@@ -265,12 +265,12 @@ namespace mant {
       const arma::Col<double>& spacing = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        const double& value = parameter.at(n);
+        const double& value = parameter(n);
 
         if (value > 0.0) {
-          asymmetricTransformation.at(n) = std::pow(value, 1 + beta * spacing.at(n) * std::sqrt(value));
+          asymmetricTransformation(n) = std::pow(value, 1 + beta * spacing(n) * std::sqrt(value));
         } else {
-          asymmetricTransformation.at(n) = value;
+          asymmetricTransformation(n) = value;
         }
       }
 
@@ -302,7 +302,7 @@ namespace mant {
       arma::Col<double> oscillate(parameter.n_elem);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        oscillate.at(n) = getOscillationTransformation(parameter.at(n));
+        oscillate(n) = getOscillationTransformation(parameter(n));
       }
 
       return oscillate;
@@ -313,7 +313,7 @@ namespace mant {
       double penality = 0.0;
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        penality += std::pow(std::max(0.0, std::abs(parameter.at(n)) - 5.0), 2.0);
+        penality += std::pow(std::max(0.0, std::abs(parameter(n)) - 5.0), 2.0);
       }
 
       return penality;

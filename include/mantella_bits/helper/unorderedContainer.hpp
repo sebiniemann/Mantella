@@ -28,7 +28,7 @@ namespace mant {
   inline std::size_t Hash::operator() (
     const arma::Col<double>& key) const noexcept {
     // Start with the hash of the first value ...
-    std::size_t hashedKey = std::hash<double>()(key.at(0));
+    std::size_t hashedKey = std::hash<double>()(key(0));
 
     // ... and add the hash value of all following values to it.
     // Note: This is adapted from the Boost library (boost::hash_combine).
@@ -42,7 +42,7 @@ namespace mant {
   inline std::size_t Hash::operator() (
     const arma::Col<unsigned int>& key) const noexcept {
     // Start with the hash of the first value ...
-    std::size_t hashedKey = std::hash<unsigned int>()(key.at(0));
+    std::size_t hashedKey = std::hash<unsigned int>()(key(0));
 
     // ... and add the hash value of all following values to it.
     // Note: This is adapted from the Boost library (boost::hash_combine).

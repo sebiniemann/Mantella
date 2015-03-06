@@ -51,7 +51,7 @@ namespace mant {
 
       double product = 1.0;
       for (std::size_t n = 0; n < z.n_elem; ++n) {
-          const double& value = z.at(n);
+          const double& value = z(n);
 
           double sum = 0.0;
           for (unsigned int k = 1; k < 33; ++k) {

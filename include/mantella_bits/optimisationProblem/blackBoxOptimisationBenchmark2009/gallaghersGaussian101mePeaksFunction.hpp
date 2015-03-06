@@ -52,9 +52,9 @@ namespace mant {
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         weight_(101) {
-      weight_.at(0) = 10.0;
+      weight_(0) = 10.0;
       for (std::size_t n = 1; n < weight_.n_elem; ++n) {
-        weight_.at(n) = 1.1 + 8.0 * static_cast<double>(n - 1) / 99.0;
+        weight_(n) = 1.1 + 8.0 * static_cast<double>(n - 1) / 99.0;
       }
     }
 
@@ -63,7 +63,7 @@ namespace mant {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 101; ++k) {
         const arma::Col<double>& parameterTransposition = parameter - localOptimaY101_.col(k);
-        maximalValue = std::max(maximalValue, weight_.at(k) * std::exp(-1.0 / (2.0 * static_cast<double>(numberOfDimensions_)) * dot(parameterTransposition, rotationR_.t() * arma::diagmat(deltaC101_.col(k)) * rotationR_ * parameterTransposition)));
+        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-1.0 / (2.0 * static_cast<double>(numberOfDimensions_)) * dot(parameterTransposition, rotationR_.t() * arma::diagmat(deltaC101_.col(k)) * rotationR_ * parameterTransposition)));
       }
 
       return std::pow(getOscillationTransformation(10.0 - maximalValue), 2.0) + getPenality(parameter);

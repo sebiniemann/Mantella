@@ -58,7 +58,7 @@ namespace mant {
 
       translation_ = translation;
       for (std::size_t n = 0; n < translation_.n_elem; n += 2) {
-        translation_.at(n) = std::abs(translation_.at(n));
+        translation_(n) = std::abs(translation_(n));
       }
     }
 
@@ -66,8 +66,8 @@ namespace mant {
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = scaling_ % getOscillationTransformation(parameter - translation_);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
-        if (z.at(n) > 0.0) {
-          z.at(n) *= 10.0;
+        if (z(n) > 0.0) {
+          z(n) *= 10.0;
         }
       }
 

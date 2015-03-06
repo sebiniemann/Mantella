@@ -20,7 +20,7 @@ namespace mant {
     std::size_t n = 0;
     for(const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
         parameters.submat(0, n, parameters.n_rows - 2, n) = parameterToObjectiveValueMapping.first;
-        objectiveValues.at(n) = parameterToObjectiveValueMapping.second;
+        objectiveValues(n) = parameterToObjectiveValueMapping.second;
         ++n;
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);

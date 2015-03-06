@@ -27,11 +27,11 @@ namespace mant {
       std::size_t k = 2 * parameter.n_elem;
       for (std::size_t l = 0; l < parameter.n_elem; ++l) {
         for (std::size_t m = l + 1; m < parameter.n_elem; ++m) {
-          parameters.at(k++, n) = parameter.at(l) * parameter.at(m);
+          parameters(k++, n) = parameter(l) * parameter(m);
         }
       }
 
-      objectiveValues.at(n) = parameterToObjectiveValueMapping.second;
+      objectiveValues(n) = parameterToObjectiveValueMapping.second;
       ++n;
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);

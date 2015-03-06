@@ -44,7 +44,7 @@ namespace mant {
     inline double DiscusFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = arma::square(getOscillationTransformation(rotationR_ * (parameter - translation_)));
-      return 1000000.0 * z.at(0) + arma::accu(z.tail(z.n_elem - 1));
+      return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
     }
 
     inline std::string DiscusFunction::toString() const noexcept {

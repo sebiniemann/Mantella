@@ -47,7 +47,7 @@ namespace mant {
       const arma::Col<double>& xHat = 2.0 * one_ % parameter;
 
       arma::Col<double> zHat(xHat.n_elem);
-      zHat.at(0) = xHat.at(0);
+      zHat(0) = xHat(0);
       zHat.tail(zHat.n_elem - 1) = xHat.tail(zHat.n_elem - 1) + 0.25 * (xHat.head(xHat.n_elem - 1) - xOpt.head(xOpt.n_elem - 1));
 
       const arma::Col<double>& z = 100.0 * (delta_ % (zHat - xOpt) + xOpt);

@@ -53,12 +53,12 @@ namespace mant {
     arma::Col<unsigned int> belowLowerBound(this->optimisationProblem_->numberOfDimensions_, arma::fill::zeros);
     arma::Col<unsigned int> aboveUpperBound(this->optimisationProblem_->numberOfDimensions_, arma::fill::zeros);
     while(!this->isFinished() & !this->isTerminated()) {
-      const arma::Col<double>& scaledSamplingFactors = samplingDistributionPerDimension_.at(0) / samplingDistributionPerDimension_;
+      const arma::Col<double>& scaledSamplingFactors = samplingDistributionPerDimension_(0) / samplingDistributionPerDimension_;
       const arma::Col<unsigned int>& numberOfSamples = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(std::pow(maximalSamplesPerResolution_ / std::pow(2, arma::sum(belowLowerBound) + arma::sum(aboveUpperBound)), this->optimisationProblem_->numberOfDimensions_) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->optimisationProblem_->numberOfDimensions_)));
 
       std::vector<arma::Col<double>> sampleParameters_;
       for (std::size_t n = 0; n < this->optimisationProblem_->numberOfDimensions_; ++n) {
-        sampleParameters_.push_back(arma::linspace(gridLowerBounds.at(n), gridUpperBounds.at(n), numberOfSamples.at(n)));
+        sampleParameters_.push_back(arma::linspace(gridLowerBounds(n), gridUpperBounds(n), numberOfSamples(n)));
       }
 
       arma::Col<unsigned int> sampleIndicies_ = arma::zeros<arma::Col<unsigned int>>(sampleParameters_.size());
@@ -69,21 +69,21 @@ namespace mant {
         ++this->numberOfIterations_;
 
         for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
-          candidateParameter.at(k) = sampleParameters_.at(k).at(sampleIndicies_.at(k));
+          candidateParameter(k) = sampleParameters_(k)(sampleIndicies_(k));
         }
 
-        ++sampleIndicies_.at(0);
+        ++sampleIndicies_(0);
         for(std::size_t k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
-          if(sampleIndicies_.at(k) >= numberOfSamples.at(k)) {
-            sampleIndicies_.at(k) = 0;
-             ++sampleIndicies_.at(k + 1);
+          if(sampleIndicies_(k) >= numberOfSamples(k)) {
+            sampleIndicies_(k) = 0;
+             ++sampleIndicies_(k + 1);
           }
         }
 
         const double& candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
         const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
 
-        samplesPerResolutions.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
+        samplesPerResolutions(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
 
         if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
           this->bestParameter_ = candidateParameter;
@@ -106,7 +106,7 @@ namespace mant {
 
         unsigned int bestResolutionDepth = 0;
         for (std::size_t n = 0; n < samplesPerResolutions.size(); ++n) {
-          for (const auto& sample : samplesPerResolutions.at(n)) {
+          for (const auto& sample : samplesPerResolutions(n)) {
             const double& candidateSoftConstraintsValue = sample.second.first;
             const double& candidateObjectiveValue = sample.second.second;
 
@@ -122,7 +122,7 @@ namespace mant {
 
         resolutionDepth = bestResolutionDepth;
       } else {
-        for(const auto& sample : samplesPerResolutions.at(resolutionDepth)) {
+        for(const auto& sample : samplesPerResolutions(resolutionDepth)) {
           const double& candidateSoftConstraintsValue = sample.second.first;
           const double& candidateObjectiveValue = sample.second.second;
 

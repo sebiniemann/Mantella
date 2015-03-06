@@ -52,16 +52,16 @@ namespace mant {
 
       arma::Col<double> zTilde(zHat);
       for (std::size_t n = 0; n < zTilde.n_elem; ++n) {
-        const double& value = zHat.at(n);
+        const double& value = zHat(n);
 
         if (std::abs(value) > 0.5) {
-          zTilde.at(n) = std::round(value);
+          zTilde(n) = std::round(value);
         } else {
-          zTilde.at(n) = std::round(value * 10.0) / 10.0;
+          zTilde(n) = std::round(value * 10.0) / 10.0;
         }
       }
 
-      return 0.1 * std::max(std::abs(zHat.at(0)) / 10000.0, arma::dot(scaling_, arma::square(rotationQ_ * zTilde))) + getPenality(parameter);
+      return 0.1 * std::max(std::abs(zHat(0)) / 10000.0, arma::dot(scaling_, arma::square(rotationQ_ * zTilde))) + getPenality(parameter);
     }
 
     inline std::string StepEllipsoidalFunction::toString() const noexcept {

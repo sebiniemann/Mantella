@@ -89,8 +89,8 @@ namespace mant {
       redundantJointAngles_.set_size(3, redundantJointIndicies_.n_elem);
 
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double& redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_.at(1, n), redundantJointStartToEndPositions_.at(0, n));
-        const double& redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_.at(2, n), redundantJointStartToEndPositions_.at(1, n));
+        const double& redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
+        const double& redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_(2, n), redundantJointStartToEndPositions_(1, n));
         redundantJointAngles_.col(n) = arma::Col<double>::fixed<3>({std::cos(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointYAngle)});
       }
     }
@@ -151,14 +151,14 @@ namespace mant {
       arma::Cube<double>::fixed<3, 3, 2> model;
 
       const arma::Col<double>::fixed<3>& endEffectorPosition = endEffectorPose.subvec(0, 2);
-      const double& endEffectorRollAngle = endEffectorPose.at(3);
-      const double& endEffectorPitchAngle = endEffectorPose.at(4);
-      const double& endEffectorYawAngle = endEffectorPose.at(5);
+      const double& endEffectorRollAngle = endEffectorPose(3);
+      const double& endEffectorPitchAngle = endEffectorPose(4);
+      const double& endEffectorYawAngle = endEffectorPose(5);
 
       model.slice(0) = redundantJointStartPositions_;
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
-        const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        model.slice(0).col(redundantJointIndex) += redundantJointActuations.at(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
+        const unsigned int& redundantJointIndex = redundantJointIndicies_(n);
+        model.slice(0).col(redundantJointIndex) += redundantJointActuations(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
       model.slice(1) = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
@@ -212,8 +212,8 @@ namespace mant {
       arma::Mat<double> inverseKinematic(6, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = -arma::sqrt(arma::sum(arma::square(baseToEndEffectorJointPositions)));
       for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const unsigned int& redundantJointIndex = redundantJointIndicies_.at(n);
-        inverseKinematic.at(n, 3 + n) = arma::dot(baseToEndEffectorJointPositions.col(redundantJointIndex), redundantJointAngles_.col(redundantJointIndex));
+        const unsigned int& redundantJointIndex = redundantJointIndicies_(n);
+        inverseKinematic(n, 3 + n) = arma::dot(baseToEndEffectorJointPositions.col(redundantJointIndex), redundantJointAngles_.col(redundantJointIndex));
       }
 
       return -1.0 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));

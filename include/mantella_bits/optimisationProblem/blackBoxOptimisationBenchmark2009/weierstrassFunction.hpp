@@ -65,7 +65,7 @@ namespace mant {
       double sum = 0.0;
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
         for (unsigned int k = 0; k < 12; ++k) {
-          sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z.at(n) + 0.5));
+          sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z(n) + 0.5));
         }
       }
 

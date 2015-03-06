@@ -62,7 +62,7 @@ namespace mant {
       ++this->numberOfIterations_;
       arma::Col<double> localBestSolution = localBestSolutions.col(this->rank_ * this->populationSize_ + n);
       double localBestObjectiveValue = this->optimisationProblem_->getObjectiveValue(localBestSolution) + this->optimisationProblem_->getSoftConstraintsValue(localBestSolution);
-      localBestObjectiveValues.at(this->rank_ * this->populationSize_ + n) = localBestObjectiveValue;
+      localBestObjectiveValues(this->rank_ * this->populationSize_ + n) = localBestObjectiveValue;
 
       if (this->isFinished() || this->isTerminated()) {
         break;
@@ -109,14 +109,14 @@ namespace mant {
         for (std::size_t n = 0; n < this->populationSize_; ++n) {
           ++this->numberOfIterations_;
 
-          std::size_t k = permutation.at(n);
+          std::size_t k = permutation(n);
           arma::Col<double> particle = localParticles.col(k);
 
           unsigned int neighbourhoodBestParticleIndex;
           arma::Col<unsigned int> neighbourhoodParticlesIndecies = arma::find(topology.col(k));
           static_cast<arma::Col<double>>(localBestObjectiveValues.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
 
-          neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies.at(neighbourhoodBestParticleIndex);
+          neighbourhoodBestParticleIndex = neighbourhoodParticlesIndecies(neighbourhoodBestParticleIndex);
 
           arma::Col<double> attractionCenter;
           if (neighbourhoodBestParticleIndex == this->rank_ * this->populationSize_ + k) {
@@ -142,8 +142,8 @@ namespace mant {
 
           double objectiveValue = this->optimisationProblem_->getObjectiveValue(solutionCandidate) + this->optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
-          if (objectiveValue < localBestObjectiveValues.at(k)) {
-            localBestObjectiveValues.at(this->rank_ * this->populationSize_ + k) = objectiveValue;
+          if (objectiveValue < localBestObjectiveValues(k)) {
+            localBestObjectiveValues(this->rank_ * this->populationSize_ + k) = objectiveValue;
             localBestSolutions.col(this->rank_ * this->populationSize_ + k) = solutionCandidate;
           }
 

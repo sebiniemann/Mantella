@@ -38,7 +38,7 @@ namespace mant {
 
   inline void Rng::setRandomSeed() noexcept {
     arma::arma_rng::set_seed_random();
-    setSeed(arma::randi<arma::Col<unsigned int>>(1).at(0));
+    setSeed(arma::randi<arma::Col<unsigned int>>(1)(0));
   }
 
   inline unsigned int Rng::getSeed() noexcept {

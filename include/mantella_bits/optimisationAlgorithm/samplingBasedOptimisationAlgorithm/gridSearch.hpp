@@ -29,12 +29,12 @@ namespace mant {
 
   template <typename ParameterType>
   void GridSearch<ParameterType>::optimiseImplementation() noexcept {
-    const arma::Col<double>& scaledSamplingFactors = samplingFactors_.at(0) / samplingFactors_;
+    const arma::Col<double>& scaledSamplingFactors = samplingFactors_(0) / samplingFactors_;
     const arma::Col<unsigned int>& numberOfSamples_ = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(this->maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->optimisationProblem_->numberOfDimensions_)));
 
     std::vector<arma::Col<double>> sampleParameters_;
     for (std::size_t n = 0; n < this->optimisationProblem_->numberOfDimensions_; ++n) {
-      sampleParameters_.push_back(arma::linspace(this->optimisationProblem_->getLowerBounds().at(n), this->optimisationProblem_->getUpperBounds().at(n), numberOfSamples_.at(n)));
+      sampleParameters_.push_back(arma::linspace(this->optimisationProblem_->getLowerBounds()(n), this->optimisationProblem_->getUpperBounds()(n), numberOfSamples_(n)));
     }
 
     arma::Col<unsigned int> sampleIndicies_ = arma::zeros<arma::Col<unsigned int>>(sampleParameters_.size());
@@ -45,14 +45,14 @@ namespace mant {
       ++this->numberOfIterations_;
 
       for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
-        candidateParameter.at(k) = sampleParameters_.at(k).at(sampleIndicies_.at(k));
+        candidateParameter(k) = sampleParameters_(k)(sampleIndicies_(k));
       }
 
-      ++sampleIndicies_.at(0);
+      ++sampleIndicies_(0);
       for(std::size_t k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
-        if(sampleIndicies_.at(k) >= numberOfSamples_.at(k)) {
-          sampleIndicies_.at(k) = 0;
-           ++sampleIndicies_.at(k + 1);
+        if(sampleIndicies_(k) >= numberOfSamples_(k)) {
+          sampleIndicies_(k) = 0;
+           ++sampleIndicies_(k + 1);
         }
       }
 

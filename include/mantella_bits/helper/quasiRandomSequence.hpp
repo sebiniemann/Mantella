@@ -24,7 +24,7 @@ namespace mant {
      arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 
      for (std::size_t n = 0; n < seed.n_elem; ++n) {
-       sequence.row(n) = getVanDerCorputSequence(base.at(n), seed.at(n), numberOfColumms).t();
+       sequence.row(n) = getVanDerCorputSequence(base(n), seed(n), numberOfColumms).t();
      }
 
      return sequence;
@@ -48,7 +48,7 @@ namespace mant {
          remaining = std::floor(remaining / base);
        }
 
-       sequence.at(n) = number;
+       sequence(n) = number;
      }
 
      return sequence;

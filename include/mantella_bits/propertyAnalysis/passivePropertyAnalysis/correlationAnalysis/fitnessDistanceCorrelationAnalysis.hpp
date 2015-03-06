@@ -20,7 +20,7 @@ namespace mant {
     unsigned int n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
       parameters.col(n) = parameterToObjectiveValueMapping.first;
-      objectiveValues.at(n) = parameterToObjectiveValueMapping.second;
+      objectiveValues(n) = parameterToObjectiveValueMapping.second;
       ++n;
     }
 

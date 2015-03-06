@@ -47,7 +47,7 @@ namespace mant {
 
       arma::Col<double> solution = agents.col(n);
       double objectiveValue = this->optimisationProblem_->getObjectiveValue(solution) + this->optimisationProblem_->getSoftConstraintsValue(solution);
-      objectiveValues.at(n) = objectiveValue;
+      objectiveValues(n) = objectiveValue;
 
       if (objectiveValue < this->bestObjectiveValue_) {
         this->bestParameter_ = solution;
@@ -64,9 +64,9 @@ namespace mant {
       for (std::size_t n = 0; n < this->populationSize_; ++n) {
         ++this->numberOfIterations_;
 
-        std::size_t k = permutation.at(n);
+        std::size_t k = permutation(n);
         arma::Col<double> currentSolution = agents.col(k);
-        double currentObjectiveValue = objectiveValues.at(k);
+        double currentObjectiveValue = objectiveValues(k);
 
         arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->optimisationProblem_->numberOfDimensions_, std::uniform_int_distribution<unsigned int>(0, this->optimisationProblem_->numberOfDimensions_)(Rng::getGenerator()));
 
@@ -98,7 +98,7 @@ namespace mant {
 
         if (betterNeighbourIndicies.n_elem > 0) {
           for (const auto& parameterToMutate : parametersToMutate) {
-            if (stddevNeighbourParameters.at(parameterToMutate) < stepSize_.at(parameterToMutate)) {
+            if (stddevNeighbourParameters(parameterToMutate) < stepSize_(parameterToMutate)) {
 
             }
           }

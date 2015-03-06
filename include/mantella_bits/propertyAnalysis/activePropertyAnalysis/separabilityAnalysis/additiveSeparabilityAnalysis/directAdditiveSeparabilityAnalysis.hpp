@@ -42,7 +42,7 @@ namespace mant {
         candidateD.elem(partitionCandidate.first) = firstPartB;
         candidateD.elem(partitionCandidate.second) = secondPartB;
 
-        differences.at(n) =
+        differences(n) =
             optimisationProblem->getObjectiveValue(candidateA) +
             optimisationProblem->getObjectiveValue(candidateD) -
             optimisationProblem->getObjectiveValue(candidateB) -

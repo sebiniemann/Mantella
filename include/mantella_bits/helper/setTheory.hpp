@@ -27,11 +27,11 @@ namespace mant {
       }
 
       while (index > lastIndex) {
-        std::iter_swap(firstSet.begin() + index, secondSet.begin() + counter.at(index));
+        std::iter_swap(firstSet.begin() + index, secondSet.begin() + counter(index));
         partitions.push_back({firstSet, secondSet});
 
-        if(counter.at(index) < secondSet.n_elem - 1) {
-          counter.tail(counter.n_elem - index).fill(counter.at(index) + 1);
+        if(counter(index) < secondSet.n_elem - 1) {
+          counter.tail(counter.n_elem - index).fill(counter(index) + 1);
           index = counter.n_elem - 1;
         } else {
           --index;

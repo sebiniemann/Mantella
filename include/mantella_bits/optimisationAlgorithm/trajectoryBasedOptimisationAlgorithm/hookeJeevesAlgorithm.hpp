@@ -50,10 +50,10 @@ namespace mant {
 
       arma::Col<double> candidateParameter = this->bestParameter_;
       for (std::size_t n = 0; n < this->optimisationProblem_->numberOfDimensions_; ++n) {
-        candidateParameter.at(n) += stepSize.at(n);
+        candidateParameter(n) += stepSize(n);
 
-        if(this->optimisationProblem_->getUpperBounds().at(n) < candidateParameter.at(n)) {
-          candidateParameter.at(n) = this->optimisationProblem_->getUpperBounds().at(n);
+        if(this->optimisationProblem_->getUpperBounds()(n) < candidateParameter(n)) {
+          candidateParameter(n) = this->optimisationProblem_->getUpperBounds()(n);
         }
 
         ++this->numberOfIterations_;
@@ -72,10 +72,10 @@ namespace mant {
           break;
         }
 
-        candidateParameter.at(n) = this->bestParameter_.at(n) - stepSize.at(n);
+        candidateParameter(n) = this->bestParameter_(n) - stepSize(n);
 
-        if(this->optimisationProblem_->getLowerBounds().at(n) > candidateParameter.at(n)) {
-          candidateParameter.at(n) = this->optimisationProblem_->getLowerBounds().at(n);
+        if(this->optimisationProblem_->getLowerBounds()(n) > candidateParameter(n)) {
+          candidateParameter(n) = this->optimisationProblem_->getLowerBounds()(n);
         }
 
         ++this->numberOfIterations_;
@@ -94,7 +94,7 @@ namespace mant {
           break;
         }
 
-        candidateParameter.at(n) = this->bestParameter_.at(n);
+        candidateParameter(n) = this->bestParameter_(n);
       }
     }
   }

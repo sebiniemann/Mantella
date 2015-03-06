@@ -89,12 +89,12 @@ namespace mant {
       for (std::size_t n = 0; n < this->populationSize_; ++n) {
         ++this->numberOfIterations_;
 
-        particleIndex_ = permutation.at(n);
+        particleIndex_ = permutation(n);
         particle_ = particles_.col(particleIndex_);
 
         neighbourhoodParticlesIndecies_ = arma::find(topology_.col(particleIndex_));
         static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies_)).min(neighbourhoodBestParticleIndex_);
-        neighbourhoodBestParticleIndex_ = neighbourhoodParticlesIndecies_.at(neighbourhoodBestParticleIndex_);
+        neighbourhoodBestParticleIndex_ = neighbourhoodParticlesIndecies_(neighbourhoodBestParticleIndex_);
 
         if (neighbourhoodBestParticleIndex_ == particleIndex_) {
           attractionCenter_ = (maximalLocalAttraction_ * (localBestSolutions_.col(particleIndex_) - particle_)) / 2.0;
@@ -119,8 +119,8 @@ namespace mant {
 
         const double& objectiveValue = this->optimisationProblem_->getObjectiveValue(solutionCandidate) + this->optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
 
-        if (objectiveValue < localBestObjectiveValues_.at(particleIndex_)) {
-          localBestObjectiveValues_.at(particleIndex_) = objectiveValue;
+        if (objectiveValue < localBestObjectiveValues_(particleIndex_)) {
+          localBestObjectiveValues_(particleIndex_) = objectiveValue;
           localBestSolutions_.col(particleIndex_) = solutionCandidate;
         }
 
@@ -159,7 +159,7 @@ namespace mant {
 
       arma::Col<double> localBestSolution = localBestSolutions_.col(n);
       double localBestObjectiveValue = this->optimisationProblem_->getObjectiveValue(localBestSolution) + this->optimisationProblem_->getSoftConstraintsValue(localBestSolution);
-      localBestObjectiveValues_.at(n) = localBestObjectiveValue;
+      localBestObjectiveValues_(n) = localBestObjectiveValue;
 
       if (localBestObjectiveValue < this->bestObjectiveValue_) {
         this->bestParameter_ = localBestSolution;

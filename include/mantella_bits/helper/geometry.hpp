@@ -97,8 +97,8 @@ namespace mant {
     arma::Col<double>::fixed<2> normal = arma::normalise(secondCenter - firstCenter);
 
     return firstCenter + arma::Col<double>::fixed<2>({
-      normal.at(0) * cosine + normal.at(1) * sine,
-      normal.at(1) * cosine - normal.at(0) * sine
+      normal(0) * cosine + normal(1) * sine,
+      normal(1) * cosine - normal(0) * sine
     });
   }
 
