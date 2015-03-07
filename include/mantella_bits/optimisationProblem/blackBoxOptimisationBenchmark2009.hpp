@@ -5,54 +5,42 @@ namespace mant {
         inline explicit BlackBoxOptimisationBenchmark2009(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline virtual void setXOpt(
-            const arma::Col<double> xOpt);
+        inline virtual void setLocalTranslation(
+            const arma::Col<double>& localTranslation);
 
-        inline virtual void setOne(
-            const arma::Col<double> one);
+        inline virtual void setReflection(
+            const bool reflection);
 
         inline virtual void setRotationR(
-            const arma::Mat<double> rotationR);
+            const arma::Mat<double>& rotationR);
 
         inline virtual void setRotationQ(
-            const arma::Mat<double> rotationQ);
+            const arma::Mat<double>& rotationQ);
 
-        inline virtual void setDeltaC101(
-            const arma::Mat<double> deltaC101);
+        inline virtual void setScaling(
+            const arma::Col<double>& scaling);
 
-        inline virtual void setLocalOptimaY101(
-            const arma::Mat<double> localOptimaY101);
-
-        inline virtual void setDeltaC21(
-            const arma::Mat<double> deltaC21);
-
-        inline virtual void setLocalOptimaY21(
-            const arma::Mat<double> localOptimaY21);
+        inline virtual void setLocalOptima(
+            const arma::Mat<double>& localOptima);
 
         virtual ~BlackBoxOptimisationBenchmark2009() = default;
 
       protected:
-        arma::Col<double> xOpt_;
-        arma::Col<double> one_;
+        arma::Col<double> localTranslation_;
+        bool reflection_;
         arma::Mat<double> rotationR_;
         arma::Mat<double> rotationQ_;
-        arma::Mat<double> deltaC101_;
-        arma::Mat<double> localOptimaY101_;
-        arma::Mat<double> deltaC21_;
-        arma::Mat<double> localOptimaY21_;
+        arma::Col<double> scaling_;
+        arma::Mat<double> localOptima_;
 
-        inline arma::Mat<double> getRandomDeltaC101() const noexcept;
+        inline arma::Col<double> getRandomScaling() const noexcept;
 
-        inline arma::Mat<double> getRandomLocalOptimaY101() const noexcept;
+        inline arma::Mat<double> getRandomLocalOptima() const noexcept;
 
-        inline arma::Mat<double> getRandomDeltaC21() const noexcept;
-
-        inline arma::Mat<double> getRandomLocalOptimaY21() const noexcept;
-
-        inline arma::Col<double> getScaling(
+        inline arma::Col<double> getScalingTransformation(
             const double& condition) const noexcept;
 
-        inline arma::Col<double> getScaling(
+        inline arma::Col<double> getScalingTransformation(
             const arma::Col<double>& condition) const noexcept;
 
         inline arma::Col<double> getAsymmetricTransformation(
