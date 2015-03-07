@@ -1,6 +1,9 @@
 namespace mant {
   template <typename ParameterType>
   class ManhattanDistance : public DistanceFunction<ParameterType> {
+    public:
+      using DistanceFunction<ParameterType>::DistanceFunction;
+
     protected:
       ParameterType getDistanceImplementation(
           const arma::Col<ParameterType>& parameter) const noexcept override;

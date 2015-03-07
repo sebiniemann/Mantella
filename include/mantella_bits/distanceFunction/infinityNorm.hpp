@@ -1,5 +1,8 @@
 namespace mant {
   class InfinityNorm : public DistanceFunction<double> {
+    public:
+      using DistanceFunction<double>::DistanceFunction;
+
     protected:
       inline double getDistanceImplementation(
           const arma::Col<double>& parameter) const noexcept override;
