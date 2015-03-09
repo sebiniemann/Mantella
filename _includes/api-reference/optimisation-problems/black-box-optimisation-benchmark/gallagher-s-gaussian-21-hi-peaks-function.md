@@ -6,7 +6,7 @@ W_i &:= \begin{cases}
 \end{cases}\\
 A &:= \begin{cases}
 \text{Uniform random permutation of } \left\{ 0, \ldots, 19 \right\} & \text{for } A_2, \ldots, A_{21} \\
-\frac{19}{2} & \text{for  } A_1
+9.5 & \text{for  } A_1
 \end{cases}\\
 C_{i} &:= \frac{T_\text{scaled}^{1000^\frac{A_i}{19}}}{1000^\frac{A_i}{38}}\\
 Y_i &:= \begin{cases}
