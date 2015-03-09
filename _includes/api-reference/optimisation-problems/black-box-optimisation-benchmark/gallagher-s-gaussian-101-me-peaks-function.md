@@ -8,7 +8,7 @@ A &:= \begin{cases}
 \text{Uniform random permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } A_2, \ldots, A_{101} \\
 \frac{99}{2} & \text{for  } A_1
 \end{cases}\\
-C_{i} &:= \frac{T_\text{scaled}^{1000^\frac{A_i}{99}}}{1000^\frac{A_i}{198}}\\
+C_{i} &:= \frac{T_\text{scaled}^{10^\frac{A_i}{33}}}{10^\frac{A_i}{66}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
 \text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for } i = 1
