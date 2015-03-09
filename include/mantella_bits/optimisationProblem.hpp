@@ -3,7 +3,7 @@ namespace mant {
   class OptimisationProblem : public Printable {
     public:
       const unsigned int numberOfDimensions_;
-.
+
       explicit OptimisationProblem(
         const unsigned int& numberOfDimensions) noexcept;
 
