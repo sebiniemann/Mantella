@@ -5,13 +5,21 @@ Version 0.9.0
 
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master)
 
-
 Mantella is a modern, header-only C++ optimisation library, supporting Linux, Windows and Mac OS X. It provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive, parallalised solvers, focusing on recent multi-cores architectures and high performance clusters. 
 
 Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., NICTA, Australia) for highly efficient linear algebra calculations.
 
-Getting started
----------------
+**Content:**
+- [Getting started](#getting-started)
+- [Got a Problem or Question?](#got-a-problem-or-question)
+- [Found an Issue or Bug?](#found-an-issue-or-bug)
+- [Requesting a Feature?](#requesting-a-feature)
+- [Implemented features](#implemented-features)
+- [Roadmap](#roadmap)
+- [License](#license)
+
+<a name="getting-started"></a> Getting started
+----------------------------------------------
 ### Prerequirements (newer version should also work)
 - GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler
 - Armadillo C++ 4.600.0 (http://arma.sourceforge.net/download.html)
@@ -91,8 +99,24 @@ bestParameter:    2.7208
    2.3872
 ```
 
-Implemented features
---------------------
+<a name="got-a-problem-or-question"></a> Got a Problem or Question?
+-------------------------------------------------------------------
+If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella).
+
+<a name="found-an-issue-or-bug"></a> Found an Issue or Bug?
+-----------------------------------------------------------
+If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues).
+
+You are welcomed to submit a pull request with your fix afterwards, if at hand.
+
+<a name="requesting-a-feature"></a> Requesting a Feature?
+---------------------------------------------------------
+If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues) labelled `feature request`.
+
+Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.
+
+<a name="implemented-features"></a> Implemented features
+--------------------------------------------------------
 ### Optimisation Algorithms
 - **Trajectory-based algorithms**
   - Hill Climbing
@@ -146,8 +170,8 @@ Full support of the [black-box optimisation benchmark (from 2009–2015)](http:/
   - Katsuura function
   - Lunacek bi-Rastrigin function
 
-Roadmap
--------
+<a name="roadmap"></a> Roadmap
+------------------------------
 - **Planned for 1.0.0**
   - ~~Adding robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
   - ~~Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)~~ **(done)**
@@ -165,8 +189,8 @@ Roadmap
 - **Backlog**
   - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
 
-License
--------
+<a name="license"></a> License
+------------------------------
 Distributed under [MIT license](http://opensource.org/licenses/MIT).
 
 Copyright (c) 2013-2015 [Sebastian Niemann](mailto:niemann@sra.uni-hannover.de) and contributors.
