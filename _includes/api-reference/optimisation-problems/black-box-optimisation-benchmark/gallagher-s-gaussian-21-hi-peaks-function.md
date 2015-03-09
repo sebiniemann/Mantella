@@ -8,7 +8,7 @@ A &:= \begin{cases}
 \text{Uniform random permutation of } \left\{ 0, \ldots, 19 \right\} & \text{for } A_2, \ldots, A_{21} \\
 \frac{19}{2} & \text{for  } A_1
 \end{cases}\\
-C_{i} &:= \frac{T_\text{scaled}^\sqrt{1000^\frac{2A_i}{19}}}{1000^\frac{2A_i}{76}}\\
+C_{i} &:= \frac{T_\text{scaled}^{1000^\frac{A_i}{19}}}{1000^\frac{2A_i}{76}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -4.9, 4.9 \right]^{N} & \text{for } i = 2, \ldots, 21 \\
 \text{Uniformly drawn from } \left[ -3.92, 3.92 \right]^{N} & \text{for  } i = 1
