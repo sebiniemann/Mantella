@@ -5,10 +5,10 @@ W_i &:= \begin{cases}
 10 & \text{for  } i = 1
 \end{cases}\\
 A_i &:= \begin{cases}
-\text{Uniformly drawn from } \left\{ 1000^{\frac{2j}{99}} : j \in \left\{ 0, \ldots, 99 \right\} \right\} \text{ without replacement} & \text{for } i = 2, \ldots, 101 \\
-1000 & \text{for  } i = 1
+\text{Uniformly random permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } i = 2, \ldots, 101 \\
+\frac{99}{2} & \text{for  } i = 1
 \end{cases}\\
-C_{i} &:= T_\text{scaled}^\sqrt{A_i} \cdot A_{i}^{-\frac{1}{4}}\\
+C_{i} &:= T_\text{scaled}^\sqrt{1000^\frac{2A_i}{99}} \cdot \left(1000^\frac{2A_i}{99}\right^{-\frac{1}{4}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
 \text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for } i = 1
