@@ -167,7 +167,7 @@ $$F_\text{scaled}(X) := S \cdot F(X)$$
 - Includes actually calculated results only.
 - Use the `.reset()` method to reset this counter to 0.
 
-Code example:
+Example:
 {% highlight cpp %}
 #include <mantella>
 #include <iostream>
