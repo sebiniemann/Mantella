@@ -4,11 +4,11 @@ W_i &:= \begin{cases}
 1.1 + 8 \cdot \frac{i - 2}{99} & \text{for } i = 2, \ldots, 101 \\
 10 & \text{for  } i = 1
 \end{cases}\\
-A_i &:= \begin{cases}
-\text{Uniformly random permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } i = 2, \ldots, 101 \\
-\frac{99}{2} & \text{for  } i = 1
+A &:= \begin{cases}
+\text{Uniform random permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } A_2, \ldots, A_{101} \\
+\frac{99}{2} & \text{for  } A_1
 \end{cases}\\
-C_{i} &:= T_\text{scaled}^\sqrt{1000^\frac{2A_i}{99}} \cdot \left(1000^\frac{2A_i}{99}\right^{-\frac{1}{4}}\\
+C_{i} &:= \frac{T_\text{scaled}^\sqrt{1000^\frac{2A_i}{99}}}{1000^\frac{2A_i}{396}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
 \text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for } i = 1
