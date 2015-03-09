@@ -4,11 +4,11 @@ W_i &:= \begin{cases}
 1.1 + 8 \cdot \frac{i - 2}{19} & \text{for } i = 2, \ldots, 21 \\
 10 & \text{for  } i = 1
 \end{cases}\\
-A_i &:= \begin{cases}
-\text{Uniformly drawn from } \left\{ 1000^{\frac{2j}{19}} : j \in \left\{ 0, \ldots, 19 \right\} \right\} \text{ without replacement} & \text{for } i = 2, \ldots, 21 \\
-1000 & \text{for  } i = 1
+A &:= \begin{cases}
+\text{Uniform random permutation of } \left\{ 0, \ldots, 19 \right\} & \text{for } A_2, \ldots, A_{21} \\
+\frac{19}{2} & \text{for  } A_1
 \end{cases}\\
-C_{i} &:= T_\text{scaled}^sqrt{A_i} \cdot A_{i}^{-\frac{1}{4}}\\
+C_{i} &:= \frac{T_\text{scaled}^\sqrt{1000^\frac{2A_i}{19}}}{1000^\frac{2A_i}{76}}\\
 Y_i &:= \begin{cases}
 \text{Uniformly drawn from } \left[ -4.9, 4.9 \right]^{N} & \text{for } i = 2, \ldots, 21 \\
 \text{Uniformly drawn from } \left[ -3.92, 3.92 \right]^{N} & \text{for  } i = 1
