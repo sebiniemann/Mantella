@@ -6,7 +6,7 @@ W_i &:= \begin{cases}
 \end{cases}\\
 A &:= \begin{cases}
 \text{Uniform random permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } A_2, \ldots, A_{101} \\
-\frac{99}{2} & \text{for  } A_1
+49.5 & \text{for  } A_1
 \end{cases}\\
 C_{i} &:= \frac{T_\text{scaled}^{10^\frac{A_i}{33}}}{10^\frac{A_i}{66}}\\
 Y_i &:= \begin{cases}
