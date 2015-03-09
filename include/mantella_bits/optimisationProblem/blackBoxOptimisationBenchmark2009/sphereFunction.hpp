@@ -45,13 +45,13 @@ namespace mant {
     // Implementation
     //
 
-    inline StepEllipsoidalFunction::StepEllipsoidalFunction(
+    inline SphereFunction::SphereFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setLocalTranslation(getRandomLocalTranslation());
     }
 
-    inline void StepEllipsoidalFunction::setLocalTranslation(
+    inline void SphereFunction::setLocalTranslation(
         const arma::Col<double> localTranslation) {
       if (localTranslation.n_elem != numberOfDimensions_) {
         throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
