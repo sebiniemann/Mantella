@@ -311,7 +311,7 @@ namespace mant {
   inline void OptimisationProblem<double>::setParameterRotation(
       const arma::Mat<double> parameterRotation) {
     if (!parameterRotation.is_square()) {
-      throw std::logic_error("The rotation matrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must be square.");
+      throw std::logic_error("The rotation matrix's shape (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must be square.");
     } else if (parameterRotation.n_rows != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     } else if(arma::any(arma::vectorise(arma::abs(parameterRotation.i() - parameterRotation.t()) > 1.0e-12 * arma::median(arma::vectorise(parameterRotation))))) {
