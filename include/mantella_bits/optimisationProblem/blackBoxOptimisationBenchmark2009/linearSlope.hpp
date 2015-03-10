@@ -5,15 +5,17 @@ namespace mant {
         inline explicit LinearSlope(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setOne(
-            const arma::Col<double> one) override;
+        inline void setReflection(
+            const bool reflection) noexcept;
 
         inline std::string toString() const noexcept override;
 
       protected:
         arma::Col<double> xOpt_;
         arma::Col<double> scaling_;
-        double f0_;
+        double partialObjectiveValue_;
+
+        arma::Col<double> reflection_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -26,10 +28,10 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("one", one_));
+          archive(cereal::make_nvp("reflection", reflection_));
           archive(cereal::make_nvp("xOpt", xOpt_));
           archive(cereal::make_nvp("scaling", scaling_));
-          archive(cereal::make_nvp("partiallyObjectiveValue", f0_));
+          archive(cereal::make_nvp("partialObjectiveValue", partialObjectiveValue));
         }
 
         template <typename Archive>
@@ -41,10 +43,10 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("one", construct->one_));
+          archive(cereal::make_nvp("reflection", construct->reflection_));
           archive(cereal::make_nvp("xOpt", construct->xOpt_));
           archive(cereal::make_nvp("scaling", construct->scaling_));
-          archive(cereal::make_nvp("partiallyObjectiveValue", construct->f0_));
+          archive(cereal::make_nvp("partialObjectiveValue", construct->partialObjectiveValue));
         }
 #endif
     };
@@ -56,18 +58,20 @@ namespace mant {
     inline LinearSlope::LinearSlope(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
-      setOne(one_);
+      setReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
     }
 
-    inline void LinearSlope::setOne(const arma::Col<double> one) {
-      if (one.n_elem != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the one vector (" + std::to_string(one.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    inline void LinearSlope::setReflection(
+        const bool reflection) noexcept {
+      if (reflection) {
+        reflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
+      } else {
+        reflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
       }
 
-      one_ = one;
-      xOpt_ = 5.0 * one_;
-      scaling_ = arma::sign(one_) % getScaling(10.0);
-      f0_ = 5.0 * arma::accu(arma::abs(scaling_));
+      xOpt_ = 5.0 * reflection_;
+      scaling_ = arma::sign(reflection_) % getScaledTransformation(10.0);
+      partialObjectiveValue_ = 5.0 * arma::accu(arma::abs(scaling_));
     }
 
     inline double LinearSlope::getObjectiveValueImplementation(
@@ -77,11 +81,11 @@ namespace mant {
       const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
       z.elem(outOfBound) = xOpt_.elem(outOfBound);
 
-      return f0_ - arma::dot(scaling_, z);
+      return partialObjectiveValue_ - arma::dot(scaling_, z);
     }
 
     inline std::string LinearSlope::toString() const noexcept {
-      return "LinearSlope";
+      return "linear-slope";
     }
   }
 }
