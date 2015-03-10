@@ -128,7 +128,7 @@ namespace mant {
     }
 
     inline std::string WeierstrassFunction::toString() const noexcept {
-      return "WeierstrassFunction";
+      return "weierstrass-function";
     }
   }
 }

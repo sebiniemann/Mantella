@@ -128,7 +128,7 @@ namespace mant {
     }
 
     inline std::string StepEllipsoidalFunction::toString() const noexcept {
-      return "StepEllipsoidalFunction";
+      return "step-ellipsoidal-function";
     }
   }
 }

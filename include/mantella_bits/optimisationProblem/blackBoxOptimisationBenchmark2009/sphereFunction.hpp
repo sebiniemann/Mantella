@@ -66,7 +66,7 @@ namespace mant {
     }
 
     inline std::string SphereFunction::toString() const noexcept {
-      return "SphereFunction";
+      return "sphere-function";
     }
   }
 }
