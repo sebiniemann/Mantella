@@ -372,11 +372,6 @@ namespace mant {
     numberOfDistinctEvaluations_ = 0;
 
     cachedObjectiveValues_.clear();
-    cachedSoftConstraintsValues_.clear();
-    cachedIsSatisfyingLowerBounds_.clear();
-    cachedIsSatisfyingUpperBounds_.clear();
-    cachedIsSatisfyingSoftConstraints_.clear();
-    cachedIsSatisfyingConstraints_.clear();
   }
 
   template <typename ParameterType>
