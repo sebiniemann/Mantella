@@ -78,7 +78,7 @@ namespace mant {
     }
 
     inline void SharpRidgeFunction::setRotationR(
-        const arma::Mat<double> rotationR) {
+        const arma::Mat<double>& rotationR) {
       if (!rotationR.is_square()) {
         throw std::logic_error("The rotation matrix's shape (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must be square.");
       } else if (rotationR.n_rows != numberOfDimensions_) {
@@ -93,7 +93,7 @@ namespace mant {
     }
 
     inline void SharpRidgeFunction::setRotationQ(
-        const arma::Mat<double> rotationQ) {
+        const arma::Mat<double>& rotationQ) {
       if (!rotationQ.is_square()) {
         throw std::logic_error("The rotation matrix's shape (" + std::to_string(rotationQ.n_rows) + ", " + std::to_string(rotationQ.n_cols) + ") must be square.");
       } else if (rotationQ.n_rows != numberOfDimensions_) {
