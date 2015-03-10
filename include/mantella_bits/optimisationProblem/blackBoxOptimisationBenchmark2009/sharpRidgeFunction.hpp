@@ -17,9 +17,11 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> localTranslation_;
+        arma::Col<double> localParameterTranslation_;
         arma::Mat<double> rotationR_;
         arma::Mat<double> rotationQ_;
+
+        const arma::Col<double> scaling_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -32,7 +34,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));;
-          archive(cereal::make_nvp("localTranslation", localTranslation_));
+          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
           archive(cereal::make_nvp("rotationR", rotationR_));
           archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
@@ -46,7 +48,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localTranslation", construct->localTranslation_));
+          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
           archive(cereal::make_nvp("rotationR", construct->rotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
@@ -60,20 +62,19 @@ namespace mant {
     inline SharpRidgeFunction::SharpRidgeFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        scaling_(getScaling(std::sqrt(0.01))) {
-      
-      setLocalTranslation(getRandomLocalTranslation());
+        scaling_(getScaledTransformation(std::sqrt(10.0))) {
+      setLocalParameterTranslation(getRandomLocalParameterTranslation());
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void SharpRidgeFunction::setLocalTranslation(
-        const arma::Col<double> localTranslation) {
-      if (localTranslation.n_elem != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    inline void SharpRidgeFunction::setLocalParameterTranslation(
+        const arma::Col<double>& localParameterTranslation) {
+      if (localParameterTranslation.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localParameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }
 
-      localTranslation_ = localTranslation;
+      localParameterTranslation_ = localParameterTranslation;
     }
 
     inline void SharpRidgeFunction::setRotationR(
@@ -108,7 +109,7 @@ namespace mant {
 
     inline double SharpRidgeFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = rotationQ_ * (scaling_ % (rotationR_ * (parameter - localTranslation_)));
+      const arma::Col<double>& z = rotationQ_ * (scaling_ % (rotationR_ * (parameter - localParameterTranslation_)));
       return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
     }
 

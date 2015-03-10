@@ -11,7 +11,7 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> localTranslation_;
+        arma::Col<double> localParameterTranslation_;
         
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -24,7 +24,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localTranslation", localTranslation_));
+          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
         }
 
         template <typename Archive>
@@ -36,7 +36,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localTranslation", construct->localTranslation_));
+          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
         }
 #endif
     };
@@ -48,21 +48,21 @@ namespace mant {
     inline SphereFunction::SphereFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
-      setLocalTranslation(getRandomLocalTranslation());
+      setLocalParameterTranslation(getRandomLocalParameterTranslation());
     }
 
-    inline void SphereFunction::setLocalTranslation(
-        const arma::Col<double> localTranslation) {
-      if (localTranslation.n_elem != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
+    inline void SphereFunction::setLocalParameterTranslation(
+        const arma::Col<double>& localParameterTranslation) {
+      if (localParameterTranslation.n_elem != numberOfDimensions_) {
+        throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localParameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
       }
 
-      localTranslation_ = localTranslation;
+      localParameterTranslation_ = localParameterTranslation;
     }
 
     inline double SphereFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      return std::pow(arma::norm(parameter - localTranslation_), 2.0);
+      return std::pow(arma::norm(parameter - localParameterTranslation_), 2.0);
     }
 
     inline std::string SphereFunction::toString() const noexcept {
