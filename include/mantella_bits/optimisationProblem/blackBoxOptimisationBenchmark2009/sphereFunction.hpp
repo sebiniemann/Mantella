@@ -5,8 +5,8 @@ namespace mant {
         inline explicit SphereFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline virtual void setLocalTranslation(
-            const arma::Col<double>& localTranslation);
+        inline void setLocalParameterTranslation(
+            const arma::Col<double>& localParameterTranslation);
 
         inline std::string toString() const noexcept override;
 

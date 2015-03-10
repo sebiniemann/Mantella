@@ -5,13 +5,13 @@ namespace mant {
         inline explicit StepEllipsoidalFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline virtual void setLocalTranslation(
-            const arma::Col<double>& localTranslation);
+        inline void setLocalParameterTranslation(
+            const arma::Col<double>& localParameterTranslation);
 
-        inline virtual void setRotationR(
+        inline void setRotationR(
             const arma::Mat<double>& rotationR);
 
-        inline virtual void setRotationQ(
+        inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
 
         inline std::string toString() const noexcept override;
