@@ -69,7 +69,7 @@ namespace mant {
         ++this->numberOfIterations_;
 
         for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
-          candidateParameter(k) = sampleParameters_(k)(sampleIndicies_(k));
+          candidateParameter(k) = sampleParameters_.at(k)(sampleIndicies_(k));
         }
 
         ++sampleIndicies_(0);
@@ -83,7 +83,7 @@ namespace mant {
         const double& candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
         const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
 
-        samplesPerResolutions(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
+        samplesPerResolutions.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
 
         if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
           this->bestParameter_ = candidateParameter;
@@ -106,7 +106,7 @@ namespace mant {
 
         unsigned int bestResolutionDepth = 0;
         for (std::size_t n = 0; n < samplesPerResolutions.size(); ++n) {
-          for (const auto& sample : samplesPerResolutions(n)) {
+          for (const auto& sample : samplesPerResolutions.at(n)) {
             const double& candidateSoftConstraintsValue = sample.second.first;
             const double& candidateObjectiveValue = sample.second.second;
 
@@ -122,7 +122,7 @@ namespace mant {
 
         resolutionDepth = bestResolutionDepth;
       } else {
-        for(const auto& sample : samplesPerResolutions(resolutionDepth)) {
+        for(const auto& sample : samplesPerResolutions.at(resolutionDepth)) {
           const double& candidateSoftConstraintsValue = sample.second.first;
           const double& candidateObjectiveValue = sample.second.second;
 

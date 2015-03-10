@@ -45,7 +45,7 @@ namespace mant {
       ++this->numberOfIterations_;
 
       for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
-        candidateParameter(k) = sampleParameters_(k)(sampleIndicies_(k));
+        candidateParameter(k) = sampleParameters_.at(k)(sampleIndicies_(k));
       }
 
       ++sampleIndicies_(0);
