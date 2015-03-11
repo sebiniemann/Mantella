@@ -23,12 +23,6 @@ TEST_CASE("bbob2009::RosenbrockFunction", "") {
     arma::Col<double> translation;
     translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
-
-    arma::Mat<double> rotationQ;
-    rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
-
     arma::Col<double> expected;
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
