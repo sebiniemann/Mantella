@@ -5,15 +5,15 @@ namespace mant {
         inline explicit SchwefelFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setReflection(
-            const bool reflection) noexcept;
+        inline void setParameterReflection(
+            const bool Parameterreflection) noexcept;
 
         inline std::string toString() const noexcept override;
 
       protected:
         arma::Col<double> scaling_;
 
-        arma::Col<double> reflection_;
+        arma::Col<double> Parameterreflection_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -51,22 +51,22 @@ namespace mant {
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         scaling_(getScaledTransformation(std::sqrt(10.0))) {
-      setReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
+      setParameterReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
     }
 
-    inline void SchwefelFunction::setReflection(
-        const bool reflection) noexcept {
-      if (reflection) {
-        reflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
+    inline void SchwefelFunction::setParameterReflection(
+        const bool Parameterreflection) noexcept {
+      if (Parameterreflection) {
+        Parameterreflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
       } else {
-        reflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
+        Parameterreflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
       }
     }
 
     inline double SchwefelFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& localParameterTranslation = 2.10484373165 * reflection_;
-      const arma::Col<double>& xHat = 2.0 * reflection_ % parameter;
+      const arma::Col<double>& localParameterTranslation = 2.10484373165 * Parameterreflection_;
+      const arma::Col<double>& xHat = 2.0 * Parameterreflection_ % parameter;
 
       arma::Col<double> zHat(xHat.n_elem);
       zHat(0) = xHat(0);
