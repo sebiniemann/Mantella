@@ -33,9 +33,7 @@ TEST_CASE("bbob2009::RosenbrockFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rosenbrockFunction.setObjectiveValueTranslation(0);
-    rosenbrockFunction.setTranslation(translation);
-    rosenbrockFunction.setRotationR(rotationR);
-    rosenbrockFunction.setRotationQ(rotationQ);
+    rosenbrockFunction.setLocalParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rosenbrockFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -43,6 +41,6 @@ TEST_CASE("bbob2009::RosenbrockFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::RosenbrockFunction(5).to_string() == "RosenbrockFunction");
+    CHECK(mant::bbob2009::RosenbrockFunction(5).toString() == "rosenbrock-function");
   }
 }
