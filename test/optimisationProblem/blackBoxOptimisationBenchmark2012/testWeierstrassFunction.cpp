@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2012::WeierstrassFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::WeierstrassFunction weierstrassFunction(numberOfDimensions);
+    mant::bbob2012::WeierstrassFunction weierstrassFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -33,7 +33,7 @@ TEST_CASE("bbob2012::WeierstrassFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedWeierstrassFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     weierstrassFunction.setObjectiveValueTranslation(0);
-    weierstrassFunction.setTranslation(translation);
+    weierstrassFunction.setLocalParameterTranslation(translation);
     weierstrassFunction.setRotationR(rotationR);
     weierstrassFunction.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2012::WeierstrassFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2012::WeierstrassFunction(5).to_string() == "WeierstrassFunction");
+    CHECK(mant::bbob2012::WeierstrassFunction(5).toString() == "weierstrass-function");
   }
 }

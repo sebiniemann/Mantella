@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2012::DiscusFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::DiscusFunction discusFunction(numberOfDimensions);
+    mant::bbob2012::DiscusFunction discusFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -30,7 +30,7 @@ TEST_CASE("bbob2012::DiscusFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedDiscusFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     discusFunction.setObjectiveValueTranslation(0);
-    discusFunction.setTranslation(translation);
+    discusFunction.setLocalParameterTranslation(translation);
     discusFunction.setRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
@@ -39,6 +39,6 @@ TEST_CASE("bbob2012::DiscusFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2012::DiscusFunction(5).to_string() == "DiscusFunction");
+    CHECK(mant::bbob2012::DiscusFunction(5).toString() == "discus-function");
   }
 }

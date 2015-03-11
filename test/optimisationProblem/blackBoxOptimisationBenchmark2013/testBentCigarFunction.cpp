@@ -30,7 +30,7 @@ TEST_CASE("bbob2013::BentCigarFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedBentCigarFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     bentCigarFunction.setObjectiveValueTranslation(0);
-    bentCigarFunction.setTranslation(translation);
+    bentCigarFunction.setLocalParameterTranslation(translation);
     bentCigarFunction.setRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
@@ -39,7 +39,7 @@ TEST_CASE("bbob2013::BentCigarFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2013::BentCigarFunction(5).to_string() == "BentCigarFunction");
+    CHECK(mant::bbob2013::BentCigarFunction(5).toString() == "bent-cigar-function");
   }
 }
 

@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2010::AttractiveSectorFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
+    mant::bbob2010::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -33,7 +33,7 @@ TEST_CASE("bbob2010::AttractiveSectorFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedAttractiveSectorFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     attractiveSectorFunction.setObjectiveValueTranslation(0);
-    attractiveSectorFunction.setTranslation(translation);
+    attractiveSectorFunction.setLocalParameterTranslation(translation);
     attractiveSectorFunction.setRotationR(rotationR);
     attractiveSectorFunction.setRotationQ(rotationQ);
 
@@ -43,7 +43,7 @@ TEST_CASE("bbob2010::AttractiveSectorFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2010::AttractiveSectorFunction(5).to_string() == "AttractiveSectorFunction");
+    CHECK(mant::bbob2010::AttractiveSectorFunction(5).toString() == "attractive-sector-function");
   }
 }
 

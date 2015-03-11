@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2010::BuecheRastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::BuecheRastriginFunction buecheRastriginFunction(numberOfDimensions);
+    mant::bbob2010::BuecheRastriginFunction buecheRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -27,7 +27,7 @@ TEST_CASE("bbob2010::BuecheRastriginFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedBuecheRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     buecheRastriginFunction.setObjectiveValueTranslation(0);
-    buecheRastriginFunction.setTranslation(translation);
+    buecheRastriginFunction.setLocalParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(buecheRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -35,6 +35,6 @@ TEST_CASE("bbob2010::BuecheRastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2010::BuecheRastriginFunction(5).to_string() == "BuecheRastriginFunction");
+    CHECK(mant::bbob2010::BuecheRastriginFunction(5).toString() == "bueche-rastrigin-function");
   }
 }

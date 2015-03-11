@@ -33,7 +33,7 @@ TEST_CASE("bbob2013::SchaffersF7Function", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchaffersF7Function,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schaffersF7Function.setObjectiveValueTranslation(0);
-    schaffersF7Function.setTranslation(translation);
+    schaffersF7Function.setLocalParameterTranslation(translation);
     schaffersF7Function.setRotationR(rotationR);
     schaffersF7Function.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2013::SchaffersF7Function", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2013::SchaffersF7Function(5).to_string() == "SchaffersF7Function");
+    CHECK(mant::bbob2013::SchaffersF7Function(5).toString() == "schaffers-f7-function");
   }
 }

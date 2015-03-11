@@ -6,7 +6,7 @@
 
 class TestPrintable : public mant::Printable {
   public:
-    std::string to_string() const noexcept override {
+    std::string toString() const noexcept override {
       return "ThisIsTestPrintable";
     }
 };

@@ -33,7 +33,7 @@ TEST_CASE("bbob2013::SchaffersF7FunctionIllConditioned", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchaffersF7FunctionIllConditioned,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schaffersF7FunctionIllConditioned.setObjectiveValueTranslation(0);
-    schaffersF7FunctionIllConditioned.setTranslation(translation);
+    schaffersF7FunctionIllConditioned.setLocalParameterTranslation(translation);
     schaffersF7FunctionIllConditioned.setRotationR(rotationR);
     schaffersF7FunctionIllConditioned.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2013::SchaffersF7FunctionIllConditioned", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2013::SchaffersF7FunctionIllConditioned(5).to_string() == "SchaffersF7FunctionIllConditioned");
+    CHECK(mant::bbob2013::SchaffersF7FunctionIllConditioned(5).toString() == "schaffers-f7-function-ill-conditioned");
   }
 }

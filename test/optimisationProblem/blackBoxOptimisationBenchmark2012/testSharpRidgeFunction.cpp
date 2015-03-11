@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2012::SharpRidgeFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
+    mant::bbob2012::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -33,7 +33,7 @@ TEST_CASE("bbob2012::SharpRidgeFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSharpRidgeFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     sharpRidgeFunction.setObjectiveValueTranslation(0);
-    sharpRidgeFunction.setTranslation(translation);
+    sharpRidgeFunction.setLocalParameterTranslation(translation);
     sharpRidgeFunction.setRotationR(rotationR);
     sharpRidgeFunction.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2012::SharpRidgeFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2012::SharpRidgeFunction(5).to_string() == "SharpRidgeFunction");
+    CHECK(mant::bbob2012::SharpRidgeFunction(5).toString() == "sharp-ridge-function");
   }
 }

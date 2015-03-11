@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2012::RosenbrockFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::RosenbrockFunctionRotated rosenbrockFunctionRotated(numberOfDimensions);
+    mant::bbob2012::RosenbrockFunctionRotated rosenbrockFunctionRotated(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -35,6 +35,6 @@ TEST_CASE("bbob2012::RosenbrockFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2012::RosenbrockFunctionRotated(5).to_string() == "RosenbrockFunctionRotated");
+    CHECK(mant::bbob2012::RosenbrockFunctionRotated(5).toString() == "rosenbrock-function-rotated");
   }
 }

@@ -27,7 +27,7 @@ TEST_CASE("bbob2009::SchwefelFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schwefelFunction.setObjectiveValueTranslation(0);
-    schwefelFunction.setOne(one);
+    schwefelFunction.setReflection(one.at(0) < 0 ? true : false);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -35,6 +35,6 @@ TEST_CASE("bbob2009::SchwefelFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::SchwefelFunction(5).to_string() == "SchwefelFunction");
+    CHECK(mant::bbob2009::SchwefelFunction(5).toString() == "schwefel-function");
   }
 }

@@ -23,19 +23,11 @@ TEST_CASE("bbob2015::RosenbrockFunction", "") {
     arma::Col<double> translation;
     translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
-
-    arma::Mat<double> rotationQ;
-    rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
-
     arma::Col<double> expected;
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rosenbrockFunction.setObjectiveValueTranslation(0);
-    rosenbrockFunction.setTranslation(translation);
-    rosenbrockFunction.setRotationR(rotationR);
-    rosenbrockFunction.setRotationQ(rotationQ);
+    rosenbrockFunction.setLocalParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rosenbrockFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -43,6 +35,6 @@ TEST_CASE("bbob2015::RosenbrockFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::RosenbrockFunction(5).to_string() == "RosenbrockFunction");
+    CHECK(mant::bbob2015::RosenbrockFunction(5).toString() == "rosenbrock-function");
   }
 }

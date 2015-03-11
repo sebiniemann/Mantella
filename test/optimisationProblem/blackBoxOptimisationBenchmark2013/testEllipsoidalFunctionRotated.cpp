@@ -30,7 +30,7 @@ TEST_CASE("bbob2013::EllipsoidalFunctionRotated", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     ellipsoidalFunctionRotated.setObjectiveValueTranslation(0);
-    ellipsoidalFunctionRotated.setTranslation(translation);
+    ellipsoidalFunctionRotated.setLocalParameterTranslation(translation);
     ellipsoidalFunctionRotated.setRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
@@ -39,6 +39,6 @@ TEST_CASE("bbob2013::EllipsoidalFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2013::EllipsoidalFunctionRotated(5).to_string() == "EllipsoidalFunctionRotated");
+    CHECK(mant::bbob2013::EllipsoidalFunctionRotated(5).toString() == "ellipsoidal-function-rotated");
   }
 }

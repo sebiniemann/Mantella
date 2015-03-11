@@ -27,7 +27,7 @@ TEST_CASE("bbob2015::LinearSlope", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
 
     linearSlope.setObjectiveValueTranslation(0);
-    linearSlope.setOne(one);
+    linearSlope.setReflection(one.at(0) < 0 ? true : false);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -35,6 +35,6 @@ TEST_CASE("bbob2015::LinearSlope", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::LinearSlope(5).to_string() == "LinearSlope");
+    CHECK(mant::bbob2015::LinearSlope(5).toString() == "linear-slope");
   }
 }
