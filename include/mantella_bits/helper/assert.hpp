@@ -1,6 +1,23 @@
 namespace mant {
-  bool isRotationMatrix(
-      const arma::Mat<double>& matrix) {
+  inline bool isRotationMatrix(
+      const arma::Mat<double>& matrix) noexcept;
+
+  inline void checkRotationMatrix(
+      const std::string& name,
+      const arma::Mat<double>& matrix);
+
+  inline bool isDimensionCompatible(
+      const std::size_t& firstDimension,
+      const std::size_t& secondDimension) noexcept;
+
+  inline void checkDimensionCompatible(
+      const std::string& firstName,
+      const std::size_t& firstDimension,
+      const std::string& secondName,
+      const std::size_t& secondDimension);
+
+  inline bool isRotationMatrix(
+      const arma::Mat<double>& matrix) noexcept {
     // is suqare?
     if (!matrix.is_square()) {
       return false;
@@ -15,22 +32,21 @@ namespace mant {
     return true;
   }
 
-  void checkRotationMatrix(
+  inline void checkRotationMatrix(
       const std::string& name,
       const arma::Mat<double>& matrix) {
-
     if(!isRotationMatrix(matrix)) {
       throw std::logic_error("Rotation matrix required: " + name + " must be square, orthonormal and its determinant be either 1 or -1.");
     }
   }
 
-  bool isDimensionCompatible(
+  inline bool isDimensionCompatible(
       const std::size_t& firstDimension,
-      const std::size_t& secondDimension) {
+      const std::size_t& secondDimension) noexcept {
     return (firstDimension == secondDimension);
   }
 
-  void checkDimensionCompatible(
+  inline void checkDimensionCompatible(
       const std::string& firstName,
       const std::size_t& firstDimension,
       const std::string& secondName,
