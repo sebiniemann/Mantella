@@ -67,7 +67,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
   
 # Locate third party libraries and headers
-find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
+find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
 message(STATUS "NOTICE: Found Armadillo.")
 
 find_package(Cereal) # Cereal (header only)
