@@ -27,7 +27,7 @@ TEST_CASE("bbob2013::SchwefelFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schwefelFunction.setObjectiveValueTranslation(0);
-    schwefelFunction.setReflection(one.at(0) < 0 ? true : false);
+    schwefelFunction.setParameterReflection(one.at(0) < 0 ? true : false);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
