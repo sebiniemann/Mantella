@@ -33,7 +33,7 @@ TEST_CASE("bbob2009::LunacekBiRastriginFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedLunacekBiRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     lunacekBiRastriginFunction.setObjectiveValueTranslation(0);
-    lunacekBiRastriginFunction.setReflection(one.at(0) < 0 ? true : false);
+    lunacekBiRastriginFunction.setParameterReflection(one.at(0) < 0 ? true : false);
     lunacekBiRastriginFunction.setRotationR(rotationR);
     lunacekBiRastriginFunction.setRotationQ(rotationQ);
 
