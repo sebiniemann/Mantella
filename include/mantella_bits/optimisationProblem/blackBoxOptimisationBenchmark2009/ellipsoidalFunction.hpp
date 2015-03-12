@@ -2,15 +2,18 @@ namespace mant {
   namespace bbob2009 {
     class EllipsoidalFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
-        using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
+        inline explicit EllipsoidalFunction(
+            const unsigned int& numberOfDimensions) noexcept;
 
-        EllipsoidalFunction(const EllipsoidalFunction&) = delete;
-        EllipsoidalFunction& operator=(const EllipsoidalFunction&) = delete;
+        inline void setLocalParameterTranslation(
+            const arma::Col<double>& localParameterTranslation);
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> scaling_ = getScaling(1000000.0);
+        const arma::Col<double> scaling_;
+
+        arma::Col<double> localParameterTranslation_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -22,7 +25,7 @@ namespace mant {
         void serialize(Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("translation", translation_));
+          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
         }
 
         template <typename Archive>
@@ -34,7 +37,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("translation", construct->translation_));
+          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
         }
 #endif
     };
@@ -43,13 +46,28 @@ namespace mant {
     // Implementation
     //
 
-    inline double EllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return arma::dot(scaling_, arma::square(getOscillationTransformation(parameter - translation_)));
+    inline EllipsoidalFunction::EllipsoidalFunction(
+        const unsigned int& numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+        scaling_(getScaledTransformation(1000000.0)) {
+      setLocalParameterTranslation(getRandomLocalParameterTranslation());
     }
 
-    inline std::string EllipsoidalFunction::to_string() const noexcept {
-      return "EllipsoidalFunction";
+    inline void EllipsoidalFunction::setLocalParameterTranslation(
+        const arma::Col<double>& localParameterTranslation) {
+      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+
+      localParameterTranslation_ = localParameterTranslation;
+    }
+
+
+    inline double EllipsoidalFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      return arma::dot(scaling_, arma::square(getOscillatedTransformation(parameter - localParameterTranslation_)));
+    }
+
+    inline std::string EllipsoidalFunction::toString() const noexcept {
+      return "ellipsoidal-function";
     }
   }
 }

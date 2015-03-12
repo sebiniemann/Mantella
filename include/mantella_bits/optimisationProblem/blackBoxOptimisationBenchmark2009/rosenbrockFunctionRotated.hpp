@@ -2,15 +2,18 @@ namespace mant {
   namespace bbob2009 {
     class RosenbrockFunctionRotated : public BlackBoxOptimisationBenchmark2009 {
       public:
-        using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
+        inline explicit RosenbrockFunctionRotated(
+            const unsigned int& numberOfDimensions) noexcept;
 
-        RosenbrockFunctionRotated(const RosenbrockFunctionRotated&) = delete;
-        RosenbrockFunctionRotated& operator=(const RosenbrockFunctionRotated&) = delete;
+        inline void setRotationR(
+            const arma::Mat<double>& rotationR);
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
-        const double max_ = std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0);
+        const double max_;
+
+        arma::Mat<double> rotationR_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -44,6 +47,21 @@ namespace mant {
     // Implementation
     //
 
+    inline RosenbrockFunctionRotated::RosenbrockFunctionRotated(
+        const unsigned int& numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+        max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)) {
+      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+    }
+
+    inline void RosenbrockFunctionRotated::setRotationR(
+        const arma::Mat<double>& rotationR) {
+      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", rotationR);
+
+      rotationR_ = rotationR;
+    }
+
     inline double RosenbrockFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = max_ * rotationR_ * parameter + 0.5;
@@ -51,8 +69,8 @@ namespace mant {
       return 100.0 * arma::accu(arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))) + arma::accu(arma::square(z.head(z.n_elem - 1) - 1.0));
     }
 
-    inline std::string RosenbrockFunctionRotated::to_string() const noexcept {
-      return "RosenbrockFunctionRotated";
+    inline std::string RosenbrockFunctionRotated::toString() const noexcept {
+      return "rosenbrock-function-rotated";
     }
   }
 }

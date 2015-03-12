@@ -12,11 +12,11 @@ TEST_CASE("random: getRandomRotationMatrix", "") {
   SECTION("Generates uniform distributed 2-dimensional rotation.") {
     arma::Col<double>::fixed<10000> angles;
     for (std::size_t n = 0; n < angles.n_elem; ++n) {
-      arma::Col<double>::fixed<2> rotatedUnitVector = mant::getRandomRotationMatrix(2) * arma::Col<double>::fixed<2>({-2, 1});
+      arma::Col<double>::fixed<2> rotatedUnitVector = mant::getRandomRotationMatrix(2) * arma::Col<double>::fixed<2>({-2.0, 1.0});
       angles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
     }
 
-    arma::Col<unsigned int> histogram = arma::hist(angles);
+    arma::Col<unsigned int> histogram = arma::hist(angles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
     CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / angles.n_elem);
   }
 
@@ -25,7 +25,7 @@ TEST_CASE("random: getRandomRotationMatrix", "") {
     arma::Col<double>::fixed<10000> pitchAngles;
     arma::Col<double>::fixed<10000> yawAngles;
     for (std::size_t n = 0; n < rollAngles.n_elem; ++n) {
-      arma::Col<double>::fixed<3> rotatedUnitVector = mant::getRandomRotationMatrix(3) * arma::Col<double>::fixed<3>({-2, 1, 3});
+      arma::Col<double>::fixed<3> rotatedUnitVector = mant::getRandomRotationMatrix(3) * arma::Col<double>::fixed<3>({-2.0, 1.0, 3.0});
       rollAngles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
       pitchAngles.at(n) = std::atan2(rotatedUnitVector.at(2), rotatedUnitVector.at(1));
       yawAngles.at(n) = std::atan2(rotatedUnitVector.at(0), rotatedUnitVector.at(2));
@@ -33,13 +33,13 @@ TEST_CASE("random: getRandomRotationMatrix", "") {
 
     arma::Col<unsigned int> histogram;
 
-    histogram = arma::hist(rollAngles);
+    histogram = arma::hist(rollAngles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
     CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / rollAngles.n_elem);
 
-    histogram = arma::hist(pitchAngles);
+    histogram = arma::hist(pitchAngles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
     CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / pitchAngles.n_elem);
 
-    histogram = arma::hist(yawAngles);
+    histogram = arma::hist(yawAngles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
     CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / yawAngles.n_elem);
   }
 }

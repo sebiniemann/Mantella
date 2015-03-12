@@ -2,12 +2,6 @@ namespace mant {
   // Calculates a hash value for custom types.
   class Hash {
     public:
-      explicit Hash() = default;
-
-      Hash(const Hash&) = default;
-
-      Hash& operator=(const Hash&) = delete;
-
       inline std::size_t operator() (
           const arma::Col<double>& key) const noexcept;
 
@@ -16,14 +10,8 @@ namespace mant {
     };
 
   // Checks whether two keys of a custom type are equal.
-  class IsKeyEqual {
+  class IsEqual {
     public:
-      explicit IsKeyEqual() = default;
-
-      IsKeyEqual(const IsKeyEqual&) = default;
-
-      IsKeyEqual& operator=(const IsKeyEqual&) = delete;
-
       inline bool operator() (
           const arma::Col<double>& firstKey,
           const arma::Col<double>& secondKey) const noexcept;
@@ -40,7 +28,7 @@ namespace mant {
   inline std::size_t Hash::operator() (
     const arma::Col<double>& key) const noexcept {
     // Start with the hash of the first value ...
-    std::size_t hashedKey = std::hash<double>()(key.at(0));
+    std::size_t hashedKey = std::hash<double>()(key(0));
 
     // ... and add the hash value of all following values to it.
     // Note: This is adapted from the Boost library (boost::hash_combine).
@@ -54,7 +42,7 @@ namespace mant {
   inline std::size_t Hash::operator() (
     const arma::Col<unsigned int>& key) const noexcept {
     // Start with the hash of the first value ...
-    std::size_t hashedKey = std::hash<unsigned int>()(key.at(0));
+    std::size_t hashedKey = std::hash<unsigned int>()(key(0));
 
     // ... and add the hash value of all following values to it.
     // Note: This is adapted from the Boost library (boost::hash_combine).
@@ -65,7 +53,7 @@ namespace mant {
     return hashedKey;
   }
 
-  inline bool IsKeyEqual::operator() (
+  inline bool IsEqual::operator() (
     const arma::Col<double>& firstKey,
     const arma::Col<double>& secondKey) const noexcept {
     // Returns true if all values of both column vectors are equal.
@@ -73,7 +61,7 @@ namespace mant {
     return arma::all(firstKey == secondKey);
   }
 
-  inline bool IsKeyEqual::operator() (
+  inline bool IsEqual::operator() (
     const arma::Col<unsigned int>& firstKey,
     const arma::Col<unsigned int>& secondKey) const noexcept {
     // Returns true if all values of both column vectors are equal.

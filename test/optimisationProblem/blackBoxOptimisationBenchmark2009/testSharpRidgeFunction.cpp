@@ -33,7 +33,7 @@ TEST_CASE("bbob2009::SharpRidgeFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSharpRidgeFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     sharpRidgeFunction.setObjectiveValueTranslation(0);
-    sharpRidgeFunction.setTranslation(translation);
+    sharpRidgeFunction.setLocalParameterTranslation(translation);
     sharpRidgeFunction.setRotationR(rotationR);
     sharpRidgeFunction.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2009::SharpRidgeFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::SharpRidgeFunction(5).to_string() == "SharpRidgeFunction");
+    CHECK(mant::bbob2009::SharpRidgeFunction(5).toString() == "sharp-ridge-function");
   }
 }

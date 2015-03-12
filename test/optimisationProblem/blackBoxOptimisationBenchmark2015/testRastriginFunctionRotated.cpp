@@ -33,7 +33,7 @@ TEST_CASE("bbob2015::RastriginFunctionRotated", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedRastriginFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rastriginFunctionRotated.setObjectiveValueTranslation(0);
-    rastriginFunctionRotated.setTranslation(translation);
+    rastriginFunctionRotated.setLocalParameterTranslation(translation);
     rastriginFunctionRotated.setRotationR(rotationR);
     rastriginFunctionRotated.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2015::RastriginFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::RastriginFunctionRotated(5).to_string() == "RastriginFunctionRotated");
+    CHECK(mant::bbob2015::RastriginFunctionRotated(5).toString() == "rastrigin-function-rotated");
   }
 }

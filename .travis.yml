@@ -1,13 +1,16 @@
 language: cpp
 
+os:
+  - linux
+
 compiler:
   - clang
   - gcc
 
 env:
   global:
-   # Encrypted COVERITY_SCAN_TOKEN
-   - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
+    # Encrypted COVERITY_SCAN_TOKEN
+    - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
 
 before_install:
   # GCC / Clang (Needed until Travis CI updates to Ubuntu 14.04+)
@@ -41,12 +44,12 @@ install:
   - sudo apt-get install -qq libblas-dev
 #  - sudo apt-get install -qq libopenblas-dev
   - sudo apt-get install -qq liblapack-dev
-  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.600.3.tar.gz
+  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.650.3.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
   - cmake .
-  - make
+  - make -j 4
   - sudo make install
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
@@ -87,13 +90,13 @@ addons:
       name: "SebastianNiemann/Mantella"
     notification_email: niemann@sra.uni-hannover.de
     build_command_prepend: "cov-configure --compiler gcc-4.8 --template; cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON ."
-    build_command: "make"
+    build_command: "make -j 4"
     branch_pattern: coverity_scan
 
 script:
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_EXAMPLES=ON -DRUN_TESTS=ON .; fi
-  - make
+  - make -j 4
   - sudo make install
   
 after_success:

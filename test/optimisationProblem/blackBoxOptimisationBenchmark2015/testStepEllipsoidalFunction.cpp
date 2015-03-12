@@ -33,7 +33,7 @@ TEST_CASE("bbob2015::StepEllipsoidalFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedStepEllipsoidalFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     stepEllipsoidalFunction.setObjectiveValueTranslation(0);
-    stepEllipsoidalFunction.setTranslation(translation);
+    stepEllipsoidalFunction.setLocalParameterTranslation(translation);
     stepEllipsoidalFunction.setRotationR(rotationR);
     stepEllipsoidalFunction.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2015::StepEllipsoidalFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::StepEllipsoidalFunction(5).to_string() == "StepEllipsoidalFunction");
+    CHECK(mant::bbob2015::StepEllipsoidalFunction(5).toString() == "step-ellipsoidal-function");
   }
 }

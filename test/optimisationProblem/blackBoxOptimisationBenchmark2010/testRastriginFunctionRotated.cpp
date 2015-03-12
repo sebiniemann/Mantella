@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2010::RastriginFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::RastriginFunctionRotated rastriginFunctionRotated(numberOfDimensions);
+    mant::bbob2010::RastriginFunctionRotated rastriginFunctionRotated(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -33,7 +33,7 @@ TEST_CASE("bbob2010::RastriginFunctionRotated", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRastriginFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rastriginFunctionRotated.setObjectiveValueTranslation(0);
-    rastriginFunctionRotated.setTranslation(translation);
+    rastriginFunctionRotated.setLocalParameterTranslation(translation);
     rastriginFunctionRotated.setRotationR(rotationR);
     rastriginFunctionRotated.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2010::RastriginFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2010::RastriginFunctionRotated(5).to_string() == "RastriginFunctionRotated");
+    CHECK(mant::bbob2010::RastriginFunctionRotated(5).toString() == "rastrigin-function-rotated");
   }
 }

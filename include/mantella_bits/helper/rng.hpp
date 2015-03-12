@@ -8,7 +8,7 @@ namespace mant {
       inline static std::mt19937_64& getGenerator() noexcept;
 
       inline static void setSeed(
-          const unsigned int& seed) noexcept;
+          const unsigned int seed) noexcept;
 
       inline static void setRandomSeed() noexcept;
 
@@ -28,7 +28,7 @@ namespace mant {
   }
 
   inline void Rng::setSeed(
-      const unsigned int& seed) noexcept {
+      const unsigned int seed) noexcept {
    seed_() = seed;
 
     getGenerator().seed(seed_());
@@ -38,7 +38,7 @@ namespace mant {
 
   inline void Rng::setRandomSeed() noexcept {
     arma::arma_rng::set_seed_random();
-    setSeed(arma::randi<arma::Col<unsigned int>>(1).at(0));
+    setSeed(arma::randi<arma::Col<unsigned int>>(1)(0));
   }
 
   inline unsigned int Rng::getSeed() noexcept {

@@ -30,7 +30,7 @@ TEST_CASE("bbob2015::DifferentPowersFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedDifferentPowersFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     differentPowersFunction.setObjectiveValueTranslation(0);
-    differentPowersFunction.setTranslation(translation);
+    differentPowersFunction.setLocalParameterTranslation(translation);
     differentPowersFunction.setRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
@@ -39,6 +39,6 @@ TEST_CASE("bbob2015::DifferentPowersFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::DifferentPowersFunction(5).to_string() == "DifferentPowersFunction");
+    CHECK(mant::bbob2015::DifferentPowersFunction(5).toString() == "different-powers-function");
   }
 }

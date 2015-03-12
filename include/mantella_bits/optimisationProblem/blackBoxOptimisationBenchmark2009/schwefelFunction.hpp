@@ -2,15 +2,18 @@ namespace mant {
   namespace bbob2009 {
     class SchwefelFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
-        using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
+        inline explicit SchwefelFunction(
+            const unsigned int& numberOfDimensions) noexcept;
 
-        SchwefelFunction(const SchwefelFunction&) = delete;
-        SchwefelFunction& operator=(const SchwefelFunction&) = delete;
+        inline void setParameterReflection(
+            const bool Parameterreflection) noexcept;
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> delta_ = getScaling(std::sqrt(10));
+        arma::Col<double> scaling_;
+
+        arma::Col<double> Parameterreflection_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -23,7 +26,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("one", one_));
+          archive(cereal::make_nvp("refletion", refletion_));
         }
 
         template <typename Archive>
@@ -35,7 +38,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("one", construct->one_));
+          archive(cereal::make_nvp("refletion", construct->refletion_));
         }
 #endif
     };
@@ -44,22 +47,38 @@ namespace mant {
     // Implementation
     //
 
+    inline SchwefelFunction::SchwefelFunction(
+        const unsigned int& numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+        scaling_(getScaledTransformation(std::sqrt(10.0))) {
+      setParameterReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
+    }
+
+    inline void SchwefelFunction::setParameterReflection(
+        const bool Parameterreflection) noexcept {
+      if (Parameterreflection) {
+        Parameterreflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
+      } else {
+        Parameterreflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
+      }
+    }
+
     inline double SchwefelFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& xOpt = arma::abs(4.2096874633 * one_);
-      const arma::Col<double>& xHat = 2.0 * one_ % parameter;
+      const arma::Col<double>& localParameterTranslation = 2.10484373165 * Parameterreflection_;
+      const arma::Col<double>& xHat = 2.0 * Parameterreflection_ % parameter;
 
       arma::Col<double> zHat(xHat.n_elem);
-      zHat.at(0) = xHat.at(0);
-      zHat.tail(zHat.n_elem - 1) = xHat.tail(zHat.n_elem - 1) + 0.25 * (xHat.head(xHat.n_elem - 1) - xOpt.head(xOpt.n_elem - 1));
+      zHat(0) = xHat(0);
+      zHat.tail(zHat.n_elem - 1) = xHat.tail(zHat.n_elem - 1) + 0.25 * (xHat.head(xHat.n_elem - 1) - localParameterTranslation.head(localParameterTranslation.n_elem - 1));
 
-      const arma::Col<double>& z = 100.0 * (delta_ % (zHat - xOpt) + xOpt);
+      const arma::Col<double>& z = 100.0 * (scaling_ % (zHat - localParameterTranslation) + localParameterTranslation);
 
       return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getPenality(z / 100.0);
     }
 
-    inline std::string SchwefelFunction::to_string() const noexcept {
-      return "SchwefelFunction";
+    inline std::string SchwefelFunction::toString() const noexcept {
+      return "schwefel-function";
     }
   }
 }

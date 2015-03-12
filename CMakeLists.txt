@@ -25,11 +25,7 @@ set(MANTELLA_PATCH 0)
 set(MANTELLA_VERSION "${MANTELLA_MAJOR}.${MANTELLA_MINOR}.${MANTELLA_PATCH}")
 
 # Add additional cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ext/cmake)
-
-
-# Provide custom build management options
-option(BUILD_EXAMPLES "Build examples" OFF)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 # Build options used only during development
 option(BUILD_TESTS "Build tests" OFF)
@@ -71,7 +67,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
   
 # Locate third party libraries and headers
-find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
+find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
 message(STATUS "NOTICE: Found Armadillo.")
 
 find_package(Cereal) # Cereal (header only)
@@ -140,6 +136,12 @@ if(BUILD_TESTS)
     test/helper/testSetTheory.cpp
     test/helper/testString.cpp
     test/helper/testUnorderedContainer.cpp
+    test/testDistanceFunction.cpp
+    test/distanceFunction/testEuclideanDistance.cpp
+    test/distanceFunction/testHammingDistance.cpp
+    test/distanceFunction/testInfinityNorm.cpp
+    test/distanceFunction/testManhattanDistance.cpp
+    test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2009/testBuecheRastriginFunction.cpp
@@ -260,9 +262,12 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark2015/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2015/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark2015/testWeierstrassFunction.cpp
-#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHillClimbing.cpp
-#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testSimulatedAnnealing.cpp
-#        test/optimisationAlgorithm/trajectoryBasedAlgorithm/testHookeJeeves.cpp
+    test/testOptimisationAlgorithm.cpp
+    test/testPropertyAnalysis.cpp
+    test/testPropertiesEstimation.cpp
+#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
+#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
+#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeeves.cpp
     ${MANTELLA_TEST_PARALLEL}
   )
 
@@ -270,20 +275,10 @@ if(BUILD_TESTS)
   target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
 
   if(RUN_TESTS)
-    message(STATUS "NOTICE: Automatically runs all tests after building them.")
+    message(STATUS "NOTICE: Automatically running all tests after building them.")
 
-    add_custom_command(TARGET libTest POST_BUILD COMMAND libTest ${PROJECT_SOURCE_DIR}/test)
+    add_custom_command(TARGET libraryTest POST_BUILD COMMAND libraryTest ${PROJECT_SOURCE_DIR}/test)
   endif()
-endif()
-
-# --------------
-# BUILD EXAMPLES
-# -------------
-if(BUILD_EXAMPLES)
-  message(STATUS "NOTICE: Configuring applications.")
-
-  # Add applications build script
-  add_subdirectory("./examples")
 endif()
 
 # ---------------------
@@ -292,6 +287,7 @@ endif()
 add_custom_target(QtWorkaround SOURCES
   # Library
   include/mantella
+  include/mantella_bits/helper/assert.hpp
   include/mantella_bits/helper/rng.hpp
   include/mantella_bits/helper/cereal.hpp
   include/mantella_bits/helper/filesystem.hpp
@@ -299,8 +295,10 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/helper/printable.hpp
   include/mantella_bits/helper/quasiRandomSequence.hpp
   include/mantella_bits/helper/random.hpp
+  include/mantella_bits/helper/regression.hpp
   include/mantella_bits/helper/setTheory.hpp
   include/mantella_bits/helper/string.hpp
+  include/mantella_bits/helper/trajectory.hpp
   include/mantella_bits/helper/unorderedContainer.hpp
   include/mantella_bits/distanceFunction.hpp
   include/mantella_bits/distanceFunction/euclideanDistance.hpp
@@ -433,55 +431,67 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/sphereFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/stepEllipsoidalFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark2015/weierstrassFunction.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prpr.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prrr.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3prus.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_3pups.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_4prus.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6prus.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/parallelKinematicMachine_6pups.hpp
-  include/mantella_bits/optimisationProblem/kinematicMachine/multiLevelStewartPlatform.hpp
-  include/mantella_bits/optimisationProblem/nkModel.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRPR.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRRR.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine4PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
+  include/mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp
   include/mantella_bits/optimisationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/gridSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/multiResolutionGridSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedAlgorithm/randomSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hillClimbing.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/hookeJeevesAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedAlgorithm/simulatedAnnealing.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/multilevelCoordinateSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/roleBasedImitationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
-  include/mantella_bits/propertiesAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/linearModelAnalysis/linearOrdinaryLeastSquares.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/passivePropertiesAnalysis/functionModelAnalysis/quadraticModelAnalysis/quadraticOrdinaryLeastSquares.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis/directMultiplicativeSeparabilityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
-  include/mantella_bits/propertiesAnalysis/activePropertiesAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/multiResolutionGridSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/multilevelCoordinateSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/roleBasedImitationAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm.hpp
+  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
+  include/mantella_bits/property.hpp
+  include/mantella_bits/property/correlationProperty.hpp
+  include/mantella_bits/property/continuityProperty.hpp
+  include/mantella_bits/property/continuityProperty/lipschitzContinuityProperty.hpp
+  include/mantella_bits/property/functionModelProperty.hpp
+  include/mantella_bits/property/functionModelProperty/linearFunctionModelProperty.hpp
+  include/mantella_bits/property/functionModelProperty/quadraticFunctionModelProperty.hpp
+  include/mantella_bits/property/separabilityProperty.hpp
+  include/mantella_bits/property/separabilityProperty/additiveSeparabilityProperty.hpp
+  include/mantella_bits/property/separabilityProperty/multiplicativeSeparabilityProperty.hpp
+  include/mantella_bits/property/proportionalityProperty.hpp
+  include/mantella_bits/property/proportionalityProperty/linearProportionalityProperty.hpp
+  include/mantella_bits/propertyAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/correlationAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/continuityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/linearFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/linearFunctionModelAnalysis/ordinaryLeastSquaresLinearFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/quadraticFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/quadraticFunctionModelAnalysis/ordinaryLeastSquaresQuadraticFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis/directMultiplicativeSeparabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
   include/mantella_bits/propertiesEstimation.hpp
-  include/mantella_bits/propertiesEstimation/maximumLikelihoodEstimation.hpp
+  include/mantella_bits/propertiesEstimation/shapeEstimation.hpp
+  include/mantella_bits/propertiesEstimation/dimensionalityEstimation.hpp
   # Tests
   test/helper.hpp
 )

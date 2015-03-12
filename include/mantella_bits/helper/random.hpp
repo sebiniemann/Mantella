@@ -28,10 +28,10 @@ namespace mant {
       arma::Mat<double> rotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
       for(std::size_t n = 0; n < angles.n_elem; ++n) {
         arma::Mat<double> subRotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
-        subRotationMatrix.at(0, 0) = sineAngles.at(n);
-        subRotationMatrix.at(0, n) = cosineAngles.at(n);
-        subRotationMatrix.at(n, 0) = cosineAngles.at(n);
-        subRotationMatrix.at(n, n) = -sineAngles.at(n);
+        subRotationMatrix(0, 0) = sineAngles(n);
+        subRotationMatrix(0, n) = cosineAngles(n);
+        subRotationMatrix(n, 0) = cosineAngles(n);
+        subRotationMatrix(n, n) = -sineAngles(n);
 
         rotationMatrix *= subRotationMatrix;
       }
@@ -49,7 +49,7 @@ namespace mant {
 
     arma::Col<unsigned int> permutation(numberOfElements);
     for (std::size_t n = 0; n < numberOfElements; ++n) {
-      permutation.at(n) = n;
+      permutation(n) = n;
     }
 
     unsigned int length = std::min(cycleSize, numberOfElements - 1);

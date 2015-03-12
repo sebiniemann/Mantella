@@ -1,22 +1,25 @@
 namespace mant {
   template <typename ParameterType>
   class ManhattanDistance : public DistanceFunction<ParameterType> {
+    public:
+      using DistanceFunction<ParameterType>::DistanceFunction;
+
     protected:
       ParameterType getDistanceImplementation(
           const arma::Col<ParameterType>& parameter) const noexcept override;
 
-      arma::Col<ParameterType> getNeighbourImplementation(
+      arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance) const noexcept override;
 
-      arma::Col<ParameterType> getNeighbourImplementation(
+      arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance,
           std::true_type) const noexcept;
 
-      arma::Col<ParameterType> getNeighbourImplementation(
+      arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
           const ParameterType& minimalDistance,
           const ParameterType& maximalDistance,
@@ -35,28 +38,36 @@ namespace mant {
 
   // TODO Minus / int / unsigned int
   template <typename ParameterType>
-  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
+  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance) const noexcept {
-    return getNeighbourImplementation(parameter, minimalDistance, maximalDistance, std::is_floating_point<ParameterType>());
+    assert(minimalDistance >= 0);
+    assert(minimalDistance <= maximalDistance);
+
+    return getRandomNeighbourImplementation(parameter, minimalDistance, maximalDistance, std::is_floating_point<ParameterType>());
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
+  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
       std::true_type) const noexcept {
-    return arma::normalise(2.0 * arma::randu(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
+    assert(minimalDistance >= 0);
+    assert(minimalDistance <= maximalDistance);
+
+    return arma::normalise(2.0 * arma::randu<arma::Col<double>>(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
   }
 
   template <typename ParameterType>
-  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getNeighbourImplementation(
+  arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
       std::false_type) const noexcept {
+    assert(minimalDistance >= 0);
+    assert(minimalDistance <= maximalDistance);
 
   }
 }

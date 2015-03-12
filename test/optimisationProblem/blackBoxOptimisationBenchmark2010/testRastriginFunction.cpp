@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob2010::RastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob2013::RastriginFunction rastriginFunction(numberOfDimensions);
+    mant::bbob2010::RastriginFunction rastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -27,7 +27,7 @@ TEST_CASE("bbob2010::RastriginFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rastriginFunction.setObjectiveValueTranslation(0);
-    rastriginFunction.setTranslation(translation);
+    rastriginFunction.setLocalParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -35,6 +35,6 @@ TEST_CASE("bbob2010::RastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2010::RastriginFunction(5).to_string() == "RastriginFunction");
+    CHECK(mant::bbob2010::RastriginFunction(5).toString() == "rastrigin-function");
   }
 }

@@ -33,7 +33,7 @@ TEST_CASE("bbob2009::KatsuuraFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedKatsuuraFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     katsuuraFunction.setObjectiveValueTranslation(0);
-    katsuuraFunction.setTranslation(translation);
+    katsuuraFunction.setLocalParameterTranslation(translation);
     katsuuraFunction.setRotationR(rotationR);
     katsuuraFunction.setRotationQ(rotationQ);
 
@@ -43,7 +43,7 @@ TEST_CASE("bbob2009::KatsuuraFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2009::KatsuuraFunction(5).to_string() == "KatsuuraFunction");
+    CHECK(mant::bbob2009::KatsuuraFunction(5).toString() == "katsuura-function");
   }
 }
 

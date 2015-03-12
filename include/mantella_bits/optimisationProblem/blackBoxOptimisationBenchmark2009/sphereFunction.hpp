@@ -2,14 +2,17 @@ namespace mant {
   namespace bbob2009 {
     class SphereFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
-        using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
+        inline explicit SphereFunction(
+            const unsigned int& numberOfDimensions) noexcept;
 
-        SphereFunction(const SphereFunction&) = delete;
-        SphereFunction& operator=(const SphereFunction&) = delete;
+        inline void setLocalParameterTranslation(
+            const arma::Col<double>& localParameterTranslation);
 
-        inline std::string to_string() const noexcept override;
+        inline std::string toString() const noexcept override;
 
       protected:
+        arma::Col<double> localParameterTranslation_;
+        
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
@@ -21,7 +24,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("translation", translation_));
+          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
         }
 
         template <typename Archive>
@@ -33,7 +36,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("translation", construct->translation_));
+          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
         }
 #endif
     };
@@ -42,13 +45,26 @@ namespace mant {
     // Implementation
     //
 
-    inline double SphereFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return std::pow(arma::norm(parameter - translation_), 2.0);
+    inline SphereFunction::SphereFunction(
+        const unsigned int& numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
+      setLocalParameterTranslation(getRandomLocalParameterTranslation());
     }
 
-    inline std::string SphereFunction::to_string() const noexcept {
-      return "SphereFunction";
+    inline void SphereFunction::setLocalParameterTranslation(
+        const arma::Col<double>& localParameterTranslation) {
+      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+
+      localParameterTranslation_ = localParameterTranslation;
+    }
+
+    inline double SphereFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      return std::pow(arma::norm(parameter - localParameterTranslation_), 2.0);
+    }
+
+    inline std::string SphereFunction::toString() const noexcept {
+      return "sphere-function";
     }
   }
 }

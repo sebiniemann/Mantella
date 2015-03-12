@@ -6,7 +6,7 @@
 
 class TestPrintable : public mant::Printable {
   public:
-    std::string to_string() const noexcept override {
+    std::string toString() const noexcept override {
       return "ThisIsTestPrintable";
     }
 };
@@ -19,7 +19,7 @@ TEST_CASE("string: to_string(Printable)", "") {
   }
 }
 
-TEST_CASE("string: to_string(shared_ptr<Printable>)", "") {
+TEST_CASE("string: to_string(Printable*)", "") {
   SECTION("Returns the specified class name.") {
     std::shared_ptr<mant::Printable> testPrintable = std::shared_ptr<mant::Printable>(new TestPrintable);
 

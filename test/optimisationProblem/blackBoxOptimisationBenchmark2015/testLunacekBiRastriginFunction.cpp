@@ -33,7 +33,7 @@ TEST_CASE("bbob2015::LunacekBiRastriginFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedLunacekBiRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     lunacekBiRastriginFunction.setObjectiveValueTranslation(0);
-    lunacekBiRastriginFunction.setOne(one);
+    lunacekBiRastriginFunction.setParameterReflection(one.at(0) < 0 ? true : false);
     lunacekBiRastriginFunction.setRotationR(rotationR);
     lunacekBiRastriginFunction.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2015::LunacekBiRastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::LunacekBiRastriginFunction(5).to_string() == "LunacekBiRastriginFunction");
+    CHECK(mant::bbob2015::LunacekBiRastriginFunction(5).toString() == "lunacek-bi-rastrigin-function");
   }
 }

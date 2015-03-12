@@ -2,14 +2,21 @@ namespace mant {
   namespace bbob2009 {
     class DifferentPowersFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
-        using BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009;
+        inline explicit DifferentPowersFunction(
+            const unsigned int& numberOfDimensions) noexcept;
 
-        DifferentPowersFunction(const DifferentPowersFunction&) = delete;
-        DifferentPowersFunction& operator=(const DifferentPowersFunction&) = delete;
+        inline void setLocalParameterTranslation(
+            const arma::Col<double>& localParameterTranslation);
 
-        inline std::string to_string() const noexcept override;
+        inline void setRotationR(
+            const arma::Mat<double>& rotationR);
+
+        inline std::string toString() const noexcept override;
 
       protected:
+        arma::Col<double> localParameterTranslation_;
+        arma::Mat<double> rotationR_;
+
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
@@ -21,7 +28,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("translation", translation_));
+          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
           archive(cereal::make_nvp("rotationR", rotationR_));
         }
 
@@ -34,7 +41,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("translation", construct->translation_));
+          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
           archive(cereal::make_nvp("rotationR", construct->rotationR_));
         }
 #endif
@@ -44,14 +51,36 @@ namespace mant {
     // Implementation
     //
 
-    inline double DifferentPowersFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - translation_));
-      return arma::norm(z % getScaling(arma::square(z)));
+    inline DifferentPowersFunction::DifferentPowersFunction(
+        const unsigned int& numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
+      setLocalParameterTranslation(getRandomLocalParameterTranslation());
+      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline std::string DifferentPowersFunction::to_string() const noexcept {
-      return "DifferentPowersFunction";
+    inline void DifferentPowersFunction::setLocalParameterTranslation(
+        const arma::Col<double>& localParameterTranslation) {
+      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+
+      localParameterTranslation_ = localParameterTranslation;
+    }
+
+    inline void DifferentPowersFunction::setRotationR(
+        const arma::Mat<double>& rotationR) {
+      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", rotationR);
+
+      rotationR_ = rotationR;
+    }
+
+    inline double DifferentPowersFunction::getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - localParameterTranslation_));
+      return arma::norm(z % getScaledTransformation(arma::square(z)));
+    }
+
+    inline std::string DifferentPowersFunction::toString() const noexcept {
+      return "different-powers-function";
     }
   }
 }

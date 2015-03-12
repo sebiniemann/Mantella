@@ -33,7 +33,7 @@ TEST_CASE("bbob2015::WeierstrassFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedWeierstrassFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     weierstrassFunction.setObjectiveValueTranslation(0);
-    weierstrassFunction.setTranslation(translation);
+    weierstrassFunction.setLocalParameterTranslation(translation);
     weierstrassFunction.setRotationR(rotationR);
     weierstrassFunction.setRotationQ(rotationQ);
 
@@ -43,6 +43,6 @@ TEST_CASE("bbob2015::WeierstrassFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2015::WeierstrassFunction(5).to_string() == "WeierstrassFunction");
+    CHECK(mant::bbob2015::WeierstrassFunction(5).toString() == "weierstrass-function");
   }
 }
