@@ -71,6 +71,9 @@
 // Mantella
 //
 
+// Assert
+#include <mantella_bits/helper/assert.hpp>
+
 // Random number generator
 #include <mantella_bits/helper/rng.hpp>
 
