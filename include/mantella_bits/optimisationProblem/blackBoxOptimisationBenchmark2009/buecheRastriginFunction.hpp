@@ -55,9 +55,7 @@ namespace mant {
 
     inline void BuecheRastriginFunction::setLocalParameterTranslation(
         const arma::Col<double>& localParameterTranslation) {
-      if (localParameterTranslation.n_elem != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localParameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      }
+      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
 
       localParameterTranslation_ = localParameterTranslation;
       for (std::size_t n = 0; n < localParameterTranslation.n_elem; n += 2) {

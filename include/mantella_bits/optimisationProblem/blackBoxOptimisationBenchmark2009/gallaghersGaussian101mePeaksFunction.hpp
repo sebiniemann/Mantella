@@ -80,24 +80,15 @@ namespace mant {
 
     inline void GallaghersGaussian101mePeaksFunction::setRotationR(
         const arma::Mat<double>& rotationR) {
-      if (!rotationR.is_square()) {
-        throw std::logic_error("The rotation matrix's shape (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must be square.");
-      } else if (rotationR.n_rows != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      } else if(arma::any(arma::vectorise(arma::abs(rotationR.i() - rotationR.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(rotationR))))))) {
-        throw std::logic_error("The rotation matrix must be orthonormal.");
-      } else if(std::abs(std::abs(arma::det(rotationR)) - 1.0) > 1.0e-12) {
-        throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(rotationR)) + ") must be either 1 or -1.");
-      }
+      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", rotationR);
 
       rotationR_ = rotationR;
     }
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterScaling(
         const arma::Col<double>& localParameterScaling) {
-      if (localParameterScaling.n_elem != 101) {
-        throw std::logic_error("The number of local scaling parameters (" + std::to_string(localParameterScaling.n_elem) + ") must be 101.");
-      }
+      checkDimensionCompatible("The number of elements", localParameterScaling.n_elem, "the number of peaks", 101);
 
       for (std::size_t n = 0; n < localParameterScaling.n_elem; ++n) {
         const double& localParameterScalingValue = std::pow(10.0, localParameterScaling(n) / 33.0);
@@ -107,11 +98,8 @@ namespace mant {
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalOptima(
         const arma::Mat<double>& localOptima) {
-    if (localOptima.n_rows != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of each local optimum (" + std::to_string(localOptima.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    } else if (localOptima.n_cols != 101) {
-      throw std::logic_error("The number of local optima (" + std::to_string(localOptima.n_cols) + ") must be 101.");
-    }
+      checkDimensionCompatible("The number of rows", localOptima.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkDimensionCompatible("The number of columns", localOptima.n_cols, "the number of peaks", 101);
 
       localOptima_ = localOptima;
     }

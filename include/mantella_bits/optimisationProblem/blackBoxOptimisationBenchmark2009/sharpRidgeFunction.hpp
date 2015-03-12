@@ -70,39 +70,23 @@ namespace mant {
 
     inline void SharpRidgeFunction::setLocalParameterTranslation(
         const arma::Col<double>& localParameterTranslation) {
-      if (localParameterTranslation.n_elem != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the local translation (" + std::to_string(localParameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      }
+      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
 
       localParameterTranslation_ = localParameterTranslation;
     }
 
     inline void SharpRidgeFunction::setRotationR(
         const arma::Mat<double>& rotationR) {
-      if (!rotationR.is_square()) {
-        throw std::logic_error("The rotation matrix's shape (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must be square.");
-      } else if (rotationR.n_rows != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(rotationR.n_rows) + ", " + std::to_string(rotationR.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      } else if(arma::any(arma::vectorise(arma::abs(rotationR.i() - rotationR.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(rotationR))))))) {
-        throw std::logic_error("The rotation matrix must be orthonormal.");
-      } else if(std::abs(std::abs(arma::det(rotationR)) - 1.0) > 1.0e-12) {
-        throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(rotationR)) + ") must be either 1 or -1.");
-      }
+      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", rotationR);
 
       rotationR_ = rotationR;
     }
 
     inline void SharpRidgeFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      if (!rotationQ.is_square()) {
-        throw std::logic_error("The rotation matrix's shape (" + std::to_string(rotationQ.n_rows) + ", " + std::to_string(rotationQ.n_cols) + ") must be square.");
-      } else if (rotationQ.n_rows != numberOfDimensions_) {
-        throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(rotationQ.n_rows) + ", " + std::to_string(rotationQ.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-      } else if(arma::any(arma::vectorise(arma::abs(rotationQ.i() - rotationQ.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(rotationQ))))))) {
-        throw std::logic_error("The rotation matrix must be orthonormal.");
-      } else if(std::abs(std::abs(arma::det(rotationQ)) - 1.0) > 1.0e-12) {
-        throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(rotationQ)) + ") must be either 1 or -1.");
-      }
+      checkDimensionCompatible("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", rotationQ);
 
       rotationQ_ = rotationQ;
     }
