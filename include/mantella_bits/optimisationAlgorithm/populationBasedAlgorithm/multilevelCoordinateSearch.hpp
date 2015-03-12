@@ -3,14 +3,22 @@ namespace mant {
   template<class DistanceFunction>
   class MultilevelCoordinateSearch : public PopulationBasedAlgorithm<double, DistanceFunction> {
   public:
-    //lower boundaries are expected in the first col of "boundaries", upper boundaries in the second col of "boundaries.
+    //
     //initialPointIndex is the index inside initialPopulation_ which is used as the starting point.
-    explicit MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem, const unsigned int& populationSize, arma::Col<unsigned int> initialPointIndex, unsigned int boxDivisions = 0, unsigned int maxLocalSearchSteps = 50) noexcept;
+    explicit MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem, const unsigned int& populationSize) noexcept;
     MultilevelCoordinateSearch(const MultilevelCoordinateSearch&) = delete;
     MultilevelCoordinateSearch& operator=(const MultilevelCoordinateSearch&) = delete;
 
-    //If local search is enabled, this sets the Algorithm to be used. By default, HillClimbing is used.
+    //If local search is enabled, this sets the algorithm to be used. By default, HillClimbing is used.
     void setLocalSearch(const std::shared_ptr<TrajectoryBasedAlgorithm<double, DistanceFunction>> localSearch);
+
+    //sets the maximum amount of splits (or depth of splitting) for the original box.
+    //\nDefault is 5 * numberOfDimensions + 10.
+    void setBoxDivisions(const unsigned int divisions);
+
+    //sets the maximal number of iterations the local search is running (each time it is called). 
+    //If set to 0, local search will be skipped completely. \nDefault is 50.
+    void setMaximumLocalSearchSteps(const unsigned int steps);
 
     std::string to_string() const noexcept override;
   protected:
@@ -126,6 +134,10 @@ namespace mant {
     // </editor-fold>
 
     //TODO: All methods need to be checked if &parameters are necessary there or if they can be replaced in some form.
+
+    //init.m
+    //computes function values for the initialpoint and for the final best point of the initial list
+    void initialPointSetup();
 
     //initbox.m \n
     //generates the boxes in the initialization procedure.
@@ -253,9 +265,8 @@ namespace mant {
 
   template<class DistanceFunction>
   MultilevelCoordinateSearch<DistanceFunction>::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize, arma::Col<unsigned int> initialPointIndex, unsigned int boxDivisions, unsigned int maxLocalSearchSteps) noexcept
-  : PopulationBasedAlgorithm<double, DistanceFunction>(optimisationProblem, populationSize), boxDivisions_(boxDivisions),
-  maxLocalSearchSteps_(maxLocalSearchSteps), initialPointIndex_(initialPointIndex) {
+      const unsigned int& populationSize) noexcept
+  : PopulationBasedAlgorithm<double, DistanceFunction>(optimisationProblem, populationSize) {
     std::cout << "starting constructor" << std::endl;
     //for convenience
     const unsigned int numberOfDimensions = optimisationProblem->getNumberOfDimensions();
@@ -265,16 +276,12 @@ namespace mant {
     std::shared_ptr<TrajectoryBasedAlgorithm<double, DistanceFunction >> localsearch(new HillClimbing<double, DistanceFunction>(optimisationProblem));
 
     setLocalSearch(localsearch);
+    setBoxDivisions(5 * numberOfDimensions + 10);
+    setMaximumLocalSearchSteps(50);
 
     std::cout << "assigning boundary" << std::endl;
 
     boundaries_ = arma::join_rows(optimisationProblem->getLowerBounds(), optimisationProblem->getUpperBounds());
-
-    //assigning standard values for variables. Can't do in header-file since dependent on input variable "boundaries"
-    if (boxDivisions_ == 0) {
-      boxDivisions_ = 5 * numberOfDimensions + 10;
-    }
-    std::cout << "boxDivisions_ = " << boxDivisions_ << std::endl;
 
     std::cout << "initting large arrays" << std::endl;
     //init of large arrays
@@ -295,56 +302,6 @@ namespace mant {
     bestPointIndex_ = arma::Col<unsigned int>(numberOfDimensions);
     variabilityRanking_ = arma::Col<unsigned int>(numberOfDimensions);
 
-    //l_ L and x0_ are the custom initialisation list variables
-    //l_ is supposed to point to the initial point x^0 in x0_ 
-    //l_ also never gets changed in matlab as far as i could see
-    //L gives the amount of predefined values per dimension (basically this->populationSize_ with more finetuning possible)
-
-    arma::Col<double> initialPoint(numberOfDimensions, arma::fill::zeros);
-    for (std::size_t i = 0; i < numberOfDimensions; i++) {
-      initialPoint(i) = x0_(i, initialPointIndex_(i));
-    }
-    std::cout << initialPoint << std::endl;
-
-    double valueForInitialPoint = this->optimisationProblem_->getObjectiveValue(initialPoint);
-    std::cout << valueForInitialPoint << std::endl;
-    initListValues_(0, initialPointIndex_(0)) = valueForInitialPoint;
-    this->numberOfIterations_++;
-
-    for (std::size_t i = 0; i < numberOfDimensions; i++) {
-      bestPointIndex_(i) = initialPointIndex(i);
-      for (std::size_t j = 0; j < this->populationSize_; j++) {
-        if (j == initialPointIndex_(i)) {
-          if (i != 0) {
-            initListValues_(j, i) = initListValues_(bestPointIndex_(i - 1), i - 1);
-          }
-        } else {
-          initialPoint(i) = x0_(i, j);
-          initListValues_(j, i) = this->optimisationProblem_->getObjectiveValue(initialPoint);
-          this->numberOfIterations_++;
-          if (initListValues_(j, i) < valueForInitialPoint) {
-            valueForInitialPoint = initListValues_(j, i);
-            bestPointIndex_(i) = j;
-          }
-        }
-      }
-      initialPoint(i) = x0_(i, bestPointIndex_(i));
-    }
-
-    //base vertex and opposite vertex init
-    baseVertex_ = arma::Col<double>(numberOfDimensions);
-    originalOppositeVertex_ = arma::Col<double>(numberOfDimensions);
-    for (std::size_t i = 0; i < numberOfDimensions; i++) {
-      baseVertex_(i) = x0_(i, initialPointIndex_(i));
-
-      //if true, use u, else use v
-      if (std::abs(baseVertex_(i) - boundaries_.col(0)(i)) > std::abs(baseVertex_(i) - boundaries_.col(1)(i))) {
-        originalOppositeVertex_(i) = boundaries_.col(0)(i);
-      } else {
-        originalOppositeVertex_(i) = boundaries_.col(1)(i);
-      }
-    }
-
     //init of record list, nboxes, nbasket,nbasket0, m, nloc, xloc
     //values not listed here are defined in header
     record_ = arma::Col<unsigned int>(boxDivisions_ - 1, arma::fill::zeros);
@@ -357,6 +314,8 @@ namespace mant {
   void MultilevelCoordinateSearch<DistanceFunction>::optimiseImplementation() {
     //for convenience
     const unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    
+    initialPointSetup();
 
     this->bestParameter_ = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
     //generate boxes
@@ -1510,6 +1469,9 @@ namespace mant {
 
   template<class DistanceFunction>
   void MultilevelCoordinateSearch<DistanceFunction>::setLocalSearch(const std::shared_ptr<TrajectoryBasedAlgorithm<double, DistanceFunction>> localSearch) {
+    if (!localSearch) {
+      throw std::invalid_argument("local search given is null!");
+    }
     localSearch_ = localSearch;
   }
 
@@ -1640,5 +1602,75 @@ namespace mant {
     return true;
   }
   // </editor-fold>
+
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::setBoxDivisions(const unsigned int divisions) {
+    boxDivisions_ = divisions;
+  }
+
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::setMaximumLocalSearchSteps(const unsigned int steps) {
+    maxLocalSearchSteps_ = steps;
+  }
+
+  template<class DistanceFunction>
+  void MultilevelCoordinateSearch<DistanceFunction>::initialPointSetup() {
+    //l, L and x0_ are the custom initialisation list variables
+    //l is supposed to point to the initial point x^0 in x0
+    //l also never gets changed in matlab as far as i could see
+    //L gives the amount of values per dimension (populationSize with more finetuning possible)
+    //l will be initialPointIndex
+    //L is completely replaced by populationSize
+    
+    //for convenience
+    const unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    
+    initialPointIndex_ = arma::Col<unsigned int>(numberOfDimensions, arma::fill::ones);
+
+    arma::Col<double> initialPoint(numberOfDimensions, arma::fill::zeros);
+    for (std::size_t i = 0; i < numberOfDimensions; i++) {
+      initialPoint(i) = x0_(i, initialPointIndex_(i));
+    }
+    std::cout << initialPoint << std::endl;
+
+    double valueForInitialPoint = this->optimisationProblem_->getObjectiveValue(initialPoint);
+    std::cout << valueForInitialPoint << std::endl;
+    initListValues_(0, initialPointIndex_(0)) = valueForInitialPoint;
+    this->numberOfIterations_++;
+
+    for (std::size_t i = 0; i < numberOfDimensions; i++) {
+      bestPointIndex_(i) = initialPointIndex_(i);
+      for (std::size_t j = 0; j < this->populationSize_; j++) {
+        if (j == initialPointIndex_(i)) {
+          if (i != 0) {
+            initListValues_(j, i) = initListValues_(bestPointIndex_(i - 1), i - 1);
+          }
+        } else {
+          initialPoint(i) = x0_(i, j);
+          initListValues_(j, i) = this->optimisationProblem_->getObjectiveValue(initialPoint);
+          this->numberOfIterations_++;
+          if (initListValues_(j, i) < valueForInitialPoint) {
+            valueForInitialPoint = initListValues_(j, i);
+            bestPointIndex_(i) = j;
+          }
+        }
+      }
+      initialPoint(i) = x0_(i, bestPointIndex_(i));
+    }
+
+    //base vertex and opposite vertex init
+    baseVertex_ = arma::Col<double>(numberOfDimensions);
+    originalOppositeVertex_ = arma::Col<double>(numberOfDimensions);
+    for (std::size_t i = 0; i < numberOfDimensions; i++) {
+      baseVertex_(i) = x0_(i, initialPointIndex_(i));
+
+      //if true, use u, else use v
+      if (std::abs(baseVertex_(i) - boundaries_.col(0)(i)) > std::abs(baseVertex_(i) - boundaries_.col(1)(i))) {
+        originalOppositeVertex_(i) = boundaries_.col(0)(i);
+      } else {
+        originalOppositeVertex_(i) = boundaries_.col(1)(i);
+      }
+    }
+  }
 }
 

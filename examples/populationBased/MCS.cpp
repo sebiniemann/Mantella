@@ -11,9 +11,8 @@ int main(int argc, char** argv) {
     //optProblem->setAcceptableObjectiveValue(0 + 1.0e-8);
 
     unsigned int popSize = 3;
-    arma::Col<arma::uword> initialPointIndex(numberOfDimensions, arma::fill::ones);
     std::cout << "creating MCS object" << std::endl;
-    mant::MultilevelCoordinateSearch<mant::EuclideanDistance> optAlgo(optProblem, popSize, initialPointIndex);
+    mant::MultilevelCoordinateSearch<mant::EuclideanDistance> optAlgo(optProblem, popSize);
     
     optAlgo.setMaximalNumberOfIterations(20);
     std::cout << "starting optimise" << std::endl;
