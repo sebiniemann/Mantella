@@ -168,9 +168,7 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingLowerBounds(
       const arma::Col<ParameterType>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return (parameter >= lowerBounds_);
   }
@@ -178,9 +176,7 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingUpperBounds(
       const arma::Col<ParameterType>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return (parameter <= upperBounds_);
   }
@@ -188,9 +184,7 @@ namespace mant {
   template <typename ParameterType>
   bool OptimisationProblem<ParameterType>::isSatisfyingSoftConstraints(
       const arma::Col<ParameterType>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return (getSoftConstraintsValue(parameter) == 0);
   }
@@ -198,9 +192,7 @@ namespace mant {
   template <typename ParameterType>
   bool OptimisationProblem<ParameterType>::isSatisfyingConstraints(
       const arma::Col<ParameterType>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
     
     return (arma::all(isSatisfyingLowerBounds(parameter)) && arma::all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
@@ -208,45 +200,15 @@ namespace mant {
   template <typename ParameterType>
   double OptimisationProblem<ParameterType>::getSoftConstraintsValue(
       const arma::Col<ParameterType>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return getSoftConstraintsValueImplementation(parameter);
   }
 
   template <typename ParameterType>
-  double OptimisationProblem<ParameterType>::getObjectiveValue(
+  inline double OptimisationProblem<ParameterType>::getObjectiveValue(
       const arma::Col<ParameterType>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
-
-    // Always increase the number of evaluations (whether its computed or retrived from cache).
-    ++numberOfEvaluations_;
-
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
-    if (cachePosition == cachedObjectiveValues_.cend()) {
-      // Increase the number of distinct evaluations only if we actually compute the value.
-      ++numberOfDistinctEvaluations_;
-
-      // The result was not found, compute it.
-      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(parameter) + objectiveValueTranslation_;
-      cachedObjectiveValues_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
-  }
-
-  template <>
-  inline double OptimisationProblem<double>::getObjectiveValue(
-      const arma::Col<double>& parameter) {
-    if (parameter.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter (" + std::to_string(parameter.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     // Always increase the number of evaluations (whether its computed or retrived from cache).
     ++numberOfEvaluations_;
@@ -275,9 +237,7 @@ namespace mant {
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setLowerBounds(
       const arma::Col<ParameterType> lowerBounds) {
-    if (lowerBounds.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the lower bound (" + std::to_string(lowerBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
 
     lowerBounds_ = lowerBounds;
   }
@@ -290,9 +250,7 @@ namespace mant {
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setUpperBounds(
       const arma::Col<ParameterType> upperBounds) {
-    if (upperBounds.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the upper bound (" + std::to_string(upperBounds.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
 
     upperBounds_ = upperBounds;
   }
@@ -300,9 +258,7 @@ namespace mant {
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
       const arma::Col<double> parameterTranslation) {
-    if (parameterTranslation.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter translation (" + std::to_string(parameterTranslation.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterTranslation_ = parameterTranslation;
   }
@@ -310,15 +266,8 @@ namespace mant {
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
       const arma::Mat<double> parameterRotation) {
-    if (!parameterRotation.is_square()) {
-      throw std::logic_error("The rotation matrix's shape (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must be square.");
-    } else if (parameterRotation.n_rows != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter rotation maxtrix (" + std::to_string(parameterRotation.n_rows) + ", " + std::to_string(parameterRotation.n_cols) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    } else if(arma::any(arma::vectorise(arma::abs(parameterRotation.i() - parameterRotation.t()) > 1.0e-12 * arma::median(arma::vectorise(parameterRotation))))) {
-      throw std::logic_error("The rotation matrix must be orthonormal.");
-    } else if(std::abs(std::abs(arma::det(parameterRotation)) - 1.0) > 1.0e-12) {
-      throw std::logic_error("The rotation matrix's determinant (" + std::to_string(arma::det(parameterRotation)) + ") must be either 1 or -1.");
-    }
+    checkDimensionCompatible("The number of rows", parameterRotation.n_rows, "the number of dimensions", numberOfDimensions_);
+    checkRotationMatrix("The matrix", parameterRotation);
 
     parameterRotation_ = parameterRotation;
   }
@@ -326,9 +275,7 @@ namespace mant {
   template <>
   inline void OptimisationProblem<double>::setParameterScale(
       const arma::Col<double> parameterScale) {
-    if (parameterScale.n_elem != numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the parameter scale (" + std::to_string(parameterScale.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
-    }
+    checkDimensionCompatible("The number of elements", parameterScale.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterScale_ = parameterScale;
   }
@@ -379,15 +326,27 @@ namespace mant {
     return cachedObjectiveValues_;
   }
 
+  template <typename ParameterType>
+  inline arma::Col<ParameterType> OptimisationProblem<ParameterType>::getScaledCongruentParameter(
+      const arma::Col<ParameterType>& parameter) const noexcept {
+    assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
+
+    return parameter;
+  }
+
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
       const arma::Col<double>& parameter) const noexcept {
+    assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
+
     return parameterRotation_ * (parameter + (parameterScale_ % parameterTranslation_));
   }
 
   template <typename ParameterType>
   double OptimisationProblem<ParameterType>::getSoftConstraintsValueImplementation(
       const arma::Col<ParameterType>& parameter) const noexcept {
+    assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
+
     return 0.0;
   }
 }
