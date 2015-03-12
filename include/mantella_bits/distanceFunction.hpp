@@ -51,9 +51,7 @@ namespace mant {
   ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter) const {
-    if(firstParameter.n_elem != secondParameter.n_elem) {
-      throw std::logic_error("The number of dimensions of the first parameter (" + std::to_string(firstParameter.n_elem) + ") must match the number of dimensions of the second parameter (" + std::to_string(secondParameter.n_elem) + ").");
-    }
+    checkDimensionCompatible("The number of elements of the first parameter", firstParameter.n_elem, "the number of elements of the second", secondParameter.n_elem);
 
     const double& distance = getDistance(firstParameter, secondParameter, std::is_floating_point<ParameterType>());
 
@@ -67,6 +65,8 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
       std::true_type) const noexcept {
+    assert(isDimensionCompatible(firstParameter.n_elem, secondParameter.n_elem));
+
     return getDistanceImplementation(secondParameter - firstParameter);
   }
 
@@ -75,6 +75,8 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
       std::false_type) const noexcept {
+    assert(isDimensionCompatible(firstParameter.n_elem, secondParameter.n_elem));
+
     return getDistanceImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter));
   }
 
@@ -83,7 +85,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance) const {
-     if(minimalDistance < 0) {
+    if(minimalDistance < 0) {
       throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be non-negative.");
     } else if (maximalDistance < minimalDistance) {
       throw std::logic_error("The maximal distance (" + std::to_string(maximalDistance) + ") must be greater than or equal to the minimal distance (" + std::to_string(minimalDistance) + ").");

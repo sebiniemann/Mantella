@@ -42,6 +42,9 @@ namespace mant {
       const arma::Col<ParameterType>& parameter,
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance) const noexcept {
+    assert(minimalDistance >= 0);
+    assert(minimalDistance <= maximalDistance);
+
     return getRandomNeighbourImplementation(parameter, minimalDistance, maximalDistance, std::is_floating_point<ParameterType>());
   }
 
@@ -51,6 +54,7 @@ namespace mant {
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
       std::true_type) const noexcept {
+    assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 
     return arma::normalise(2.0 * arma::randu<arma::Col<double>>(parameter.n_elem) - 1.0, 1) * std::uniform_real_distribution<ParameterType>(minimalDistance, maximalDistance)(Rng::getGenerator());
@@ -62,6 +66,7 @@ namespace mant {
       const ParameterType& minimalDistance,
       const ParameterType& maximalDistance,
       std::false_type) const noexcept {
+    assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 
   }

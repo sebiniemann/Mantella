@@ -26,6 +26,7 @@ namespace mant {
       const arma::Col<unsigned int>& parameter,
       const unsigned int& minimalDistance,
       const unsigned int& maximalDistance) const {
+    assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 
     if(minimalDistance > std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) {

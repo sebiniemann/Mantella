@@ -26,6 +26,7 @@ namespace mant {
       const arma::Col<double>& parameter,
       const double& minimalDistance,
       const double& maximalDistance) const noexcept {
+    assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 
     const arma::Col<double>& velocity = arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
