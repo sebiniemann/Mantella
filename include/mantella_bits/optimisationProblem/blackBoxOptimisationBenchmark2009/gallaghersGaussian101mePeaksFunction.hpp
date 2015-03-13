@@ -104,7 +104,7 @@ namespace mant {
 
     inline arma::Col<double> GallaghersGaussian101mePeaksFunction::getRandomLocalParameterConditioning() const noexcept {
       arma::Col<double> localParameterConditioning(101);
-      localParameterConditioning(0) = 9.5;
+      localParameterConditioning(0) = 49.5;
       localParameterConditioning.tail(100) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(100));
 
       return localParameterConditioning;
