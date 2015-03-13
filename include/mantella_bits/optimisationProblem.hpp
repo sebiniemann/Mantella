@@ -44,8 +44,8 @@ namespace mant {
       void setObjectiveValueTranslation(
         const double objectiveValueTranslation) noexcept;
 
-      void setObjectiveValueScale(
-        const double objectiveValueScale) noexcept;
+      void setObjectiveValueScaling(
+        const double objectiveValueScaling) noexcept;
       
       void setAcceptableObjectiveValue(
           const double acceptableObjectiveValue) noexcept;
@@ -74,7 +74,7 @@ namespace mant {
       arma::Mat<double> parameterRotation_;
 
       double objectiveValueTranslation_;
-      double objectiveValueScale_;
+      double objectiveValueScaling_;
 
       double acceptableObjectiveValue_;
 
@@ -106,7 +106,7 @@ namespace mant {
         archive(cereal::make_nvp("parameterRotation", parameterRotation_));
         archive(cereal::make_nvp("parameterScaling", parameterScaling_));
         archive(cereal::make_nvp("objectiveValueTranslation", objectiveValueTranslation_));
-        archive(cereal::make_nvp("objectiveValueScale", objectiveValueScale_));
+        archive(cereal::make_nvp("objectiveValueScaling", objectiveValueScaling_));
         archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
       }
 #endif
@@ -145,7 +145,7 @@ namespace mant {
     setLowerBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) - std::numeric_limits<ParameterType>::max());
     setUpperBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::numeric_limits<ParameterType>::max());
     setObjectiveValueTranslation(0.0);
-    setObjectiveValueScale(1.0);
+    setObjectiveValueScaling(1.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
   }
 
@@ -161,7 +161,7 @@ namespace mant {
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
     setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setObjectiveValueTranslation(0.0);
-    setObjectiveValueScale(1.0);
+    setObjectiveValueScaling(1.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
   }
 
@@ -220,7 +220,7 @@ namespace mant {
       ++numberOfDistinctEvaluations_;
 
       // The result was not found, compute it.
-      const double& result = objectiveValueScale_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
+      const double& result = objectiveValueScaling_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
@@ -287,9 +287,9 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScale(
-      const double objectiveValueScale) noexcept {
-    objectiveValueScale_ = objectiveValueScale;
+  void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScaling(
+      const double objectiveValueScaling) noexcept {
+    objectiveValueScaling_ = objectiveValueScaling;
   }
 
   template <typename ParameterType>
