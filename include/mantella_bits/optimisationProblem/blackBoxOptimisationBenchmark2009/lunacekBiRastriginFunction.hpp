@@ -5,25 +5,24 @@ namespace mant {
         inline explicit LunacekBiRastriginFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setParameterReflection(
-            const bool Parameterreflection) noexcept;
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
-
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        inline void setParameterRotationQ(
+            const arma::Mat<double>& parameterRotationQ);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> scaling_;
+        const arma::Col<double> parameterConditinong_;
         const double s_ = 1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1);
-        const double mu1_ = -std::sqrt(5.25 / s_);
+        const double mu1_ = -std::sqrt(5.25 / s_) + 2.5;
 
-        arma::Col<double> Parameterreflection_;
-        arma::Mat<double> rotationR_;
-        arma::Mat<double> rotationQ_;
+        arma::Mat<double> parameterRotationR_;
+        arma::Mat<double> parameterRotationQ_;
+
+        inline double getSoftConstraintsValueImplementation(
+            const arma::Col<double>& parameter) const noexcept override;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -36,9 +35,8 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("Parameterreflection", Parameterreflection_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
+          archive(cereal::make_nvp("parameterRotationR", rotationR_));
+          archive(cereal::make_nvp("parameterRotationQ", rotationQ_));
         }
 
         template <typename Archive>
@@ -50,9 +48,8 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("Parameterreflection", construct->Parameterreflection_));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
+          archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
         }
 #endif
     };
@@ -64,43 +61,41 @@ namespace mant {
     inline LunacekBiRastriginFunction::LunacekBiRastriginFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        scaling_(getScaledTransformation(std::sqrt(10.0))) {
-      setParameterReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+        parameterConditinong_(getParameterConditioning(std::sqrt(10.0))) {
+      // A vector with al elements set to 2.5.
+      setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.5);
+      // A vector with all elements randomly and uniformly set to either 2 or -2.
+      setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void LunacekBiRastriginFunction::setParameterReflection(
-        const bool Parameterreflection) noexcept {
-      if (Parameterreflection) {
-        Parameterreflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
-      } else {
-        Parameterreflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
-      }
+    inline void LunacekBiRastriginFunction::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
+
+      parameterRotationR_ = parameterRotationR;
     }
 
-    inline void LunacekBiRastriginFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
+    inline void LunacekBiRastriginFunction::setParameterRotationQ(
+        const arma::Mat<double>& parameterRotationQ) {
+      checkDimensionCompatible("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationQ);
 
-      rotationR_ = rotationR;
+      parameterRotationQ_ = parameterRotationQ;
     }
 
-    inline void LunacekBiRastriginFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      checkDimensionCompatible("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationQ);
-
-      rotationQ_ = rotationQ;
+    inline double LunacekBiRastriginFunction::getSoftConstraintsValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      return 10000.0 * getBoundConstraintsValue(parameter);
     }
 
     inline double LunacekBiRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& xHat = 2.0 * arma::sign(Parameterreflection_) % parameter;
-      const arma::Col<double>& z = rotationQ_ * (scaling_ % (rotationR_ * (xHat - 2.5)));
+      const arma::Col<double>& z = parameterRotationQ_ * (parameterConditinong_ % (parameterRotationR_ * parameter));
 
-      return std::min(arma::accu(arma::square(xHat - 2.5)), static_cast<double>(numberOfDimensions_) + s_ * arma::accu(arma::square(xHat - mu1_))) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + 10000.0 * getPenality(parameter);
+      return std::min(std::pow(arma::norm(parameter), 2), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter - mu1_), 2)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z)));
     }
 
     inline std::string LunacekBiRastriginFunction::toString() const noexcept {
@@ -110,5 +105,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::LunacekBiRastriginFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::LunacekBiRastriginFunction);
 #endif

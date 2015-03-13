@@ -33,9 +33,9 @@ TEST_CASE("bbob2009::AttractiveSectorFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedAttractiveSectorFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     attractiveSectorFunction.setObjectiveValueTranslation(0);
-    attractiveSectorFunction.setLocalParameterTranslation(translation);
-    attractiveSectorFunction.setRotationR(rotationR);
-    attractiveSectorFunction.setRotationQ(rotationQ);
+    attractiveSectorFunction.setParameterTranslation(translation);
+    attractiveSectorFunction.setParameterRotationR(rotationR);
+    attractiveSectorFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

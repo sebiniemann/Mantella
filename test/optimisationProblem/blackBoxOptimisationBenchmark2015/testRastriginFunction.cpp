@@ -27,7 +27,7 @@ TEST_CASE("bbob2015::RastriginFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rastriginFunction.setObjectiveValueTranslation(0);
-    rastriginFunction.setLocalParameterTranslation(translation);
+    rastriginFunction.setParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

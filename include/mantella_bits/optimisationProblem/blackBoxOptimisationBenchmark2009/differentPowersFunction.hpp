@@ -5,17 +5,13 @@ namespace mant {
         inline explicit DifferentPowersFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setLocalParameterTranslation(
-            const arma::Col<double>& localParameterTranslation);
-
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> localParameterTranslation_;
-        arma::Mat<double> rotationR_;
+        arma::Mat<double> parameterRotationR_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -28,8 +24,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -41,8 +36,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -54,29 +48,22 @@ namespace mant {
     inline DifferentPowersFunction::DifferentPowersFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
-      setLocalParameterTranslation(getRandomLocalParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterTranslation(getRandomParameterTranslation());
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void DifferentPowersFunction::setLocalParameterTranslation(
-        const arma::Col<double>& localParameterTranslation) {
-      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    inline void DifferentPowersFunction::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      localParameterTranslation_ = localParameterTranslation;
-    }
-
-    inline void DifferentPowersFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
-
-      rotationR_ = rotationR;
+      parameterRotationR_ = parameterRotationR;
     }
 
     inline double DifferentPowersFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::abs(rotationR_ * (parameter - localParameterTranslation_));
-      return arma::norm(z % getScaledTransformation(arma::square(z)));
+      const arma::Col<double>& z = arma::abs(parameterRotationR_ * parameter);
+      return arma::norm(z % getConditionedParameter(arma::square(z)));
     }
 
     inline std::string DifferentPowersFunction::toString() const noexcept {
@@ -86,5 +73,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::DifferentPowersFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::DifferentPowersFunction);
 #endif

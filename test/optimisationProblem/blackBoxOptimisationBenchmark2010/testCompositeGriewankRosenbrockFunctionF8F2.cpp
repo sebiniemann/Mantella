@@ -27,7 +27,7 @@ TEST_CASE("bbob2010::CompositeGriewankRosenbrockFunctionF8F2", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedCompositeGriewankRosenbrockFunctionF8F2,dim" + std::to_string(numberOfDimensions) +".mat");
 
     compositeGriewankRosenbrockFunctionF8F2.setObjectiveValueTranslation(0);
-    compositeGriewankRosenbrockFunctionF8F2.setRotationR(rotationR);
+    compositeGriewankRosenbrockFunctionF8F2.setParameterRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(compositeGriewankRosenbrockFunctionF8F2.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

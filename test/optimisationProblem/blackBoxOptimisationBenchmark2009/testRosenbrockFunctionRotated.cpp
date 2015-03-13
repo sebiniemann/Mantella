@@ -27,7 +27,7 @@ TEST_CASE("bbob2009::RosenbrockFunctionRotated", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRosenbrockFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rosenbrockFunctionRotated.setObjectiveValueTranslation(0);
-    rosenbrockFunctionRotated.setRotationR(rotationR);
+    rosenbrockFunctionRotated.setParameterRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rosenbrockFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

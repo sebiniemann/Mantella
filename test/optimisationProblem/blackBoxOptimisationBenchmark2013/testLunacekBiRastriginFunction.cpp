@@ -33,9 +33,10 @@ TEST_CASE("bbob2013::LunacekBiRastriginFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedLunacekBiRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     lunacekBiRastriginFunction.setObjectiveValueTranslation(0);
-    lunacekBiRastriginFunction.setParameterReflection(one.at(0) < 0 ? true : false);
-    lunacekBiRastriginFunction.setRotationR(rotationR);
-    lunacekBiRastriginFunction.setRotationQ(rotationQ);
+    lunacekBiRastriginFunction.setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.5);
+    lunacekBiRastriginFunction.setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions) + (one.at(0) > 0 ? 2.0 : -2.0));
+    lunacekBiRastriginFunction.setParameterRotationR(rotationR);
+    lunacekBiRastriginFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(lunacekBiRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

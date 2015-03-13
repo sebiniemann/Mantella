@@ -33,9 +33,9 @@ TEST_CASE("bbob2010::WeierstrassFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedWeierstrassFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     weierstrassFunction.setObjectiveValueTranslation(0);
-    weierstrassFunction.setLocalParameterTranslation(translation);
-    weierstrassFunction.setRotationR(rotationR);
-    weierstrassFunction.setRotationQ(rotationQ);
+    weierstrassFunction.setParameterTranslation(translation);
+    weierstrassFunction.setParameterRotationR(rotationR);
+    weierstrassFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(weierstrassFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

@@ -5,23 +5,19 @@ namespace mant {
         inline explicit RastriginFunctionRotated(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setLocalParameterTranslation(
-            const arma::Col<double>& localParameterTranslation);
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
-
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        inline void setParameterRotationQ(
+            const arma::Mat<double>& parameterRotationQ);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> scaling_;
+        const arma::Col<double> parameterConditioning_;
 
-        arma::Col<double> localParameterTranslation_;
-        arma::Mat<double> rotationR_;
-        arma::Mat<double> rotationQ_;
+        arma::Mat<double> parameterRotationR_;
+        arma::Mat<double> parameterRotationQ_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -34,9 +30,8 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
+          archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
         }
 
         template <typename Archive>
@@ -48,9 +43,8 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
+          archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
         }
 #endif
     };
@@ -62,38 +56,31 @@ namespace mant {
     inline RastriginFunctionRotated::RastriginFunctionRotated(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        scaling_(getScaledTransformation(std::sqrt(10.0))) {
-      setLocalParameterTranslation(getRandomLocalParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
+      setParameterTranslation(getRandomParameterTranslation());
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void RastriginFunctionRotated::setLocalParameterTranslation(
-        const arma::Col<double>& localParameterTranslation) {
-      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    inline void RastriginFunctionRotated::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      localParameterTranslation_ = localParameterTranslation;
+      parameterRotationR_ = parameterRotationR;
     }
 
-    inline void RastriginFunctionRotated::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
+    inline void RastriginFunctionRotated::setParameterRotationQ(
+        const arma::Mat<double>& parameterRotationQ) {
+      checkDimensionCompatible("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationQ);
 
-      rotationR_ = rotationR;
-    }
-
-    inline void RastriginFunctionRotated::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      checkDimensionCompatible("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationQ);
-
-      rotationQ_ = rotationQ;
+      parameterRotationQ_ = parameterRotationQ;
     }
 
     inline double RastriginFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = rotationR_ * (scaling_ % (rotationQ_ * getAsymmetricTransformation(0.2, getOscillatedTransformation(rotationR_ * (parameter - localParameterTranslation_)))));
+      const arma::Col<double>& z = parameterRotationR_ * (parameterConditioning_ % (parameterRotationQ_ * getAsymmetricParameter(0.2, getOscillatedParameter(parameterRotationR_ * parameter))));
 
       return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
     }
@@ -105,5 +92,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::RastriginFunctionRotated);
+CEREAL_REGISTER_TYPE(mant::bbob2009::RastriginFunctionRotated);
 #endif

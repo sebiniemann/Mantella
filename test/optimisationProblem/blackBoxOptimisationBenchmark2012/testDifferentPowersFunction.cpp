@@ -30,8 +30,8 @@ TEST_CASE("bbob2012::DifferentPowersFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedDifferentPowersFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     differentPowersFunction.setObjectiveValueTranslation(0);
-    differentPowersFunction.setLocalParameterTranslation(translation);
-    differentPowersFunction.setRotationR(rotationR);
+    differentPowersFunction.setParameterTranslation(translation);
+    differentPowersFunction.setParameterRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(differentPowersFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

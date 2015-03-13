@@ -33,9 +33,9 @@ TEST_CASE("bbob2010::KatsuuraFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedKatsuuraFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     katsuuraFunction.setObjectiveValueTranslation(0);
-    katsuuraFunction.setLocalParameterTranslation(translation);
-    katsuuraFunction.setRotationR(rotationR);
-    katsuuraFunction.setRotationQ(rotationQ);
+    katsuuraFunction.setParameterTranslation(translation);
+    katsuuraFunction.setParameterRotationR(rotationR);
+    katsuuraFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(katsuuraFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

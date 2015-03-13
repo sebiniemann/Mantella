@@ -30,8 +30,8 @@ TEST_CASE("bbob2012::EllipsoidalFunctionRotated", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedEllipsoidalFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     ellipsoidalFunctionRotated.setObjectiveValueTranslation(0);
-    ellipsoidalFunctionRotated.setLocalParameterTranslation(translation);
-    ellipsoidalFunctionRotated.setRotationR(rotationR);
+    ellipsoidalFunctionRotated.setParameterTranslation(translation);
+    ellipsoidalFunctionRotated.setParameterRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(ellipsoidalFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

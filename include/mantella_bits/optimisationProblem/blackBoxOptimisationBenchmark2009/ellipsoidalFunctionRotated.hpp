@@ -5,19 +5,15 @@ namespace mant {
         inline explicit EllipsoidalFunctionRotated(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setLocalParameterTranslation(
-            const arma::Col<double>& localParameterTranslation);
-
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> scaling_;
+        const arma::Col<double> parameterConditoning_;
 
-        arma::Col<double> localParameterTranslation_;
-        arma::Mat<double> rotationR_;
+        arma::Mat<double> parameterRotationR_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -30,8 +26,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -43,8 +38,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -56,29 +50,22 @@ namespace mant {
     inline EllipsoidalFunctionRotated::EllipsoidalFunctionRotated(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        scaling_(getScaledTransformation(1000000.0)) {
-      setLocalParameterTranslation(getRandomLocalParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+        parameterConditoning_(getParameterConditioning(1000000.0)) {
+      setParameterTranslation(getRandomParameterTranslation());
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void EllipsoidalFunctionRotated::setLocalParameterTranslation(
-        const arma::Col<double>& localParameterTranslation) {
-      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    inline void EllipsoidalFunctionRotated::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      localParameterTranslation_ = localParameterTranslation;
-    }
-
-    inline void EllipsoidalFunctionRotated::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
-
-      rotationR_ = rotationR;
+      parameterRotationR_ = parameterRotationR;
     }
 
     inline double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      return arma::dot(scaling_, arma::square(getOscillatedTransformation(rotationR_ * (parameter - localParameterTranslation_))));
+      return arma::dot(parameterConditoning_, arma::square(getOscillatedParameter(parameterRotationR_ * parameter)));
     }
 
     inline std::string EllipsoidalFunctionRotated::toString() const noexcept {
@@ -88,5 +75,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::EllipsoidalFunctionRotated);
+CEREAL_REGISTER_TYPE(mant::bbob2009::EllipsoidalFunctionRotated);
 #endif

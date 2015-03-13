@@ -11,9 +11,9 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> scaling_;
+        const arma::Col<double> parameterConditioning_;
 
-        arma::Col<double> Parameterreflection_;
+        arma::Col<double> parameterReflection_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -26,7 +26,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("refletion", refletion_));
+          archive(cereal::make_nvp("parameterReflection", parameterReflection_));
         }
 
         template <typename Archive>
@@ -38,7 +38,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("refletion", construct->refletion_));
+          archive(cereal::make_nvp("parameterReflection", construct->parameterReflection_));
         }
 #endif
     };
@@ -50,31 +50,25 @@ namespace mant {
     inline SchwefelFunction::SchwefelFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        scaling_(getScaledTransformation(std::sqrt(10.0))) {
+        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
+      // A vector with all elements randomly and uniformly set to either 2 or -2.
+      setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
       setParameterReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
     }
 
     inline void SchwefelFunction::setParameterReflection(
-        const bool Parameterreflection) noexcept {
-      if (Parameterreflection) {
-        Parameterreflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
-      } else {
-        Parameterreflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
-      }
+        const bool parameterReflection) noexcept {
+      parameterReflection_ = arma::zeros<arma::Col<double>>(numberOfDimensions_) + (parameterReflection ? 2.10484373165 : -2.10484373165);
     }
 
     inline double SchwefelFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& localParameterTranslation = 2.10484373165 * Parameterreflection_;
-      const arma::Col<double>& xHat = 2.0 * Parameterreflection_ % parameter;
+      arma::Col<double> s = parameter;
+      s.tail(s.n_elem - 1) += 0.25 * (parameter.head(parameter.n_elem - 1) - parameterReflection_.head(parameterReflection_.n_elem - 1));
 
-      arma::Col<double> zHat(xHat.n_elem);
-      zHat(0) = xHat(0);
-      zHat.tail(zHat.n_elem - 1) = xHat.tail(zHat.n_elem - 1) + 0.25 * (xHat.head(xHat.n_elem - 1) - localParameterTranslation.head(localParameterTranslation.n_elem - 1));
+      const arma::Col<double>& z = 100.0 * (parameterConditioning_ % (s - parameterReflection_) + parameterReflection_);
 
-      const arma::Col<double>& z = 100.0 * (scaling_ % (zHat - localParameterTranslation) + localParameterTranslation);
-
-      return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getPenality(z / 100.0);
+      return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getBoundConstraintsValue(z / 100.0);
     }
 
     inline std::string SchwefelFunction::toString() const noexcept {
@@ -84,5 +78,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::SchwefelFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::SchwefelFunction);
 #endif

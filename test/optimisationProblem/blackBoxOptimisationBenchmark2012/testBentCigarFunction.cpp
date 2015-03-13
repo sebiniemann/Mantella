@@ -30,8 +30,8 @@ TEST_CASE("bbob2012::BentCigarFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedBentCigarFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     bentCigarFunction.setObjectiveValueTranslation(0);
-    bentCigarFunction.setLocalParameterTranslation(translation);
-    bentCigarFunction.setRotationR(rotationR);
+    bentCigarFunction.setParameterTranslation(translation);
+    bentCigarFunction.setParameterRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(bentCigarFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

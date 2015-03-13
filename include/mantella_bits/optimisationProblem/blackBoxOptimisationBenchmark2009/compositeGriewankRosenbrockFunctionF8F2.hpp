@@ -5,15 +5,15 @@ namespace mant {
         inline explicit CompositeGriewankRosenbrockFunctionF8F2(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
         inline std::string toString() const noexcept override;
 
       protected:
         const double max_;
 
-        arma::Mat<double> rotationR_;
+        arma::Mat<double> parameterRotationR_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -26,7 +26,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -38,7 +38,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -51,23 +51,23 @@ namespace mant {
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)) {
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void CompositeGriewankRosenbrockFunctionF8F2::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
+    inline void CompositeGriewankRosenbrockFunctionF8F2::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      rotationR_ = rotationR;
+      parameterRotationR_ = parameterRotationR;
     }
 
     inline double CompositeGriewankRosenbrockFunctionF8F2::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = max_ * rotationR_ * parameter + 0.5;
-      const arma::Col<double>& s = 100.0 * arma::square(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)) + arma::square(1.0 - z.head(z.n_elem - 1));
+      const arma::Col<double>& s = max_ * parameterRotationR_ * parameter + 0.5;
+      const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(1.0 - s.head(s.n_elem - 1));
 
-      return 10.0 * (arma::mean(s / 4000.0 - arma::cos(s)) + 1);
+      return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1);
     }
 
     inline std::string CompositeGriewankRosenbrockFunctionF8F2::toString() const noexcept {
@@ -77,5 +77,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::CompositeGriewankRosenbrockFunctionF8F2);
+CEREAL_REGISTER_TYPE(mant::bbob2009::CompositeGriewankRosenbrockFunctionF8F2);
 #endif

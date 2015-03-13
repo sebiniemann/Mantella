@@ -5,17 +5,13 @@ namespace mant {
         inline explicit DiscusFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setLocalParameterTranslation(
-            const arma::Col<double>& localParameterTranslation);
-
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> localParameterTranslation_;
-        arma::Mat<double> rotationR_;
+        arma::Mat<double> parameterRotationR_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -28,8 +24,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -41,8 +36,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -54,28 +48,21 @@ namespace mant {
     inline DiscusFunction::DiscusFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
-      setLocalParameterTranslation(getRandomLocalParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterTranslation(getRandomParameterTranslation());
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void DiscusFunction::setLocalParameterTranslation(
-        const arma::Col<double>& localParameterTranslation) {
-      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    inline void DiscusFunction::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      localParameterTranslation_ = localParameterTranslation;
-    }
-
-    inline void DiscusFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
-
-      rotationR_ = rotationR;
+      parameterRotationR_ = parameterRotationR;
     }
 
     inline double DiscusFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::square(getOscillatedTransformation(rotationR_ * (parameter - localParameterTranslation_)));
+      const arma::Col<double>& z = arma::square(getOscillatedParameter(parameterRotationR_ * parameter));
       return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
     }
 
@@ -86,5 +73,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::DiscusFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::DiscusFunction);
 #endif

@@ -33,9 +33,9 @@ TEST_CASE("bbob2012::RastriginFunctionRotated", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRastriginFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rastriginFunctionRotated.setObjectiveValueTranslation(0);
-    rastriginFunctionRotated.setLocalParameterTranslation(translation);
-    rastriginFunctionRotated.setRotationR(rotationR);
-    rastriginFunctionRotated.setRotationQ(rotationQ);
+    rastriginFunctionRotated.setParameterTranslation(translation);
+    rastriginFunctionRotated.setParameterRotationR(rotationR);
+    rastriginFunctionRotated.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rastriginFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

@@ -33,9 +33,9 @@ TEST_CASE("bbob2012::StepEllipsoidalFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedStepEllipsoidalFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     stepEllipsoidalFunction.setObjectiveValueTranslation(0);
-    stepEllipsoidalFunction.setLocalParameterTranslation(translation);
-    stepEllipsoidalFunction.setRotationR(rotationR);
-    stepEllipsoidalFunction.setRotationQ(rotationQ);
+    stepEllipsoidalFunction.setParameterTranslation(translation);
+    stepEllipsoidalFunction.setParameterRotationR(rotationR);
+    stepEllipsoidalFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(stepEllipsoidalFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

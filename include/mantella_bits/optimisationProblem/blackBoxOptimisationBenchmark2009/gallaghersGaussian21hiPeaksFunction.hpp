@@ -5,27 +5,30 @@ namespace mant {
         inline explicit GallaghersGaussian21hiPeaksFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline virtual void setRotationR(
-            const arma::Mat<double>& rotationR);
+        inline virtual void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
-        inline virtual void setLocalParameterScaling(
-            const arma::Col<double>& localParameterScaling);
+        inline virtual void setLocalParameterConditioning(
+            const arma::Col<double>& localParameterConditioning);
 
-        inline virtual void setLocalOptima(
-            const arma::Mat<double>& localOptima);
+        inline virtual void setLocalParameterTranslation(
+            const arma::Mat<double>& localParameterTranslation);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> weight_;
+        const arma::Col<double> weight_;
 
-        arma::Mat<double> rotationR_;
-        arma::Col<double> localParameterScaling_;
-        arma::Mat<double> localOptima_;
+        arma::Mat<double> parameterRotationR_;
+        arma::Col<double> localParameterConditioning_;
+        arma::Mat<double> localParameterTranslation_;
 
-        inline arma::Col<double> getRandomLocalParameterScaling() const noexcept;
+        inline arma::Col<double> getRandomLocalParameterConditioning() const noexcept;
 
-        inline arma::Mat<double> getRandomLocalOptima() const noexcept;
+        inline arma::Mat<double> getRandomLocalParameterTranslation() const noexcept;
+
+        inline double getSoftConstraintsValueImplementation(
+            const arma::Col<double>& parameter) const noexcept override;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -38,9 +41,9 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
-          archive(cereal::make_nvp("localParameterScaling", localParameterScaling_));
-          archive(cereal::make_nvp("localOptima", localOptima_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
+          archive(cereal::make_nvp("localParameterConditioning", localParameterConditioning_));
+          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
         }
 
         template <typename Archive>
@@ -52,9 +55,9 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
-          archive(cereal::make_nvp("localParameterScaling", construct->localParameterScaling_));
-          archive(cereal::make_nvp("localOptima", construct->localOptima_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
+          archive(cereal::make_nvp("localParameterConditioning", construct->localParameterConditioning_));
+          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
         }
 #endif
     };
@@ -66,68 +69,68 @@ namespace mant {
     inline GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        weight_(21),
-        localParameterScaling_(21) {
-      weight_(0) = 10.0;
-      for (std::size_t n = 1; n < weight_.n_elem; ++n) {
-        weight_(n) = 1.1 + 8.0 * static_cast<double>(n - 1) / 19.0;
-      }
-
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setLocalParameterScaling(getRandomLocalParameterScaling());
-      setLocalOptima(getRandomLocalOptima());
+        weight_({10, 1.1, 1.521052631578947, 1.942105263157895, 2.363157894736842, 2.784210526315789, 3.205263157894737, 3.626315789473684, 4.047368421052632, 4.468421052631578, 4.889473684210526, 5.310526315789474, 5.731578947368421, 6.152631578947368, 6.573684210526316, 6.994736842105263, 7.41578947368421, 7.836842105263157, 8.257894736842106, 8.678947368421053, 9.1}) {
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setLocalParameterConditioning(getRandomLocalParameterConditioning());
+      setLocalParameterTranslation(getRandomLocalParameterTranslation());
     }
 
-    inline void GallaghersGaussian21hiPeaksFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
+    inline void GallaghersGaussian21hiPeaksFunction::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      rotationR_ = rotationR;
+      parameterRotationR_ = parameterRotationR;
     }
 
-    inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterScaling(
-        const arma::Col<double>& localParameterScaling) {
-      checkDimensionCompatible("The number of elements", localParameterScaling.n_elem, "the number of peaks", 21);
+    inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterConditioning(
+        const arma::Col<double>& localParameterConditioning) {
+      checkDimensionCompatible("The number of elements", localParameterConditioning.n_elem, "the number of peaks", 21);
 
-      for (std::size_t n = 0; n < localParameterScaling.n_elem; ++n) {
-        const double& localParameterScalingValue = std::pow(10.0, localParameterScaling(n) / 33.0);
-        localParameterScaling_.col(n) = getScaledTransformation(localParameterScalingValue) / std::sqrt(localParameterScalingValue);
+      localParameterConditioning_.set_size(numberOfDimensions_, 21);
+      for (std::size_t n = 0; n < localParameterConditioning.n_elem; ++n) {
+        const double& localParameterConditioningValue = std::pow(10.0, localParameterConditioning(n) / 33.0);
+        localParameterConditioning_.col(n) = getParameterConditioning(localParameterConditioningValue) / std::sqrt(localParameterConditioningValue);
       }
     }
 
-    inline void GallaghersGaussian21hiPeaksFunction::setLocalOptima(
-        const arma::Mat<double>& localOptima) {
-      checkDimensionCompatible("The number of rows", localOptima.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkDimensionCompatible("The number of columns", localOptima.n_cols, "the number of peaks", 21);
+    inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterTranslation(
+        const arma::Mat<double>& localParameterTranslation) {
+      checkDimensionCompatible("The number of rows", localParameterTranslation.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkDimensionCompatible("The number of columns", localParameterTranslation.n_cols, "the number of peaks", 21);
 
-      localOptima_ = localOptima;
+      localParameterTranslation_ = localParameterTranslation;
     }
 
-    inline arma::Col<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalParameterScaling() const noexcept {
-      arma::Col<double> localParameterScaling(21);
-      localParameterScaling(0) = 9.5;
-      localParameterScaling.tail(20) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(20));
+    inline arma::Col<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalParameterConditioning() const noexcept {
+      arma::Col<double> localParameterConditioning(21);
+      localParameterConditioning(0) = 9.5;
+      localParameterConditioning.tail(20) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(20));
 
-      return localParameterScaling;
+      return localParameterConditioning;
     }
 
-    inline arma::Mat<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalOptima() const noexcept {
-      arma::Mat<double> localOptima = arma::randu<arma::Mat<double>>(numberOfDimensions_, 21) * 9.8 - 4.9;
-      localOptima.col(0) = 0.8 * localOptima.col(0);
+    inline arma::Mat<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalParameterTranslation() const noexcept {
+      arma::Mat<double> localParameterTranslation = arma::randu<arma::Mat<double>>(numberOfDimensions_, 21) * 9.8 - 4.9;
+      localParameterTranslation.col(0) = 0.8 * localParameterTranslation.col(0);
 
-      return localOptima;
+      return localParameterTranslation;
+    }
+
+    inline double GallaghersGaussian21hiPeaksFunction::getSoftConstraintsValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      return getBoundConstraintsValue(parameter);
     }
 
     inline double GallaghersGaussian21hiPeaksFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 21; ++k) {
-        const arma::Col<double>& localParameterTranslation = parameter - localOptima_.col(k);
-        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-1.0 / (2.0 * static_cast<double>(numberOfDimensions_)) * arma::dot(localParameterTranslation, rotationR_.t() * arma::diagmat(localParameterScaling_.col(k)) * rotationR_ * localParameterTranslation)));
+        const arma::Col<double>& locallyTranslatedParameter = parameter - localParameterTranslation_.col(k);
+        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-1.0 / (2.0 * static_cast<double>(numberOfDimensions_)) * arma::dot(locallyTranslatedParameter, parameterRotationR_.t() * arma::diagmat(localParameterConditioning_.col(k)) * parameterRotationR_ * locallyTranslatedParameter)));
       }
 
-      return std::pow(getOscillatedTransformation(10.0 - maximalValue), 2.0) + getPenality(parameter);
+      return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
     }
 
     inline std::string GallaghersGaussian21hiPeaksFunction::toString() const noexcept {
@@ -137,5 +140,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::GallaghersGaussian21hiPeaksFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::GallaghersGaussian21hiPeaksFunction);
 #endif

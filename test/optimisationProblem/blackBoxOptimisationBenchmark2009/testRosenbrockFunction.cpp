@@ -27,7 +27,7 @@ TEST_CASE("bbob2009::RosenbrockFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rosenbrockFunction.setObjectiveValueTranslation(0);
-    rosenbrockFunction.setLocalParameterTranslation(translation);
+    rosenbrockFunction.setParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(rosenbrockFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

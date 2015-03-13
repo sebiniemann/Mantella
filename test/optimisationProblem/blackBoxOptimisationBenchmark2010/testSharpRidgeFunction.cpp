@@ -33,9 +33,9 @@ TEST_CASE("bbob2010::SharpRidgeFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSharpRidgeFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     sharpRidgeFunction.setObjectiveValueTranslation(0);
-    sharpRidgeFunction.setLocalParameterTranslation(translation);
-    sharpRidgeFunction.setRotationR(rotationR);
-    sharpRidgeFunction.setRotationQ(rotationQ);
+    sharpRidgeFunction.setParameterTranslation(translation);
+    sharpRidgeFunction.setParameterRotationR(rotationR);
+    sharpRidgeFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(sharpRidgeFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

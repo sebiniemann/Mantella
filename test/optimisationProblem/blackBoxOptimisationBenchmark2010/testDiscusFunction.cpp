@@ -30,8 +30,8 @@ TEST_CASE("bbob2010::DiscusFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedDiscusFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     discusFunction.setObjectiveValueTranslation(0);
-    discusFunction.setLocalParameterTranslation(translation);
-    discusFunction.setRotationR(rotationR);
+    discusFunction.setParameterTranslation(translation);
+    discusFunction.setParameterRotationR(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(discusFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

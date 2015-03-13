@@ -7,13 +7,11 @@ namespace mant {
 
         inline std::string toString() const noexcept override;
 
-        inline void setLocalParameterTranslation(
-            const arma::Col<double>& localParameterTranslation);
-
       protected:
-        const arma::Col<double> scaling_;
+        const arma::Col<double> parameterConditioning_;
 
-        arma::Col<double> localParameterTranslation_;
+        inline double getSoftConstraintsValueImplementation(
+            const arma::Col<double>& parameter) const noexcept override;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -25,7 +23,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
         }
 
         template <typename Archive>
@@ -37,7 +34,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
         }
 #endif
     };
@@ -49,30 +45,29 @@ namespace mant {
     inline BuecheRastriginFunction::BuecheRastriginFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        scaling_(getScaledTransformation(std::sqrt(10.0))) {
-      setLocalParameterTranslation(getRandomLocalParameterTranslation());
+        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
+      arma::Col<double> parameterTranslation_ = getRandomParameterTranslation();
+      for (std::size_t n = 0; n < parameterTranslation_.n_elem; n += 2) {
+        parameterTranslation_(n) = std::abs(parameterTranslation_(n));
+      }
+      setParameterTranslation(parameterTranslation_);
     }
 
-    inline void BuecheRastriginFunction::setLocalParameterTranslation(
-        const arma::Col<double>& localParameterTranslation) {
-      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
-
-      localParameterTranslation_ = localParameterTranslation;
-      for (std::size_t n = 0; n < localParameterTranslation.n_elem; n += 2) {
-        localParameterTranslation_(n) = std::abs(localParameterTranslation(n));
-      }
+    inline double BuecheRastriginFunction::getSoftConstraintsValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      return 100.0 * getBoundConstraintsValue(parameter);
     }
 
     inline double BuecheRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> z = scaling_ % getOscillatedTransformation(parameter - localParameterTranslation_);
+      arma::Col<double> z = parameterConditioning_ % getOscillatedParameter(parameter);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
         if (z(n) > 0.0) {
           z(n) *= 10.0;
         }
       }
 
-      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0) + 100.0 * getPenality(parameter);
+      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
     }
 
     inline std::string BuecheRastriginFunction::toString() const noexcept {
@@ -82,5 +77,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::BuecheRastriginFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::BuecheRastriginFunction);
 #endif

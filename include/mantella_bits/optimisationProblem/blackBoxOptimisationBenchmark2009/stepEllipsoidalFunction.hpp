@@ -5,24 +5,23 @@ namespace mant {
         inline explicit StepEllipsoidalFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setLocalParameterTranslation(
-            const arma::Col<double>& localParameterTranslation);
+        inline void setParameterRotationR(
+            const arma::Mat<double>& parameterRotationR);
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
-
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        inline void setParameterRotationQ(
+            const arma::Mat<double>& parameterRotationQ);
 
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> localParameterTranslation_;
-        arma::Mat<double> rotationR_;
-        arma::Mat<double> rotationQ_;
-        
-        const arma::Col<double> firstScaling_;
-        const arma::Col<double> secondScaling_;
+        const arma::Col<double> firstParameterConditioning_;
+        const arma::Col<double> secondParameterConditioning_;
+
+        arma::Mat<double> parameterRotationR_;
+        arma::Mat<double> parameterRotationQ_;
+
+        inline double getSoftConstraintsValueImplementation(
+            const arma::Col<double>& parameter) const noexcept override;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -35,9 +34,8 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", rotationR_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
+          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
+          archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
         }
 
         template <typename Archive>
@@ -49,9 +47,8 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
-          archive(cereal::make_nvp("rotationR", construct->rotationR_));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
+          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
+          archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
         }
 #endif
     };
@@ -63,52 +60,50 @@ namespace mant {
     inline StepEllipsoidalFunction::StepEllipsoidalFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        firstScaling_(getScaledTransformation(std::sqrt(10.0))),
-        secondScaling_(getScaledTransformation(100)) {
-      setLocalParameterTranslation(getRandomLocalParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+        firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
+        secondParameterConditioning_(getParameterConditioning(100)) {
+      setParameterTranslation(getRandomParameterTranslation());
+      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void StepEllipsoidalFunction::setLocalParameterTranslation(
-        const arma::Col<double>& localParameterTranslation) {
-      checkDimensionCompatible("The number of elements", localParameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    inline void StepEllipsoidalFunction::setParameterRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationR);
 
-      localParameterTranslation_ = localParameterTranslation;
+      parameterRotationR_ = parameterRotationR;
     }
 
-    inline void StepEllipsoidalFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      checkDimensionCompatible("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationR);
+    inline void StepEllipsoidalFunction::setParameterRotationQ(
+        const arma::Mat<double>& parameterRotationQ) {
+      checkDimensionCompatible("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkRotationMatrix("The matrix", parameterRotationQ);
 
-      rotationR_ = rotationR;
+      parameterRotationQ_ = parameterRotationQ;
     }
 
-    inline void StepEllipsoidalFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      checkDimensionCompatible("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", rotationQ);
-
-      rotationQ_ = rotationQ;
+    inline double StepEllipsoidalFunction::getSoftConstraintsValueImplementation(
+        const arma::Col<double>& parameter) const noexcept {
+      return getBoundConstraintsValue(parameter);
     }
     
     inline double StepEllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& zHat = firstScaling_ % (rotationR_ * (parameter - localParameterTranslation_));
+      const arma::Col<double>& s = firstParameterConditioning_ % (parameterRotationR_ * parameter);
 
-      arma::Col<double> zTilde(zHat);
-      for (std::size_t n = 0; n < zTilde.n_elem; ++n) {
-        const double& value = zHat(n);
+      arma::Col<double> z = s;
+      for (std::size_t n = 0; n < z.n_elem; ++n) {
+        const double& value = s(n);
 
         if (std::abs(value) > 0.5) {
-          zTilde(n) = std::round(value);
+          z(n) = std::round(value);
         } else {
-          zTilde(n) = std::round(value * 10.0) / 10.0;
+          z(n) = std::round(value * 10.0) / 10.0;
         }
       }
 
-      return 0.1 * std::max(std::abs(zHat(0)) / 10000.0, arma::dot(secondScaling_, arma::square(rotationQ_ * zTilde))) + getPenality(parameter);
+      return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(parameterRotationQ_ * z)));
     }
 
     inline std::string StepEllipsoidalFunction::toString() const noexcept {
@@ -118,5 +113,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::StepEllipsoidalFunction);
+CEREAL_REGISTER_TYPE(mant::bbob2009::StepEllipsoidalFunction);
 #endif

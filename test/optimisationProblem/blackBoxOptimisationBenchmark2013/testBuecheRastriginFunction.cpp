@@ -22,12 +22,15 @@ TEST_CASE("bbob2013::BuecheRastriginFunction", "") {
 
     arma::Col<double> translation;
     translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    for (std::size_t n = 0; n < translation.n_elem; n += 2) {
+      translation(n) = std::abs(translation(n));
+    }
 
     arma::Col<double> expected;
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedBuecheRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     buecheRastriginFunction.setObjectiveValueTranslation(0);
-    buecheRastriginFunction.setLocalParameterTranslation(translation);
+    buecheRastriginFunction.setParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(buecheRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

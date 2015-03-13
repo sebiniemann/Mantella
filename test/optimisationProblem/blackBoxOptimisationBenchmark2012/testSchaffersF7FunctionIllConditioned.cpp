@@ -33,9 +33,9 @@ TEST_CASE("bbob2012::SchaffersF7FunctionIllConditioned", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSchaffersF7FunctionIllConditioned,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schaffersF7FunctionIllConditioned.setObjectiveValueTranslation(0);
-    schaffersF7FunctionIllConditioned.setLocalParameterTranslation(translation);
-    schaffersF7FunctionIllConditioned.setRotationR(rotationR);
-    schaffersF7FunctionIllConditioned.setRotationQ(rotationQ);
+    schaffersF7FunctionIllConditioned.setParameterTranslation(translation);
+    schaffersF7FunctionIllConditioned.setParameterRotationR(rotationR);
+    schaffersF7FunctionIllConditioned.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(schaffersF7FunctionIllConditioned.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

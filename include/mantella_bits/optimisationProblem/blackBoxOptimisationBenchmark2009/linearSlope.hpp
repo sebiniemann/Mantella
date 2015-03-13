@@ -11,11 +11,10 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Col<double> xOpt_;
-        arma::Col<double> scaling_;
-        double partialObjectiveValue_;
+        arma::Col<double> parameterReflection_;
 
-        arma::Col<double> Parameterreflection_;
+        arma::Col<double> parameterConditioning_;
+        double f0_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -28,10 +27,9 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("Parameterreflection", Parameterreflection_));
-          archive(cereal::make_nvp("xOpt", xOpt_));
-          archive(cereal::make_nvp("scaling", scaling_));
-          archive(cereal::make_nvp("partialObjectiveValue", partialObjectiveValue));
+          archive(cereal::make_nvp("parameterReflection", parameterReflection_));
+          archive(cereal::make_nvp("parameterConditioning", parameterConditioning_));
+          archive(cereal::make_nvp("f0", f0_));
         }
 
         template <typename Archive>
@@ -43,10 +41,9 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("Parameterreflection", construct->Parameterreflection_));
-          archive(cereal::make_nvp("xOpt", construct->xOpt_));
-          archive(cereal::make_nvp("scaling", construct->scaling_));
-          archive(cereal::make_nvp("partialObjectiveValue", construct->partialObjectiveValue));
+          archive(cereal::make_nvp("parameterReflection", construct->parameterReflection_));
+          archive(cereal::make_nvp("parameterConditioning", construct->parameterConditioning_));
+          archive(cereal::make_nvp("f0", construct->f0_));
         }
 #endif
     };
@@ -62,26 +59,21 @@ namespace mant {
     }
 
     inline void LinearSlope::setParameterReflection(
-        const bool Parameterreflection) noexcept {
-      if (Parameterreflection) {
-        Parameterreflection_ = -arma::ones<arma::Col<double>>(numberOfDimensions_);
-      } else {
-        Parameterreflection_ = arma::ones<arma::Col<double>>(numberOfDimensions_);
-      }
+        const bool parameterReflection) noexcept {
+      parameterReflection_ = arma::zeros<arma::Col<double>>(numberOfDimensions_) + (parameterReflection ? 5.0 : -5.0);
 
-      xOpt_ = 5.0 * Parameterreflection_;
-      scaling_ = arma::sign(Parameterreflection_) % getScaledTransformation(10.0);
-      partialObjectiveValue_ = 5.0 * arma::accu(arma::abs(scaling_));
+      parameterConditioning_ = arma::sign(parameterReflection_) % getParameterConditioning(10.0);
+      f0_ = 5.0 * arma::accu(arma::abs(parameterConditioning_));
     }
 
     inline double LinearSlope::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = parameter;
 
-      const arma::Col<unsigned int>& outOfBound = arma::find(xOpt_ % z >= 25.0);
-      z.elem(outOfBound) = xOpt_.elem(outOfBound);
+      const arma::Col<unsigned int>& outOfBound = arma::find(parameterReflection_ % z >= 25.0);
+      z.elem(outOfBound) = parameterReflection_.elem(outOfBound);
 
-      return partialObjectiveValue_ - arma::dot(scaling_, z);
+      return f0_ - arma::dot(parameterConditioning_, z);
     }
 
     inline std::string LinearSlope::toString() const noexcept {
@@ -91,5 +83,5 @@ namespace mant {
 }
 
 #if defined(MANTELLA_USE_PARALLEL)
-// CEREAL_REGISTER_TYPE(mant::bbob2009::LinearSlope);
+CEREAL_REGISTER_TYPE(mant::bbob2009::LinearSlope);
 #endif

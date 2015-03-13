@@ -27,7 +27,7 @@ TEST_CASE("bbob2013::SphereFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedSphereFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     sphereFunction.setObjectiveValueTranslation(0);
-    sphereFunction.setLocalParameterTranslation(translation);
+    sphereFunction.setParameterTranslation(translation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(sphereFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

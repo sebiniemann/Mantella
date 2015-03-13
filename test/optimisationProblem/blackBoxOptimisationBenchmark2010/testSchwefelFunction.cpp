@@ -29,7 +29,7 @@ TEST_CASE("bbob2010::SchwefelFunction", "") {
     schwefelFunction.setObjectiveValueTranslation(0);
     schwefelFunction.setParameterReflection(one.at(0) < 0 ? true : false);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (std::size_t n = 0; n > parameters.n_cols; ++n) {
       CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
