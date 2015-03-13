@@ -102,7 +102,7 @@ if(BUILD_TESTS)
   message(STATUS "NOTICE: Configuring tests")
 
   # Locate third party libraries and headers
-  find_package(Armadillo 4.600.0 REQUIRED) # Armadillo C++
+  find_package(Armadillo 4.650.3 REQUIRED) # Armadillo C++
   find_package(Catch REQUIRED) # Catch (header only)
 
   # Include third party headers
