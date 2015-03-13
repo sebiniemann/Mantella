@@ -141,16 +141,15 @@ namespace mant {
       const arma::Col<double>::fixed<3>& secondCenter,
       const double& secondRadius,
       const arma::Col<double>::fixed<3>& thirdCenter,
-      const double& thirdRadius,
-      ) {
+      const double& thirdRadius) {
     const arma::Col<double>::fixed<3>& firstToSecondCenter = secondCenter - firstCenter;
     const arma::Col<double>::fixed<3>& firstToThirdCenter = thirdCenter - firstCenter;
 
     const arma::Col<double>::fixed<3>& normal = arma::cross(firstToSecondCenter, firstToThirdCenter);
-    const arma::Col<double>::fixed<3>& normalLength = arma::norm(normal);
+    const double& normalLength = arma::norm(normal);
 
     const arma::Col<double>::fixed<3>& firstToInnerCenter = (arma::cross((std::pow(arma::norm(firstToSecondCenter), 2) + std::pow(firstRadius, 2) - std::pow(secondRadius, 2)) * firstToThirdCenter - (std::pow(arma::norm(firstToThirdCenter), 2) + std::pow(firstRadius, 2) - std::pow(thirdRadius, 2)) * firstToSecondCenter, normal)) / std::pow(normalLength, 2);
-    const arma::Col<double>::fixed<3>& innerCenterToIntercection = std::sqrt(std::pow(firstRadius, 2) - std::pow(arma::norm(innerCenter), 2)) * normal / normalLength;
+    const arma::Col<double>::fixed<3>& innerCenterToIntercection = std::sqrt(std::pow(firstRadius, 2) - std::pow(arma::norm(firstToInnerCenter), 2)) * normal / normalLength;
 
     return firstCenter + firstToInnerCenter + innerCenterToIntercection;
   }
