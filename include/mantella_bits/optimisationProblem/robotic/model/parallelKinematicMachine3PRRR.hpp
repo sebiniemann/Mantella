@@ -2,6 +2,7 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine3PRRR {
       public:
+        // TODO Add end effector rotation
         inline explicit ParallelKinematicMachine3PRRR() noexcept;
 
         inline arma::Mat<double>::fixed<2, 3> getLinkLengths() const noexcept;

@@ -2,6 +2,7 @@ namespace mant {
   namespace robotic {
     class ParallelKinematicMachine3PRPR {
       public:
+        // TODO Add end effector rotation
         inline explicit ParallelKinematicMachine3PRPR() noexcept;
 
         inline arma::Row<double>::fixed<3> getMinimalActiveJointActuations() const noexcept;
