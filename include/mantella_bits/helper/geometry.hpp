@@ -46,6 +46,14 @@ namespace mant {
   // Implementation
   //
 
+  inline arma::Col<double>::fixed<3> getTriangulation(
+      const arma::Col<double>::fixed<3>& firstCenter,
+      const double& firstRadius,
+      const arma::Col<double>::fixed<3>& secondCenter,
+      const double& secondRadius,
+      const arma::Col<double>::fixed<3>& thirdCenter,
+      const double& thirdRadius);
+
   inline arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
       const double& angle) noexcept {
     double sineAngle = std::sin(angle);
