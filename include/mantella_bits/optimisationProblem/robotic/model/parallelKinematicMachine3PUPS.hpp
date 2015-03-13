@@ -204,7 +204,7 @@ namespace mant {
       }
 
       arma::Mat<double>::fixed<6, 3> forwardKinematic;
-      forwardKinematic.rows(0, 2) = baseToEndEffectorJointPositions;
+      forwardKinematic.head_rows(3) = baseToEndEffectorJointPositions;
       for (std::size_t n = 0; n < baseToEndEffectorJointPositions.n_cols; ++n) {
         forwardKinematic.submat(3, n, 5, n) = arma::cross(endEffectorJointsRotated.col(n), baseToEndEffectorJointPositions.col(n));
       }

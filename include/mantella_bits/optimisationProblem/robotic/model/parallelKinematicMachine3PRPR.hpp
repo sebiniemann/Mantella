@@ -205,7 +205,7 @@ namespace mant {
       }
 
       arma::Mat<double>::fixed<3, 3> forwardKinematic;
-      forwardKinematic.rows(0, 1) = baseToEndEffectorJointPositions;
+      forwardKinematic.head_rows(2) = baseToEndEffectorJointPositions;
       forwardKinematic.row(2) = -forwardKinematic.row(0) % endEffectorJointPositionsRotated.row(1) + forwardKinematic.row(1) % endEffectorJointPositionsRotated.row(0);
 
       arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);

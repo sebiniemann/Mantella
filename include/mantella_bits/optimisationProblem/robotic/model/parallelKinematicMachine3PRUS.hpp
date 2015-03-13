@@ -236,7 +236,7 @@ namespace mant {
       const arma::Mat<double>::fixed<3, 3>& baseToEndEffectorJoints = endEffectorJoints - baseJoints;
 
       arma::Mat<double>::fixed<6, 3> forwardKinematic;
-      forwardKinematic.rows(0, 2) = baseToEndEffectorJoints;
+      forwardKinematic.head_rows(3) = baseToEndEffectorJoints;
       for (std::size_t n = 0; n < baseToEndEffectorJoints.n_cols; ++n) {
         forwardKinematic.submat(3, n, 5, n) = arma::cross(endEffectorJointsRotated.col(n), baseToEndEffectorJoints.col(n));
       }

@@ -198,7 +198,7 @@ namespace mant {
       const arma::Mat<double>::fixed<2, 3>& passiveJoints = model.slice(1);
 
       arma::Mat<double>::fixed<3, 3> forwardKinematic;
-      forwardKinematic.rows(0, 1) = endEffectorJoints - passiveJoints;
+      forwardKinematic.head_rows(2) = endEffectorJoints - passiveJoints;
       forwardKinematic.row(2) = -forwardKinematic.row(0) % endEffectorJointsRotated.row(1) + forwardKinematic.row(1) % endEffectorJointsRotated.row(0);
 
       const arma::Mat<double>::fixed<2, 3>& baseToPassiveJoints = passiveJoints - baseJoints;
