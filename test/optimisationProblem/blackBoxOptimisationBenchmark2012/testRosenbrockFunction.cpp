@@ -18,13 +18,13 @@ TEST_CASE("bbob2012::RosenbrockFunction", "") {
     mant::bbob2012::RosenbrockFunction rosenbrockFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> translation;
-    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/translation,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2013/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedRosenbrockFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     rosenbrockFunction.setObjectiveValueTranslation(0);
     rosenbrockFunction.setParameterTranslation(translation);

@@ -18,13 +18,13 @@ TEST_CASE("bbob2015::LinearSlope", "") {
     mant::bbob2015::LinearSlope linearSlope(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> one;
-    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/one,dim" + std::to_string(numberOfDimensions) +".mat");
+    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/one,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
 
     linearSlope.setObjectiveValueTranslation(0);
     linearSlope.setParameterReflection(one.at(0) > 0 ? true : false);

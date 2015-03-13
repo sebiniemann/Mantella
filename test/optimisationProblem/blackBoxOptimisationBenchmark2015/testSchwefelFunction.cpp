@@ -18,13 +18,13 @@ TEST_CASE("bbob2015::SchwefelFunction", "") {
     mant::bbob2015::SchwefelFunction schwefelFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> one;
-    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/one,dim" + std::to_string(numberOfDimensions) +".mat");
+    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/one,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark2015/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schwefelFunction.setObjectiveValueTranslation(0);
     schwefelFunction.setParameterReflection(one.at(0) < 0 ? true : false);
