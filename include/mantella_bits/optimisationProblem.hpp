@@ -339,7 +339,7 @@ namespace mant {
       const arma::Col<double>& parameter) const noexcept {
     assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
 
-    return parameterRotation_ * (parameter + (parameterScale_ % parameterTranslation_));
+    return parameterRotation_ * (parameterScaling_ % parameter - parameterTranslation_);
   }
 
   template <typename ParameterType>
