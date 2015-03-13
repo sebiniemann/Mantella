@@ -202,7 +202,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter) {
     checkDimensionCompatible("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
-    return getSoftConstraintsValueImplementation(parameter);
+    return objectiveValueScaling_ * getSoftConstraintsValueImplementation(parameter);
   }
 
   template <typename ParameterType>
