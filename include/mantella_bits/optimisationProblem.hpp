@@ -35,8 +35,8 @@ namespace mant {
       void setParameterTranslation(
           const arma::Col<ParameterType> parameterTranslation);
 
-      void setParameterScale(
-        const arma::Col<ParameterType> parameterScale);
+      void setParameterScaling(
+        const arma::Col<ParameterType> parameterScaling);
 
       void setParameterRotation(
         const arma::Mat<ParameterType> parameterRotation);
@@ -70,7 +70,7 @@ namespace mant {
       arma::Col<ParameterType> upperBounds_;
 
       arma::Col<double> parameterTranslation_;
-      arma::Col<double> parameterScale_;
+      arma::Col<double> parameterScaling_;
       arma::Mat<double> parameterRotation_;
 
       double objectiveValueTranslation_;
@@ -104,7 +104,7 @@ namespace mant {
         archive(cereal::make_nvp("upperBounds", upperBounds_));
         archive(cereal::make_nvp("parameterTranslation", parameterTranslation_));
         archive(cereal::make_nvp("parameterRotation", parameterRotation_));
-        archive(cereal::make_nvp("parameterScale", parameterScale_));
+        archive(cereal::make_nvp("parameterScaling", parameterScaling_));
         archive(cereal::make_nvp("objectiveValueTranslation", objectiveValueTranslation_));
         archive(cereal::make_nvp("objectiveValueScale", objectiveValueScale_));
         archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
@@ -129,8 +129,8 @@ namespace mant {
       const arma::Mat<double> parameterRotation);
 
   template <>
-  inline void OptimisationProblem<double>::setParameterScale(
-      const arma::Col<double> parameterScale);
+  inline void OptimisationProblem<double>::setParameterScaling(
+      const arma::Col<double> parameterScaling);
 
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
@@ -159,7 +159,7 @@ namespace mant {
     setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
-    setParameterScale(arma::ones<arma::Col<double>>(numberOfDimensions_));
+    setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setObjectiveValueTranslation(0.0);
     setObjectiveValueScale(1.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
@@ -273,11 +273,11 @@ namespace mant {
   }
 
   template <>
-  inline void OptimisationProblem<double>::setParameterScale(
-      const arma::Col<double> parameterScale) {
-    checkDimensionCompatible("The number of elements", parameterScale.n_elem, "the number of dimensions", numberOfDimensions_);
+  inline void OptimisationProblem<double>::setParameterScaling(
+      const arma::Col<double> parameterScaling) {
+    checkDimensionCompatible("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
 
-    parameterScale_ = parameterScale;
+    parameterScaling_ = parameterScaling;
   }
 
   template <typename ParameterType>
