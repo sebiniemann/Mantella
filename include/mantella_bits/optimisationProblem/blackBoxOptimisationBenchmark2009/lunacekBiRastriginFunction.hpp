@@ -95,7 +95,7 @@ namespace mant {
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = parameterRotationQ_ * (parameterConditinong_ % (parameterRotationR_ * parameter));
 
-      return std::min(std::pow(arma::norm(parameter), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter - mu1_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z)));
+      return std::min(std::pow(arma::norm(parameter), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter - mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z)));
     }
 
     inline std::string LunacekBiRastriginFunction::toString() const noexcept {
