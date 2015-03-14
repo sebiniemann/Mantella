@@ -62,7 +62,7 @@ namespace mant {
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
-        mu_(-std::sqrt(5.25 / s_) + 2.5),
+        mu_(std::sqrt(5.25 / s_) + 2.5),
         parameterConditinong_(getParameterConditioning(10.0)) {
       // A vector with al elements set to 2.5.
       setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.5);
@@ -97,7 +97,7 @@ namespace mant {
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = parameterRotationQ_ * (parameterConditinong_ % (parameterRotationR_ * parameter));
 
-      return std::min(std::pow(arma::norm(parameter), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter - mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z)));
+      return std::min(std::pow(arma::norm(parameter), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z)));
     }
 
     inline std::string LunacekBiRastriginFunction::toString() const noexcept {
