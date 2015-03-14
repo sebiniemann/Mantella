@@ -53,9 +53,9 @@ namespace mant {
     inline double SchwefelFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> s = parameter;
-      s.tail(s.n_elem - 1) += 0.25 * (parameter.head(parameter.n_elem - 1) - parameterReflection_.head(parameterReflection_.n_elem - 1));
+      s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
 
-      const arma::Col<double>& z = 100.0 * (parameterConditioning_ % (s - parameterReflection_) + parameterReflection_);
+      const arma::Col<double>& z = 100.0 * (parameterConditioning_ % (s - 4.2096874633) + 4.2096874633);
 
       return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getBoundConstraintsValue(z / 100.0);
     }
