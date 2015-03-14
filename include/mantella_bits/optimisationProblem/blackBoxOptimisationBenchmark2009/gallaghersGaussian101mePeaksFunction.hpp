@@ -20,7 +20,7 @@ namespace mant {
         const arma::Col<double> weight_;
 
         arma::Mat<double> parameterRotationR_;
-        arma::Col<double> localParameterConditioning_;
+        arma::Mat<double> localParameterConditioning_;
         arma::Mat<double> localParameterTranslation_;
 
         inline arma::Col<double> getRandomLocalParameterConditioning() const noexcept;
