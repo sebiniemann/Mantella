@@ -5,15 +5,10 @@ namespace mant {
         inline explicit SchwefelFunction(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setParameterReflection(
-            const bool Parameterreflection) noexcept;
-
         inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> parameterConditioning_;
-
-        arma::Col<double> parameterReflection_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -53,12 +48,6 @@ namespace mant {
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       // A vector with all elements randomly and uniformly set to either 2 or -2.
       setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
-      setParameterReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
-    }
-
-    inline void SchwefelFunction::setParameterReflection(
-        const bool parameterReflection) noexcept {
-      parameterReflection_ = arma::zeros<arma::Col<double>>(numberOfDimensions_) + (parameterReflection ? 2.10484373165 : -2.10484373165);
     }
 
     inline double SchwefelFunction::getObjectiveValueImplementation(
