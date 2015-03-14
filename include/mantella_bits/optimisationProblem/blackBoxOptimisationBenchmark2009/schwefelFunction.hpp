@@ -57,7 +57,7 @@ namespace mant {
 
       const arma::Col<double>& z = 100.0 * (parameterConditioning_ % (s - 4.2096874633) + 4.2096874633);
 
-      return 0.01 * (418.9828872724339 - arma::mean(z % arma::sin(arma::sqrt(arma::abs(z))))) + 100.0 * getBoundConstraintsValue(z / 100.0);
+      return 0.01 * (418.9828872724339 - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<double>(numberOfDimensions_)) + 100.0 * getBoundConstraintsValue(z / 100.0);
     }
 
     inline std::string SchwefelFunction::toString() const noexcept {
