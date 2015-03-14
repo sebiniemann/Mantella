@@ -5,8 +5,8 @@ namespace mant {
         inline explicit LinearSlope(
             const unsigned int& numberOfDimensions) noexcept;
 
-        inline void setParameterReflection(
-            const bool Parameterreflection) noexcept;
+        inline void setObjectiveFunctionRotation(
+            const arma::Col<double>& objectiveFunctionRotation) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -55,25 +55,22 @@ namespace mant {
     inline LinearSlope::LinearSlope(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
-      setParameterReflection(std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? true : false);
+      setObjectiveFunctionRotation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));
     }
 
-    inline void LinearSlope::setParameterReflection(
-        const bool parameterReflection) noexcept {
-      parameterReflection_ = arma::zeros<arma::Col<double>>(numberOfDimensions_) + (parameterReflection ? 5.0 : -5.0);
-
-      parameterConditioning_ = arma::sign(parameterReflection_) % getParameterConditioning(10.0);
-      f0_ = 5.0 * arma::accu(arma::abs(parameterConditioning_));
+    inline void LinearSlope::setObjectiveFunctionRotation(
+        const arma::Col<double>& objectiveFunctionRotation) noexcept {
+      objectiveFunctionRotation_ = objectiveFunctionRotation;
     }
 
     inline double LinearSlope::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> z = parameter;
 
-      const arma::Col<unsigned int>& outOfBound = arma::find(parameterReflection_ % z >= 25.0);
-      z.elem(outOfBound) = parameterReflection_.elem(outOfBound);
+      const arma::Col<unsigned int>& outOfBound = arma::find(objectiveFunctionRotation_ % z >= 5.0);
+      z.elem(outOfBound) = objectiveFunctionRotation_.elem(outOfBound) * 5;
 
-      return f0_ - arma::dot(parameterConditioning_, z);
+      return f0_ - arma::dot(arma::sign(objectiveFunctionRotation_) % parameterConditioning_, z);
     }
 
     inline std::string LinearSlope::toString() const noexcept {
