@@ -99,8 +99,8 @@ namespace mant {
       throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
     }
 
-    double cosine = (std::pow(firstRadius, 2) - std::pow(secondRadius, 2) + std::pow(distance, 2)) / (2 * distance);
-    double sine = std::sqrt(std::pow(firstRadius, 2) - std::pow(cosine, 2));
+    double cosine = (std::pow(firstRadius, 2.0) - std::pow(secondRadius, 2.0) + std::pow(distance, 2.0)) / (2.0 * distance);
+    double sine = std::sqrt(std::pow(firstRadius, 2.0) - std::pow(cosine, 2.0));
 
     arma::Col<double>::fixed<2> normal = arma::normalise(secondCenter - firstCenter);
 
@@ -128,7 +128,7 @@ namespace mant {
     }
 
     const arma::Col<double>::fixed<3>& innerCenter = sphereCenter + innerDistance * circleNormal;
-    const double& innerRadius = std::sqrt(std::pow(sphereRadius, 2) - std::pow(innerDistance, 2));
+    const double& innerRadius = std::sqrt(std::pow(sphereRadius, 2.0) - std::pow(innerDistance, 2.0));
 
     const double& distance = arma::norm(innerCenter - circleCenter);
 
@@ -138,9 +138,9 @@ namespace mant {
 
     const arma::Col<double>::fixed<3>& normal = arma::normalise(arma::cross(innerCenter - circleCenter, circleNormal));
 
-    const double& intersectionDistance = (std::pow(circleRadius, 2) - std::pow(innerRadius, 2) + std::pow(distance, 2)) / (2 * distance);
+    const double& intersectionDistance = (std::pow(circleRadius, 2.0) - std::pow(innerRadius, 2.0) + std::pow(distance, 2.0)) / (2.0 * distance);
 
-    return circleCenter + intersectionDistance / distance * (innerCenter - circleCenter) + normal * std::sqrt(std::pow(circleRadius, 2) - std::pow(intersectionDistance, 2));
+    return circleCenter + intersectionDistance / distance * (innerCenter - circleCenter) + normal * std::sqrt(std::pow(circleRadius, 2.0) - std::pow(intersectionDistance, 2.0));
   }
 
   inline arma::Col<double>::fixed<3> getTriangulation(
@@ -156,8 +156,8 @@ namespace mant {
     const arma::Col<double>::fixed<3>& normal = arma::cross(firstToSecondCenter, firstToThirdCenter);
     const double& normalLength = arma::norm(normal);
 
-    const arma::Col<double>::fixed<3>& firstToInnerCenter = (arma::cross((std::pow(arma::norm(firstToSecondCenter), 2) + std::pow(firstRadius, 2) - std::pow(secondRadius, 2)) * firstToThirdCenter - (std::pow(arma::norm(firstToThirdCenter), 2) + std::pow(firstRadius, 2) - std::pow(thirdRadius, 2)) * firstToSecondCenter, normal)) / std::pow(normalLength, 2);
-    const arma::Col<double>::fixed<3>& innerCenterToIntercection = std::sqrt(std::pow(firstRadius, 2) - std::pow(arma::norm(firstToInnerCenter), 2)) * normal / normalLength;
+    const arma::Col<double>::fixed<3>& firstToInnerCenter = (arma::cross((std::pow(arma::norm(firstToSecondCenter), 2.0) + std::pow(firstRadius, 2.0) - std::pow(secondRadius, 2.0)) * firstToThirdCenter - (std::pow(arma::norm(firstToThirdCenter), 2.0) + std::pow(firstRadius, 2.0) - std::pow(thirdRadius, 2.0)) * firstToSecondCenter, normal)) / std::pow(normalLength, 2.0);
+    const arma::Col<double>::fixed<3>& innerCenterToIntercection = std::sqrt(std::pow(firstRadius, 2.0) - std::pow(arma::norm(firstToInnerCenter), 2.0)) * normal / normalLength;
 
     return firstCenter + firstToInnerCenter + innerCenterToIntercection;
   }
