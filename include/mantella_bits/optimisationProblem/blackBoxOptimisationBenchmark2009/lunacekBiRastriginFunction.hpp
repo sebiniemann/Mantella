@@ -61,7 +61,7 @@ namespace mant {
     inline LunacekBiRastriginFunction::LunacekBiRastriginFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        parameterConditinong_(getParameterConditioning(std::sqrt(10.0))) {
+        parameterConditinong_(getParameterConditioning(10.0)) {
       // A vector with al elements set to 2.5.
       setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.5);
       // A vector with all elements randomly and uniformly set to either 2 or -2.
