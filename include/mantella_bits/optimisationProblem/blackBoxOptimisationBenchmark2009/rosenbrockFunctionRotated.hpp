@@ -66,7 +66,9 @@ namespace mant {
         const arma::Col<double>& parameter) const noexcept {
       const arma::Col<double>& z = max_ * parameterRotationR_ * parameter + 0.5;
 
-      return 100.0 * std::pow(arma::accu(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), 2.0) + std::pow(arma::accu(z.head(z.n_elem - 1) - 1.0), 2.0);
+      return 100.0 *
+          std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), 2.0) +
+          std::pow(arma::norm(z.head(z.n_elem - 1) - 1.0), 2.0);
     }
 
     inline std::string RosenbrockFunctionRotated::toString() const noexcept {
