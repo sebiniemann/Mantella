@@ -14,9 +14,9 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
+        const double s_;
+        const double mu_;
         const arma::Col<double> parameterConditinong_;
-        const double s_ = 1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1);
-        const double mu1_ = -std::sqrt(5.25 / s_) + 2.5;
 
         arma::Mat<double> parameterRotationR_;
         arma::Mat<double> parameterRotationQ_;
@@ -61,6 +61,8 @@ namespace mant {
     inline LunacekBiRastriginFunction::LunacekBiRastriginFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+        s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
+        mu_(-std::sqrt(5.25 / s_) + 2.5),
         parameterConditinong_(getParameterConditioning(10.0)) {
       // A vector with al elements set to 2.5.
       setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.5);
