@@ -141,8 +141,6 @@ namespace mant {
       gridSoftCostraintsValueThreshold = bestGridSoftConstraintsValue;
       gridObjectiveValueThreshold = bestGridObjectiveValue;
 
-      std::cout << bestGridParameter << std::endl;
-      std::cout << stepSize << std::endl;
       arma::Col<double> gridLowerBoundsCandidate = bestGridParameter - stepSize;
       arma::Col<double> gridUpperBoundsCandidate = bestGridParameter + stepSize;
 
