@@ -81,7 +81,7 @@ namespace mant {
       unsigned int numberOfEvaluations_;
       unsigned int numberOfDistinctEvaluations_;
 
-      arma::Col<ParameterType> getScaledCongruentParameter(
+      arma::Col<ParameterType> getDiversifiedParameter(
         const arma::Col<ParameterType>& parameter) const noexcept;
 
       virtual double getSoftConstraintsValueImplementation(
@@ -133,7 +133,7 @@ namespace mant {
       const arma::Col<double> parameterScaling);
 
   template <>
-  inline arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
+  inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
       const arma::Col<double>& parameter) const noexcept;
 
   template <typename ParameterType>
@@ -220,7 +220,7 @@ namespace mant {
       ++numberOfDistinctEvaluations_;
 
       // The result was not found, compute it.
-      const double& result = objectiveValueScaling_ * getObjectiveValueImplementation(getScaledCongruentParameter(parameter)) + objectiveValueTranslation_;
+      const double& result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
@@ -327,7 +327,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  inline arma::Col<ParameterType> OptimisationProblem<ParameterType>::getScaledCongruentParameter(
+  inline arma::Col<ParameterType> OptimisationProblem<ParameterType>::getDiversifiedParameter(
       const arma::Col<ParameterType>& parameter) const noexcept {
     assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
 
@@ -335,7 +335,7 @@ namespace mant {
   }
 
   template <>
-  inline arma::Col<double> OptimisationProblem<double>::getScaledCongruentParameter(
+  inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
       const arma::Col<double>& parameter) const noexcept {
     assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
 
