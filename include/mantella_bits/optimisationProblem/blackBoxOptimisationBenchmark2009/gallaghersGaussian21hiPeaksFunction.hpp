@@ -69,7 +69,7 @@ namespace mant {
     inline GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction(
         const unsigned int& numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
-        weight_({10, 1.1, 1.521052631578947, 1.942105263157895, 2.363157894736842, 2.784210526315789, 3.205263157894737, 3.626315789473684, 4.047368421052632, 4.468421052631578, 4.889473684210526, 5.310526315789474, 5.731578947368421, 6.152631578947368, 6.573684210526316, 6.994736842105263, 7.41578947368421, 7.836842105263157, 8.257894736842106, 8.678947368421053, 9.1}) {
+        weight_(arma::join_cols(arma::Col<double>({10}), arma::linspace<arma::Col<double>>(1.1, 9.1, 20))) {
       setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
       setLocalParameterConditioning(getRandomLocalParameterConditioning());
       setLocalParameterTranslation(getRandomLocalParameterTranslation());
