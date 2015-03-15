@@ -74,7 +74,7 @@ namespace mant {
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> conditionedParameter = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
-      for (std::size_t n = 0; n < conditionedParameter.n_elem; ++n) {
+      for (std::size_t n = 0; n < parameter.n_elem; ++n) {
         conditionedParameter(n) = std::pow(parameter(n), conditionedParameter(n));
       }
 
