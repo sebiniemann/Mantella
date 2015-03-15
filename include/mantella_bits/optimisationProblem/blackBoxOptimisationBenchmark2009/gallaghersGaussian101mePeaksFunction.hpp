@@ -127,7 +127,7 @@ namespace mant {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 101; ++k) {
         const arma::Col<double>& locallyTranslatedParameter = parameter - localParameterTranslation_.col(k);
-        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-1.0 / (2.0 * static_cast<double>(numberOfDimensions_)) * arma::dot(locallyTranslatedParameter, parameterRotationR_.t() * arma::diagmat(localParameterConditioning_.col(k)) * parameterRotationR_ * locallyTranslatedParameter)));
+        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-0.5 / static_cast<double>(numberOfDimensions_) * arma::dot(locallyTranslatedParameter, parameterRotationR_.t() * arma::diagmat(localParameterConditioning_.col(k)) * parameterRotationR_ * locallyTranslatedParameter)));
       }
 
       return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
