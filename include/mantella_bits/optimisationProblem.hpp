@@ -37,13 +37,13 @@ namespace mant {
           const arma::Col<unsigned int> parameterPermutation);
 
       void setParameterTranslation(
-          const arma::Col<ParameterType> parameterTranslation);
+          const arma::Col<double> parameterTranslation);
 
       void setParameterScaling(
-        const arma::Col<ParameterType> parameterScaling);
+        const arma::Col<double> parameterScaling);
 
       void setParameterRotation(
-        const arma::Mat<ParameterType> parameterRotation);
+        const arma::Mat<double> parameterRotation);
 
       void setObjectiveValueTranslation(
         const double objectiveValueTranslation) noexcept;
