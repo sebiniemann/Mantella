@@ -89,7 +89,7 @@ namespace mant {
 
       localParameterConditioning_.set_size(numberOfDimensions_, 21);
       for (std::size_t n = 0; n < localParameterConditioning.n_elem; ++n) {
-        const double& localParameterConditioningValue = std::pow(10.0, localParameterConditioning(n) / 33.0);
+        const double& localParameterConditioningValue = std::pow(1000.0, localParameterConditioning(n) / 19.0);
         localParameterConditioning_.col(n) = getParameterConditioning(localParameterConditioningValue) / std::sqrt(localParameterConditioningValue);
       }
     }
@@ -104,7 +104,7 @@ namespace mant {
 
     inline arma::Col<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalParameterConditioning() const noexcept {
       arma::Col<double> localParameterConditioning(21);
-      localParameterConditioning(0) = 9.5;
+      localParameterConditioning(0) = 19;
       localParameterConditioning.tail(20) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(20));
 
       return localParameterConditioning;
