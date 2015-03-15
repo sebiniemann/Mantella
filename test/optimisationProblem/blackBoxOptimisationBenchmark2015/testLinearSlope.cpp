@@ -27,7 +27,7 @@ TEST_CASE("bbob2015::LinearSlope", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
 
     linearSlope.setObjectiveValueTranslation(0);
-    linearSlope.setParameterReflection(one.at(0) > 0 ? true : false);
+    linearSlope.setObjectiveFunctionRotation(arma::zeros<arma::Col<double>>(numberOfDimensions) + (one.at(0) > 0 ? 1.0 : -1.0));
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

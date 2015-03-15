@@ -27,7 +27,7 @@ TEST_CASE("bbob2010::SchwefelFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedSchwefelFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     schwefelFunction.setObjectiveValueTranslation(0);
-    schwefelFunction.setParameterReflection(one.at(0) < 0 ? true : false);
+    schwefelFunction.setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions) + (one.at(0) > 0 ? 2.0 : -2.0));
 
     for (std::size_t n = 0; n > parameters.n_cols; ++n) {
       CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
