@@ -32,6 +32,9 @@ namespace mant {
       bool isSatisfyingConstraints(
         const arma::Col<ParameterType>& parameter);
 
+      void setParameterPermutation(
+          const arma::Col<unsigned int> parameterPermutation);
+
       void setParameterTranslation(
           const arma::Col<ParameterType> parameterTranslation);
 
@@ -69,6 +72,7 @@ namespace mant {
       arma::Col<ParameterType> lowerBounds_;
       arma::Col<ParameterType> upperBounds_;
 
+      arma::Col<unsigned int> parameterPermutation_;
       arma::Col<double> parameterTranslation_;
       arma::Col<double> parameterScaling_;
       arma::Mat<double> parameterRotation_;
@@ -144,6 +148,7 @@ namespace mant {
       numberOfDistinctEvaluations_(0) {
     setLowerBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) - std::numeric_limits<ParameterType>::max());
     setUpperBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::numeric_limits<ParameterType>::max());
+    setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
     setObjectiveValueTranslation(0.0);
     setObjectiveValueScaling(1.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
@@ -157,6 +162,7 @@ namespace mant {
       numberOfDistinctEvaluations_(0) {
     setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
     setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
+    setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
     setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
@@ -255,6 +261,15 @@ namespace mant {
     upperBounds_ = upperBounds;
   }
 
+  template <typename ParameterType>
+  inline void OptimisationProblem<ParameterType>::setParameterPermutation(
+      const arma::Col<unsigned int> parameterPermutation) {
+    // TODO Check if this is actually a permutaion
+    checkDimensionCompatible("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
+
+    parameterPermutation_ = parameterPermutation;
+  }
+
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
       const arma::Col<double> parameterTranslation) {
@@ -331,7 +346,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter) const noexcept {
     assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
 
-    return parameter;
+    return parameter.elem(parameterPermutation_);
   }
 
   template <>
@@ -339,7 +354,7 @@ namespace mant {
       const arma::Col<double>& parameter) const noexcept {
     assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
 
-    return parameterRotation_ * (parameterScaling_ % parameter - parameterTranslation_);
+    return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
   }
 
   template <typename ParameterType>
