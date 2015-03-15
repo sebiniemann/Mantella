@@ -17,7 +17,7 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> weight_;
+        const arma::Col<double>::fixed<21> weight_;
 
         arma::Mat<double> parameterRotationR_;
         arma::Mat<double> localParameterConditioning_;
