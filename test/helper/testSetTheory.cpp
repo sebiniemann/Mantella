@@ -4,8 +4,6 @@
 // C++ Standard Library
 #include <array>
 
-#include <iostream>
-
 // Mantella
 #include <mantella>
 
