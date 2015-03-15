@@ -38,6 +38,6 @@ TEST_CASE("bbob2013::BuecheRastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob2013::BuecheRastriginFunction(5).toString() == "bueche-rastigin-function");
+    CHECK(mant::bbob2013::BuecheRastriginFunction(5).toString() == "bueche-rastrigin-function");
   }
 }
