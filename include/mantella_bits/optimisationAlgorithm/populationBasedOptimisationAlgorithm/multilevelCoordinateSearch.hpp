@@ -1,7 +1,7 @@
 namespace mant {
 
   template <typename ParameterType>
-  class MultilevelCoordinateSearch : public PopulationBasedAlgorithm<ParameterType> {
+  class MultilevelCoordinateSearch : public PopulationBasedOptimisationAlgorithm<ParameterType> {
   public:
     //initialPointIndex is the index inside initialPopulation_ which is used as the starting point.
     explicit MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem, const unsigned int& populationSize) noexcept;
@@ -265,7 +265,7 @@ namespace mant {
   template <typename ParameterType>
   MultilevelCoordinateSearch<DistanceFunction>::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
-  : PopulationBasedAlgorithm<ParameterType>(optimisationProblem, populationSize) {
+  : PopulationBasedOptimisationAlgorithm<ParameterType>(optimisationProblem, populationSize) {
     //for convenience
     const unsigned int numberOfDimensions = optimisationProblem->getNumberOfDimensions();
 
