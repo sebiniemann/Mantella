@@ -49,6 +49,8 @@ namespace mant {
       // and false otherwise.
       virtual bool isTerminated() const noexcept;
 
+      virtual void restart() noexcept;
+
       // Provides a default deconstructor.
       virtual ~OptimisationAlgorithm() = default;
 
@@ -186,6 +188,11 @@ namespace mant {
   template <typename ParameterType>
   bool OptimisationAlgorithm<ParameterType>::isTerminated() const noexcept {
     return (numberOfIterations_ >= maximalNumberOfIterations_);
+  }
+
+  template <typename ParameterType>
+  void OptimisationAlgorithm<ParameterType>::restart() noexcept {
+
   }
 
   template <typename ParameterType>
