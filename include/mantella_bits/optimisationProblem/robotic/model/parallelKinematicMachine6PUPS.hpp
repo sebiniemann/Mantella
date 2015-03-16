@@ -39,6 +39,7 @@ namespace mant {
 
         inline arma::Col<double>::fixed<6> getEndEffectorPose(
             const arma::Row<double>::fixed<6>& actuations,
+            const arma::Row<double>::fixed<3>& endEffectorRotation,
             const arma::Row<double>& redundantJointActuations) const;
 
         inline double getEndEffectorPoseAccuracy(
@@ -188,9 +189,25 @@ namespace mant {
 
     inline arma::Col<double>::fixed<6> ParallelKinematicMachine6PUPS::getEndEffectorPose(
         const arma::Row<double>::fixed<6>& actuations,
+        const arma::Row<double>::fixed<3>& endEffectorRotation,
         const arma::Row<double>& redundantJointActuations) const {
-      // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
-      return {0, 0, 0, 0, 0, 0};
+      if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
+        throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
+      }
+
+      const double& endEffectorRollAngle = endEffectorRotation(0);
+      const double& endEffectorPitchAngle = endEffectorRotation(1);
+      const double& endEffectorYawAngle = endEffectorRotation(2);
+
+      arma::Mat<double> baseJointPositions = redundantJointStartPositions_;
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
+        const unsigned int& redundantJointIndex = redundantJointIndicies_(n);
+        baseJointPositions.col(redundantJointIndex) += redundantJointActuations(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
+      }
+
+      baseJointPositions -= get3DRotation(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
+
+      return arma::join_cols(getTriangulation(baseJointPositions.col(0), actuations(0), baseJointPositions.col(1), actuations(1), baseJointPositions.col(2), actuations(2)), endEffectorRotation);
     }
 
     inline double ParallelKinematicMachine6PUPS::getEndEffectorPoseAccuracy(
