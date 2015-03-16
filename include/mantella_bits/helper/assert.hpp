@@ -3,8 +3,8 @@ namespace mant {
       const arma::Mat<double>& matrix) noexcept;
 
   inline bool isCompatibleDimension(
-      const std::size_t& firstDimension,
-      const std::size_t& secondDimension) noexcept;
+      const std::size_t firstDimension,
+      const std::size_t secondDimension) noexcept;
 
   inline void checkRotationMatrix(
       const std::string& name,
@@ -12,9 +12,9 @@ namespace mant {
 
   inline void checkCompatibleDimension(
       const std::string& firstName,
-      const std::size_t& firstDimension,
+      const std::size_t firstDimension,
       const std::string& secondName,
-      const std::size_t& secondDimension);
+      const std::size_t secondDimension);
 
   inline bool isRotationMatrix(
       const arma::Mat<double>& matrix) noexcept {
@@ -33,8 +33,8 @@ namespace mant {
   }
 
   inline bool isCompatibleDimension(
-      const std::size_t& firstDimension,
-      const std::size_t& secondDimension) noexcept {
+      const std::size_t firstDimension,
+      const std::size_t secondDimension) noexcept {
     return (firstDimension == secondDimension);
   }
 
@@ -48,9 +48,9 @@ namespace mant {
 
   inline void checkCompatibleDimension(
       const std::string& firstName,
-      const std::size_t& firstDimension,
+      const std::size_t firstDimension,
       const std::string& secondName,
-      const std::size_t& secondDimension) {
+      const std::size_t secondDimension) {
     if(!isCompatibleDimension(firstDimension, secondDimension)) {
       throw std::logic_error("Incompatible dimensions: " + firstName + " must be equal to " + secondName);
     }
