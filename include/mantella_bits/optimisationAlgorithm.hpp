@@ -57,6 +57,8 @@ namespace mant {
       virtual ~OptimisationAlgorithm() = default;
 
     protected:
+      const unsigned int numberOfDimensions_;
+
       // The current number of iterations performed.
       unsigned int numberOfIterations_;
 
@@ -75,6 +77,34 @@ namespace mant {
       // The distance function to be used.
       std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction_;
 
+      arma::Col<ParameterType> getLowerBounds() const noexcept;
+
+      arma::Col<ParameterType> getUpperBounds() const noexcept;
+
+      double getSoftConstraintsValue(
+        const arma::Col<ParameterType>& parameter);
+
+      arma::Col<unsigned int> isSatisfyingLowerBounds(
+        const arma::Col<ParameterType>& parameter);
+
+      arma::Col<unsigned int> isSatisfyingUpperBounds(
+        const arma::Col<ParameterType>& parameter);
+
+      bool isSatisfyingSoftConstraints(
+        const arma::Col<ParameterType>& parameter);
+
+      bool isSatisfyingConstraints(
+        const arma::Col<ParameterType>& parameter);
+
+      double getAcceptableObjectiveValue() const noexcept;
+
+      double getObjectiveValue(
+        const arma::Col<ParameterType>& parameter);
+
+      unsigned int getNumberOfEvaluations() const noexcept;
+
+      unsigned int getNumberOfDistinctEvaluations() const noexcept;
+
       void setDefaultDistanceFunction(std::true_type) noexcept;
       void setDefaultDistanceFunction(std::false_type) noexcept;
 
@@ -92,6 +122,7 @@ namespace mant {
   OptimisationAlgorithm<ParameterType>::OptimisationAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : optimisationProblem_(optimisationProblem),
+      numberOfDimensions_(optimisationProblem_->numberOfDimensions_),
       numberOfIterations_(0),
       bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
       bestObjectiveValue_(std::numeric_limits<double>::infinity()) {
@@ -167,5 +198,67 @@ namespace mant {
   void OptimisationAlgorithm<ParameterType>::setDefaultDistanceFunction(
       std::false_type) noexcept {
     setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new ManhattanDistance<ParameterType>));
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType>::getLowerBounds() const noexcept {
+    return optimisationProblem_->getLowerBounds();
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType>::getUpperBounds() const noexcept {
+    return optimisationProblem_->getUpperBounds();
+  }
+
+  template <typename ParameterType>
+  double OptimisationAlgorithm<ParameterType>::getSoftConstraintsValue(
+    const arma::Col<ParameterType>& parameter) {
+    return optimisationProblem_->getSoftConstraintsValue(parameter);
+  }
+
+  template <typename ParameterType>
+  arma::Col<unsigned int> OptimisationAlgorithm<ParameterType>::isSatisfyingLowerBounds(
+    const arma::Col<ParameterType>& parameter) {
+    return optimisationProblem_->isSatisfyingLowerBounds(parameter);
+  }
+
+  template <typename ParameterType>
+  arma::Col<unsigned int> OptimisationAlgorithm<ParameterType>::isSatisfyingUpperBounds(
+    const arma::Col<ParameterType>& parameter) {
+    return optimisationProblem_->isSatisfyingUpperBounds(parameter);
+  }
+
+  template <typename ParameterType>
+  bool OptimisationAlgorithm<ParameterType>::isSatisfyingSoftConstraints(
+    const arma::Col<ParameterType>& parameter) {
+    return optimisationProblem_->isSatisfyingSoftConstraints(parameter);
+  }
+
+  template <typename ParameterType>
+  bool OptimisationAlgorithm<ParameterType>::isSatisfyingConstraints(
+    const arma::Col<ParameterType>& parameter) {
+    return optimisationProblem_->isSatisfyingConstraints(parameter);
+  }
+
+  template <typename ParameterType>
+  double OptimisationAlgorithm<ParameterType>::getAcceptableObjectiveValue() const noexcept {
+    return optimisationProblem_->getAcceptableObjectiveValue();
+  }
+
+  template <typename ParameterType>
+  double OptimisationAlgorithm<ParameterType>::getObjectiveValue(
+    const arma::Col<ParameterType>& parameter) {
+    parameterHistory_.push_back(parameter);
+    return optimisationProblem_->getObjectiveValue(parameter);
+  }
+
+  template <typename ParameterType>
+  unsigned int OptimisationAlgorithm<ParameterType>::getNumberOfEvaluations() const noexcept {
+    return optimisationProblem_->getNumberOfEvaluations();
+  }
+
+  template <typename ParameterType>
+  unsigned int OptimisationAlgorithm<ParameterType>::getNumberOfDistinctEvaluations() const noexcept {
+    return optimisationProblem_->getNumberOfDistinctEvaluations();
   }
 }
