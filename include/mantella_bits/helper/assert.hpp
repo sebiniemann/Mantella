@@ -2,13 +2,13 @@ namespace mant {
   inline bool isRotationMatrix(
       const arma::Mat<double>& matrix) noexcept;
 
-  inline void checkRotationMatrix(
-      const std::string& name,
-      const arma::Mat<double>& matrix);
-
   inline bool isCompatibleDimension(
       const std::size_t& firstDimension,
       const std::size_t& secondDimension) noexcept;
+
+  inline void checkRotationMatrix(
+      const std::string& name,
+      const arma::Mat<double>& matrix);
 
   inline void checkCompatibleDimension(
       const std::string& firstName,
@@ -32,18 +32,18 @@ namespace mant {
     return true;
   }
 
+  inline bool isCompatibleDimension(
+      const std::size_t& firstDimension,
+      const std::size_t& secondDimension) noexcept {
+    return (firstDimension == secondDimension);
+  }
+
   inline void checkRotationMatrix(
       const std::string& name,
       const arma::Mat<double>& matrix) {
     if(!isRotationMatrix(matrix)) {
       throw std::logic_error("Rotation matrix required: " + name + " must be square, orthonormal and its determinant be either 1 or -1.");
     }
-  }
-
-  inline bool isCompatibleDimension(
-      const std::size_t& firstDimension,
-      const std::size_t& secondDimension) noexcept {
-    return (firstDimension == secondDimension);
   }
 
   inline void checkCompatibleDimension(
