@@ -64,7 +64,7 @@ namespace mant {
 
     inline void SharpRidgeFunction::setParameterRotationR(
         const arma::Mat<double>& parameterRotationR) {
-      checkDimensionCompatible("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkDimensionCompatibility("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
       checkRotationMatrix("The matrix", parameterRotationR);
 
       parameterRotationR_ = parameterRotationR;
@@ -72,7 +72,7 @@ namespace mant {
 
     inline void SharpRidgeFunction::setParameterRotationQ(
         const arma::Mat<double>& parameterRotationQ) {
-      checkDimensionCompatible("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkDimensionCompatibility("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
       checkRotationMatrix("The matrix", parameterRotationQ);
 
       parameterRotationQ_ = parameterRotationQ;

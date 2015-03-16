@@ -10,7 +10,7 @@ namespace mant {
       const std::size_t& firstDimension,
       const std::size_t& secondDimension) noexcept;
 
-  inline void checkDimensionCompatible(
+  inline void checkDimensionCompatibility(
       const std::string& firstName,
       const std::size_t& firstDimension,
       const std::string& secondName,
@@ -46,7 +46,7 @@ namespace mant {
     return (firstDimension == secondDimension);
   }
 
-  inline void checkDimensionCompatible(
+  inline void checkDimensionCompatibility(
       const std::string& firstName,
       const std::size_t& firstDimension,
       const std::string& secondName,
