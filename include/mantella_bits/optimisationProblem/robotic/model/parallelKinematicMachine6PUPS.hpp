@@ -156,7 +156,7 @@ namespace mant {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
-      checkCompatibleDimension("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
+      isEqual("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
 
       arma::Cube<double>::fixed<3, 6, 2> model;
 
@@ -195,7 +195,7 @@ namespace mant {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
-      checkCompatibleDimension("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
+      isEqual("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
 
       const double& endEffectorRollAngle = endEffectorRotation(0);
       const double& endEffectorPitchAngle = endEffectorRotation(1);

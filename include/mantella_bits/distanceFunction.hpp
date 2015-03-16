@@ -51,7 +51,7 @@ namespace mant {
   ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter) const {
-    checkCompatibleDimension("The number of elements of the first parameter", firstParameter.n_elem, "the number of elements of the second", secondParameter.n_elem);
+    isEqual("The number of elements of the first parameter", firstParameter.n_elem, "the number of elements of the second", secondParameter.n_elem);
 
     const double& distance = getDistance(firstParameter, secondParameter, std::is_floating_point<ParameterType>());
 
@@ -65,7 +65,7 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
       std::true_type) const noexcept {
-    assert(isCompatibleDimension(firstParameter.n_elem, secondParameter.n_elem));
+    assert(isEqual(firstParameter.n_elem, secondParameter.n_elem));
 
     return getDistanceImplementation(secondParameter - firstParameter);
   }
@@ -75,7 +75,7 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
       std::false_type) const noexcept {
-    assert(isCompatibleDimension(firstParameter.n_elem, secondParameter.n_elem));
+    assert(isEqual(firstParameter.n_elem, secondParameter.n_elem));
 
     return getDistanceImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter));
   }

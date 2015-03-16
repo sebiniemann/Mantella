@@ -64,16 +64,16 @@ namespace mant {
 
     inline void AttractiveSectorFunction::setParameterRotationR(
         const arma::Mat<double>& parameterRotationR) {
-      checkCompatibleDimension("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", parameterRotationR);
+      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", parameterRotationR);
 
       parameterRotationR_ = parameterRotationR;
     }
 
     inline void AttractiveSectorFunction::setParameterRotationQ(
         const arma::Mat<double>& parameterRotationQ) {
-      checkCompatibleDimension("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkRotationMatrix("The matrix", parameterRotationQ);
+      isEqual("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", parameterRotationQ);
 
       parameterRotationQ_ = parameterRotationQ;
     }

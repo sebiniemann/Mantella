@@ -2,18 +2,18 @@ namespace mant {
   inline bool isRotationMatrix(
       const arma::Mat<double>& matrix) noexcept;
 
-  inline bool isCompatibleDimension(
-      const std::size_t firstDimension,
-      const std::size_t secondDimension) noexcept;
-  inline void checkRotationMatrix(
+  inline void isRotationMatrix(
       const std::string& name,
       const arma::Mat<double>& matrix);
 
-  inline void checkCompatibleDimension(
+  inline bool isEqual(
+      const std::size_t firstValue,
+      const std::size_t secondValue) noexcept;
+
+  inline void isEqual(
       const std::string& firstName,
-      const std::size_t firstDimension,
+      const std::size_t firstValue,
       const std::string& secondName,
-      const std::size_t secondDimension);
       const std::size_t secondValue);
 
   inline bool isRotationMatrix(
@@ -32,30 +32,27 @@ namespace mant {
     return true;
   }
 
-  inline bool isCompatibleDimension(
-      const std::size_t firstDimension,
-      const std::size_t secondDimension) noexcept {
-    return (firstDimension == secondDimension);
-  }
-
-  inline void checkRotationMatrix(
+  inline void isRotationMatrix(
       const std::string& name,
       const arma::Mat<double>& matrix) {
     if(!isRotationMatrix(matrix)) {
-      throw std::logic_error("Rotation matrix required: " + name + " must be square, orthonormal and its determinant be either 1 or -1.");
+      throw std::logic_error(name + " must be a rotation matrix, i.e. it must be square, orthonormal and its determinant be either 1 or -1.");
     }
   }
 
-  inline void checkCompatibleDimension(
+  inline bool isEqual(
+      const std::size_t firstValue,
+      const std::size_t secondValue) noexcept {
+    return (firstValue == secondValue);
+  }
+
+  inline void isEqual(
       const std::string& firstName,
-      const std::size_t firstDimension,
+      const std::size_t firstValue,
       const std::string& secondName,
-      const std::size_t secondDimension) {
-    if(!isCompatibleDimension(firstDimension, secondDimension)) {
-      throw std::logic_error("Incompatible dimensions: " + firstName + " must be equal to " + secondName);
-    }
-  }
-
+      const std::size_t secondValue) {
+    if(!isEqual(firstValue, secondValue)) {
+      throw std::logic_error(firstName + " must be equal to " + secondName);
     }
   }
 }
