@@ -2,7 +2,6 @@ namespace mant {
   namespace robotic {
     class MultiLevelStewartPlatform {
       public:
-        // TODO Add setter
         inline explicit MultiLevelStewartPlatform() noexcept;
 
         inline void setPlatformLevels(
