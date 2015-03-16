@@ -6,11 +6,11 @@ namespace mant {
       const std::string& name,
       const arma::Mat<double>& matrix);
 
-  inline bool isDimensionCompatible(
+  inline bool isCompatibleDimension(
       const std::size_t& firstDimension,
       const std::size_t& secondDimension) noexcept;
 
-  inline void checkDimensionCompatibility(
+  inline void checkCompatibleDimension(
       const std::string& firstName,
       const std::size_t& firstDimension,
       const std::string& secondName,
@@ -46,7 +46,7 @@ namespace mant {
     return (firstDimension == secondDimension);
   }
 
-  inline void checkDimensionCompatibility(
+  inline void checkCompatibleDimension(
       const std::string& firstName,
       const std::size_t& firstDimension,
       const std::string& secondName,

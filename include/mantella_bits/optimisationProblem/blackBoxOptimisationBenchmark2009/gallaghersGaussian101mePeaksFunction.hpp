@@ -77,7 +77,7 @@ namespace mant {
 
     inline void GallaghersGaussian101mePeaksFunction::setParameterRotationR(
         const arma::Mat<double>& parameterRotationR) {
-      checkDimensionCompatibility("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkCompatibleDimension("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
       checkRotationMatrix("The matrix", parameterRotationR);
 
       parameterRotationR_ = parameterRotationR;
@@ -85,7 +85,7 @@ namespace mant {
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterConditioning(
         const arma::Col<double>& localParameterConditioning) {
-      checkDimensionCompatibility("The number of elements", localParameterConditioning.n_elem, "the number of peaks", 101);
+      checkCompatibleDimension("The number of elements", localParameterConditioning.n_elem, "the number of peaks", 101);
 
       localParameterConditioning_.set_size(numberOfDimensions_, 101);
       for (std::size_t n = 0; n < localParameterConditioning.n_elem; ++n) {
@@ -96,8 +96,8 @@ namespace mant {
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterTranslation(
         const arma::Mat<double>& localParameterTranslation) {
-      checkDimensionCompatibility("The number of rows", localParameterTranslation.n_rows, "the number of dimensions", numberOfDimensions_);
-      checkDimensionCompatibility("The number of columns", localParameterTranslation.n_cols, "the number of peaks", 101);
+      checkCompatibleDimension("The number of rows", localParameterTranslation.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkCompatibleDimension("The number of columns", localParameterTranslation.n_cols, "the number of peaks", 101);
 
       localParameterTranslation_ = localParameterTranslation;
     }

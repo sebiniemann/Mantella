@@ -57,7 +57,7 @@ namespace mant {
 
     inline void EllipsoidalFunctionRotated::setParameterRotationR(
         const arma::Mat<double>& parameterRotationR) {
-      checkDimensionCompatibility("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkCompatibleDimension("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
       checkRotationMatrix("The matrix", parameterRotationR);
 
       parameterRotationR_ = parameterRotationR;

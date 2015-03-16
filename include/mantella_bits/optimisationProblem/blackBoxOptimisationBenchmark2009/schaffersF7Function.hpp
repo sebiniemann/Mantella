@@ -67,7 +67,7 @@ namespace mant {
 
     inline void SchaffersF7Function::setParameterRotationR(
         const arma::Mat<double>& parameterRotationR) {
-      checkDimensionCompatibility("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkCompatibleDimension("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
       checkRotationMatrix("The matrix", parameterRotationR);
 
       parameterRotationR_ = parameterRotationR;
@@ -75,7 +75,7 @@ namespace mant {
 
     inline void SchaffersF7Function::setParameterRotationQ(
         const arma::Mat<double>& parameterRotationQ) {
-      checkDimensionCompatibility("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      checkCompatibleDimension("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
       checkRotationMatrix("The matrix", parameterRotationQ);
 
       parameterRotationQ_ = parameterRotationQ;

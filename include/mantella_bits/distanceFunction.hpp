@@ -51,7 +51,7 @@ namespace mant {
   ParameterType DistanceFunction<ParameterType>::getDistance(
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter) const {
-    checkDimensionCompatibility("The number of elements of the first parameter", firstParameter.n_elem, "the number of elements of the second", secondParameter.n_elem);
+    checkCompatibleDimension("The number of elements of the first parameter", firstParameter.n_elem, "the number of elements of the second", secondParameter.n_elem);
 
     const double& distance = getDistance(firstParameter, secondParameter, std::is_floating_point<ParameterType>());
 
