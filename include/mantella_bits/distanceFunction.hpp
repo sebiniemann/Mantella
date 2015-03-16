@@ -65,7 +65,7 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
       std::true_type) const noexcept {
-    assert(isDimensionCompatible(firstParameter.n_elem, secondParameter.n_elem));
+    assert(isCompatibleDimension(firstParameter.n_elem, secondParameter.n_elem));
 
     return getDistanceImplementation(secondParameter - firstParameter);
   }
@@ -75,7 +75,7 @@ namespace mant {
       const arma::Col<ParameterType>& firstParameter,
       const arma::Col<ParameterType>& secondParameter,
       std::false_type) const noexcept {
-    assert(isDimensionCompatible(firstParameter.n_elem, secondParameter.n_elem));
+    assert(isCompatibleDimension(firstParameter.n_elem, secondParameter.n_elem));
 
     return getDistanceImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter));
   }

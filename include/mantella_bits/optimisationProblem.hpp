@@ -345,7 +345,7 @@ namespace mant {
   template <typename ParameterType>
   inline arma::Col<ParameterType> OptimisationProblem<ParameterType>::getDiversifiedParameter(
       const arma::Col<ParameterType>& parameter) const noexcept {
-    assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
+    assert(isCompatibleDimension(parameter.n_elem, numberOfDimensions_));
 
     return parameter.elem(parameterPermutation_);
   }
@@ -353,7 +353,7 @@ namespace mant {
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
       const arma::Col<double>& parameter) const noexcept {
-    assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
+    assert(isCompatibleDimension(parameter.n_elem, numberOfDimensions_));
 
     return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
   }
@@ -361,7 +361,7 @@ namespace mant {
   template <typename ParameterType>
   double OptimisationProblem<ParameterType>::getSoftConstraintsValueImplementation(
       const arma::Col<ParameterType>& parameter) const noexcept {
-    assert(isDimensionCompatible(parameter.n_elem, numberOfDimensions_));
+    assert(isCompatibleDimension(parameter.n_elem, numberOfDimensions_));
 
     return 0.0;
   }

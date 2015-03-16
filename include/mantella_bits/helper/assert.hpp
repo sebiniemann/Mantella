@@ -40,7 +40,7 @@ namespace mant {
     }
   }
 
-  inline bool isDimensionCompatible(
+  inline bool isCompatibleDimension(
       const std::size_t& firstDimension,
       const std::size_t& secondDimension) noexcept {
     return (firstDimension == secondDimension);
@@ -51,7 +51,7 @@ namespace mant {
       const std::size_t& firstDimension,
       const std::string& secondName,
       const std::size_t& secondDimension) {
-    if(!isDimensionCompatible(firstDimension, secondDimension)) {
+    if(!isCompatibleDimension(firstDimension, secondDimension)) {
       throw std::logic_error("Incompatible dimensions: " + firstName + " must be equal to " + secondName);
     }
   }
