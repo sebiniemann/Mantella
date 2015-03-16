@@ -6,6 +6,18 @@ namespace mant {
       const std::size_t firstDimension,
       const std::size_t secondDimension) noexcept;
 
+  template <typename ParameterType>
+  inline bool isBetween(
+      const arma::Col<ParameterType>& parameter,
+      const arma::Col<ParameterType>& lowerBound,
+      const arma::Col<ParameterType>& upperBound);
+
+  template <typename ParameterType>
+  inline bool isBetween(
+      const arma::Col<ParameterType>& parameter,
+      const ParameterType lowerBound,
+      const ParameterType upperBound);
+
   inline void checkRotationMatrix(
       const std::string& name,
       const arma::Mat<double>& matrix);
@@ -15,6 +27,24 @@ namespace mant {
       const std::size_t firstDimension,
       const std::string& secondName,
       const std::size_t secondDimension);
+
+  template <typename ParameterType>
+  inline void checkBetween(
+      const std::string& parameterName,
+      const arma::Col<ParameterType>& parameter,
+      const std::string& lowerBoundName,
+      const arma::Col<ParameterType>& lowerBound,
+      const std::string& upperBoundName,
+      const arma::Col<ParameterType>& upperBound);
+
+  template <typename ParameterType>
+  inline void checkBetween(
+      const std::string& parameterName,
+      const arma::Col<ParameterType>& parameter,
+      const std::string& lowerBoundName,
+      const ParameterType lowerBound,
+      const std::string& upperBoundName,
+      const ParameterType upperBound);
 
   inline bool isRotationMatrix(
       const arma::Mat<double>& matrix) noexcept {
@@ -38,6 +68,46 @@ namespace mant {
     return (firstDimension == secondDimension);
   }
 
+  template <typename ParameterType>
+  inline bool isBetween(
+      const arma::Col<ParameterType>& parameter,
+      const arma::Col<ParameterType>& lowerBound,
+      const arma::Col<ParameterType>& upperBound) {
+    for(std::size_t n = 0; n < parameter.n_elem; ++n) {
+      const double value = parameter(n);
+
+      if(value < lowerBound(n) || value > upperBound(n)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  template <typename ParameterType>
+  inline bool isBetween(
+      const arma::Col<ParameterType>& parameter,
+      const ParameterType lowerBound,
+      const ParameterType upperBound) {
+    for(std::size_t n = 0; n < parameter.n_elem; ++n) {
+      const double value = parameter(n);
+
+      if(value < lowerBound || value > upperBound) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  template <typename ParameterType>
+  inline bool isBetween(
+      const arma::Col<ParameterType>& parameter,
+      const ParameterType lowerBound,
+      const ParameterType upperBound) noexcept {
+
+  }
+
   inline void checkRotationMatrix(
       const std::string& name,
       const arma::Mat<double>& matrix) {
@@ -53,6 +123,32 @@ namespace mant {
       const std::size_t secondDimension) {
     if(!isCompatibleDimension(firstDimension, secondDimension)) {
       throw std::logic_error("Incompatible dimensions: " + firstName + " must be equal to " + secondName);
+    }
+  }
+
+  template <typename ParameterType>
+  inline void checkBetween(
+      const std::string& parameterName,
+      const arma::Col<ParameterType>& parameter,
+      const std::string& lowerBoundName,
+      const arma::Col<ParameterType>& lowerBound,
+      const std::string& upperBoundName,
+      const arma::Col<ParameterType>& upperBound) {
+    if(!isBetween(parameter, lowerBound, upperBound)) {
+      throw std::logic_error();
+    }
+  }
+
+  template <typename ParameterType>
+  inline void checkBetween(
+      const std::string& parameterName,
+      const arma::Col<ParameterType>& parameter,
+      const std::string& lowerBoundName,
+      const ParameterType lowerBound,
+      const std::string& upperBoundName,
+      const ParameterType upperBound) {
+    if(!isBetween(parameter, lowerBound, upperBound)) {
+      throw std::logic_error();
     }
   }
 }
