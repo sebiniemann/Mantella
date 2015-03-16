@@ -1,6 +1,5 @@
 namespace mant {
   template <typename ParameterType>
-  // TODO Add random translation, ... xy methods
   class OptimisationProblem : public Printable {
     public:
       const unsigned int numberOfDimensions_;
