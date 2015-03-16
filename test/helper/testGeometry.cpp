@@ -24,7 +24,7 @@ TEST_CASE("geometry: get2DRotation(...)", "") {
   }
 }
 
-TEST_CASE("geometry: get3DRotationMatrix(...)", "") {
+TEST_CASE("geometry: get3DRotation(...)", "") {
   SECTION("Generates 3D rotation matrix.") {
     const std::array<double, 14>& rollAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -45, 276, -56, -45.89}};
     const std::array<double, 14>& pitchAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -90, -89, 78, -245}};
@@ -51,7 +51,7 @@ TEST_CASE("geometry: get3DRotationMatrix(...)", "") {
             0.0, 0.0, 1.0
           });
 
-          compare<double>(mant::get3DRotationMatrix(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
+          compare<double>(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
         }
       }
     }

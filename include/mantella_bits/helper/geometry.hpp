@@ -5,7 +5,7 @@ namespace mant {
       const double& angle) noexcept;
 
   // Generates a 3-dimensional right-handside rotation matrix.
-  inline arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
+  inline arma::Mat<double>::fixed<3, 3> get3DRotation(
       // Rotation around the x-axis.
       const double& rollAngle,
       // Rotation around the y-axis.
@@ -65,7 +65,7 @@ namespace mant {
     });
   }
 
-  inline arma::Mat<double>::fixed<3, 3> get3DRotationMatrix(
+  inline arma::Mat<double>::fixed<3, 3> get3DRotation(
       const double& rollAngle,
       const double& pitchAngle,
       const double& yawAngle) noexcept {

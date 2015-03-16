@@ -111,7 +111,7 @@ namespace mant {
       }
 
       for (std::size_t n = 0; n < baseJointAngles_.n_cols; ++n) {
-        baseJointRotations_.slice(n) = get3DRotationMatrix(redundantJointAngles_(0, n), 0, redundantJointAngles_(1, n));
+        baseJointRotations_.slice(n) = get3DRotation(redundantJointAngles_(0, n), 0, redundantJointAngles_(1, n));
       }
 
       for (std::size_t n = 0; n < baseJointRotations_.n_slices; ++n) {
@@ -184,7 +184,7 @@ namespace mant {
         model.slice(0).col(redundantJointIndex) += redundantJointActuations(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      model.slice(2) = get3DRotationMatrix(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
+      model.slice(2) = get3DRotation(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
       model.slice(2).each_col() += endEffectorPosition;
 
       for (std::size_t n = 0; n < model.slice(0).n_cols; ++n) {
