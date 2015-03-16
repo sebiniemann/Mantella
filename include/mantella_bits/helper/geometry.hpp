@@ -1,6 +1,6 @@
 namespace mant {
   // Generates a 2-dimensional right-handside rotation matrix.
-  inline arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
+  inline arma::Mat<double>::fixed<2, 2> get2DRotation(
       // Rotation around the x-axis.
       const double& angle) noexcept;
 
@@ -54,7 +54,7 @@ namespace mant {
       const arma::Col<double>::fixed<3>& thirdCenter,
       const double& thirdRadius);
 
-  inline arma::Mat<double>::fixed<2, 2> get2DRotationMatrix(
+  inline arma::Mat<double>::fixed<2, 2> get2DRotation(
       const double& angle) noexcept {
     double sineAngle = std::sin(angle);
     double cosineAngle = std::cos(angle);

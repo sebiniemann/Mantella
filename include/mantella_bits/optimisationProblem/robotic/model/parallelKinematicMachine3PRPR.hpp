@@ -162,7 +162,7 @@ namespace mant {
         model.slice(0).col(redundantJointIndex) += redundantJointActuations(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
-      model.slice(1) = get2DRotationMatrix(endEffectorAngle) * endEffectorJointPositions_;
+      model.slice(1) = get2DRotation(endEffectorAngle) * endEffectorJointPositions_;
       model.slice(1).each_col() += endEffectorPosition;
 
       return model;

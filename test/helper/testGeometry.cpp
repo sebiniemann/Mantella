@@ -9,7 +9,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("geometry: get2DRotationMatrix(...)", "") {
+TEST_CASE("geometry: get2DRotation(...)", "") {
   SECTION("Generates 2D rotation matrix.") {
     const std::array<double, 15>& angles = {{0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0}};
 
@@ -19,7 +19,7 @@ TEST_CASE("geometry: get2DRotationMatrix(...)", "") {
         std::sin(angle), std::cos(angle)
       });
 
-      compare(mant::get2DRotationMatrix(angle), expected);
+      compare(mant::get2DRotation(angle), expected);
     }
   }
 }
