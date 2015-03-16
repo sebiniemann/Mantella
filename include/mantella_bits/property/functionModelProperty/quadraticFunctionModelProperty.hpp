@@ -6,7 +6,7 @@ namespace mant {
       inline arma::Mat<double> getCoefficients() const noexcept;
 
       inline void setCoefficients(
-          const arma::Mat<double> coefficients);
+          const arma::Mat<double>& coefficients);
 
     protected:
       arma::Mat<double> coefficients_;
@@ -21,7 +21,7 @@ namespace mant {
   }
 
   void QuadraticFunctionModelProperty::setCoefficients(
-      const arma::Mat<double> coefficients) {
+      const arma::Mat<double>& coefficients) {
     if(!coefficients.is_square()) {
       // TODO Throw an exception
     }

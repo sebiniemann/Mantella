@@ -8,10 +8,10 @@ namespace mant {
         const unsigned int& numberOfDimensions) noexcept;
 
       void setLowerBounds(
-        const arma::Col<ParameterType> lowerBounds);
+        const arma::Col<ParameterType>& lowerBounds);
 
       void setUpperBounds(
-        const arma::Col<ParameterType> upperBounds);
+        const arma::Col<ParameterType>& upperBounds);
 
       arma::Col<ParameterType> getLowerBounds() const noexcept;
 
@@ -33,16 +33,16 @@ namespace mant {
         const arma::Col<ParameterType>& parameter);
 
       void setParameterPermutation(
-          const arma::Col<unsigned int> parameterPermutation);
+          const arma::Col<unsigned int>& parameterPermutation);
 
       void setParameterTranslation(
-          const arma::Col<double> parameterTranslation);
+          const arma::Col<double>& parameterTranslation);
 
       void setParameterScaling(
-        const arma::Col<double> parameterScaling);
+        const arma::Col<double>& parameterScaling);
 
       void setParameterRotation(
-        const arma::Mat<double> parameterRotation);
+        const arma::Mat<double>& parameterRotation);
 
       void setObjectiveValueTranslation(
         const double objectiveValueTranslation) noexcept;
@@ -126,15 +126,15 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
-      const arma::Col<double> parameterTranslation);
+      const arma::Col<double>& parameterTranslation);
 
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
-      const arma::Mat<double> parameterRotation);
+      const arma::Mat<double>& parameterRotation);
 
   template <>
   inline void OptimisationProblem<double>::setParameterScaling(
-      const arma::Col<double> parameterScaling);
+      const arma::Col<double>& parameterScaling);
 
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
@@ -242,7 +242,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setLowerBounds(
-      const arma::Col<ParameterType> lowerBounds) {
+      const arma::Col<ParameterType>& lowerBounds) {
     checkDimensionCompatible("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
 
     lowerBounds_ = lowerBounds;
@@ -255,7 +255,7 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setUpperBounds(
-      const arma::Col<ParameterType> upperBounds) {
+      const arma::Col<ParameterType>& upperBounds) {
     checkDimensionCompatible("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
 
     upperBounds_ = upperBounds;
@@ -263,7 +263,7 @@ namespace mant {
 
   template <typename ParameterType>
   inline void OptimisationProblem<ParameterType>::setParameterPermutation(
-      const arma::Col<unsigned int> parameterPermutation) {
+      const arma::Col<unsigned int>& parameterPermutation) {
     // TODO Check if this is actually a permutaion
     checkDimensionCompatible("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
 
@@ -272,7 +272,7 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
-      const arma::Col<double> parameterTranslation) {
+      const arma::Col<double>& parameterTranslation) {
     checkDimensionCompatible("The number of elements", parameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterTranslation_ = parameterTranslation;
@@ -280,7 +280,7 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
-      const arma::Mat<double> parameterRotation) {
+      const arma::Mat<double>& parameterRotation) {
     checkDimensionCompatible("The number of rows", parameterRotation.n_rows, "the number of dimensions", numberOfDimensions_);
     checkRotationMatrix("The matrix", parameterRotation);
 
@@ -289,7 +289,7 @@ namespace mant {
 
   template <>
   inline void OptimisationProblem<double>::setParameterScaling(
-      const arma::Col<double> parameterScaling) {
+      const arma::Col<double>& parameterScaling) {
     checkDimensionCompatible("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterScaling_ = parameterScaling;
