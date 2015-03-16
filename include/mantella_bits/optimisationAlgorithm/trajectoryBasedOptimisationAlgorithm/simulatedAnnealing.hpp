@@ -15,7 +15,7 @@ namespace mant {
       ParameterType maximalStepSize_;
 
       virtual bool isAcceptableState(
-          const double& candidateObjectiveValue) noexcept;
+          const double candidateObjectiveValue) noexcept;
 
       void optimiseImplementation() noexcept override;
 
@@ -71,7 +71,7 @@ namespace mant {
 
   template <typename ParameterType>
   bool SimulatedAnnealing<ParameterType>::isAcceptableState(
-      const double& candidateObjectiveValue) noexcept {
+      const double candidateObjectiveValue) noexcept {
     return std::exp((this->bestObjectiveValue_ - candidateObjectiveValue) / (this->numberOfIterations_ / this->maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 

@@ -9,8 +9,8 @@ namespace mant {
 
       inline arma::Col<double> getRandomNeighbourImplementation(
           const arma::Col<double>& parameter,
-          const double& minimalDistance,
-          const double& maximalDistance) const noexcept override;
+          const double minimalDistance,
+          const double maximalDistance) const noexcept override;
   };
 
   //
@@ -24,8 +24,8 @@ namespace mant {
 
   inline arma::Col<double> InfinityNorm::getRandomNeighbourImplementation(
       const arma::Col<double>& parameter,
-      const double& minimalDistance,
-      const double& maximalDistance) const noexcept {
+      const double minimalDistance,
+      const double maximalDistance) const noexcept {
     assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 

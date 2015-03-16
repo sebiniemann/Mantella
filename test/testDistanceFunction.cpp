@@ -35,8 +35,8 @@ unsigned int MockDistanceFunction<unsigned int>::getDistanceImplementation(
 template <>
 arma::Col<double> MockDistanceFunction<double>::getRandomNeighbourImplementation(
     const arma::Col<double>& parameter,
-    const double& minimalDistance,
-    const double& maximalDistance) const noexcept {
+    const double minimalDistance,
+    const double maximalDistance) const noexcept {
   arma::Col<double> result = parameter;
   result.at(0) += (maximalDistance + minimalDistance) / 2.0;
   return result;

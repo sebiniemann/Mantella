@@ -11,16 +11,16 @@ namespace mant {
         inline arma::Col<double> getRandomParameterTranslation() const noexcept;
 
         inline arma::Col<double> getParameterConditioning(
-            const double& conditionNumber) const noexcept;
+            const double conditionNumber) const noexcept;
 
         inline arma::Col<double> getConditionedParameter(
             const arma::Col<double>& parameter) const noexcept;
 
         inline arma::Col<double> getAsymmetricParameter(
-            const double& asymmetry, const arma::Col<double>& parameter) const noexcept;
+            const double asymmetry, const arma::Col<double>& parameter) const noexcept;
 
         inline double getOscillatedValue(
-            const double& oscilliation) const noexcept;
+            const double oscilliation) const noexcept;
 
         inline arma::Col<double> getOscillatedParameter(
             const arma::Col<double>& parameter) const noexcept;
@@ -60,7 +60,7 @@ namespace mant {
     }
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark2009::getParameterConditioning(
-        const double& conditionNumber) const noexcept {
+        const double conditionNumber) const noexcept {
       arma::Col<double> parameterConditioning = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
       for (auto& conditioning : parameterConditioning) {
@@ -82,13 +82,13 @@ namespace mant {
     }
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark2009::getAsymmetricParameter(
-        const double& asymmetry,
+        const double asymmetry,
         const arma::Col<double>& parameter) const noexcept {
       arma::Col<double> asymmetricParameter(parameter.n_elem);
       const arma::Col<double>& spacing = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        const double& value = parameter(n);
+        const double value = parameter(n);
 
         if (value > 0.0) {
           asymmetricParameter(n) = std::pow(value, 1 + asymmetry * spacing(n) * std::sqrt(value));
@@ -101,7 +101,7 @@ namespace mant {
     }
 
     inline double BlackBoxOptimisationBenchmark2009::getOscillatedValue(
-        const double& value) const noexcept {
+        const double value) const noexcept {
       if (value != 0.0) {
         double c1;
         double c2;
