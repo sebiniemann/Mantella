@@ -5,6 +5,9 @@ namespace mant {
         // TODO Add setter
         inline explicit MultiLevelStewartPlatform() noexcept;
 
+        inline void setPlatformLevels(
+            const std::vector<ParallelKinematicMachine6PUPS> platformLevels) noexcept;
+
         inline std::vector<arma::Cube<double>::fixed<3, 6, 2>> getModel(
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
@@ -106,6 +109,11 @@ namespace mant {
         -0.0423873979048716,-0.0594332272290012, 0.009});
 
       platformLevels_.push_back(thirdPlatformLevel);
+    }
+
+    inline void MultiLevelStewartPlatform::setPlatformLevels(
+        const std::vector<ParallelKinematicMachine6PUPS> platformLevels) noexcept {
+      platformLevels_ = platformLevels;
     }
 
     inline std::vector<arma::Cube<double>::fixed<3, 6, 2>> MultiLevelStewartPlatform::getModel(
