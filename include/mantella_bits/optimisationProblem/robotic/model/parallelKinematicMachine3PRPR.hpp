@@ -149,7 +149,7 @@ namespace mant {
       if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
         throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
       }
-      checkDimensionCompatiblility("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
+      checkDimensionCompatibility("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
 
       arma::Cube<double>::fixed<2, 3, 2> model;
 

@@ -174,7 +174,7 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingLowerBounds(
       const arma::Col<ParameterType>& parameter) {
-    checkDimensionCompatiblility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return (parameter >= lowerBounds_);
   }
@@ -182,7 +182,7 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingUpperBounds(
       const arma::Col<ParameterType>& parameter) {
-    checkDimensionCompatiblility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return (parameter <= upperBounds_);
   }
@@ -190,7 +190,7 @@ namespace mant {
   template <typename ParameterType>
   bool OptimisationProblem<ParameterType>::isSatisfyingSoftConstraints(
       const arma::Col<ParameterType>& parameter) {
-    checkDimensionCompatiblility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return (getSoftConstraintsValue(parameter) == 0);
   }
@@ -198,7 +198,7 @@ namespace mant {
   template <typename ParameterType>
   bool OptimisationProblem<ParameterType>::isSatisfyingConstraints(
       const arma::Col<ParameterType>& parameter) {
-    checkDimensionCompatiblility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
     
     return (arma::all(isSatisfyingLowerBounds(parameter)) && arma::all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
@@ -206,7 +206,7 @@ namespace mant {
   template <typename ParameterType>
   double OptimisationProblem<ParameterType>::getSoftConstraintsValue(
       const arma::Col<ParameterType>& parameter) {
-    checkDimensionCompatiblility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     return objectiveValueScaling_ * getSoftConstraintsValueImplementation(parameter);
   }
@@ -214,7 +214,7 @@ namespace mant {
   template <typename ParameterType>
   inline double OptimisationProblem<ParameterType>::getObjectiveValue(
       const arma::Col<ParameterType>& parameter) {
-    checkDimensionCompatiblility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
     // Always increase the number of evaluations (whether its computed or retrived from cache).
     ++numberOfEvaluations_;
@@ -243,7 +243,7 @@ namespace mant {
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setLowerBounds(
       const arma::Col<ParameterType>& lowerBounds) {
-    checkDimensionCompatiblility("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
 
     lowerBounds_ = lowerBounds;
   }
@@ -256,7 +256,7 @@ namespace mant {
   template <typename ParameterType>
   void OptimisationProblem<ParameterType>::setUpperBounds(
       const arma::Col<ParameterType>& upperBounds) {
-    checkDimensionCompatiblility("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
 
     upperBounds_ = upperBounds;
   }
@@ -265,7 +265,7 @@ namespace mant {
   inline void OptimisationProblem<ParameterType>::setParameterPermutation(
       const arma::Col<unsigned int>& parameterPermutation) {
     // TODO Check if this is actually a permutaion
-    checkDimensionCompatiblility("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterPermutation_ = parameterPermutation;
   }
@@ -273,7 +273,7 @@ namespace mant {
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
       const arma::Col<double>& parameterTranslation) {
-    checkDimensionCompatiblility("The number of elements", parameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterTranslation_ = parameterTranslation;
   }
@@ -281,7 +281,7 @@ namespace mant {
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
       const arma::Mat<double>& parameterRotation) {
-    checkDimensionCompatiblility("The number of rows", parameterRotation.n_rows, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of rows", parameterRotation.n_rows, "the number of dimensions", numberOfDimensions_);
     checkRotationMatrix("The matrix", parameterRotation);
 
     parameterRotation_ = parameterRotation;
@@ -290,7 +290,7 @@ namespace mant {
   template <>
   inline void OptimisationProblem<double>::setParameterScaling(
       const arma::Col<double>& parameterScaling) {
-    checkDimensionCompatiblility("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
+    checkDimensionCompatibility("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterScaling_ = parameterScaling;
   }
