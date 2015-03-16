@@ -36,6 +36,8 @@ namespace mant {
       // Returns the objective value of the best parameter yet found.
       double getBestObjectiveValue() const noexcept;
 
+      std::vector<arma::Col<ParameterType>> getParameterHistory() const noexcept;
+
       // Checks whether the currently best objective value satisfies the upper bound for an
       // acceptable objective value.
       // Returns true if the objective value is lower than or equal to the upper bound and false
@@ -75,6 +77,8 @@ namespace mant {
 
       // The best parameter's objective value.
       double bestObjectiveValue_;
+
+      std::vector<arma::Col<ParameterType>> parameterHistory_;
 
       // The distance function to be used.
       std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction_;
@@ -178,6 +182,11 @@ namespace mant {
   template <typename ParameterType>
   double OptimisationAlgorithm<ParameterType>::getBestObjectiveValue() const noexcept {
     return bestObjectiveValue_;
+  }
+
+  template <typename ParameterType>
+  std::vector<arma::Col<ParameterType>> OptimisationAlgorithm<ParameterType>::getParameterHistory() const noexcept {
+    return parameterHistory_;
   }
 
   template <typename ParameterType>
