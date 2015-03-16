@@ -39,6 +39,7 @@ namespace mant {
 
         inline arma::Col<double>::fixed<6> getEndEffectorPose(
             const arma::Row<double>::fixed<4>& actuations,
+            const arma::Row<double>::fixed<3>& endEffectorRotation,
             const arma::Row<double>& redundantJointActuations) const;
 
         inline double getEndEffectorPoseAccuracy(
@@ -214,9 +215,28 @@ namespace mant {
 
     inline arma::Col<double>::fixed<6> ParallelKinematicMachine4PRUS::getEndEffectorPose(
         const arma::Row<double>::fixed<4>& actuations,
+        const arma::Row<double>::fixed<3>& endEffectorRotation,
         const arma::Row<double>& redundantJointActuations) const {
-      // TODO Direct kinematic (estimate position, using a simple HillCLimber algorithm)
-      return {0, 0, 0, 0, 0, 0};
+      if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
+        throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
+      }
+
+      const double& endEffectorRollAngle = endEffectorRotation(0);
+      const double& endEffectorPitchAngle = endEffectorRotation(1);
+      const double& endEffectorYawAngle = endEffectorRotation(2);
+
+      arma::Mat<double> passiveJointPositions = redundantJointStartPositions_;
+      for (std::size_t n = 0; n < redundantJointIndicies_.n_elem; n++) {
+        const unsigned int& redundantJointIndex = redundantJointIndicies_(n);
+        passiveJointPositions.col(redundantJointIndex) += redundantJointActuations(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
+      }
+
+      passiveJointPositions -= get3DRotation(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointPositions_;
+      for(std::size_t n = 0; n < passiveJointPositions.n_cols; ++n) {
+        passiveJointPositions.col(n) += get3DRotation(actuations(0), baseJointAngles_(0, n), baseJointAngles_(1, n)) * arma::Col<double>::fixed<3>({0, 0, linkLengths_(0, n)});
+      }
+
+      return arma::join_cols(getTriangulation(passiveJointPositions.col(0), linkLengths_(1, 0), passiveJointPositions.col(1), linkLengths_(1, 1), passiveJointPositions.col(2), linkLengths_(1, 2)), endEffectorRotation);
     }
 
     inline double ParallelKinematicMachine4PRUS::getEndEffectorPoseAccuracy(
