@@ -9,7 +9,7 @@ namespace mant {
     MultilevelCoordinateSearch& operator=(const MultilevelCoordinateSearch&) = delete;
 
     //If local search is enabled, this sets the algorithm to be used. By default, HillClimbing is used.
-    void setLocalSearch(const std::shared_ptr<TrajectoryBasedAlgorithm<ParameterType>> localSearch);
+    void setLocalSearch(const std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<ParameterType>> localSearch);
 
     //sets the maximum amount of splits (or depth of splitting) for the original box.
     //\nDefault is 5 * numberOfDimensions + 10.
@@ -28,7 +28,7 @@ namespace mant {
     //
     // <editor-fold>
 
-    std::shared_ptr<TrajectoryBasedAlgorithm<ParameterType>> localSearch_;
+    std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<ParameterType>> localSearch_;
 
     //TODO: could be moved to constructor as a definable variable
     unsigned int step1_ = 1000; //initial size of some vectors/matrices for which the initial sizing depends on input
@@ -271,7 +271,7 @@ namespace mant {
 
     this->bestParameter_ = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
 
-    std::shared_ptr<TrajectoryBasedAlgorithm<double, DistanceFunction >> localsearch(new HillClimbing<ParameterType>(optimisationProblem));
+    std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<double, DistanceFunction >> localsearch(new HillClimbing<ParameterType>(optimisationProblem));
 
     setLocalSearch(localsearch);
     setBoxDivisions(5 * numberOfDimensions + 10);
@@ -1245,7 +1245,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::setLocalSearch(const std::shared_ptr<TrajectoryBasedAlgorithm<ParameterType>> localSearch) {
+  void MultilevelCoordinateSearch<DistanceFunction>::setLocalSearch(const std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<ParameterType>> localSearch) {
     if (!localSearch) {
       throw std::invalid_argument("local search given is null!");
     }
