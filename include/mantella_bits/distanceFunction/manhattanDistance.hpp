@@ -10,19 +10,19 @@ namespace mant {
 
       arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
-          const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance) const noexcept override;
+          const ParameterType minimalDistance,
+          const ParameterType maximalDistance) const noexcept override;
 
       arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
-          const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance,
+          const ParameterType minimalDistance,
+          const ParameterType maximalDistance,
           std::true_type) const noexcept;
 
       arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
-          const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance,
+          const ParameterType minimalDistance,
+          const ParameterType maximalDistance,
           std::false_type) const noexcept;
   };
 
@@ -40,8 +40,8 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
-      const ParameterType& minimalDistance,
-      const ParameterType& maximalDistance) const noexcept {
+      const ParameterType minimalDistance,
+      const ParameterType maximalDistance) const noexcept {
     assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 
@@ -51,8 +51,8 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
-      const ParameterType& minimalDistance,
-      const ParameterType& maximalDistance,
+      const ParameterType minimalDistance,
+      const ParameterType maximalDistance,
       std::true_type) const noexcept {
     assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
@@ -63,8 +63,8 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<ParameterType> ManhattanDistance<ParameterType>::getRandomNeighbourImplementation(
       const arma::Col<ParameterType>& parameter,
-      const ParameterType& minimalDistance,
-      const ParameterType& maximalDistance,
+      const ParameterType minimalDistance,
+      const ParameterType maximalDistance,
       std::false_type) const noexcept {
     assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);

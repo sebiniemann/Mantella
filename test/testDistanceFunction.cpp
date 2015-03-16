@@ -16,8 +16,8 @@ class MockDistanceFunction : public mant::DistanceFunction<ParameterType>{
 
     arma::Col<ParameterType> getRandomNeighbourImplementation(
         const arma::Col<ParameterType>& parameter,
-        const ParameterType& minimalDistance,
-        const ParameterType& maximalDistance) const noexcept override;
+        const ParameterType minimalDistance,
+        const ParameterType maximalDistance) const noexcept override;
 };
 
 template <>

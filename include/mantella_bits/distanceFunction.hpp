@@ -11,8 +11,8 @@ namespace mant {
 
       arma::Col<ParameterType> getRandomNeighbour(
           const arma::Col<ParameterType>& parameter,
-          const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance) const;
+          const ParameterType minimalDistance,
+          const ParameterType maximalDistance) const;
 
       // Provides a default deconstructor.
       virtual ~DistanceFunction() = default;
@@ -33,8 +33,8 @@ namespace mant {
 
       virtual arma::Col<ParameterType> getRandomNeighbourImplementation(
           const arma::Col<ParameterType>& parameter,
-          const ParameterType& minimalDistance,
-          const ParameterType& maximalDistance) const = 0;
+          const ParameterType minimalDistance,
+          const ParameterType maximalDistance) const = 0;
   };
 
   //
@@ -83,8 +83,8 @@ namespace mant {
   template <typename ParameterType>
   arma::Col<ParameterType> DistanceFunction<ParameterType>::getRandomNeighbour(
       const arma::Col<ParameterType>& parameter,
-      const ParameterType& minimalDistance,
-      const ParameterType& maximalDistance) const {
+      const ParameterType minimalDistance,
+      const ParameterType maximalDistance) const {
     if(minimalDistance < 0) {
       throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be non-negative.");
     } else if (maximalDistance < minimalDistance) {
