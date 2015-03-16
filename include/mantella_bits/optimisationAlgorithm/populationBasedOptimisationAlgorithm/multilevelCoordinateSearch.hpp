@@ -263,15 +263,15 @@ namespace mant {
   // <editor-fold>
 
   template <typename ParameterType>
-  MultilevelCoordinateSearch<DistanceFunction>::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
+  MultilevelCoordinateSearch<ParameterType>::MultilevelCoordinateSearch(const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int& populationSize) noexcept
   : PopulationBasedOptimisationAlgorithm<ParameterType>(optimisationProblem, populationSize) {
     //for convenience
-    const unsigned int numberOfDimensions = optimisationProblem->getNumberOfDimensions();
+    const unsigned int numberOfDimensions = optimisationProblem->numberOfDimensions_;
 
     this->bestParameter_ = arma::Col<double>(numberOfDimensions, arma::fill::zeros);
 
-    std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<double, DistanceFunction >> localsearch(new HillClimbing<ParameterType>(optimisationProblem));
+    std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<ParameterType >> localsearch(new HillClimbing<ParameterType>(optimisationProblem));
 
     setLocalSearch(localsearch);
     setBoxDivisions(5 * numberOfDimensions + 10);
@@ -306,9 +306,9 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::optimiseImplementation() {
+  void MultilevelCoordinateSearch<ParameterType>::optimiseImplementation() {
     //for convenience
-    const unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    const unsigned int numberOfDimensions = this->optimisationProblem_->numberOfDimensions_;
     
     initialPointSetup();
 
@@ -489,9 +489,9 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::initBoxes() noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::initBoxes() noexcept {
     //for convenience
-    const unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    const unsigned int numberOfDimensions = this->optimisationProblem_->numberOfDimensions_;
 
     //parameter values of box 1
     ipar_(0) = 0;
@@ -602,12 +602,12 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  std::string MultilevelCoordinateSearch<DistanceFunction>::to_string() const noexcept {
+  std::string MultilevelCoordinateSearch<ParameterType>::to_string() const noexcept {
     return "MultilevelCoordinateSearch";
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::genBox(int nbox, int par, int level, int nchild, double baseVertexFunctionValue) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::genBox(int nbox, int par, int level, int nchild, double baseVertexFunctionValue) noexcept {
     //since par is matlab-1 in value, and we want matlab value in ipar_
     ipar_(nbox) = par + 1;
     level_(nbox) = level;
@@ -616,7 +616,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<double> MultilevelCoordinateSearch<DistanceFunction>::quadraticPolynomialInterpolation(arma::Col<double> supportPoints, arma::Col<double> functionValues) const noexcept {
+  arma::Col<double> MultilevelCoordinateSearch<ParameterType>::quadraticPolynomialInterpolation(arma::Col<double> supportPoints, arma::Col<double> functionValues) const noexcept {
     arma::Col<double> d(3);
     d(0) = functionValues(0);
     d(1) = (functionValues(1) - functionValues(0)) / (supportPoints(1) - supportPoints(0));
@@ -626,7 +626,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  double MultilevelCoordinateSearch<DistanceFunction>::minimumQuadraticPolynomial(double a, double b, arma::Col<double> d, arma::Mat<double> x0_fragment) const noexcept {
+  double MultilevelCoordinateSearch<ParameterType>::minimumQuadraticPolynomial(double a, double b, arma::Col<double> d, arma::Mat<double> x0_fragment) const noexcept {
     double x = 0;
     if (d(2) == 0) {
       if (d(1) > 0) {
@@ -655,12 +655,12 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  double MultilevelCoordinateSearch<DistanceFunction>::quadraticPolynomial(double x, arma::Col<double> d, arma::Mat<double> x0_fragment) const noexcept {
+  double MultilevelCoordinateSearch<ParameterType>::quadraticPolynomial(double x, arma::Col<double> d, arma::Mat<double> x0_fragment) const noexcept {
     return d(0) + d(1)*(x - x0_fragment(0)) + d(2)*(x - x0_fragment(0))*(x - x0_fragment(1));
   }
 
   template <typename ParameterType>
-  double MultilevelCoordinateSearch<DistanceFunction>::splitByGoldenSectionRule(double x1, double x2, double f1, double f2) const noexcept {
+  double MultilevelCoordinateSearch<ParameterType>::splitByGoldenSectionRule(double x1, double x2, double f1, double f2) const noexcept {
     if (f1 <= f2) {
       return x1 + 0.5 * (-1 + std::sqrt(5))*(x2 - x1);
     } else {
@@ -669,7 +669,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::splitByRank(unsigned int par, unsigned int numberOfDimensions, arma::Col<unsigned int> n0) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::splitByRank(unsigned int par, unsigned int numberOfDimensions, arma::Col<unsigned int> n0) noexcept {
     isplit_(par) = 1;
     int n1 = n0(0);
     int p1 = variabilityRanking_(0);
@@ -689,7 +689,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  double MultilevelCoordinateSearch<DistanceFunction>::splitBySubint(double x, double y) const noexcept {
+  double MultilevelCoordinateSearch<ParameterType>::splitBySubint(double x, double y) const noexcept {
     double x2 = y;
     if (x == 0 && std::abs(y) > 1000) {
       x2 = std::copysign(1.0, y);
@@ -702,7 +702,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool MultilevelCoordinateSearch<DistanceFunction>::splitByInitList(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par) noexcept {
+  bool MultilevelCoordinateSearch<ParameterType>::splitByInitList(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par) noexcept {
     arma::Col<double> x = baseVertex_;
     initListValues_.col(m_ - 1).zeros();
     for (int j = 0; j < this->populationSize_; j++) {
@@ -791,7 +791,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool MultilevelCoordinateSearch<DistanceFunction>::split(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par) noexcept {
+  bool MultilevelCoordinateSearch<ParameterType>::split(unsigned int splittingIndex, unsigned int minimalLevel, unsigned int par) noexcept {
     arma::Col<double> x = baseVertex_;
     arma::Col<double> z = z_.col(par);
     x(splittingIndex) = z(1);
@@ -901,7 +901,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<double> MultilevelCoordinateSearch<DistanceFunction>::expectedGainOfSplit(unsigned int par, unsigned int numberOfDimensions, arma::Col<unsigned int> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) noexcept {
+  arma::Col<double> MultilevelCoordinateSearch<ParameterType>::expectedGainOfSplit(unsigned int par, unsigned int numberOfDimensions, arma::Col<unsigned int> n0, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double> f1, arma::Col<double> f2) noexcept {
     double emin = arma::datum::inf;
     arma::Col<double> expectedGain = arma::Col<double>(numberOfDimensions);
     for (int i = 0; i < numberOfDimensions; i++) {
@@ -939,7 +939,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  unsigned int MultilevelCoordinateSearch<DistanceFunction>::startSweep() noexcept {
+  unsigned int MultilevelCoordinateSearch<ParameterType>::startSweep() noexcept {
     record_ = arma::Col<unsigned int>(boxDivisions_ - 1, arma::fill::zeros);
     unsigned int s = boxDivisions_;
     for (unsigned int i = 0; i < nboxes_; i++) {
@@ -958,9 +958,9 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::vertex(unsigned int par, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2, arma::Col<unsigned int>& n0) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::vertex(unsigned int par, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2, arma::Col<unsigned int>& n0) noexcept {
     //for convenience
-    unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    unsigned int numberOfDimensions = this->optimisationProblem_->numberOfDimensions_;
 
     baseVertex_ = arma::Col<double>(numberOfDimensions);
     baseVertex_.fill(arma::datum::inf);
@@ -1106,7 +1106,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::vert1(int updateIndex, unsigned int j, unsigned int m, arma::Col<double>& x, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::vert1(int updateIndex, unsigned int j, unsigned int m, arma::Col<double>& x, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2) noexcept {
     int j1 = 0;
     //matlab checks for 1, since it's index use 0
     if (j == 0) {
@@ -1126,7 +1126,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::vert2(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::vert2(int updateIndex, unsigned int j, unsigned int m, arma::Col<double> x, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2) noexcept {
     int j1 = 0;
     //matlab checks for 1, since it's index use 0
     if (j == 0) {
@@ -1152,7 +1152,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::vert3(int updateIndex, unsigned int j, const int& f0columnIndex, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::vert3(int updateIndex, unsigned int j, const int& f0columnIndex, arma::Col<double>& x1, arma::Col<double>& x2, arma::Col<double>& f1, arma::Col<double>& f2) noexcept {
     int k1 = 0;
     int k2 = 0;
     //matlab checks for 1, since it's index use 0
@@ -1176,7 +1176,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::updtf(unsigned int numberOfDimensions, unsigned int splittingIndex, double fold, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double>& f1, arma::Col<double>& f2, double baseVertexValueCurrentBox) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::updtf(unsigned int numberOfDimensions, unsigned int splittingIndex, double fold, arma::Col<double> x1, arma::Col<double> x2, arma::Col<double>& f1, arma::Col<double>& f2, double baseVertexValueCurrentBox) noexcept {
     for (int i = 0; i < numberOfDimensions; i++) {
       if (i != splittingIndex) {
         if (x1(i) == arma::datum::inf) {
@@ -1191,7 +1191,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  arma::Col<double> MultilevelCoordinateSearch<DistanceFunction>::subint(double x, double y) const noexcept {
+  arma::Col<double> MultilevelCoordinateSearch<ParameterType>::subint(double x, double y) const noexcept {
     double x2 = y;
     int f = 1000;
     if (f * std::abs(x) < 1) {
@@ -1212,7 +1212,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::updateRecord(unsigned int label, int level, arma::Col<double> f) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::updateRecord(unsigned int label, int level, arma::Col<double> f) noexcept {
     if (record_.n_elem < level) {
       record_(level - 1) = label + 1;
     } else if (record_(level - 1) == 0) {
@@ -1223,7 +1223,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool MultilevelCoordinateSearch<DistanceFunction>::checkLocationNotUsed(arma::Col<double> location) const noexcept {
+  bool MultilevelCoordinateSearch<ParameterType>::checkLocationNotUsed(arma::Col<double> location) const noexcept {
     for (int i = 0; i < nloc_; i++) {
       //TODO: This might not work correctly
       if (arma::all(location == xloc_.col(i))) {
@@ -1234,7 +1234,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::addLocation(arma::Col<double>& loc) noexcept {
+  void MultilevelCoordinateSearch<ParameterType>::addLocation(arma::Col<double>& loc) noexcept {
     nloc_++;
     if (xloc_.n_cols < nloc_) {
       xloc_.resize(xloc_.n_cols + step_);
@@ -1245,7 +1245,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::setLocalSearch(const std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<ParameterType>> localSearch) {
+  void MultilevelCoordinateSearch<ParameterType>::setLocalSearch(const std::shared_ptr<TrajectoryBasedOptimisationAlgorithm<ParameterType>> localSearch) {
     if (!localSearch) {
       throw std::invalid_argument("local search given is null!");
     }
@@ -1253,7 +1253,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool MultilevelCoordinateSearch<DistanceFunction>::pointInsideDomainOfAttraction(arma::Col<double>& loc, std::shared_ptr<double> valueAtLoc, double nbasket) noexcept {
+  bool MultilevelCoordinateSearch<ParameterType>::pointInsideDomainOfAttraction(arma::Col<double>& loc, std::shared_ptr<double> valueAtLoc, double nbasket) noexcept {
     if (nbasket == 0) {
       return true;
     }
@@ -1317,7 +1317,7 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  bool MultilevelCoordinateSearch<DistanceFunction>::candidateInsideDomainOfAttraction(arma::Col<double> candidate, double valueAtCandidate, double nbasket) noexcept {
+  bool MultilevelCoordinateSearch<ParameterType>::candidateInsideDomainOfAttraction(arma::Col<double> candidate, double valueAtCandidate, double nbasket) noexcept {
     if (nbasket == 0) {
       return true;
     }
@@ -1381,17 +1381,17 @@ namespace mant {
   // </editor-fold>
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::setBoxDivisions(const unsigned int divisions) {
+  void MultilevelCoordinateSearch<ParameterType>::setBoxDivisions(const unsigned int divisions) {
     boxDivisions_ = divisions;
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::setMaximumLocalSearchSteps(const unsigned int steps) {
+  void MultilevelCoordinateSearch<ParameterType>::setMaximumLocalSearchSteps(const unsigned int steps) {
     maxLocalSearchSteps_ = steps;
   }
 
   template <typename ParameterType>
-  void MultilevelCoordinateSearch<DistanceFunction>::initialPointSetup() {
+  void MultilevelCoordinateSearch<ParameterType>::initialPointSetup() {
     //l, L and x0_ are the custom initialisation list variables
     //l is supposed to point to the initial point x^0 in x0
     //l also never gets changed in matlab as far as i could see
@@ -1400,7 +1400,7 @@ namespace mant {
     //L is completely replaced by populationSize
     
     //for convenience
-    const unsigned int numberOfDimensions = this->optimisationProblem_->getNumberOfDimensions();
+    const unsigned int numberOfDimensions = this->optimisationProblem_->numberOfDimensions_;
     
     initialPointIndex_ = arma::Col<unsigned int>(numberOfDimensions, arma::fill::ones);
 
