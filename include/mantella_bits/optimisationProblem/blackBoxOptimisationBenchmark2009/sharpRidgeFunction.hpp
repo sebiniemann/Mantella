@@ -3,7 +3,7 @@ namespace mant {
     class SharpRidgeFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit SharpRidgeFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -54,7 +54,7 @@ namespace mant {
     //
 
     inline SharpRidgeFunction::SharpRidgeFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());

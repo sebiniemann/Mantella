@@ -3,7 +3,7 @@ namespace mant {
     public:
       inline explicit StandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int populationSize) noexcept;
 
       inline void setNeighbourhoodProbability(
           const double neighbourhoodProbability) noexcept;
@@ -65,7 +65,7 @@ namespace mant {
 
   inline StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int populationSize) noexcept
     : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize),
       localBestObjectiveValues_(this->populationSize_),
       randomizeTopology_(true) {

@@ -3,7 +3,7 @@ namespace mant {
     class SphereFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit SphereFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -39,7 +39,7 @@ namespace mant {
     //
 
     inline SphereFunction::SphereFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
 
     }

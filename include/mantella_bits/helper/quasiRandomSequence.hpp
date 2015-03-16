@@ -2,12 +2,12 @@ namespace mant {
    inline arma::Mat<double> getHaltonSequence(
        const arma::Col<unsigned int>& base,
        const arma::Col<unsigned int>& seed,
-       const unsigned int& numberOfColumms);
+       const unsigned int numberOfColumms);
 
    inline arma::Col<double> getVanDerCorputSequence(
-       const unsigned int& base,
-       const unsigned int& seed,
-       const unsigned int& numberOfColumms) noexcept;
+       const unsigned int base,
+       const unsigned int seed,
+       const unsigned int numberOfColumms) noexcept;
 
    //
    // Implementation
@@ -16,7 +16,7 @@ namespace mant {
    inline arma::Mat<double> getHaltonSequence(
        const arma::Col<unsigned int>& base,
        const arma::Col<unsigned int>& seed,
-       const unsigned int& numberOfColumms) {
+       const unsigned int numberOfColumms) {
      if(base.n_elem != seed.n_elem) {
        throw std::logic_error("The number of dimensions of the base parameter (" + std::to_string(base.n_elem) + ") must match the number of dimensions of the seed parameter (" + std::to_string(seed.n_elem) + ").");
      }
@@ -31,9 +31,9 @@ namespace mant {
    }
 
    inline arma::Col<double> getVanDerCorputSequence(
-       const unsigned int& base,
-       const unsigned int& seed,
-       const unsigned int& numberOfColumms) noexcept {
+       const unsigned int base,
+       const unsigned int seed,
+       const unsigned int numberOfColumms) noexcept {
      arma::Col<double> sequence(numberOfColumms);
 
      for (std::size_t n = 0; n < numberOfColumms; ++n) {

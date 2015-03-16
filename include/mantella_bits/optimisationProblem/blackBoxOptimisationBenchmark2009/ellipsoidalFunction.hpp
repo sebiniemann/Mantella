@@ -3,7 +3,7 @@ namespace mant {
     class EllipsoidalFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit EllipsoidalFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -40,7 +40,7 @@ namespace mant {
     //
 
     inline EllipsoidalFunction::EllipsoidalFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(1000000.0)) {
 

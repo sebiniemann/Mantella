@@ -3,7 +3,7 @@ namespace mant {
     class WeierstrassFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit WeierstrassFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -58,7 +58,7 @@ namespace mant {
     //
 
     inline WeierstrassFunction::WeierstrassFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         f0_(-1.99951171875),
         parameterConditioning_(getParameterConditioning(std::sqrt(0.01))) {

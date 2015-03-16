@@ -3,7 +3,7 @@ namespace mant {
     class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit StepEllipsoidalFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -58,7 +58,7 @@ namespace mant {
     //
 
     inline StepEllipsoidalFunction::StepEllipsoidalFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
         secondParameterConditioning_(getParameterConditioning(100)) {

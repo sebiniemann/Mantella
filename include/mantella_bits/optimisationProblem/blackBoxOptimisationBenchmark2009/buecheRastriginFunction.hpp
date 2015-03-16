@@ -3,7 +3,7 @@ namespace mant {
     class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit BuecheRastriginFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -43,7 +43,7 @@ namespace mant {
     //
 
     inline BuecheRastriginFunction::BuecheRastriginFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       arma::Col<double> parameterTranslation_ = getRandomParameterTranslation();

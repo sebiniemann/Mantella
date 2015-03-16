@@ -3,7 +3,7 @@ namespace mant {
     class RosenbrockFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit RosenbrockFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -42,7 +42,7 @@ namespace mant {
     //
 
     inline RosenbrockFunction::RosenbrockFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)) {
       setParameterTranslation(0.75 * getRandomParameterTranslation());

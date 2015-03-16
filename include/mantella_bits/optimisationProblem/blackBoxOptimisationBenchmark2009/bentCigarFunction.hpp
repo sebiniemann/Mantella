@@ -3,7 +3,7 @@ namespace mant {
     class BentCigarFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit BentCigarFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -46,7 +46,7 @@ namespace mant {
     //
 
     inline BentCigarFunction::BentCigarFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));

@@ -3,7 +3,7 @@ namespace mant {
     class SchaffersF7FunctionIllConditioned : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit SchaffersF7FunctionIllConditioned(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& rotationR);
@@ -57,7 +57,7 @@ namespace mant {
     //
 
     inline SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))) {
       setParameterTranslation(getRandomParameterTranslation());

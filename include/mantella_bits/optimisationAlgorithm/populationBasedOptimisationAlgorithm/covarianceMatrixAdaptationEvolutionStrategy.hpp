@@ -4,7 +4,7 @@ namespace mant {
       //TODO: which input parameters should be added to the constructor?
       inline explicit CovarianceMatrixAdaptationEvolutionStrategy(
         const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int populationSize) noexcept;
 
       inline void setStepsize(
           const double sigma) noexcept;
@@ -23,7 +23,7 @@ namespace mant {
 
   inline CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int populationSize) noexcept
   : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize) {
     setStepsize(0.3);
   }

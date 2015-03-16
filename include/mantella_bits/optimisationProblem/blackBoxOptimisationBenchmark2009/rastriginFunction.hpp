@@ -3,7 +3,7 @@ namespace mant {
     class RastriginFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit RastriginFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -41,7 +41,7 @@ namespace mant {
     //
 
     inline RastriginFunction::RastriginFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());

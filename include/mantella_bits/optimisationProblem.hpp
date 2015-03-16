@@ -5,7 +5,7 @@ namespace mant {
       const unsigned int numberOfDimensions_;
 
       explicit OptimisationProblem(
-        const unsigned int& numberOfDimensions) noexcept;
+        const unsigned int numberOfDimensions) noexcept;
 
       void setLowerBounds(
         const arma::Col<ParameterType>& lowerBounds);
@@ -122,7 +122,7 @@ namespace mant {
 
   template <>
   inline OptimisationProblem<double>::OptimisationProblem(
-      const unsigned int& numberOfDimensions) noexcept;
+      const unsigned int numberOfDimensions) noexcept;
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
@@ -142,7 +142,7 @@ namespace mant {
 
   template <typename ParameterType>
   OptimisationProblem<ParameterType>::OptimisationProblem(
-      const unsigned int& numberOfDimensions) noexcept
+      const unsigned int numberOfDimensions) noexcept
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
@@ -156,7 +156,7 @@ namespace mant {
 
   template <>
   inline OptimisationProblem<double>::OptimisationProblem(
-      const unsigned int& numberOfDimensions) noexcept
+      const unsigned int numberOfDimensions) noexcept
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {

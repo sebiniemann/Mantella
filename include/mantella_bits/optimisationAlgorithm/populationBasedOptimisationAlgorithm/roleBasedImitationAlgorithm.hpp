@@ -3,7 +3,7 @@ namespace mant {
     public:
       inline explicit RoleBasedImitationAlgorithm(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int populationSize) noexcept;
 
       inline void setNeighbourhoodSize(
           const unsigned int neighbourhoodSize) noexcept;
@@ -28,7 +28,7 @@ namespace mant {
 
   inline RoleBasedImitationAlgorithm::RoleBasedImitationAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int populationSize) noexcept
     : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize),
       stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)),
       neighbourhoodSize_(0),

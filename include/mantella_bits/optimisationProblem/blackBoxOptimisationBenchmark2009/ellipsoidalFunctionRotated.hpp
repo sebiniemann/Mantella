@@ -3,7 +3,7 @@ namespace mant {
     class EllipsoidalFunctionRotated : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit EllipsoidalFunctionRotated(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -48,7 +48,7 @@ namespace mant {
     //
 
     inline EllipsoidalFunctionRotated::EllipsoidalFunctionRotated(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditoning_(getParameterConditioning(1000000.0)) {
       setParameterTranslation(getRandomParameterTranslation());

@@ -9,8 +9,8 @@ namespace mant {
 
       inline arma::Col<unsigned int> getRandomNeighbourImplementation(
           const arma::Col<unsigned int>& parameter,
-          const unsigned int& minimalDistance,
-          const unsigned int& maximalDistance) const override;
+          const unsigned int minimalDistance,
+          const unsigned int maximalDistance) const override;
   };
 
   //
@@ -24,8 +24,8 @@ namespace mant {
 
   inline arma::Col<unsigned int> HammingDistance::getRandomNeighbourImplementation(
       const arma::Col<unsigned int>& parameter,
-      const unsigned int& minimalDistance,
-      const unsigned int& maximalDistance) const {
+      const unsigned int minimalDistance,
+      const unsigned int maximalDistance) const {
     assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 

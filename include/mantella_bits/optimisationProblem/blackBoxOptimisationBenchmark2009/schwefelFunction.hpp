@@ -3,7 +3,7 @@ namespace mant {
     class SchwefelFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit SchwefelFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline std::string toString() const noexcept override;
 
@@ -43,7 +43,7 @@ namespace mant {
     //
 
     inline SchwefelFunction::SchwefelFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       // A vector with all elements randomly and uniformly set to either 2 or -2.

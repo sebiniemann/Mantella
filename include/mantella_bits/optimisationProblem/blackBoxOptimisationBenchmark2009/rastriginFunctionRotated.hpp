@@ -3,7 +3,7 @@ namespace mant {
     class RastriginFunctionRotated : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit RastriginFunctionRotated(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -54,7 +54,7 @@ namespace mant {
     //
 
     inline RastriginFunctionRotated::RastriginFunctionRotated(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());

@@ -3,7 +3,7 @@ namespace mant {
     public:
       inline explicit ParallelStandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int populationSize) noexcept;
 
       inline void setNeighbourhoodProbability(
           const double neighbourhoodProbability) noexcept;
@@ -35,7 +35,7 @@ namespace mant {
 
   ParallelStandardParticleSwarmOptimisation2011::ParallelStandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int populationSize) noexcept
     : ParallelAlgorithm<double>(optimisationProblem, populationSize) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(this->populationSize_), 3.0));
     setAcceleration(1.0 / (2.0 * std::log(2.0)));

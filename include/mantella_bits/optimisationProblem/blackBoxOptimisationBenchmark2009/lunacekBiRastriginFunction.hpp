@@ -3,7 +3,7 @@ namespace mant {
     class LunacekBiRastriginFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit LunacekBiRastriginFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -59,7 +59,7 @@ namespace mant {
     //
 
     inline LunacekBiRastriginFunction::LunacekBiRastriginFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
         mu_(std::sqrt(5.25 / s_) + 2.5),

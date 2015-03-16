@@ -3,7 +3,7 @@ namespace mant {
     class BlackBoxOptimisationBenchmark2009 : public OptimisationProblem<double> {
       public:
         inline explicit BlackBoxOptimisationBenchmark2009(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         virtual ~BlackBoxOptimisationBenchmark2009() = default;
 
@@ -45,7 +45,7 @@ namespace mant {
     //
 
     inline BlackBoxOptimisationBenchmark2009::BlackBoxOptimisationBenchmark2009(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : OptimisationProblem(numberOfDimensions) {
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);

@@ -3,7 +3,7 @@ namespace mant {
     class LinearSlope : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit LinearSlope(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setObjectiveFunctionRotation(
             const arma::Col<double>& objectiveFunctionRotation) noexcept;
@@ -49,7 +49,7 @@ namespace mant {
     //
 
     inline LinearSlope::LinearSlope(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(10.0)),
         f0_(5.0 * arma::accu(parameterConditioning_)) {

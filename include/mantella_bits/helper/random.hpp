@@ -1,20 +1,20 @@
 namespace mant {
   inline arma::Mat<double> getRandomRotationMatrix(
-      const unsigned int& numberOfDimensions) noexcept;
+      const unsigned int numberOfDimensions) noexcept;
 
   inline arma::Col<unsigned int> getRandomPermutation(
-      const unsigned int& numberOfElements,
-      const unsigned int& cycleLength);
+      const unsigned int numberOfElements,
+      const unsigned int cycleLength);
 
   inline arma::Col<unsigned int> getRandomPermutation(
-      const unsigned int& numberOfElements) noexcept;
+      const unsigned int numberOfElements) noexcept;
 
   //
   // Implementation
   //
 
   inline arma::Mat<double> getRandomRotationMatrix(
-      const unsigned int& numberOfDimensions) noexcept {
+      const unsigned int numberOfDimensions) noexcept {
     arma::Mat<double> Q;
     arma::Mat<double> R;
 
@@ -41,8 +41,8 @@ namespace mant {
   }
 
   inline arma::Col<unsigned int> getRandomPermutation(
-      const unsigned int& numberOfElements,
-      const unsigned int& cycleSize) {
+      const unsigned int numberOfElements,
+      const unsigned int cycleSize) {
     if(numberOfElements < cycleSize) {
       throw std::logic_error("The cycle size (" + std::to_string(cycleSize) + ") must be lower than or equal to the number of elements (" + std::to_string(numberOfElements) + ").");
     }
@@ -61,7 +61,7 @@ namespace mant {
   }
 
   inline arma::Col<unsigned int> getRandomPermutation(
-      const unsigned int& numberOfElements) noexcept {
+      const unsigned int numberOfElements) noexcept {
     return getRandomPermutation(numberOfElements, numberOfElements);
   }
 }

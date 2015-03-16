@@ -3,7 +3,7 @@ namespace mant {
     class KatsuuraFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit KatsuuraFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -57,7 +57,7 @@ namespace mant {
     //
 
     inline KatsuuraFunction::KatsuuraFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(10.0)) {
       setParameterTranslation(getRandomParameterTranslation());

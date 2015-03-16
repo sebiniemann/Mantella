@@ -4,7 +4,7 @@ namespace mant {
     public:
       explicit ParallelAlgorithm(
           const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
-          const unsigned int& populationSize) noexcept;
+          const unsigned int populationSize) noexcept;
 
       unsigned int getRank() const noexcept;
       unsigned int getNumberOfNodes() const noexcept;
@@ -25,7 +25,7 @@ namespace mant {
   template <typename ParameterType>
   ParallelAlgorithm<ParameterType>::ParallelAlgorithm(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
-      const unsigned int& populationSize) noexcept
+      const unsigned int populationSize) noexcept
     : PopulationBasedOptimisationAlgorithm<ParameterType>(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);

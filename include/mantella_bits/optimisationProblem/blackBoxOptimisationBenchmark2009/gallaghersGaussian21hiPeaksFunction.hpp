@@ -3,7 +3,7 @@ namespace mant {
     class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark2009 {
       public:
         inline explicit GallaghersGaussian21hiPeaksFunction(
-            const unsigned int& numberOfDimensions) noexcept;
+            const unsigned int numberOfDimensions) noexcept;
 
         inline virtual void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
@@ -67,7 +67,7 @@ namespace mant {
     //
 
     inline GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction(
-        const unsigned int& numberOfDimensions) noexcept
+        const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         weight_(arma::join_cols(arma::Col<double>({10}), arma::linspace<arma::Col<double>>(1.1, 9.1, 20))) {
       setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
