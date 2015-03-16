@@ -1,10 +1,6 @@
 namespace mant {
   template <typename ParameterType>
   class OptimisationAlgorithm : public Printable {
-    private:
-      // The optimisation problem to be optimised.
-      std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem_;
-
     public:
       // Constructs an optimisation algorithm with the given problem to be optimised.
       explicit OptimisationAlgorithm(
@@ -55,6 +51,10 @@ namespace mant {
 
       // Provides a default deconstructor.
       virtual ~OptimisationAlgorithm() = default;
+
+    private:
+      // The optimisation problem to be optimised.
+      std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem_;
 
     protected:
       const unsigned int numberOfDimensions_;
