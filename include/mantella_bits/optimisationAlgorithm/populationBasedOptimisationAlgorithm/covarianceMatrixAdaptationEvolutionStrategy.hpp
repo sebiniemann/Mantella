@@ -29,7 +29,7 @@ namespace mant {
   }
 
   inline void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
-    unsigned int numberOfDimensions = this->optimisationProblem_->numberOfDimensions_;
+    unsigned int numberOfDimensions = this->numberOfDimensions_;
     arma::Col<double> objectiveValues = arma::randu<arma::Col<double>>(numberOfDimensions);
 
     //init selection parameters
@@ -62,7 +62,7 @@ namespace mant {
       arma::Mat<double> arx(numberOfDimensions, this->populationSize_);
       for (std::size_t n = 0; n < this->populationSize_; ++n) {
         arx.col(n) = objectiveValues + stepSize_ * B * (D % arma::randn<arma::Col<double>>(numberOfDimensions));
-        arfitness(n) = this->optimisationProblem_->getObjectiveValue(arx.col(n));
+        arfitness(n) = this->getObjectiveValue(arx.col(n));
         ++this->numberOfIterations_;
 
         //TODO: Consider soft-constraints.

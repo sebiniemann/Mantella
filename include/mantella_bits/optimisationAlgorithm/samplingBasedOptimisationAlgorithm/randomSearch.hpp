@@ -27,9 +27,9 @@ namespace mant {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      const arma::Col<ParameterType>& candidateParameter = this->distanceFunction_.getRandomNeighbour(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
-      const double& candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
-      const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
+      const arma::Col<ParameterType>& candidateParameter = this->distanceFunction_.getRandomNeighbour(this->getLowerBounds(), this->getUpperBounds() - this->getLowerBounds());
+      const double& candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
+      const double& candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 
       if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
         this->bestParameter_ = candidateParameter;

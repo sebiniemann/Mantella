@@ -32,8 +32,8 @@ namespace mant {
   MultiResolutionGridSearch<ParameterType>::MultiResolutionGridSearch(
       const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
     : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
-    setMinimalSamplingDistances(arma::ones(this->optimisationProblem_->numberOfDimensions_) * 1e-3);
-    setSamplingDistributionPerDimension(arma::ones(this->optimisationProblem_->numberOfDimensions_) / static_cast<double>(this->optimisationProblem_->numberOfDimensions_));
+    setMinimalSamplingDistances(arma::ones(this->numberOfDimensions_) * 1e-3);
+    setSamplingDistributionPerDimension(arma::ones(this->numberOfDimensions_) / static_cast<double>(this->numberOfDimensions_));
     setMaximalSamplesPerResolution(11);
   }
 
@@ -47,22 +47,22 @@ namespace mant {
     double gridSoftCostraintsValueThreshold = std::numeric_limits<double>::infinity();
     double gridObjectiveValueThreshold = std::numeric_limits<double>::infinity();
 
-    arma::Col<double> gridLowerBounds = this->optimisationProblem_->getLowerBounds();
-    arma::Col<double> gridUpperBounds = this->optimisationProblem_->getUpperBounds();
+    arma::Col<double> gridLowerBounds = this->getLowerBounds();
+    arma::Col<double> gridUpperBounds = this->getUpperBounds();
 
-    arma::Col<unsigned int> belowLowerBound(this->optimisationProblem_->numberOfDimensions_, arma::fill::zeros);
-    arma::Col<unsigned int> aboveUpperBound(this->optimisationProblem_->numberOfDimensions_, arma::fill::zeros);
+    arma::Col<unsigned int> belowLowerBound(this->numberOfDimensions_, arma::fill::zeros);
+    arma::Col<unsigned int> aboveUpperBound(this->numberOfDimensions_, arma::fill::zeros);
     while(!this->isFinished() & !this->isTerminated()) {
       const arma::Col<double>& scaledSamplingFactors = samplingDistributionPerDimension_(0) / samplingDistributionPerDimension_;
-      const arma::Col<unsigned int>& numberOfSamples = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(std::pow(maximalSamplesPerResolution_ / std::pow(2, arma::sum(belowLowerBound) + arma::sum(aboveUpperBound)), this->optimisationProblem_->numberOfDimensions_) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->optimisationProblem_->numberOfDimensions_)));
+      const arma::Col<unsigned int>& numberOfSamples = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(std::pow(maximalSamplesPerResolution_ / std::pow(2, arma::sum(belowLowerBound) + arma::sum(aboveUpperBound)), this->numberOfDimensions_) / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->numberOfDimensions_)));
 
       std::vector<arma::Col<double>> sampleParameters_;
-      for (std::size_t n = 0; n < this->optimisationProblem_->numberOfDimensions_; ++n) {
+      for (std::size_t n = 0; n < this->numberOfDimensions_; ++n) {
         sampleParameters_.push_back(arma::linspace(gridLowerBounds(n), gridUpperBounds(n), numberOfSamples(n)));
       }
 
       arma::Col<unsigned int> sampleIndicies_ = arma::zeros<arma::Col<unsigned int>>(sampleParameters_.size());
-      arma::Col<double> candidateParameter(this->optimisationProblem_->numberOfDimensions_);
+      arma::Col<double> candidateParameter(this->numberOfDimensions_);
 
       const unsigned int& overallNumberOfSamples = arma::prod(numberOfSamples);
       for(unsigned int n = 0; n < overallNumberOfSamples; ++n) {
@@ -80,8 +80,8 @@ namespace mant {
           }
         }
 
-        const double& candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
-        const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
+        const double& candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
+        const double& candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 
         samplesPerResolutions.at(resolutionDepth).insert({candidateParameter, {candidateSoftConstraintsValue, candidateObjectiveValue}});
 
@@ -100,7 +100,7 @@ namespace mant {
       double bestGridSoftConstraintsValue = std::numeric_limits<double>::infinity();
       double bestGridObjectiveValue = std::numeric_limits<double>::infinity();
 
-      if (arma::all((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / arma::pow(numberOfSamples - 1, resolutionDepth + 1) < minimalSamplingDistances_)) {
+      if (arma::all((this->getUpperBounds() - this->getLowerBounds()) / arma::pow(numberOfSamples - 1, resolutionDepth + 1) < minimalSamplingDistances_)) {
         bestGridSoftConstraintsValue = gridSoftCostraintsValueThreshold;
         bestGridSoftConstraintsValue = gridObjectiveValueThreshold;
 
@@ -136,7 +136,7 @@ namespace mant {
         ++resolutionDepth;
       }
 
-      const arma::Col<double>& stepSize = (this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / arma::pow(numberOfSamples - 1, resolutionDepth);
+      const arma::Col<double>& stepSize = (this->getUpperBounds() - this->getLowerBounds()) / arma::pow(numberOfSamples - 1, resolutionDepth);
 
       gridSoftCostraintsValueThreshold = bestGridSoftConstraintsValue;
       gridObjectiveValueThreshold = bestGridObjectiveValue;
@@ -163,8 +163,8 @@ namespace mant {
   template <typename ParameterType>
   void MultiResolutionGridSearch<ParameterType>::setMinimalSamplingDistances(
       const arma::Col<double> minimalSamplingDistances) {
-    if(minimalSamplingDistances.n_elem != this->optimisationProblem_->numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the sampling distances (" + std::to_string(minimalSamplingDistances.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
+    if(minimalSamplingDistances.n_elem != this->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the sampling distances (" + std::to_string(minimalSamplingDistances.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
     }
 
     minimalSamplingDistances_ = minimalSamplingDistances;
@@ -179,8 +179,8 @@ namespace mant {
   template <typename ParameterType>
   void MultiResolutionGridSearch<ParameterType>::setSamplingDistributionPerDimension(
       const arma::Col<double> samplingDistributionPerDimension) {
-    if(samplingDistributionPerDimension.n_elem != this->optimisationProblem_->numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the sampling distributions (" + std::to_string(samplingDistributionPerDimension.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
+    if(samplingDistributionPerDimension.n_elem != this->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the sampling distributions (" + std::to_string(samplingDistributionPerDimension.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
     } else if(arma::sum(samplingDistributionPerDimension) != 1.0) {
       throw std::logic_error("The sum of all sampling distributions (" + std::to_string(arma::sum(samplingDistributionPerDimension)) + ") must be 1.");
     }

@@ -39,8 +39,8 @@ namespace mant {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
-    this->bestSoftConstraintsValue_ = this->optimisationProblem_->getSoftConstraintsValue(this->initialParameter_);
-    this->bestObjectiveValue_ = this->optimisationProblem_->getObjectiveValue(this->initialParameter_);
+    this->bestSoftConstraintsValue_ = this->getSoftConstraintsValue(this->initialParameter_);
+    this->bestObjectiveValue_ = this->getObjectiveValue(this->initialParameter_);
 
     arma::Col<double> state = this->bestParameter_;
     while(!this->isFinished() && !this->isTerminated()) {
@@ -48,14 +48,14 @@ namespace mant {
 
       arma::Col<ParameterType> candidateParameter = this->distanceFunction_.getRandomNeighbour(state, 0, maximalStepSize_);
 
-      const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < this->optimisationProblem_->getLowerBounds());
-      const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > this->optimisationProblem_->getUpperBounds());
+      const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < this->getLowerBounds());
+      const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > this->getUpperBounds());
 
-      candidateParameter.elem(belowLowerBound) = this->optimisationProblem_->getLowerBounds().elem(belowLowerBound);
-      candidateParameter.elem(aboveUpperBound) = this->optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
+      candidateParameter.elem(belowLowerBound) = this->getLowerBounds().elem(belowLowerBound);
+      candidateParameter.elem(aboveUpperBound) = this->getUpperBounds().elem(aboveUpperBound);
 
-      const double& candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
-      const double& candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
+      const double& candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
+      const double& candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 
       if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
         state = candidateParameter;
@@ -93,12 +93,12 @@ namespace mant {
   template <typename ParameterType>
   void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
       std::true_type) noexcept {
-    setMaximalStepSize(this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10.0);
+    setMaximalStepSize(this->distanceFunction_.getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10.0);
   }
 
   template <typename ParameterType>
   void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
       std::false_type) noexcept {
-    setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->optimisationProblem_->getLowerBounds(), this->optimisationProblem_->getUpperBounds()) / 10));
+    setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10));
   }
 }

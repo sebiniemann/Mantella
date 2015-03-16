@@ -30,23 +30,23 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
       const unsigned int populationSize) noexcept
     : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize),
-      stepSize_(arma::square((this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds()) / 100)),
+      stepSize_(arma::square((this->getUpperBounds() - this->getLowerBounds()) / 100)),
       neighbourhoodSize_(0),
       maximalNeighbourhoodConvergence_(this->populationSize_) {
 
   }
 
   inline void RoleBasedImitationAlgorithm::optimiseImplementation() noexcept {
-    arma::Mat<double> agents = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
-    agents.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
-    agents.each_col() += this->optimisationProblem_->getLowerBounds();
+    arma::Mat<double> agents = arma::randu<arma::Mat<double>>(this->numberOfDimensions_, this->populationSize_);
+    agents.each_col() %= this->getUpperBounds() - this->getLowerBounds();
+    agents.each_col() += this->getLowerBounds();
 
     arma::Col<double> objectiveValues(this->populationSize_);
     for (std::size_t n = 0; n < this->populationSize_; ++n) {
       ++this->numberOfIterations_;
 
       arma::Col<double> solution = agents.col(n);
-      double objectiveValue = this->optimisationProblem_->getObjectiveValue(solution) + this->optimisationProblem_->getSoftConstraintsValue(solution);
+      double objectiveValue = this->getObjectiveValue(solution) + this->getSoftConstraintsValue(solution);
       objectiveValues(n) = objectiveValue;
 
       if (objectiveValue < this->bestObjectiveValue_) {
@@ -68,7 +68,7 @@ namespace mant {
         arma::Col<double> currentSolution = agents.col(k);
         double currentObjectiveValue = objectiveValues(k);
 
-        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->optimisationProblem_->numberOfDimensions_, std::uniform_int_distribution<unsigned int>(0, this->optimisationProblem_->numberOfDimensions_)(Rng::getGenerator()));
+        arma::Col<unsigned int> parametersToMutate = getRandomPermutation(this->numberOfDimensions_, std::uniform_int_distribution<unsigned int>(0, this->numberOfDimensions_)(Rng::getGenerator()));
 
         arma::Col<unsigned int> neighbourIndicies = getRandomPermutation(this->populationSize_ - 1, neighbourhoodSize_);
         neighbourIndicies.elem(arma::find(neighbourIndicies >= k)) += 1;

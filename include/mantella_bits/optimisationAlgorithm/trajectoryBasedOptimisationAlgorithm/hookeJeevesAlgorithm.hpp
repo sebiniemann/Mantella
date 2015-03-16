@@ -27,7 +27,7 @@ namespace mant {
   inline HookeJeevesAlgorithm::HookeJeevesAlgorithm(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
     : TrajectoryBasedOptimisationAlgorithm<double>(optimisationProblem) {
-    setInitialStepSize(this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds());
+    setInitialStepSize(this->getUpperBounds() - this->getLowerBounds());
     setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 0.5);
   }
 
@@ -35,8 +35,8 @@ namespace mant {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
-    this->bestSoftConstraintsValue_ = this->optimisationProblem_->getSoftConstraintsValue(this->initialParameter_);
-    this->bestObjectiveValue_ = this->optimisationProblem_->getObjectiveValue(this->initialParameter_);
+    this->bestSoftConstraintsValue_ = this->getSoftConstraintsValue(this->initialParameter_);
+    this->bestObjectiveValue_ = this->getObjectiveValue(this->initialParameter_);
 
     bool reduceStepSize = false;
     arma::Col<double> stepSize = initialStepSize_;
@@ -49,16 +49,16 @@ namespace mant {
       reduceStepSize = true;
 
       arma::Col<double> candidateParameter = this->bestParameter_;
-      for (std::size_t n = 0; n < this->optimisationProblem_->numberOfDimensions_; ++n) {
+      for (std::size_t n = 0; n < this->numberOfDimensions_; ++n) {
         candidateParameter(n) += stepSize(n);
 
-        if(this->optimisationProblem_->getUpperBounds()(n) < candidateParameter(n)) {
-          candidateParameter(n) = this->optimisationProblem_->getUpperBounds()(n);
+        if(this->getUpperBounds()(n) < candidateParameter(n)) {
+          candidateParameter(n) = this->getUpperBounds()(n);
         }
 
         ++this->numberOfIterations_;
-        double candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
-        double candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
+        double candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
+        double candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 
         if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
           reduceStepSize = false;
@@ -74,13 +74,13 @@ namespace mant {
 
         candidateParameter(n) = this->bestParameter_(n) - stepSize(n);
 
-        if(this->optimisationProblem_->getLowerBounds()(n) > candidateParameter(n)) {
-          candidateParameter(n) = this->optimisationProblem_->getLowerBounds()(n);
+        if(this->getLowerBounds()(n) > candidateParameter(n)) {
+          candidateParameter(n) = this->getLowerBounds()(n);
         }
 
         ++this->numberOfIterations_;
-        candidateSoftConstraintsValue = this->optimisationProblem_->getSoftConstraintsValue(candidateParameter);
-        candidateObjectiveValue = this->optimisationProblem_->getObjectiveValue(candidateParameter);
+        candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
+        candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 
         if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
           reduceStepSize = false;
@@ -101,8 +101,8 @@ namespace mant {
 
   inline void HookeJeevesAlgorithm::setInitialStepSize(
       const arma::Col<double> initialStepSize) {
-    if(initialStepSize.n_rows != this->optimisationProblem_->numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
+    if(initialStepSize.n_rows != this->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
     } else if (arma::any(initialStepSize <= 0)) {
       throw std::logic_error("The initial step size must be strict greater than 0.");
     }
@@ -112,8 +112,8 @@ namespace mant {
 
   inline void HookeJeevesAlgorithm::setStepSizeDecrease(
       const arma::Col<double> stepSizeDecrease) {
-    if(stepSizeDecrease.n_rows != this->optimisationProblem_->numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->optimisationProblem_->numberOfDimensions_) + ").");
+    if(stepSizeDecrease.n_rows != this->numberOfDimensions_) {
+      throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
     } else if(arma::any(stepSizeDecrease <= 0) || arma::any(stepSizeDecrease >= 1)) {
       throw std::logic_error("The step size decrease must be strict greater than 0 and strict lower than 1.");
     }

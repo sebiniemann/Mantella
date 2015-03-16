@@ -105,19 +105,19 @@ namespace mant {
         arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
         arma::Col<double> solutionCandidate = particle_ + velocityCandidate;
 
-        const arma::Col<unsigned int>& belowLowerBound = arma::find(solutionCandidate < this->optimisationProblem_->getLowerBounds());
-        const arma::Col<unsigned int>& aboveUpperBound = arma::find(solutionCandidate > this->optimisationProblem_->getUpperBounds());
+        const arma::Col<unsigned int>& belowLowerBound = arma::find(solutionCandidate < this->getLowerBounds());
+        const arma::Col<unsigned int>& aboveUpperBound = arma::find(solutionCandidate > this->getUpperBounds());
 
         velocityCandidate.elem(belowLowerBound) *= -0.5;
         velocityCandidate.elem(aboveUpperBound) *= -0.5;
 
-        solutionCandidate.elem(belowLowerBound) = this->optimisationProblem_->getLowerBounds().elem(belowLowerBound);
-        solutionCandidate.elem(aboveUpperBound) = this->optimisationProblem_->getUpperBounds().elem(aboveUpperBound);
+        solutionCandidate.elem(belowLowerBound) = this->getLowerBounds().elem(belowLowerBound);
+        solutionCandidate.elem(aboveUpperBound) = this->getUpperBounds().elem(aboveUpperBound);
 
         velocities_.col(particleIndex_) = velocityCandidate;
         particles_.col(particleIndex_) = solutionCandidate;
 
-        const double& objectiveValue = this->optimisationProblem_->getObjectiveValue(solutionCandidate) + this->optimisationProblem_->getSoftConstraintsValue(solutionCandidate);
+        const double& objectiveValue = this->getObjectiveValue(solutionCandidate) + this->getSoftConstraintsValue(solutionCandidate);
 
         if (objectiveValue < localBestObjectiveValues_(particleIndex_)) {
           localBestObjectiveValues_(particleIndex_) = objectiveValue;
@@ -143,13 +143,13 @@ namespace mant {
   }
 
   inline void StandardParticleSwarmOptimisation2011::initialiseSwarm() noexcept {
-    particles_ = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
-    particles_.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
-    particles_.each_col() += this->optimisationProblem_->getLowerBounds();
+    particles_ = arma::randu<arma::Mat<double>>(this->numberOfDimensions_, this->populationSize_);
+    particles_.each_col() %= this->getUpperBounds() - this->getLowerBounds();
+    particles_.each_col() += this->getLowerBounds();
 
-    velocities_ = arma::randu<arma::Mat<double>>(this->optimisationProblem_->numberOfDimensions_, this->populationSize_);
-    velocities_.each_col() %= this->optimisationProblem_->getUpperBounds() - this->optimisationProblem_->getLowerBounds();
-    velocities_.each_col() += this->optimisationProblem_->getLowerBounds();
+    velocities_ = arma::randu<arma::Mat<double>>(this->numberOfDimensions_, this->populationSize_);
+    velocities_.each_col() %= this->getUpperBounds() - this->getLowerBounds();
+    velocities_.each_col() += this->getLowerBounds();
     velocities_ -= particles_;
 
     localBestSolutions_ = particles_;
@@ -158,7 +158,7 @@ namespace mant {
       ++this->numberOfIterations_;
 
       arma::Col<double> localBestSolution = localBestSolutions_.col(n);
-      double localBestObjectiveValue = this->optimisationProblem_->getObjectiveValue(localBestSolution) + this->optimisationProblem_->getSoftConstraintsValue(localBestSolution);
+      double localBestObjectiveValue = this->getObjectiveValue(localBestSolution) + this->getSoftConstraintsValue(localBestSolution);
       localBestObjectiveValues_(n) = localBestObjectiveValue;
 
       if (localBestObjectiveValue < this->bestObjectiveValue_) {
@@ -179,7 +179,7 @@ namespace mant {
   }
 
   inline arma::Col<double> StandardParticleSwarmOptimisation2011::getVelocity() noexcept {
-    return arma::normalise(arma::randn<arma::Col<double>>(this->optimisationProblem_->numberOfDimensions_)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
+    return arma::normalise(arma::randn<arma::Col<double>>(this->numberOfDimensions_)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
   inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011::getRandomNeighbourhoodTopology() noexcept {
