@@ -33,7 +33,7 @@ F_T &:= \text{The translation of the objective value.}\\
 
 <div class="custom-callout custom-callout-info">
 #### Default values
-The objective function and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\\), \\(X_S\\), \\(X_T\\), \\(F_S\\) and \\(F_T\\) are set to a neutral element.
+The objective function and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\\), \\(X_S\\), \\(X_T\\), \\(F_S\\) and \\(F_T\\) are set to a neutral element/function.
 </div>
 
 - Constraints handling<br>
