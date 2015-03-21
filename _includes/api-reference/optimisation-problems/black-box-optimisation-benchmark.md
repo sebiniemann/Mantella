@@ -1,4 +1,4 @@
-Abstract base class for the black-box optimisation benchmark.
+*Abstract base class for the black-box optimisation benchmark.*
 
 $$\min_{X \in [L, U]} F(X)$$
 
