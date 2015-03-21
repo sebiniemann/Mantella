@@ -11,7 +11,10 @@ C_L &:= \text{The lower bounds of the search space.}\\
 C_U &:= \text{The upper bounds of the search space.}
 \end{align}$$
 
-Per default, the optimisation problem has no (soft-)constraints, i.e. \\(C(X) = 0 \forall X\\) and \\(C_L = -\infty^N, C_U = \infty^N\\).
+<div class="custom-callout custom-callout-info">
+#### Default values
+Unless otherwise stated, the optimisation problem has no soft- or bound-constraints, i.e. \\(C(X) = 0 \ \forall X\\), \\(C_L = -\infty^N\\) and \\(C_U = \infty^N\\).
+</div>
 
 It is further possible to permutate, scale, translate and rotate any objective function and value.
 
@@ -28,8 +31,10 @@ F_T &:= \text{The translation of the objective value.}\\
 \circ &:= \text{Element-wise multiplication.}
 \end{align}$$
 
-Per default, the objective function and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\\), \\(X_S\\), \\(X_T\\), \\(F_S\\) and \\(F_T\\) are set to a neutral element.
-
+<div class="custom-callout custom-callout-info">
+#### Default values
+The objective function and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\\), \\(X_S\\), \\(X_T\\), \\(F_S\\) and \\(F_T\\) are set to a neutral element.
+</div>
 
 - Constraints handling<br>
   <a href="#optimisation-problems-setLowerBounds">setLowerBounds</a>, <a href="#optimisation-problems-setUpperBounds">setUpperBounds</a>, <a href="#optimisation-problems-getLowerBounds">getLowerBounds</a>, <a href="#optimisation-problems-getUpperBounds">getUpperBounds</a>, <a href="#optimisation-problems-getSoftConstraintsValue">getSoftConstraintsValue</a>, <a href="#optimisation-problems-isSatisfyingLowerBounds">isSatisfyingLowerBounds</a>, <a href="#optimisation-problems-isSatisfyingUpperBounds">isSatisfyingUpperBounds</a>, <a href="#optimisation-problems-isSatisfyingSoftConstraints">isSatisfyingSoftConstraints</a>, <a href="#optimisation-problems-isSatisfyingConstraints">isSatisfyingConstraints</a>
