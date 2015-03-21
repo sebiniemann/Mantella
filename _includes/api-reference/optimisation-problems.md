@@ -163,7 +163,7 @@ The objective function and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\
 **<small>void</small> .setAcceptableObjectiveValue( <small>double</small> F )** {% include noexcept %}
 
 - Defines the upper limit for an objective value to be acceptable by the user.
-- *Note:* The acceptable objective value is not required to be reachable.
+- **Note:** The acceptable objective value is not required to be reachable.
 
 ---
 <a name="optimisation-problems-getAcceptableObjectiveValue"></a>
@@ -171,7 +171,7 @@ The objective function and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\
 
 - Returns the the upper limit for an objective value to be acceptable by the user.
 - The default value (if not parameterised by `.setAcceptableObjectiveValue(...)`) is the lowest representable number.
-- *Note:* The acceptable objective value is not required to be reachable.
+- **Note:** The acceptable objective value is not required to be reachable.
 
 ---
 <a name="optimisation-problems-getObjectiveValue"></a>
