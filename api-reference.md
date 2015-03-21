@@ -114,7 +114,7 @@ table_of_contents:
 ---
 
 <div class="custom-callout custom-callout-info">
-### Can the interface ... be used for my problem?
+#### Can this interface be used for my problem?
 
 While we use many commen interfaces for continuous and discrete optimisation problems, some calculations will only sense for one of them.
 
@@ -130,7 +130,7 @@ Interfaces marked without any specifiers can be used for all problem types.
 </div>
 
 <div class="custom-callout custom-callout-info">
-### Notable interface guarantees
+#### Notable interface guarantees
 
 <dl class="dl-horizontal" markdown="0">
   <dt>{% include noexcept %}</dt>
