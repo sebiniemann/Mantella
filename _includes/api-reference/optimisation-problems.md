@@ -6,7 +6,7 @@ $$\min_{X \in [C_L, C_U]} F(X) + C(X)$$
 
 $$\begin{align}
 F &:= \text{Some objective function.}\\
-C &:= \text{The sum of all (soft-)constraints (which are always positive and only 0 if X satisfies all constraints).}\\
+C &:= \text{The sum of all (soft-)constraints.}\\
 C_L &:= \text{The lower bounds of the search space.}\\
 C_U &:= \text{The upper bounds of the search space.}
 \end{align}$$
