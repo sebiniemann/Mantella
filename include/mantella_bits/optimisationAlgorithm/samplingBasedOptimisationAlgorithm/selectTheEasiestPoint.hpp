@@ -4,7 +4,7 @@ namespace mant {
   class selectTheEasiestPoint : public SamplingBasedOptimisationAlgorithm<ParameterType> {
   public:
     explicit selectTheEasiestPoint(
-        const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+        const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem, unsigned int solvingDimension) noexcept;
 
     std::string toString() const noexcept override;
 
@@ -35,37 +35,38 @@ namespace mant {
   : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
     setSolvingDimension(solvingDimension);
 
-    sol = arma::Col<double>(numberOfDimensions_);
+    sol = arma::Col<double>(this->numberOfDimensions_);
     t = arma::Col<double>(200);
     ft = arma::Col<double>(200);
 
     lowerBound = optimisationProblem->getLowerBounds()(solvingDimension);
     upperBound = optimisationProblem->getUpperBounds()(solvingDimension);
 
-    sol = (lowerBound + (upperBound - lowerBound)) * arma::randu(numberOfDimensions_); //mySTEPinit 18
+    sol = (lowerBound + (upperBound - lowerBound)) * arma::randu(this->numberOfDimensions_); //mySTEPinit 18
 
     t(0) = lowerBound;
     sol(solvingDimension) = lowerBound;
-    ft(0) = -getObjectiveValue(sol);
+    ft(0) = -this->getObjectiveValue(sol);
     this->numberOfIterations_++;
     //this never gets done in "normal" STEP, but we need to do it
-    if (arma::max(ft) < bestObjectiveValue_) {
-      bestObjectiveValue_ = arma::max(ft);
-      bestParameter_ = sol;
+    if (arma::max(ft) < this->bestObjectiveValue_) {
+      this->bestObjectiveValue_ = arma::max(ft);
+      this->bestParameter_ = sol;
     }
 
     t(1) = upperBound;
     sol(solvingDimension) = upperBound;
-    ft(1) = -getObjectiveValue(sol);
+    ft(1) = -this->getObjectiveValue(sol);
     this->numberOfIterations_++;
     //this never gets done in "normal" STEP, but we need to do it
-    if (arma::max(ft) < bestObjectiveValue_) {
-      bestObjectiveValue_ = arma::max(ft);
-      bestParameter_ = sol;
+    if (arma::max(ft) < this->bestObjectiveValue_) {
+      this->bestObjectiveValue_ = arma::max(ft);
+      this->bestParameter_ = sol;
     }
   }
 
-  void selectTheEasiestPoint<ParameterType>::optimiseImplementation() noexcept override {
+  template <typename ParameterType>
+  void selectTheEasiestPoint<ParameterType>::optimiseImplementation() noexcept {
     while (!this->isFinished() & !this->isTerminated()) {
 
       unsigned int i1 = 0; //i1 and i2 are both used and indexes so their value is 1 less than in matlab
@@ -92,12 +93,12 @@ namespace mant {
 
       t(nt) = t(i1) + 0.5 * (t(i2) - t(i1));
       sol(solvingDimension) = t(nt);
-      ft(nt) = -getObjectiveValue(sol);
+      ft(nt) = -this->getObjectiveValue(sol);
       this->numberOfIterations_++;
       //this never gets done in "normal" STEP, but we need to do it
-      if (arma::max(ft) < bestObjectiveValue_) {
-        bestObjectiveValue_ = arma::max(ft);
-        bestParameter_ = sol;
+      if (arma::max(ft) < this->bestObjectiveValue_) {
+        this->bestObjectiveValue_ = arma::max(ft);
+        this->bestParameter_ = sol;
       }
 
       arma::uvec sortIndexT = arma::sort_index(t);
