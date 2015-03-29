@@ -35,20 +35,20 @@ namespace mant {
       void setParameterPermutation(
           const arma::Col<unsigned int>& parameterPermutation);
 
-      void setParameterTranslation(
-          const arma::Col<double>& parameterTranslation);
-
       void setParameterScaling(
         const arma::Col<double>& parameterScaling);
+
+      void setParameterTranslation(
+          const arma::Col<double>& parameterTranslation);
 
       void setParameterRotation(
         const arma::Mat<double>& parameterRotation);
 
-      void setObjectiveValueTranslation(
-        const double objectiveValueTranslation) noexcept;
-
       void setObjectiveValueScaling(
         const double objectiveValueScaling) noexcept;
+
+      void setObjectiveValueTranslation(
+        const double objectiveValueTranslation) noexcept;
       
       void setAcceptableObjectiveValue(
           const double acceptableObjectiveValue) noexcept;
@@ -73,12 +73,12 @@ namespace mant {
       arma::Col<ParameterType> upperBounds_;
 
       arma::Col<unsigned int> parameterPermutation_;
-      arma::Col<double> parameterTranslation_;
       arma::Col<double> parameterScaling_;
+      arma::Col<double> parameterTranslation_;
       arma::Mat<double> parameterRotation_;
 
-      double objectiveValueTranslation_;
       double objectiveValueScaling_;
+      double objectiveValueTranslation_;
 
       double acceptableObjectiveValue_;
 
@@ -106,23 +106,24 @@ namespace mant {
         archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
         archive(cereal::make_nvp("lowerBounds", lowerBounds_));
         archive(cereal::make_nvp("upperBounds", upperBounds_));
+        archive(cereal::make_nvp("parameterPermutation", parameterPermutation_));
+        archive(cereal::make_nvp("parameterScaling", parameterScaling_));
         archive(cereal::make_nvp("parameterTranslation", parameterTranslation_));
         archive(cereal::make_nvp("parameterRotation", parameterRotation_));
-        archive(cereal::make_nvp("parameterScaling", parameterScaling_));
-        archive(cereal::make_nvp("objectiveValueTranslation", objectiveValueTranslation_));
         archive(cereal::make_nvp("objectiveValueScaling", objectiveValueScaling_));
+        archive(cereal::make_nvp("objectiveValueTranslation", objectiveValueTranslation_));
         archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
       }
 #endif
   };
 
-  //
-  // Implementation
-  //
-
   template <>
   inline OptimisationProblem<double>::OptimisationProblem(
       const unsigned int numberOfDimensions) noexcept;
+
+  template <>
+  inline void OptimisationProblem<double>::setParameterScaling(
+      const arma::Col<double>& parameterScaling);
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
@@ -133,12 +134,12 @@ namespace mant {
       const arma::Mat<double>& parameterRotation);
 
   template <>
-  inline void OptimisationProblem<double>::setParameterScaling(
-      const arma::Col<double>& parameterScaling);
-
-  template <>
   inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
       const arma::Col<double>& parameter) const noexcept;
+
+  //
+  // Implementation
+  //
 
   template <typename ParameterType>
   OptimisationProblem<ParameterType>::OptimisationProblem(
@@ -149,8 +150,8 @@ namespace mant {
     setLowerBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) - std::numeric_limits<ParameterType>::max());
     setUpperBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::numeric_limits<ParameterType>::max());
     setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
-    setObjectiveValueTranslation(0.0);
     setObjectiveValueScaling(1.0);
+    setObjectiveValueTranslation(0.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
   }
 
@@ -166,9 +167,48 @@ namespace mant {
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
     setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
-    setObjectiveValueTranslation(0.0);
     setObjectiveValueScaling(1.0);
+    setObjectiveValueTranslation(0.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::setLowerBounds(
+      const arma::Col<ParameterType>& lowerBounds) {
+    isEqual("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
+
+    lowerBounds_ = lowerBounds;
+  }
+
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::setUpperBounds(
+      const arma::Col<ParameterType>& upperBounds) {
+    isEqual("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
+
+    upperBounds_ = upperBounds;
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getLowerBounds() const noexcept {
+    return lowerBounds_;
+  }
+
+  template <typename ParameterType>
+  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getUpperBounds() const noexcept {
+    return upperBounds_;
+  }
+
+  template <typename ParameterType>
+  double OptimisationProblem<ParameterType>::getSoftConstraintsValue(
+      const arma::Col<ParameterType>& parameter) {
+    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+
+    const double& softConstraintValue = getSoftConstraintsValueImplementation(parameter);
+    
+    // All soft-constraint values must be greater than or equal to 0.
+    assert(softConstraintValue >= 0);
+    
+    return objectiveValueScaling_ * softConstraintValue;
   }
 
   template <typename ParameterType>
@@ -176,7 +216,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter) {
     isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
-    return (parameter >= lowerBounds_);
+    return arma::all(parameter >= lowerBounds_);
   }
 
   template <typename ParameterType>
@@ -184,7 +224,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter) {
     isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
 
-    return (parameter <= upperBounds_);
+    return  arma::all(parameter <= upperBounds_);
   }
 
   template <typename ParameterType>
@@ -200,65 +240,8 @@ namespace mant {
       const arma::Col<ParameterType>& parameter) {
     isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
     
+    // Returns only true, if all other isSatisfying*-methods will also return true.
     return (arma::all(isSatisfyingLowerBounds(parameter)) && arma::all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
-  }
-
-  template <typename ParameterType>
-  double OptimisationProblem<ParameterType>::getSoftConstraintsValue(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
-
-    return objectiveValueScaling_ * getSoftConstraintsValueImplementation(parameter);
-  }
-
-  template <typename ParameterType>
-  inline double OptimisationProblem<ParameterType>::getObjectiveValue(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
-
-    // Always increase the number of evaluations (whether its computed or retrived from cache).
-    ++numberOfEvaluations_;
-
-    // Check if the result is already cached.
-    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
-    if (cachePosition == cachedObjectiveValues_.cend()) {
-      // Increase the number of distinct evaluations only if we actually compute the value.
-      ++numberOfDistinctEvaluations_;
-
-      // The result was not found, compute it.
-      const double& result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
-      cachedObjectiveValues_.insert({parameter, result});
-      return result;
-    } else {
-      // Return the found result.
-      return cachePosition->second;
-    }
-  }
-
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getLowerBounds() const noexcept {
-    return lowerBounds_;
-  }
-
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setLowerBounds(
-      const arma::Col<ParameterType>& lowerBounds) {
-    isEqual("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
-
-    lowerBounds_ = lowerBounds;
-  }
-
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getUpperBounds() const noexcept {
-    return upperBounds_;
-  }
-
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setUpperBounds(
-      const arma::Col<ParameterType>& upperBounds) {
-    isEqual("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
-
-    upperBounds_ = upperBounds;
   }
 
   template <typename ParameterType>
@@ -268,6 +251,14 @@ namespace mant {
     isEqual("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterPermutation_ = parameterPermutation;
+  }
+
+  template <>
+  inline void OptimisationProblem<double>::setParameterScaling(
+      const arma::Col<double>& parameterScaling) {
+    isEqual("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
+
+    parameterScaling_ = parameterScaling;
   }
 
   template <>
@@ -287,12 +278,10 @@ namespace mant {
     parameterRotation_ = parameterRotation;
   }
 
-  template <>
-  inline void OptimisationProblem<double>::setParameterScaling(
-      const arma::Col<double>& parameterScaling) {
-    isEqual("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
-
-    parameterScaling_ = parameterScaling;
+  template <typename ParameterType>
+  void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScaling(
+      const double objectiveValueScaling) noexcept {
+    objectiveValueScaling_ = objectiveValueScaling;
   }
 
   template <typename ParameterType>
@@ -302,9 +291,9 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScaling(
-      const double objectiveValueScaling) noexcept {
-    objectiveValueScaling_ = objectiveValueScaling;
+  void OptimisationProblem<ParameterType>::setAcceptableObjectiveValue(
+      const double acceptableObjectiveValue) noexcept {
+    acceptableObjectiveValue_ = acceptableObjectiveValue;
   }
 
   template <typename ParameterType>
@@ -313,9 +302,27 @@ namespace mant {
   }
 
   template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setAcceptableObjectiveValue(
-      const double acceptableObjectiveValue) noexcept {
-    acceptableObjectiveValue_ = acceptableObjectiveValue;
+  inline double OptimisationProblem<ParameterType>::getObjectiveValue(
+      const arma::Col<ParameterType>& parameter) {
+    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+
+    // Always increase the number of evaluations.
+    ++numberOfEvaluations_;
+
+    // Check if the result is already cached.
+    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
+    if (cachePosition == cachedObjectiveValues_.cend()) {
+      // Increase the number of distinct evaluations only if we actually compute the value.
+      ++numberOfDistinctEvaluations_;
+
+      // The result was not found, compute it.
+      const double& result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
+      cachedObjectiveValues_.insert({parameter, result});
+      return result;
+    } else {
+      // Return the found result.
+      return cachePosition->second;
+    }
   }
 
   template <typename ParameterType>
