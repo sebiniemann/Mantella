@@ -13,13 +13,12 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css">
-
+    <!-- Bootstrap switch -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap-switch.min.css">
     <!-- Custom theme -->
     <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/sra-theme.css">
-    
     <!-- Fonts -->
     <link href="http://fonts.googleapis.com/css?family=Nunito:400,700|Open+Sans" rel="stylesheet" type="text/css">
-    
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -98,13 +97,23 @@
     <script src="{{ site.baseurl }}/assets/js/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="{{ site.baseurl }}/assets/js/bootstrap.min.js"></script>
+    <!-- Bootstrap sidebar -->
+    <script src="{{ site.baseurl }}/assets/js/bootstrap-sidebar.min.js"></script>
+    <!-- Bootstrap switch -->
+    <script src="{{ site.baseurl }}/assets/js/bootstrap-switch.min.js"></script>
+    <script>$("[name='my-checkbox']").bootstrapSwitch();</script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ site.baseurl }}/assets/js/ie10-viewport-bug-workaround.js"></script>
     <!-- MathJax -->
     <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <!-- Custum script -->
-    <script src="{{ site.baseurl }}/assets/js/documentation.min.js"></script>
+    <script>
+      $(function() {
+        $.fn.bootstrapSwitch.defaults.size = 'mini';
+        $(".bootstrap-switch").bootstrapSwitch();
+      });
+    </script>
       
     <!-- Google Analytics OptOut (must be placed before the actual tracking code) -->
     <script>

@@ -74,6 +74,8 @@ body {
     background-color: $secondary-color-light;
     border-color: $secondary-color;
   }
+  
+  
 }
 
 /*
@@ -272,61 +274,81 @@ body {
   position: static;
 }
 
-/* First level of nav */
-
-.custom-sidenav {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-/* All levels of nav */
-
-.custom-sidebar .nav {
-  margin-left: 0;
-  > {
-    li > a {
-      display: block;
-      padding: 4px 20px;
-      font-size: 16px;
-      font-weight: 500;
-      color: $secondary-color-dark;
-      &:hover, &:focus {
-        text-decoration: none;
-        color: $link-color;
+.custom-sidebar {
+  .nav {
+    margin-left: 0;
+    > {
+      li > a {
+        display: block;
+        padding: 4px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        color: $secondary-color-dark;
+        &:hover, &:focus {
+          text-decoration: none;
+          color: $link-color;
+        }
+      }
+      .active,
+      .selected {
+        > a, &:hover > a, &:focus > a {
+          padding-left: 18px;
+          font-weight: bold;
+          color: $primary-color;
+          background-color: transparent;
+          border-right: 2px solid $primary-color;
+        }
       }
     }
-    .active {
-      > a, &:hover > a, &:focus > a {
-        padding-left: 18px;
-        font-weight: bold;
-        color: $primary-color;
-        background-color: transparent;
-        border-right: 2px solid $primary-color;
+    
+    .nav {
+      display: none;
+      /* Hide by default, but at >768px, show it */
+      padding-bottom: 10px;
+      > {
+        li > a {
+          padding-top: 1px;
+          padding-bottom: 1px;
+          padding-left: 30px;
+          font-size: 12px;
+          font-weight: normal;
+          &:hover, &:focus {
+            padding-left: 29px;
+          }
+        }
+        .active {
+          > a, &:hover > a, &:focus > a {
+            padding-left: 28px;
+            font-weight: 500;
+          }
+        }
       }
     }
   }
-  .nav {
+    
+  .back-to-top {
     display: none;
-    /* Hide by default, but at >768px, show it */
-    padding-bottom: 10px;
-    > {
-      li > a {
-        padding-top: 1px;
-        padding-bottom: 1px;
-        padding-left: 30px;
-        font-size: 12px;
-        font-weight: normal;
-        &:hover, &:focus {
-          padding-left: 29px;
-        }
-      }
-      .active {
-        > a, &:hover > a, &:focus > a {
-          padding-left: 28px;
-          font-weight: 500;
-        }
-      }
+    padding: 4px 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: $secondary-color-dark;
+  
+    &:hover {
+      color: $primary-color;
+      text-decoration: none
     }
+  }
+    
+  .custom-filter > li {
+    margin: 4px 20px;
+  }
+}
+
+@media (min-width:768px) {
+  .custom-sidebar .back-to-top {
+    display: block
   }
 }
 
@@ -523,4 +545,34 @@ dl {
 
 main small {
   color: $secondary-color-dark;
+}
+
+/*
+ * Anchors
+ */
+.custom-anchor {
+  float: right;
+  margin-right: 10px;
+  width: 1em;
+  height: 1em;
+  opacity: 0;
+  color: inherit;
+  text-align: center;
+}
+
+:hover > {
+  .custom-anchor {
+    opacity: .5;
+    transition: color .16s linear;
+  }
+  
+  .custom-anchor:hover {
+    opacity: 1;
+    text-decoration: none;
+  }
+}
+
+
+main a[href^="http"]:not(.btn):after {
+  content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABJQTFRF////ZmZmf39/mZmZzMzM////uFQy2wAAAAF0Uk5TAEDm2GYAAAA9SURBVAjXY2BgUFJSYmBgMg0NYgCygaSgoAqQFA1ydQKSKiFKRgyizk4CCgyiIaoCDAyioaFAUlBQUIABAOraB5b0DpEbAAAAAElFTkSuQmCC);    
 }

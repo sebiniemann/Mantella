@@ -9,10 +9,10 @@
 
 **.setAcceleration( A )**
 {% include noexcept %}
-<br />
+<br>
 **.setLocalAttraction( L )**
 {% include noexcept %}
-<br />
+<br>
 **.setGlobalAttraction( G )**
 {% include noexcept %}
 

@@ -1,7 +1,7 @@
 **.getDistance( X )**
 {% include discrete-only %}
 {% include noexcept %}
-<br />
+<br>
 **.getDistance( X, Y )**
 {% include discrete-only %}
 

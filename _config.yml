@@ -1,5 +1,5 @@
 # Site settings
-baseurl: http://SebastianNiemann.github.io/Mantella
+#baseurl: http://SebastianNiemann.github.io/Mantella
 
 # Note, it is not required for the title to match the project name
 title: Mantella
@@ -15,6 +15,10 @@ navigation:
  - API Reference
  - License
  - Questions
+ 
+api_version:
+ - 1.x
+ - Draft
 
 # Avoids the need of .html suffixes
 permalink: pretty

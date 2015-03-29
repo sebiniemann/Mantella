@@ -1,7 +1,7 @@
 **.getDistance( X )**
 {% include continuous-only %}
 {% include noexcept %}
-<br />
+<br>
 **.getDistance( X, Y )**
 {% include continuous-only %}
 

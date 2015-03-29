@@ -1,6 +1,6 @@
 **.getDistance( X )**
 {% include noexcept %}
-<br />
+<br>
 **.getDistance( X, Y )**
 
 **.getRandomNeighbour( X, A, B )**

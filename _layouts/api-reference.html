@@ -1,7 +1,8 @@
 ---
 layout: base
 ---
-
+{% assign api_reference_folder = page.title | slugify %}
+      
 <div class="custom-header" id="content">
   <div class="container">
     <h1>{{ page.title }}</h1>
@@ -18,13 +19,15 @@ layout: base
             <a href="#table-of-contents">Table of Contents</a>
           </li>
           {% for first_level in page.table_of_contents %}
+            {% capture first_level_namespace %}{% if first_level[1].namespace %}{{ first_level[1].namespace }}-{% endif %}{% endcapture %}
             <li>
-              <a href="#{{ first_level[0] | slugify }}">{{ first_level[0] }}</a>
-              {% if first_level[1] != empty %}
-                <ul class="nav">
-                  {% for second_level in first_level[1] %}
+              <a href="#{{first_level_namespace}}{{ first_level[0] | slugify }}">{{ first_level[0] }}</a>
+              {% if first_level[1].subsection %}
+                  <ul class="nav">
+                  {% for second_level in first_level[1].subsection %}
+                    {% capture second_level_namespace %}{{first_level_namespace}}{% if second_level[1].namespace %}{{ second_level[1].namespace }}-{% endif %}{% endcapture %}
                     <li>
-                      <a href="#{{ second_level[0] | slugify }}">{{ second_level[0] }}</a>
+                      <a href="#{{second_level_namespace}}{{ second_level[0] | slugify }}">{{ second_level[0] }}</a>
                     </li>
                   {% endfor %}
                 </ul>
@@ -32,6 +35,37 @@ layout: base
             </li>
           {% endfor %}
         </ul>
+        <a class="back-to-top" href="#top">
+          Back to top
+        </a>
+        
+        <br>
+        Version:
+        <ul class="nav custom-sidenav">
+          {% for api_version in site.api_version %}
+            {% if forloop.index == 1 %}
+              {% assign api_version_folder = "api-reference" %}
+            {% else %}
+              {% capture api_version_folder %}api-reference-{{ api_version | slugify }}{% endcapture %}
+            {% endif %}
+            <li {% if api_version_folder == api_reference_folder %}class="selected"{% endif %}>
+              <a href="{{ site.baseurl }}/{{ api_version_folder }}">{{ api_version }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+        
+        <!--
+        <br>
+        Filter:
+        <ul class="nav custom-sidenav custom-filter">
+            <li>
+              <input class="bootstrap-switch" type="checkbox"> <span class="label custom-label-continuous">continuous</span>
+            </li>
+            <li>
+              <input class="bootstrap-switch" type="checkbox"> <span class="label custom-label-discrete">discrete</span>
+            </li>
+        </ul>
+        -->
       </nav>
     </div>
     <main class="col-md-9" role="main">
@@ -40,28 +74,33 @@ layout: base
       <h1 id="table-of-contents">Table of Contents</h2>
       <ul class="toc">
         {% for first_level in page.table_of_contents %}
+          {% capture first_level_namespace %}{% if first_level[1].namespace %}{{ first_level[1].namespace }}-{% endif %}{% endcapture %}
           <li>
-            <a href="#{{ first_level[0] | slugify }}">{{ first_level[0] }}</a>
-            {% if first_level[1] != empty %}
+            <a href="#{{first_level_namespace}}{{ first_level[0] | slugify }}">{{ first_level[0] }}</a>
+            {% if first_level[1].subsection %}
               <ul>
-                {% for second_level in first_level[1] %}
+                {% for second_level in first_level[1].subsection %}
+                  {% capture second_level_namespace %}{{first_level_namespace}}{% if second_level[1].namespace %}{{ second_level[1].namespace }}-{% endif %}{% endcapture %}
                   <li>
-                    <a href="#{{ second_level[0] | slugify }}">{{ second_level[0] }}</a>
-                    {% if second_level[1] != empty %}
+                    <a href="#{{second_level_namespace}}{{ second_level[0] | slugify }}">{{ second_level[0] }}</a>
+                    {% if second_level[1].subsection %}
                       <ul>
-                        {% for third_level in second_level[1] %}
+                        {% for third_level in second_level[1].subsection %}
+                          {% capture third_level_namespace %}{{second_level_namespace}}{% if third_level[1].namespace %}{{ third_level[1].namespace }}-{% endif %}{% endcapture %}
                           <li>
-                            <a href="#{{ third_level[0] | slugify }}">{{ third_level[0] }}</a>
-                            {% if third_level[1] != empty %}
+                            <a href="#{{ third_level_namespace }}{{ third_level[0] | slugify }}">{{ third_level[0] }}</a>
+                            {% if third_level[1].subsection %}
                               <ul>
-                                {% for fourth_level in third_level[1] %}
+                                {% for fourth_level in third_level[1].subsection %}
+                                  {% capture fourth_level_namespace %}{{third_level_namespace}}{% if fourth_level[1].namespace %}{{ fourth_level[1].namespace }}-{% endif %}{% endcapture %}
                                   <li>
-                                    <a href="#{{ fourth_level[0] | slugify }}">{{ fourth_level[0] }}</a>
-                                    {% if fourth_level[1] != empty %}
+                                    <a href="#{{ fourth_level_namespace }}{{ fourth_level[0] | slugify }}">{{ fourth_level[0] }}</a>
+                                    {% if fourth_level[1].subsection %}
                                       <ul>
-                                        {% for fifth_level in fourth_level[1] %}
+                                        {% for fifth_level in fourth_level[1].subsection %}
+                                          {% capture fifth_level_namespace %}{{fourth_level_namespace}}{% if fifth_level[1].namespace %}{{ fifth_level[1].namespace }}-{% endif %}{% endcapture %}
                                           <li>
-                                            <a href="#{{ fifth_level[0] | slugify }}">{{ fifth_level[0] }}</a>
+                                            <a href="#{{ fifth_level_namespace }}{{ fifth_level[0] | slugify }}">{{ fifth_level[0] }}</a>
                                           </li>
                                         {% endfor %}
                                       </ul>
@@ -83,110 +122,73 @@ layout: base
       </ul>
       
       {% for first_level in page.table_of_contents %}
-        <h1 id="{{ first_level[0] | slugify }}" class="page-header">{{ first_level[0] }}</h1>
-        {% capture first_level_ref %}{{ page.title | slugify }}/{{ first_level[0] | slugify }}{% endcapture %}
-        {% capture content %}{% include {{first_level_ref}}.md %}{% endcapture %}
+        {% capture first_level_namespace %}{% if first_level[1].namespace %}{{ first_level[1].namespace }}-{% endif %}{% endcapture %}
+        {% capture first_level_anchor %}{{ first_level_namespace }}{{ first_level[0] | slugify }}{% endcapture %}
+        {% capture first_level_index %}{{ forloop.index }}{% endcapture %}
+        <h1 id="{{ first_level_anchor }}" class="page-header">
+          {{ first_level_index }} {{ first_level[0] }}
+          <a class="custom-anchor" href="#{{ first_level_anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+        </h1>
+        
+        {% capture first_level_include %}{{ api_reference_folder }}/{{ first_level[0] | slugify }}{% endcapture %}
+        {% capture first_level_anchor_prefix %}{{ first_level_anchor }}-{% endcapture %}
+        {% capture content %}{% include {{first_level_include}}.md namespace=first_level_namespace anchor_prefix=first_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
         {{ content | markdownify }}
         
-        {% for file in site.static_files %}
-          {% capture example_ref %}/examples/{{ first_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
-          {% if file.path == example_ref %}
-            {% highlight cpp %}
-            {% include_relative {{example_ref}} %}
-            {% endhighlight %}
-
-            {% highlight text %}
-            {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
-            {% endhighlight %}
-          {% endif %}
-        {% endfor %}
-        
-        {% for second_level in first_level[1] %}
-          <h2 id="{{ second_level[0] | slugify }}" class="page-header">{{ second_level[0] }}</h2>
-          <div class="second-level">
-            {% capture second_level_ref %}{{ first_level_ref }}/{{ second_level[0] | slugify }}{% endcapture %}
-            {% capture content %}{% include {{second_level_ref}}.md %}{% endcapture %}
+        {% for second_level in first_level[1].subsection %}
+          {% capture second_level_namespace %}{{ first_level_namespace }}{% if second_level[1].namespace %}{{ second_level[1].namespace }}-{% endif %}{% endcapture %}
+          {% capture second_level_anchor %}{{ second_level_namespace }}{{ second_level[0] | slugify }}{% endcapture %}
+          {% capture second_level_index %}{{ first_level_index }}.{{ forloop.index }}{% endcapture %}
+          <h2 id="{{ second_level_anchor }}" class="page-header">
+            {{ second_level_index }} {{ second_level[0] }}
+            <a class="custom-anchor" href="#{{ second_level_anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+          </h2>
+          {% capture second_level_include %}{{ first_level_include }}/{{ second_level[0] | slugify }}{% endcapture %}
+          {% capture second_level_anchor_prefix %}{{ second_level_anchor }}-{% endcapture %}
+          {% capture content %}{% include {{second_level_include}}.md namespace=second_level_namespace anchor_prefix=second_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
+          {{ content | markdownify }}
+          
+          {% for third_level in second_level[1].subsection %}
+            {% capture third_level_namespace %}{{ second_level_namespace }}{% if third_level[1].namespace %}{{ third_level[1].namespace }}-{% endif %}{% endcapture %}
+            {% capture third_level_anchor %}{{ third_level_namespace }}{{ third_level[0] | slugify }}{% endcapture %}
+            {% capture third_level_index %}{{ second_level_index }}.{{ forloop.index }}{% endcapture %}
+            <h2 id="{{ third_level_anchor }}" class="page-header">
+              {{ third_level_index }} {{ third_level[0] }}
+              <a class="custom-anchor" href="#{{ third_level_anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+            </h2>
+            {% capture third_level_include %}{{ second_level_include }}/{{ third_level[0] | slugify }}{% endcapture %}
+            {% capture third_level_anchor_prefix %}{{ third_level_anchor }}-{% endcapture %}
+            {% capture content %}{% include {{third_level_include}}.md namespace=third_level_namespace anchor_prefix=third_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
             {{ content | markdownify }}
-        
-            {% for file in site.static_files %}
-              {% capture example_ref %}/examples/{{ second_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
-              {% if file.path == example_ref %}
-                {% highlight cpp %}
-                {% include_relative {{example_ref}} %}
-                {% endhighlight %}
-
-                {% highlight text %}
-                {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
-                {% endhighlight %}
-              {% endif %}
-            {% endfor %}
-          
-            {% for third_level in second_level[1] %}
-              <h3 id="{{ third_level[0] | slugify }}" class="page-header">{{ third_level[0] }}</h3>
-              <div class="third-level">
-                {% capture third_level_ref %}{{ second_level_ref }}/{{ third_level[0] | slugify }}{% endcapture %}
-                {% capture content %}{% include {{third_level_ref}}.md %}{% endcapture %}
+      
+            {% for fourth_level in third_level[1].subsection %}
+              {% capture fourth_level_namespace %}{{ third_level_anchor }}{% if fourth_level[1].namespace %}{{ fourth_level[1].namespace }}-{% endif %}{% endcapture %}
+              {% capture fourth_level_anchor %}{{ fourth_level_namespace }}{{ fourth_level[0] | slugify }}{% endcapture %}
+              {% capture fourth_level_index %}{{ third_level_index }}.{{ forloop.index }}{% endcapture %}
+              <h2 id="{{ fourth_level_anchor }}" class="page-header">
+                {{ fourth_level_index }} {{ fourth_level[0] }}
+                <a class="custom-anchor" href="#{{ fourth_level_anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+              </h2>
+              {% capture fourth_level_include %}{{ third_level_include }}/{{ fourth_level[0] | slugify }}{% endcapture %}
+              {% capture fourth_level_anchor_prefix %}{{ fourth_level_anchor }}-{% endcapture %}
+              {% capture content %}{% include {{fourth_level_include}}.md namespace=fourth_level_namespace anchor_prefix=fourth_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
+              {{ content | markdownify }}
+    
+              {% for fifth_level in fourth_level[1].subsection %}
+                {% capture fifth_level_namespace %}{{ fourth_level_namespace }}{% if fifth_level[1].namespace %}{{ fifth_level[1].namespace }}-{% endif %}{% endcapture %}
+                {% capture fifth_level_anchor %}{{ fifth_level_namespace }}{{ fifth_level[0] | slugify }}{% endcapture %}
+                {% capture fifth_level_index %}{{ fourth_level_index }}.{{ forloop.index }}{% endcapture %}
+                <h2 id="{{ fifth_level_anchor }}" class="page-header">
+                  {{ fifth_level_index }} {{ fifth_level[0] }}
+                  <a class="custom-anchor" href="#{{ fifth_level_anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+                </h2>
+                {% capture fifth_level_include %}{{ fourth_level_include }}/{{ fifth_level[0] | slugify }}{% endcapture %}
+                {% capture fifth_level_anchor_prefix %}{{ fifth_level_anchor }}-{% endcapture %}
+                {% capture content %}{% include {{fifth_level_include}}.md namespace=fifth_level_namespace anchor_prefix=fifth_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
                 {{ content | markdownify }}
-        
-                {% for file in site.static_files %}
-                  {% capture example_ref %}/examples/{{ third_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
-                  {% if file.path == example_ref %}
-                    {% highlight cpp %}
-                    {% include_relative {{example_ref}} %}
-                    {% endhighlight %}
-
-                    {% highlight text %}
-                    {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
-                    {% endhighlight %}
-                  {% endif %}
-                {% endfor %}
-          
-                {% for fourth_level in third_level[1] %}
-                  <h4 id="{{ fourth_level[0] | slugify }}" class="page-header">{{ fourth_level[0] }}</h4>
-                  <div class="fourth-level">
-                    {% capture fourth_level_ref %}{{ third_level_ref }}/{{ fourth_level[0] | slugify }}{% endcapture %}
-                    {% capture content %}{% include {{fourth_level_ref}}.md %}{% endcapture %}
-                    {{ content | markdownify }}
-        
-                    {% for file in site.static_files %}
-                      {% capture example_ref %}/examples/{{ fourth_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
-                      {% if file.path == example_ref %}
-                        {% highlight cpp %}
-                        {% include_relative {{example_ref}} %}
-                        {% endhighlight %}
-
-                        {% highlight text %}
-                        {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
-                        {% endhighlight %}
-                      {% endif %}
-                    {% endfor %}
-          
-                    {% for fifth_level in fourth_level[1] %}
-                      <h5 id="{{ fifth_level[0] | slugify }}" class="page-header">{{ fifth_level[0] }}</h5>
-                      <div class="fifth-level">
-                        {% capture fifth_level_ref %}{{ fourth_level_ref }}/{{ fifth_level[0] | slugify }}{% endcapture %}
-                        {% capture content %}{% include {{fifth_level_ref}}.md %}{% endcapture %}
-                        {{ content | markdownify }}
-        
-                        {% for file in site.static_files %}
-                          {% capture example_ref %}/examples/{{ fifth_level_ref  | replace: 'api-reference/', '' }}.cpp{% endcapture %}
-                          {% if file.path == example_ref %}
-                            {% highlight cpp %}
-                            {% include_relative {{example_ref}} %}
-                            {% endhighlight %}
-
-                            {% highlight text %}
-                            {% include_relative {{example_ref | replace: '.cpp', '.output'}} %}
-                            {% endhighlight %}
-                          {% endif %}
-                        {% endfor %}
-                      </div>
-                    {% endfor %}
-                  </div>
-                {% endfor %}
-              </div>
+              {% endfor %}
             {% endfor %}
-          </div>
+          {% endfor %}
         {% endfor %}
       {% endfor %}
     </main>
