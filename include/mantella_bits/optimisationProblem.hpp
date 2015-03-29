@@ -147,8 +147,11 @@ namespace mant {
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
+    // A vector with all elements set to the lowest representable value.
     setLowerBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) - std::numeric_limits<ParameterType>::max());
+    // A vector with all elements set to the largest representable value.
     setUpperBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::numeric_limits<ParameterType>::max());
+    // (0, ..., numberOfDimensions - 1) 
     setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
@@ -161,12 +164,15 @@ namespace mant {
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
+    // A vector with all elements set to the lowest representable value.
     setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
+    // A vector with all elements set to the largest representable value.
     setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
+    // (0, ..., numberOfDimensions - 1) 
     setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
+    setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
-    setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
@@ -353,6 +359,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter) const noexcept {
     assert(isEqual(parameter.n_elem, numberOfDimensions_));
 
+    // The parameter is only permutated for non-continuous problems.
     return parameter.elem(parameterPermutation_);
   }
 
@@ -361,6 +368,7 @@ namespace mant {
       const arma::Col<double>& parameter) const noexcept {
     assert(isEqual(parameter.n_elem, numberOfDimensions_));
 
+    // The paraemter is firstly permutated, than scaled, translated and lastly rotated.
     return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
   }
 
