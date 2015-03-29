@@ -27,72 +27,42 @@ set(MANTELLA_VERSION "${MANTELLA_MAJOR}.${MANTELLA_MINOR}.${MANTELLA_PATCH}")
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
-# Build options used only during development
+# Development build options
 option(BUILD_TESTS "Build tests" OFF)
 option(RUN_TESTS "Run (and build) tests" OFF)
+option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 if(RUN_TESTS)
   set(BUILD_TESTS ON)
 endif()
-mark_as_advanced(BUILD_TESTS RUN_TESTS)
+mark_as_advanced(BUILD_TESTS RUN_TESTS MEASURE_CODE_COVERAGE)
 
-option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
-mark_as_advanced(MEASURE_CODE_COVERAGE)
-
-# Set output directories
-if(NOT EXECUTABLE_OUTPUT_PATH)
-  set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-endif()
-
-# Enable C++11 features
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-# Display all warnings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-
-# Use native machine features (SSE3, SSE4, AVX, ...), if possible and compiled with Armadillo
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-
-if(MEASURE_CODE_COVERAGE)
-  # Use debug mode, no optimisation, measure coverage
-  message(STATUS "NOTICE: Measure code coverage.")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
-endif()
-
-# Include our own headers
-include_directories(${PROJECT_SOURCE_DIR}/include)
-
-# ---------------
-# PREPARE LIBRARY
-# ---------------
-message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
-  
-# Locate third party libraries and headers
-find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
-message(STATUS "NOTICE: Found Armadillo.")
-
-find_package(Cereal) # Cereal (header only)
-find_package(MPI 3.0.0) # MPI
-
-if(MPI_C_FOUND AND CEREAL_FOUND)
-  message(STATUS "NOTICE: Found MPI and Cereal (adding cluster computation support).")
+if(WIN32)
+  message(STATUS "")
+  message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
+  message(STATUS "")
 else()
-  message(STATUS "NOTICE: Could not find MPI and/or Cereal (excluding cluser computation support).")
+  # ---------------
+  # PREPARE LIBRARY
+  # ---------------
+  message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
+    
+  # Locate third party libraries and headers
+  find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
+
+  message(STATUS "")
+  message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive (or use *sudo make install* as a shortcut).")
+  message(STATUS "")
+
+  # ----------
+  # INSTALLING
+  # ----------
+
+  if(NOT INSTALL_INCLUDE_DIR)
+    set(INSTALL_INCLUDE_DIR "include")
+  endif()
+
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 endif()
-
-
-message(STATUS "")
-message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive (or use *sudo make install* as a shortcut).")
-message(STATUS "")
-
-# ----------
-# INSTALLING
-# ----------
-
-if(NOT INSTALL_INCLUDE_DIR)
-  set(INSTALL_INCLUDE_DIR "include")
-endif()
-
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
 # -----------
 # BUILD TESTS
@@ -101,27 +71,49 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_D
 if(BUILD_TESTS)
   message(STATUS "NOTICE: Configuring tests")
 
-  # Locate third party libraries and headers
-  find_package(Armadillo 4.650.3 REQUIRED) # Armadillo C++
-  find_package(Catch REQUIRED) # Catch (header only)
+  # Set output directories
+  if(NOT EXECUTABLE_OUTPUT_PATH)
+    set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+  endif()
 
+  # Enable C++11 features
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+  # Display all warnings
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+  # Use native machine features (SSE3, SSE4, AVX, ...), if possible and compiled with Armadillo
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+
+  if(MEASURE_CODE_COVERAGE)
+    # Use debug mode, no optimisation, measure coverage
+    message(STATUS "NOTICE: Measure code coverage.")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
+  endif()
+
+  # Include our own headers
+  include_directories(${PROJECT_SOURCE_DIR}/include)
+  
+  # Locate third party libraries and headers
+  if(WIN32)
+    find_library(ARMADILLO_LIBRARIES openblas HINTS "C:/Program\ Files/OpenBLAS/lib")
+    find_path(ARMADILLO_INCLUDE_DIR armadillo HINTS "C:/Program\ Files/Armadillo/include")
+    find_path(CATCH_INCLUDE_DIRS catch.hpp HINTS "C:/Program\ Files/Catch")
+  else()
+    find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
+    find_package(Catch REQUIRED) # Catch (header only)
+  endif()
+  
+  message(STATUS "ARMADILLO_LIBRARIES: ${ARMADILLO_LIBRARIES}")
+  message(STATUS "ARMADILLO_INCLUDE_DIR: ${ARMADILLO_INCLUDE_DIR}")
+  message(STATUS "CATCH_INCLUDE_DIRS: ${CATCH_INCLUDE_DIRS}")
+  
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
   include_directories(${CATCH_INCLUDE_DIRS}) # Catch
 
   # Include headers
   include_directories(${PROJECT_SOURCE_DIR}/test) # MANTELLA tests
-
-  set(MANTELLA_TEST_PARALLEL
-#    test/helper/testCereal.cpp
-  )
-
-  if(NOT MPI_C_FOUND OR NOT CEREAL_FOUND)
-    set(MANTELLA_TEST_PARALLEL "")
-    message(STATUS "NOTICE: Found MPI and Cereal (adding cluster computation test cases).")
-  else()
-    message(STATUS "NOTICE: Could not find MPI and/or Cereal (excluding cluser computation test cases).")
-  endif()
 
   # Compile the optimisation library tests
   # All paths must start with "test/"
@@ -268,7 +260,6 @@ if(BUILD_TESTS)
 #        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
 #        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeeves.cpp
-    ${MANTELLA_TEST_PARALLEL}
   )
 
   # Link against third party libraries
