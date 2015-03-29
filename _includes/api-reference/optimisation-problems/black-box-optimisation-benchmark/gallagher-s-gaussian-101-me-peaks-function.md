@@ -5,13 +5,13 @@ W_i &:= \begin{cases}
 10 & \text{for  } i = 1
 \end{cases}\\
 A &:= \begin{cases}
-\text{Uniform random permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } A_2, \ldots, A_{101} \\
+\text{Randomly and uniformly permutation of } \left\{ 0, \ldots, 99 \right\} & \text{for } A_2, \ldots, A_{101} \\
 49.5 & \text{for  } A_1
 \end{cases}\\
 C_{i} &:= \frac{T_\text{scaled}^{10^\frac{A_i}{33}}}{10^\frac{A_i}{66}}\\
 Y_i &:= \begin{cases}
-\text{Uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
-\text{Uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for } i = 1
+\text{Randomly and uniformly drawn from } \left[ -5, 5 \right]^{N} & \text{for } i = 2, \ldots, 101 \\
+\text{Randomly and uniformly drawn from } \left[ -4, 4 \right]^{N} & \text{for } i = 1
 \end{cases}
 \end{align}$$
 
@@ -39,6 +39,6 @@ Y_i &:= \begin{cases}
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, i.e. *gallaghers-gaussian-101me-peaks-function*.
+- Returns a filesystem friendly name of the problem, e.g. *gallaghers-gaussian-101me-peaks-function*.
 
 

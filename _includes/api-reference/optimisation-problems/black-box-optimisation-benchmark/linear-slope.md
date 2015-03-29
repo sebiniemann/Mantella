@@ -1,6 +1,6 @@
 $$\begin{align}
 F(X) &:= F_0 - S \cdot Z\\
-O &:= \text{Uniformly choosen from } \{(5,5,\ldots,5), (-5,-5,\ldots,-5)\}\\
+O &:= \text{Randomly and uniformly choosen from } \{(5,5,\ldots,5), (-5,-5,\ldots,-5)\}\\
 S_i &:= T_{\text{scaled}, i}^\sqrt{10} \cdot \operatorname{sign}(O_i) \\
 Z_i &:= \begin{cases}
 X_i & \text{if } X_{i} \cdot O_i < 25 \\
@@ -28,4 +28,4 @@ F_0 &:= \sum_{i=1}^{N} 5 \left| S_i \right|
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, i.e. *linear-slope*.
+- Returns a filesystem friendly name of the problem, e.g. *linear-slope*.

@@ -2,7 +2,7 @@ $$\begin{align}
 F(X) &:= \min\left( \sum_{i=1}^{N} \left( \tilde{X}_i - 2.5 \right)^2, N + S \sum_{i=1}^{N} \left( \tilde{X}_i - \mu \right)^2 \right) + 10 \left( N - \sum_{i=1}^N \cos\left( 2 \pi Z_i \right)\right) + 10000 F_\text{penality}(X)\\
 S &:= 1 - \frac{0.5}{\sqrt{N + 20} - 4.1}\\
 \mu &:= -\sqrt{5.25 / S}\\
-O &:= \text{Uniformly choosen from } \{(2.5,2.5,\ldots,2.5), (-2.5,-2.5,\ldots,-2.5)\}\\
+O &:= \text{Randomly and uniformly choosen from } \{(2.5,2.5,\ldots,2.5), (-2.5,-2.5,\ldots,-2.5)\}\\
 \tilde{X}_i &:= 2 \operatorname{sign}(O_i) \cdot X_i\\
 Z &:= Q \cdot T_\text{scaled}^\sqrt{10} \cdot R \cdot \left( \tilde{X} - 2.5 \right)\\
 \end{align}$$
@@ -33,4 +33,4 @@ Z &:= Q \cdot T_\text{scaled}^\sqrt{10} \cdot R \cdot \left( \tilde{X} - 2.5 \ri
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, i.e. *lunacek-bi-rastrigin-function*.
+- Returns a filesystem friendly name of the problem, e.g. *lunacek-bi-rastrigin-function*.

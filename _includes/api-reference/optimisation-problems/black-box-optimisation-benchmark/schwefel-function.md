@@ -1,6 +1,6 @@
 $$\begin{align}
 F(X) &:= 0.01 (418.9828872724339 - \frac{\sum_{i=1}^{N-1} \tilde{Z}_i \cdot \sin\left( \sqrt{\left| \tilde{Z}_i \right|} \right)}{N - 1})+ 100 F_\text{penality}\left( \frac{\tilde{Z}}{100} \right)\\
-O &:= \text{Uniformly choosen from } \{(1,1,\ldots,1), (-1,-1,\ldots,-1)\}\\
+O &:= \text{Randomly and uniformly choosen from } \{(1,1,\ldots,1), (-1,-1,\ldots,-1)\}\\
 X^\text{opt}_i &:= 4.2096874633 \left|O\right|\\
 \tilde{X} &:= 2 O \circ X\\
 Z_i &:= \begin{cases}
@@ -29,4 +29,4 @@ Z_i &:= \begin{cases}
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, i.e. *schwefel-function*.
+- Returns a filesystem friendly name of the problem, e.g. *schwefel-function*.

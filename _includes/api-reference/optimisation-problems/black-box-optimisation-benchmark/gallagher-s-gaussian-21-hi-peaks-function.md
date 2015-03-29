@@ -5,13 +5,13 @@ W_i &:= \begin{cases}
 10 & \text{for  } i = 1
 \end{cases}\\
 A &:= \begin{cases}
-\text{Uniform random permutation of } \left\{ 0, \ldots, 19 \right\} & \text{for } A_2, \ldots, A_{21} \\
+\text{Randomly and uniformly random permutation of } \left\{ 0, \ldots, 19 \right\} & \text{for } A_2, \ldots, A_{21} \\
 9.5 & \text{for  } A_1
 \end{cases}\\
 C_{i} &:= \frac{T_\text{scaled}^{1000^\frac{A_i}{19}}}{1000^\frac{A_i}{38}}\\
 Y_i &:= \begin{cases}
-\text{Uniformly drawn from } \left[ -4.9, 4.9 \right]^{N} & \text{for } i = 2, \ldots, 21 \\
-\text{Uniformly drawn from } \left[ -3.92, 3.92 \right]^{N} & \text{for  } i = 1
+\text{Randomly and uniformly drawn from } \left[ -4.9, 4.9 \right]^{N} & \text{for } i = 2, \ldots, 21 \\
+\text{Randomly and uniformly drawn from } \left[ -3.92, 3.92 \right]^{N} & \text{for  } i = 1
 \end{cases}
 \end{align}$$
 
@@ -39,6 +39,6 @@ Y_i &:= \begin{cases}
 ---
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, i.e. *gallaghers-gaussian-21hi-peaks-function*.
+- Returns a filesystem friendly name of the problem, e.g. *gallaghers-gaussian-21hi-peaks-function*.
 
 
