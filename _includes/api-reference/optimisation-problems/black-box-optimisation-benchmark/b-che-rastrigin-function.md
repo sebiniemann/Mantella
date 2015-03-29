@@ -41,8 +41,8 @@ Visualisation of the sampled function using Matlab:
 {% include {{ api_reference_folder }}/_examples/bbob2015_bueche_rastrigin_function.m %}
 {% endhighlight %}
 
-![Sampling of the Büche-Rastrigin function - surface plot]({{ site.url }}/assets/images/{{ api_reference_folder }}/bbob2015_bueche_rastrigin_function_surface.png)
-![Sampling of the Büche-Rastrigin function - contour plot]({{ site.url }}/assets/images/{{ api_reference_folder }}/bbob2015_bueche_rastrigin_function_contour.png)
+![Sampling of the Büche-Rastrigin function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_bueche_rastrigin_function_surface.png)
+![Sampling of the Büche-Rastrigin function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_bueche_rastrigin_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="BuecheRastriginFunction" %}

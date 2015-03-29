@@ -40,8 +40,8 @@ Visualisation of the sampled function using Matlab:
 {% include {{ api_reference_folder }}/_examples/bbob2015_bent_cigar_function.m %}
 {% endhighlight %}
 
-![Sampling of the bent cigar function - surface plot]({{ site.url }}/assets/images/{{ api_reference_folder }}/bbob2015_bent_cigar_function_surface.png)
-![Sampling of the bent cigar function - contour plot]({{ site.url }}/assets/images/{{ api_reference_folder }}/bbob2015_bent_cigar_function_contour.png)
+![Sampling of the bent cigar function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_bent_cigar_function_surface.png)
+![Sampling of the bent cigar function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_bent_cigar_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="BentCigarFunction" %}
