@@ -253,7 +253,7 @@ namespace mant {
   template <typename ParameterType>
   inline void OptimisationProblem<ParameterType>::setParameterPermutation(
       const arma::Col<unsigned int>& parameterPermutation) {
-    // TODO Check if this is actually a permutaion
+    //isPermutation("The vector", parameterPermutation, 0, parameterPermutation.n_elem - 1); // TODO implement. Checks uniqueness and bounds
     isEqual("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
 
     parameterPermutation_ = parameterPermutation;
