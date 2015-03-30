@@ -1,31 +1,55 @@
+*Extends the black-box optimisation benchmark base class*
+
+**Objective function:**
+
 $$\begin{align}
 F(X) &:= F_0 - S \cdot Z\\
-O &:= \text{Randomly and uniformly choosen from } \{(5,5,\ldots,5), (-5,-5,\ldots,-5)\}\\
-S_i &:= T_{\text{scaled}, i}^\sqrt{10} \cdot \operatorname{sign}(O_i) \\
+S &:= T_\text{conditioning}^\sqrt{10}\\
 Z_i &:= \begin{cases}
-X_i & \text{if } X_{i} \cdot O_i < 25 \\
-O_i & \text{otherwise}
+X_i & \text{if } X_{i} > {C_L}_i \\
+{C_L}_i & \text{otherwise}
 \end{cases}\\
-F_0 &:= \sum_{i=1}^{N} 5 \left| S_i \right|
+F_0 &:= \left\Vert 5 S \right\Vert_2^2\\
+C_L &:= \text{The lower bounds of the search space.}
 \end{align}$$
 
-**LinearSlope( <small>unsigned int</small> N )**
+**Soft-constraints function:**
+
+$$C(X) := 0, \ \forall X$$
+
+Example code, sampling and plotting of the linear slope function.
+Create a new source file called **bbob2015_linear_slope.cpp**:
+{% highlight cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob2015_linear_slope.cpp %}
+{% endhighlight %}
+
+Compile and build an executable from the source.
+{% highlight bash %}
+c++ -std=c++11 bbob2015_linear_slope.cpp -larmadillo -o bbob2015_linear_slope
+./bbob2015_linear_slope
+{% endhighlight %}
+
+Visualisation of the sampled function using Matlab:
+{% highlight matlab %}
+{% include {{ api_reference_folder }}/_examples/bbob2015_linear_slope.m %}
+{% endhighlight %}
+
+![Sampling of the linear slope - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_linear_slope_surface.png)
+![Sampling of the linear slope - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_linear_slope_contour.png)
+
+- Constructor<br>
+  {% include reference prefix=include.anchor_prefix name="LinearSlope" %}
+- Miscellaneous<br>
+  {% include reference prefix=include.anchor_prefix name="toString" %}
+
+{% include label prefix=include.anchor_prefix name="LinearSlope" %}
+**LinearSlope( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- The problem must have at least 1 dimension.
+- **Requirement:** The dimension *N* must be greater than or equal to 1.
 
 ---
-**<small>void</small> .setXOpt( <small>arma::Col&lt;T&gt;</small> X )**
-
-- Parameterises the transition by variable \\(X^\text{opt}\\).
-
----
-**<small>void</small> .setOne( <small>bool</small> P )** {% include noexcept %}
-
-- Parameterises the variable \\(O\\).
-- All elements in \\(O\\) are either equal to 5 (P = `true`) or -5 (P = `false`).
-
----
+{% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
 - Returns a filesystem friendly name of the problem, e.g. *linear-slope*.
