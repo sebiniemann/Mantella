@@ -31,8 +31,8 @@ Visualisation of the sampled function using Matlab:
 {% include {{ api_reference_folder }}/_examples/bbob2015_rastrigin_function_rotated.m %}
 {% endhighlight %}
 
-![Sampling of the step ellipsoidal function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_rastrigin_function_rotated_surface.png)
-![Sampling of the step ellipsoidal function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_rastrigin_function_rotated_contour.png)
+![Sampling of the Rastrigin function (rotated) - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_rastrigin_function_rotated_surface.png)
+![Sampling of the Rastrigin function (rotated) - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_rastrigin_function_rotated_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="RastriginFunctionRotated" %}

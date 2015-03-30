@@ -28,8 +28,8 @@ Visualisation of the sampled function using Matlab:
 {% include {{ api_reference_folder }}/_examples/bbob2015_ellipsoidal_function.m %}
 {% endhighlight %}
 
-![Sampling of the step ellipsoidal function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_ellipsoidal_function_surface.png)
-![Sampling of the step ellipsoidal function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_ellipsoidal_function_contour.png)
+![Sampling of the ellipsoidal function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_ellipsoidal_function_surface.png)
+![Sampling of the ellipsoidal function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_ellipsoidal_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="EllipsoidalFunction" %}
