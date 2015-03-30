@@ -4,7 +4,7 @@
 
 $$\begin{align}
 F(X) &:= \left\Vert S \right\Vert_2^{1.8} \\
-Z &:= Q \cdot T_\text{scaling}^\sqrt{10} \cdot R \cdot \left( X - X_T \right)\\
+Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot R \cdot X\\
 S_i &:= \begin{cases}
   100 Z_{i} & \text{if } Z_{i} \cdot {X_T}_i > 0 \\
   Z_{i} & \text{otherwise}

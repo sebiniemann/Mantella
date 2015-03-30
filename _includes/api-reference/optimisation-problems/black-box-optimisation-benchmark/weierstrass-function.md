@@ -4,7 +4,7 @@
 
 $$\begin{align}
 F(X) &:= 10 \left( \frac{\sum_{i=1}^N \sum_{j=0}^{11} 0.5^j \cos\left( 2 \pi 3^j \left(Z_i + 0.5 \right) \right)}{N}  - F_0 \right)^3\\
-Z &:= R \cdot T_\text{scaled}^\frac{1}{10} \cdot Q \cdot T_\text{oscillated} \left( R \cdot \left( X - X_T \right) \right)\\
+Z &:= R \cdot T_\text{conditioning}^\frac{1}{10} \cdot Q \cdot T_\text{oscillated} \left( R \cdot X \right)\\
 F_0 &:= \sum_{i=0}^{11} 0.5^i \cos\left( \pi 3^j \right)\\
 N &:= \text{The number of dimensions.}\\
 R &:= \text{Some rotation matrix.}\\

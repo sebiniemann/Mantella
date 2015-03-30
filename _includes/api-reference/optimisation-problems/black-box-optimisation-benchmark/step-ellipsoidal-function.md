@@ -3,8 +3,8 @@
 **Objective function:**
 
 $$\begin{align}
-F(X) &:=  0.1 \max\left( \frac{\left| Z_1 \right|}{10000}, T_\text{scaled}^{100} \cdot Q \cdot \tilde{Z} \right)\\
-Z &:= T_\text{scaled}^\sqrt{10} \cdot R \cdot \left( X - X_T \right) \\
+F(X) &:=  0.1 \max\left( \frac{\left| Z_1 \right|}{10000}, T_\text{conditioning}^{100} \cdot Q \cdot \tilde{Z} \right)\\
+Z &:= T_\text{conditioning}^\sqrt{10} \cdot R \cdot X \\
 \tilde{Z} &:= \begin{cases}
 \left\lfloor 0.5 + Z_i\right\rfloor & \text{if } Z_i > 0.5\\
 \frac{\left\lfloor 0.5 + 10Z_i\right\rfloor}{10} & \text{otherwise}\\

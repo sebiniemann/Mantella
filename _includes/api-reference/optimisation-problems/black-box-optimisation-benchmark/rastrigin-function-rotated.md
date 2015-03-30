@@ -4,8 +4,8 @@
 
 $$\begin{align}
 F(X) &:= 10 \left( N - \sum_{i=1}^N \cos\left( 2\pi Z_i \right) \right) + \left\Vert Z \right\Vert_2^2\\
-Z &:= R \cdot T_\text{scaled}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( R \cdot \left( X - X^\text{opt} \right) \right) \right)\\
-X_T &:= \text{The translation of the parameter space.}\\
+Z &:= R \cdot T_\text{conditioning}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( R \cdot X \right) \right)\\
+N &:= \text{The number of dimensions.}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$

@@ -4,8 +4,8 @@
 
 $$\begin{align}
 F(X) &:= \left\Vert \prod_{i = 1}^{N} \left| Z_i \right| S_i \right\Vert_{2}\\
-S &:= T_\text{scaled} \left( Z^{2} \right)\\
 Z &:= R \cdot X \\
+S &:= T_\text{conditioned} \left( Z^{2} \right)\\
 N &:= \text{The number of dimensions.}\\
 R &:= \text{Some rotation matrix.}\\
 (\ldots)^p &:= \text{Element-wise power}

@@ -4,8 +4,8 @@
 
 $$\begin{align}
 F(X) &:= 10 \left( N - \sum_{i=1}^N \cos\left( 2\pi Z_i \right) \right) + \left\Vert Z \right\Vert_2^2\\
-Z &:= T_\text{scaled}^\sqrt{10} \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( X - X^\text{opt} \right) \right)\\
-X_T &:= \text{The translation of the parameter space.}
+Z &:= T_\text{conditioning}^\sqrt{10} \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( X \right) \right)\\
+N &:= \text{The number of dimensions.}
 \end{align}$$
 
 **Soft-constraints function:**

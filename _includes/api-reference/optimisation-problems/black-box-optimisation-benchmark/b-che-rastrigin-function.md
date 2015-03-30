@@ -4,7 +4,7 @@
 
 $$\begin{align}
 F(X) &:= 10 N - \sum_{i = 1}^{N} \left( \cos{2 \pi S_{i}} \right) + \left\Vert S \right\Vert_{2}^{2}\\
-Z &:= T_\text{scaling}^\sqrt{10} \cdot T_\text{oscillated}\left( X - X_T \right)\\
+Z &:= T_\text{conditioning}^\sqrt{10} \cdot T_\text{oscillated} \left( X \right)\\
 S_{i} &:= \begin{cases}
 10 Z_{i} & \text{if } i \text{ is odd and } Z_{i} > 0\\
 Z_{i} & \text{otherwise}

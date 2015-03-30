@@ -5,7 +5,7 @@
 $$\begin{align}
 F(X) &:= \left( \frac{\sum_{i=1}^{N-1} S_i \cdot \left(1 + \sin\left(50 S_i^{0.4}\right)^2\right)}{N - 1} \right)^2\\
 
-Z &:= T_\text{scaled}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.5}\left( R \cdot \left( X - X_T \right) \right)\\
+Z &:= T_\text{conditioning}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.5}\left( R \cdot X \right)\\
 S_i &:= \left(Z_i^2 + Z_{i+1}^2 \right)^{0.25}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
