@@ -12,7 +12,7 @@ N &:= \text{The number of dimensions.}
 
 $$C(X) := 0, \ \forall X$$
 
-Example code, sampling and plotting of the rastrigin function.
+Example code, sampling and plotting of the Rastrigin function.
 Create a new source file called **bbob2015_rastrigin_function.cpp**:
 {% highlight cpp %}
 {% include {{ api_reference_folder }}/_examples/bbob2015_rastrigin_function.cpp %}
