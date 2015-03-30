@@ -5,14 +5,9 @@ namespace mant {
         inline explicit DiscusFunction(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline std::string toString() const noexcept override;
 
       protected:
-        arma::Mat<double> parameterRotationR_;
-
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
@@ -24,7 +19,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -36,7 +30,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -49,20 +42,12 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void DiscusFunction::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
 
     inline double DiscusFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::square(getOscillatedParameter(parameterRotationR_ * parameter));
+      const arma::Col<double>& z = arma::square(getOscillatedParameter(parameter));
       return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
     }
 

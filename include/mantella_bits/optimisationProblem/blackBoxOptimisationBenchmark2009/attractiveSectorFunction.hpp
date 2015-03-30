@@ -5,9 +5,6 @@ namespace mant {
         inline explicit AttractiveSectorFunction(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline void setParameterRotationQ(
             const arma::Mat<double>& parameterRotationQ);
 
@@ -16,7 +13,6 @@ namespace mant {
       protected:
         const arma::Col<double> parameterConditioning_;
 
-        arma::Mat<double> parameterRotationR_;
         arma::Mat<double> parameterRotationQ_;
 
         inline double getObjectiveValueImplementation(
@@ -30,7 +26,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
           archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
         }
 
@@ -43,7 +38,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
           archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
         }
 #endif
@@ -58,16 +52,8 @@ namespace mant {
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
       setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void AttractiveSectorFunction::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
     }
 
     inline void AttractiveSectorFunction::setParameterRotationQ(
@@ -80,7 +66,7 @@ namespace mant {
 
     inline double AttractiveSectorFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> z = parameterRotationQ_ * (parameterConditioning_ % (parameterRotationR_ * parameter));
+      arma::Col<double> z = parameterRotationQ_ * (parameterConditioning_ % parameter);
       z.elem(arma::find(z % parameterTranslation_ > 0.0)) *= 100.0;
 
       return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);

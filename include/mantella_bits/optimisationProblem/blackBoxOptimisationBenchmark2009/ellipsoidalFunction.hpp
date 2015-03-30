@@ -52,7 +52,7 @@ namespace mant {
     }
 
     inline std::string EllipsoidalFunction::toString() const noexcept {
-      return "ellipsoidal-function";
+      return "bbob2009_ellipsoidal_function";
     }
   }
 }

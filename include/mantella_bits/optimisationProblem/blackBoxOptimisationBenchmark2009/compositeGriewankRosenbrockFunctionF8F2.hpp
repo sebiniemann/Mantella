@@ -5,16 +5,9 @@ namespace mant {
         inline explicit CompositeGriewankRosenbrockFunctionF8F2(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline std::string toString() const noexcept override;
 
       protected:
-        const double max_;
-
-        arma::Mat<double> parameterRotationR_;
-
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
@@ -26,7 +19,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -38,7 +30,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -51,7 +42,7 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)) {
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
 
     inline void CompositeGriewankRosenbrockFunctionF8F2::setParameterRotationR(
@@ -64,8 +55,7 @@ namespace mant {
 
     inline double CompositeGriewankRosenbrockFunctionF8F2::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& s = max_ * parameterRotationR_ * parameter + 0.5;
-      const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(1.0 - s.head(s.n_elem - 1));
+      const arma::Col<double>& z = 100.0 * arma::square(arma::square(parameter.head(parameter.n_elem - 1)) - parameter.tail(parameter.n_elem - 1)) + arma::square(1.0 - parameter.head(parameter.n_elem - 1));
 
       return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1);
     }

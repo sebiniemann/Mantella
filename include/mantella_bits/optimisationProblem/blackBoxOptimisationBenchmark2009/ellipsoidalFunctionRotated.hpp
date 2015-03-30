@@ -5,15 +5,10 @@ namespace mant {
         inline explicit EllipsoidalFunctionRotated(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline std::string toString() const noexcept override;
 
       protected:
         const arma::Col<double> parameterConditoning_;
-
-        arma::Mat<double> parameterRotationR_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -26,7 +21,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
         }
 
         template <typename Archive>
@@ -38,7 +32,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
         }
 #endif
     };
@@ -52,20 +45,12 @@ namespace mant {
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
         parameterConditoning_(getParameterConditioning(1000000.0)) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void EllipsoidalFunctionRotated::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
 
     inline double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      return arma::dot(parameterConditoning_, arma::square(getOscillatedParameter(parameterRotationR_ * parameter)));
+      return arma::dot(parameterConditoning_, arma::square(getOscillatedParameter(parameter)));
     }
 
     inline std::string EllipsoidalFunctionRotated::toString() const noexcept {
