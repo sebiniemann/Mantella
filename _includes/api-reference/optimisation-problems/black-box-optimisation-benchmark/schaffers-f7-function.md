@@ -16,7 +16,7 @@ Q &:= \text{Some rotation matrix.}
 
 $$C(X) := 10 F_\text{penality}(X)$$
 
-Example code, sampling and plotting of the sharpe ridge function.
+Example code, sampling and plotting of the Schaffers f7 function.
 Create a new source file called **bbob2015_schaffers_f7_function.cpp**:
 {% highlight cpp %}
 {% include {{ api_reference_folder }}/_examples/bbob2015_schaffers_f7_function.cpp %}
