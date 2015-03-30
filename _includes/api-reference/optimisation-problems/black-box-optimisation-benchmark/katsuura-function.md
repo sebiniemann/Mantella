@@ -4,8 +4,7 @@
 
 $$\begin{align}
 F(X) &:= \frac{10}{N^{2}} \left( \prod_{i=1}^{N}\left( 1 + i \sum_{j=1}^{32} \frac{\left| 2^{j}Z_i - \left[2^{j}Z_{i}\right]\right|}{2^j} \right)^{\frac{10}{N^{1.2}}} - 1 \right)\\
-Z &:= Q \cdot T_\text{scaled}^{10} \cdot R \cdot \left( X - X^\text{opt} \right)\\
-X_T &:= \text{The translation of the parameter space.}\\
+Z &:= Q \cdot T_\text{scaled}^{10} \cdot R \cdot X\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}\\
 [\cdot] &:= \text{nearest integer value}
@@ -38,7 +37,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="KatsuuraFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

@@ -3,8 +3,7 @@
 **Objective function:**
 
 $$\begin{align}
-F(X) &:=  T_\text{scaling}^{1000000} \cdot T_{oscillated} \left( R \cdot \left( X - X_T \right) \right)^{2}\\
-X_T &:= \text{The translation of the parameter space.}\\
+F(X) &:=  T_\text{conditioning}^{1000000} \cdot T_{oscillated} \left( R \cdot X \right)^{2}\\
 R &:= \text{Some rotation matrix.}\\
 (\ldots)^p &:= \text{Element-wise power}
 \end{align}$$
@@ -36,7 +35,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="EllipsoidalFunctionRotated" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

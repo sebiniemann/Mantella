@@ -4,8 +4,7 @@
 
 $$\begin{align}
 F(X) &:= Z_1^2 + 100 \left\Vert \left(Z_2, \ldots, Z_N \right) \right\Vert_2\\
-Z &:= Q \cdot T_\text{scaled}^\sqrt{10} \cdot R \cdot \left( X - X_T \right)\\
-X_T &:= \text{The translation of the parameter space.}\\
+Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot R \cdot X\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
@@ -37,7 +36,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="SharpRidgeFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

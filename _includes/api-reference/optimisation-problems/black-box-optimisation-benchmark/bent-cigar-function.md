@@ -4,7 +4,7 @@
 
 $$\begin{align}
 F(X) &:= Z_{1} + 1000000 \sum_{i = 2}^{N} Z_{i}\\
-Z &:= \left( R \cdot T_\text{asymmetric}^{0.5} \cdot \left( R \cdot \left( X - X^\text{opt} \right) \right) \right)^{2}\\
+Z &:= \left( R \cdot T_\text{asymmetric}^{0.5} \cdot \left( R \cdot X \right) \right)^{2}\\
 F_0 &:= \sum_{i=0}^{11} 0.5^i \cos\left( \pi 3^j \right)\\
 N &:= \text{The number of dimensions.}\\
 X_T &:= \text{The translation of the parameter space.}\\
@@ -39,7 +39,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="BentCigarFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

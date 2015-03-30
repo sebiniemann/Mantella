@@ -3,8 +3,7 @@
 **Objective function:**
 
 $$\begin{align}
-F(X) &:=  T_\text{scaling}^{1000000} \cdot T_{oscillated} \left( X - X_T \right)^{2}\\
-X_T &:= \text{The translation of the parameter space.}\\
+F(X) &:=  T_\text{conditioning}^{1000000} \cdot T_{oscillated} \left( X \right)^{2}
 (\ldots)^p &:= \text{Element-wise power}
 \end{align}$$
 
@@ -34,8 +33,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="EllipsoidalFunction" %}
-- Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited)
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

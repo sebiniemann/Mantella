@@ -6,7 +6,6 @@ $$\begin{align}
 F(X) &:= 1000000 Z_{1} + \sum_{i = 2}^{N} Z_{i}\\
 Z &:= T_\text{oscillated} \left( R \cdot \left( X - X_T \right) \right)^{2}\\
 N &:= \text{The number of dimensions.}\\
-X_T &:= \text{The translation of the parameter space.}\\
 R &:= \text{Some rotation matrix.}\\
 (\ldots)^p &:= \text{Element-wise power}
 \end{align}$$
@@ -38,7 +37,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="DiscusFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

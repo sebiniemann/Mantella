@@ -3,8 +3,7 @@
 **Objective function:**
 
 $$\begin{align}
-F(X) &:= \left\Vert X - X_T \right\Vert_2\\
-X_T &:= \text{The translation of the parameter space.}\\
+F(X) &:= \left\Vert X \right\Vert_2
 \end{align}$$
 
 **Soft-constraints function:**
@@ -33,8 +32,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="SphereFunction" %}
-- Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited)
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

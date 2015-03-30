@@ -4,10 +4,9 @@
 
 $$\begin{align}
 F(X) &:= \left\Vert \prod_{i = 1}^{N} \left| Z_i \right| S_i \right\Vert_{2}\\
-Z &:= R \cdot \left( X - X_T \right)\\
 S &:= T_\text{scaled} \left( Z^{2} \right)\\
+Z &:= R \cdot X \\
 N &:= \text{The number of dimensions.}\\
-X_T &:= \text{The translation of the parameter space.}\\
 R &:= \text{Some rotation matrix.}\\
 (\ldots)^p &:= \text{Element-wise power}
 \end{align}$$
@@ -39,7 +38,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="DifferentPowersFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

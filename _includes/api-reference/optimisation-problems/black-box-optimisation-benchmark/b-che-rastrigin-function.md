@@ -9,8 +9,7 @@ S_{i} &:= \begin{cases}
 10 Z_{i} & \text{if } i \text{ is odd and } Z_{i} > 0\\
 Z_{i} & \text{otherwise}
 \end{cases}\\
-N &:= \text{The number of dimensions.}\\
-X_T &:= \text{The translation of the parameter space.}
+N &:= \text{The number of dimensions.}
 \end{align}$$
 
 **Soft-constraints function:**
@@ -39,8 +38,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="BuecheRastriginFunction" %}
-- Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited)
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

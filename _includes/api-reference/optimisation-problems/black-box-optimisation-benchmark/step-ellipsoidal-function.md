@@ -9,7 +9,6 @@ Z &:= T_\text{scaled}^\sqrt{10} \cdot R \cdot \left( X - X_T \right) \\
 \left\lfloor 0.5 + Z_i\right\rfloor & \text{if } Z_i > 0.5\\
 \frac{\left\lfloor 0.5 + 10Z_i\right\rfloor}{10} & \text{otherwise}\\
 \end{cases}\\
-X_T &:= \text{The translation of the parameter space.}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
@@ -41,7 +40,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="StepEllipsoidalFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
   

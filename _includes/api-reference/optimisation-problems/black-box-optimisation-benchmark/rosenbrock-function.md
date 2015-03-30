@@ -33,8 +33,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="RosenbrockFunction" %}
-- Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited)
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

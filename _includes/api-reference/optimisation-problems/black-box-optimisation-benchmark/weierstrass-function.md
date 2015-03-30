@@ -7,7 +7,6 @@ F(X) &:= 10 \left( \frac{\sum_{i=1}^N \sum_{j=0}^{11} 0.5^j \cos\left( 2 \pi 3^j
 Z &:= R \cdot T_\text{scaled}^\frac{1}{10} \cdot Q \cdot T_\text{oscillated} \left( R \cdot \left( X - X_T \right) \right)\\
 F_0 &:= \sum_{i=0}^{11} 0.5^i \cos\left( \pi 3^j \right)\\
 N &:= \text{The number of dimensions.}\\
-X_T &:= \text{The translation of the parameter space.}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
@@ -39,7 +38,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="WeierstrassFunction" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 

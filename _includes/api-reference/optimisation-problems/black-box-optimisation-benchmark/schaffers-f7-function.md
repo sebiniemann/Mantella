@@ -7,7 +7,6 @@ F(X) &:= \left( \frac{\sum_{i=1}^{N-1} S_i \cdot \left(1 + \sin\left(50 S_i^{0.4
 
 Z &:= T_\text{scaled}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.5}\left( R \cdot \left( X - X_T \right) \right)\\
 S_i &:= \left(Z_i^2 + Z_{i+1}^2 \right)^{0.25}\\
-X_T &:= \text{The translation of the parameter space.}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
@@ -39,7 +38,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="SchaffersF7Function" %}
 - Parameterisation<br>
-  {% include reference prefix="optimisation-problems-" name="setParameterTranslation" %} (inherited), {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
