@@ -5,6 +5,7 @@
 $$\begin{align}
 F(X) &:= 100 \sum_{i=1}^{N-1} \left( Z_i^2 - Z_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( Z_i + 1 \right)^2\\
 Z &:= \max\left(1, \frac{\sqrt{N}}{8}\right) \cdot \left( X - X^\text{opt} \right) + 1
+N &:= \text{The number of dimensions.}
 \end{align}$$
 
 **Soft-constraints function:**

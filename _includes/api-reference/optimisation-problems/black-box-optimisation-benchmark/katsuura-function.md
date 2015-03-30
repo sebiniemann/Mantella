@@ -5,6 +5,7 @@
 $$\begin{align}
 F(X) &:= \frac{10}{N^{2}} \left( \prod_{i=1}^{N}\left( 1 + i \sum_{j=1}^{32} \frac{\left| 2^{j}Z_i - \left[2^{j}Z_{i}\right]\right|}{2^j} \right)^{\frac{10}{N^{1.2}}} - 1 \right)\\
 Z &:= Q \cdot T_\text{scaled}^{10} \cdot R \cdot X\\
+N &:= \text{The number of dimensions.}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}\\
 [\cdot] &:= \text{nearest integer value}
