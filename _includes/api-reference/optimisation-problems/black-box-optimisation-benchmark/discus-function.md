@@ -4,7 +4,7 @@
 
 $$\begin{align}
 F(X) &:= 1000000 Z_{1} + \sum_{i = 2}^{N} Z_{i}\\
-Z &:= T_\text{oscillated} \left( R \cdot \left( X - X_T \right) \right)^{2}\\
+Z &:= T_\text{oscillated} \left( R \cdot X \right)^{2}\\
 N &:= \text{The number of dimensions.}\\
 R &:= \text{Some rotation matrix.}\\
 (\ldots)^p &:= \text{Element-wise power}
