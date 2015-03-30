@@ -70,7 +70,7 @@ namespace mant {
     }
 
     inline std::string RosenbrockFunctionRotated::toString() const noexcept {
-      return "rosenbrock-function-rotated";
+      return "bbob2009_rosenbrock_function_rotated";
     }
   }
 }

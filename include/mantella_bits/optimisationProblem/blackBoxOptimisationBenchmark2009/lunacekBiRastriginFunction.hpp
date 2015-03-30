@@ -101,7 +101,7 @@ namespace mant {
     }
 
     inline std::string LunacekBiRastriginFunction::toString() const noexcept {
-      return "lunacek-bi-rastrigin-function";
+      return "bbob2009_lunacek_bi_rastrigin_function";
     }
   }
 }

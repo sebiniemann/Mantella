@@ -52,7 +52,7 @@ namespace mant {
     }
 
     inline std::string DifferentPowersFunction::toString() const noexcept {
-      return "different-powers-function";
+      return "bbob2009_different_powers_function";
     }
   }
 }

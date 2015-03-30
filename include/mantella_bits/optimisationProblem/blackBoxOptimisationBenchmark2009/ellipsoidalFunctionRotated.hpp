@@ -54,7 +54,7 @@ namespace mant {
     }
 
     inline std::string EllipsoidalFunctionRotated::toString() const noexcept {
-      return "ellipsoidal-function-rotated";
+      return "bbob2009_ellipsoidal_function_rotated";
     }
   }
 }

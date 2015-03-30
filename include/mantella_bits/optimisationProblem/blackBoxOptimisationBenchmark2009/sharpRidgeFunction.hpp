@@ -85,7 +85,7 @@ namespace mant {
     }
 
     inline std::string SharpRidgeFunction::toString() const noexcept {
-      return "sharp-ridge-function";
+      return "bbob2009_sharp_ridge_function";
     }
   }
 }

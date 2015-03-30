@@ -71,7 +71,7 @@ namespace mant {
     }
 
     inline std::string BuecheRastriginFunction::toString() const noexcept {
-      return "bueche-rastrigin-function";
+      return "bbob2009_bueche_rastrigin_function";
     }
   }
 }

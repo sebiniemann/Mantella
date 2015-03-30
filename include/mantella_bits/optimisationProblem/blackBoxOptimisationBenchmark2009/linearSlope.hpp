@@ -72,7 +72,7 @@ namespace mant {
     }
 
     inline std::string LinearSlope::toString() const noexcept {
-      return "linear-slope";
+      return "bbob2009_linear_slope";
     }
   }
 }

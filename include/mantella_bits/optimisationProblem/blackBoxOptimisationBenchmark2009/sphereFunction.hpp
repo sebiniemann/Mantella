@@ -50,7 +50,7 @@ namespace mant {
     }
 
     inline std::string SphereFunction::toString() const noexcept {
-      return "sphere-function";
+      return "bbob2009_sphere_function";
     }
   }
 }

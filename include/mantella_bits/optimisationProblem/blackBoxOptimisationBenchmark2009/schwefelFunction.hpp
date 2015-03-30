@@ -61,7 +61,7 @@ namespace mant {
     }
 
     inline std::string SchwefelFunction::toString() const noexcept {
-      return "schwefel-function";
+      return "bbob2009_schwefel_function";
     }
   }
 }

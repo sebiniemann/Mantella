@@ -52,7 +52,7 @@ namespace mant {
     }
 
     inline std::string BentCigarFunction::toString() const noexcept {
-      return "bent-cigar-function";
+      return "bbob2009_bent_cigar_function";
     }
   }
 }

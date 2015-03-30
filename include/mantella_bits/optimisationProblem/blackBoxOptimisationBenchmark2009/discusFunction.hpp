@@ -52,7 +52,7 @@ namespace mant {
     }
 
     inline std::string DiscusFunction::toString() const noexcept {
-      return "discus-function";
+      return "bbob2009_discus_function";
     }
   }
 }

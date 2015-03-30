@@ -61,7 +61,7 @@ namespace mant {
     }
 
     inline std::string CompositeGriewankRosenbrockFunctionF8F2::toString() const noexcept {
-      return "composite-griewank-rosenbrock-function-f8f2";
+      return "bbob2009_composite_griewank_rosenbrock_function_f8f2";
     }
   }
 }

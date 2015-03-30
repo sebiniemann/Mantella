@@ -56,7 +56,7 @@ namespace mant {
     }
 
     inline std::string RosenbrockFunction::toString() const noexcept {
-      return "rosenbrock-function";
+      return "bbob2009_rosenbrock_function";
     }
   }
 }

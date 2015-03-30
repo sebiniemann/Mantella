@@ -73,7 +73,7 @@ namespace mant {
     }
 
     inline std::string AttractiveSectorFunction::toString() const noexcept {
-      return "attractive-sector-function";
+      return "bbob2009_attractive_sector_function";
     }
   }
 }

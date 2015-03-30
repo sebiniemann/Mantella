@@ -107,7 +107,7 @@ namespace mant {
     }
 
     inline std::string KatsuuraFunction::toString() const noexcept {
-      return "katsuura-function";
+      return "bbob2009_katsuura_function";
     }
   }
 }

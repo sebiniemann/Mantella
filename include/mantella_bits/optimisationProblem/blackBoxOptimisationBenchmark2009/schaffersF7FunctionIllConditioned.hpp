@@ -95,7 +95,7 @@ namespace mant {
     }
 
     inline std::string SchaffersF7FunctionIllConditioned::toString() const noexcept {
-      return "schaffers-f7-function-ill-conditioned";
+      return "bbob2009_schaffers_f7_function_ill_conditioned";
     }
   }
 }

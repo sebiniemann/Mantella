@@ -134,7 +134,7 @@ namespace mant {
     }
 
     inline std::string GallaghersGaussian101mePeaksFunction::toString() const noexcept {
-      return "gallaghers-gaussian-101me-peaks-function";
+      return "bbob2009_gallaghers_gaussian_101me_peaks_function";
     }
   }
 }

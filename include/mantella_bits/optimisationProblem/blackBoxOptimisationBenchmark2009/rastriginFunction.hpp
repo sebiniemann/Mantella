@@ -55,7 +55,7 @@ namespace mant {
     }
 
     inline std::string RastriginFunction::toString() const noexcept {
-      return "rastrigin-function";
+      return "bbob2009_rastrigin_function";
     }
   }
 }

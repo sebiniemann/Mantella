@@ -103,7 +103,7 @@ namespace mant {
     }
 
     inline std::string WeierstrassFunction::toString() const noexcept {
-      return "weierstrass-function";
+      return "bbob2009_weierstrass_function";
     }
   }
 }

@@ -86,7 +86,7 @@ namespace mant {
     }
 
     inline std::string RastriginFunctionRotated::toString() const noexcept {
-      return "rastrigin-function-rotated";
+      return "bbob2009_rastrigin_function_rotated";
     }
   }
 }

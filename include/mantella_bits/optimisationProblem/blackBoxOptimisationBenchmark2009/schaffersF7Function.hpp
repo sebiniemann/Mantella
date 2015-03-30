@@ -95,7 +95,7 @@ namespace mant {
     }
 
     inline std::string SchaffersF7Function::toString() const noexcept {
-      return "schaffers-f7-function";
+      return "bbob2009_schaffers_f7_function";
     }
   }
 }
