@@ -43,7 +43,7 @@ Visualisation of the sampled function using Matlab:
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
 {% include label prefix=include.anchor_prefix name="KatsuuraFunction" %}
-**KatsuuraFunction( <small>unsigned int</small> N )**
+**KatsuuraFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
 - **Requirement:** The dimension *N* must be greater than or equal to 1.
