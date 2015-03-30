@@ -18,13 +18,6 @@ Q &:= \text{Some rotation matrix.}
 
 $$C(X) := 0, \ \forall X$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T\\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the attractive sector function.
 Create a new source file called **bbob2015_attractive_sector_function.cpp**:
 {% highlight cpp %}

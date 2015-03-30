@@ -16,13 +16,6 @@ Q &:= \text{Some rotation matrix.}
 
 $$C(X) := 10 F_\text{penality}(X)$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T \\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the Schaffers f7 function (ill-conditioned).
 Create a new source file called **bbob2015_schaffers_f7_function_ill_conditioned.cpp**:
 {% highlight cpp %}

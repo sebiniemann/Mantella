@@ -15,13 +15,6 @@ R &:= \text{Some rotation matrix.}\\
 
 $$C(X) := 0, \ \forall X$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T \text{ (not unique)}\\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the discus function.
 Create a new source file called **bbob2015_discus_function.cpp**:
 {% highlight cpp %}

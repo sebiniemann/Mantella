@@ -15,13 +15,6 @@ Q &:= \text{Some rotation matrix.}\\
 
 $$C(X) := F_\text{penality}(X)$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T \\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the katsuura function.
 Create a new source file called **bbob2015_katsuura_function.cpp**:
 {% highlight cpp %}

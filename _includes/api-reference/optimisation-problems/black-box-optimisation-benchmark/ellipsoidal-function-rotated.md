@@ -13,13 +13,6 @@ R &:= \text{Some rotation matrix.}\\
 
 $$C(X) := 0, \ \forall X$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T \\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the ellipsoidal function (rotated).
 Create a new source file called **bbob2015_ellipsoidal_function_rotated.cpp**:
 {% highlight cpp %}

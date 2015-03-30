@@ -12,13 +12,6 @@ R &:= \text{Some rotation matrix.}
 
 $$C(X) := 0, \ \forall X$$
 
-**Minimal parameter and objective function value:**
-    
-$$\begin{align}
-X_\text{minimal} &= \frac{R \cdot 0.5}{\max\left(1, \frac{\sqrt{N}}{8}\right)} \\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the rosenbrock function (rotated).
 Create a new source file called **bbob2015_rosenbrock_function_rotated.cpp**:
 {% highlight cpp %}

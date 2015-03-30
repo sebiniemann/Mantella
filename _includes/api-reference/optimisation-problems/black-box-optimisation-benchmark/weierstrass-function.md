@@ -16,13 +16,6 @@ Q &:= \text{Some rotation matrix.}
 
 $$C(X) := \frac{10 F_\text{penality}(X)}{N}$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T \text{ (not unique)}\\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the Weierstrass function.
 Create a new source file called **bbob2015_weierstrass_function.cpp**:
 {% highlight cpp %}

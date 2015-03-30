@@ -15,13 +15,6 @@ R &:= \text{Some rotation matrix.}\\
 
 $$C(X) := 0, \ \forall X$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= \frac{\left(0.5, \ldots, 0.5 \right) \cdot R}{\max\left( 1, \frac{\sqrt{N}}{8} \right)} \text{ (not unique)}\\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the composite Griewank-Rosenbrock function f8f2.
 Create a new source file called **bbob2015_composite_griewank_rosenbrock_function_f8f2.cpp**:
 {% highlight cpp %}

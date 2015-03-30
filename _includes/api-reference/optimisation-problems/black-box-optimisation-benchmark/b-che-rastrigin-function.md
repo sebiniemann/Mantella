@@ -17,13 +17,6 @@ X_T &:= \text{The translation of the parameter space.}
 
 $$C(X) := 100 \cdot F_\text{penality}(X)$$
 
-**Minimal parameter and objective function value:**
-
-$$\begin{align}
-X_\text{minimal} &= X_T \text{ (not unique)}\\
-F(X_\text{minimal}) &= 0
-\end{align}$$
-
 Example code, sampling and plotting of the Büche-Rastrigin function.
 Create a new source file called **bbob2015_bueche_rastrigin_function.cpp**:
 {% highlight cpp %}
