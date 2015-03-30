@@ -87,11 +87,7 @@ namespace mant {
         const arma::Col<double>& localParameterConditioning) {
       isEqual("The number of elements", localParameterConditioning.n_elem, "the number of peaks", 101);
 
-      localParameterConditioning_.set_size(numberOfDimensions_, 101);
-      for (std::size_t n = 0; n < localParameterConditioning.n_elem; ++n) {
-        const double& localParameterConditioningValue = std::pow(10.0, localParameterConditioning(n) / 33.0);
-        localParameterConditioning_.col(n) = getParameterConditioning(localParameterConditioningValue) / std::sqrt(localParameterConditioningValue);
-      }
+      localParameterConditioning_ = localParameterConditioning;
     }
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterTranslation(
@@ -102,10 +98,17 @@ namespace mant {
       localParameterTranslation_ = localParameterTranslation;
     }
 
-    inline arma::Col<double> GallaghersGaussian101mePeaksFunction::getRandomLocalParameterConditioning() const noexcept {
+    inline arma::Mat<double> GallaghersGaussian101mePeaksFunction::getRandomLocalParameterConditioning() const noexcept {
       arma::Col<double> localParameterConditioning(101);
       localParameterConditioning(0) = 49.5;
       localParameterConditioning.tail(100) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(100));
+
+// TODO
+      localParameterConditioning_.set_size(numberOfDimensions_, 101);
+      for (std::size_t n = 0; n < localParameterConditioning.n_elem; ++n) {
+        const double& localParameterConditioningValue = std::pow(10.0, localParameterConditioning(n) / 33.0);
+        localParameterConditioning_.col(n) = getParameterConditioning(localParameterConditioningValue) / std::sqrt(localParameterConditioningValue);
+      }
 
       return localParameterConditioning;
     }
