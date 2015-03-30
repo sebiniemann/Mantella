@@ -49,7 +49,7 @@ Visualisation of the sampled function using Matlab:
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;T&gt;</small> R )**
+**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;double&gt;</small> R )**
 
 - Parameterises the rotation by \\(R\\).
 - **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
@@ -57,7 +57,7 @@ Visualisation of the sampled function using Matlab:
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}
-**<small>void</small> .setParameterRotationQ( <small>arma::Mat&lt;T&gt;</small> Q )**
+**<small>void</small> .setParameterRotationQ( <small>arma::Mat&lt;double&gt;</small> Q )**
 
 - Parameterises the rotation by \\(Q\\).
 - **Requirement:** The number of rows and columns in *Q* must each match the problem dimension.
