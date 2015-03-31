@@ -80,7 +80,7 @@ namespace mant {
         //arma::Col<double> dx = t.rows(1, nt) - t.rows(0, nt - 1);
         arma::Col<double> dy = ft.rows(1, nt) - ft.rows(0, nt - 1);
         arma::Col<double> yhat = ftarget - ft.rows(0, nt - 1); //TODO: t/feps handling!!
-        arma::Col<double> D = (4 * yhat - 2 * dy + 4 * arma::sqrt(yhat % yhat - yhat % dy)); //dividing everything by dx² omitted since pointless.
+        arma::Col<double> D = 4 * yhat - 2 * dy + 4 * arma::sqrt(yhat % yhat - yhat % dy); //dividing everything by dx² omitted since pointless.
         i1 = arma::sort_index(D)(0);
         i2 = i1 + 1;
       }
