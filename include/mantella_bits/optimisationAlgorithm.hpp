@@ -138,8 +138,8 @@ namespace mant {
 
   template <typename ParameterType>
   void OptimisationAlgorithm<ParameterType>::optimise() {
-    if(arma::any(optimisationProblem_->getUpperBound() < optimisationProblem_->getLowerBound())) {
-      throw std::logic_error("The upper bound of the optimisation problem must be greater than or equal to its lower bound.");
+    if(arma::any(optimisationProblem_->getUpperBounds() < optimisationProblem_->getLowerBounds())) {
+      throw std::logic_error("The upper bounds of the optimisation problem must be greater than or equal to its lower bounds.");
     }
     
     // Resets the results, counters and caches
