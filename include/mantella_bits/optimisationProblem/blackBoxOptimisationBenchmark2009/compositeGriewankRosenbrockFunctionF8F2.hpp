@@ -42,18 +42,10 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
       // A vector with all elements set to max(1, numberOfDimensions / 8).
-      setParameterScaling(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0));
+      setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0));
       // A vector with all elements set to 0.5.
-      setParameterTranslation(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + 0.5);
+      setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 0.5);
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void CompositeGriewankRosenbrockFunctionF8F2::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
     }
 
     inline double CompositeGriewankRosenbrockFunctionF8F2::getObjectiveValueImplementation(
