@@ -134,7 +134,7 @@ namespace mant {
       }
 
       return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
-    }rota
+    }
 
     inline std::string GallaghersGaussian21hiPeaksFunction::toString() const noexcept {
       return "bbob2009_gallaghers_gaussian_21hi_peaks_function";
