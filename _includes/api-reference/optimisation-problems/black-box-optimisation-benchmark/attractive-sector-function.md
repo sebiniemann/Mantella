@@ -4,14 +4,14 @@
 
 $$\begin{align}
 F(X) &:= \left\Vert S \right\Vert_2^{1.8} \\
-Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot R \cdot X\\
+Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot X\\
 S_i &:= \begin{cases}
   100 Z_{i} & \text{if } Z_{i} \cdot {X_T}_i > 0 \\
   Z_{i} & \text{otherwise}
 \end{cases}\\
 X_T &:= \text{The translation of the parameter space.}\\
-R &:= \text{Some rotation matrix.}\\
-Q &:= \text{Some rotation matrix.}
+Q &:= \text{Some rotation matrix.}\\
+T_\text{conditioning}^\sqrt{10} &:= \text{The conditioning of the parameter space.}
 \end{align}$$
 
 **Soft-constraints function:**
@@ -41,7 +41,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="AttractiveSectorFunction" %}
 - Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
@@ -50,14 +50,6 @@ Visualisation of the sampled function using Matlab:
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
 - **Requirement:** The dimension *N* must be greater than or equal to 1.
-
----
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;T&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}
