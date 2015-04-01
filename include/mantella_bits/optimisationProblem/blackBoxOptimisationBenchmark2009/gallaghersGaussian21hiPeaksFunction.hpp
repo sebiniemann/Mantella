@@ -9,7 +9,7 @@ namespace mant {
             const arma::Mat<double>& parameterRotationR);
 
         inline virtual void setLocalParameterConditioning(
-            const arma::Col<double>& localParameterConditioning);
+            const arma::Mat<double>& localParameterConditioning);
 
         inline virtual void setLocalParameterTranslation(
             const arma::Mat<double>& localParameterTranslation);
@@ -23,7 +23,7 @@ namespace mant {
         arma::Mat<double> localParameterConditioning_;
         arma::Mat<double> localParameterTranslation_;
 
-        inline arma::Col<double> getRandomLocalParameterConditioning() const noexcept;
+        inline arma::Mat<double> getRandomLocalParameterConditioning() const noexcept;
 
         inline arma::Mat<double> getRandomLocalParameterTranslation() const noexcept;
 
@@ -84,7 +84,7 @@ namespace mant {
     }
 
     inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterConditioning(
-        const arma::Col<double>& localParameterConditioning) {
+        const arma::Mat<double>& localParameterConditioning) {
       isEqual("The number of rows", localParameterConditioning.n_rows, "the number of dimensions", numberOfDimensions_);
       isEqual("The number of columns", localParameterConditioning.n_elem, "the number of peaks", 21);
 
