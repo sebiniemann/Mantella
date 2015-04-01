@@ -3,10 +3,7 @@
 **Objective function:**
 
 $$\begin{align}
-F(X) &:= 100 \sum_{i=1}^{N-1} \left( Z_i^2 - Z_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( Z_i + 1 \right)^2\\
-Z &:= \max\left(1, \frac{\sqrt{N}}{8}\right) \cdot R \cdot X + 0.5\\
-N &:= \text{The number of dimensions.}\\
-R &:= \text{Some rotation matrix.}
+F(X) &:= 100 \sum_{i=1}^{N-1} \left( X_i^2 - X_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( X_i + 1 \right)^2
 \end{align}$$
 
 **Soft-constraints function:**
@@ -35,8 +32,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="RosenbrockFunctionRotated" %}
-- Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
   
@@ -45,14 +40,6 @@ Visualisation of the sampled function using Matlab:
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
 - **Requirement:** The dimension *N* must be greater than or equal to 2.
-
----
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;double&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
 
 ---
 {% include label prefix=include.anchor_prefix name="toString" %}
