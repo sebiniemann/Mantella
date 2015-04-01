@@ -85,13 +85,10 @@ namespace mant {
 
     inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterConditioning(
         const arma::Col<double>& localParameterConditioning) {
-      isEqual("The number of elements", localParameterConditioning.n_elem, "the number of peaks", 21);
+      isEqual("The number of rows", localParameterConditioning.n_rows, "the number of dimensions", numberOfDimensions_);
+      isEqual("The number of columns", localParameterConditioning.n_elem, "the number of peaks", 21);
 
-      localParameterConditioning_.set_size(numberOfDimensions_, 21);
-      for (std::size_t n = 0; n < localParameterConditioning.n_elem; ++n) {
-        const double& localParameterConditioningValue = std::pow(1000.0, localParameterConditioning(n) / 19.0);
-        localParameterConditioning_.col(n) = getParameterConditioning(localParameterConditioningValue) / std::sqrt(localParameterConditioningValue);
-      }
+      localParameterConditioning_ = localParameterConditioning;
     }
 
     inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterTranslation(
@@ -102,10 +99,16 @@ namespace mant {
       localParameterTranslation_ = localParameterTranslation;
     }
 
-    inline arma::Col<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalParameterConditioning() const noexcept {
-      arma::Col<double> localParameterConditioning(21);
-      localParameterConditioning(0) = 19;
-      localParameterConditioning.tail(20) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(20));
+    inline arma::Mat<double> GallaghersGaussian21hiPeaksFunction::getRandomLocalParameterConditioning() const noexcept {
+      arma::Col<double> conditionings(21);
+      conditionings(0) = 19.0;
+      conditionings.tail(conditionings.n_elem - 1) = arma::conv_to<arma::Col<double>>::from(getRandomPermutation(conditionings.n_elem - 1));
+
+      arma::Mat<double> localParameterConditioning(numberOfDimensions_, conditionings.n_elem);
+      for (std::size_t n = 0; n < conditionings.n_elem; ++n) {
+        const double& conditioning = std::pow(1000.0, conditionings(n) / 19.0);
+        localParameterConditioning.col(n) = getParameterConditioning(conditioning) / std::sqrt(conditioning);
+      }
 
       return localParameterConditioning;
     }
