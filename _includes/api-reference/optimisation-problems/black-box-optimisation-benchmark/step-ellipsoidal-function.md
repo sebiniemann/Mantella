@@ -4,12 +4,11 @@
 
 $$\begin{align}
 F(X) &:=  0.1 \max\left( \frac{\left| Z_1 \right|}{10000}, T_\text{conditioning}^{100} \cdot Q \cdot \tilde{Z} \right)\\
-Z &:= T_\text{conditioning}^\sqrt{10} \cdot R \cdot X \\
+Z &:= T_\text{conditioning}^\sqrt{10} \cdot X \\
 \tilde{Z} &:= \begin{cases}
 \left\lfloor 0.5 + Z_i\right\rfloor & \text{if } Z_i > 0.5\\
 \frac{\left\lfloor 0.5 + 10Z_i\right\rfloor}{10} & \text{otherwise}\\
 \end{cases}\\
-R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
 
@@ -40,7 +39,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="StepEllipsoidalFunction" %}
 - Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
   
@@ -49,14 +48,6 @@ Visualisation of the sampled function using Matlab:
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
 - **Requirement:** The dimension *N* must be greater than or equal to 1.
-
----
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;double&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}

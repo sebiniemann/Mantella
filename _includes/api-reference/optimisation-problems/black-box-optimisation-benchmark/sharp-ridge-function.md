@@ -4,8 +4,8 @@
 
 $$\begin{align}
 F(X) &:= Z_1^2 + 100 \left\Vert \left(Z_2, \ldots, Z_N \right) \right\Vert_2\\
-Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot R \cdot X\\
-R &:= \text{Some rotation matrix.}\\
+Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot X\\
+N &:= \text{The number of dimensions.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
 
@@ -36,7 +36,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="SharpRidgeFunction" %}
 - Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
@@ -45,14 +45,6 @@ Visualisation of the sampled function using Matlab:
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
 - **Requirement:** The dimension *N* must be greater than or equal to 1.
-
----
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;double&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}
