@@ -91,9 +91,6 @@ if(BUILD_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
   endif()
 
-  # Include our own headers
-  include_directories(${PROJECT_SOURCE_DIR}/include)
-  
   # Locate third party libraries and headers
   if(WIN32)
     find_library(ARMADILLO_LIBRARIES openblas HINTS "C:/Program\ Files/OpenBLAS/lib")
@@ -104,6 +101,8 @@ if(BUILD_TESTS)
     find_package(Catch REQUIRED) # Catch (header only)
   endif()
   
+  # Include Mantella
+  include_directories(${PROJECT_SOURCE_DIR}/include)
   
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
