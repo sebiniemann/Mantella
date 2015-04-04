@@ -31,7 +31,7 @@ TEST_CASE("bbob::DifferentPowersFunction", "") {
 
     differentPowersFunction.setObjectiveValueTranslation(0);
     differentPowersFunction.setParameterTranslation(translation);
-    differentPowersFunction.setParameterRotationR(rotationR);
+    differentPowersFunction.setParameterRotation(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(differentPowersFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -39,6 +39,6 @@ TEST_CASE("bbob::DifferentPowersFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::DifferentPowersFunction(5).toString() == "different-powers-function");
+    CHECK(mant::bbob::DifferentPowersFunction(5).toString() == "bbob_different_powers_function");
   }
 }

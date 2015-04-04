@@ -35,6 +35,6 @@ TEST_CASE("bbob::LinearSlope", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::LinearSlope(5).toString() == "linear-slope");
+    CHECK(mant::bbob::LinearSlope(5).toString() == "bbob_linear_slope");
   }
 }

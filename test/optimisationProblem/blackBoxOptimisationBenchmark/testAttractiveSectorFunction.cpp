@@ -34,7 +34,7 @@ TEST_CASE("bbob::AttractiveSectorFunction", "") {
 
     attractiveSectorFunction.setObjectiveValueTranslation(0);
     attractiveSectorFunction.setParameterTranslation(translation);
-    attractiveSectorFunction.setParameterRotationR(rotationR);
+    attractiveSectorFunction.setParameterRotation(rotationR);
     attractiveSectorFunction.setParameterRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
@@ -43,7 +43,7 @@ TEST_CASE("bbob::AttractiveSectorFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::AttractiveSectorFunction(5).toString() == "attractive-sector-function");
+    CHECK(mant::bbob::AttractiveSectorFunction(5).toString() == "bbob_attractive_sector_function");
   }
 }
 

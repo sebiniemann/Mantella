@@ -35,6 +35,6 @@ TEST_CASE("bbob::RosenbrockFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::RosenbrockFunctionRotated(5).toString() == "rosenbrock-function-rotated");
+    CHECK(mant::bbob::RosenbrockFunctionRotated(5).toString() == "bbob_rosenbrock_function_rotated");
   }
 }

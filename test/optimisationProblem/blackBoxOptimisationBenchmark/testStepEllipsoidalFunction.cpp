@@ -43,6 +43,6 @@ TEST_CASE("bbob::StepEllipsoidalFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::StepEllipsoidalFunction(5).toString() == "step-ellipsoidal-function");
+    CHECK(mant::bbob::StepEllipsoidalFunction(5).toString() == "bbob_step_ellipsoidal_function");
   }
 }

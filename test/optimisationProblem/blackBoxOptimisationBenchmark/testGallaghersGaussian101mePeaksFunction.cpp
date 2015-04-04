@@ -23,7 +23,7 @@ TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction", "") {
     arma::Mat<double> rotationR;
     rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    arma::Col<double> deltaC101;
+    arma::Mat<double> deltaC101;
     deltaC101.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/deltaC101,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> localOptimaY101;
@@ -33,7 +33,7 @@ TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedGallaghersGaussian101mePeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     gallaghersGaussian101mePeaksFunction.setObjectiveValueTranslation(0);
-    gallaghersGaussian101mePeaksFunction.setParameterRotationR(rotationR);
+    gallaghersGaussian101mePeaksFunction.setParameterRotationQ(rotationR);
     gallaghersGaussian101mePeaksFunction.setLocalParameterTranslation(localOptimaY101);
     gallaghersGaussian101mePeaksFunction.setLocalParameterConditioning(deltaC101);
 
@@ -43,7 +43,7 @@ TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::GallaghersGaussian101mePeaksFunction(5).toString() == "gallaghers-gaussian-101me-peaks-function");
+    CHECK(mant::bbob::GallaghersGaussian101mePeaksFunction(5).toString() == "bbob_gallaghers_gaussian_101me_peaks_function");
   }
 }
 

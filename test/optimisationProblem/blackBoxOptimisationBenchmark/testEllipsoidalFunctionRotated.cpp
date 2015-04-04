@@ -31,7 +31,7 @@ TEST_CASE("bbob::EllipsoidalFunctionRotated", "") {
 
     ellipsoidalFunctionRotated.setObjectiveValueTranslation(0);
     ellipsoidalFunctionRotated.setParameterTranslation(translation);
-    ellipsoidalFunctionRotated.setParameterRotationR(rotationR);
+    ellipsoidalFunctionRotated.setParameterRotation(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(ellipsoidalFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -39,6 +39,6 @@ TEST_CASE("bbob::EllipsoidalFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::EllipsoidalFunctionRotated(5).toString() == "ellipsoidal-function-rotated");
+    CHECK(mant::bbob::EllipsoidalFunctionRotated(5).toString() == "bbob_ellipsoidal_function_rotated");
   }
 }

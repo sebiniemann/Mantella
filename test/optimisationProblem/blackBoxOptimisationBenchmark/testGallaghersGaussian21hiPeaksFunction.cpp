@@ -23,7 +23,7 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
     arma::Mat<double> rotationR;
     rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
 
-    arma::Col<double> deltaC21;
+    arma::Mat<double> deltaC21;
     deltaC21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/deltaC21,dim" + std::to_string(numberOfDimensions) +".mat");
 
     arma::Mat<double> localOptimaY21;
@@ -33,7 +33,7 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     gallaghersGaussian21hiPeaksFunction.setObjectiveValueTranslation(0);
-    gallaghersGaussian21hiPeaksFunction.setParameterRotationR(rotationR);
+    gallaghersGaussian21hiPeaksFunction.setParameterRotationQ(rotationR);
     gallaghersGaussian21hiPeaksFunction.setLocalParameterTranslation(localOptimaY21);
     gallaghersGaussian21hiPeaksFunction.setLocalParameterConditioning(deltaC21);
 
@@ -43,7 +43,7 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction(5).toString() == "gallaghers-gaussian-21hi-peaks-function");
+    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
   }
 }
 

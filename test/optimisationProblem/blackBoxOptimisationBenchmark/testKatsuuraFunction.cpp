@@ -43,7 +43,7 @@ TEST_CASE("bbob::KatsuuraFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::KatsuuraFunction(5).toString() == "katsuura-function");
+    CHECK(mant::bbob::KatsuuraFunction(5).toString() == "bbob_katsuura_function");
   }
 }
 

@@ -31,7 +31,7 @@ TEST_CASE("bbob::BentCigarFunction", "") {
 
     bentCigarFunction.setObjectiveValueTranslation(0);
     bentCigarFunction.setParameterTranslation(translation);
-    bentCigarFunction.setParameterRotationR(rotationR);
+    bentCigarFunction.setParameterRotation(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(bentCigarFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -39,7 +39,7 @@ TEST_CASE("bbob::BentCigarFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::BentCigarFunction(5).toString() == "bent-cigar-function");
+    CHECK(mant::bbob::BentCigarFunction(5).toString() == "bbob_bent_cigar_function");
   }
 }
 

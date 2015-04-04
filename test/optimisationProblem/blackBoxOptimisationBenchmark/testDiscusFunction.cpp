@@ -31,7 +31,7 @@ TEST_CASE("bbob::DiscusFunction", "") {
 
     discusFunction.setObjectiveValueTranslation(0);
     discusFunction.setParameterTranslation(translation);
-    discusFunction.setParameterRotationR(rotationR);
+    discusFunction.setParameterRotation(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(discusFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
@@ -39,6 +39,6 @@ TEST_CASE("bbob::DiscusFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::DiscusFunction(5).toString() == "discus-function");
+    CHECK(mant::bbob::DiscusFunction(5).toString() == "bbob_discus_function");
   }
 }

@@ -43,6 +43,6 @@ TEST_CASE("bbob::SchaffersF7Function", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchaffersF7Function(5).toString() == "schaffers-f7-function");
+    CHECK(mant::bbob::SchaffersF7Function(5).toString() == "bbob_schaffers_f7_function");
   }
 }

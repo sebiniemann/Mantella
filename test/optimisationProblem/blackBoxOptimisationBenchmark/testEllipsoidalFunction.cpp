@@ -35,6 +35,6 @@ TEST_CASE("bbob::EllipsoidalFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::EllipsoidalFunction(5).toString() == "ellipsoidal-function");
+    CHECK(mant::bbob::EllipsoidalFunction(5).toString() == "bbob_ellipsoidal_function");
   }
 }

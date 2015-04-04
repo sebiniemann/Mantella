@@ -43,6 +43,6 @@ TEST_CASE("bbob::RastriginFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::RastriginFunctionRotated(5).toString() == "rastrigin-function-rotated");
+    CHECK(mant::bbob::RastriginFunctionRotated(5).toString() == "bbob_rastrigin_function_rotated");
   }
 }
