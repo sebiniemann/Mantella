@@ -1,12 +1,13 @@
 // Catch
 #include <catch.hpp>
-#include <helper.hpp>
 
 // C++ Standard Library
 #include <random>
 
 // Mantella
 #include <mantella>
+
+#include "../helper.hpp"
 
 TEST_CASE("Rng", "") {
   SECTION("Getting a working generator.") {

@@ -1,6 +1,5 @@
 // Catch
 #include <catch.hpp>
-#include <helper.hpp>
 
 // C++ Standard Library
 #include <cmath>
@@ -8,6 +7,8 @@
 
 // Mantella
 #include <mantella>
+
+#include "../helper.hpp"
 
 TEST_CASE("geometry: get2DRotation(...)", "") {
   SECTION("Generates 2D rotation matrix.") {

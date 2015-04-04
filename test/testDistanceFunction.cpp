@@ -1,12 +1,13 @@
 // Catch
 #include <catch.hpp>
-#include <helper.hpp>
 
 // C++ Standard Library
 #include <cmath>
 
 // Mantella
 #include <mantella>
+
+#include "./helper.hpp"
 
 template <typename ParameterType>
 class MockDistanceFunction : public mant::DistanceFunction<ParameterType>{
