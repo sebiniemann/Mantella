@@ -104,9 +104,6 @@ if(BUILD_TESTS)
     find_package(Catch REQUIRED) # Catch (header only)
   endif()
   
-  message(STATUS "ARMADILLO_LIBRARIES: ${ARMADILLO_LIBRARIES}")
-  message(STATUS "ARMADILLO_INCLUDE_DIR: ${ARMADILLO_INCLUDE_DIR}")
-  message(STATUS "CATCH_INCLUDE_DIRS: ${CATCH_INCLUDE_DIRS}")
   
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
