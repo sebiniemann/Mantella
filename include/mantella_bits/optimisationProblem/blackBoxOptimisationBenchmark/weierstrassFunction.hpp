@@ -1,6 +1,6 @@
 namespace mant {
   namespace bbob {
-    class WeierstrassFunction : public BlackBoxOptimisationBenchmark2009 {
+    class WeierstrassFunction : public BlackBoxOptimisationBenchmark {
       public:
         inline explicit WeierstrassFunction(
             const unsigned int numberOfDimensions) noexcept;
@@ -32,7 +32,7 @@ namespace mant {
         template <typename Archive>
         void serialize(
             Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
           archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
@@ -46,7 +46,7 @@ namespace mant {
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
 
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
           archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
           archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
         }
@@ -59,7 +59,7 @@ namespace mant {
 
     inline WeierstrassFunction::WeierstrassFunction(
         const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark(numberOfDimensions),
         f0_(-1.99951171875),
         parameterConditioning_(getParameterConditioning(std::sqrt(0.01))) {
       setParameterTranslation(getRandomParameterTranslation());

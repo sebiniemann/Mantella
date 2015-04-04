@@ -1,6 +1,6 @@
 namespace mant {
   namespace bbob {
-    class LinearSlope : public BlackBoxOptimisationBenchmark2009 {
+    class LinearSlope : public BlackBoxOptimisationBenchmark {
       public:
         inline explicit LinearSlope(
             const unsigned int numberOfDimensions) noexcept;
@@ -25,7 +25,7 @@ namespace mant {
         template <typename Archive>
         void serialize(
             Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("objectiveFunctionRotation", objectiveFunctionRotation_));
         }
@@ -38,7 +38,7 @@ namespace mant {
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
 
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
           archive(cereal::make_nvp("objectiveFunctionRotation", construct->objectiveFunctionRotation_));
         }
 #endif
@@ -50,7 +50,7 @@ namespace mant {
 
     inline LinearSlope::LinearSlope(
         const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(10.0)),
         f0_(5.0 * arma::accu(parameterConditioning_)) {
       setObjectiveFunctionRotation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));

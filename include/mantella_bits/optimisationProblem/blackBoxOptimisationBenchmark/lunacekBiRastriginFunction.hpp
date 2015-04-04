@@ -1,6 +1,6 @@
 namespace mant {
   namespace bbob {
-    class LunacekBiRastriginFunction : public BlackBoxOptimisationBenchmark2009 {
+    class LunacekBiRastriginFunction : public BlackBoxOptimisationBenchmark {
       public:
         inline explicit LunacekBiRastriginFunction(
             const unsigned int numberOfDimensions) noexcept;
@@ -33,7 +33,7 @@ namespace mant {
         template <typename Archive>
         void serialize(
             Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("parameterRotationR", rotationR_));
           archive(cereal::make_nvp("parameterRotationQ", rotationQ_));
@@ -47,7 +47,7 @@ namespace mant {
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
 
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
           archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
           archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
         }
@@ -60,7 +60,7 @@ namespace mant {
 
     inline LunacekBiRastriginFunction::LunacekBiRastriginFunction(
         const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark(numberOfDimensions),
         s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
         mu_(std::sqrt(5.25 / s_) + 2.5),
         parameterConditinong_(getParameterConditioning(10.0)) {

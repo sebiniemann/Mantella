@@ -1,6 +1,6 @@
 namespace mant {
   namespace bbob {
-    class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark2009 {
+    class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark {
       public:
         inline explicit GallaghersGaussian21hiPeaksFunction(
             const unsigned int numberOfDimensions) noexcept;
@@ -39,7 +39,7 @@ namespace mant {
         template <typename Archive>
         void serialize(
             Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
           archive(cereal::make_nvp("localParameterConditioning", localParameterConditioning_));
@@ -54,7 +54,7 @@ namespace mant {
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
 
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
           archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
           archive(cereal::make_nvp("localParameterConditioning", construct->localParameterConditioning_));
           archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
@@ -68,7 +68,7 @@ namespace mant {
 
     inline GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction(
         const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark(numberOfDimensions),
         weight_(arma::join_cols(arma::Col<double>({10}), arma::linspace<arma::Col<double>>(1.1, 9.1, 20))) {
       setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
       setLocalParameterConditioning(getRandomLocalParameterConditioning());

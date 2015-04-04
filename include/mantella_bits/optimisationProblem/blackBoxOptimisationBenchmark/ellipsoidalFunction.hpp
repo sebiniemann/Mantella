@@ -1,6 +1,6 @@
 namespace mant {
   namespace bbob {
-    class EllipsoidalFunction : public BlackBoxOptimisationBenchmark2009 {
+    class EllipsoidalFunction : public BlackBoxOptimisationBenchmark {
       public:
         inline explicit EllipsoidalFunction(
             const unsigned int numberOfDimensions) noexcept;
@@ -18,7 +18,7 @@ namespace mant {
 
         template <typename Archive>
         void serialize(Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(this)));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
         }
 
@@ -30,7 +30,7 @@ namespace mant {
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
           construct(numberOfDimensions);
 
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark2009", cereal::base_class<BlackBoxOptimisationBenchmark2009>(construct.ptr())));
+          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
         }
 #endif
     };
@@ -41,7 +41,7 @@ namespace mant {
 
     inline EllipsoidalFunction::EllipsoidalFunction(
         const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark2009(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(1000000.0)) {
 
     }
