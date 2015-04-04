@@ -86,7 +86,7 @@ namespace mant {
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterConditioning(
         const arma::Mat<double>& localParameterConditioning) {
       isEqual("The number of rows", localParameterConditioning.n_rows, "the number of dimensions", numberOfDimensions_);
-      isEqual("The number of columns", localParameterConditioning.n_elem, "the number of peaks", 101);
+      isEqual("The number of columns", localParameterConditioning.n_cols, "the number of peaks", 101);
 
       localParameterConditioning_ = localParameterConditioning;
     }
