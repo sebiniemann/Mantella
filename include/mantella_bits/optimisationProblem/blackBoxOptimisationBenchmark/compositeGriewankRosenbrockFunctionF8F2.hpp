@@ -42,18 +42,15 @@ namespace mant {
 
     inline CompositeGriewankRosenbrockFunctionF8F2::CompositeGriewankRosenbrockFunctionF8F2(
         const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark2009(numberOfDimensions) {
-      // A vector with all elements set to max(1, numberOfDimensions / 8).
-      setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0));
-      // A vector with all elements set to 0.5.
-      setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 0.5);
+      : BlackBoxOptimisationBenchmark(numberOfDimensions),
         max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)){
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
 
     inline double CompositeGriewankRosenbrockFunctionF8F2::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = 100.0 * arma::square(arma::square(parameter.head(parameter.n_elem - 1)) - parameter.tail(parameter.n_elem - 1)) + arma::square(1.0 - parameter.head(parameter.n_elem - 1));
+       const arma::Col<double>& s = max_ * parameter + 0.5;
+      const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
 
       return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1);
     }
