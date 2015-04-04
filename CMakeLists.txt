@@ -109,9 +109,6 @@ if(BUILD_TESTS)
   include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
   include_directories(${CATCH_INCLUDE_DIRS}) # Catch
 
-  # Include headers
-  include_directories(${PROJECT_SOURCE_DIR}/test) # MANTELLA tests
-
   # Compile the optimisation library tests
   # All paths must start with "test/"
   add_executable(libraryTest
