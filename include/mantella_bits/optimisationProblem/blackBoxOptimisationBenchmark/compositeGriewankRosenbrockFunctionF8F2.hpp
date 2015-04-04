@@ -8,6 +8,8 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
+        const double max_;
+
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
@@ -45,6 +47,7 @@ namespace mant {
       setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0));
       // A vector with all elements set to 0.5.
       setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 0.5);
+        max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)){
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
 
