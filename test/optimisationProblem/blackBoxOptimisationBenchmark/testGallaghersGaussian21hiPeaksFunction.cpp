@@ -34,8 +34,8 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
 
     gallaghersGaussian21hiPeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian21hiPeaksFunction.setRotationQ(rotationR);
-    gallaghersGaussian21hiPeaksFunction.setLocalParameterTranslation(localOptimaY21);
-    gallaghersGaussian21hiPeaksFunction.setLocalParameterConditioning(deltaC21);
+    gallaghersGaussian21hiPeaksFunction.setLocalParameterTranslations(localOptimaY21);
+    gallaghersGaussian21hiPeaksFunction.setLocalParameterConditionings(deltaC21);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(gallaghersGaussian21hiPeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
