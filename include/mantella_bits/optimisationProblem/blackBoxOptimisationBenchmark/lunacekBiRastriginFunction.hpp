@@ -5,6 +5,9 @@ namespace mant {
         inline explicit LunacekBiRastriginFunction(
             const unsigned int numberOfDimensions) noexcept;
 
+        inline void setRotationR(
+            const arma::Mat<double>& parameterRotationR);
+
         inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
 
@@ -15,6 +18,7 @@ namespace mant {
         const double mu_;
         const arma::Col<double> parameterConditinong_;
 
+        arma::Mat<double> rotationR_;
         arma::Mat<double> rotationQ_;
 
         inline double getSoftConstraintsValueImplementation(
@@ -31,6 +35,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
+          archive(cereal::make_nvp("parameterRotationR", rotationR_));
           archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
@@ -43,6 +48,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
+          archive(cereal::make_nvp("parameterRotationR", construct->rotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
@@ -56,14 +62,20 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
         s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
-        mu_(std::sqrt(5.25 / s_) + 2.5),
+        mu_(std::sqrt(5.25 / s_)),
         parameterConditinong_(getParameterConditioning(10.0)) {
-      // A vector with al elements set to 2.5.
-      setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.5);
       // A vector with all elements randomly and uniformly set to either 2 or -2.
       setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    }
+
+    inline void LunacekBiRastriginFunction::setRotationR(
+        const arma::Mat<double>& parameterRotationR) {
+      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", parameterRotationR);
+
+      rotationR_ = parameterRotationR;
     }
 
     inline void LunacekBiRastriginFunction::setRotationQ(
@@ -81,9 +93,7 @@ namespace mant {
 
     inline double LunacekBiRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = rotationQ_ * (parameterConditinong_ % parameter);
-
-      return std::min(std::pow(arma::norm(parameter), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z)));
+      return std::min(std::pow(arma::norm(parameter - 2.5), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter - 2.5))))));
     }
 
     inline std::string LunacekBiRastriginFunction::toString() const noexcept {
