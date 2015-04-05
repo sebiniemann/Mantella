@@ -5,9 +5,6 @@ namespace mant {
         inline explicit StepEllipsoidalFunction(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
 
@@ -17,7 +14,6 @@ namespace mant {
         const arma::Col<double> firstParameterConditioning_;
         const arma::Col<double> secondParameterConditioning_;
 
-        arma::Mat<double> parameterRotationR_;
         arma::Mat<double> rotationQ_;
 
         inline double getSoftConstraintsValueImplementation(
@@ -34,7 +30,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
           archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
@@ -47,7 +42,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
@@ -63,15 +57,7 @@ namespace mant {
         firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
         secondParameterConditioning_(getParameterConditioning(100)) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void StepEllipsoidalFunction::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
@@ -90,7 +76,7 @@ namespace mant {
     
     inline double StepEllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& s = firstParameterConditioning_ % (parameterRotationR_ * parameter);
+      const arma::Col<double>& s = firstParameterConditioning_ % parameter;
 
       arma::Col<double> z = s;
       for (std::size_t n = 0; n < z.n_elem; ++n) {
@@ -103,7 +89,7 @@ namespace mant {
         }
       }
 
-      return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(parameterRotationQ_ * z)));
+      return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
     }
 
     inline std::string StepEllipsoidalFunction::toString() const noexcept {

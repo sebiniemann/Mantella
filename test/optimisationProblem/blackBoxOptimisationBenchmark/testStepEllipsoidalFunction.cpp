@@ -34,7 +34,7 @@ TEST_CASE("bbob::StepEllipsoidalFunction", "") {
 
     stepEllipsoidalFunction.setObjectiveValueTranslation(0);
     stepEllipsoidalFunction.setParameterTranslation(translation);
-    stepEllipsoidalFunction.setParameterRotationR(rotationR);
+    stepEllipsoidalFunction.setParameterRotation(rotationR);
     stepEllipsoidalFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {

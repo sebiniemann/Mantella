@@ -5,9 +5,6 @@ namespace mant {
         inline explicit SchaffersF7Function(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
 
@@ -16,7 +13,6 @@ namespace mant {
       protected:
         const arma::Col<double> parameterConditioning_;
 
-        arma::Mat<double> parameterRotationR_;
         arma::Mat<double> rotationQ_;
 
         inline double getSoftConstraintsValueImplementation(
@@ -33,7 +29,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
           archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
@@ -46,7 +41,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
@@ -61,15 +55,7 @@ namespace mant {
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void SchaffersF7Function::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
@@ -88,7 +74,7 @@ namespace mant {
 
     inline double SchaffersF7Function::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& s = arma::square(parameterConditioning_ % (parameterRotationQ_ * getAsymmetricParameter(0.5, parameterRotationR_ * parameter)));
+      const arma::Col<double>& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter)));
       const arma::Col<double>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
 
       return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);

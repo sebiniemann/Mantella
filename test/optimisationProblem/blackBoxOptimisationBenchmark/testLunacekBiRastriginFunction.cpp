@@ -35,7 +35,7 @@ TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
     lunacekBiRastriginFunction.setObjectiveValueTranslation(0);
     lunacekBiRastriginFunction.setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.5);
     lunacekBiRastriginFunction.setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions) + (one.at(0) > 0 ? 2.0 : -2.0));
-    lunacekBiRastriginFunction.setRotationR(rotationR);
+    lunacekBiRastriginFunction.setParameterRotation(rotationR);
     lunacekBiRastriginFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {

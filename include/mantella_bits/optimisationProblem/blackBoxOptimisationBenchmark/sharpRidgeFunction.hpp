@@ -5,9 +5,6 @@ namespace mant {
         inline explicit SharpRidgeFunction(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
-
         inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
 
@@ -16,7 +13,6 @@ namespace mant {
       protected:
         const arma::Col<double> parameterConditioning_;
 
-        arma::Mat<double> parameterRotationR_;
         arma::Mat<double> rotationQ_;
 
         inline double getObjectiveValueImplementation(
@@ -30,7 +26,6 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
           archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
@@ -43,7 +38,6 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
@@ -58,15 +52,7 @@ namespace mant {
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
-    }
-
-    inline void SharpRidgeFunction::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
-
-      parameterRotationR_ = parameterRotationR;
+      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
@@ -80,7 +66,7 @@ namespace mant {
 
     inline double SharpRidgeFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = parameterRotationQ_ * (parameterConditioning_ % (parameterRotationR_ * parameter));
+      const arma::Col<double>& z = rotationQ_ * (parameterConditioning_ %  parameter);
       return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
     }
 
