@@ -35,7 +35,7 @@ TEST_CASE("bbob::KatsuuraFunction", "") {
     katsuuraFunction.setObjectiveValueTranslation(0);
     katsuuraFunction.setParameterTranslation(translation);
     katsuuraFunction.setParameterRotationR(rotationR);
-    katsuuraFunction.setParameterRotationQ(rotationQ);
+    katsuuraFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(katsuuraFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

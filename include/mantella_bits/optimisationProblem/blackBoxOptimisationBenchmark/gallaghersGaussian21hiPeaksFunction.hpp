@@ -5,8 +5,8 @@ namespace mant {
         inline explicit GallaghersGaussian21hiPeaksFunction(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline virtual void setParameterRotationQ(
-            const arma::Mat<double>& parameterRotationQ);
+        inline virtual void setRotationQ(
+            const arma::Mat<double>& rotationQ);
 
         inline virtual void setLocalParameterConditioning(
             const arma::Mat<double>& localParameterConditioning);
@@ -19,7 +19,7 @@ namespace mant {
       protected:
         const arma::Col<double>::fixed<21> weight_;
 
-        arma::Mat<double> parameterRotationQ_;
+        arma::Mat<double> rotationQ_;
         arma::Mat<double> localParameterConditioning_;
         arma::Mat<double> localParameterTranslation_;
 
@@ -41,7 +41,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
+          archive(cereal::make_nvp("rotationQ", rotationQ_));
           archive(cereal::make_nvp("localParameterConditioning", localParameterConditioning_));
           archive(cereal::make_nvp("localParameterTranslation", localParameterTranslation_));
         }
@@ -55,7 +55,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
+          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
           archive(cereal::make_nvp("localParameterConditioning", construct->localParameterConditioning_));
           archive(cereal::make_nvp("localParameterTranslation", construct->localParameterTranslation_));
         }
@@ -70,17 +70,17 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
         weight_(arma::join_cols(arma::Col<double>({10}), arma::linspace<arma::Col<double>>(1.1, 9.1, 20))) {
-      setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
       setLocalParameterConditioning(getRandomLocalParameterConditioning());
       setLocalParameterTranslation(getRandomLocalParameterTranslation());
     }
 
-    inline void GallaghersGaussian21hiPeaksFunction::setParameterRotationQ(
-        const arma::Mat<double>& parameterRotationQ) {
-      isEqual("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationQ);
+    inline void GallaghersGaussian21hiPeaksFunction::setRotationQ(
+        const arma::Mat<double>& rotationQ) {
+      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", rotationQ);
 
-      parameterRotationQ_ = parameterRotationQ;
+      rotationQ_ = rotationQ;
     }
 
     inline void GallaghersGaussian21hiPeaksFunction::setLocalParameterConditioning(
@@ -130,7 +130,7 @@ namespace mant {
       double maximalValue = std::numeric_limits<double>::lowest();
       for (unsigned int k = 0; k < 21; ++k) {
         const arma::Col<double>& locallyTranslatedParameter = parameter - localParameterTranslation_.col(k);
-        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-0.5 / static_cast<double>(numberOfDimensions_) * arma::dot(locallyTranslatedParameter, parameterRotationQ_.t() * arma::diagmat(localParameterConditioning_.col(k)) * parameterRotationQ_ * locallyTranslatedParameter)));
+        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-0.5 / static_cast<double>(numberOfDimensions_) * arma::dot(locallyTranslatedParameter, rotationQ_.t() * arma::diagmat(localParameterConditioning_.col(k)) * rotationQ_ * locallyTranslatedParameter)));
       }
 
       return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);

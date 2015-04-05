@@ -33,7 +33,7 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
     expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
 
     gallaghersGaussian21hiPeaksFunction.setObjectiveValueTranslation(0);
-    gallaghersGaussian21hiPeaksFunction.setParameterRotationQ(rotationR);
+    gallaghersGaussian21hiPeaksFunction.setRotationQ(rotationR);
     gallaghersGaussian21hiPeaksFunction.setLocalParameterTranslation(localOptimaY21);
     gallaghersGaussian21hiPeaksFunction.setLocalParameterConditioning(deltaC21);
 

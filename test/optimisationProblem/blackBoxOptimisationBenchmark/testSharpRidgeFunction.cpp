@@ -35,7 +35,7 @@ TEST_CASE("bbob::SharpRidgeFunction", "") {
     sharpRidgeFunction.setObjectiveValueTranslation(0);
     sharpRidgeFunction.setParameterTranslation(translation);
     sharpRidgeFunction.setParameterRotationR(rotationR);
-    sharpRidgeFunction.setParameterRotationQ(rotationQ);
+    sharpRidgeFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(sharpRidgeFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

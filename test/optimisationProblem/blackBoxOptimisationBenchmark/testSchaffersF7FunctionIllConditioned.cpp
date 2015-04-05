@@ -35,7 +35,7 @@ TEST_CASE("bbob::SchaffersF7FunctionIllConditioned", "") {
     schaffersF7FunctionIllConditioned.setObjectiveValueTranslation(0);
     schaffersF7FunctionIllConditioned.setParameterTranslation(translation);
     schaffersF7FunctionIllConditioned.setParameterRotationR(rotationR);
-    schaffersF7FunctionIllConditioned.setParameterRotationQ(rotationQ);
+    schaffersF7FunctionIllConditioned.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(schaffersF7FunctionIllConditioned.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

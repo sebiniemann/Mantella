@@ -35,7 +35,7 @@ TEST_CASE("bbob::SchaffersF7Function", "") {
     schaffersF7Function.setObjectiveValueTranslation(0);
     schaffersF7Function.setParameterTranslation(translation);
     schaffersF7Function.setParameterRotationR(rotationR);
-    schaffersF7Function.setParameterRotationQ(rotationQ);
+    schaffersF7Function.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(schaffersF7Function.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

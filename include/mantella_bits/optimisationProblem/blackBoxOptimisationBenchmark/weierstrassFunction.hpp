@@ -8,8 +8,8 @@ namespace mant {
         inline void setParameterRotationR(
             const arma::Mat<double>& parameterRotationR);
 
-        inline void setParameterRotationQ(
-            const arma::Mat<double>& parameterRotationQ);
+        inline void setRotationQ(
+            const arma::Mat<double>& rotationQ);
             
         inline std::string toString() const noexcept override;
 
@@ -18,7 +18,7 @@ namespace mant {
         const arma::Col<double> parameterConditioning_;
 
         arma::Mat<double> parameterRotationR_;
-        arma::Mat<double> parameterRotationQ_;
+        arma::Mat<double> rotationQ_;
 
         inline double getSoftConstraintsValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -35,7 +35,7 @@ namespace mant {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
           archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
-          archive(cereal::make_nvp("parameterRotationQ", parameterRotationQ_));
+          archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
         template <typename Archive>
@@ -48,7 +48,7 @@ namespace mant {
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
           archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
-          archive(cereal::make_nvp("parameterRotationQ", construct->parameterRotationQ_));
+          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
     };
@@ -64,7 +64,7 @@ namespace mant {
         parameterConditioning_(getParameterConditioning(std::sqrt(0.01))) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setParameterRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
     inline void WeierstrassFunction::setParameterRotationR(
@@ -75,12 +75,12 @@ namespace mant {
       parameterRotationR_ = parameterRotationR;
     }
 
-    inline void WeierstrassFunction::setParameterRotationQ(
-        const arma::Mat<double>& parameterRotationQ) {
-      isEqual("The number of rows", parameterRotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationQ);
+    inline void WeierstrassFunction::setRotationQ(
+        const arma::Mat<double>& rotationQ) {
+      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", rotationQ);
 
-      parameterRotationQ_ = parameterRotationQ;
+      rotationQ_ = rotationQ;
     }
 
     inline double WeierstrassFunction::getSoftConstraintsValueImplementation(
