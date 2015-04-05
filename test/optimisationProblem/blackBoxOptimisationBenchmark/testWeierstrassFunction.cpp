@@ -34,7 +34,7 @@ TEST_CASE("bbob::WeierstrassFunction", "") {
 
     weierstrassFunction.setObjectiveValueTranslation(0);
     weierstrassFunction.setParameterTranslation(translation);
-    weierstrassFunction.setParameterRotationR(rotationR);
+    weierstrassFunction.setRotationR(rotationR);
     weierstrassFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {

@@ -5,8 +5,8 @@ namespace mant {
         inline explicit WeierstrassFunction(
             const unsigned int numberOfDimensions) noexcept;
 
-        inline void setParameterRotationR(
-            const arma::Mat<double>& parameterRotationR);
+        inline void setRotationR(
+            const arma::Mat<double>& rotationR);
 
         inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
@@ -17,7 +17,7 @@ namespace mant {
         const double f0_;
         const arma::Col<double> parameterConditioning_;
 
-        arma::Mat<double> parameterRotationR_;
+        arma::Mat<double> rotationR_;
         arma::Mat<double> rotationQ_;
 
         inline double getSoftConstraintsValueImplementation(
@@ -34,7 +34,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("parameterRotationR", parameterRotationR_));
+          archive(cereal::make_nvp("rotationR", rotationR_));
           archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
@@ -47,7 +47,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("parameterRotationR", construct->parameterRotationR_));
+          archive(cereal::make_nvp("rotationR", construct->rotationR_));
           archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
@@ -63,16 +63,16 @@ namespace mant {
         f0_(-1.99951171875),
         parameterConditioning_(getParameterConditioning(std::sqrt(0.01))) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotationR(getRandomRotationMatrix(numberOfDimensions_));
+      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
 
-    inline void WeierstrassFunction::setParameterRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
+    inline void WeierstrassFunction::setRotationR(
+        const arma::Mat<double>& rotationR) {
+      isEqual("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", rotationR);
 
-      parameterRotationR_ = parameterRotationR;
+      rotationR_ = rotationR;
     }
 
     inline void WeierstrassFunction::setRotationQ(
@@ -90,7 +90,7 @@ namespace mant {
     
     inline double WeierstrassFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = parameterRotationR_ * (parameterConditioning_ % (parameterRotationQ_ * getOscillatedParameter(parameterRotationR_ * parameter)));
+      const arma::Col<double>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getOscillatedParameter(rotationR_ * parameter)));
 
       double sum = 0.0;
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {

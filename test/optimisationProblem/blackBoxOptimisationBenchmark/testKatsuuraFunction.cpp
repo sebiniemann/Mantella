@@ -34,7 +34,7 @@ TEST_CASE("bbob::KatsuuraFunction", "") {
 
     katsuuraFunction.setObjectiveValueTranslation(0);
     katsuuraFunction.setParameterTranslation(translation);
-    katsuuraFunction.setParameterRotationR(rotationR);
+    katsuuraFunction.setRotationR(rotationR);
     katsuuraFunction.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {

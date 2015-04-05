@@ -34,7 +34,7 @@ TEST_CASE("bbob::RastriginFunctionRotated", "") {
 
     rastriginFunctionRotated.setObjectiveValueTranslation(0);
     rastriginFunctionRotated.setParameterTranslation(translation);
-    rastriginFunctionRotated.setParameterRotationR(rotationR);
+    rastriginFunctionRotated.setRotationR(rotationR);
     rastriginFunctionRotated.setRotationQ(rotationQ);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
