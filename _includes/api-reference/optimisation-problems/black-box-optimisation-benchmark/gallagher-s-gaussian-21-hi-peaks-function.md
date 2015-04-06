@@ -41,7 +41,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="GallaghersGaussian21hiPeaksFunction" %}
 - Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" , {% include reference prefix=include.anchor_prefix name="setLocalParameterConditionings" %}, {% include reference prefix=include.anchor_prefix name="setLocalParameterTranslations" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setLocalParameterConditionings" %}, {% include reference prefix=include.anchor_prefix name="setLocalParameterTranslations" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
