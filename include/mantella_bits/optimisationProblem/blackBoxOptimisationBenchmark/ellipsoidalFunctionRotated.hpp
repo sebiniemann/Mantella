@@ -8,7 +8,7 @@ namespace mant {
         inline std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditoning_;
+        const arma::Col<double> parameterConditioning_;
 
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
@@ -43,14 +43,14 @@ namespace mant {
     inline EllipsoidalFunctionRotated::EllipsoidalFunctionRotated(
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditoning_(getParameterConditioning(1000000.0)) {
+        parameterConditioning_(getParameterConditioning(1000000.0)) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
 
     inline double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      return arma::dot(parameterConditoning_, arma::square(getOscillatedParameter(parameter)));
+      return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
     }
 
     inline std::string EllipsoidalFunctionRotated::toString() const noexcept {
