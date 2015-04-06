@@ -5,9 +5,14 @@ namespace mant {
         inline explicit BentCigarFunction(
             const unsigned int numberOfDimensions) noexcept;
 
+        inline void setRotationQ(
+            const arma::Mat<double>& rotationQ);
+
         inline std::string toString() const noexcept override;
 
       protected:
+        arma::Mat<double> rotationQ_;
+        
         inline double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const noexcept override;
 
@@ -19,6 +24,7 @@ namespace mant {
             Archive& archive) noexcept {
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
           archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
+          archive(cereal::make_nvp("rotationQ", rotationQ_));
         }
 
         template <typename Archive>
@@ -30,6 +36,7 @@ namespace mant {
           construct(numberOfDimensions);
 
           archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
+          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
         }
 #endif
     };
@@ -42,12 +49,20 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    }
+
+    inline void BentCigarFunction::setRotationQ(
+        const arma::Mat<double>& rotationQ) {
+      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
+      isRotationMatrix("The matrix", rotationQ);
+
+      rotationQ_ = rotationQ;
     }
 
     inline double BentCigarFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::square(parameterRotation_ * getAsymmetricParameter(0.5, parameter));
+      const arma::Col<double>& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter));
       return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
     }
 
