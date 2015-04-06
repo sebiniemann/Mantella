@@ -55,7 +55,7 @@ namespace mant {
 
     inline arma::Col<double> BlackBoxOptimisationBenchmark::getRandomParameterTranslation() const noexcept {
       arma::Col<double> randomParameterTranslation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
-      randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0)).fill(-1.0e5);
+      randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0)).fill(-1.0e-5);
       return randomParameterTranslation;
     }
 
