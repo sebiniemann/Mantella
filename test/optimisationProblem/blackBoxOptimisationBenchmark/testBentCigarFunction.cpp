@@ -31,7 +31,7 @@ TEST_CASE("bbob::BentCigarFunction", "") {
 
     bentCigarFunction.setObjectiveValueTranslation(0);
     bentCigarFunction.setParameterTranslation(translation);
-    bentCigarFunction.setParameterRotation(rotationR);
+    bentCigarFunction.setRotationQ(rotationR);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(bentCigarFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
