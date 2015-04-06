@@ -1,5 +1,8 @@
-*Abstract base class for the black-box optimisation benchmark.*
-*Extends the optimisation problem base class*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Extends the optimisation problem base class and is itself an abstract base class for the black-box optimisation benchmark problems.
+</div>
 
 - Separable functions<br>
   {% include reference prefix=include.namespace name="Sphere function" %}, {% include reference prefix=include.namespace name="Ellipsoidal function" %}, {% include reference prefix=include.namespace name="Rastrigin function" %}, {% include reference prefix=include.namespace name="Büche-Rastrigin function" %}, {% include reference prefix=include.namespace name="Linear Slope" %}
