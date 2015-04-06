@@ -1,4 +1,8 @@
-*Extends the black-box optimisation benchmark base class*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Extends the black-box optimisation benchmark base class
+</div>
 
 **Objective function:**
 
@@ -16,6 +20,14 @@ N &:= \text{The number of dimensions.}
 
 $$C(X) := 100 \cdot F_\text{penality}(X)$$
 
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space translation \\(X_T\\) is randomly and uniformly chosen from \\([-4, 4]\\) for odd and from \\([0, 4]\\) for even dimensions, rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to -0.00001 for odd and to 0.00001 for even dimensions instead.
+</div>
+
 Example code, sampling and plotting of the Büche-Rastrigin function.
 Create a new source file called **bbob2015_bueche_rastrigin_function.cpp**:
 {% highlight cpp %}
@@ -27,6 +39,7 @@ Compile and build an executable from the source.
 c++ -std=c++11 bbob2015_bueche_rastrigin_function.cpp -larmadillo -o bbob2015_bueche_rastrigin_function
 ./bbob2015_bueche_rastrigin_function
 {% endhighlight %}
+
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
@@ -45,10 +58,10 @@ Visualisation of the sampled function using Matlab:
 **BuecheRastriginFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- **Requirement:** The dimension *N* must be greater than or equal to 1.
+- **Requirement:** The dimension *N* must be greater than or equal to 2.
 
 ---
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_bueche_rastrigin_function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_bueche_rastrigin_function*.

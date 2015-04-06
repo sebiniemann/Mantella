@@ -1,19 +1,32 @@
-*Extends the black-box optimisation benchmark base class*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Extends the black-box optimisation benchmark base class
+</div>
 
 **Objective function:**
 
 $$\begin{align}
 F(X) &:= \frac{10}{N^{2}} \left( \prod_{i=1}^{N}\left( 1 + i \sum_{j=1}^{32} \frac{\left| 2^{j}Z_i - \left[2^{j}Z_{i}\right]\right|}{2^j} \right)^{\frac{10}{N^{1.2}}} - 1 \right)\\
-Z &:= Q \cdot T_\text{scaled}^{10} \cdot R \cdot X\\
+Z &:= Q \cdot T_\text{scaled}^{10} \cdot X\\
 N &:= \text{The number of dimensions.}\\
-R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}\\
-[\cdot] &:= \text{nearest integer value}
+[\cdot] &:= \text{Rounding to the nearest integer value}
 \end{align}$$
 
 **Soft-constraints function:**
 
 $$C(X) := F_\text{penality}(X)$$
+
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space translation \\(X_T\\) is randomly and uniformly chosen from \\([-4, 4]^N\\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to -0.00001 instead.
+- The parameter space rotation \\(X_R\\) is set to a randomly and uniformly chosen rotation matrix.
+- \\(Q\\) is set to a randomly and uniformly chosen rotation matrix.
+</div>
 
 Example code, sampling and plotting of the Katsuura function.
 Create a new source file called **bbob2015_katsuura_function.cpp**:
@@ -38,7 +51,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="KatsuuraFunction" %}
 - Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
@@ -46,15 +59,7 @@ Visualisation of the sampled function using Matlab:
 **KatsuuraFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- **Requirement:** The dimension *N* must be greater than or equal to 1.
-
----
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;double&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
+- **Requirement:** The dimension *N* must be greater than or equal to 2.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}
@@ -68,4 +73,4 @@ Visualisation of the sampled function using Matlab:
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_katsuura_function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_katsuura_function*.

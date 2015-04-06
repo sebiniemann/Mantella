@@ -1,19 +1,30 @@
-*Extends the black-box optimisation benchmark base class*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Extends the black-box optimisation benchmark base class
+</div>
 
 **Objective function:**
 
 $$\begin{align}
-F(X) &:= \left\Vert \prod_{i = 1}^{N} \left| Z_i \right| S_i \right\Vert_{2}\\
-Z &:= R \cdot X \\
-S &:= T_\text{conditioned} \left( Z^{2} \right)\\
+F(X) &:= \left\Vert \prod_{i = 1}^{N} \left| X_i \right| Z_i \right\Vert_{2}\\
+Z &:= T_\text{conditioned} \left( X^{2} \right)\\
 N &:= \text{The number of dimensions.}\\
-R &:= \text{Some rotation matrix.}\\
 (\ldots)^p &:= \text{Element-wise power}
 \end{align}$$
 
 **Soft-constraints function:**
 
 $$C(X) := 0, \ \forall X$$
+
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space translation \\(X_T\\) is randomly and uniformly chosen from \\([-4, 4]^N\\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to -0.00001 instead.
+- The parameter space rotation \\(X_R\\) is set to a randomly and uniformly chosen rotation matrix.
+</div>
 
 Example code, sampling and plotting of the different powers function.
 Create a new source file called **bbob2015_different_powers_function.cpp**:
@@ -37,8 +48,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="DifferentPowersFunction" %}
-- Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
@@ -47,14 +56,6 @@ Visualisation of the sampled function using Matlab:
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
 - **Requirement:** The dimension *N* must be greater than or equal to 1.
-
----
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;T&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
 
 ---
 {% include label prefix=include.anchor_prefix name="toString" %}

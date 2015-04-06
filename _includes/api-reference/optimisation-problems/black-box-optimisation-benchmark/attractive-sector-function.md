@@ -1,22 +1,34 @@
-*Extends the black-box optimisation benchmark base class*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Extends the black-box optimisation benchmark base class
+</div>
 
 **Objective function:**
 
 $$\begin{align}
-F(X) &:= \left\Vert S \right\Vert_2^{1.8} \\
+F(X) &:= T_\text{oscillated}\left(\left\Vert S \right\Vert_2^2\right)^{0.9} \\
 Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot X\\
 S_i &:= \begin{cases}
   100 Z_{i} & \text{if } Z_{i} \cdot {X_T}_i > 0 \\
   Z_{i} & \text{otherwise}
 \end{cases}\\
-X_T &:= \text{The translation of the parameter space.}\\
-Q &:= \text{Some rotation matrix.}\\
-T_\text{conditioning}^\sqrt{10} &:= \text{The conditioning of the parameter space.}
+Q &:= \text{Some rotation matrix.}
 \end{align}$$
 
 **Soft-constraints function:**
 
 $$C(X) := 0, \ \forall X$$
+
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space translation \\(X_T\\) is randomly and uniformly chosen from \\([-4, 4]^N\\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to -0.00001 instead.
+- The parameter space rotation \\(X_R\\) is set to a randomly and uniformly chosen rotation matrix.
+- \\(Q\\) is set to a randomly and uniformly chosen rotation matrix.
+</div>
 
 Example code, sampling and plotting of the attractive sector function.
 Create a new source file called **bbob2015_attractive_sector_function.cpp**:
@@ -49,7 +61,7 @@ Visualisation of the sampled function using Matlab:
 **AttractiveSectorFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- **Requirement:** The dimension *N* must be greater than or equal to 1.
+- **Requirement:** The dimension *N* must be greater than or equal to 2.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}
@@ -63,4 +75,4 @@ Visualisation of the sampled function using Matlab:
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_attractive_sector_function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_attractive_sector_function*.

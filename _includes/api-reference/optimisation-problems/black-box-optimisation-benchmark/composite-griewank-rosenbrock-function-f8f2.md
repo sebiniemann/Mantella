@@ -1,19 +1,30 @@
-*Extends the black-box optimisation benchmark base class*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Extends the black-box optimisation benchmark base class
+</div>
 
 **Objective function:**
 
 $$\begin{align}
 F(X) &:= 10 \left( \frac{\sum_{i = 1}^{N} \frac{S_i}{4000} - \cos\left( S_i \right)}{N} + 1 \right)\\
 M &:= \max\left( 1, \frac{\sqrt{N}}{8} \right)\\
-Z &:= M \cdot R \cdot X + 0.5\\
+Z &:= M \cdot X + 0.5\\
 S &:= 100 \left( \sum_{i = 1}^{N - 1} \left( Z_{i}^{2} - Z_{i + 1} \right) \right)^{2} + \left( \sum_{i = 1}^{N-1} \left( 1 - Z_{i} \right) \right)^{2}\\
-N &:= \text{The number of dimensions.}\\
-R &:= \text{Some rotation matrix.}\\
+N &:= \text{The number of dimensions.}
 \end{align}$$
 
 **Soft-constraints function:**
 
 $$C(X) := 0, \ \forall X$$
+
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space rotation \\(X_R\\) is set to a randomly and uniformly chosen rotation matrix.
+</div>
 
 Example code, sampling and plotting of the composite Griewank-Rosenbrock function f8f2.
 Create a new source file called **bbob2015_composite_griewank_rosenbrock_function_f8f2.cpp**:
@@ -37,8 +48,6 @@ Visualisation of the sampled function using Matlab:
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="CompositeGriewankRosenbrockFunctionF8F2" %}
-- Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
@@ -49,15 +58,7 @@ Visualisation of the sampled function using Matlab:
 - **Requirement:** The dimension *N* must be greater than or equal to 2.
 
 ---
-{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
-**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;T&gt;</small> R )**
-
-- Parameterises the rotation by \\(R\\).
-- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
-- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
-
----
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_composite_griewank_rosenbrock_function_f8f2*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_composite_griewank_rosenbrock_function_f8f2*.
