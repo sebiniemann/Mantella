@@ -4,7 +4,7 @@
 Abstract base class for all optimisation problems.
 </div>
 
-All optimisation problems are defined as minimisation problems:
+All optimisation problems are defined as bounded minimisation problems with soft-constraints:
 
 $$\min_{X \in [C_L, C_U]} F(X) + C(X)$$
 
