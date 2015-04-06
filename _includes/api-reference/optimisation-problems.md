@@ -17,7 +17,8 @@ C_U &:= \text{The upper bounds of the search space.}
 
 <div class="custom-callout custom-callout-info">
 #### Default values
-Unless otherwise stated, the optimisation problem has no soft- or bound-constraints, i.e. \\(C(X) = 0, \ \forall X\\), \\(C_L = -\infty^N\\) and \\(C_U = \infty^N\\).
+
+Unless otherwise stated, the optimisation problem has neither soft- nor bound-constraints, i.e. \\(C(X) := 0, \ \forall X\\), \\(C_L := -\infty^N\\) and \\(C_U := \infty^N\\).
 </div>
 
 It is further possible to permutate, scale, translate and rotate the parameter space and objective value.
@@ -37,7 +38,8 @@ F_T &:= \text{The translation of the objective value.}\\
 
 <div class="custom-callout custom-callout-info">
 #### Default values
-The parameter space and value is initially unchanged, i.e. \\(X_P\\), \\(X_R\\), \\(X_S\\), \\(X_T\\), \\(F_S\\) and \\(F_T\\) are set to a neutral element/function.
+
+Unless otherwise stated, the parameter space and objective value is initially unchanged, i.e. \\(X_P\\), \\(X_R\\), \\(X_S\\), \\(X_T\\), \\(F_S\\) and \\(F_T\\) are set to a neutral element/function.
 </div>
 
 - Constraints handling<br>
