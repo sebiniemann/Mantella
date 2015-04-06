@@ -31,7 +31,7 @@ X_P &:= \text{The permuation of the dimensions of the parameter space.}\\
 X_S &:= \text{The scaling of the parameter space (continuous-only).}\\
 X_T &:= \text{The translation of the parameter space (continuous-only).}\\
 X_R &:= \text{The rotation of the parameter space (continuous-only).}\\
-F_S &:= \text{The scaling of the objective value.}\\
+F_S &:= \text{The scaling of the objective and soft-constraints value.}\\
 F_T &:= \text{The translation of the objective value.}\\
 \circ &:= \text{Element-wise multiplication.}
 \end{align}$$
