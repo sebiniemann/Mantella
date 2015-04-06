@@ -43,7 +43,7 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
         parameterConditioning_(getParameterConditioning(1000000.0)) {
-
+      setParameterTranslation(getRandomParameterTranslation());
     }
 
     inline double EllipsoidalFunction::getObjectiveValueImplementation(
