@@ -1,4 +1,8 @@
-*Abstract base class for all optimisation problems.*
+<div class="custom-callout custom-callout-info">
+#### Inheritance
+
+Abstract base class for all optimisation problems.
+</div>
 
 All optimisation problems are defined as minimisation problems:
 
