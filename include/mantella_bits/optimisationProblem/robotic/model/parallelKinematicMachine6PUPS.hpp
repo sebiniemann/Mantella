@@ -3,6 +3,13 @@ namespace mant {
     class ParallelKinematicMachine6PUPS {
       public:
         inline explicit ParallelKinematicMachine6PUPS() noexcept;
+        
+        inline explicit ParallelKinematicMachine6PUPS(
+            const arma::Mat<double>::fixed<3, 6> redundantJointStartPositions,
+            const arma::Mat<double>::fixed<3, 6> redundantJointEndPositions,
+            const arma::Mat<double>::fixed<3, 6> endEffectorJointPositions,
+            const arma::Row<double>::fixed<6> minimalActiveJointActuations,
+            const arma::Row<double>::fixed<6> maximalActiveJointActuations);
 
         inline arma::Row<double>::fixed<6> getMinimalActiveJointActuations() const noexcept;
 
@@ -65,34 +72,49 @@ namespace mant {
     // Implementation
     //
 
-    inline ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS() noexcept {
-      setMinimalActiveJointActuations({0.39, 0.39, 0.39, 0.39, 0.39, 0.39});
-      setMaximalActiveJointActuations({0.95, 0.95, 0.95, 0.95, 0.95, 0.95});
-
-      setEndEffectorJointPositions({
-        -0.025561381023353, 0.086293776138137, 0.12,
-        0.025561381023353, 0.086293776138137, 0.12,
-        0.087513292835791, -0.021010082747031, 0.12,
-        0.061951911812438, -0.065283693391106, 0.12,
-        -0.061951911812438, -0.065283693391106, 0.12,
-        -0.087513292835791, -0.021010082747032, 0.12});
-
-      setRedundantJointStartPositions({
-        -0.463708870031622, 0.417029254828353, -0.346410161513775,
-        0.463708870031622, 0.417029254828353, -0.346410161513775,
-        0.593012363818459, 0.193069033993384, -0.346410161513775,
-        0.129303493786838, -0.610098288821738, -0.346410161513775,
-        -0.129303493786837, -0.610098288821738, -0.346410161513775,
-        -0.593012363818459, 0.193069033993384, -0.346410161513775});
-
-      setRedundantJointEndPositions({
-        -0.247202519085512, 0.292029254828353, 0.086602540378444,
-        0.247202519085512, 0.292029254828353, 0.086602540378444,
-        0.376506012872349, 0.068069033993384, 0.086602540378444,
-        0.129303493786838, -0.360098288821738, 0.086602540378444,
-        -0.129303493786837, -0.360098288821738, 0.086602540378444,
-        -0.376506012872349, 0.068069033993384, 0.086602540378444});
-
+    inline ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS() noexcept 
+      : ParallelKinematicMachine6PUPS({
+          -0.463708870031622, 0.417029254828353, -0.346410161513775,
+          0.463708870031622, 0.417029254828353, -0.346410161513775,
+          0.593012363818459, 0.193069033993384, -0.346410161513775,
+          0.129303493786838, -0.610098288821738, -0.346410161513775,
+          -0.129303493786837, -0.610098288821738, -0.346410161513775,
+          -0.593012363818459, 0.193069033993384, -0.346410161513775
+        }, {
+          -0.247202519085512, 0.292029254828353, 0.086602540378444,
+          0.247202519085512, 0.292029254828353, 0.086602540378444,
+          0.376506012872349, 0.068069033993384, 0.086602540378444,
+          0.129303493786838, -0.360098288821738, 0.086602540378444,
+          -0.129303493786837, -0.360098288821738, 0.086602540378444,
+          -0.376506012872349, 0.068069033993384, 0.086602540378444
+        }, {
+          -0.025561381023353, 0.086293776138137, 0.12,
+          0.025561381023353, 0.086293776138137, 0.12,
+          0.087513292835791, -0.021010082747031, 0.12,
+          0.061951911812438, -0.065283693391106, 0.12,
+          -0.061951911812438, -0.065283693391106, 0.12,
+          -0.087513292835791, -0.021010082747032, 0.12
+        }, {
+          0.39, 0.39, 0.39, 0.39, 0.39, 0.39
+        }, {
+          0.95, 0.95, 0.95, 0.95, 0.95, 0.95
+        }) {
+          
+    }
+    
+    // TODO Add checks
+    inline explicit ParallelKinematicMachine6PUPS(
+        const arma::Mat<double>::fixed<3, 6> redundantJointStartPositions,
+        const arma::Mat<double>::fixed<3, 6> redundantJointEndPositions,
+        const arma::Mat<double>::fixed<3, 6> endEffectorJointPositions,
+        const arma::Row<double>::fixed<6> minimalActiveJointActuations,
+        const arma::Row<double>::fixed<6> maximalActiveJointActuations) {
+      setRedundantJointStartPositions(redundantJointStartPositions);
+      setRedundantJointEndPositions(redundantJointEndPositions);
+      setEndEffectorJointPositions(endEffectorJointPositions);
+      setMinimalActiveJointActuations(minimalActiveJointActuations);
+      setMaximalActiveJointActuations(maximalActiveJointActuations);
+      
       redundantJointStartToEndPositions_ = redundantJointEndPositions_ - redundantJointStartPositions_;
       redundantJointIndicies_ = arma::find(arma::any(redundantJointStartToEndPositions_));
 
