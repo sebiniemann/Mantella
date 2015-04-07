@@ -103,7 +103,7 @@ namespace mant {
     }
     
     // TODO Add checks
-    inline explicit ParallelKinematicMachine6PUPS(
+    inline ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS(
         const arma::Mat<double>::fixed<3, 6> redundantJointStartPositions,
         const arma::Mat<double>::fixed<3, 6> redundantJointEndPositions,
         const arma::Mat<double>::fixed<3, 6> endEffectorJointPositions,
