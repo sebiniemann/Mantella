@@ -20,7 +20,7 @@ namespace mant {
       const arma::Col<ParameterType>& parameter = n->first;
       const double& objectiveValue = n->second;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
-        this->lipschitzConstant_ = std::max(this->lipschitzConstant_, std::abs(k->second - objectiveValue) / this->distanceFunction_.getDistance(parameter, k->first));
+        this->lipschitzConstant_ = std::max(this->lipschitzConstant_, std::abs(k->second - objectiveValue) / this->distanceFunction_->getDistance(parameter, k->first));
       }
     }
   }
