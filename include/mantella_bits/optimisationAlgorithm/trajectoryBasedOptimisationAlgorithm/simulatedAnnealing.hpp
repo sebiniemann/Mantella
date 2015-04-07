@@ -46,7 +46,7 @@ namespace mant {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      arma::Col<ParameterType> candidateParameter = this->distanceFunction_.getRandomNeighbour(state, 0, maximalStepSize_);
+      arma::Col<ParameterType> candidateParameter = this->distanceFunction_->getRandomNeighbour(state, 0, maximalStepSize_);
 
       const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < this->getLowerBounds());
       const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > this->getUpperBounds());
@@ -93,12 +93,12 @@ namespace mant {
   template <typename ParameterType>
   void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
       std::true_type) noexcept {
-    setMaximalStepSize(this->distanceFunction_.getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10.0);
+    setMaximalStepSize(this->distanceFunction_->getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10.0);
   }
 
   template <typename ParameterType>
   void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
       std::false_type) noexcept {
-    setMaximalStepSize(arma::max(1, this->distanceFunction_.getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10));
+    setMaximalStepSize(arma::max(1, this->distanceFunction_->getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10));
   }
 }
