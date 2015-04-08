@@ -51,10 +51,10 @@ Visualisation of the sampled function using Matlab:
 **SphereFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- **Requirement:** The dimension *N* must be greater than or equal to 1.
+- **Requirement:** The dimension *N* must be greater than or equal to 2.
 
 ---
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_sphere_function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_sphere_function*.

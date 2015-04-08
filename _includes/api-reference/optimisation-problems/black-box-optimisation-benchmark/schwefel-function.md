@@ -5,9 +5,9 @@ Extends the black-box optimisation benchmark base class
 </div>
 
 **Objective function:**
-      
+
 $$\begin{align}
-F(X) &:= 0.01 (418.9828872724339 - \frac{\sum_{i=1}^{N} \tilde{S}_i \cdot \sin\left( \sqrt{\left| \tilde{S}_i \right|} \right)}{N})+ 100 F_\text{penality}\left( \frac{\tilde{Z}}{100} \right)\\
+F(X) &:= 0.01 (418.9828872724339 - \frac{\sum_{i=1}^{N} S_i \cdot \sin\left( \sqrt{\left| S_i \right|} \right)}{N})+ 100 F_\text{penality}\left( \frac{Z}{100} \right)\\
 Z_i &:= \begin{cases}
 X_i + 0.25 \left( X_{i-1} - 4.2096874633 \right) & \text{for } i = 2, \ldots, N \\
 X_i & \text{for } i = 1
@@ -64,4 +64,4 @@ Visualisation of the sampled function using Matlab:
 **<small>std::string</small> .toString()** {% include noexcept %}
 
 
-- Returns a filesystem friendly name of the problem, e.g. *schwefel-function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_schwefel_function*.

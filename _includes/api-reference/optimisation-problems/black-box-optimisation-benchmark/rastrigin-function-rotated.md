@@ -8,9 +8,9 @@ Extends the black-box optimisation benchmark base class
 
 $$\begin{align}
 F(X) &:= 10 \left( N - \sum_{i=1}^N \cos\left( 2\pi Z_i \right) \right) + \left\Vert Z \right\Vert_2^2\\
-Z &:= X_R \cdot T_\text{conditioning}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( X \right) \right)\\
+Z &:= R \cdot T_\text{conditioning}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( R \cdot X \right) \right)\\
 N &:= \text{The number of dimensions.}\\
-X_R &:= \text{The rotation of the parameter space.}\\
+R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
 \end{align}$$
 
@@ -51,7 +51,7 @@ Visualisation of the sampled function using Matlab:
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="RastriginFunctionRotated" %}
 - Parameterisation<br>
-  {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
+  {% include reference prefix=include.anchor_prefix name="setParameterRotationR" %}, {% include reference prefix=include.anchor_prefix name="setParameterRotationQ" %}
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
@@ -59,7 +59,15 @@ Visualisation of the sampled function using Matlab:
 **RastriginFunctionRotated( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- **Requirement:** The dimension *N* must be greater than or equal to 1.
+- **Requirement:** The dimension *N* must be greater than or equal to 2.
+
+---
+{% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
+**<small>void</small> .setParameterRotationR( <small>arma::Mat&lt;double&gt;</small> R )**
+
+- Parameterises the rotation by \\(R\\).
+- **Requirement:** The number of rows and columns in *R* must each match the problem dimension.
+- **Requirement:** *R* must be square, orthonormal (\\(R^{t} = R^{-1}\\)) and its determinant equal be to 1 or -1.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationQ" %}
@@ -73,4 +81,4 @@ Visualisation of the sampled function using Matlab:
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_rastrigin_function_rotated*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_rastrigin_function_rotated*.

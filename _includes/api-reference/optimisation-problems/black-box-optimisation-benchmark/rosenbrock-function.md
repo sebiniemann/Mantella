@@ -7,7 +7,9 @@ Extends the black-box optimisation benchmark base class
 **Objective function:**
 
 $$\begin{align}
-F(X) &:= 100 \sum_{i=1}^{N-1} \left( X_i^2 - X_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( X_i + 1 \right)^2
+F(X) &:= 100 \sum_{i=1}^{N-1} \left( X_i^2 - X_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( X_i + 1 \right)^2\\
+Z & := \max\left(1, \sqrt{\frac{N}{2}} \right) \cdot X + 1 \\
+N &:= \text{The number of dimensions.}
 \end{align}$$
 
 **Soft-constraints function:**
@@ -56,4 +58,4 @@ Visualisation of the sampled function using Matlab:
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_rosenbrock_function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_rosenbrock_function*.

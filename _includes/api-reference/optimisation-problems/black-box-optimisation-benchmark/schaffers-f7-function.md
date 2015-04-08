@@ -74,4 +74,4 @@ Visualisation of the sampled function using Matlab:
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *bbob2015_schaffers_f7_function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_schaffers_f7_function*.

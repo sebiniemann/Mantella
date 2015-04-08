@@ -7,10 +7,10 @@ Extends the black-box optimisation benchmark base class
 **Objective function:**
 
 $$\begin{align}
-F(X) &:= \min\left( \sum_{i=1}^{N} \left( X_i - 2.5 \right)^2, N + S \sum_{i=1}^{N} \left( X_i - \mu \right)^2 \right) + 10 \left( N - \sum_{i=1}^N \cos\left( 2 \pi Z_i \right)\right)\\
+F(X) &:= \min\left( \sum_{i=1}^{N} \left( X_i - 2.5 \right)^2, N + S \sum_{i=1}^{N} \left( X_i + \mu \right)^2 \right) + 10 \left( N - \sum_{i=1}^N \cos\left( 2 \pi Z_i \right)\right)\\
 Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot R \cdot \left( X - 2.5 \right)\\
 S &:= 1 - \frac{0.5}{\sqrt{N + 20} - 4.1}\\
-\mu &:= -\sqrt{5.25 / S}\\
+\mu &:= \sqrt{5.25 / S}\\
 N &:= \text{The number of dimensions.}\\
 R &:= \text{Some rotation matrix.}\\
 Q &:= \text{Some rotation matrix.}
@@ -61,7 +61,7 @@ Visualisation of the sampled function using Matlab:
 **LunacekBiRastriginFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
 - Creates an *N*-dimensional optimisation problem instance of this class.
-- **Requirement:** The dimension *N* must be greater than or equal to 1.
+- **Requirement:** The dimension *N* must be greater than or equal to 2.
 
 ---
 {% include label prefix=include.anchor_prefix name="setParameterRotationR" %}
@@ -83,4 +83,4 @@ Visualisation of the sampled function using Matlab:
 {% include label prefix=include.anchor_prefix name="toString" %}
 **<small>std::string</small> .toString()** {% include noexcept %}
 
-- Returns a filesystem friendly name of the problem, e.g. *lunacek-bi-rastrigin-function*.
+- Returns a filesystem friendly name of the problem, e.g. *bbob_lunacek_bi_rastrigin_function*.
