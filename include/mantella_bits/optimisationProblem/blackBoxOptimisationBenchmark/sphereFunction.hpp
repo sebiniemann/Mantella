@@ -41,7 +41,7 @@ namespace mant {
     inline SphereFunction::SphereFunction(
         const unsigned int numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-
+      setParameterTranslation(getRandomParameterTranslation());
     }
 
     inline double SphereFunction::getObjectiveValueImplementation(
