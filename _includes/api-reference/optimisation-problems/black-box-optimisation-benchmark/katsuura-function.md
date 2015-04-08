@@ -29,24 +29,24 @@ The default values are set as specified by the black box optimisation benchmark.
 </div>
 
 Example code, sampling and plotting of the Katsuura function.
-Create a new source file called **bbob2015_katsuura_function.cpp**:
+Create a new source file called **bbob_katsuura_function.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_katsuura_function.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_katsuura_function.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_katsuura_function.cpp -larmadillo -o bbob2015_katsuura_function
-./bbob2015_katsuura_function
+c++ -std=c++11 bbob_katsuura_function.cpp -larmadillo -o bbob_katsuura_function
+./bbob_katsuura_function
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_katsuura_function.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_katsuura_function.m %}
 {% endhighlight %}
 
-![Sampling of the Katsuura function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_katsuura_function_surface.png)
-![Sampling of the Katsuura function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_katsuura_function_contour.png)
+![Sampling of the Katsuura function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_katsuura_function_surface.png)
+![Sampling of the Katsuura function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_katsuura_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="KatsuuraFunction" %}

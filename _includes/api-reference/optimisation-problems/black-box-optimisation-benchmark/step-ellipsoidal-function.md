@@ -17,24 +17,24 @@ Q &:= \text{Some rotation matrix.}
 $$C(X) := F_\text{penality}(X)$$
 
 Example code, sampling and plotting of the step ellipsoidal function.
-Create a new source file called **bbob2015_step_ellipsoidal_function.cpp**:
+Create a new source file called **bbob_step_ellipsoidal_function.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_step_ellipsoidal_function.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_step_ellipsoidal_function.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_step_ellipsoidal_function.cpp -larmadillo -o bbob2015_step_ellipsoidal_function
-./bbob2015_step_ellipsoidal_function
+c++ -std=c++11 bbob_step_ellipsoidal_function.cpp -larmadillo -o bbob_step_ellipsoidal_function
+./bbob_step_ellipsoidal_function
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_step_ellipsoidal_function.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_step_ellipsoidal_function.m %}
 {% endhighlight %}
 
-![Sampling of the step ellipsoidal function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_step_ellipsoidal_function_surface.png)
-![Sampling of the step ellipsoidal function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_step_ellipsoidal_function_contour.png)
+![Sampling of the step ellipsoidal function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_step_ellipsoidal_function_surface.png)
+![Sampling of the step ellipsoidal function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_step_ellipsoidal_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="StepEllipsoidalFunction" %}

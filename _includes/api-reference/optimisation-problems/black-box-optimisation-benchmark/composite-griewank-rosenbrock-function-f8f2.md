@@ -27,24 +27,24 @@ The default values are set as specified by the black box optimisation benchmark.
 </div>
 
 Example code, sampling and plotting of the composite Griewank-Rosenbrock function f8f2.
-Create a new source file called **bbob2015_composite_griewank_rosenbrock_function_f8f2.cpp**:
+Create a new source file called **bbob_composite_griewank_rosenbrock_function_f8f2.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_composite_griewank_rosenbrock_function_f8f2.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_composite_griewank_rosenbrock_function_f8f2.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_composite_griewank_rosenbrock_function_f8f2.cpp -larmadillo -o bbob2015_composite_griewank_rosenbrock_function_f8f2
-./bbob2015_composite_griewank_rosenbrock_function_f8f2
+c++ -std=c++11 bbob_composite_griewank_rosenbrock_function_f8f2.cpp -larmadillo -o bbob_composite_griewank_rosenbrock_function_f8f2
+./bbob_composite_griewank_rosenbrock_function_f8f2
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_composite_griewank_rosenbrock_function_f8f2.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_composite_griewank_rosenbrock_function_f8f2.m %}
 {% endhighlight %}
 
-![Sampling of the composite Griewank-Rosenbrock function f8f2 - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_composite_griewank_rosenbrock_function_f8f2_surface.png)
-![Sampling of the composite Griewank-Rosenbrock function f8f2 - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_composite_griewank_rosenbrock_function_f8f2_contour.png)
+![Sampling of the composite Griewank-Rosenbrock function f8f2 - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_composite_griewank_rosenbrock_function_f8f2_surface.png)
+![Sampling of the composite Griewank-Rosenbrock function f8f2 - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_composite_griewank_rosenbrock_function_f8f2_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="CompositeGriewankRosenbrockFunctionF8F2" %}

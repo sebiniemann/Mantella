@@ -17,24 +17,24 @@ N &:= \text{The number of dimensions.}
 $$C(X) := 0, \ \forall X$$
 
 Example code, sampling and plotting of the Schwefel function.
-Create a new source file called **bbob2015_schwefel_function.cpp**:
+Create a new source file called **bbob_schwefel_function.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_schwefel_function.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_schwefel_function.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_schwefel_function.cpp -larmadillo -o bbob2015_schwefel_function
-./bbob2015_schwefel_function
+c++ -std=c++11 bbob_schwefel_function.cpp -larmadillo -o bbob_schwefel_function
+./bbob_schwefel_function
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_schwefel_function.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_schwefel_function.m %}
 {% endhighlight %}
 
-![Sampling of the schwefel function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_schwefel_function_surface.png)
-![Sampling of the schwefel function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_schwefel_function_contour.png)
+![Sampling of the schwefel function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_schwefel_function_surface.png)
+![Sampling of the schwefel function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_schwefel_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="SchwefelFunction" %}

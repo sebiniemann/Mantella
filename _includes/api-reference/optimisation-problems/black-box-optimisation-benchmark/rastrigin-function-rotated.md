@@ -15,24 +15,24 @@ Q &:= \text{Some rotation matrix.}
 $$C(X) := 0, \ \forall X$$
 
 Example code, sampling and plotting of the Rastrigin function (rotated).
-Create a new source file called **bbob2015_rastrigin_function_rotated.cpp**:
+Create a new source file called **bbob_rastrigin_function_rotated.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_rastrigin_function_rotated.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_rastrigin_function_rotated.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_rastrigin_function_rotated.cpp -larmadillo -o bbob2015_rastrigin_function_rotated
-./bbob2015_rastrigin_function_rotated
+c++ -std=c++11 bbob_rastrigin_function_rotated.cpp -larmadillo -o bbob_rastrigin_function_rotated
+./bbob_rastrigin_function_rotated
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_rastrigin_function_rotated.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_rastrigin_function_rotated.m %}
 {% endhighlight %}
 
-![Sampling of the Rastrigin function (rotated) - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_rastrigin_function_rotated_surface.png)
-![Sampling of the Rastrigin function (rotated) - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_rastrigin_function_rotated_contour.png)
+![Sampling of the Rastrigin function (rotated) - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_rastrigin_function_rotated_surface.png)
+![Sampling of the Rastrigin function (rotated) - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_rastrigin_function_rotated_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="RastriginFunctionRotated" %}

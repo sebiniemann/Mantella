@@ -15,24 +15,24 @@ Q &:= \text{Some rotation matrix.}
 $$C(X) := 10 F_\text{penality}(X)$$
 
 Example code, sampling and plotting of the Schaffers f7 function (ill-conditioned).
-Create a new source file called **bbob2015_schaffers_f7_function_ill_conditioned.cpp**:
+Create a new source file called **bbob_schaffers_f7_function_ill_conditioned.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_schaffers_f7_function_ill_conditioned.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_schaffers_f7_function_ill_conditioned.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_schaffers_f7_function_ill_conditioned.cpp -larmadillo -o bbob2015_schaffers_f7_function_ill_conditioned
-./bbob2015_schaffers_f7_function_ill_conditioned
+c++ -std=c++11 bbob_schaffers_f7_function_ill_conditioned.cpp -larmadillo -o bbob_schaffers_f7_function_ill_conditioned
+./bbob_schaffers_f7_function_ill_conditioned
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_schaffers_f7_function_ill_conditioned.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_schaffers_f7_function_ill_conditioned.m %}
 {% endhighlight %}
 
-![Sampling of the Schaffers f7 function (ill-conditioned) - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_schaffers_f7_function_ill_conditioned_surface.png)
-![Sampling of the Schaffers f7 function (ill-conditioned) - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_schaffers_f7_function_ill_conditioned_contour.png)
+![Sampling of the Schaffers f7 function (ill-conditioned) - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_schaffers_f7_function_ill_conditioned_surface.png)
+![Sampling of the Schaffers f7 function (ill-conditioned) - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_schaffers_f7_function_ill_conditioned_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="SchaffersF7FunctionIllConditioned" %}

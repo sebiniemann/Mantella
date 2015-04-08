@@ -18,24 +18,24 @@ C_L &:= \text{The lower bounds of the search space.}
 $$C(X) := 0, \ \forall X$$
 
 Example code, sampling and plotting of the linear slope function.
-Create a new source file called **bbob2015_linear_slope.cpp**:
+Create a new source file called **bbob_linear_slope.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_linear_slope.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_linear_slope.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_linear_slope.cpp -larmadillo -o bbob2015_linear_slope
-./bbob2015_linear_slope
+c++ -std=c++11 bbob_linear_slope.cpp -larmadillo -o bbob_linear_slope
+./bbob_linear_slope
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_linear_slope.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_linear_slope.m %}
 {% endhighlight %}
 
-![Sampling of the linear slope - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_linear_slope_surface.png)
-![Sampling of the linear slope - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_linear_slope_contour.png)
+![Sampling of the linear slope - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_linear_slope_surface.png)
+![Sampling of the linear slope - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_linear_slope_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="LinearSlope" %}

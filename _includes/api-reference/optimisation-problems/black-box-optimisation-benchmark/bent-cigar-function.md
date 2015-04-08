@@ -29,24 +29,24 @@ The default values are set as specified by the black box optimisation benchmark.
 </div>
 
 Example code, sampling and plotting of the bent cigar function.
-Create a new source file called **bbob2015_bent_cigar_function.cpp**:
+Create a new source file called **bbob_bent_cigar_function.cpp**:
 {% highlight cpp %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_bent_cigar_function.cpp %}
+{% include {{ api_reference_folder }}/_examples/bbob_bent_cigar_function.cpp %}
 {% endhighlight %}
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob2015_bent_cigar_function.cpp -larmadillo -o bbob2015_bent_cigar_function
-./bbob2015_bent_cigar_function
+c++ -std=c++11 bbob_bent_cigar_function.cpp -larmadillo -o bbob_bent_cigar_function
+./bbob_bent_cigar_function
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}
-{% include {{ api_reference_folder }}/_examples/bbob2015_bent_cigar_function.m %}
+{% include {{ api_reference_folder }}/_examples/bbob_bent_cigar_function.m %}
 {% endhighlight %}
 
-![Sampling of the bent cigar function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_bent_cigar_function_surface.png)
-![Sampling of the bent cigar function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob2015_bent_cigar_function_contour.png)
+![Sampling of the bent cigar function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_bent_cigar_function_surface.png)
+![Sampling of the bent cigar function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_bent_cigar_function_contour.png)
 
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="BentCigarFunction" %}
