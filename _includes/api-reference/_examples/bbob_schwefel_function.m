@@ -6,18 +6,18 @@ Z = dlmread('Z.mat');
 % Generate surface plot
 surf(X, Y, Z);
 shading interp;
-title('BBOB2015 schwefel function - surface plot');
+title('BBOB schwefel function - surface plot');
 xlabel('x_1');
 ylabel('x_2');
 zlabel('f(x_1, x_2)');
 view(-35, 35);
 colorbar;
-print('bbob2015_schwefel_function_surface','-dpng');
+print('bbob_schwefel_function_surface','-dpng');
 
 % Generate contour plot
 contour(X, Y, Z);
-title('BBOB2015 schwefel function - contour plot');
+title('BBOB schwefel function - contour plot');
 xlabel('x_1');
 ylabel('x_2');
 colorbar;
-print('bbob2015_schwefel_function_contour','-dpng');
+print('bbob_schwefel_function_contour','-dpng');

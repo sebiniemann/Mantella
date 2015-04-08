@@ -2,7 +2,7 @@
 
 int main() {
   unsigned int numberOfDimensions = 2;
-  mant::bbob2015::RastriginFunctionRotated optimisationProblem(numberOfDimensions);
+  mant::bbob::RastriginFunctionRotated optimisationProblem(numberOfDimensions);
 
   unsigned int samplesPerDimension = 1001;
   arma::Mat<double> X = arma::repmat(arma::linspace<arma::Row<double>>(-5, 5, samplesPerDimension), samplesPerDimension, 1);
