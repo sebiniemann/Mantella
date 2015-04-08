@@ -21,6 +21,14 @@ C_L &:= \text{The lower bounds of the search space.}
 
 $$C(X) := 0, \ \forall X$$
 
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space rotation \\(X_R\\) is randomly and uniformly chosen to be either set to a 180° rotation for each dimension, or no rotation at all.
+</div>
+
 Example code, sampling and plotting of the linear slope function.
 Create a new source file called **bbob_linear_slope.cpp**:
 {% highlight cpp %}

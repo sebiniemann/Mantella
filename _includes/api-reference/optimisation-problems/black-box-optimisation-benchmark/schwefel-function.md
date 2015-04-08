@@ -20,6 +20,14 @@ N &:= \text{The number of dimensions.}
 
 $$C(X) := 0, \ \forall X$$
 
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space scaling \\(X_S\\) is randomly and uniformly chosen to be either set to a posivie or negative vector of twos.
+</div>
+
 Example code, sampling and plotting of the Schwefel function.
 Create a new source file called **bbob_schwefel_function.cpp**:
 {% highlight cpp %}

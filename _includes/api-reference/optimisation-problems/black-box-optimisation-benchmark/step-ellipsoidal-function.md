@@ -20,6 +20,16 @@ Q &:= \text{Some rotation matrix.}
 
 $$C(X) := F_\text{penality}(X)$$
 
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space translation \\(X_T\\) is randomly and uniformly chosen from \\([-4, 4]^N\\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to -0.00001 instead.
+- The parameter space rotation \\(X_R\\) is set to a randomly and uniformly chosen rotation matrix.
+- \\(Q\\) is set to a randomly and uniformly chosen rotation matrix.
+</div>
+
 Example code, sampling and plotting of the step ellipsoidal function.
 Create a new source file called **bbob_step_ellipsoidal_function.cpp**:
 {% highlight cpp %}

@@ -14,6 +14,14 @@ F(X) &:= \left\Vert X \right\Vert_2
 
 $$C(X) := 0, \ \forall X$$
 
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space translation \\(X_T\\) is randomly and uniformly chosen from \\([-4, 4]^N\\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to -0.00001 instead.
+</div>
+
 Example code, sampling and plotting of the sphere function.
 Create a new source file called **bbob_sphere_function.cpp**:
 {% highlight cpp %}

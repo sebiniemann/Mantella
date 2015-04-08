@@ -19,6 +19,16 @@ Q &:= \text{Some rotation matrix.}
 
 $$C(X) := \frac{10 F_\text{penality}(X)}{N}$$
 
+<div class="custom-callout custom-callout-info">
+#### Default values
+
+The default values are set as specified by the black box optimisation benchmark.
+
+- The parameter space scaling \\(X_S\\) is randomly and uniformly chosen to be either set to a posivie or negative vector of twos.
+- \\(R\\) is set to a randomly and uniformly chosen rotation matrix.
+- \\(Q\\) is set to a randomly and uniformly chosen rotation matrix.
+</div>
+
 Example code, sampling and plotting of the Weierstrass function.
 Create a new source file called **bbob_weierstrass_function.cpp**:
 {% highlight cpp %}
