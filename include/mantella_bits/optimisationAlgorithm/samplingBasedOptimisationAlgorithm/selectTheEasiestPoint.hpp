@@ -9,10 +9,12 @@ namespace mant {
     std::string toString() const noexcept override;
 
     void setSolvingDimension(const unsigned int solvingDimension);
+    
+    void setEpsilon(const double epsilon);
 
   protected:
     void optimiseImplementation() noexcept override;
-
+    
     double lowerBound; //TODO: HCMA sets this to -5 in all cases... (xacmes.m 90)
     double upperBound; //TODO: HCMA sets this to 5 in all cases... (xacmes.m 90)
     unsigned int solvingDimension; //ix in HCMA. gets set to i-1 in mystepinit, than incremented by 1 in mystep initialization...
@@ -20,6 +22,8 @@ namespace mant {
     unsigned int parameterCount = 1;
     arma::Col<double> parameterHistory;
     arma::Col<double> functionValueHistory;
+    
+    double epsilon = 1e-10;
   };
 
   //
@@ -78,7 +82,7 @@ namespace mant {
       } else {
         //arma::Col<double> dx = t.rows(1, nt) - t.rows(0, nt - 1);
         arma::Col<double> dy = functionValueHistory.rows(1, parameterCount) - functionValueHistory.rows(0, parameterCount - 1);
-        arma::Col<double> yhat = ftarget - functionValueHistory.rows(0, parameterCount - 1); //TODO: t/feps handling!!
+        arma::Col<double> yhat = ftarget - functionValueHistory.rows(0, parameterCount - 1) + epsilon;
         arma::Col<double> D = 4 * yhat - 2 * dy + 4 * arma::sqrt(yhat % yhat - yhat % dy); //dividing everything by dx² omitted since pointless.
         i1 = arma::sort_index(D)(0);
         i2 = i1 + 1;
@@ -114,6 +118,11 @@ namespace mant {
   template <typename ParameterType>
   void SelectTheEasiestPoint<ParameterType>::setSolvingDimension(const unsigned int solvingDimension) {
     this->solvingDimension = solvingDimension;
+  }
+  
+  template <typename ParameterType>
+  void SelectTheEasiestPoint<ParameterType>::setEpsilon(const double epsilon) {
+    this->epsilon = epsilon;
   }
 
   template <typename ParameterType>
