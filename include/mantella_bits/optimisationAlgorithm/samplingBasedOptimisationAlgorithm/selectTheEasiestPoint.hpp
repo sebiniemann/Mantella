@@ -8,8 +8,11 @@ namespace mant {
 
     std::string toString() const noexcept override;
 
+    //Sets the dimension in which to do stepping. Changing between iterations will cause 
+    //unwanted and wrong behaviour.
     void setSolvingDimension(const unsigned int solvingDimension);
     
+    //Sets the minimal distance between two parameter-values.
     void setEpsilon(const double epsilon);
 
   protected:
