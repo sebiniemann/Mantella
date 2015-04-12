@@ -120,11 +120,17 @@ namespace mant {
 
   template <typename ParameterType>
   void SelectTheEasiestPoint<ParameterType>::setSolvingDimension(const unsigned int solvingDimension) {
+    if(solvingDimension >= this->numberOfDimensions_) {
+      throw std::logic_error("The solving dimension cannot be larger than the number of dimension of the optimisation problem.");
+    }
     this->solvingDimension = solvingDimension;
   }
   
   template <typename ParameterType>
   void SelectTheEasiestPoint<ParameterType>::setEpsilon(const double epsilon) {
+    if(epsilon < 0 ) {
+      throw std::logic_error("The distance between two parameters cannot be negative.");
+    }
     this->epsilon = epsilon;
   }
 
