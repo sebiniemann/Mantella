@@ -33,12 +33,11 @@ namespace mant {
   SelectTheEasiestPoint<ParameterType>::SelectTheEasiestPoint(
       const std::shared_ptr<OptimisationProblem<double>> optimisationProblem, const unsigned int solvingDimension) noexcept
   : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
-    std::cout << "we have lift off!" << std::endl;
     setSolvingDimension(solvingDimension);
 
     sol = arma::Col<double>(this->numberOfDimensions_);
-    parameterHistory = arma::Col<double>(this->numberOfIterations_); //NOI should suffice as size, 
-    functionValueHistory = arma::Col<double>(this->numberOfIterations_);
+    parameterHistory = arma::Col<double>(this->maximalNumberOfIterations_); //NOI should suffice as size, 
+    functionValueHistory = arma::Col<double>(this->maximalNumberOfIterations_);
 
     lowerBound = optimisationProblem->getLowerBounds()(solvingDimension);
     upperBound = optimisationProblem->getUpperBounds()(solvingDimension);
