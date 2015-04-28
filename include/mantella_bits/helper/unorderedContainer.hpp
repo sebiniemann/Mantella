@@ -19,7 +19,7 @@ namespace mant {
   //
 
   template <typename ParameterType>
-  inline std::size_t Hash::operator() (
+  inline std::size_t Hash<ParameterType>::operator() (
     const arma::Col<ParameterType>& key) const noexcept {
     // Start with the hash of the first value ...
     std::size_t hashedKey = std::hash<ParameterType>()(key(0));
@@ -34,7 +34,7 @@ namespace mant {
   }
   
   template <typename ParameterType>
-  inline bool IsEqual::operator() (
+  inline bool IsEqual<ParameterType>::operator() (
     const arma::Col<ParameterType>& firstKey,
     const arma::Col<ParameterType>& secondKey) const {
   // TODO Add exception
