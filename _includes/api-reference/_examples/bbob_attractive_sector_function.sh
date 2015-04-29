@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_attractive_sector_function.exe
   rm bbob_attractive_sector_function.exe
 else
-  c++ -std=c++11 bbob_attractive_sector_function.cpp -larmadillo -o bbob_attractive_sector_function
-  ./bbob_attractive_sector_function
+  ./bbob_attractive_sector_function.core.sh
   rm bbob_attractive_sector_function
 fi
 

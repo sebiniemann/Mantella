@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_weierstrass_function.exe
   rm bbob_weierstrass_function.exe
 else
-  c++ -std=c++11 bbob_weierstrass_function.cpp -larmadillo -o bbob_weierstrass_function
-  ./bbob_weierstrass_function
+  ./bbob_weierstrass_function.core.sh
   rm bbob_weierstrass_function
 fi
 

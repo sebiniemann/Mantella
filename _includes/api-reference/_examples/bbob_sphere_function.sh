@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_sphere_function.exe
   rm bbob_sphere_function.exe
 else
-  c++ -std=c++11 bbob_sphere_function.cpp -larmadillo -o bbob_sphere_function
-  ./bbob_sphere_function
+  ./bbob_sphere_function.core.sh
   rm bbob_sphere_function
 fi
 

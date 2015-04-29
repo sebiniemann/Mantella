@@ -36,8 +36,7 @@ Create a new source file called **bbob_schaffers_f7_function_ill_conditioned.cpp
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_schaffers_f7_function_ill_conditioned.cpp -larmadillo -o bbob_schaffers_f7_function_ill_conditioned
-./bbob_schaffers_f7_function_ill_conditioned
+{% include {{ api_reference_folder }}/_examples/bbob_schaffers_f7_function_ill_conditioned.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

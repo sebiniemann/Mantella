@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_rastrigin_function_rotated.exe
   rm bbob_rastrigin_function_rotated.exe
 else
-  c++ -std=c++11 bbob_rastrigin_function_rotated.cpp -larmadillo -o   
-  ./bbob_rastrigin_function_rotated
+  ./bbob_rastrigin_function_rotated.core.sh
   rm bbob_rastrigin_function_rotated
 fi
 

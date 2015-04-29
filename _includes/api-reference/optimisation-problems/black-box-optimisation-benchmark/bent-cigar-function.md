@@ -36,8 +36,7 @@ Create a new source file called **bbob_bent_cigar_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_bent_cigar_function.cpp -larmadillo -o bbob_bent_cigar_function
-./bbob_bent_cigar_function
+{% include {{ api_reference_folder }}/_examples/bbob_bent_cigar_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

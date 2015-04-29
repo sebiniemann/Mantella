@@ -1,7 +1,7 @@
 <div class="custom-callout custom-callout-info">
 #### Inheritance
 
-Extends the black-box optimisation benchmark base class
+Extends the `BlackBoxOptimisationBenchmark` base class.
 </div>
 
 **Objective function:**
@@ -36,10 +36,8 @@ Create a new source file called **bbob_bueche_rastrigin_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_bueche_rastrigin_function.cpp -larmadillo -o bbob_bueche_rastrigin_function
-./bbob_bueche_rastrigin_function
+{% include {{ api_reference_folder }}/_examples/bbob_bueche_rastrigin_function.core.sh %}
 {% endhighlight %}
-
 
 Visualisation of the sampled function using Matlab:
 {% highlight matlab %}

@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_bent_cigar_function.exe
   rm bbob_bent_cigar_function.exe
 else
-  c++ -std=c++11 bbob_bent_cigar_function.cpp -larmadillo -o bbob_bent_cigar_function
-  ./bbob_bent_cigar_function
+  ./bbob_bent_cigar_function.core.sh
   rm bbob_bent_cigar_function
 fi
 

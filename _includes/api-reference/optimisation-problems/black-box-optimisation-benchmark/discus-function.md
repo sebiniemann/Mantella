@@ -34,8 +34,7 @@ Create a new source file called **bbob_discus_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_discus_function.cpp -larmadillo -o bbob_discus_function
-./bbob_discus_function
+{% include {{ api_reference_folder }}/_examples/bbob_discus_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

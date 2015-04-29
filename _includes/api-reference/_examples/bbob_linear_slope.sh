@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_linear_slope.exe
   rm bbob_linear_slope.exe
 else
-  c++ -std=c++11 bbob_linear_slope.cpp -larmadillo -o bbob_linear_slope
-  ./bbob_linear_slope
+  ./bbob_linear_slope.core.sh
   rm bbob_linear_slope
 fi
 

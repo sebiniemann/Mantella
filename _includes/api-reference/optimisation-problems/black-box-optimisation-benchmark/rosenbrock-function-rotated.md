@@ -33,8 +33,7 @@ Create a new source file called **bbob_rosenbrock_function_rotated.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_rosenbrock_function_rotated.cpp -larmadillo -o bbob_rosenbrock_function_rotated
-./bbob_rosenbrock_function_rotated
+{% include {{ api_reference_folder }}/_examples/bbob_rosenbrock_function_rotated.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

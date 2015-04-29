@@ -30,8 +30,7 @@ Create a new source file called **bbob_sphere_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_sphere_function.cpp -larmadillo -o bbob_sphere_function
-./bbob_sphere_function
+{% include {{ api_reference_folder }}/_examples/bbob_sphere_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

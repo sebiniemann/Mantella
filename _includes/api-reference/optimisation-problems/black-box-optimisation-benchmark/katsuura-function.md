@@ -8,7 +8,7 @@ Extends the black-box optimisation benchmark base class
 
 $$\begin{align}
 F(X) &:= \frac{10}{N^{2}} \left( \prod_{i=1}^{N}\left( 1 + i \sum_{j=1}^{32} \frac{\left| 2^{j}Z_i - \left[2^{j}Z_{i}\right]\right|}{2^j} \right)^{\frac{10}{N^{1.2}}} - 1 \right)\\
-Z &:= Q \cdot T_\text{scaled}^{10} \cdot X\\
+Z &:= Q \cdot T_\text{conditioned}^{10} \cdot X\\
 N &:= \text{The number of dimensions.}\\
 Q &:= \text{Some rotation matrix.}\\
 [\cdot] &:= \text{Rounding to the nearest integer value}
@@ -36,8 +36,7 @@ Create a new source file called **bbob_katsuura_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_katsuura_function.cpp -larmadillo -o bbob_katsuura_function
-./bbob_katsuura_function
+{% include {{ api_reference_folder }}/_examples/bbob_katsuura_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_different_powers_function.exe
   rm bbob_different_powers_function.exe
 else
-  c++ -std=c++11 bbob_different_powers_function.cpp -larmadillo -o bbob_different_powers_function
-  ./bbob_different_powers_function
+  ./bbob_different_powers_function.core.sh
   rm bbob_different_powers_function
 fi
 

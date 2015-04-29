@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_katsuura_function.exe
   rm bbob_katsuura_function.exe
 else
-  c++ -std=c++11 bbob_katsuura_function.cpp -larmadillo -o bbob_katsuura_function
-  ./bbob_katsuura_function
+  ./bbob_katsuura_function.core.sh
   rm bbob_katsuura_function
 fi
 

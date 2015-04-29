@@ -37,8 +37,7 @@ Create a new source file called **bbob_linear_slope.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_linear_slope.cpp -larmadillo -o bbob_linear_slope
-./bbob_linear_slope
+{% include {{ api_reference_folder }}/_examples/bbob_linear_slope.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

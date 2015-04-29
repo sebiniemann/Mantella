@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_schaffers_f7_function_ill_conditioned.exe
   rm bbob_schaffers_f7_function_ill_conditioned.exe
 else
-  c++ -std=c++11 bbob_schaffers_f7_function_ill_conditioned.cpp -larmadillo -o bbob_schaffers_f7_function_ill_conditioned
-  ./bbob_schaffers_f7_function_ill_conditioned
+  ./bbob_schaffers_f7_function_ill_conditioned.core.sh
   rm bbob_schaffers_f7_function_ill_conditioned
 fi
 

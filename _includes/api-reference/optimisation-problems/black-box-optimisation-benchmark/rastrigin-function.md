@@ -32,8 +32,7 @@ Create a new source file called **bbob_rastrigin_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_rastrigin_function.cpp -larmadillo -o bbob_rastrigin_function
-./bbob_rastrigin_function
+{% include {{ api_reference_folder }}/_examples/bbob_rastrigin_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

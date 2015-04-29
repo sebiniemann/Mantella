@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_lunacek_bi_rastrigin_function.exe
   rm bbob_lunacek_bi_rastrigin_function.exe
 else
-  c++ -std=c++11 bbob_lunacek_bi_rastrigin_function.cpp -larmadillo -o bbob_lunacek_bi_rastrigin_function
-  ./bbob_lunacek_bi_rastrigin_function
+  ./bbob_lunacek_bi_rastrigin_function.core.sh
   rm bbob_lunacek_bi_rastrigin_function
 fi
 

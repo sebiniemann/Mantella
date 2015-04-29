@@ -1,0 +1,2 @@
+./bbob_sphere_function
+rm bbob_sphere_function

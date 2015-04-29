@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_ellipsoidal_function.exe
   rm bbob_ellipsoidal_function.exe
 else
-  c++ -std=c++11 bbob_ellipsoidal_function.cpp -larmadillo -o bbob_ellipsoidal_function
-  ./bbob_ellipsoidal_function
+  ./bbob_ellipsoidal_function.core.sh
   rm bbob_ellipsoidal_function
 fi
 

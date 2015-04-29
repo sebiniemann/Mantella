@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_rosenbrock_function.exe
   rm bbob_rosenbrock_function.exe
 else
-  c++ -std=c++11 bbob_rosenbrock_function.cpp -larmadillo -o bbob_rosenbrock_function
-  ./bbob_rosenbrock_function
+  ./bbob_rosenbrock_function.core.sh
   rm bbob_rosenbrock_function
 fi
 

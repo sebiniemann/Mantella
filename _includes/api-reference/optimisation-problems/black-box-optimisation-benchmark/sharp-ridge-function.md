@@ -35,8 +35,7 @@ Create a new source file called **bbob_sharp_ridge_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_sharp_ridge_function.cpp -larmadillo -o bbob_sharp_ridge_function
-./bbob_sharp_ridge_function
+{% include {{ api_reference_folder }}/_examples/bbob_sharp_ridge_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

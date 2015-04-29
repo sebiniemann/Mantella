@@ -1,9 +1,9 @@
-% Load samples
+% Loading samples
 X = dlmread('X.mat');
 Y = dlmread('Y.mat');
 Z = dlmread('Z.mat');
 
-% Generate surface plot
+% Generates a surface plot
 surf(X, Y, Z);
 shading interp;
 title('BBOB Linear slope - surface plot');
@@ -14,7 +14,7 @@ view(-35, 35);
 colorbar;
 print('bbob_linear_slope_surface','-dpng');
 
-% Generate contour plot
+% Generates a contour plot
 contour(X, Y, Z);
 title('BBOB Linear slope - contour plot');
 xlabel('x_1');

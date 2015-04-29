@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_bueche_rastrigin_function.exe
   rm bbob_bueche_rastrigin_function.exe
 else
-  c++ -std=c++11 bbob_bueche_rastrigin_function.cpp -larmadillo -o bbob_bueche_rastrigin_function
-  ./bbob_bueche_rastrigin_function
+  ./bbob_bueche_rastrigin_function.core.sh
   rm bbob_bueche_rastrigin_function
 fi
 

@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_schwefel_function.exe
   rm bbob_schwefel_function.exe
 else
-  c++ -std=c++11 bbob_schwefel_function.cpp -larmadillo -o bbob_schwefel_function
-  ./bbob_schwefel_function
+  ./bbob_schwefel_function.core.sh
   rm bbob_schwefel_function
 fi
 

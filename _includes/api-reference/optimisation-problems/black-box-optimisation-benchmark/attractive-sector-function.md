@@ -1,7 +1,7 @@
 <div class="custom-callout custom-callout-info">
 #### Inheritance
 
-Extends the black-box optimisation benchmark base class
+Extends the `BlackBoxOptimisationBenchmark` base class.
 </div>
 
 **Objective function:**
@@ -38,8 +38,7 @@ Create a new source file called **bbob_attractive_sector_function.cpp**:
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_attractive_sector_function.cpp -larmadillo -o bbob_attractive_sector_function
-./bbob_attractive_sector_function
+{% include {{ api_reference_folder }}/_examples/bbob_attractive_sector_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

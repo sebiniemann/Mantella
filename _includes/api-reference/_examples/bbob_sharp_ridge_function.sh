@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_sharp_ridge_function.exe
   rm bbob_sharp_ridge_function.exe
 else
-  c++ -std=c++11 bbob_sharp_ridge_function.cpp -larmadillo -o bbob_sharp_ridge_function
-  ./bbob_sharp_ridge_function
+  ./bbob_sharp_ridge_function.core.sh
   rm bbob_sharp_ridge_function
 fi
 

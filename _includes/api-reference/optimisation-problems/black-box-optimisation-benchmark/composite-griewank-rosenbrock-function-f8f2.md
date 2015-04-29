@@ -34,8 +34,7 @@ Create a new source file called **bbob_composite_griewank_rosenbrock_function_f8
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_composite_griewank_rosenbrock_function_f8f2.cpp -larmadillo -o bbob_composite_griewank_rosenbrock_function_f8f2
-./bbob_composite_griewank_rosenbrock_function_f8f2
+{% include {{ api_reference_folder }}/_examples/bbob_composite_griewank_rosenbrock_function_f8f2.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

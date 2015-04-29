@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_gallaghers_gaussian_101_me_peaks_function.exe
   rm bbob_gallaghers_gaussian_101_me_peaks_function.exe
 else
-  c++ -std=c++11 bbob_gallaghers_gaussian_101_me_peaks_function.cpp -larmadillo -o bbob_gallaghers_gaussian_101_me_peaks_function
-  ./bbob_gallaghers_gaussian_101_me_peaks_function
+  ./bbob_gallaghers_gaussian_101_me_peaks_function.core.sh
   rm bbob_gallaghers_gaussian_101_me_peaks_function
 fi
 

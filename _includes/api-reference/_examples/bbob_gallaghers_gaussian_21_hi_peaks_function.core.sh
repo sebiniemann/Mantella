@@ -1,0 +1,2 @@
+c++ -std=c++11 bbob_gallaghers_gaussian_21_hi_peaks_function.cpp -larmadillo -o bbob_gallaghers_gaussian_21_hi_peaks_function
+./bbob_gallaghers_gaussian_21_hi_peaks_function

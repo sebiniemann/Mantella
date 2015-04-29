@@ -47,8 +47,7 @@ Create a new source file called **bbob_gallaghers_gaussian_21_hi_peaks_function.
 
 Compile and build an executable from the source.
 {% highlight bash %}
-c++ -std=c++11 bbob_gallaghers_gaussian_21_hi_peaks_function.cpp -larmadillo -o bbob_gallaghers_gaussian_21_hi_peaks_function
-./bbob_gallaghers_gaussian_21_hi_peaks_function
+{% include {{ api_reference_folder }}/_examples/bbob_gallaghers_gaussian_21_hi_peaks_function.core.sh %}
 {% endhighlight %}
 
 Visualisation of the sampled function using Matlab:

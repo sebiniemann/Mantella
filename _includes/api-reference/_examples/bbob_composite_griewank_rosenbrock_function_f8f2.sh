@@ -4,8 +4,7 @@ if [[ "$(uname -o)" = "Msys" ]]; then
   ./bbob_composite_griewank_rosenbrock_function_f8f2.exe
   rm bbob_composite_griewank_rosenbrock_function_f8f2.exe
 else
-  c++ -std=c++11 bbob_composite_griewank_rosenbrock_function_f8f2.cpp -larmadillo -o bbob_composite_griewank_rosenbrock_function_f8f2
-  ./bbob_composite_griewank_rosenbrock_function_f8f2
+  ./bbob_composite_griewank_rosenbrock_function_f8f2.core.sh
   rm bbob_composite_griewank_rosenbrock_function_f8f2
 fi
 

@@ -1,9 +1,9 @@
-% Load samples
+% Loading samples
 X = dlmread('X.mat');
 Y = dlmread('Y.mat');
 Z = dlmread('Z.mat');
 
-% Generate surface plot
+% Generates a surface plot
 surf(X, Y, Z);
 shading interp;
 title(['bbob Gallagher', char(39), 's Gaussian 21-hi peaks function - surface plot']);
@@ -14,7 +14,7 @@ view(-35, 35);
 colorbar;
 print('bbob_gallaghers_gaussian_21_hi_peaks_function_surface','-dpng');
 
-% Generate contour plot
+% Generates a contour plot
 contour(X, Y, Z);
 title(['bbob Gallagher', char(39), 's Gaussian 21-hi peaks function - contour plot']);
 xlabel('x_1');
