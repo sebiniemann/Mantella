@@ -60,13 +60,13 @@ table_of_contents:
           Pose Accuracy:
           Models:
             subsection:
-              Parallel Kinematic Machine 3(P)RPR:
-              Parallel Kinematic Machine 3(P)RRR:
-              Parallel Kinematic Machine 3(P)RUS:
-              Parallel Kinematic Machine 3(P)UPS:
-              Parallel Kinematic Machine 4(P)RUS:
-              Parallel Kinematic Machine 6(P)RUS:
-              Parallel Kinematic Machine 6(P)UPS:
+              Parallel Kinematic Machine 3PRPR:
+              Parallel Kinematic Machine 3PRRR:
+              Parallel Kinematic Machine 3PRUS:
+              Parallel Kinematic Machine 3PUPS:
+              Parallel Kinematic Machine 4PRUS:
+              Parallel Kinematic Machine 6PRUS:
+              Parallel Kinematic Machine 6PUPS:
               Multi-level Stewart Platform:
   Distance Functions:
     subsection:
