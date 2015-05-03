@@ -5,7 +5,7 @@ Contributing to Mantella
 
 <a name="coding-guidelines"></a> Coding Guidelines
 ---------------------------------------
-- Everything should be (thoroughly) ** tested**.
+- Everything should be (thoroughly) **tested**.
 - All methods must be **documented**, regardless of the code visibility.
 - We usually follow the [Google Style Guides](https://code.google.com/p/google-styleguide/).
 
