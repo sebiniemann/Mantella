@@ -13,7 +13,7 @@ Contributing to Mantella
 ---------------------------------------
 Commit messages should be organised as followed:
 ```
-[fix|doc|test|devel]: <subject>
+<subject>
 
 <body>
 
@@ -25,8 +25,6 @@ Add a short description (usually no more than 15 words) about the content  of yo
 
 ### Body
 Describe the details of your changes as specific as possible. Do not be afraid to add multiple lines. Please try to make your explanation as specific as possible and avoid vague descriptions.
-
-Feel free to read the read the [Linux Kernel commit guidelines](http://git.kernel.org/cgit/git/git.git/tree/Documentation/SubmittingPatches?id=HEAD) on how to improve commit messages. 
 
 ### Signature
 End the commit message of your pull request by signing your work, i.e. adding some contact details.
