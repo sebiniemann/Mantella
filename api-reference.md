@@ -132,15 +132,16 @@ table_of_contents:
       Dimensionality Estimation:
   Helpers:
     subsection:
+      Asserts:
       Random Number Generator:
       Cereal:
       Filesystem:
       Geometry:
       Quasi Random Sequences:
       Random Matrix/Vector Generators:
-      Regression Analyses:
+#      Regression Analyses:
       Set Theory:
-      Trajectories:
+#      Trajectories:
       Printable:
       String:
       Unordered Containers:
