@@ -95,16 +95,6 @@ layout: base
                                   {% capture fourth_level_namespace %}{{third_level_namespace}}{% if fourth_level[1].namespace %}{{ fourth_level[1].namespace }}-{% endif %}{% endcapture %}
                                   <li>
                                     <a href="#{{ fourth_level_namespace }}{{ fourth_level[0] | slugify }}">{{ fourth_level[0] }}</a>
-                                    {% if fourth_level[1].subsection %}
-                                      <ul>
-                                        {% for fifth_level in fourth_level[1].subsection %}
-                                          {% capture fifth_level_namespace %}{{fourth_level_namespace}}{% if fifth_level[1].namespace %}{{ fifth_level[1].namespace }}-{% endif %}{% endcapture %}
-                                          <li>
-                                            <a href="#{{ fifth_level_namespace }}{{ fifth_level[0] | slugify }}">{{ fifth_level[0] }}</a>
-                                          </li>
-                                        {% endfor %}
-                                      </ul>
-                                    {% endif %}
                                   </li>
                                 {% endfor %}
                               </ul>
@@ -173,20 +163,6 @@ layout: base
               {% capture fourth_level_anchor_prefix %}{{ fourth_level_anchor }}-{% endcapture %}
               {% capture content %}{% include {{fourth_level_include}}.md namespace=fourth_level_namespace anchor_prefix=fourth_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
               {{ content | markdownify }}
-    
-              {% for fifth_level in fourth_level[1].subsection %}
-                {% capture fifth_level_namespace %}{{ fourth_level_namespace }}{% if fifth_level[1].namespace %}{{ fifth_level[1].namespace }}-{% endif %}{% endcapture %}
-                {% capture fifth_level_anchor %}{{ fifth_level_namespace }}{{ fifth_level[0] | slugify }}{% endcapture %}
-                {% capture fifth_level_index %}{{ fourth_level_index }}.{{ forloop.index }}{% endcapture %}
-                <h2 id="{{ fifth_level_anchor }}" class="page-header">
-                  {{ fifth_level_index }} {{ fifth_level[0] }}
-                  <a class="custom-anchor" href="#{{ fifth_level_anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
-                </h2>
-                {% capture fifth_level_include %}{{ fourth_level_include }}/{{ fifth_level[0] | slugify }}{% endcapture %}
-                {% capture fifth_level_anchor_prefix %}{{ fifth_level_anchor }}-{% endcapture %}
-                {% capture content %}{% include {{fifth_level_include}}.md namespace=fifth_level_namespace anchor_prefix=fifth_level_anchor_prefix api_reference_folder=api_reference_folder %}{% endcapture %}
-                {{ content | markdownify }}
-              {% endfor %}
             {% endfor %}
           {% endfor %}
         {% endfor %}

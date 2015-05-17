@@ -1,9 +1,9 @@
 <div class="custom-callout custom-callout-info">
 #### Inheritance & Templating
 
-Abstract base class for all optimisation problems.
+Pure virtual base class for all optimisation problems.
 
-Continuous (`float`, `double`, ...) as well as discrete types (`unsigned int`, ...) can be used as template parameter `T` in `OptimisationProblem<T>`.
+Continuous (`float`, `double`, ...) as well as integral types (`unsigned int`, ...) can be used as template parameter `T` for the `OptimisationProblem<T>` class.
 </div>
 
 All optimisation problems are defined as single-objective, real-valued minimisation problems and may have bounds and soft-constraints.
@@ -224,13 +224,13 @@ Example code, demonstrating the difference between `.getNumberOfEvaluations()` a
 {% include {{ api_reference_folder }}/_examples/optimisation_problem.cpp %}
 {% endhighlight %}
 
-Compile and build an executable from the source.
+Compilation and execution:
 {% highlight cpp %}
 {% include {{ api_reference_folder }}/_examples/optimisation_problem.core.sh %}
 {% endhighlight %}
 
 Output:
-{% highlight cpp %}
+{% highlight text %}
 {% include {{ api_reference_folder }}/_examples/optimisation_problem.output %}
 {% endhighlight %}
 

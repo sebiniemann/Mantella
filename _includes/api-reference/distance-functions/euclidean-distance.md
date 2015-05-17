@@ -1,14 +1,39 @@
-**.getDistance( X )**
-{% include continuous-only %}
-{% include noexcept %}
-<br>
-**.getDistance( X, Y )**
-{% include continuous-only %}
+<div class="custom-callout custom-callout-info">
+#### Inheritance
 
-- *getDistance( X, Y )* is a metric
-- *getDistance( X )* is equivalent to *getDistance( X, 0 )*, with 0 as a zero vector.
+Extends the `DistanceFunction<T>` base class.
 
-$$\sqrt{\sum_{i = 1}^{n} (x_{i} - y_{i})^{2}}$$
+Continuous (`float`, `double`, ...) as well as integral types (`unsigned int`, ...) can be used as template parameter `T` for the `EuclideanDistance<T>` class.
+</div>
 
-**.getRandomNeighbour( X, min_distance, max_distance )**
-{% include continuous-only %}
+**Distance function:**
+
+$$D(X, Y) := \left\Vert X - Y \right\Vert_2$$
+
+Example code, sampling and plotting of neighbours of the point of origin, with minimal distance 1 and maximal distance 2.
+
+Create a new source file called **euclidean_distance.cpp**:
+{% highlight cpp %}
+{% include {{ api_reference_folder }}/_examples/euclidean_distance.cpp %}
+{% endhighlight %}
+
+Compilation and execution:
+{% highlight bash %}
+{% include {{ api_reference_folder }}/_examples/euclidean_distance.core.sh %}
+{% endhighlight %}
+
+Visualisation of the sampled function, using Matlab:
+{% highlight matlab %}
+{% include {{ api_reference_folder }}/_examples/euclidean_distance.m %}
+{% endhighlight %}
+
+![Sampling of the euclidean distance - scatter plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/euclidean_distance.png)
+
+**Constructor**<br>
+  {% include reference prefix=include.anchor_prefix name="EuclideanDistance" %}
+
+---
+{% include label prefix=include.anchor_prefix name="EuclideanDistance" %}
+**EuclideanDistance()** {% include noexcept %}
+
+- Creates a default instance of this class.

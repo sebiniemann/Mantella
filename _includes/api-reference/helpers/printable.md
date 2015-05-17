@@ -1,10 +1,10 @@
 <div class="custom-callout custom-callout-info">
 #### Inheritance
 
-Abstract base class for all printable objects, i.e. classes with a filesystem friendly string representation.
+Pure virtual base class for all named classes with a string representation.
 </div>
 
-The only intended usage of this class is to be inherited by `... extends Printable, ...`, in order to guarantee the presence of `.toString()`.
+The only usage of this class is to be inherited by, in order to guarantee the presence of a `.toString()` method.
 
 ---
 **<small>std::string</small> .toString()**

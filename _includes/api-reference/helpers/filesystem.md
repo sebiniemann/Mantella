@@ -4,4 +4,4 @@
 
 - Returns true if the file(path) *S* exists, and false otherwise.
 - **Note:** This will also work with relative paths.
-- **Note:** This may not work for directories on windows.
+- **Note:** This may not work for directories, especially on windows.

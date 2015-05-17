@@ -70,71 +70,30 @@ table_of_contents:
               Multi-level Stewart Platform:
   Distance Functions:
     subsection:
-      Euclidean Distance:
-      Hamming Distance:
-      Infinity Norm:
       Manhattan Distance:
-  Properties:
-    subsection:
-      Correlation Property:
-      Continuity Properties:
-        subsection:
-          Lipschitz Continuity Property:
-      Function Model Properties:
-        subsection:
-          Linear Function Model Property:
-          Quadratic Function Model Property:
-      Separability Properties:
-        subsection:
-          Additive Separability Property:
-          Multiplicative Separability Property:
-      Proportionality Properties:
-        subsection:
-          Linear Proportionality Property:
+      Euclidean Distance:
+      P-Norm:
+      Maximum Norm:
+      Hamming Distance:
   Property Analyses:
     subsection:
       Passive Property Analyses:
         subsection:
-          Correlation Analyses:
-            subsection:
-              Fitness Distance Correlation Analysis:
-          Continuity Analyses:
-            subsection:
-              Lipschitz Continuity Analyses:
-                subsection:
-                  Direct Lipschitz Continuity Analysis:
-          Function Model Analyses:
-            subsection:
-              Linear Function Model Analyses:
-                subsection:
-                  Ordinary Least Squares Linear Function Model Analysis:
-              Quadratic Function Model Analyses:
-                subsection:
-                  Ordinary Least Squares Quadratic Function Model Analysis:
+          Fitness Distance Correlation Analysis:
+          Fitness Cloud Correlation Analysis:
+          Lipschitz Continuity Analysis:
+          Alpha-Hölder Continuity Analysis:
+          Ordinary Least Squares Linear Function Model Analysis:
+          Ordinary Least Squares Quadratic Function Model Analysis:
       Active Property Analyses:
         subsection:
-          Separability Analyses:
-            subsection:
-              Additive Separability Analyses:
-                subsection:
-                  Direct Additive Separability Analysis:
-            Multiplicative Separability Analyses:
-              subsection:
-                Direct Multiplicative Separability Analysis:
-          Proportionality Analyses:
-            subsection:
-              Linear Proportionality Analyses:
-                subsection:
-                  Direct Linear Proportionality Analysis:
-  Properties Estimations:
-    subsection:
-      Function Shape Estimation:
-      Dimensionality Estimation:
+          Additive Separability Analysis:
+          Multiplicative Separability Analysis:
+          Linear Proportionality Analysis:
   Helpers:
     subsection:
       Asserts:
       Random Number Generator:
-      Cereal:
       Filesystem:
       Geometry:
       Quasi Random Sequences:

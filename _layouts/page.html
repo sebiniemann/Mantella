@@ -17,6 +17,15 @@ layout: base
           {% for first_level in page.table_of_contents %}
             <li>
               <a href="#{{ first_level[0] | slugify }}">{{ first_level[0] }}</a>
+              {% if first_level[1].subsection %}
+                <ul class="nav custom-sidenav">
+                  {% for second_level in first_level[1].subsection %}
+                    <li>
+                      <a href="#{{ second_level[0] | slugify }}">{{ second_level[0] }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </li>
           {% endfor %}
         </ul>
@@ -30,6 +39,13 @@ layout: base
         {% capture first_level_ref %}{{ page.title | slugify }}/{{ first_level[0] | slugify }}{% endcapture %}
         {% capture content %}{% include {{first_level_ref}}.md %}{% endcapture %}
         {{ content | markdownify }}
+        
+        {% for second_level in first_level[1].subsection %}
+          <h2 id="{{ second_level[0] | slugify }}" class="page-header">{{ second_level[0] }}</h2>
+          {% capture second_level_ref %}{{ first_level_ref }}/{{ second_level[0] | slugify }}{% endcapture %}
+          {% capture content %}{% include {{second_level_ref}}.md %}{% endcapture %}
+          {{ content | markdownify }}
+        {% endfor %}
       {% endfor %}
     </main>
   </div>

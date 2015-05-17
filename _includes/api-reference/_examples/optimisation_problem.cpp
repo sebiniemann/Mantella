@@ -11,5 +11,7 @@ int main() {
   optimisationProblem.getObjectiveValue({0.6, 0.8, 0.0}); // Actual computation
   
   std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
-  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
+  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl
+  
+  return 0;
 }

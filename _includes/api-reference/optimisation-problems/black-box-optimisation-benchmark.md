@@ -1,7 +1,9 @@
 <div class="custom-callout custom-callout-info">
 #### Inheritance
 
-Extends the `OptimisationProblem&lt;double&gt;` base class and is itself an abstract base class for the black-box optimisation benchmark problems.
+Extends the `OptimisationProblem<double>` base class.
+
+Pure virtual base class for all black-box optimisation benchmark problems.
 </div>
 
 The black-box optimisation benchmark, developed by [Nikolaus Hansen](https://www.lri.fr/~hansen/) et al., is a popular benchmark for continuous, single-objective black-box optimisation algorithms and used in competitions at the [GECCO 2009](http://coco.gforge.inria.fr/doku.php?id=bbob-2009), [2010](http://coco.gforge.inria.fr/doku.php?id=bbob-2010), [2012](http://coco.gforge.inria.fr/doku.php?id=bbob-2012), [2013](http://coco.gforge.inria.fr/doku.php?id=bbob-2013), [2015](http://coco.gforge.inria.fr/doku.php?id=bbob-2015) and [CEC 2015](http://coco.gforge.inria.fr/doku.php?id=cec-bbob-2015). It consist of 24 synthetic optimisation problems and focuses on *comprehensible* instances, in order to get a better cause-effect understanding between the algorithm and problem at hand.

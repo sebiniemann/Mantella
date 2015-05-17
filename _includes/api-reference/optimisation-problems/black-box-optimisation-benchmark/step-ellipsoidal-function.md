@@ -31,17 +31,18 @@ The default values are set as specified by the black box optimisation benchmark.
 </div>
 
 Example code, sampling and plotting of the step ellipsoidal function.
+
 Create a new source file called **bbob_step_ellipsoidal_function.cpp**:
 {% highlight cpp %}
 {% include {{ api_reference_folder }}/_examples/bbob_step_ellipsoidal_function.cpp %}
 {% endhighlight %}
 
-Compile and build an executable from the source.
+Compilation and execution:
 {% highlight bash %}
 {% include {{ api_reference_folder }}/_examples/bbob_step_ellipsoidal_function.core.sh %}
 {% endhighlight %}
 
-Visualisation of the sampled function using Matlab:
+Visualisation of the sampled function, using Matlab:
 {% highlight matlab %}
 {% include {{ api_reference_folder }}/_examples/bbob_step_ellipsoidal_function.m %}
 {% endhighlight %}
@@ -49,6 +50,7 @@ Visualisation of the sampled function using Matlab:
 ![Sampling of the step ellipsoidal function - surface plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_step_ellipsoidal_function_surface.png)
 ![Sampling of the step ellipsoidal function - contour plot]({{ site.baseurl }}/assets/images/{{ api_reference_folder }}/bbob_step_ellipsoidal_function_contour.png)
 
+---
 - Constructor<br>
   {% include reference prefix=include.anchor_prefix name="StepEllipsoidalFunction" %}
 - Parameterisation<br>

@@ -21,7 +21,7 @@
 {% include label prefix=include.anchor_prefix name="setPlatformLevels" %}
 **<small>void</small> .setPlatformLevels( <small>std::vector&lt;mant::ParallelKinematicMachine6PUPS&gt;</small> X )**
 
-- Parameterises the platform levels \\(\left\{\text{6UPS}_0, \text{6UPS}_1, \ldots\right\}\\).
+- Parameterises the platform levels \\(\left\\{\text{6UPS}_0, \text{6UPS}_1, \ldots\right\\}\\).
 - The *i*-te 6UPS stands for the *i*-te platform level.
 - **Requirement:** All platform levels must be redundancy free, .i.e \\(J_{\text{6UPS}_i, j}^\text{redundant,start} = J_{\text{6UPS}_i, j}^\text{redundant,end}\\).
 
@@ -29,7 +29,8 @@
 {% include label prefix=include.anchor_prefix name="getModel" %}
 **<small>arma::Cube&lt;double&gt;::fixed&lt;3, 6, 2&gt;</small> .getModel( <small>arma::Mat&lt;double&gt;</small> E )**
 
-- Returns for each platform level the position of all actively or passively moveable joints \\(\left(\left(\left(J_{\text{6UPS}_0, 0}^\text{base}, \ldots, J_{\text{6UPS}_0, 5}^\text{base}\right), \left(J_{\text{6UPS}_0, 0}^\text{end-effector}, \ldots, J_{\text{6UPS}_0, 5}^\text{end-effector}\right)\right), \left(\left(J_{\text{6UPS}_1, 0}^\text{base}, \ldots, J_{\text{6UPS}_1, 5}^\text{base}\right), \left(J_{\text{6UPS}_1, 0}^\text{end-effector}, \ldots, J_{\text{6UPS}_1, 5}^\text{end-effector}\right)\right), \ldots\right)\\), to fully describe the given robot.
+- Returns for each platform level the position of all actively and passively moveable joints, to fully describe the given robot.
+- The *i*-te cube is equal to `.getModel()` of the *i*-te `mant::ParallelKinematicMachine6PUPS`.
 - **Requirement:** The number of columns in *E* must be equal to the number of platform levels.
 - **Requirement:** The number of rows in *E* must be equal to 6.
 - **Requirement:** The pose given by the *i*-te row in *E* must be reachable by the *i*-te platform level.

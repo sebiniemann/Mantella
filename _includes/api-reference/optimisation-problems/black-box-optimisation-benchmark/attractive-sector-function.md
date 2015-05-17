@@ -31,17 +31,18 @@ The default values are set as specified by the black box optimisation benchmark.
 </div>
 
 Example code, sampling and plotting of the attractive sector function.
+
 Create a new source file called **bbob_attractive_sector_function.cpp**:
 {% highlight cpp %}
 {% include {{ api_reference_folder }}/_examples/bbob_attractive_sector_function.cpp %}
 {% endhighlight %}
 
-Compile and build an executable from the source.
+Compilation and execution:
 {% highlight bash %}
 {% include {{ api_reference_folder }}/_examples/bbob_attractive_sector_function.core.sh %}
 {% endhighlight %}
 
-Visualisation of the sampled function using Matlab:
+Visualisation of the sampled function, using Matlab:
 {% highlight matlab %}
 {% include {{ api_reference_folder }}/_examples/bbob_attractive_sector_function.m %}
 {% endhighlight %}
@@ -56,6 +57,7 @@ Visualisation of the sampled function using Matlab:
 - Miscellaneous<br>
   {% include reference prefix=include.anchor_prefix name="toString" %}
 
+---
 {% include label prefix=include.anchor_prefix name="AttractiveSectorFunction" %}
 **AttractiveSectorFunction( <small>unsigned int</small> N )** {% include continuous-only %}
 
