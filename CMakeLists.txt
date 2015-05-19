@@ -177,7 +177,6 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella
   include/mantella_bits/helper/assert.hpp
   include/mantella_bits/helper/rng.hpp
-  include/mantella_bits/helper/cereal.hpp
   include/mantella_bits/helper/filesystem.hpp
   include/mantella_bits/helper/geometry.hpp
   include/mantella_bits/helper/printable.hpp

@@ -55,18 +55,6 @@
 // Armadillo
 #include <armadillo>
 
-// Cereal
-#if defined(MANTELLA_USE_PARALLEL)
-  #include <cereal/cereal.hpp>
-  #include <cereal/access.hpp>
-  #include <cereal/archives/json.hpp>
-  #include <cereal/types/base_class.hpp>
-  #include <cereal/types/vector.hpp>
-  #include <cereal/types/polymorphic.hpp>
-
-  #include <mantella_bits/helper/cereal.hpp>
-#endif
-
 //
 // Mantella
 //
