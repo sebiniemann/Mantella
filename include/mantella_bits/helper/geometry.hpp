@@ -42,10 +42,6 @@ namespace mant {
       // The radius of the sphere.
       const double sphereRadius);
 
-  //
-  // Implementation
-  //
-
   inline arma::Col<double>::fixed<3> getTriangulation(
       const arma::Col<double>::fixed<3>& firstCenter,
       const double firstRadius,
@@ -53,6 +49,10 @@ namespace mant {
       const double secondRadius,
       const arma::Col<double>::fixed<3>& thirdCenter,
       const double thirdRadius);
+
+  //
+  // Implementation
+  //
 
   inline arma::Mat<double>::fixed<2, 2> get2DRotation(
       const double angle) noexcept {
