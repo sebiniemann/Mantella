@@ -91,9 +91,7 @@
 
 // Distance functions
 #include <mantella_bits/distanceFunction.hpp>
-#include <mantella_bits/distanceFunction/euclideanDistance.hpp>
 #include <mantella_bits/distanceFunction/hammingDistance.hpp>
-#include <mantella_bits/distanceFunction/infinityNorm.hpp>
 #include <mantella_bits/distanceFunction/manhattanDistance.hpp>
 
 // Optimisation problems
