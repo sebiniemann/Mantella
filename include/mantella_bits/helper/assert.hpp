@@ -1,21 +1,23 @@
 namespace mant {
+  inline void verify(
+      const bool test,
+      const std::string& errorMessage);
+
   inline bool isRotationMatrix(
       const arma::Mat<double>& matrix) noexcept;
 
-  inline void isRotationMatrix(
-      const std::string& name,
-      const arma::Mat<double>& matrix);
-
-  inline bool isEqual(
-      const std::size_t firstValue,
-      const std::size_t secondValue) noexcept;
-
-  inline void isEqual(
-      const std::string& firstName,
-      const std::size_t firstValue,
-      const std::string& secondName,
-      const std::size_t secondValue);
-
+  //
+  // Implementation
+  //
+      
+  inline void verify(
+      const bool test,
+      const std::string& errorMessage) {
+    if(!test) {
+      throw std::runtime_exception(errorMessage);
+    }   
+  }
+      
   inline bool isRotationMatrix(
       const arma::Mat<double>& matrix) noexcept {
     // is suqare?
@@ -30,29 +32,5 @@ namespace mant {
     }
 
     return true;
-  }
-
-  inline void isRotationMatrix(
-      const std::string& name,
-      const arma::Mat<double>& matrix) {
-    if(!isRotationMatrix(matrix)) {
-      throw std::logic_error(name + " must be a rotation matrix, i.e. it must be square, orthonormal and its determinant be either 1 or -1.");
-    }
-  }
-
-  inline bool isEqual(
-      const std::size_t firstValue,
-      const std::size_t secondValue) noexcept {
-    return (firstValue == secondValue);
-  }
-
-  inline void isEqual(
-      const std::string& firstName,
-      const std::size_t firstValue,
-      const std::string& secondName,
-      const std::size_t secondValue) {
-    if(!isEqual(firstValue, secondValue)) {
-      throw std::logic_error(firstName + " must be equal to " + secondName);
-    }
   }
 }
