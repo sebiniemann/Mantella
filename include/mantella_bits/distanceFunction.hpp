@@ -43,11 +43,13 @@ namespace mant {
       const arma::Col<T>& secondParameter) const {
     verify(firstParameter.n_elem == secondParameter.n_elem, "The number of elements of the first parameter must be equal to the number of elements of the second parameter.");
 
-    // TODO Check wheter T is signed or unsigned.
-    const T& distance = getLengthImplementation(
+    T distance;
+    if(std::is_unsigned<T>::value)
       // Avoids integer underflows / wraps for unsigned types.
-      arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter)
-    );
+      distance = getLengthImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter);
+    ) else {
+      distance = getLengthImplementation(secondParameter - firstParameter);
+    }
     
     assert(distance >= 0);
 
