@@ -1,9 +1,9 @@
 namespace mant {
-  template <typename ParameterType>
-  class MultiResolutionGridSearch : public SamplingBasedOptimisationAlgorithm<ParameterType> {
+  template <typename T>
+  class MultiResolutionGridSearch : public SamplingBasedOptimisationAlgorithm<T> {
     public:
       explicit MultiResolutionGridSearch(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       void setMinimalSamplingDistances(
           const arma::Col<double> minimalSamplingDistances);
@@ -17,7 +17,7 @@ namespace mant {
       std::string toString() const noexcept override;
 
     protected:
-      arma::Col<ParameterType> minimalSamplingDistances_;
+      arma::Col<T> minimalSamplingDistances_;
       unsigned int maximalSamplesPerResolution_;
       arma::Col<double> samplingDistributionPerDimension_;
 
@@ -28,17 +28,17 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  MultiResolutionGridSearch<ParameterType>::MultiResolutionGridSearch(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
+  template <typename T>
+  MultiResolutionGridSearch<T>::MultiResolutionGridSearch(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+    : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
     setMinimalSamplingDistances(arma::ones(this->numberOfDimensions_) * 1e-3);
     setSamplingDistributionPerDimension(arma::ones(this->numberOfDimensions_) / static_cast<double>(this->numberOfDimensions_));
     setMaximalSamplesPerResolution(11);
   }
 
-  template <typename ParameterType>
-  void MultiResolutionGridSearch<ParameterType>::optimiseImplementation() noexcept {
+  template <typename T>
+  void MultiResolutionGridSearch<T>::optimiseImplementation() noexcept {
     unsigned int resolutionDepth = 0;
 
     std::map<unsigned int, std::unordered_map<arma::Col<double>, std::pair<double, double>, Hash, IsEqual>> samplesPerResolutions;
@@ -160,8 +160,8 @@ namespace mant {
   }
 
 
-  template <typename ParameterType>
-  void MultiResolutionGridSearch<ParameterType>::setMinimalSamplingDistances(
+  template <typename T>
+  void MultiResolutionGridSearch<T>::setMinimalSamplingDistances(
       const arma::Col<double> minimalSamplingDistances) {
     if(minimalSamplingDistances.n_elem != this->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the sampling distances (" + std::to_string(minimalSamplingDistances.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
@@ -170,14 +170,14 @@ namespace mant {
     minimalSamplingDistances_ = minimalSamplingDistances;
   }
 
-  template <typename ParameterType>
-  void MultiResolutionGridSearch<ParameterType>::setMaximalSamplesPerResolution(
+  template <typename T>
+  void MultiResolutionGridSearch<T>::setMaximalSamplesPerResolution(
       const unsigned int maximalSamplesPerResolution) noexcept {
     maximalSamplesPerResolution_ = maximalSamplesPerResolution;
   }
 
-  template <typename ParameterType>
-  void MultiResolutionGridSearch<ParameterType>::setSamplingDistributionPerDimension(
+  template <typename T>
+  void MultiResolutionGridSearch<T>::setSamplingDistributionPerDimension(
       const arma::Col<double> samplingDistributionPerDimension) {
     if(samplingDistributionPerDimension.n_elem != this->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the sampling distributions (" + std::to_string(samplingDistributionPerDimension.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
@@ -188,8 +188,8 @@ namespace mant {
     samplingDistributionPerDimension_ = samplingDistributionPerDimension;
   }
 
-  template <typename ParameterType>
-  std::string MultiResolutionGridSearch<ParameterType>::toString() const noexcept {
+  template <typename T>
+  std::string MultiResolutionGridSearch<T>::toString() const noexcept {
     return "MultiResolutionGridSearch";
   }
 }

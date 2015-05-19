@@ -1,7 +1,7 @@
 namespace mant {
-  template <typename ParameterType>
-  class ContinuityProperty : public Property<ParameterType> {
+  template <typename T>
+  class ContinuityProperty : public Property<T> {
     public:
-      using Property<ParameterType>::Property;
+      using Property<T>::Property;
   };
 }

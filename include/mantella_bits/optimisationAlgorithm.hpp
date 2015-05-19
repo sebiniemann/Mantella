@@ -1,11 +1,11 @@
 namespace mant {
-  template <typename ParameterType>
+  template <typename T>
   class OptimisationAlgorithm : public Printable {
     public:
       // Constructs an optimisation algorithm with the given problem to be optimised.
       explicit OptimisationAlgorithm(
           // The problem to be optimised
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       // Starts the optimisation process.
       // Note: The best parameter and its objective value can be retrived via the corresponding
@@ -13,7 +13,7 @@ namespace mant {
       void optimise();
 
       void setDistanceFunction(
-          const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept;
+          const std::shared_ptr<DistanceFunction<T>> distanceFunction) noexcept;
 
       // Returns the current number of iterations performed.
       unsigned int getNumberOfIterations() const noexcept;
@@ -28,7 +28,7 @@ namespace mant {
       // 1 - Fulfills the interval-constraints
       // 2 - Has the lowest soft-constraint value yet found
       // 3 - Has the lowest objective value yet found
-      arma::Col<ParameterType> getBestParameter() const noexcept;
+      arma::Col<T> getBestParameter() const noexcept;
 
       // Returns the objective value of the best parameter yet found.
       double getBestSoftConstraintsValue() const noexcept;
@@ -36,7 +36,7 @@ namespace mant {
       // Returns the objective value of the best parameter yet found.
       double getBestObjectiveValue() const noexcept;
 
-      std::vector<arma::Col<ParameterType>> getParameterHistory() const noexcept;
+      std::vector<arma::Col<T>> getParameterHistory() const noexcept;
 
       // Checks whether the currently best objective value satisfies the upper bound for an
       // acceptable objective value.
@@ -58,7 +58,7 @@ namespace mant {
 
     private:
       // The optimisation problem to be optimised.
-      std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem_;
+      std::shared_ptr<OptimisationProblem<T>> optimisationProblem_;
 
     protected:
       const unsigned int numberOfDimensions_;
@@ -70,7 +70,7 @@ namespace mant {
       unsigned int maximalNumberOfIterations_;
 
       // The best parameter yet found.
-      arma::Col<ParameterType> bestParameter_;
+      arma::Col<T> bestParameter_;
 
       // The best parameter's soft-constraint value.
       double bestSoftConstraintsValue_;
@@ -78,34 +78,34 @@ namespace mant {
       // The best parameter's objective value.
       double bestObjectiveValue_;
 
-      std::vector<arma::Col<ParameterType>> parameterHistory_;
+      std::vector<arma::Col<T>> parameterHistory_;
 
       // The distance function to be used.
-      std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction_;
+      std::shared_ptr<DistanceFunction<T>> distanceFunction_;
 
-      arma::Col<ParameterType> getLowerBounds() const noexcept;
+      arma::Col<T> getLowerBounds() const noexcept;
 
-      arma::Col<ParameterType> getUpperBounds() const noexcept;
+      arma::Col<T> getUpperBounds() const noexcept;
 
       double getSoftConstraintsValue(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       arma::Col<unsigned int> isSatisfyingLowerBounds(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       arma::Col<unsigned int> isSatisfyingUpperBounds(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       bool isSatisfyingSoftConstraints(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       bool isSatisfyingConstraints(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       double getAcceptableObjectiveValue() const noexcept;
 
       double getObjectiveValue(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       unsigned int getNumberOfEvaluations() const noexcept;
 
@@ -124,20 +124,20 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  OptimisationAlgorithm<ParameterType>::OptimisationAlgorithm(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
+  template <typename T>
+  OptimisationAlgorithm<T>::OptimisationAlgorithm(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
     : optimisationProblem_(optimisationProblem),
       numberOfDimensions_(optimisationProblem_->numberOfDimensions_),
       numberOfIterations_(0),
       bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
       bestObjectiveValue_(std::numeric_limits<double>::infinity()) {
     setMaximalNumberOfIterations(1000);
-    setDefaultDistanceFunction(std::is_floating_point<ParameterType>());
+    setDefaultDistanceFunction(std::is_floating_point<T>());
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::optimise() {
+  template <typename T>
+  void OptimisationAlgorithm<T>::optimise() {
     if(arma::any(optimisationProblem_->getUpperBounds() < optimisationProblem_->getLowerBounds())) {
       throw std::logic_error("The upper bounds of the optimisation problem must be greater than or equal to its lower bounds.");
     }
@@ -152,129 +152,129 @@ namespace mant {
     return optimiseImplementation();
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::setDistanceFunction(
-      const std::shared_ptr<DistanceFunction<ParameterType>> distanceFunction) noexcept {
+  template <typename T>
+  void OptimisationAlgorithm<T>::setDistanceFunction(
+      const std::shared_ptr<DistanceFunction<T>> distanceFunction) noexcept {
     distanceFunction_ = distanceFunction;
   }
 
-  template <typename ParameterType>
-  unsigned int OptimisationAlgorithm<ParameterType>::getNumberOfIterations() const noexcept {
+  template <typename T>
+  unsigned int OptimisationAlgorithm<T>::getNumberOfIterations() const noexcept {
     return numberOfIterations_;
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::setMaximalNumberOfIterations(
+  template <typename T>
+  void OptimisationAlgorithm<T>::setMaximalNumberOfIterations(
       const unsigned int maximalNumberOfIterations) noexcept {
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType>::getBestParameter() const noexcept {
+  template <typename T>
+  arma::Col<T> OptimisationAlgorithm<T>::getBestParameter() const noexcept {
     return bestParameter_;
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getBestSoftConstraintsValue() const noexcept {
+  template <typename T>
+  double OptimisationAlgorithm<T>::getBestSoftConstraintsValue() const noexcept {
     return bestSoftConstraintsValue_;
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getBestObjectiveValue() const noexcept {
+  template <typename T>
+  double OptimisationAlgorithm<T>::getBestObjectiveValue() const noexcept {
     return bestObjectiveValue_;
   }
 
-  template <typename ParameterType>
-  std::vector<arma::Col<ParameterType>> OptimisationAlgorithm<ParameterType>::getParameterHistory() const noexcept {
+  template <typename T>
+  std::vector<arma::Col<T>> OptimisationAlgorithm<T>::getParameterHistory() const noexcept {
     return parameterHistory_;
   }
 
-  template <typename ParameterType>
-  bool OptimisationAlgorithm<ParameterType>::isFinished() const noexcept {
+  template <typename T>
+  bool OptimisationAlgorithm<T>::isFinished() const noexcept {
     return (bestSoftConstraintsValue_ == 0.0 && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
-  template <typename ParameterType>
-  bool OptimisationAlgorithm<ParameterType>::isTerminated() const noexcept {
+  template <typename T>
+  bool OptimisationAlgorithm<T>::isTerminated() const noexcept {
     return (numberOfIterations_ >= maximalNumberOfIterations_);
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::restart() noexcept {
+  template <typename T>
+  void OptimisationAlgorithm<T>::restart() noexcept {
 
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::setDefaultDistanceFunction(
+  template <typename T>
+  void OptimisationAlgorithm<T>::setDefaultDistanceFunction(
       std::true_type) noexcept {
-    setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new EuclideanDistance));
+    setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new EuclideanDistance));
   }
 
-  template <typename ParameterType>
-  void OptimisationAlgorithm<ParameterType>::setDefaultDistanceFunction(
+  template <typename T>
+  void OptimisationAlgorithm<T>::setDefaultDistanceFunction(
       std::false_type) noexcept {
-    setDistanceFunction(std::shared_ptr<DistanceFunction<ParameterType>>(new ManhattanDistance<ParameterType>));
+    setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new ManhattanDistance<T>));
   }
 
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType>::getLowerBounds() const noexcept {
+  template <typename T>
+  arma::Col<T> OptimisationAlgorithm<T>::getLowerBounds() const noexcept {
     return optimisationProblem_->getLowerBounds();
   }
 
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationAlgorithm<ParameterType>::getUpperBounds() const noexcept {
+  template <typename T>
+  arma::Col<T> OptimisationAlgorithm<T>::getUpperBounds() const noexcept {
     return optimisationProblem_->getUpperBounds();
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getSoftConstraintsValue(
-    const arma::Col<ParameterType>& parameter) {
+  template <typename T>
+  double OptimisationAlgorithm<T>::getSoftConstraintsValue(
+    const arma::Col<T>& parameter) {
     return optimisationProblem_->getSoftConstraintsValue(parameter);
   }
 
-  template <typename ParameterType>
-  arma::Col<unsigned int> OptimisationAlgorithm<ParameterType>::isSatisfyingLowerBounds(
-    const arma::Col<ParameterType>& parameter) {
+  template <typename T>
+  arma::Col<unsigned int> OptimisationAlgorithm<T>::isSatisfyingLowerBounds(
+    const arma::Col<T>& parameter) {
     return optimisationProblem_->isSatisfyingLowerBounds(parameter);
   }
 
-  template <typename ParameterType>
-  arma::Col<unsigned int> OptimisationAlgorithm<ParameterType>::isSatisfyingUpperBounds(
-    const arma::Col<ParameterType>& parameter) {
+  template <typename T>
+  arma::Col<unsigned int> OptimisationAlgorithm<T>::isSatisfyingUpperBounds(
+    const arma::Col<T>& parameter) {
     return optimisationProblem_->isSatisfyingUpperBounds(parameter);
   }
 
-  template <typename ParameterType>
-  bool OptimisationAlgorithm<ParameterType>::isSatisfyingSoftConstraints(
-    const arma::Col<ParameterType>& parameter) {
+  template <typename T>
+  bool OptimisationAlgorithm<T>::isSatisfyingSoftConstraints(
+    const arma::Col<T>& parameter) {
     return optimisationProblem_->isSatisfyingSoftConstraints(parameter);
   }
 
-  template <typename ParameterType>
-  bool OptimisationAlgorithm<ParameterType>::isSatisfyingConstraints(
-    const arma::Col<ParameterType>& parameter) {
+  template <typename T>
+  bool OptimisationAlgorithm<T>::isSatisfyingConstraints(
+    const arma::Col<T>& parameter) {
     return optimisationProblem_->isSatisfyingConstraints(parameter);
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getAcceptableObjectiveValue() const noexcept {
+  template <typename T>
+  double OptimisationAlgorithm<T>::getAcceptableObjectiveValue() const noexcept {
     return optimisationProblem_->getAcceptableObjectiveValue();
   }
 
-  template <typename ParameterType>
-  double OptimisationAlgorithm<ParameterType>::getObjectiveValue(
-    const arma::Col<ParameterType>& parameter) {
+  template <typename T>
+  double OptimisationAlgorithm<T>::getObjectiveValue(
+    const arma::Col<T>& parameter) {
     parameterHistory_.push_back(parameter);
     return optimisationProblem_->getObjectiveValue(parameter);
   }
 
-  template <typename ParameterType>
-  unsigned int OptimisationAlgorithm<ParameterType>::getNumberOfEvaluations() const noexcept {
+  template <typename T>
+  unsigned int OptimisationAlgorithm<T>::getNumberOfEvaluations() const noexcept {
     return optimisationProblem_->getNumberOfEvaluations();
   }
 
-  template <typename ParameterType>
-  unsigned int OptimisationAlgorithm<ParameterType>::getNumberOfDistinctEvaluations() const noexcept {
+  template <typename T>
+  unsigned int OptimisationAlgorithm<T>::getNumberOfDistinctEvaluations() const noexcept {
     return optimisationProblem_->getNumberOfDistinctEvaluations();
   }
 }

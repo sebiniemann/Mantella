@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType>
-  class PassivePropertyAnalysis : public PropertyAnalysis<ParameterType> {
+  template <typename T>
+  class PassivePropertyAnalysis : public PropertyAnalysis<T> {
     public:
-      using PropertyAnalysis<ParameterType>::PropertyAnalysis;
+      using PropertyAnalysis<T>::PropertyAnalysis;
 
       void analyse(
           const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMapping) noexcept;
@@ -16,8 +16,8 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  void PassivePropertyAnalysis<ParameterType>::analyse(
+  template <typename T>
+  void PassivePropertyAnalysis<T>::analyse(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMapping) noexcept {
     analyseImplementation(parameterToObjectiveValueMapping);
   }

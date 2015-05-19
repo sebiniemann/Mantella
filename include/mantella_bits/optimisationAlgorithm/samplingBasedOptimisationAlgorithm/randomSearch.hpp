@@ -1,9 +1,9 @@
 namespace mant {
-  template <typename ParameterType>
-  class RandomSearch : public SamplingBasedOptimisationAlgorithm<ParameterType> {
+  template <typename T>
+  class RandomSearch : public SamplingBasedOptimisationAlgorithm<T> {
     public:
       explicit RandomSearch(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       std::string toString() const noexcept override;
 
@@ -15,19 +15,19 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  RandomSearch<ParameterType>::RandomSearch(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
+  template <typename T>
+  RandomSearch<T>::RandomSearch(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+    : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
 
   }
 
-  template <typename ParameterType>
-  void RandomSearch<ParameterType>::optimiseImplementation() noexcept {
+  template <typename T>
+  void RandomSearch<T>::optimiseImplementation() noexcept {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      const arma::Col<ParameterType>& candidateParameter = this->distanceFunction_->getRandomNeighbour(arma::zeros<arma::Col<double>>(numberOfDimensions_), this->getLowerBounds(), this->getUpperBounds() - this->getLowerBounds());
+      const arma::Col<T>& candidateParameter = this->distanceFunction_->getRandomNeighbour(arma::zeros<arma::Col<double>>(numberOfDimensions_), this->getLowerBounds(), this->getUpperBounds() - this->getLowerBounds());
       const double& candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
       const double& candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 
@@ -39,8 +39,8 @@ namespace mant {
     };
   }
 
-  template <typename ParameterType>
-  std::string RandomSearch<ParameterType>::toString() const noexcept {
+  template <typename T>
+  std::string RandomSearch<T>::toString() const noexcept {
     return "RandomSearch";
   }
 }

@@ -1,21 +1,21 @@
 namespace mant {
-  template <typename ParameterType>
-  class LinearProportionalityAnalysis : public ProportionalityAnalysis<ParameterType> {
+  template <typename T>
+  class LinearProportionalityAnalysis : public ProportionalityAnalysis<T> {
     public:
-      using ProportionalityAnalysis<ParameterType>::ProportionalityAnalysis;
+      using ProportionalityAnalysis<T>::ProportionalityAnalysis;
 
-      LinearProportionalityProperty<ParameterType> getProperty() const noexcept;
+      LinearProportionalityProperty<T> getProperty() const noexcept;
 
     protected:
-      LinearProportionalityProperty<ParameterType> property_;
+      LinearProportionalityProperty<T> property_;
   };
 
   //
   // Implementation
   //
 
-  template <typename ParameterType>
-  LinearProportionalityProperty<ParameterType> LinearProportionalityAnalysis<ParameterType>::getProperty() const noexcept {
+  template <typename T>
+  LinearProportionalityProperty<T> LinearProportionalityAnalysis<T>::getProperty() const noexcept {
     return property_;
   }
 }

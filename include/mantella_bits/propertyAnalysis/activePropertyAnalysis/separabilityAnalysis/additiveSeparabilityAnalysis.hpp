@@ -1,21 +1,21 @@
 namespace mant {
-  template <typename ParameterType>
-  class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<ParameterType> {
+  template <typename T>
+  class AdditiveSeparabilityAnalysis : public SeparabilityAnalysis<T> {
     public:
-      using SeparabilityAnalysis<ParameterType>::SeparabilityAnalysis;
+      using SeparabilityAnalysis<T>::SeparabilityAnalysis;
 
-      AdditiveSeparabilityProperty<ParameterType> getProperty() const noexcept;
+      AdditiveSeparabilityProperty<T> getProperty() const noexcept;
 
     protected:
-      AdditiveSeparabilityProperty<ParameterType> property_;
+      AdditiveSeparabilityProperty<T> property_;
   };
 
   //
   // Implementation
   //
 
-  template <typename ParameterType>
-  AdditiveSeparabilityProperty<ParameterType> AdditiveSeparabilityAnalysis<ParameterType>::getProperty() const noexcept {
+  template <typename T>
+  AdditiveSeparabilityProperty<T> AdditiveSeparabilityAnalysis<T>::getProperty() const noexcept {
     return property_;
   }
 }

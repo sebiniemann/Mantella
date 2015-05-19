@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType>
-  class LinearProportionalityProperty : public ProportionalityProperty<ParameterType> {
+  template <typename T>
+  class LinearProportionalityProperty : public ProportionalityProperty<T> {
     public:
-      using ProportionalityProperty<ParameterType>::ProportionalityProperty;
+      using ProportionalityProperty<T>::ProportionalityProperty;
 
       bool isProportional() const noexcept;
 
@@ -23,23 +23,23 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  bool LinearProportionalityProperty<ParameterType>::isProportional() const noexcept {
+  template <typename T>
+  bool LinearProportionalityProperty<T>::isProportional() const noexcept {
     return isProportional_;
   }
 
-  template <typename ParameterType>
-  void LinearProportionalityProperty<ParameterType>::isProportional(const bool isProportional) noexcept {
+  template <typename T>
+  void LinearProportionalityProperty<T>::isProportional(const bool isProportional) noexcept {
     isProportional_ = isProportional;
   }
 
-  template <typename ParameterType>
-  std::unordered_map<unsigned int, std::pair<double, arma::Col<unsigned int>>> LinearProportionalityProperty<ParameterType>::getProportions() const noexcept {
+  template <typename T>
+  std::unordered_map<unsigned int, std::pair<double, arma::Col<unsigned int>>> LinearProportionalityProperty<T>::getProportions() const noexcept {
     return proportions_;
   }
 
-  template <typename ParameterType>
-  void LinearProportionalityProperty<ParameterType>::setProportions(
+  template <typename T>
+  void LinearProportionalityProperty<T>::setProportions(
       std::unordered_map<unsigned int, std::pair<double, arma::Col<unsigned int>>> proportions) {
     proportions_ = proportions;
   }

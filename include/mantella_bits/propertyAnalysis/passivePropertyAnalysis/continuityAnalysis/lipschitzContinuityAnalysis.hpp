@@ -1,21 +1,21 @@
 namespace mant {
-  template <typename ParameterType>
-  class LipschitzContinuityAnalysis : public ContinuityAnalysis<ParameterType> {
+  template <typename T>
+  class LipschitzContinuityAnalysis : public ContinuityAnalysis<T> {
     public:
-      using ContinuityAnalysis<ParameterType>::ContinuityAnalysis;
+      using ContinuityAnalysis<T>::ContinuityAnalysis;
 
-      LipschitzContinuityProperty<ParameterType> getProperty() const noexcept;
+      LipschitzContinuityProperty<T> getProperty() const noexcept;
 
     protected:
-      LipschitzContinuityProperty<ParameterType> property_;
+      LipschitzContinuityProperty<T> property_;
   };
 
   //
   // Implementation
   //
 
-  template <typename ParameterType>
-  LipschitzContinuityProperty<ParameterType> LipschitzContinuityAnalysis<ParameterType>::getProperty() const noexcept {
+  template <typename T>
+  LipschitzContinuityProperty<T> LipschitzContinuityAnalysis<T>::getProperty() const noexcept {
     return property_;
   }
 }

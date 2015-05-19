@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType>
-  class LipschitzContinuityProperty : public ContinuityProperty<ParameterType> {
+  template <typename T>
+  class LipschitzContinuityProperty : public ContinuityProperty<T> {
     public:
-      using ContinuityProperty<ParameterType>::ContinuityProperty;
+      using ContinuityProperty<T>::ContinuityProperty;
 
       bool isLipschitzContinuous() const noexcept;
 
@@ -24,24 +24,24 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  bool LipschitzContinuityProperty<ParameterType>::isLipschitzContinuous() const noexcept {
+  template <typename T>
+  bool LipschitzContinuityProperty<T>::isLipschitzContinuous() const noexcept {
     return isLipschitzContinuous_;
   }
 
-  template <typename ParameterType>
-  void LipschitzContinuityProperty<ParameterType>::isLipschitzContinuous(
+  template <typename T>
+  void LipschitzContinuityProperty<T>::isLipschitzContinuous(
       const bool isLipschitzContinuous) noexcept {
     isLipschitzContinuous_ = isLipschitzContinuous;
   }
 
-  template <typename ParameterType>
-  double LipschitzContinuityProperty<ParameterType>::getLipschitzConstant() const noexcept {
+  template <typename T>
+  double LipschitzContinuityProperty<T>::getLipschitzConstant() const noexcept {
     return lipschitzConstant_;
   }
 
-  template <typename ParameterType>
-  void LipschitzContinuityProperty<ParameterType>::setLipschitzConstant(
+  template <typename T>
+  void LipschitzContinuityProperty<T>::setLipschitzConstant(
       const double lipschitzConstant) noexcept {
     lipschitzConstant_ = lipschitzConstant;
   }

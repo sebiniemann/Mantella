@@ -1,20 +1,20 @@
 namespace mant {
-  template <typename ParameterType>
-  class ActivePropertyAnalysis : public PropertyAnalysis<ParameterType> {
+  template <typename T>
+  class ActivePropertyAnalysis : public PropertyAnalysis<T> {
     public:
-      using PropertyAnalysis<ParameterType>::PropertyAnalysis;
+      using PropertyAnalysis<T>::PropertyAnalysis;
 
       void analyse(
-          std::shared_ptr<OptimisationProblem<ParameterType>>) noexcept;
+          std::shared_ptr<OptimisationProblem<T>>) noexcept;
 
     protected:
       virtual void analyseImplementation(
-          std::shared_ptr<OptimisationProblem<ParameterType>>) noexcept = 0;
+          std::shared_ptr<OptimisationProblem<T>>) noexcept = 0;
   };
 
-  template <typename ParameterType>
-  void ActivePropertyAnalysis<ParameterType>::analyse(
-      std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept {
+  template <typename T>
+  void ActivePropertyAnalysis<T>::analyse(
+      std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept {
     analyseImplementation(optimisationProblem);
   }
 }

@@ -1,6 +1,6 @@
 namespace mant {
-  template <typename ParameterType>
-  class CorrelationProperty : public Property<ParameterType> {
+  template <typename T>
+  class CorrelationProperty : public Property<T> {
     public:
       double getCorrelationCoefficient() const noexcept;
 
@@ -15,13 +15,13 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  double CorrelationProperty<ParameterType>::getCorrelationCoefficient() const noexcept {
+  template <typename T>
+  double CorrelationProperty<T>::getCorrelationCoefficient() const noexcept {
     return correlationCoefficient_;
   }
 
-  template <typename ParameterType>
-  void CorrelationProperty<ParameterType>::setCorrelationCoefficient(
+  template <typename T>
+  void CorrelationProperty<T>::setCorrelationCoefficient(
       const double correlationCoefficient) noexcept {
     correlationCoefficient_ = correlationCoefficient;
   }

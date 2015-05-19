@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType>
-  class FunctionModelAnalysis : public PassivePropertyAnalysis<ParameterType> {
+  template <typename T>
+  class FunctionModelAnalysis : public PassivePropertyAnalysis<T> {
     public:
-      using PassivePropertyAnalysis<ParameterType>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
 
       arma::Col<double> getResiduals() const noexcept;
 
@@ -14,8 +14,8 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  arma::Col<double> FunctionModelAnalysis<ParameterType>::getResiduals() const noexcept {
+  template <typename T>
+  arma::Col<double> FunctionModelAnalysis<T>::getResiduals() const noexcept {
     return residuals_;
   }
 }

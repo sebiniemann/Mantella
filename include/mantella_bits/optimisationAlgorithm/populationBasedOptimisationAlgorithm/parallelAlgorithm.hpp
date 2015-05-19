@@ -1,9 +1,9 @@
 namespace mant {
-  template <typename ParameterType>
-  class ParallelAlgorithm : public PopulationBasedOptimisationAlgorithm<ParameterType> {
+  template <typename T>
+  class ParallelAlgorithm : public PopulationBasedOptimisationAlgorithm<T> {
     public:
       explicit ParallelAlgorithm(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
           const unsigned int populationSize) noexcept;
 
       unsigned int getRank() const noexcept;
@@ -22,24 +22,24 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  ParallelAlgorithm<ParameterType>::ParallelAlgorithm(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem,
+  template <typename T>
+  ParallelAlgorithm<T>::ParallelAlgorithm(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
       const unsigned int populationSize) noexcept
-    : PopulationBasedOptimisationAlgorithm<ParameterType>(optimisationProblem, populationSize) {
+    : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
   }
 
-  template <typename ParameterType>
-  void ParallelAlgorithm<ParameterType>::optimiseImplementation() noexcept {
+  template <typename T>
+  void ParallelAlgorithm<T>::optimiseImplementation() noexcept {
     unsigned int serialisedOptimisationProblemSize;
     char* serialisedOptimisationProblemBuffer;
 
     if (rank_ == 0) {
       std::ostringstream output; {
         cereal::JSONOutputArchive archive(output);
-        archive(OptimisationAlgorithm<ParameterType>::optimisationProblem_);
+        archive(OptimisationAlgorithm<T>::optimisationProblem_);
       };
 
       std::string serialisedOptimisationProblem = output.str();
@@ -58,7 +58,7 @@ namespace mant {
     if (rank_ != 0) {
       std::istringstream input(serialisedOptimisationProblemBuffer); {
         cereal::JSONInputArchive archive(input);
-        archive(OptimisationAlgorithm<ParameterType>::optimisationProblem_);
+        archive(OptimisationAlgorithm<T>::optimisationProblem_);
       }
     }
 
@@ -67,13 +67,13 @@ namespace mant {
     parallelOptimiseImplementation();
   }
 
-  template <typename ParameterType>
-  unsigned int ParallelAlgorithm<ParameterType>::getRank() const noexcept {
+  template <typename T>
+  unsigned int ParallelAlgorithm<T>::getRank() const noexcept {
     return rank_;
   }
 
-  template <typename ParameterType>
-  unsigned int ParallelAlgorithm<ParameterType>::getNumberOfNodes() const noexcept {
+  template <typename T>
+  unsigned int ParallelAlgorithm<T>::getNumberOfNodes() const noexcept {
     return numberOfNodes_;
   }
 }

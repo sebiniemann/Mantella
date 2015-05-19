@@ -1,45 +1,65 @@
 namespace mant {
-  class HammingDistance : public DistanceFunction<unsigned int> {
+  template <typename T>
+  class HammingDistance : public DistanceFunction<T> {
     public:
-      using DistanceFunction<unsigned int>::DistanceFunction;
+      explicit HammingDistance(
+          const T lowerBound,
+          const T upperBound);
 
     protected:
-      inline unsigned int getDistanceImplementation(
-          const arma::Col<unsigned int>& parameter) const noexcept override;
+      const T lowerBound_;
+      const T upperBound_;
+    
+      T getLengthImplementation(
+          const arma::Col<T>& parameter) const noexcept override;
 
-      inline arma::Col<unsigned int> getRandomNeighbourImplementation(
-          const arma::Col<unsigned int>& parameter,
-          const unsigned int minimalDistance,
-          const unsigned int maximalDistance) const override;
+      arma::Col<T> getRandomNeighbourImplementation(
+          const arma::Col<T>& parameter,
+          const T minimalDistance,
+          const T maximalDistance) const override;
   };
 
   //
   // Implementation
   //
 
-  inline unsigned int HammingDistance::getDistanceImplementation(
-      const arma::Col<unsigned int>& parameter) const noexcept {
+  HammingDistance::HammingDistance(
+      const T lowerBound,
+      const T upperBound)
+    : lowerBound_(lowerBound),
+      upperBound_(upperBound) {
+    verify(lowerBound_ <= upperBound_, "The lower bound must be less than or equal to the upper bound.");
+  }
+
+  T HammingDistance::getLengthImplementation(
+      const arma::Col<T>& parameter) const noexcept {
     return arma::accu(parameter != 0);
   }
 
-  inline arma::Col<unsigned int> HammingDistance::getRandomNeighbourImplementation(
-      const arma::Col<unsigned int>& parameter,
-      const unsigned int minimalDistance,
-      const unsigned int maximalDistance) const {
+  arma::Col<T> HammingDistance::getRandomNeighbourImplementation(
+      arma::Col<T> parameter,
+      const T minimalDistance,
+      const T maximalDistance) const {
     assert(minimalDistance >= 0);
     assert(minimalDistance <= maximalDistance);
 
-    if(minimalDistance > std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) {
-          throw std::logic_error("The minimal distance (" + std::to_string(minimalDistance) + ") must be lower than or equal to the absolute maximal distance (" + std::to_string(std::min(getDistanceImplementation(parameter), parameter.n_elem - getDistanceImplementation(parameter))) + ").");
+    // The maximal distance of the Hamming distance is limited by the number of elements.
+    verify(maximalDistance <= parameter.n_elem, "The maximal distance must be less than or equal to the number of elements.");
+
+    // Chooses randomly and uniformly the number and indicies of the elements to be changed.
+    for(const T element : getRandomPermutation(parameter.n_elem, std::uniform_int_distribution<T>(minimalDistance, maximalDistance)(Rng::getGenerator()))) {
+      // Selects randomly and uniformly a new value from the range [min, max - 1] ...
+      T newValue = std::uniform_int_distribution<T>(lowerBound_, upperBound_ - 1)(Rng::getGenerator());
+      
+      // ... and adds +1 if it was within [current, max - 1], setting the actual range to
+      // [min, current - 1], [current + 1, max].
+      if(parameter(element) >= newValue) {
+        newValue += 1;
+      }
+      
+      parameter(element) = newValue;
     }
-
-    arma::Col<unsigned int> flippedParameter = parameter;
-
-    const arma::Col<unsigned int>& elementsToFlip = getRandomPermutation(parameter.n_elem, std::uniform_int_distribution<unsigned int>(minimalDistance, maximalDistance)(Rng::getGenerator()));
-    const arma::Col<unsigned int>& flippedElements = parameter.elem(elementsToFlip);
-
-    flippedParameter.elem(flippedElements != 0).fill(0);
-    flippedParameter.elem(flippedElements == 0).fill(1);
-    return flippedParameter;
+    
+    return parameter;
   }
 }

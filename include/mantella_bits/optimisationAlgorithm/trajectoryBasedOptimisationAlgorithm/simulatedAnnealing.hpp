@@ -1,18 +1,18 @@
 // TODO Add restarting
 namespace mant {
-  template <typename ParameterType>
-  class SimulatedAnnealing : public TrajectoryBasedOptimisationAlgorithm<ParameterType> {
+  template <typename T>
+  class SimulatedAnnealing : public TrajectoryBasedOptimisationAlgorithm<T> {
     public:
       explicit SimulatedAnnealing(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       void setMaximalStepSize(
-          const ParameterType maximalStepSize);
+          const T maximalStepSize);
 
       std::string toString() const noexcept override;
 
     protected:
-      ParameterType maximalStepSize_;
+      T maximalStepSize_;
 
       virtual bool isAcceptableState(
           const double candidateObjectiveValue) noexcept;
@@ -27,15 +27,15 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  SimulatedAnnealing<ParameterType>::SimulatedAnnealing(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : TrajectoryBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
-    setDefaultMaximalStepSize(std::is_floating_point<ParameterType>());
+  template <typename T>
+  SimulatedAnnealing<T>::SimulatedAnnealing(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+    : TrajectoryBasedOptimisationAlgorithm<T>(optimisationProblem) {
+    setDefaultMaximalStepSize(std::is_floating_point<T>());
   }
 
-  template <typename ParameterType>
-  void SimulatedAnnealing<ParameterType>::optimiseImplementation() noexcept {
+  template <typename T>
+  void SimulatedAnnealing<T>::optimiseImplementation() noexcept {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
@@ -46,7 +46,7 @@ namespace mant {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      arma::Col<ParameterType> candidateParameter = this->distanceFunction_->getRandomNeighbour(state, 0, maximalStepSize_);
+      arma::Col<T> candidateParameter = this->distanceFunction_->getRandomNeighbour(state, 0, maximalStepSize_);
 
       const arma::Col<unsigned int>& belowLowerBound = arma::find(candidateParameter < this->getLowerBounds());
       const arma::Col<unsigned int>& aboveUpperBound = arma::find(candidateParameter > this->getUpperBounds());
@@ -69,15 +69,15 @@ namespace mant {
     }
   }
 
-  template <typename ParameterType>
-  bool SimulatedAnnealing<ParameterType>::isAcceptableState(
+  template <typename T>
+  bool SimulatedAnnealing<T>::isAcceptableState(
       const double candidateObjectiveValue) noexcept {
     return std::exp((this->bestObjectiveValue_ - candidateObjectiveValue) / (this->numberOfIterations_ / this->maximalNumberOfIterations_)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
-  template <typename ParameterType>
-  void SimulatedAnnealing<ParameterType>::setMaximalStepSize(
-      const ParameterType maximalStepSize) {
+  template <typename T>
+  void SimulatedAnnealing<T>::setMaximalStepSize(
+      const T maximalStepSize) {
     if (maximalStepSize <= 0) {
       throw std::logic_error("The maximal step size must be strict greater than 0.");
     }
@@ -85,19 +85,19 @@ namespace mant {
     maximalStepSize_ = maximalStepSize;
   }
 
-  template <typename ParameterType>
-  std::string SimulatedAnnealing<ParameterType>::toString() const noexcept {
+  template <typename T>
+  std::string SimulatedAnnealing<T>::toString() const noexcept {
     return "SimulatedAnnealing";
   }
 
-  template <typename ParameterType>
-  void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
+  template <typename T>
+  void SimulatedAnnealing<T>::setDefaultMaximalStepSize(
       std::true_type) noexcept {
     setMaximalStepSize(this->distanceFunction_->getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10.0);
   }
 
-  template <typename ParameterType>
-  void SimulatedAnnealing<ParameterType>::setDefaultMaximalStepSize(
+  template <typename T>
+  void SimulatedAnnealing<T>::setDefaultMaximalStepSize(
       std::false_type) noexcept {
     setMaximalStepSize(arma::max(1, this->distanceFunction_->getDistance(this->getLowerBounds(), this->getUpperBounds()) / 10));
   }

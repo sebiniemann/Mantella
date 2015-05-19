@@ -1,5 +1,5 @@
 namespace mant {
-  template <typename ParameterType, class... Properties>
+  template <typename T, class... Properties>
   class PropertiesEstimation {
     public:
       void estimate(
@@ -16,8 +16,8 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType, class... Properties>
-  void PropertiesEstimation<ParameterType, Properties...>::estimate(
+  template <typename T, class... Properties>
+  void PropertiesEstimation<T, Properties...>::estimate(
       const Properties*... properties) noexcept{
     return estimateImplementation(properties...);
   }

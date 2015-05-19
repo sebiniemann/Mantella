@@ -1,5 +1,5 @@
 namespace mant {
-  template <typename ParameterType>
+  template <typename T>
   class OptimisationProblem : public Printable {
     public:
       const unsigned int numberOfDimensions_;
@@ -8,29 +8,29 @@ namespace mant {
         const unsigned int numberOfDimensions) noexcept;
 
       void setLowerBounds(
-        const arma::Col<ParameterType>& lowerBounds);
+        const arma::Col<T>& lowerBounds);
 
       void setUpperBounds(
-        const arma::Col<ParameterType>& upperBounds);
+        const arma::Col<T>& upperBounds);
 
-      arma::Col<ParameterType> getLowerBounds() const noexcept;
+      arma::Col<T> getLowerBounds() const noexcept;
 
-      arma::Col<ParameterType> getUpperBounds() const noexcept;
+      arma::Col<T> getUpperBounds() const noexcept;
 
       double getSoftConstraintsValue(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       arma::Col<unsigned int> isSatisfyingLowerBounds(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       arma::Col<unsigned int> isSatisfyingUpperBounds(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       bool isSatisfyingSoftConstraints(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       bool isSatisfyingConstraints(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       void setParameterPermutation(
           const arma::Col<unsigned int>& parameterPermutation);
@@ -56,7 +56,7 @@ namespace mant {
       double getAcceptableObjectiveValue() const noexcept;
 
       double getObjectiveValue(
-        const arma::Col<ParameterType>& parameter);
+        const arma::Col<T>& parameter);
 
       unsigned int getNumberOfEvaluations() const noexcept;
 
@@ -64,13 +64,18 @@ namespace mant {
 
       void reset() noexcept;
 
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> getCachedObjectiveValues() const noexcept;
+      std::unordered_map<arma::Col<T>, double, Hash, IsEqual> getCachedObjectiveValues() const noexcept;
+
+      std::vector<long double> serialise() const noexcept;
+
+      void deserialise(
+          std::vector<long double> serialisedProblem);
 
       virtual ~OptimisationProblem() = default;
 
     protected:
-      arma::Col<ParameterType> lowerBounds_;
-      arma::Col<ParameterType> upperBounds_;
+      arma::Col<T> lowerBounds_;
+      arma::Col<T> upperBounds_;
 
       arma::Col<unsigned int> parameterPermutation_;
       arma::Col<double> parameterScaling_;
@@ -85,36 +90,16 @@ namespace mant {
       unsigned int numberOfEvaluations_;
       unsigned int numberOfDistinctEvaluations_;
 
-      arma::Col<ParameterType> getDiversifiedParameter(
-        const arma::Col<ParameterType>& parameter) const noexcept;
+      arma::Col<T> getDiversifiedParameter(
+        const arma::Col<T>& parameter) const noexcept;
 
       virtual double getSoftConstraintsValueImplementation(
-        const arma::Col<ParameterType>& parameter) const noexcept;
+        const arma::Col<T>& parameter) const noexcept;
 
       virtual double getObjectiveValueImplementation(
-        const arma::Col<ParameterType>& parameter) const noexcept = 0;
+        const arma::Col<T>& parameter) const noexcept = 0;
 
-      std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> cachedObjectiveValues_;
-
- #if defined(MANTELLA_USE_PARALLEL)
-      friend class cereal::access;
-      OptimisationProblem() = default;
-      
-      template <typename Archive>
-      void serialize(
-          Archive& archive) noexcept {
-        archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-        archive(cereal::make_nvp("lowerBounds", lowerBounds_));
-        archive(cereal::make_nvp("upperBounds", upperBounds_));
-        archive(cereal::make_nvp("parameterPermutation", parameterPermutation_));
-        archive(cereal::make_nvp("parameterScaling", parameterScaling_));
-        archive(cereal::make_nvp("parameterTranslation", parameterTranslation_));
-        archive(cereal::make_nvp("parameterRotation", parameterRotation_));
-        archive(cereal::make_nvp("objectiveValueScaling", objectiveValueScaling_));
-        archive(cereal::make_nvp("objectiveValueTranslation", objectiveValueTranslation_));
-        archive(cereal::make_nvp("acceptableObjectiveValue", acceptableObjectiveValue_));
-      }
-#endif
+      std::unordered_map<arma::Col<T>, double, Hash, IsEqual> cachedObjectiveValues_;
   };
 
   template <>
@@ -141,16 +126,16 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  OptimisationProblem<ParameterType>::OptimisationProblem(
+  template <typename T>
+  OptimisationProblem<T>::OptimisationProblem(
       const unsigned int numberOfDimensions) noexcept
     : numberOfDimensions_(numberOfDimensions),
       numberOfEvaluations_(0),
       numberOfDistinctEvaluations_(0) {
     // A vector with all elements set to the lowest representable value.
-    setLowerBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) - std::numeric_limits<ParameterType>::max());
+    setLowerBounds(arma::zeros<arma::Col<T>>(numberOfDimensions_) - std::numeric_limits<T>::max());
     // A vector with all elements set to the largest representable value.
-    setUpperBounds(arma::zeros<arma::Col<ParameterType>>(numberOfDimensions_) + std::numeric_limits<ParameterType>::max());
+    setUpperBounds(arma::zeros<arma::Col<T>>(numberOfDimensions_) + std::numeric_limits<T>::max());
     // (0, ..., numberOfDimensions - 1) 
     setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
     setObjectiveValueScaling(1.0);
@@ -178,36 +163,36 @@ namespace mant {
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
   }
 
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setLowerBounds(
-      const arma::Col<ParameterType>& lowerBounds) {
-    isEqual("The number of elements", lowerBounds.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  void OptimisationProblem<T>::setLowerBounds(
+      const arma::Col<T>& lowerBounds) {
+    verify(lowerBounds.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     lowerBounds_ = lowerBounds;
   }
 
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setUpperBounds(
-      const arma::Col<ParameterType>& upperBounds) {
-    isEqual("The number of elements", upperBounds.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  void OptimisationProblem<T>::setUpperBounds(
+      const arma::Col<T>& upperBounds) {
+    verify(upperBounds.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     upperBounds_ = upperBounds;
   }
 
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getLowerBounds() const noexcept {
+  template <typename T>
+  arma::Col<T> OptimisationProblem<T>::getLowerBounds() const noexcept {
     return lowerBounds_;
   }
 
-  template <typename ParameterType>
-  arma::Col<ParameterType> OptimisationProblem<ParameterType>::getUpperBounds() const noexcept {
+  template <typename T>
+  arma::Col<T> OptimisationProblem<T>::getUpperBounds() const noexcept {
     return upperBounds_;
   }
 
-  template <typename ParameterType>
-  double OptimisationProblem<ParameterType>::getSoftConstraintsValue(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  double OptimisationProblem<T>::getSoftConstraintsValue(
+      const arma::Col<T>& parameter) {
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     const double& softConstraintValue = getSoftConstraintsValueImplementation(parameter);
     
@@ -217,100 +202,118 @@ namespace mant {
     return objectiveValueScaling_ * softConstraintValue;
   }
 
-  template <typename ParameterType>
-  arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingLowerBounds(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  arma::Col<unsigned int> OptimisationProblem<T>::isSatisfyingLowerBounds(
+      const arma::Col<T>& parameter) {
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     return arma::all(parameter >= lowerBounds_);
   }
 
-  template <typename ParameterType>
-  arma::Col<unsigned int> OptimisationProblem<ParameterType>::isSatisfyingUpperBounds(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  arma::Col<unsigned int> OptimisationProblem<T>::isSatisfyingUpperBounds(
+      const arma::Col<T>& parameter) {
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     return  arma::all(parameter <= upperBounds_);
   }
 
-  template <typename ParameterType>
-  bool OptimisationProblem<ParameterType>::isSatisfyingSoftConstraints(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  bool OptimisationProblem<T>::isSatisfyingSoftConstraints(
+      const arma::Col<T>& parameter) {
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     return (getSoftConstraintsValue(parameter) == 0);
   }
 
-  template <typename ParameterType>
-  bool OptimisationProblem<ParameterType>::isSatisfyingConstraints(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  bool OptimisationProblem<T>::isSatisfyingConstraints(
+      const arma::Col<T>& parameter) {
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
     
     // Returns only true, if all other isSatisfying*-methods will also return true.
     return (arma::all(isSatisfyingLowerBounds(parameter)) && arma::all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
 
-  template <typename ParameterType>
-  inline void OptimisationProblem<ParameterType>::setParameterPermutation(
+  template <typename T>
+  inline void OptimisationProblem<T>::setParameterPermutation(
       const arma::Col<unsigned int>& parameterPermutation) {
-    //isPermutation("The vector", parameterPermutation, 0, parameterPermutation.n_elem - 1); // TODO implement. Checks uniqueness and bounds
-    isEqual("The number of elements", parameterPermutation.n_elem, "the number of dimensions", numberOfDimensions_);
+    verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
+    verify(isPermutation(parameterPermutation, 0, numberOfDimensions_ - 1), "The parameter must be a permutation.");
 
     parameterPermutation_ = parameterPermutation;
+
+    // Resets all counter and caches, as the problem was changed.
+    reset();
   }
 
   template <>
   inline void OptimisationProblem<double>::setParameterScaling(
       const arma::Col<double>& parameterScaling) {
-    isEqual("The number of elements", parameterScaling.n_elem, "the number of dimensions", numberOfDimensions_);
+    verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     parameterScaling_ = parameterScaling;
+
+    // Resets all counter and caches, as the problem was changed.
+    reset();
   }
 
   template <>
   inline void OptimisationProblem<double>::setParameterTranslation(
       const arma::Col<double>& parameterTranslation) {
-    isEqual("The number of elements", parameterTranslation.n_elem, "the number of dimensions", numberOfDimensions_);
+    verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     parameterTranslation_ = parameterTranslation;
+
+    // Resets all counter and caches, as the problem was changed.
+    reset();
   }
 
   template <>
   inline void OptimisationProblem<double>::setParameterRotation(
       const arma::Mat<double>& parameterRotation) {
-    isEqual("The number of rows", parameterRotation.n_rows, "the number of dimensions", numberOfDimensions_);
-    isRotationMatrix("The matrix", parameterRotation);
+    verify(parameterRotation.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions.");
+    verifiy(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
 
     parameterRotation_ = parameterRotation;
+
+    // Resets all counter and caches, as the problem was changed.
+    reset();
   }
 
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::OptimisationProblem::setObjectiveValueScaling(
+  template <typename T>
+  void OptimisationProblem<T>::OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) noexcept {
     objectiveValueScaling_ = objectiveValueScaling;
+
+    // Resets all counter and caches, as the problem was changed.
+    reset();
   }
 
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setObjectiveValueTranslation(
+  template <typename T>
+  void OptimisationProblem<T>::setObjectiveValueTranslation(
       const double objectiveValueTranslation) noexcept {
     objectiveValueTranslation_ = objectiveValueTranslation;
+
+    // Resets all counter and caches, as the problem was changed.
+    reset();
   }
 
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::setAcceptableObjectiveValue(
+  template <typename T>
+  void OptimisationProblem<T>::setAcceptableObjectiveValue(
       const double acceptableObjectiveValue) noexcept {
     acceptableObjectiveValue_ = acceptableObjectiveValue;
   }
 
-  template <typename ParameterType>
-  double OptimisationProblem<ParameterType>::getAcceptableObjectiveValue() const noexcept {
+  template <typename T>
+  double OptimisationProblem<T>::getAcceptableObjectiveValue() const noexcept {
     return acceptableObjectiveValue_;
   }
 
-  template <typename ParameterType>
-  inline double OptimisationProblem<ParameterType>::getObjectiveValue(
-      const arma::Col<ParameterType>& parameter) {
-    isEqual("The number of elements", parameter.n_elem, "the number of dimensions", numberOfDimensions_);
+  template <typename T>
+  inline double OptimisationProblem<T>::getObjectiveValue(
+      const arma::Col<T>& parameter) {
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
@@ -321,62 +324,101 @@ namespace mant {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
-      // The result was not found, compute it.
       const double& result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
-      // Return the found result.
       return cachePosition->second;
     }
   }
 
-  template <typename ParameterType>
-  unsigned int OptimisationProblem<ParameterType>::getNumberOfEvaluations() const noexcept {
+  template <typename T>
+  unsigned int OptimisationProblem<T>::getNumberOfEvaluations() const noexcept {
     return numberOfEvaluations_;
   }
 
-  template <typename ParameterType>
-  unsigned int OptimisationProblem<ParameterType>::getNumberOfDistinctEvaluations() const noexcept {
+  template <typename T>
+  unsigned int OptimisationProblem<T>::getNumberOfDistinctEvaluations() const noexcept {
     return numberOfDistinctEvaluations_;
   }
 
-  template <typename ParameterType>
-  void OptimisationProblem<ParameterType>::reset() noexcept {
+  template <typename T>
+  void OptimisationProblem<T>::reset() noexcept {
     numberOfEvaluations_ = 0;
     numberOfDistinctEvaluations_ = 0;
 
     cachedObjectiveValues_.clear();
   }
 
-  template <typename ParameterType>
-  std::unordered_map<arma::Col<ParameterType>, double, Hash, IsEqual> OptimisationProblem<ParameterType>::getCachedObjectiveValues() const noexcept {
+  template <typename T>
+  std::unordered_map<arma::Col<T>, double, Hash, IsEqual> OptimisationProblem<T>::getCachedObjectiveValues() const noexcept {
     return cachedObjectiveValues_;
   }
 
-  template <typename ParameterType>
-  inline arma::Col<ParameterType> OptimisationProblem<ParameterType>::getDiversifiedParameter(
-      const arma::Col<ParameterType>& parameter) const noexcept {
-    assert(isEqual(parameter.n_elem, numberOfDimensions_));
+  template <typename T>
+  inline arma::Col<T> OptimisationProblem<T>::getDiversifiedParameter(
+      const arma::Col<T>& parameter) const noexcept {
+    assert(parameter.n_elem == numberOfDimensions_);
 
-    // The parameter is only permutated for non-continuous problems.
+    // For discrete problems, the parameter is only permutated.
     return parameter.elem(parameterPermutation_);
   }
 
   template <>
   inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
       const arma::Col<double>& parameter) const noexcept {
-    assert(isEqual(parameter.n_elem, numberOfDimensions_));
+    assert(parameter.n_elem == numberOfDimensions_);
 
-    // The paraemter is firstly permutated, than scaled, translated and lastly rotated.
+    // The parameter is firstly permutated, than scaled, translated and lastly rotated.
     return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
   }
 
-  template <typename ParameterType>
-  double OptimisationProblem<ParameterType>::getSoftConstraintsValueImplementation(
-      const arma::Col<ParameterType>& parameter) const noexcept {
-    assert(isEqual(parameter.n_elem, numberOfDimensions_));
+  template <typename T>
+  double OptimisationProblem<T>::getSoftConstraintsValueImplementation(
+      const arma::Col<T>& parameter) const noexcept {
+    assert(parameter.n_elem == numberOfDimensions_);
 
     return 0.0;
+  }
+
+  template <typename T>
+  std::vector<long double> serialise() const noexcept {
+    std::vector<long double> serialisedProblem;
+
+    serialisedProblem.push_back(numberOfDimensions_);
+
+    for(std::size_t n = 0; n < lowerBounds_.n_elem; ++n) {
+      serialisedProblem.push_back(lowerBounds_(n));
+    }
+
+    for(std::size_t n = 0; n < upperBounds_.n_elem; ++n) {
+      serialisedProblem.push_back(upperBounds_(n));
+    }
+
+    for(std::size_t n = 0; n < parameterPermutation_.n_elem; ++n) {
+      serialisedProblem.push_back(parameterPermutation_(n));
+    }
+
+    for(std::size_t n = 0; n < parameterScaling_.n_elem; ++n) {
+      serialisedProblem.push_back(parameterScaling_(n));
+    }
+
+    for(std::size_t n = 0; n < parameterTranslation_.n_elem; ++n) {
+      serialisedProblem.push_back(parameterTranslation_(n));
+    }
+
+    for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
+      serialisedProblem.push_back(parameterRotation_(n));
+    }
+
+    serialisedProblem.push_back(objectiveValueScaling_);
+    serialisedProblem.push_back(objectiveValueTranslation_);
+
+    serialisedProblem.push_back(acceptableObjectiveValue_);
+  }
+
+  void deserialise(
+      std::vector<T> serialisedProblem) {
+
   }
 }

@@ -1,9 +1,9 @@
 namespace mant {
-  template <typename ParameterType>
-  class GridSearch : public SamplingBasedOptimisationAlgorithm<ParameterType> {
+  template <typename T>
+  class GridSearch : public SamplingBasedOptimisationAlgorithm<T> {
     public:
       explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       void setSamplingFactors(
           const arma::Col<double> samplingFactors);
@@ -20,15 +20,15 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  GridSearch<ParameterType>::GridSearch(
-      const std::shared_ptr<OptimisationProblem<ParameterType>> optimisationProblem) noexcept
-    : SamplingBasedOptimisationAlgorithm<ParameterType>(optimisationProblem) {
+  template <typename T>
+  GridSearch<T>::GridSearch(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+    : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
     setSamplingFactors(arma::ones(this->numberOfDimensions_) / static_cast<double>(this->numberOfDimensions_));
   }
 
-  template <typename ParameterType>
-  void GridSearch<ParameterType>::optimiseImplementation() noexcept {
+  template <typename T>
+  void GridSearch<T>::optimiseImplementation() noexcept {
     const arma::Col<double>& scaledSamplingFactors = samplingFactors_(0) / samplingFactors_;
     const arma::Col<unsigned int>& numberOfSamples_ = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(this->maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->numberOfDimensions_)));
 
@@ -71,8 +71,8 @@ namespace mant {
     }
   }
 
-  template <typename ParameterType>
-  void GridSearch<ParameterType>::setSamplingFactors(
+  template <typename T>
+  void GridSearch<T>::setSamplingFactors(
       const arma::Col<double> samplingFactors) {
     if(samplingFactors.n_elem != this->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
@@ -83,8 +83,8 @@ namespace mant {
     samplingFactors_ = samplingFactors;
   }
 
-  template <typename ParameterType>
-  std::string GridSearch<ParameterType>::toString() const noexcept {
+  template <typename T>
+  std::string GridSearch<T>::toString() const noexcept {
     return "GridSearch";
   }
 }

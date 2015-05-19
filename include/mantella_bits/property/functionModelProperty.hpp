@@ -1,7 +1,7 @@
 namespace mant {
-  template <typename ParameterType>
-  class FunctionModelProperty : public Property<ParameterType> {
+  template <typename T>
+  class FunctionModelProperty : public Property<T> {
     public:
-      using Property<ParameterType>::Property;
+      using Property<T>::Property;
   };
 }

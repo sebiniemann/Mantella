@@ -1,5 +1,5 @@
 namespace mant {
-  template <typename ParameterType>
+  template <typename T>
   class Property {
     public:
       explicit Property();
@@ -14,14 +14,14 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  Property<ParameterType>::Property()
+  template <typename T>
+  Property<T>::Property()
     : plausibility_(0) {
 
   }
 
-  template <typename ParameterType>
-  double Property<ParameterType>::getPlausibility() const noexcept {
+  template <typename T>
+  double Property<T>::getPlausibility() const noexcept {
     return plausibility_;
   }
 }

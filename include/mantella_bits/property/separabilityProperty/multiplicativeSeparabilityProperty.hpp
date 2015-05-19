@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename ParameterType>
-  class MultiplicativeSeparabilityProperty : SeparabilityProperty<ParameterType> {
+  template <typename T>
+  class MultiplicativeSeparabilityProperty : SeparabilityProperty<T> {
     public:
-      using SeparabilityProperty<ParameterType>::SeparabilityProperty;
+      using SeparabilityProperty<T>::SeparabilityProperty;
 
       bool isSeparable() const noexcept;
 
@@ -23,23 +23,23 @@ namespace mant {
   // Implementation
   //
 
-  template <typename ParameterType>
-  bool MultiplicativeSeparabilityProperty<ParameterType>::isSeparable() const noexcept {
+  template <typename T>
+  bool MultiplicativeSeparabilityProperty<T>::isSeparable() const noexcept {
     return isSeparable_;
   }
 
-  template <typename ParameterType>
-  void MultiplicativeSeparabilityProperty<ParameterType>::isSeparable(const bool isSeparable) noexcept {
+  template <typename T>
+  void MultiplicativeSeparabilityProperty<T>::isSeparable(const bool isSeparable) noexcept {
     isSeparable_ = isSeparable;
   }
 
-  template <typename ParameterType>
-  std::vector<arma::Col<unsigned int>> MultiplicativeSeparabilityProperty<ParameterType>::getSeparation() const noexcept {
+  template <typename T>
+  std::vector<arma::Col<unsigned int>> MultiplicativeSeparabilityProperty<T>::getSeparation() const noexcept {
     return separation_;
   }
 
-  template <typename ParameterType>
-  void MultiplicativeSeparabilityProperty<ParameterType>::setSeparation(
+  template <typename T>
+  void MultiplicativeSeparabilityProperty<T>::setSeparation(
       const std::vector<arma::Col<unsigned int>> separation) {
     separation_ = separation;
   }

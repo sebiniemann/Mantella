@@ -1,21 +1,21 @@
 namespace mant {
-  template <typename ParameterType>
-    class CorrelationAnalysis : public PassivePropertyAnalysis<ParameterType> {
+  template <typename T>
+    class CorrelationAnalysis : public PassivePropertyAnalysis<T> {
     public:
-      using PassivePropertyAnalysis<ParameterType>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
 
-      CorrelationProperty<ParameterType> getProperty() const noexcept;
+      CorrelationProperty<T> getProperty() const noexcept;
 
     protected:
-      CorrelationProperty<ParameterType> property_;
+      CorrelationProperty<T> property_;
   };
 
   //
   // Implementation
   //
 
-  template <typename ParameterType>
-  CorrelationProperty<ParameterType> CorrelationAnalysis<ParameterType>::getProperty() const noexcept {
+  template <typename T>
+  CorrelationProperty<T> CorrelationAnalysis<T>::getProperty() const noexcept {
     return property_;
   }
 }
