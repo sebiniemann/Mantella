@@ -69,7 +69,7 @@ namespace mant {
       std::vector<long double> serialise() const noexcept;
 
       void deserialise(
-          std::vector<long double> serialisedProblem);
+          const std::vector<long double>& serialisedProblem);
 
       virtual ~OptimisationProblem() = default;
 
@@ -416,8 +416,9 @@ namespace mant {
     serialisedProblem.push_back(acceptableObjectiveValue_);
   }
 
-  void deserialise(
-      std::vector<T> serialisedProblem) {
+  template <typename T>
+  void OptimisationProblem<T>::deserialise(
+      const std::vector<long double>& serialisedProblem) {
 
   }
 }
