@@ -20,10 +20,10 @@ namespace mant {
       double getSoftConstraintsValue(
         const arma::Col<T>& parameter);
 
-      arma::Col<unsigned int> isSatisfyingLowerBounds(
+      arma::Col<unsigned int> isOutOfLowerBounds(
         const arma::Col<T>& parameter);
 
-      arma::Col<unsigned int> isSatisfyingUpperBounds(
+      arma::Col<unsigned int> isOutOfUpperBounds(
         const arma::Col<T>& parameter);
 
       bool isSatisfyingSoftConstraints(
@@ -64,7 +64,7 @@ namespace mant {
 
       void reset() noexcept;
 
-      std::unordered_map<arma::Col<T>, double, Hash, IsEqual> getCachedObjectiveValues() const noexcept;
+      std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>> getCachedObjectiveValues() const noexcept;
 
       std::vector<long double> serialise() const noexcept;
 
@@ -99,7 +99,7 @@ namespace mant {
       virtual double getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept = 0;
 
-      std::unordered_map<arma::Col<T>, double, Hash, IsEqual> cachedObjectiveValues_;
+      std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>> cachedObjectiveValues_;
   };
 
   template <>
@@ -203,19 +203,19 @@ namespace mant {
   }
 
   template <typename T>
-  arma::Col<unsigned int> OptimisationProblem<T>::isSatisfyingLowerBounds(
+  arma::Col<unsigned int> OptimisationProblem<T>::isOutOfLowerBounds(
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return arma::all(parameter >= lowerBounds_);
+    return parameter < lowerBounds_;
   }
 
   template <typename T>
-  arma::Col<unsigned int> OptimisationProblem<T>::isSatisfyingUpperBounds(
+  arma::Col<unsigned int> OptimisationProblem<T>::isOutOfUpperBounds(
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return  arma::all(parameter <= upperBounds_);
+    return  parameter > upperBounds_;
   }
 
   template <typename T>
@@ -230,9 +230,8 @@ namespace mant {
   bool OptimisationProblem<T>::isSatisfyingConstraints(
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-    
-    // Returns only true, if all other isSatisfying*-methods will also return true.
-    return (arma::all(isSatisfyingLowerBounds(parameter)) && arma::all(isSatisfyingUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
+
+    return (!arma::any(isOutOfLowerBounds(parameter)) && !arma::any(isOutOfUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
 
   template <typename T>
@@ -273,7 +272,7 @@ namespace mant {
   inline void OptimisationProblem<double>::setParameterRotation(
       const arma::Mat<double>& parameterRotation) {
     verify(parameterRotation.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions.");
-    verifiy(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
+    verify(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
 
     parameterRotation_ = parameterRotation;
 
@@ -351,7 +350,7 @@ namespace mant {
   }
 
   template <typename T>
-  std::unordered_map<arma::Col<T>, double, Hash, IsEqual> OptimisationProblem<T>::getCachedObjectiveValues() const noexcept {
+  std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>> OptimisationProblem<T>::getCachedObjectiveValues() const noexcept {
     return cachedObjectiveValues_;
   }
 
@@ -382,7 +381,7 @@ namespace mant {
   }
 
   template <typename T>
-  std::vector<long double> serialise() const noexcept {
+  std::vector<long double> OptimisationProblem<T>::serialise() const noexcept {
     std::vector<long double> serialisedProblem;
 
     serialisedProblem.push_back(numberOfDimensions_);
