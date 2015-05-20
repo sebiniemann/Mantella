@@ -124,11 +124,8 @@ if(BUILD_TESTS)
     test/helper/testString.cpp
     test/helper/testUnorderedContainer.cpp
     test/testDistanceFunction.cpp
-    test/distanceFunction/testEuclideanDistance.cpp
     test/distanceFunction/testHammingDistance.cpp
-    test/distanceFunction/testInfinityNorm.cpp
     test/distanceFunction/testManhattanDistance.cpp
-    test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
@@ -153,12 +150,6 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
-    test/testOptimisationAlgorithm.cpp
-    test/testPropertyAnalysis.cpp
-    test/testPropertiesEstimation.cpp
-#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
-#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
-#        test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeeves.cpp
   )
 
   # Link against third party libraries
