@@ -163,10 +163,8 @@ namespace mant {
     inline arma::Cube<double>::fixed<3, 3, 3> ParallelKinematicMachine3PRUS::getModel(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
-      if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
-        throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
-      }
-      isEqual("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
+      verify(arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1)), "All values for the actuation of redundantion joints must be between [0, 1].");
+      verify(redundantJointActuations.n_elem == redundantJointIndicies_.n_elem, "The number of redundant actuations must be equal to the number of redundant joints.");
 
       arma::Cube<double>::fixed<3, 3, 3> model;
 
@@ -213,10 +211,8 @@ namespace mant {
         const arma::Row<double>::fixed<3>& actuations,
         const arma::Row<double>::fixed<3>& endEffectorRotation,
         const arma::Row<double>& redundantJointActuations) const {
-      if (arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1))) {
-        throw std::logic_error("All values for the actuation of redundantion joints must be between [0, 1].");
-      }
-      isEqual("The number of redundant actuations", redundantJointActuations.n_elem, "the number of redundant joints", redundantJointIndicies_.n_elem);
+      verify(arma::any(arma::vectorise(redundantJointActuations < 0)) || arma::any(arma::vectorise(redundantJointActuations > 1)), "All values for the actuation of redundantion joints must be between [0, 1].");
+      verify(redundantJointActuations.n_elem == redundantJointIndicies_.n_elem, "The number of redundant actuations must be equal to the number of redundant joints.");
 
       const double& endEffectorRollAngle = endEffectorRotation(0);
       const double& endEffectorPitchAngle = endEffectorRotation(1);
