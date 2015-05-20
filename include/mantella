@@ -124,16 +124,12 @@
 #include <mantella_bits/optimisationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/multiResolutionGridSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp>
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp>
 #include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/multilevelCoordinateSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/roleBasedImitationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp>
 
 // Property analyses
