@@ -14,7 +14,7 @@ namespace mant {
           const arma::Col<T>& parameter) const noexcept override;
 
       arma::Col<T> getRandomNeighbourImplementation(
-          const arma::Col<T>& parameter,
+          arma::Col<T> parameter,
           const T minimalDistance,
           const T maximalDistance) const override;
   };
@@ -23,7 +23,8 @@ namespace mant {
   // Implementation
   //
 
-  HammingDistance::HammingDistance(
+  template <typename T>
+  HammingDistance<T>::HammingDistance(
       const T lowerBound,
       const T upperBound)
     : lowerBound_(lowerBound),
@@ -31,12 +32,14 @@ namespace mant {
     verify(lowerBound_ <= upperBound_, "The lower bound must be less than or equal to the upper bound.");
   }
 
-  T HammingDistance::getLengthImplementation(
+  template <typename T>
+  T HammingDistance<T>::getLengthImplementation(
       const arma::Col<T>& parameter) const noexcept {
     return arma::accu(parameter != 0);
   }
 
-  arma::Col<T> HammingDistance::getRandomNeighbourImplementation(
+  template <typename T>
+  arma::Col<T> HammingDistance<T>::getRandomNeighbourImplementation(
       arma::Col<T> parameter,
       const T minimalDistance,
       const T maximalDistance) const {
