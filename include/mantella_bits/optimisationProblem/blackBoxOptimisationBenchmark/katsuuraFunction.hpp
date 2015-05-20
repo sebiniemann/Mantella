@@ -61,8 +61,8 @@ namespace mant {
 
     inline void KatsuuraFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", rotationQ);
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }

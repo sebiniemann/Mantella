@@ -77,24 +77,24 @@ namespace mant {
 
     inline void GallaghersGaussian101mePeaksFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", rotationQ);
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterConditionings(
         const arma::Mat<double>& localParameterConditionings) {
-      isEqual("The number of rows", localParameterConditionings.n_rows, "the number of dimensions", numberOfDimensions_);
-      isEqual("The number of columns", localParameterConditionings.n_cols, "the number of peaks", 101);
+      verify(localParameterConditionings.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(localParameterConditionings.n_cols == 101, "The number of columns must be equal to the number of peaks (101).");
 
       localParameterConditionings_ = localParameterConditionings;
     }
 
     inline void GallaghersGaussian101mePeaksFunction::setLocalParameterTranslations(
         const arma::Mat<double>& localParameterTranslations) {
-      isEqual("The number of rows", localParameterTranslations.n_rows, "the number of dimensions", numberOfDimensions_);
-      isEqual("The number of columns", localParameterTranslations.n_cols, "the number of peaks", 101);
+      verify(localParameterTranslations.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(localParameterTranslations.n_cols == 101, "The number of columns must be equal to the number of peaks (101).");
 
       localParameterTranslations_ = localParameterTranslations;
     }

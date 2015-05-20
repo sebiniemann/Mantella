@@ -69,16 +69,16 @@ namespace mant {
 
     inline void WeierstrassFunction::setRotationR(
         const arma::Mat<double>& rotationR) {
-      isEqual("The number of rows", rotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", rotationR);
+      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
       rotationR_ = rotationR;
     }
 
     inline void WeierstrassFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", rotationQ);
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }

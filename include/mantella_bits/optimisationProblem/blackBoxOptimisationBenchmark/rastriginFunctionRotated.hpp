@@ -6,7 +6,7 @@ namespace mant {
             const unsigned int numberOfDimensions) noexcept;
 
         inline void setRotationR(
-            const arma::Mat<double>& parameterRotationR);
+            const arma::Mat<double>& rotationR);
 
         inline void setRotationQ(
             const arma::Mat<double>& rotationQ);
@@ -63,17 +63,17 @@ namespace mant {
     }
 
     inline void RastriginFunctionRotated::setRotationR(
-        const arma::Mat<double>& parameterRotationR) {
-      isEqual("The number of rows", parameterRotationR.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", parameterRotationR);
+        const arma::Mat<double>& rotationR) {
+      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
-      rotationR_ = parameterRotationR;
+      rotationR_ = rotationR;
     }
 
     inline void RastriginFunctionRotated::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      isEqual("The number of rows", rotationQ.n_rows, "the number of dimensions", numberOfDimensions_);
-      isRotationMatrix("The matrix", rotationQ);
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
