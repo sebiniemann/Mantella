@@ -1,7 +1,7 @@
 namespace mant {
-  class DirectLinearProportionalityAnalysis : public LinearProportionalityAnalysis<double> {
+  class LinearProportionalityAnalysis : public ActivePropertyAnalysis<double> {
     public:
-      using LinearProportionalityAnalysis<double>::LinearProportionalityAnalysis;
+      using ActivePropertyAnalysis<double>::ActivePropertyAnalysis;
 
     protected:
       void analyseImplementation(

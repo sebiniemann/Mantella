@@ -1,11 +1,11 @@
 namespace mant {
-  class OrdinaryLeastSquaresQuadraticFunctionModelAnalysis : public QuadraticFunctionModelAnalysis {
+  class OrdinaryLeastSquaresQuadraticFunctionModelAnalysis : public PassivePropertyAnalysis<double> {
     public:
-      using QuadraticFunctionModelAnalysis::QuadraticFunctionModelAnalysis;
+      using PassivePropertyAnalysis<double>::PassivePropertyAnalysis;
 
     protected:
       inline void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -13,7 +13,7 @@ namespace mant {
   //
 
   inline void OrdinaryLeastSquaresQuadraticFunctionModelAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem * (parameterToObjectiveValueMappings.cbegin()->first.n_elem + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 

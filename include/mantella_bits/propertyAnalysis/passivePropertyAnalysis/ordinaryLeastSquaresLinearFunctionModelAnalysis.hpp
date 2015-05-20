@@ -1,11 +1,11 @@
 namespace mant {
-  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public LinearFunctionModelAnalysis {
+  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public PassivePropertyAnalysis<double> {
     public:
-      using LinearFunctionModelAnalysis::LinearFunctionModelAnalysis;
+      using PassivePropertyAnalysis<double>::PassivePropertyAnalysis;
 
     protected:
       inline void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -13,7 +13,7 @@ namespace mant {
   //
 
   inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 

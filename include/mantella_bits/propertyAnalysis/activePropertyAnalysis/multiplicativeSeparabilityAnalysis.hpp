@@ -1,7 +1,7 @@
 namespace mant {
-  class DirectMultiplicativeSeparabilityAnalysis : public MultiplicativeSeparabilityAnalysis<double> {
+  class MultiplicativeSeparabilityAnalysis : public ActivePropertyAnalysis<double> {
     public:
-      using MultiplicativeSeparabilityAnalysis<double>::MultiplicativeSeparabilityAnalysis;
+      using ActivePropertyAnalysis<double>::ActivePropertyAnalysis;
 
     protected:
       inline void analyseImplementation(
@@ -12,7 +12,7 @@ namespace mant {
   // Implementation
   //
 
-  inline void DirectMultiplicativeSeparabilityAnalysis::analyseImplementation(
+  inline void MultiplicativeSeparabilityAnalysis::analyseImplementation(
       std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->numberOfDimensions_);
 
