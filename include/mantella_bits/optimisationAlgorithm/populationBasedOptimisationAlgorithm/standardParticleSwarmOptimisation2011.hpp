@@ -1,46 +1,47 @@
 namespace mant {
-  class StandardParticleSwarmOptimisation2011 : public PopulationBasedOptimisationAlgorithm<double> {
+  template <typename T>
+  class StandardParticleSwarmOptimisation2011 : public PopulationBasedOptimisationAlgorithm<T> {
     public:
       inline explicit StandardParticleSwarmOptimisation2011(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
           const unsigned int populationSize) noexcept;
 
       inline void setNeighbourhoodProbability(
-          const double neighbourhoodProbability) noexcept;
+          const T neighbourhoodProbability) noexcept;
 
       inline void setMaximalAcceleration(
-          const double maximalAcceleration) noexcept;
+          const T maximalAcceleration) noexcept;
       inline void setMaximalLocalAttraction(
-          const double maximalLocalAttraction) noexcept;
+          const T maximalLocalAttraction) noexcept;
       inline void setMaximalGlobalAttraction(
-          const double maximalGlobalAttraction) noexcept;
+          const T maximalGlobalAttraction) noexcept;
 
       inline void setMaximalSwarmConvergence(
-          const double maximalSwarmConvergence) noexcept;
+          const T maximalSwarmConvergence) noexcept;
 
       inline std::string toString() const noexcept override;
 
     protected:
-      double neighbourhoodProbability_;
+      T neighbourhoodProbability_;
 
-      double maximalAcceleration_;
-      double maximalLocalAttraction_;
-      double maximalGlobalAttraction_;
+      T maximalAcceleration_;
+      T maximalLocalAttraction_;
+      T maximalGlobalAttraction_;
 
-      double maximalSwarmConvergence_;
+      T maximalSwarmConvergence_;
 
-      arma::Mat<double> particles_;
-      arma::Mat<double> velocities_;
+      arma::Mat<T> particles_;
+      arma::Mat<T> velocities_;
 
       unsigned int particleIndex_;
-      arma::Col<double> particle_;
+      arma::Col<T> particle_;
 
       arma::Col<unsigned int> neighbourhoodParticlesIndecies_;
       unsigned int neighbourhoodBestParticleIndex_;
 
-      arma::Col<double> attractionCenter_;
+      arma::Col<T> attractionCenter_;
 
-      arma::Mat<double> localBestSolutions_;
+      arma::Mat<T> localBestSolutions_;
       arma::Row<double> localBestSoftConstraintsValues_;
       arma::Row<double> localBestObjectiveValues_;
 
@@ -55,28 +56,30 @@ namespace mant {
 
       inline arma::Mat<unsigned int> getRandomNeighbourhoodTopology() noexcept;
 
-      inline double getAcceleration() noexcept;
-      inline arma::Col<double> getVelocity() noexcept;
+      inline T getAcceleration() noexcept;
+      inline arma::Col<T> getVelocity() noexcept;
   };
 
   //
   // Implementation
   //
 
-  inline StandardParticleSwarmOptimisation2011::StandardParticleSwarmOptimisation2011(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem,
+  template <typename T>
+  inline StandardParticleSwarmOptimisation2011<T>::StandardParticleSwarmOptimisation2011(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
       const unsigned int populationSize) noexcept
-    : PopulationBasedOptimisationAlgorithm<double>(optimisationProblem, populationSize),
+    : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize),
       localBestObjectiveValues_(this->populationSize_),
       randomizeTopology_(true) {
-    setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(this->populationSize_), 3.0));
+    setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<T>(this->populationSize_), 3.0));
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));
     setMaximalGlobalAttraction(maximalLocalAttraction_);
     setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
   }
 
-  inline void StandardParticleSwarmOptimisation2011::optimiseImplementation() noexcept {
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::optimiseImplementation() noexcept {
     initialiseSwarm();
 
     while(!this->isFinished() && !this->isTerminated()) {
@@ -93,7 +96,7 @@ namespace mant {
         particle_ = particles_.col(particleIndex_);
 
         neighbourhoodParticlesIndecies_ = arma::find(topology_.col(particleIndex_));
-        static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies_)).min(neighbourhoodBestParticleIndex_);
+        static_cast<arma::Col<T>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies_)).min(neighbourhoodBestParticleIndex_);
         neighbourhoodBestParticleIndex_ = neighbourhoodParticlesIndecies_(neighbourhoodBestParticleIndex_);
 
         if (neighbourhoodBestParticleIndex_ == particleIndex_) {
@@ -102,8 +105,8 @@ namespace mant {
           attractionCenter_ = (maximalLocalAttraction_ * (localBestSolutions_.col(particleIndex_) - particle_) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex_) - particle_)) / 3.0;
         }
 
-        arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
-        arma::Col<double> solutionCandidate = particle_ + velocityCandidate;
+        arma::Col<T> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
+        arma::Col<T> solutionCandidate = particle_ + velocityCandidate;
 
         const arma::Col<unsigned int>& belowLowerBound = arma::find(solutionCandidate < this->getLowerBounds());
         const arma::Col<unsigned int>& aboveUpperBound = arma::find(solutionCandidate > this->getUpperBounds());
@@ -136,18 +139,19 @@ namespace mant {
         }
       }
 
-      if (static_cast<arma::Row<double>>(arma::stddev(particles_, 1)).max() < maximalSwarmConvergence_) {
+      if (static_cast<arma::Row<T>>(arma::stddev(particles_, 1)).max() < maximalSwarmConvergence_) {
         initialiseSwarm();
       }
     }
   }
 
-  inline void StandardParticleSwarmOptimisation2011::initialiseSwarm() noexcept {
-    particles_ = arma::randu<arma::Mat<double>>(this->numberOfDimensions_, this->populationSize_);
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::initialiseSwarm() noexcept {
+    particles_ = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, this->populationSize_);
     particles_.each_col() %= this->getUpperBounds() - this->getLowerBounds();
     particles_.each_col() += this->getLowerBounds();
 
-    velocities_ = arma::randu<arma::Mat<double>>(this->numberOfDimensions_, this->populationSize_);
+    velocities_ = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, this->populationSize_);
     velocities_.each_col() %= this->getUpperBounds() - this->getLowerBounds();
     velocities_.each_col() += this->getLowerBounds();
     velocities_ -= particles_;
@@ -174,47 +178,56 @@ namespace mant {
     randomizeTopology_ = true;
   }
 
-  inline double StandardParticleSwarmOptimisation2011::getAcceleration() noexcept {
-    return std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
+  template <typename T>
+  inline T StandardParticleSwarmOptimisation2011<T>::getAcceleration() noexcept {
+    return std::uniform_real_distribution<T>(0.0, 1.0)(Rng::getGenerator());
   }
 
-  inline arma::Col<double> StandardParticleSwarmOptimisation2011::getVelocity() noexcept {
-    return arma::normalise(arma::randn<arma::Col<double>>(this->numberOfDimensions_)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
+  template <typename T>
+  inline arma::Col<T> StandardParticleSwarmOptimisation2011<T>::getVelocity() noexcept {
+    return arma::normalise(arma::randn<arma::Col<T>>(this->numberOfDimensions_)) * std::uniform_real_distribution<T>(0.0, 1.0)(Rng::getGenerator());
   }
 
-  inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011::getRandomNeighbourhoodTopology() noexcept {
-    arma::Mat<unsigned int> topology = (arma::randu<arma::Mat<double>>(this->populationSize_, this->populationSize_) <= neighbourhoodProbability_);
+  template <typename T>
+  inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011<T>::getRandomNeighbourhoodTopology() noexcept {
+    arma::Mat<unsigned int> topology = (arma::randu<arma::Mat<T>>(this->populationSize_, this->populationSize_) <= neighbourhoodProbability_);
     topology.diag() += 1.0;
 
     return topology;
   }
 
-  inline void StandardParticleSwarmOptimisation2011::setNeighbourhoodProbability(
-      const double neighbourhoodProbability) noexcept {
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::setNeighbourhoodProbability(
+      const T neighbourhoodProbability) noexcept {
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
-  inline void StandardParticleSwarmOptimisation2011::setMaximalAcceleration(
-      const double maximalAcceleration) noexcept {
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::setMaximalAcceleration(
+      const T maximalAcceleration) noexcept {
     maximalAcceleration_ = maximalAcceleration;
   }
 
-  inline void StandardParticleSwarmOptimisation2011::setMaximalLocalAttraction(
-      const double maximalLocalAttraction) noexcept {
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::setMaximalLocalAttraction(
+      const T maximalLocalAttraction) noexcept {
     maximalLocalAttraction_ = maximalLocalAttraction;
   }
 
-  inline void StandardParticleSwarmOptimisation2011::setMaximalGlobalAttraction(
-      const double maximalGlobalAttraction) noexcept {
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::setMaximalGlobalAttraction(
+      const T maximalGlobalAttraction) noexcept {
     maximalGlobalAttraction_ = maximalGlobalAttraction;
   }
 
-  inline void StandardParticleSwarmOptimisation2011::setMaximalSwarmConvergence(
-      const double maximalSwarmConvergence) noexcept {
+  template <typename T>
+  inline void StandardParticleSwarmOptimisation2011<T>::setMaximalSwarmConvergence(
+      const T maximalSwarmConvergence) noexcept {
     maximalSwarmConvergence_ = maximalSwarmConvergence;
   }
 
-  inline std::string StandardParticleSwarmOptimisation2011::toString() const noexcept {
+  template <typename T>
+  inline std::string StandardParticleSwarmOptimisation2011<T>::toString() const noexcept {
     return "StandardParticleSwarmOptimisation2011";
   }
 }
