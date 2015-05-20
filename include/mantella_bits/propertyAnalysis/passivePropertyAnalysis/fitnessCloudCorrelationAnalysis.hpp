@@ -1,20 +1,31 @@
 namespace mant {
-  class FitnessDistanceCorrelationAnalysis : public PassivePropertyAnalysis<double> {
+  template <typename T>
+  class FitnessCloudCorrelationAnalysis : public PassivePropertyAnalysis<T> {
     public:
-      using PassivePropertyAnalysis<double>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
+
+      double getCorrelationCoefficient() const noexcept;
 
     protected:
+      double correlationCoefficient_;
+
       inline void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  inline void FitnessDistanceCorrelationAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
-    arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
+  template <typename T>
+  double FitnessCloudCorrelationAnalysis<T>::getCorrelationCoefficient() const noexcept {
+    return correlationCoefficient_;
+  }
+
+  template <typename T>
+  void FitnessCloudCorrelationAnalysis<T>::analyseImplementation(
+      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+    arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 
     unsigned int n = 0;
@@ -29,6 +40,6 @@ namespace mant {
 
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
-    property_.setCorrelationCoefficient(arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues)));
+    correlationCoefficient_ = arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
   }
 }

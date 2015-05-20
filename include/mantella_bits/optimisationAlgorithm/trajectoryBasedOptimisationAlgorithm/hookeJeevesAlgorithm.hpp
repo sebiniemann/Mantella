@@ -1,21 +1,22 @@
 // TODO Add restarting
 namespace mant {
-  class HookeJeevesAlgorithm : public TrajectoryBasedOptimisationAlgorithm<double> {
+  template <typename T>
+  class HookeJeevesAlgorithm : public TrajectoryBasedOptimisationAlgorithm<T> {
     public:
       inline explicit HookeJeevesAlgorithm(
-          const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       inline void setInitialStepSize(
-          const arma::Col<double> initialStepSize);
+          const arma::Col<T> initialStepSize);
 
       inline void setStepSizeDecrease(
-          const arma::Col<double> stepSizeDecrease);
+          const arma::Col<T> stepSizeDecrease);
 
       inline std::string toString() const noexcept override;
 
     protected:
-      arma::Col<double> initialStepSize_;
-      arma::Col<double> stepSizeDecrease_;
+      arma::Col<T> initialStepSize_;
+      arma::Col<T> stepSizeDecrease_;
 
       inline void optimiseImplementation() noexcept override;
   };
@@ -24,14 +25,16 @@ namespace mant {
   // Implementation
   //
 
-  inline HookeJeevesAlgorithm::HookeJeevesAlgorithm(
-      const std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept
-    : TrajectoryBasedOptimisationAlgorithm<double>(optimisationProblem) {
+  template <typename T>
+  HookeJeevesAlgorithm<T>::HookeJeevesAlgorithm(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+    : TrajectoryBasedOptimisationAlgorithm<T>(optimisationProblem) {
     setInitialStepSize(this->getUpperBounds() - this->getLowerBounds());
-    setStepSizeDecrease(arma::ones<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 0.5);
+    setStepSizeDecrease(arma::ones<arma::Col<T>>(optimisationProblem->numberOfDimensions_) * 0.5);
   }
 
-  inline void HookeJeevesAlgorithm::optimiseImplementation() noexcept {
+  template <typename T>
+  void HookeJeevesAlgorithm<T>::optimiseImplementation() noexcept {
     ++this->numberOfIterations_;
 
     this->bestParameter_ = this->initialParameter_;
@@ -39,7 +42,7 @@ namespace mant {
     this->bestObjectiveValue_ = this->getObjectiveValue(this->initialParameter_);
 
     bool reduceStepSize = false;
-    arma::Col<double> stepSize = initialStepSize_;
+    arma::Col<T> stepSize = initialStepSize_;
 
     while(!this->isFinished() && !this->isTerminated()) {
       if (reduceStepSize) {
@@ -48,7 +51,7 @@ namespace mant {
 
       reduceStepSize = true;
 
-      arma::Col<double> candidateParameter = this->bestParameter_;
+      arma::Col<T> candidateParameter = this->bestParameter_;
       for (std::size_t n = 0; n < this->numberOfDimensions_; ++n) {
         candidateParameter(n) += stepSize(n);
 
@@ -99,8 +102,9 @@ namespace mant {
     }
   }
 
-  inline void HookeJeevesAlgorithm::setInitialStepSize(
-      const arma::Col<double> initialStepSize) {
+  template <typename T>
+  void HookeJeevesAlgorithm<T>::setInitialStepSize(
+      const arma::Col<T> initialStepSize) {
     if(initialStepSize.n_rows != this->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
     } else if (arma::any(initialStepSize <= 0)) {
@@ -110,8 +114,9 @@ namespace mant {
     initialStepSize_ = initialStepSize;
   }
 
-  inline void HookeJeevesAlgorithm::setStepSizeDecrease(
-      const arma::Col<double> stepSizeDecrease) {
+  template <typename T>
+  void HookeJeevesAlgorithm<T>::setStepSizeDecrease(
+      const arma::Col<T> stepSizeDecrease) {
     if(stepSizeDecrease.n_rows != this->numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
     } else if(arma::any(stepSizeDecrease <= 0) || arma::any(stepSizeDecrease >= 1)) {
@@ -121,7 +126,8 @@ namespace mant {
     stepSizeDecrease_ = stepSizeDecrease;
   }
 
-  inline std::string HookeJeevesAlgorithm::toString() const noexcept {
+  template <typename T>
+  std::string HookeJeevesAlgorithm<T>::toString() const noexcept {
     return "HookeJeevesAlgorithm";
   }
 }

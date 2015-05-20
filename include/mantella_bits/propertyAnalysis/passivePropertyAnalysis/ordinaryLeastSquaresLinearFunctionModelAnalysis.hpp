@@ -1,20 +1,31 @@
 namespace mant {
-  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public PassivePropertyAnalysis<double> {
+  template <typename T>
+  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public PassivePropertyAnalysis<T> {
     public:
-      using PassivePropertyAnalysis<double>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
+
+      arma::Col<double> getCoefficients() const noexcept;
 
     protected:
-      inline void analyseImplementation(
-          const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+      arma::Col<double> coefficients_;
+
+      void analyseImplementation(
+          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  inline void OrdinaryLeastSquaresLinearFunctionModelAnalysis::analyseImplementation(
-      const std::unordered_map<arma::Col<double>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
-    arma::Mat<double> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem + 1, parameterToObjectiveValueMappings.size());
+  template <typename T>
+  arma::Col<double> OrdinaryLeastSquaresLinearFunctionModelAnalysis<T>::getCoefficients() const noexcept {
+    return coefficients_;
+  }
+
+  template <typename T>
+  void OrdinaryLeastSquaresLinearFunctionModelAnalysis<T>::analyseImplementation(
+      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+    arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem + 1, parameterToObjectiveValueMappings.size());
     arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
 
     std::size_t n = 0;
@@ -26,9 +37,9 @@ namespace mant {
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
     try {
-      property_.setCoefficients((parameters * parameters.t()).i() * parameters * objectiveValues);
+      coefficients_ = (parameters * parameters.t()).i() * parameters * objectiveValues;
     } catch (...) {
-      property_.setCoefficients(arma::pinv(parameters * parameters.t()) * parameters * objectiveValues);
+      coefficients_ = arma::pinv(parameters * parameters.t()) * parameters * objectiveValues;
     }
   }
 }

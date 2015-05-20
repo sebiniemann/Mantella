@@ -1,10 +1,11 @@
 namespace mant {
-  class LinearProportionalityAnalysis : public ActivePropertyAnalysis<double> {
+  template <typename T>
+  class LinearProportionalityAnalysis : public ActivePropertyAnalysis<T> {
     public:
-      using ActivePropertyAnalysis<double>::ActivePropertyAnalysis;
+      using ActivePropertyAnalysis<T>::ActivePropertyAnalysis;
 
     protected:
       void analyseImplementation(
-          std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
+          std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept override;
   };
 }

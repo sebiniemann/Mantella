@@ -37,7 +37,7 @@ namespace mant {
       arma::round(
         // Chooses randomly and uniformly a direction and length for each element, normalising their
         // sum to 1.
-        arma::normalise(arma::randu<arma::Col<long double>>(parameter.n_elem) - 0.5, 1) *
+        arma::normalise(arma::randu<arma::Col<T>>(parameter.n_elem) - 0.5, 1) *
         // Chooses randomly and uniformly the length of the vector from the open interval 
         // (min - 0.5, max + 0.5).
         // *Note:* The interval must be open at both sides, to support positive and negative

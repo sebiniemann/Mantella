@@ -27,7 +27,7 @@ namespace mant {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
 
-      const arma::Col<T>& candidateParameter = this->distanceFunction_->getRandomNeighbour(arma::zeros<arma::Col<double>>(numberOfDimensions_), this->getLowerBounds(), this->getUpperBounds() - this->getLowerBounds());
+      const arma::Col<T>& candidateParameter = this->distanceFunction_->getRandomNeighbour(arma::zeros<arma::Col<double>>(this->numberOfDimensions_), this->getLowerBounds(), this->getUpperBounds() - this->getLowerBounds());
       const double& candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
       const double& candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
 

@@ -23,24 +23,16 @@ namespace mant {
 
   template <typename T>
   PropertyAnalysis<T>::PropertyAnalysis() noexcept {
-    setDefaultDistanceFunction(std::is_floating_point<T>());
+    if(std::is_integral<T>::value) {
+      setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new ManhattanDistance<T>));
+    }
   }
 
   template <typename T>
   void PropertyAnalysis<T>::setDistanceFunction(
       const std::shared_ptr<DistanceFunction<T>> distanceFunction) noexcept {
+    static_assert(std::is_integral<T>::value, "T must be an integral type.");
+
     distanceFunction_ = distanceFunction;
-  }
-
-  template <typename T>
-  void PropertyAnalysis<T>::setDefaultDistanceFunction(
-      std::true_type) noexcept {
-    setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new EuclideanDistance));
-  }
-
-  template <typename T>
-  void PropertyAnalysis<T>::setDefaultDistanceFunction(
-      std::false_type) noexcept {
-    setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new ManhattanDistance<T>));
   }
 }

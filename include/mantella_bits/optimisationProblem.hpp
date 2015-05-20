@@ -36,13 +36,13 @@ namespace mant {
           const arma::Col<unsigned int>& parameterPermutation);
 
       void setParameterScaling(
-        const arma::Col<double>& parameterScaling);
+        const arma::Col<T>& parameterScaling);
 
       void setParameterTranslation(
-          const arma::Col<double>& parameterTranslation);
+          const arma::Col<T>& parameterTranslation);
 
       void setParameterRotation(
-        const arma::Mat<double>& parameterRotation);
+        const arma::Mat<T>& parameterRotation);
 
       void setObjectiveValueScaling(
         const double objectiveValueScaling) noexcept;
@@ -78,9 +78,9 @@ namespace mant {
       arma::Col<T> upperBounds_;
 
       arma::Col<unsigned int> parameterPermutation_;
-      arma::Col<double> parameterScaling_;
-      arma::Col<double> parameterTranslation_;
-      arma::Mat<double> parameterRotation_;
+      arma::Col<T> parameterScaling_;
+      arma::Col<T> parameterTranslation_;
+      arma::Mat<T> parameterRotation_;
 
       double objectiveValueScaling_;
       double objectiveValueTranslation_;
@@ -102,26 +102,6 @@ namespace mant {
       std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>> cachedObjectiveValues_;
   };
 
-  template <>
-  inline OptimisationProblem<double>::OptimisationProblem(
-      const unsigned int numberOfDimensions) noexcept;
-
-  template <>
-  inline void OptimisationProblem<double>::setParameterScaling(
-      const arma::Col<double>& parameterScaling);
-
-  template <>
-  inline void OptimisationProblem<double>::setParameterTranslation(
-      const arma::Col<double>& parameterTranslation);
-
-  template <>
-  inline void OptimisationProblem<double>::setParameterRotation(
-      const arma::Mat<double>& parameterRotation);
-
-  template <>
-  inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
-      const arma::Col<double>& parameter) const noexcept;
-
   //
   // Implementation
   //
@@ -138,26 +118,13 @@ namespace mant {
     setUpperBounds(arma::zeros<arma::Col<T>>(numberOfDimensions_) + std::numeric_limits<T>::max());
     // (0, ..., numberOfDimensions - 1) 
     setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
-    setObjectiveValueScaling(1.0);
-    setObjectiveValueTranslation(0.0);
-    setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
-  }
 
-  template <>
-  inline OptimisationProblem<double>::OptimisationProblem(
-      const unsigned int numberOfDimensions) noexcept
-    : numberOfDimensions_(numberOfDimensions),
-      numberOfEvaluations_(0),
-      numberOfDistinctEvaluations_(0) {
-    // A vector with all elements set to the lowest representable value.
-    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
-    // A vector with all elements set to the largest representable value.
-    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
-    // (0, ..., numberOfDimensions - 1) 
-    setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
-    setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
-    setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
-    setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
+    if(std::is_floating_point<T>::value) {
+      setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
+      setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
+      setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
+    }
+
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
     setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
@@ -235,10 +202,10 @@ namespace mant {
   }
 
   template <typename T>
-  inline void OptimisationProblem<T>::setParameterPermutation(
+  void OptimisationProblem<T>::setParameterPermutation(
       const arma::Col<unsigned int>& parameterPermutation) {
     verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
-    verify(isPermutation(parameterPermutation, 0, numberOfDimensions_ - 1), "The parameter must be a permutation.");
+    verify(isPermutation(parameterPermutation, 0u, numberOfDimensions_ - 1), "The parameter must be a permutation.");
 
     parameterPermutation_ = parameterPermutation;
 
@@ -246,9 +213,11 @@ namespace mant {
     reset();
   }
 
-  template <>
-  inline void OptimisationProblem<double>::setParameterScaling(
-      const arma::Col<double>& parameterScaling) {
+  template <typename T>
+  void OptimisationProblem<T>::setParameterScaling(
+      const arma::Col<T>& parameterScaling) {
+    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+
     verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     parameterScaling_ = parameterScaling;
@@ -257,9 +226,11 @@ namespace mant {
     reset();
   }
 
-  template <>
-  inline void OptimisationProblem<double>::setParameterTranslation(
-      const arma::Col<double>& parameterTranslation) {
+  template <typename T>
+  void OptimisationProblem<T>::setParameterTranslation(
+      const arma::Col<T>& parameterTranslation) {
+    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+
     verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     parameterTranslation_ = parameterTranslation;
@@ -268,9 +239,11 @@ namespace mant {
     reset();
   }
 
-  template <>
-  inline void OptimisationProblem<double>::setParameterRotation(
-      const arma::Mat<double>& parameterRotation) {
+  template <typename T>
+  void OptimisationProblem<T>::setParameterRotation(
+      const arma::Mat<T>& parameterRotation) {
+    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+
     verify(parameterRotation.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions.");
     verify(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
 
@@ -355,21 +328,17 @@ namespace mant {
   }
 
   template <typename T>
-  inline arma::Col<T> OptimisationProblem<T>::getDiversifiedParameter(
+  arma::Col<T> OptimisationProblem<T>::getDiversifiedParameter(
       const arma::Col<T>& parameter) const noexcept {
     assert(parameter.n_elem == numberOfDimensions_);
 
-    // For discrete problems, the parameter is only permutated.
-    return parameter.elem(parameterPermutation_);
-  }
-
-  template <>
-  inline arma::Col<double> OptimisationProblem<double>::getDiversifiedParameter(
-      const arma::Col<double>& parameter) const noexcept {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    // The parameter is firstly permutated, than scaled, translated and lastly rotated.
-    return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
+    if(std::is_integral<T>::value) {
+        // For discrete problems, the parameter is only permutated.
+        return parameter.elem(parameterPermutation_);
+    } else {
+        // For continuous problems, parameter is firstly permutated, than scaled, translated and lastly rotated.
+        return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
+    }
   }
 
   template <typename T>
@@ -414,6 +383,8 @@ namespace mant {
     serialisedProblem.push_back(objectiveValueTranslation_);
 
     serialisedProblem.push_back(acceptableObjectiveValue_);
+
+    return serialisedProblem;
   }
 
   template <typename T>

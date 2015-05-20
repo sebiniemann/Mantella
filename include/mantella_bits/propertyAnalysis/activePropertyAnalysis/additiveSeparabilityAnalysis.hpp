@@ -1,19 +1,37 @@
 namespace mant {
-  class AdditiveSeparabilityAnalysis : public ActivePropertyAnalysis<double> {
+  template <typename T>
+  class AdditiveSeparabilityAnalysis : public ActivePropertyAnalysis<T> {
     public:
-      using ActivePropertyAnalysis<double>::ActivePropertyAnalysis;
+      explicit AdditiveSeparabilityAnalysis() noexcept;
+
+      void setMaximalNumberOfIterations(
+            const unsigned long long maximalNumberOfIterations) noexcept;
 
     protected:
-      inline void analyseImplementation(
-          std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept override;
+      unsigned long long maximalNumberOfIterations_;
+
+      void analyseImplementation(
+          std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  inline void AdditiveSeparabilityAnalysis::analyseImplementation(
-      std::shared_ptr<OptimisationProblem<double>> optimisationProblem) noexcept {
+  template <typename T>
+  AdditiveSeparabilityAnalysis<T>::AdditiveSeparabilityAnalysis() noexcept {
+      setMaximalNumberOfIterations(1000);
+  }
+
+  template <typename T>
+  void AdditiveSeparabilityAnalysis<T>::setMaximalNumberOfIterations(
+        const unsigned long long maximalNumberOfIterations) noexcept {
+      maximalNumberOfIterations_ = maximalNumberOfIterations;
+  }
+
+  template <typename T>
+  void AdditiveSeparabilityAnalysis<T>::analyseImplementation(
+      std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->numberOfDimensions_);
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;
@@ -21,24 +39,24 @@ namespace mant {
       arma::Col<double> differences(maximalNumberOfIterations_);
 
       for(std::size_t n = 0; n < differences.n_elem; ++n) {
-        arma::Col<double> firstPartA = arma::randu<arma::Col<double>>(partitionCandidate.first.n_elem);
-        arma::Col<double> firstPartB = arma::randu<arma::Col<double>>(partitionCandidate.first.n_elem);
-        arma::Col<double> secondPartA = arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem);
-        arma::Col<double> secondPartB = arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem);
+        arma::Col<T> firstPartA = arma::randu<arma::Col<T>>(partitionCandidate.first.n_elem);
+        arma::Col<T> firstPartB = arma::randu<arma::Col<T>>(partitionCandidate.first.n_elem);
+        arma::Col<T> secondPartA = arma::randu<arma::Col<T>>(partitionCandidate.second.n_elem);
+        arma::Col<T> secondPartB = arma::randu<arma::Col<T>>(partitionCandidate.second.n_elem);
 
-        arma::Col<double> candidateA(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
+        arma::Col<T> candidateA(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateA.elem(partitionCandidate.first) = firstPartA;
         candidateA.elem(partitionCandidate.second) = secondPartA;
 
-        arma::Col<double> candidateB(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
+        arma::Col<T> candidateB(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateB.elem(partitionCandidate.first) = firstPartA;
         candidateB.elem(partitionCandidate.second) = secondPartB;
 
-        arma::Col<double> candidateC(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
+        arma::Col<T> candidateC(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateC.elem(partitionCandidate.first) = firstPartB;
         candidateC.elem(partitionCandidate.second) = secondPartA;
 
-        arma::Col<double> candidateD(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
+        arma::Col<T> candidateD(optimisationProblem->numberOfDimensions_, arma::fill::zeros);
         candidateD.elem(partitionCandidate.first) = firstPartB;
         candidateD.elem(partitionCandidate.second) = secondPartB;
 

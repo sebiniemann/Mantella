@@ -111,9 +111,6 @@ namespace mant {
 
       unsigned int getNumberOfDistinctEvaluations() const noexcept;
 
-      void setDefaultDistanceFunction(std::true_type) noexcept;
-      void setDefaultDistanceFunction(std::false_type) noexcept;
-
       // The actual optimisation procedere.
       // Note: The counter within the optimisation problem (counting the number of distinct function
       // evaluations for example) are already reset beforehand.
@@ -133,7 +130,10 @@ namespace mant {
       bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
       bestObjectiveValue_(std::numeric_limits<double>::infinity()) {
     setMaximalNumberOfIterations(1000);
-    setDefaultDistanceFunction(std::is_floating_point<T>());
+
+    if(std::is_integral<T>::value) {
+      setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new ManhattanDistance<T>));
+    }
   }
 
   template <typename T>
@@ -155,6 +155,8 @@ namespace mant {
   template <typename T>
   void OptimisationAlgorithm<T>::setDistanceFunction(
       const std::shared_ptr<DistanceFunction<T>> distanceFunction) noexcept {
+    static_assert(std::is_integral<T>::value, "T must be an integral type.");
+
     distanceFunction_ = distanceFunction;
   }
 
@@ -202,18 +204,6 @@ namespace mant {
   template <typename T>
   void OptimisationAlgorithm<T>::restart() noexcept {
 
-  }
-
-  template <typename T>
-  void OptimisationAlgorithm<T>::setDefaultDistanceFunction(
-      std::true_type) noexcept {
-    setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new EuclideanDistance));
-  }
-
-  template <typename T>
-  void OptimisationAlgorithm<T>::setDefaultDistanceFunction(
-      std::false_type) noexcept {
-    setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new ManhattanDistance<T>));
   }
 
   template <typename T>
