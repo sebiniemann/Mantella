@@ -44,7 +44,7 @@ namespace mant {
     verify(firstParameter.n_elem == secondParameter.n_elem, "The number of elements of the first parameter must be equal to the number of elements of the second parameter.");
 
     T distance;
-    if(std::is_unsigned<T>::value)
+    if(std::is_unsigned<T>::value) {
       // Avoids integer underflows / wraps for unsigned types.
       distance = getLengthImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter);
     ) else {
