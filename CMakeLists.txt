@@ -31,9 +31,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 option(BUILD_TESTS "Build tests" OFF)
 option(RUN_TESTS "Run (and build) tests" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
+
 if(RUN_TESTS)
   set(BUILD_TESTS ON)
 endif()
+
 mark_as_advanced(BUILD_TESTS RUN_TESTS MEASURE_CODE_COVERAGE)
 
 if(WIN32)
@@ -241,42 +243,18 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
-  include/mantella_bits/property.hpp
-  include/mantella_bits/property/correlationProperty.hpp
-  include/mantella_bits/property/continuityProperty.hpp
-  include/mantella_bits/property/continuityProperty/lipschitzContinuityProperty.hpp
-  include/mantella_bits/property/functionModelProperty.hpp
-  include/mantella_bits/property/functionModelProperty/linearFunctionModelProperty.hpp
-  include/mantella_bits/property/functionModelProperty/quadraticFunctionModelProperty.hpp
-  include/mantella_bits/property/separabilityProperty.hpp
-  include/mantella_bits/property/separabilityProperty/additiveSeparabilityProperty.hpp
-  include/mantella_bits/property/separabilityProperty/multiplicativeSeparabilityProperty.hpp
-  include/mantella_bits/property/proportionalityProperty.hpp
-  include/mantella_bits/property/proportionalityProperty/linearProportionalityProperty.hpp
   include/mantella_bits/propertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/correlationAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/correlationAnalysis/fitnessDistanceCorrelationAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/continuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/continuityAnalysis/lipschitzContinuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/continuityAnalysis/lipschitzContinuityAnalysis/directLipschitzContinuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/linearFunctionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/linearFunctionModelAnalysis/ordinaryLeastSquaresLinearFunctionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/quadraticFunctionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/functionModelAnalysis/quadraticFunctionModelAnalysis/ordinaryLeastSquaresQuadraticFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessCloudCorrelationAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/alphaHoelderContinuityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresLinearFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresQuadraticFunctionModelAnalysis.hpp
   include/mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/additiveSeparabilityAnalysis/directAdditiveSeparabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/separabilityAnalysis/multiplicativeSeparabilityAnalysis/directMultiplicativeSeparabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis/linearProportionalityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/proportionalityAnalysis/linearProportionalityAnalysis/directLinearProportionalityAnalysis.hpp
-  include/mantella_bits/propertiesEstimation.hpp
-  include/mantella_bits/propertiesEstimation/shapeEstimation.hpp
-  include/mantella_bits/propertiesEstimation/dimensionalityEstimation.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp
   # Tests
   test/helper.hpp
 )
