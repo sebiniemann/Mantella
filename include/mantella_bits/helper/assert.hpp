@@ -14,7 +14,7 @@ namespace mant {
       const bool test,
       const std::string& errorMessage) {
     if(!test) {
-      throw std::runtime_exception(errorMessage);
+      throw std::runtime_error(errorMessage);
     }   
   }
       
