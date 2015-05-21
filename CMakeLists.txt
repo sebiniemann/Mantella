@@ -126,6 +126,7 @@ if(BUILD_TESTS)
     test/testDistanceFunction.cpp
     test/distanceFunction/testHammingDistance.cpp
     test/distanceFunction/testManhattanDistance.cpp
+    test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
