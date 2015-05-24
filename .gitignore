@@ -22,6 +22,9 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 
+# Vagrant
+.vagrant/
+
 # C++
 # Compiled Object files
 *.slo
