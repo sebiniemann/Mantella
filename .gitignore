@@ -11,6 +11,10 @@ lib/
 # Netbeans
 nbproject/
 
+# CLion
+*.iml
+.idea/
+
 # CMake
 CMakeCache.txt
 CMakeFiles
