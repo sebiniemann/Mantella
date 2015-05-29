@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::LinearSlope", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::LinearSlope linearSlope(numberOfDimensions);
+    mant::bbob::LinearSlope<> linearSlope(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -35,6 +35,6 @@ TEST_CASE("bbob::LinearSlope", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::LinearSlope(5).toString() == "bbob_linear_slope");
+    CHECK(mant::bbob::LinearSlope<>(5).toString() == "bbob_linear_slope");
   }
 }

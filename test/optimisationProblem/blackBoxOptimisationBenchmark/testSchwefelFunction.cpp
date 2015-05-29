@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::SchwefelFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SchwefelFunction schwefelFunction(numberOfDimensions);
+    mant::bbob::SchwefelFunction<> schwefelFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -35,6 +35,6 @@ TEST_CASE("bbob::SchwefelFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchwefelFunction(5).toString() == "bbob_schwefel_function");
+    CHECK(mant::bbob::SchwefelFunction<>(5).toString() == "bbob_schwefel_function");
   }
 }

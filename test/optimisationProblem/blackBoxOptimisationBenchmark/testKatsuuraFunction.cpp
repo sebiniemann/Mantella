@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::KatsuuraFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::KatsuuraFunction katsuuraFunction(numberOfDimensions);
+    mant::bbob::KatsuuraFunction<> katsuuraFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -43,7 +43,7 @@ TEST_CASE("bbob::KatsuuraFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::KatsuuraFunction(5).toString() == "bbob_katsuura_function");
+    CHECK(mant::bbob::KatsuuraFunction<>(5).toString() == "bbob_katsuura_function");
   }
 }
 

@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::EllipsoidalFunctionRotated", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::EllipsoidalFunctionRotated ellipsoidalFunctionRotated(numberOfDimensions);
+    mant::bbob::EllipsoidalFunctionRotated<> ellipsoidalFunctionRotated(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -39,6 +39,6 @@ TEST_CASE("bbob::EllipsoidalFunctionRotated", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::EllipsoidalFunctionRotated(5).toString() == "bbob_ellipsoidal_function_rotated");
+    CHECK(mant::bbob::EllipsoidalFunctionRotated<>(5).toString() == "bbob_ellipsoidal_function_rotated");
   }
 }

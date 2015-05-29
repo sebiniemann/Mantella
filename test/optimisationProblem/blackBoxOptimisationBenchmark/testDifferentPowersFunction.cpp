@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::DifferentPowersFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::DifferentPowersFunction differentPowersFunction(numberOfDimensions);
+    mant::bbob::DifferentPowersFunction<> differentPowersFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -39,6 +39,6 @@ TEST_CASE("bbob::DifferentPowersFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::DifferentPowersFunction(5).toString() == "bbob_different_powers_function");
+    CHECK(mant::bbob::DifferentPowersFunction<>(5).toString() == "bbob_different_powers_function");
   }
 }

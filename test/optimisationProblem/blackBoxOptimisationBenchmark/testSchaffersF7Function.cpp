@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::SchaffersF7Function", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SchaffersF7Function schaffersF7Function(numberOfDimensions);
+    mant::bbob::SchaffersF7Function<> schaffersF7Function(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -43,6 +43,6 @@ TEST_CASE("bbob::SchaffersF7Function", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchaffersF7Function(5).toString() == "bbob_schaffers_f7_function");
+    CHECK(mant::bbob::SchaffersF7Function<>(5).toString() == "bbob_schaffers_f7_function");
   }
 }

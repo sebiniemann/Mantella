@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::LunacekBiRastriginFunction lunacekBiRastriginFunction(numberOfDimensions);
+    mant::bbob::LunacekBiRastriginFunction<> lunacekBiRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -43,6 +43,6 @@ TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::LunacekBiRastriginFunction(5).toString() == "bbob_lunacek_bi_rastrigin_function");
+    CHECK(mant::bbob::LunacekBiRastriginFunction<>(5).toString() == "bbob_lunacek_bi_rastrigin_function");
   }
 }

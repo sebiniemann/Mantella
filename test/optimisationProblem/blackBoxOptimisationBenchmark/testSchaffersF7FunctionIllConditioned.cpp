@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::SchaffersF7FunctionIllConditioned", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
+    mant::bbob::SchaffersF7FunctionIllConditioned<> schaffersF7FunctionIllConditioned(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -43,6 +43,6 @@ TEST_CASE("bbob::SchaffersF7FunctionIllConditioned", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchaffersF7FunctionIllConditioned(5).toString() == "bbob_schaffers_f7_function_ill_conditioned");
+    CHECK(mant::bbob::SchaffersF7FunctionIllConditioned<>(5).toString() == "bbob_schaffers_f7_function_ill_conditioned");
   }
 }
