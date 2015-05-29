@@ -116,9 +116,9 @@ namespace mant {
   template <typename T, typename U>
   OptimisationProblem<T, U>::OptimisationProblem(
       const std::size_t numberOfDimensions) noexcept
-    : numberOfDimensions_(numberOfDimensions),
-      numberOfEvaluations_(0),
-      numberOfDistinctEvaluations_(0) {
+    : numberOfDimensions_(numberOfDimensions) {
+    reset();
+    
     // A vector with all elements set to the lowest representable value.
     setLowerBounds(arma::zeros<arma::Col<T>>(numberOfDimensions_) - std::numeric_limits<T>::max());
     // A vector with all elements set to the largest representable value.
