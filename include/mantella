@@ -23,8 +23,9 @@
 // Configuration
 //
 
-#if !defined(MANTELLA_USE_PARALLEL) && defined(MPI_SUCCESS)
-  #define MANTELLA_USE_PARALLEL
+#undef MANTELLA_USE_PARALLEL_ALGORITHMS
+#if defined(MPI_SUCCESS)
+  #define MANTELLA_USE_PARALLEL_ALGORITHMS
 #endif
 
 //
@@ -54,6 +55,11 @@
 
 // Armadillo
 #include <armadillo>
+
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+  // MPI
+  #include <mpi.h>
+#endif
 
 //
 // Mantella
@@ -144,12 +150,3 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp>
-
-// Parallel optimisation algorithms
-#if defined(MANTELLA_USE_PARALLEL)
-  // MPI
-  #include <mpi.h>
-
-  #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
-  #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
-#endif
