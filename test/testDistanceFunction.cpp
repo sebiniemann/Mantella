@@ -58,7 +58,7 @@ TEST_CASE("DistanceFunction<unsigned int>", "") {
 
     SECTION("Throws an exception, if minimal distance > maximal distance.") {
       arma::Col<unsigned int>::fixed<5> parameter = arma::zeros<arma::Col<unsigned int>>(5);
-      CHECK_THROWS_AS(distanceFunction.getRandomNeighbour(parameter, 10, 4), std::runtime_error);
+      CHECK_THROWS_AS(distanceFunction.getRandomNeighbour(parameter, 10, 4), std::logic_error);
     }
   }
 
