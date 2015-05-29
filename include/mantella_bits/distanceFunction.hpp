@@ -14,7 +14,6 @@ namespace mant {
           const T minimalDistance,
           const T maximalDistance) const;
 
-      // Provides a default deconstructor.
       virtual ~DistanceFunction() = default;
 
     protected:
