@@ -44,7 +44,7 @@ namespace mant {
 
     T distance;
     if(std::is_unsigned<T>::value) {
-      // Avoids integer underflows / wraps for unsigned types.
+      // Avoids unexpected integer underflows / wraps for unsigned types.
       distance = getLengthImplementation(arma::max(firstParameter, secondParameter) - arma::min(firstParameter, secondParameter));
     } else {
       distance = getLengthImplementation(secondParameter - firstParameter);
