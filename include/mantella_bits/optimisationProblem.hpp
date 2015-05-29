@@ -102,10 +102,10 @@ namespace mant {
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
       friend class OptimisationAlgorithm;
 
-      std::vector<long double> serialise() const noexcept;
+      std::vector<double> serialise() const noexcept;
 
       void deserialise(
-          const std::vector<long double>& serialisedOptimisationProblem);
+          const std::vector<double>& serialisedOptimisationProblem);
 #endif
   };
 
@@ -367,8 +367,8 @@ namespace mant {
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
   template <typename T, typename U>
-  std::vector<long double> OptimisationProblem<T, U>::serialise() const noexcept {
-    std::vector<long double> serialisedOptimisationProblem;
+  std::vector<double> OptimisationProblem<T, U>::serialise() const noexcept {
+    std::vector<double> serialisedOptimisationProblem;
 
     for(std::size_t n = 0; n < lowerBounds_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(lowerBounds_(n));
@@ -404,7 +404,7 @@ namespace mant {
 
   template <typename T, typename U>
   void OptimisationProblem<T, U>::deserialise(
-      const std::vector<long double>& serialisedOptimisationProblem) {
+      const std::vector<double>& serialisedOptimisationProblem) {
 
   }
 #endif

@@ -39,10 +39,10 @@ namespace mant {
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
         friend class OptimisationAlgorithm;
         
-        std::vector<long double> serialise() const noexcept;
+        std::vector<double> serialise() const noexcept;
 
         void deserialise(
-            const std::vector<long double>& serialisedOptimisationProblem);
+            const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -135,8 +135,8 @@ namespace mant {
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
     template <typename T>
-    std::vector<long double> AttractiveSectorFunction<T>::serialise() const noexcept {
-      std::vector<long double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+    std::vector<double> AttractiveSectorFunction<T>::serialise() const noexcept {
+      std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         serialisedOptimisationProblem.push_back(rotationQ_(n));
@@ -155,7 +155,7 @@ namespace mant {
 
     template <typename T>
     void AttractiveSectorFunction<T>::deserialise(
-        const std::vector<long double>& serialisedOptimisationProblem) {
+        const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = serialisedOptimisationProblem.pop_back();

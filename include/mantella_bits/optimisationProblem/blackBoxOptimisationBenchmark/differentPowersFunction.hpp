@@ -17,10 +17,10 @@ namespace mant {
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
         friend class OptimisationAlgorithm;
         
-        std::vector<long double> serialise() const noexcept;
+        std::vector<double> serialise() const noexcept;
 
         void deserialise(
-            const std::vector<long double>& serialisedOptimisationProblem);
+            const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -50,13 +50,13 @@ namespace mant {
     
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
     template <typename T>
-    std::vector<long double> BentCigarFunction<T>::serialise() const noexcept {
+    std::vector<double> BentCigarFunction<T>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();;
     }
 
     template <typename T>
     void BentCigarFunction<T>::deserialise(
-        const std::vector<long double>& serialisedOptimisationProblem) {
+        const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }
 #endif
