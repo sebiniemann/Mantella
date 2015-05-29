@@ -35,6 +35,15 @@ namespace mant {
 
         T getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
+        
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+        friend class OptimisationAlgorithm;
+        
+        std::vector<long double> serialise() const noexcept;
+
+        void deserialise(
+            const std::vector<long double>& serialisedOptimisationProblem);
+#endif
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -151,5 +160,47 @@ namespace mant {
     std::string GallaghersGaussian21hiPeaksFunction<T>::toString() const noexcept {
       return "bbob_gallaghers_gaussian_21hi_peaks_function";
     }
+
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+    template <typename T>
+    std::vector<long double> AttractiveSectorFunction<T>::serialise() const noexcept {
+      std::vector<long double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+      
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(rotationQ_(n));
+      }
+      
+      for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(localParameterConditionings_(n));
+      }
+      
+      for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(localParameterTranslations_(n));
+      }
+      
+      return serialisedOptimisationProblem;
+    }
+
+    template <typename T>
+    void AttractiveSectorFunction<T>::deserialise(
+        const std::vector<long double>& serialisedOptimisationProblem) {
+      rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = serialisedOptimisationProblem.pop_back();
+      }
+      
+      localParameterConditionings_.set_size(this->numberOfDimensions_, 21);
+      for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
+        localParameterConditionings_(n) = serialisedOptimisationProblem.pop_back();
+      }
+      
+      localParameterTranslations_.set_size(this->numberOfDimensions_, 21);
+      for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
+        localParameterTranslations_(n) = serialisedOptimisationProblem.pop_back();
+      }
+        
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
