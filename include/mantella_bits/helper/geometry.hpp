@@ -67,15 +67,13 @@ namespace mant {
       const double firstRadius,
       const arma::Col<double>::fixed<2>& secondCenter,
       const double secondRadius) {
+    verify(firstRadius > 0, "The radius of the first circle must be strict greater than 0.");
+    verify(secondRadius > 0, "The radius of the second circle must be strict greater than 0.");
+      
     double distance = arma::norm(secondCenter - firstCenter);
-
-    if(firstRadius <= 0) {
-      throw std::logic_error("The radius of the first circle (" + std::to_string(firstRadius) + ") must be strict greater than 0.");
-    } else if(secondRadius <= 0) {
-      throw std::logic_error("The radius of the second circle (" + std::to_string(secondRadius) + ") must be strict greater than 0.");
-    } else if (distance == 0 || distance >= firstRadius + secondRadius || distance <= std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius)) {
-      throw std::logic_error("Only intersections with exactly two intersections are considered valid.");
-    }
+    verify(distance > 0, "The distance between both circle centres must be strict greater than 0.");
+    verify(distance < firstRadius + secondRadius, "The distance between both circles centres must be strict less than the sum of their radii.");
+    verify(distance > std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius), "The distance between both centres must be strict greater than the difference in their radii.");
 
     double cosine = (std::pow(firstRadius, 2.0) - std::pow(secondRadius, 2.0) + std::pow(distance, 2.0)) / (2.0 * distance);
     double sine = std::sqrt(std::pow(firstRadius, 2.0) - std::pow(cosine, 2.0));
@@ -94,25 +92,20 @@ namespace mant {
       const arma::Col<double>::fixed<3>& circleNormal,
       const arma::Col<double>::fixed<3>& sphereCenter,
       const double sphereRadius) {
+    verify(circleRadius > 0, "The radius of the circle must be strict greater than 0.");
+    verify(sphereRadius > 0, "The radius of the sphere must be strict greater than 0.");
+      
     // Distance between the spheres center and the intersection circle within the sphere
     const double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
-
-    if(circleRadius <= 0) {
-      throw std::logic_error("The radius of the circle (" + std::to_string(circleRadius) + ") must be strict greater than 0.");
-    } else if(sphereRadius <= 0) {
-      throw std::logic_error("The radius of the sphere (" + std::to_string(sphereRadius) + ") must be strict greater than 0.");
-    } else if (std::abs(innerDistance) >= sphereRadius) {
-      throw std::logic_error("Only intersections with exactly two solutions are considered valid.");
-    }
+    verify(std::abs(innerDistance) < sphereRadius, "Only intersections with exactly two solutions are considered valid.");
 
     const arma::Col<double>::fixed<3>& innerCenter = sphereCenter + innerDistance * circleNormal;
     const double innerRadius = std::sqrt(std::pow(sphereRadius, 2.0) - std::pow(innerDistance, 2.0));
 
     const double distance = arma::norm(innerCenter - circleCenter);
-
-    if (distance == 0 || distance >= circleRadius + innerRadius || distance <= std::max(circleRadius, innerRadius) - std::min(circleRadius, innerRadius)) {
-      throw std::logic_error("Only intersections with exactly two solutions are considered valid.");
-    }
+    verify(distance > 0, "The distance between both circle centres must be strict greater than 0. Note: The second circle is defnied by a plane/sphere intesection.");
+    verify(distance < circleRadius + innerRadius, "The distance between both circles centres must be strict less than the sum of their radii. Note: The second circle is defnied by a plane/sphere intesection.");
+    verify(distance > std::max(circleRadius, innerRadius) - std::min(circleRadius, innerRadius), "The distance between both centres must be strict greater than the difference in their radii. Note: The second circle is defnied by a plane/sphere intesection.");
 
     const arma::Col<double>::fixed<3>& normal = arma::normalise(arma::cross(innerCenter - circleCenter, circleNormal));
 
