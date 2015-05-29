@@ -84,7 +84,7 @@ if(BUILD_TESTS)
   # Display all warnings
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-  # Use native machine features (SSE3, SSE4, AVX, ...), if possible and compiled with Armadillo
+  # Use native machine features (SSE3, SSE4, AVX, ...) if possible
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
   if(MEASURE_CODE_COVERAGE)
