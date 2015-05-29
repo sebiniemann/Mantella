@@ -15,27 +15,14 @@ namespace mant {
 
         T getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
+        
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+        friend class OptimisationAlgorithm;
+        
+        std::vector<long double> serialise() const noexcept;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
-
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-        }
-
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<EllipsoidalFunctionRotated>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-        }
+        void deserialise(
+            const std::vector<long double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -62,5 +49,18 @@ namespace mant {
     std::string EllipsoidalFunctionRotated<T>::toString() const noexcept {
       return "bbob_ellipsoidal_function_rotated";
     }
+    
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+    template <typename T>
+    std::vector<long double> BentCigarFunction<T>::serialise() const noexcept {
+      return BlackBoxOptimisationBenchmark<T, T>::serialise();;
+    }
+
+    template <typename T>
+    void BentCigarFunction<T>::deserialise(
+        const std::vector<long double>& serialisedOptimisationProblem) {
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
