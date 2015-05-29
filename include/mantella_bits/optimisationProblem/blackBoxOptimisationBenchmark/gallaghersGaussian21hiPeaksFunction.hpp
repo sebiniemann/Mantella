@@ -44,34 +44,6 @@ namespace mant {
         void deserialise(
             const std::vector<long double>& serialisedOptimisationProblem);
 #endif
-
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
-
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
-          archive(cereal::make_nvp("localParameterConditionings", localParameterConditionings_));
-          archive(cereal::make_nvp("localParameterTranslations", localParameterTranslations_));
-        }
-
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<GallaghersGaussian21hiPeaksFunction>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
-          archive(cereal::make_nvp("localParameterConditionings", construct->localParameterConditionings_));
-          archive(cereal::make_nvp("localParameterTranslations", construct->localParameterTranslations_));
-        }
-#endif
     };
 
     //
