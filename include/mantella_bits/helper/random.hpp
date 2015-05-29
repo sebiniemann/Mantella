@@ -43,9 +43,7 @@ namespace mant {
   inline arma::Col<unsigned int> getRandomPermutation(
       const unsigned int numberOfElements,
       const unsigned int cycleSize) {
-    if(numberOfElements < cycleSize) {
-      throw std::logic_error("The cycle size (" + std::to_string(cycleSize) + ") must be lower than or equal to the number of elements (" + std::to_string(numberOfElements) + ").");
-    }
+    verify(cycleSize <= numberOfElements , "The cycle size must be lower than or equal to the number of elements.");
 
     arma::Col<unsigned int> permutation(numberOfElements);
     for (std::size_t n = 0; n < numberOfElements; ++n) {

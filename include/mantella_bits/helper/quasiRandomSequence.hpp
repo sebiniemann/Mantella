@@ -17,9 +17,7 @@ namespace mant {
        const arma::Col<unsigned int>& base,
        const arma::Col<unsigned int>& seed,
        const unsigned int numberOfColumms) {
-     if(base.n_elem != seed.n_elem) {
-       throw std::logic_error("The number of dimensions of the base parameter (" + std::to_string(base.n_elem) + ") must match the number of dimensions of the seed parameter (" + std::to_string(seed.n_elem) + ").");
-     }
+     verify(base.n_elem == seed.n_elem, "The number of dimensions of the base parameter must match the number of dimensions of the seed parameter.");
 
      arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 
