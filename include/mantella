@@ -28,6 +28,8 @@
   #define MANTELLA_USE_PARALLEL_ALGORITHMS
 #endif
 
+#define MANTELLA_USE_CACHES
+
 //
 // Prerequirements
 //
