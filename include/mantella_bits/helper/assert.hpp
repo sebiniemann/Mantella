@@ -20,7 +20,7 @@ namespace mant {
       const bool expression,
       const std::string& errorMessage) {
     if(!expression) {
-      throw std::runtime_error(errorMessage);
+      throw std::logic_error(errorMessage);
     }   
   }
 
