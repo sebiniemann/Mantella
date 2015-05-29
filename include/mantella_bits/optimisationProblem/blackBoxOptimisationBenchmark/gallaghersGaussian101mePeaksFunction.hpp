@@ -35,33 +35,14 @@ namespace mant {
 
         T getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
+        
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+        friend class OptimisationAlgorithm;
+        
+        std::vector<long double> serialise() const noexcept;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
-
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
-          archive(cereal::make_nvp("localParameterConditionings", localParameterConditionings_));
-          archive(cereal::make_nvp("localParameterTranslations", localParameterTranslations_));
-        }
-
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<GallaghersGaussian101mePeaksFunction>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
-          archive(cereal::make_nvp("localParameterConditionings", construct->localParameterConditionings_));
-          archive(cereal::make_nvp("localParameterTranslations", construct->localParameterTranslations_));
-        }
+        void deserialise(
+            const std::vector<long double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -151,5 +132,47 @@ namespace mant {
     std::string GallaghersGaussian101mePeaksFunction<T>::toString() const noexcept {
       return "bbob_gallaghers_gaussian_101me_peaks_function";
     }
+
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+    template <typename T>
+    std::vector<long double> AttractiveSectorFunction<T>::serialise() const noexcept {
+      std::vector<long double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+      
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(rotationQ_(n));
+      }
+      
+      for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(localParameterConditionings_(n));
+      }
+      
+      for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(localParameterTranslations_(n));
+      }
+      
+      return serialisedOptimisationProblem;
+    }
+
+    template <typename T>
+    void AttractiveSectorFunction<T>::deserialise(
+        const std::vector<long double>& serialisedOptimisationProblem) {
+      rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = serialisedOptimisationProblem.pop_back();
+      }
+      
+      localParameterConditionings_.set_size(this->numberOfDimensions_, 21);
+      for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
+        localParameterConditionings_(n) = serialisedOptimisationProblem.pop_back();
+      }
+      
+      localParameterTranslations_.set_size(this->numberOfDimensions_, 21);
+      for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
+        localParameterTranslations_(n) = serialisedOptimisationProblem.pop_back();
+      }
+        
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
