@@ -134,15 +134,15 @@ namespace mant {
     verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
     
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
-    unsigned long long serialisedOptimisationProblemSize;
     std::vector<double> serialisedOptimisationProblem;
+    unsigned int serialisedOptimisationProblemSize;
 
     if (rank_ == 0) {
       serialisedOptimisationProblem = optimisationProblem_->serialise();
-      serialisedOptimisationProblemSize = static_cast<unsigned long long>(serialisedOptimisationProblem.size());
+      serialisedOptimisationProblemSize = static_cast<unsigned int>(serialisedOptimisationProblem.size());
     }
 
-    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
 
     if (rank_ != 0) {
       serialisedOptimisationProblem.resize(serialisedOptimisationProblemSize);
