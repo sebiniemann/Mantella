@@ -23,29 +23,14 @@ namespace mant {
 
         T getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
+        
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+        friend class OptimisationAlgorithm;
+        
+        std::vector<double> serialise() const noexcept;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
-
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
-        }
-
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<SchaffersF7FunctionIllConditioned>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
-        }
+        void deserialise(
+            const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -91,5 +76,29 @@ namespace mant {
     std::string SchaffersF7FunctionIllConditioned<T>::toString() const noexcept {
       return "bbob_schaffers_f7_function_ill_conditioned";
     }
+
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+    template <typename T>
+    std::vector<double> AttractiveSectorFunction<T>::serialise() const noexcept {
+      std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+      
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(rotationQ_(n));
+      }
+      
+      return serialisedOptimisationProblem;
+    }
+
+    template <typename T>
+    void AttractiveSectorFunction<T>::deserialise(
+        const std::vector<double>& serialisedOptimisationProblem) {
+      rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = serialisedOptimisationProblem.pop_back();
+      }
+        
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
