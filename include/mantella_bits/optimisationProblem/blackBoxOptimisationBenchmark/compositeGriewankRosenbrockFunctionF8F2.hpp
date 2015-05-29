@@ -60,7 +60,3 @@ namespace mant {
     }
   }
 }
-
-#if defined(MANTELLA_USE_PARALLEL)
-CEREAL_REGISTER_TYPE(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2);
-#endif

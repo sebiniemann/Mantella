@@ -85,7 +85,3 @@ namespace mant {
     }
   }
 }
-
-#if defined(MANTELLA_USE_PARALLEL)
-CEREAL_REGISTER_TYPE(mant::bbob::SchaffersF7Function);
-#endif
