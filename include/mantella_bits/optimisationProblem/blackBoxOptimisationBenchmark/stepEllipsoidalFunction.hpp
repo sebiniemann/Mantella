@@ -1,26 +1,29 @@
 namespace mant {
   namespace bbob {
-    class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit StepEllipsoidalFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit StepEllipsoidalFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> firstParameterConditioning_;
-        const arma::Col<double> secondParameterConditioning_;
+        const arma::Col<T> firstParameterConditioning_;
+        const arma::Col<T> secondParameterConditioning_;
 
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -51,48 +54,53 @@ namespace mant {
     // Implementation
     //
 
-    inline StepEllipsoidalFunction::StepEllipsoidalFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
-        secondParameterConditioning_(getParameterConditioning(100)) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    StepEllipsoidalFunction<T>::StepEllipsoidalFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        firstParameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))),
+        secondParameterConditioning_(this->getParameterConditioning(static_cast<T>(100.0L))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void StepEllipsoidalFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void StepEllipsoidalFunction<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double StepEllipsoidalFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return getBoundConstraintsValue(parameter);
+    template <typename T>
+    T StepEllipsoidalFunction<T>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return this->getBoundConstraintsValue(parameter);
     }
     
-    inline double StepEllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& s = firstParameterConditioning_ % parameter;
+    template <typename T>
+    T StepEllipsoidalFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& s = firstParameterConditioning_ % parameter;
 
-      arma::Col<double> z = s;
+      arma::Col<T> z = s;
       for (std::size_t n = 0; n < z.n_elem; ++n) {
-        const double& value = s(n);
+        const T& value = s(n);
 
-        if (std::abs(value) > 0.5) {
+        if (std::abs(value) > static_cast<T>(0.5L)) {
           z(n) = std::round(value);
         } else {
-          z(n) = std::round(value * 10.0) / 10.0;
+          z(n) = std::round(value * static_cast<T>(10.0L)) / static_cast<T>(10.0L);
         }
       }
 
-      return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
+      return static_cast<T>(0.1L) * std::max(std::abs(s(0)) / static_cast<T>(10000.0L), arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
     }
 
-    inline std::string StepEllipsoidalFunction::toString() const noexcept {
+    template <typename T>
+    std::string StepEllipsoidalFunction<T>::toString() const noexcept {
       return "bbob_step_ellipsoidal_function";
     }
   }

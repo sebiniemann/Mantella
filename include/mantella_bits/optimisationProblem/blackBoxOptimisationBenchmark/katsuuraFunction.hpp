@@ -1,25 +1,28 @@
 namespace mant {
   namespace bbob {
-    class KatsuuraFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class KatsuuraFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit KatsuuraFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit KatsuuraFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -50,49 +53,54 @@ namespace mant {
     // Implementation
     //
 
-    inline KatsuuraFunction::KatsuuraFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(10.0)) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    KatsuuraFunction<T>::KatsuuraFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(static_cast<T>(10.0L))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void KatsuuraFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void KatsuuraFunction<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double KatsuuraFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return getBoundConstraintsValue(parameter);
+    template <typename T>
+    T KatsuuraFunction<T>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return this->getBoundConstraintsValue(parameter);
     }
 
-    inline double KatsuuraFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter);
+    template <typename T>
+    T KatsuuraFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      arma::Col<T> z = rotationQ_ * (parameterConditioning_ % parameter);
 
-      double product = 1.0;
+      T product = static_cast<T>(1.0L);
       for (std::size_t n = 0; n < z.n_elem; ++n) {
-          const double& value = z(n);
+          const T& value = z(n);
 
-          double sum = 0.0;
-          for (unsigned int k = 1; k < 33; ++k) {
-              const double& power = std::pow(2.0, k);
+          T sum = static_cast<T>(0.0L);
+          for (std::size_t k = 1; k < 33; ++k) {
+              const T& power = std::pow(static_cast<T>(2.0L), k);
               sum += std::abs(power * value - std::round(power * value)) / power;
           }
 
-          product *= std::pow(1.0 + (static_cast<double>(n) + 1.0) * sum, (10.0 / std::pow(static_cast<double>(numberOfDimensions_), 1.2)));
+          product *= std::pow(static_cast<T>(1.0L) + (static_cast<T>(n) + static_cast<T>(1.0L)) * sum, (static_cast<T>(10.0L) / std::pow(static_cast<T>(this->numberOfDimensions_), static_cast<T>(1.2L))));
       }
 
-      return 10.0 / std::pow(static_cast<double>(numberOfDimensions_), 2.0) * (product - 1.0);
+      return static_cast<T>(10.0L) / std::pow(static_cast<T>(this->numberOfDimensions_), static_cast<T>(2.0L)) * (product - static_cast<T>(1.0L));
     }
 
-    inline std::string KatsuuraFunction::toString() const noexcept {
+    template <typename T>
+    std::string KatsuuraFunction<T>::toString() const noexcept {
       return "bbob_katsuura_function";
     }
   }

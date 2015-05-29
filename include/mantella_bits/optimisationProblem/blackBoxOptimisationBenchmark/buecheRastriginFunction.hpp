@@ -1,20 +1,23 @@
 namespace mant {
   namespace bbob {
-    class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit BuecheRastriginFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit BuecheRastriginFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -42,35 +45,39 @@ namespace mant {
     // Implementation
     //
 
-    inline BuecheRastriginFunction::BuecheRastriginFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
-      arma::Col<double> parameterTranslation_ = getRandomParameterTranslation();
-      for (std::size_t n = 0; n < parameterTranslation_.n_elem; n += 2) {
-        parameterTranslation_(n) = std::abs(parameterTranslation_(n));
+    template <typename T>
+    BuecheRastriginFunction<T>::BuecheRastriginFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
+      arma::Col<T> parameterTranslation = this->getRandomParameterTranslation();
+      for (std::size_t n = 0; n < parameterTranslation.n_elem; n += 2) {
+        parameterTranslation(n) = std::abs(parameterTranslation(n));
       }
-      setParameterTranslation(parameterTranslation_);
+      this->setParameterTranslation(parameterTranslation);
     }
 
-    inline double BuecheRastriginFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return 100.0 * getBoundConstraintsValue(parameter);
+    template <typename T>
+    T BuecheRastriginFunction<T>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return static_cast<T>(100.0L) * this->getBoundConstraintsValue(parameter);
     }
 
-    inline double BuecheRastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> z = parameterConditioning_ % getOscillatedParameter(parameter);
+    template <typename T>
+    T BuecheRastriginFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      arma::Col<T> z = parameterConditioning_ % this->getOscillatedParameter(parameter);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
-        if (z(n) > 0.0) {
-          z(n) *= 10.0;
+        if (z(n) > static_cast<T>(0.0L)) {
+          z(n) *= static_cast<T>(10.0L);
         }
       }
 
-      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+      return static_cast<T>(10.0L) * (static_cast<T>(this->numberOfDimensions_) - arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z))) + std::pow(arma::norm(z), static_cast<T>(2.0L));
     }
 
-    inline std::string BuecheRastriginFunction::toString() const noexcept {
+    template <typename T>
+    std::string BuecheRastriginFunction<T>::toString() const noexcept {
       return "bbob_bueche_rastrigin_function";
     }
   }

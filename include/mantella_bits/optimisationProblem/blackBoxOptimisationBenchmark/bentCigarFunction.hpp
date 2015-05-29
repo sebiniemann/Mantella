@@ -1,20 +1,23 @@
 namespace mant {
   namespace bbob {
-    class BentCigarFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class BentCigarFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit BentCigarFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit BentCigarFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationQ_;
         
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -45,28 +48,32 @@ namespace mant {
     // Implementation
     //
 
-    inline BentCigarFunction::BentCigarFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    BentCigarFunction<T>::BentCigarFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void BentCigarFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void BentCigarFunction<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double BentCigarFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter));
-      return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
+    template <typename T>
+    T BentCigarFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = arma::square(rotationQ_ * this->getAsymmetricParameter(static_cast<T>(0.5L), rotationQ_ * parameter));
+      return z(0) + static_cast<T>(1000000.0L) * arma::accu(z.tail(z.n_elem - 1));
     }
 
-    inline std::string BentCigarFunction::toString() const noexcept {
+    template <typename T>
+    std::string BentCigarFunction<T>::toString() const noexcept {
       return "bbob_bent_cigar_function";
     }
   }

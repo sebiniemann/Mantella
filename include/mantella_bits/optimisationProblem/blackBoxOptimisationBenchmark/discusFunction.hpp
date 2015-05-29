@@ -1,15 +1,18 @@
 namespace mant {
   namespace bbob {
-    class DiscusFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class DiscusFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit DiscusFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit DiscusFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -38,20 +41,23 @@ namespace mant {
     // Implementation
     //
 
-    inline DiscusFunction::DiscusFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    DiscusFunction<T>::DiscusFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline double DiscusFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::square(getOscillatedParameter(parameter));
-      return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
+    template <typename T>
+    T DiscusFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = arma::square(this->getOscillatedParameter(parameter));
+      return static_cast<T>(1000000.0L) * z(0) + arma::accu(z.tail(z.n_elem - 1));
     }
 
-    inline std::string DiscusFunction::toString() const noexcept {
+    template <typename T>
+    std::string DiscusFunction<T>::toString() const noexcept {
       return "bbob_discus_function";
     }
   }

@@ -1,26 +1,29 @@
 namespace mant {
   namespace bbob {
-    class RastriginFunctionRotated : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class RastriginFunctionRotated : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit RastriginFunctionRotated(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit RastriginFunctionRotated(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        void setRotationR(
+            const arma::Mat<T>& rotationR);
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        arma::Mat<double> rotationR_;
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationR_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -53,39 +56,44 @@ namespace mant {
     // Implementation
     //
 
-    inline RastriginFunctionRotated::RastriginFunctionRotated(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    RastriginFunctionRotated<T>::RastriginFunctionRotated(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      setRotationR(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void RastriginFunctionRotated::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void RastriginFunctionRotated<T>::setRotationR(
+        const arma::Mat<T>& rotationR) {
+      verify(rotationR.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
       rotationR_ = rotationR;
     }
 
-    inline void RastriginFunctionRotated::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void RastriginFunctionRotated<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double RastriginFunctionRotated::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.2, getOscillatedParameter(rotationR_ * parameter))));
+    template <typename T>
+    T RastriginFunctionRotated<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * this->getAsymmetricParameter(static_cast<T>(0.2L), this->getOscillatedParameter(rotationR_ * parameter))));
 
-      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+      return static_cast<T>(10.0L) * (static_cast<T>(this->numberOfDimensions_) - arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z))) + std::pow(arma::norm(z), static_cast<T>(2.0L));
     }
 
-    inline std::string RastriginFunctionRotated::toString() const noexcept {
+    template <typename T>
+    std::string RastriginFunctionRotated<T>::toString() const noexcept {
       return "bbob_rastrigin_function_rotated";
     }
   }

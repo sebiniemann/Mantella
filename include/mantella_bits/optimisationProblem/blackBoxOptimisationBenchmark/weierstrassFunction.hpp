@@ -1,30 +1,33 @@
 namespace mant {
   namespace bbob {
-    class WeierstrassFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class WeierstrassFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit WeierstrassFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit WeierstrassFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        void setRotationR(
+            const arma::Mat<T>& rotationR);
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
             
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const double f0_;
-        const arma::Col<double> parameterConditioning_;
+        const T f0_;
+        const arma::Col<T> parameterConditioning_;
 
-        arma::Mat<double> rotationR_;
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationR_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -57,52 +60,58 @@ namespace mant {
     // Implementation
     //
 
-    inline WeierstrassFunction::WeierstrassFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        f0_(-1.99951171875),
-        parameterConditioning_(getParameterConditioning(std::sqrt(0.01))) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    WeierstrassFunction<T>::WeierstrassFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        f0_(static_cast<T>(-1.99951171875L)),
+        parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(0.01L)))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      setRotationR(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void WeierstrassFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void WeierstrassFunction<T>::setRotationR(
+        const arma::Mat<T>& rotationR) {
+      verify(rotationR.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
       rotationR_ = rotationR;
     }
 
-    inline void WeierstrassFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void WeierstrassFunction<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double WeierstrassFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return 10.0 * getBoundConstraintsValue(parameter) / static_cast<double>(numberOfDimensions_);
+    template <typename T>
+    T WeierstrassFunction<T>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return static_cast<T>(10.0L) * this->getBoundConstraintsValue(parameter) / static_cast<T>(this->numberOfDimensions_);
     }
     
-    inline double WeierstrassFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getOscillatedParameter(rotationR_ * parameter)));
+    template <typename T>
+    T WeierstrassFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * this->getOscillatedParameter(rotationR_ * parameter)));
 
-      double sum = 0.0;
-      for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        for (unsigned int k = 0; k < 12; ++k) {
-          sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z(n) + 0.5));
+      T sum = static_cast<T>(0.0L);
+      for (std::size_t n = 0; n < z.n_elem; ++n) {
+        for (std::size_t k = 0; k < 12; ++k) {
+          sum += std::pow(static_cast<T>(0.5L), k) * std::cos(static_cast<T>(2.0L) * arma::datum::pi * std::pow(static_cast<T>(3.0L), k) * (z(n) + static_cast<T>(0.5L)));
         }
       }
 
-      return 10 * std::pow(sum / static_cast<double>(numberOfDimensions_) - f0_, 3);
+      return static_cast<T>(10.0L) * std::pow(sum / static_cast<T>(this->numberOfDimensions_) - f0_, static_cast<T>(3.0L));
     }
 
-    inline std::string WeierstrassFunction::toString() const noexcept {
+    template <typename T>
+    std::string WeierstrassFunction<T>::toString() const noexcept {
       return "bbob_weierstrass_function";
     }
   }

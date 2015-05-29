@@ -1,17 +1,20 @@
 namespace mant {
   namespace bbob {
-    class RastriginFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class RastriginFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit RastriginFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit RastriginFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -40,21 +43,24 @@ namespace mant {
     // Implementation
     //
 
-    inline RastriginFunction::RastriginFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
-      setParameterTranslation(getRandomParameterTranslation());
+    template <typename T>
+    RastriginFunction<T>::RastriginFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
     }
 
-    inline double RastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = parameterConditioning_ % getAsymmetricParameter(0.2, getOscillatedParameter(parameter));
+    template <typename T>
+    T RastriginFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = parameterConditioning_ % this->getAsymmetricParameter(static_cast<T>(0.2L), this->getOscillatedParameter(parameter));
 
-      return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+      return static_cast<T>(10.0L) * (static_cast<T>(this->numberOfDimensions_) - arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z))) + std::pow(arma::norm(z), static_cast<T>(2.0L));
     }
 
-    inline std::string RastriginFunction::toString() const noexcept {
+    template <typename T>
+    std::string RastriginFunction<T>::toString() const noexcept {
       return "bbob_rastrigin_function";
     }
   }

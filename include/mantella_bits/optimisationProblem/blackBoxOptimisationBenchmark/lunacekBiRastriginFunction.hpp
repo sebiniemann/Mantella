@@ -1,31 +1,34 @@
 namespace mant {
   namespace bbob {
-    class LunacekBiRastriginFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class LunacekBiRastriginFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit LunacekBiRastriginFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit LunacekBiRastriginFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationR(
-            const arma::Mat<double>& rotationR);
+        void setRotationR(
+            const arma::Mat<T>& rotationR);
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const double s_;
-        const double mu_;
-        const arma::Col<double> parameterConditinong_;
+        const T s_;
+        const T mu_;
+        const arma::Col<T> parameterConditinong_;
 
-        arma::Mat<double> rotationR_;
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationR_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -58,45 +61,51 @@ namespace mant {
     // Implementation
     //
 
-    inline LunacekBiRastriginFunction::LunacekBiRastriginFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
-        mu_(std::sqrt(5.25 / s_)),
-        parameterConditinong_(getParameterConditioning(10.0)) {
+    template <typename T>
+    LunacekBiRastriginFunction<T>::LunacekBiRastriginFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        s_(static_cast<T>(1.0L) - static_cast<T>(0.5L) / (std::sqrt(static_cast<T>(this->numberOfDimensions_) + static_cast<T>(20.0L)) - static_cast<T>(4.1L))),
+        mu_(std::sqrt(static_cast<T>(5.25L) / s_)),
+        parameterConditinong_(this->getParameterConditioning(static_cast<T>(10.0L))) {
       // A vector with all elements randomly and uniformly set to either 2 or -2.
-      setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
-      setRotationR(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+      this->setParameterScaling(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? static_cast<T>(2.0L) : static_cast<T>(-2.0L)));
+      setRotationR(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void LunacekBiRastriginFunction::setRotationR(
-        const arma::Mat<double>& rotationR) {
-      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void LunacekBiRastriginFunction<T>::setRotationR(
+        const arma::Mat<T>& rotationR) {
+      verify(rotationR.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
       rotationR_ = rotationR;
     }
 
-    inline void LunacekBiRastriginFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void LunacekBiRastriginFunction<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double LunacekBiRastriginFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return 10000.0 * getBoundConstraintsValue(parameter);
+    template <typename T>
+    T LunacekBiRastriginFunction<T>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return static_cast<T>(10000.0L) * this->getBoundConstraintsValue(parameter);
     }
 
-    inline double LunacekBiRastriginFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return std::min(std::pow(arma::norm(parameter - 2.5), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter - 2.5))))));
+    template <typename T>
+    T LunacekBiRastriginFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return std::min(std::pow(arma::norm(parameter - static_cast<T>(2.5L)), static_cast<T>(2.0L)), static_cast<T>(this->numberOfDimensions_) + s_ * std::pow(arma::norm(parameter + mu_), static_cast<T>(2.0L))) + static_cast<T>(10.0L) * (static_cast<T>(this->numberOfDimensions_) - arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter - static_cast<T>(2.5L)))))));
     }
 
-    inline std::string LunacekBiRastriginFunction::toString() const noexcept {
+    template <typename T>
+    std::string LunacekBiRastriginFunction<T>::toString() const noexcept {
       return "bbob_lunacek_bi_rastrigin_function";
     }
   }

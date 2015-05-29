@@ -1,19 +1,22 @@
 namespace mant {
   namespace bbob {
-    class RosenbrockFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class RosenbrockFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit RosenbrockFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit RosenbrockFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const double max_;
+        const T max_;
 
-        arma::Col<double> localParameterTranslation_;
+        arma::Col<T> localParameterTranslation_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -41,21 +44,24 @@ namespace mant {
     // Implementation
     //
 
-    inline RosenbrockFunction::RosenbrockFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)) {
-      setParameterTranslation(0.75 * getRandomParameterTranslation());
+    template <typename T>
+    RosenbrockFunction<T>::RosenbrockFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        max_(std::max(static_cast<T>(1.0L), std::sqrt(static_cast<T>(this->numberOfDimensions_)) / static_cast<T>(8.0L))) {
+      this->setParameterTranslation(static_cast<T>(0.75L) * this->getRandomParameterTranslation());
     }
 
-    inline double RosenbrockFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = max_ * parameter + 1.0;
+    template <typename T>
+    T RosenbrockFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = max_ * parameter + static_cast<T>(1.0L);
 
-      return 100.0 * std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), 2.0) + std::pow(arma::norm(z.head(z.n_elem - 1) - 1.0), 2.0);
+      return static_cast<T>(100.0L) * std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), static_cast<T>(2.0L)) + std::pow(arma::norm(z.head(z.n_elem - 1) - static_cast<T>(1.0L)), static_cast<T>(2.0L));
     }
 
-    inline std::string RosenbrockFunction::toString() const noexcept {
+    template <typename T>
+    std::string RosenbrockFunction<T>::toString() const noexcept {
       return "bbob_rosenbrock_function";
     }
   }

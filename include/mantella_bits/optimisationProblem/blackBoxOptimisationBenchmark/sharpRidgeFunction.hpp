@@ -1,22 +1,25 @@
 namespace mant {
   namespace bbob {
-    class SharpRidgeFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class SharpRidgeFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit SharpRidgeFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit SharpRidgeFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -47,30 +50,34 @@ namespace mant {
     // Implementation
     //
 
-    inline SharpRidgeFunction::SharpRidgeFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    SharpRidgeFunction<T>::SharpRidgeFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void SharpRidgeFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T>
+    void SharpRidgeFunction<T>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double SharpRidgeFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = rotationQ_ * (parameterConditioning_ %  parameter);
-      return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
+    template <typename T>
+    T SharpRidgeFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = rotationQ_ * (parameterConditioning_ %  parameter);
+      return std::pow(z(0), static_cast<T>(2.0L)) + static_cast<T>(100.0L) * arma::norm(z.tail(z.n_elem - 1));
     }
 
-    inline std::string SharpRidgeFunction::toString() const noexcept {
+    template <typename T>
+    std::string SharpRidgeFunction<T>::toString() const noexcept {
       return "bbob_sharp_ridge_function";
     }
   }

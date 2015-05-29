@@ -1,15 +1,18 @@
 namespace mant {
   namespace bbob {
-    class DifferentPowersFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class DifferentPowersFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit DifferentPowersFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit DifferentPowersFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -38,20 +41,23 @@ namespace mant {
     // Implementation
     //
 
-    inline DifferentPowersFunction::DifferentPowersFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    DifferentPowersFunction<T>::DifferentPowersFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline double DifferentPowersFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& z = arma::abs(parameter);
-      return arma::norm(z % getConditionedParameter(arma::square(z)));
+    template <typename T>
+    T DifferentPowersFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& z = arma::abs(parameter);
+      return arma::norm(z % this->getConditionedParameter(arma::square(z)));
     }
 
-    inline std::string DifferentPowersFunction::toString() const noexcept {
+    template <typename T>
+    std::string DifferentPowersFunction<T>::toString() const noexcept {
       return "bbob_different_powers_function";
     }
   }

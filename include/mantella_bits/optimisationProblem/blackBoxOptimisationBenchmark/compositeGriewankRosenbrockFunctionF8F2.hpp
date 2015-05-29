@@ -1,17 +1,20 @@
 namespace mant {
   namespace bbob {
-    class CompositeGriewankRosenbrockFunctionF8F2 : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class CompositeGriewankRosenbrockFunctionF8F2 : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit CompositeGriewankRosenbrockFunctionF8F2(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit CompositeGriewankRosenbrockFunctionF8F2(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const double max_;
+        const T max_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -40,22 +43,25 @@ namespace mant {
     // Implementation
     //
 
-    inline CompositeGriewankRosenbrockFunctionF8F2::CompositeGriewankRosenbrockFunctionF8F2(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)){
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    CompositeGriewankRosenbrockFunctionF8F2<T>::CompositeGriewankRosenbrockFunctionF8F2(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        max_(std::max(static_cast<T>(1.0L), std::sqrt(static_cast<T>(this->numberOfDimensions_)) / static_cast<T>(8.0L))){
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline double CompositeGriewankRosenbrockFunctionF8F2::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-       const arma::Col<double>& s = max_ * parameter + 0.5;
-      const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
+    template <typename T>
+    T CompositeGriewankRosenbrockFunctionF8F2<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+       const arma::Col<T>& s = max_ * parameter + static_cast<T>(0.5L);
+      const arma::Col<T>& z = static_cast<T>(100.0L) * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - static_cast<T>(1.0L));
 
-      return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1);
+      return static_cast<T>(10.0L) * (arma::mean(z / static_cast<T>(4000.0L) - arma::cos(z)) + static_cast<T>(1L));
     }
 
-    inline std::string CompositeGriewankRosenbrockFunctionF8F2::toString() const noexcept {
+    template <typename T>
+    std::string CompositeGriewankRosenbrockFunctionF8F2<T>::toString() const noexcept {
       return "bbob_composite_griewank_rosenbrock_function_f8f2";
     }
   }

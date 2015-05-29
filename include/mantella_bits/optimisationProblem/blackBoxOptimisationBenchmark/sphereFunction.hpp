@@ -1,15 +1,18 @@
 namespace mant {
   namespace bbob {
-    class SphereFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class SphereFunction : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit SphereFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit SphereFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -38,18 +41,21 @@ namespace mant {
     // Implementation
     //
 
-    inline SphereFunction::SphereFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-      setParameterTranslation(getRandomParameterTranslation());
+    template <typename T>
+    SphereFunction<T>::SphereFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
     }
 
-    inline double SphereFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return std::pow(arma::norm(parameter), 2.0);
+    template <typename T>
+    T SphereFunction<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return std::pow(arma::norm(parameter), static_cast<T>(2.0L));
     }
 
-    inline std::string SphereFunction::toString() const noexcept {
+    template <typename T>
+    std::string SphereFunction<T>::toString() const noexcept {
       return "bbob_sphere_function";
     }
   }

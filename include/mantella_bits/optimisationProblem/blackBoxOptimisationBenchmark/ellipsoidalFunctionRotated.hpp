@@ -1,17 +1,20 @@
 namespace mant {
   namespace bbob {
-    class EllipsoidalFunctionRotated : public BlackBoxOptimisationBenchmark {
+    template <typename T = double>
+    class EllipsoidalFunctionRotated : public BlackBoxOptimisationBenchmark<T> {
+      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
       public:
-        inline explicit EllipsoidalFunctionRotated(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit EllipsoidalFunctionRotated(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        T getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL)
         friend class cereal::access;
@@ -40,20 +43,23 @@ namespace mant {
     // Implementation
     //
 
-    inline EllipsoidalFunctionRotated::EllipsoidalFunctionRotated(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(1000000.0)) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T>
+    EllipsoidalFunctionRotated<T>::EllipsoidalFunctionRotated(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(static_cast<T>(1000000.0L))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
+    template <typename T>
+    T EllipsoidalFunctionRotated<T>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter)));
     }
 
-    inline std::string EllipsoidalFunctionRotated::toString() const noexcept {
+    template <typename T>
+    std::string EllipsoidalFunctionRotated<T>::toString() const noexcept {
       return "bbob_ellipsoidal_function_rotated";
     }
   }
