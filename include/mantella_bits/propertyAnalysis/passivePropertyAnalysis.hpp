@@ -6,9 +6,9 @@ namespace mant {
     
     public:
       using PropertyAnalysis<T, U>::PropertyAnalysis;
-
+      
       void analyse(
-          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMapping) noexcept;
+          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings);
 
     protected:
       virtual void analyseImplementation(
@@ -21,7 +21,9 @@ namespace mant {
 
   template <typename T, typename U>
   void PassivePropertyAnalysis<T, U>::analyse(
-      const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMapping) noexcept {
-    analyseImplementation(parameterToObjectiveValueMapping);
+      const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) {
+    verify(parameterToObjectiveValueMappings.size() > 1, "");
+    
+    analyseImplementation(parameterToObjectiveValueMappings);
   }
 }
