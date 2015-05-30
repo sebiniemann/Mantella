@@ -1,5 +1,5 @@
 namespace mant {
-  template <typename T>
+  template <typename T, typename U = double>
   class AlphaHoelderContinuityAnalysis : public PassivePropertyAnalysis<T> {
     public:
       using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
@@ -12,7 +12,7 @@ namespace mant {
       double lipschitzConstant_;
 
       void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -31,7 +31,7 @@ namespace mant {
 
   template <typename T>
   void AlphaHoelderContinuityAnalysis<T>::analyseImplementation(
-      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<T>& parameter = n->first;
       const double& objectiveValue = n->second;
