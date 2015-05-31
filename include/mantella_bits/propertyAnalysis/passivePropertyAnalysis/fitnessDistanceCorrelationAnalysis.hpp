@@ -28,7 +28,7 @@ namespace mant {
   void FitnessDistanceCorrelationAnalysis<T, U>::analyseImplementation(
       const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
-    arma::Col<U> objectiveValues(parameterToObjectiveValueMappings.size());
+    arma::Col<U> objectiveValues(parameters.n_cols);
 
     std::size_t n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
