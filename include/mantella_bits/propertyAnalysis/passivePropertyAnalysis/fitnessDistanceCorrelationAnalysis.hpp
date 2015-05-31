@@ -30,7 +30,7 @@ namespace mant {
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
     arma::Col<U> objectiveValues(parameterToObjectiveValueMappings.size());
 
-    unsigned int n = 0;
+    std::size_t n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
       parameters.col(n) = parameterToObjectiveValueMapping.first;
       objectiveValues(n) = parameterToObjectiveValueMapping.second;
