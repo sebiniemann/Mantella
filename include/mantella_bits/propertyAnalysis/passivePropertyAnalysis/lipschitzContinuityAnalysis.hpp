@@ -29,7 +29,7 @@ namespace mant {
       const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<T>& parameter = n->first;
-      const double& objectiveValue = n->second;
+      const U objectiveValue = n->second;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
       }
     }
