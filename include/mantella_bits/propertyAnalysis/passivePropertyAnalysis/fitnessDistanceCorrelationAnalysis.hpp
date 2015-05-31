@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename T>
-  class FitnessDistanceCorrelationAnalysis : public PassivePropertyAnalysis<T> {
+  template <typename T, typename U = double>
+  class FitnessDistanceCorrelationAnalysis : public PassivePropertyAnalysis<T, U> {
     public:
-      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T, U>::PassivePropertyAnalysis;
 
       double getCorrelationCoefficient() const noexcept;
 
@@ -12,23 +12,23 @@ namespace mant {
       double correlationCoefficient_;
 
       void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template <typename T>
-  double FitnessDistanceCorrelationAnalysis<T>::getCorrelationCoefficient() const noexcept {
+  template <typename T, typename U>
+  double FitnessDistanceCorrelationAnalysis<T, U>::getCorrelationCoefficient() const noexcept {
     return correlationCoefficient_;
   }
 
-  template <typename T>
-  void FitnessDistanceCorrelationAnalysis<T>::analyseImplementation(
-      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+  template <typename T, typename U>
+  void FitnessDistanceCorrelationAnalysis<T, U>::analyseImplementation(
+      const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
-    arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
+    arma::Col<U> objectiveValues(parameterToObjectiveValueMappings.size());
 
     unsigned int n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
