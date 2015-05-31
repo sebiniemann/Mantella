@@ -6,6 +6,8 @@ namespace mant {
 
       double getLipschitzConstant() const noexcept;
 
+      std::string toString() const noexcept override;
+
     protected:
       double lipschitzConstant_;
 
@@ -32,5 +34,10 @@ namespace mant {
         lipschitzConstant_ = std::max(lipschitzConstant_, std::abs(k->second - objectiveValue) / this->distanceFunction_->getDistance(parameter, k->first));
       }
     }
+  }
+
+  template <typename T, typename U>
+  std::string LipschitzContinuityAnalysis<T, U>::toString() const noexcept {
+    return "lipschitz_continuity_analysis";
   }
 }

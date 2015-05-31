@@ -6,6 +6,8 @@ namespace mant {
 
       double getCorrelationCoefficient() const noexcept;
 
+      std::string toString() const noexcept override;
+
     protected:
       double correlationCoefficient_;
 
@@ -41,5 +43,10 @@ namespace mant {
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
     correlationCoefficient_ = arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
+  }
+
+  template <typename T, typename U>
+  std::string FitnessDistanceCorrelationAnalysis<T, U>::toString() const noexcept {
+    return "fitness_distance_correlation_analysis";
   }
 }
