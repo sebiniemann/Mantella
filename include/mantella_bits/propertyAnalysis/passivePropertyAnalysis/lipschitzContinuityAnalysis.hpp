@@ -31,6 +31,11 @@ namespace mant {
       const arma::Col<T>& parameter = n->first;
       const U objectiveValue = n->second;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
+        if (std::is_integral<T>::value) {
+          lipschitzConstant_ = std::max(lipschitzConstant_, std::abs(k->second - objectiveValue) / this->distanceFunction_->getDistance(parameter, k->first));
+        } else {
+          lipschitzConstant_ = std::max(lipschitzConstant_, std::abs(k->second - objectiveValue) / arma::norm(k->first - parameter)); 
+        }
       }
     }
   }
