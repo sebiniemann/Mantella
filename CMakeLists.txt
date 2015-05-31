@@ -231,7 +231,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/propertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessCloudCorrelationAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/neighbourFitnessCorrelationAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/alphaHoelderContinuityAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresLinearFunctionModelAnalysis.hpp
