@@ -227,8 +227,6 @@ namespace mant {
   template <typename T, typename U>
   void OptimisationProblem<T, U>::setParameterScaling(
       const arma::Col<T>& parameterScaling) {
-    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
-
     verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     parameterScaling_ = parameterScaling;
@@ -240,8 +238,6 @@ namespace mant {
   template <typename T, typename U>
   void OptimisationProblem<T, U>::setParameterTranslation(
       const arma::Col<T>& parameterTranslation) {
-    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
-
     verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     parameterTranslation_ = parameterTranslation;
@@ -253,8 +249,6 @@ namespace mant {
   template <typename T, typename U>
   void OptimisationProblem<T, U>::setParameterRotation(
       const arma::Mat<T>& parameterRotation) {
-    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
-
     verify(parameterRotation.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions.");
     verify(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
 
