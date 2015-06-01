@@ -1,8 +1,9 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double>
-    class AttractiveSectorFunction : public BlackBoxOptimisationBenchmark<T> {
-      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    template <typename T = double, typename U = double>
+    class AttractiveSectorFunction : public BlackBoxOptimisationBenchmark<T, U> {
+      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit AttractiveSectorFunction(
@@ -35,18 +36,18 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T>
-    AttractiveSectorFunction<T>::AttractiveSectorFunction(
+    template <typename T, typename U>
+    AttractiveSectorFunction<T, U>::AttractiveSectorFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
       this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    template <typename T>
-    void AttractiveSectorFunction<T>::setRotationQ(
+    template <typename T, typename U>
+    void AttractiveSectorFunction<T, U>::setRotationQ(
         const arma::Mat<T>& rotationQ) {
       verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
@@ -54,8 +55,8 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    template <typename T>
-    T AttractiveSectorFunction<T>::getObjectiveValueImplementation(
+    template <typename T, typename U>
+    T AttractiveSectorFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> z = rotationQ_ * (parameterConditioning_ % parameter);
       z.elem(arma::find(z % this->parameterTranslation_ > static_cast<T>(0.0L))) *= static_cast<T>(100.0L);
@@ -63,14 +64,14 @@ namespace mant {
       return std::pow(this->getOscillatedValue(std::pow(arma::norm(z), static_cast<T>(2.0L))), static_cast<T>(0.9L));
     }
 
-    template <typename T>
-    std::string AttractiveSectorFunction<T>::toString() const noexcept {
+    template <typename T, typename U>
+    std::string AttractiveSectorFunction<T, U>::toString() const noexcept {
       return "bbob_attractive_sector_function";
     }
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
-    template <typename T>
-    std::vector<double> AttractiveSectorFunction<T>::serialise() const noexcept {
+    template <typename T, typename U>
+    std::vector<double> AttractiveSectorFunction<T, U>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
@@ -80,8 +81,8 @@ namespace mant {
       return serialisedOptimisationProblem;
     }
 
-    template <typename T>
-    void AttractiveSectorFunction<T>::deserialise(
+    template <typename T, typename U>
+    void AttractiveSectorFunction<T, U>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {

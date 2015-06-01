@@ -1,8 +1,9 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double>
-    class SchaffersF7FunctionIllConditioned : public BlackBoxOptimisationBenchmark<T> {
-      static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    template <typename T = double, typename U = double>
+    class SchaffersF7FunctionIllConditioned : public BlackBoxOptimisationBenchmark<T, U> {
+      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit SchaffersF7FunctionIllConditioned(
@@ -38,18 +39,18 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T>
-    SchaffersF7FunctionIllConditioned<T>::SchaffersF7FunctionIllConditioned(
+    template <typename T, typename U>
+    SchaffersF7FunctionIllConditioned<T, U>::SchaffersF7FunctionIllConditioned(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(1000.0L)))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
       this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    template <typename T>
-    void SchaffersF7FunctionIllConditioned<T>::setRotationQ(
+    template <typename T, typename U>
+    void SchaffersF7FunctionIllConditioned<T, U>::setRotationQ(
         const arma::Mat<T>& rotationQ) {
       verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
@@ -57,14 +58,14 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    template <typename T>
-    T SchaffersF7FunctionIllConditioned<T>::getSoftConstraintsValueImplementation(
+    template <typename T, typename U>
+    T SchaffersF7FunctionIllConditioned<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       return static_cast<T>(10.0L) * this->getBoundConstraintsValue(parameter);
     }
 
-    template <typename T>
-    T SchaffersF7FunctionIllConditioned<T>::getObjectiveValueImplementation(
+    template <typename T, typename U>
+    T SchaffersF7FunctionIllConditioned<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& s = arma::square(parameterConditioning_ % (rotationQ_ * this->getAsymmetricParameter(static_cast<T>(0.5L), parameter)));
       const arma::Col<T>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), static_cast<T>(0.25L));
@@ -72,14 +73,14 @@ namespace mant {
       return std::pow(arma::mean(z % (static_cast<T>(1.0L) + arma::square(arma::sin(static_cast<T>(50.0L) * arma::pow(z, static_cast<T>(0.4L)))))), static_cast<T>(2.0L));
     }
 
-    template <typename T>
-    std::string SchaffersF7FunctionIllConditioned<T>::toString() const noexcept {
+    template <typename T, typename U>
+    std::string SchaffersF7FunctionIllConditioned<T, U>::toString() const noexcept {
       return "bbob_schaffers_f7_function_ill_conditioned";
     }
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
-    template <typename T>
-    std::vector<double> SchaffersF7FunctionIllConditioned<T>::serialise() const noexcept {
+    template <typename T, typename U>
+    std::vector<double> SchaffersF7FunctionIllConditioned<T, U>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
@@ -89,8 +90,8 @@ namespace mant {
       return serialisedOptimisationProblem;
     }
 
-    template <typename T>
-    void SchaffersF7FunctionIllConditioned<T>::deserialise(
+    template <typename T, typename U>
+    void SchaffersF7FunctionIllConditioned<T, U>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
