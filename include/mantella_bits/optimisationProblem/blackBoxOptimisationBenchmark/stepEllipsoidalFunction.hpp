@@ -75,7 +75,7 @@ namespace mant {
       const arma::Col<T>& s = firstParameterConditioning_ % parameter;
 
       arma::Col<T> z = s;
-      for (std::size_t n = 0u; n < z.n_elem; ++n) {
+      for (std::size_t n = 0; n < z.n_elem; ++n) {
         const T& value = s(n);
 
         if (std::abs(value) > static_cast<T>(0.5L)) {
@@ -85,7 +85,7 @@ namespace mant {
         }
       }
 
-      return static_cast<U>(0.1L) * std::max(std::abs(static_cast<U>(s(0u))) / static_cast<U>(10000.0L), static_cast<U>(arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z))));
+      return static_cast<U>(0.1L) * std::max(std::abs(static_cast<U>(s(0))) / static_cast<U>(10000.0L), static_cast<U>(arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z))));
     }
 
     template <typename T, typename U>
@@ -98,7 +98,7 @@ namespace mant {
     std::vector<double> StepEllipsoidalFunction<T, U>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
-      for(std::size_t n = 0u; n < rotationQ_.n_elem; ++n) {
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
       }
       
@@ -109,7 +109,7 @@ namespace mant {
     void StepEllipsoidalFunction<T, U>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
-      for(std::size_t n = 0u; n < rotationQ_.n_elem; ++n) {
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         

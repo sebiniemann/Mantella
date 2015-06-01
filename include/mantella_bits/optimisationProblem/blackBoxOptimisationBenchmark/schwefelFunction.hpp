@@ -47,7 +47,7 @@ namespace mant {
     U SchwefelFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> s = parameter;
-      s.tail(s.n_elem - 1u) += static_cast<T>(0.25L) * (s.head(s.n_elem - 1u) - static_cast<T>(4.2096874633L));
+      s.tail(s.n_elem - 1) += static_cast<T>(0.25L) * (s.head(s.n_elem - 1) - static_cast<T>(4.2096874633L));
 
       const arma::Col<T>& z = static_cast<T>(100.0L) * (parameterConditioning_ % (s - static_cast<T>(4.2096874633L)) + static_cast<T>(4.2096874633L));
 

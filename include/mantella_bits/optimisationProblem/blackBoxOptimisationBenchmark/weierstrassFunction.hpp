@@ -88,8 +88,8 @@ namespace mant {
       const arma::Col<T>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * this->getOscillatedParameter(rotationR_ * parameter)));
 
       U sum = static_cast<U>(0.0L);
-      for (std::size_t n = 0u; n < z.n_elem; ++n) {
-        for (std::size_t k = 0u; k < 12; ++k) {
+      for (std::size_t n = 0; n < z.n_elem; ++n) {
+        for (std::size_t k = 0; k < 12; ++k) {
           sum += std::pow(static_cast<U>(0.5L), k) * std::cos(static_cast<U>(2.0L) * arma::datum::pi * std::pow(static_cast<U>(3.0L), k) * (static_cast<U>(z(n)) + static_cast<U>(0.5L)));
         }
       }
@@ -122,12 +122,12 @@ namespace mant {
     void WeierstrassFunction<T, U>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
-      for(std::size_t n = 0u; n < rotationQ_.n_elem; ++n) {
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
       
       rotationR_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
-      for(std::size_t n = 0u; n < rotationR_.n_elem; ++n) {
+      for(std::size_t n = 0; n < rotationR_.n_elem; ++n) {
         rotationR_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         

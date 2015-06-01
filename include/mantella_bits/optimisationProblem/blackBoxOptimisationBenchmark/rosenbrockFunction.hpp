@@ -49,7 +49,7 @@ namespace mant {
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = max_ * parameter + static_cast<T>(1.0L);
 
-      return static_cast<U>(100.0L) * std::pow(static_cast<U>(arma::norm(arma::square(z.head(z.n_elem - 1u)) - z.tail(z.n_elem - 1u))), static_cast<U>(2.0L)) + std::pow(static_cast<U>(arma::norm(z.head(z.n_elem - 1u) - static_cast<T>(1.0L))), static_cast<U>(2.0L));
+      return static_cast<U>(100.0L) * std::pow(static_cast<U>(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))), static_cast<U>(2.0L)) + std::pow(static_cast<U>(arma::norm(z.head(z.n_elem - 1) - static_cast<T>(1.0L))), static_cast<U>(2.0L));
     }
 
     template <typename T, typename U>

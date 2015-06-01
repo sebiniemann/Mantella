@@ -71,7 +71,7 @@ namespace mant {
     U SchaffersF7Function<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& s = arma::square(parameterConditioning_ % (rotationQ_ * this->getAsymmetricParameter(static_cast<T>(0.5L), parameter)));
-      const arma::Col<T>& z = arma::pow(s.head(s.n_elem - 1u) + s.tail(s.n_elem - 1u), static_cast<T>(0.25L));
+      const arma::Col<T>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), static_cast<T>(0.25L));
 
       return std::pow(static_cast<U>(arma::mean(z % (static_cast<T>(1.0L) + arma::square(arma::sin(static_cast<T>(50.0L) * arma::pow(z, static_cast<T>(0.4L))))))), static_cast<U>(2.0L));
     }
@@ -86,7 +86,7 @@ namespace mant {
     std::vector<double> SchaffersF7Function<T, U>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
-      for(std::size_t n = 0u; n < rotationQ_.n_elem; ++n) {
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
       }
       
@@ -97,7 +97,7 @@ namespace mant {
     void SchaffersF7Function<T, U>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
-      for(std::size_t n = 0u; n < rotationQ_.n_elem; ++n) {
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         
