@@ -136,8 +136,8 @@ namespace mant {
       setParameterRotation(arma::eye<arma::Mat<T>>(numberOfDimensions_, numberOfDimensions_));
     }
     
-    setObjectiveValueScaling(1.0);
-    setObjectiveValueTranslation(0.0);
+    setObjectiveValueScaling(static_cast<U>(1.0L));
+    setObjectiveValueTranslation(static_cast<U>(0.0L));
     setAcceptableObjectiveValue(std::numeric_limits<U>::lowest());
   }
 
@@ -175,7 +175,7 @@ namespace mant {
     const U& softConstraintValue = getSoftConstraintsValueImplementation(parameter);
     
     // All soft-constraint values must be greater than or equal to 0.
-    assert(softConstraintValue >= 0.0);
+    assert(softConstraintValue >= static_cast<U>(0.0L));
     
     return objectiveValueScaling_ * softConstraintValue;
   }
@@ -201,7 +201,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return (getSoftConstraintsValue(parameter) == 0.0);
+    return (getSoftConstraintsValue(parameter) == static_cast<U>(0.0L));
   }
 
   template <typename T, typename U>
