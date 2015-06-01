@@ -1,6 +1,6 @@
 namespace mant {
   namespace bbob {
-    template <typename T, typename U = double>
+    template <typename T = double, typename U = double>
     class BlackBoxOptimisationBenchmark : public OptimisationProblem<T, U> {
     static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
     static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
