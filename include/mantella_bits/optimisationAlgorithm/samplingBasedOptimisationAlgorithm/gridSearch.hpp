@@ -1,9 +1,9 @@
 namespace mant {
-  template <typename T>
-  class GridSearch : public SamplingBasedOptimisationAlgorithm<T> {
+  template <typename T, typename U = double>
+  class GridSearch : public SamplingBasedOptimisationAlgorithm<T, U> {
     public:
       explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept;
 
       void setNumberOfSamples(
           const arma::Col<unsigned int>& numberOfSamples);
@@ -20,15 +20,15 @@ namespace mant {
   // Implementation
   //
 
-  template <typename T>
-  GridSearch<T>::GridSearch(
+  template <typename T, typename U>
+  GridSearch<T, U>::GridSearch(
       const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
     : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
     setNumberOfSamples(arma::zeros(this->numberOfDimensions_) + 10);
   }
 
-  template <typename T>
-  void GridSearch<T>::optimiseImplementation() noexcept {
+  template <typename T, typename U>
+  void GridSearch<T, U>::optimiseImplementation() noexcept {
     verify(arma::accu(numberOfSamples_) <= this->maximalNumberOfIterations_ * this->numberOfNodes_, "");
     if (std::is_integral<T>::value) {
       // For integral types, ensure that each dimension has as least the same amout of elements as
@@ -70,16 +70,16 @@ namespace mant {
     }
   }
 
-  template <typename T>
-  void GridSearch<T>::setNumberOfSamples(
+  template <typename T, typename U>
+  void GridSearch<T, U>::setNumberOfSamples(
       const arma::Col<unsigned int>& numberOfSamples) {
     verify(arma::all(numberOfSamples > 0), "");
 
     numberOfSamples_ = numberOfSamples;
   }
 
-  template <typename T>
-  std::string GridSearch<T>::toString() const noexcept {
+  template <typename T, typename U>
+  std::string GridSearch<T, U>::toString() const noexcept {
     return "grid_search";
   }
 }
