@@ -386,16 +386,18 @@ namespace mant {
       serialisedOptimisationProblem.push_back(parameterPermutation_(n));
     }
 
-    for(std::size_t n = 0; n < parameterScaling_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(parameterScaling_(n));
-    }
+    if (std::is_floating_point<T>::value) {
+      for(std::size_t n = 0; n < parameterScaling_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(parameterScaling_(n));
+      }
 
-    for(std::size_t n = 0; n < parameterTranslation_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(parameterTranslation_(n));
-    }
+      for(std::size_t n = 0; n < parameterTranslation_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(parameterTranslation_(n));
+      }
 
-    for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(parameterRotation_(n));
+      for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(parameterRotation_(n));
+      }
     }
 
     serialisedOptimisationProblem.push_back(objectiveValueScaling_);
