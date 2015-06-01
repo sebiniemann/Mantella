@@ -360,7 +360,7 @@ namespace mant {
       const arma::Col<T>& parameter) const noexcept {
     assert(parameter.n_elem == numberOfDimensions_);
 
-    return 0.0;
+    return static_cast<U>(0.0L);
   }
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
