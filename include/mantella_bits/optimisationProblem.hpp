@@ -128,7 +128,7 @@ namespace mant {
     setUpperBounds(arma::zeros<arma::Col<T>>(numberOfDimensions_) + std::numeric_limits<T>::max());
     
     // (0, ..., numberOfDimensions - 1) 
-    setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
+    setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0u, numberOfDimensions_ - 1u, numberOfDimensions));
       
     if (std::is_floating_point<T>::value) {
       setParameterScaling(arma::ones<arma::Col<T>>(numberOfDimensions_));
@@ -216,7 +216,7 @@ namespace mant {
   void OptimisationProblem<T, U>::setParameterPermutation(
       const arma::Col<unsigned int>& parameterPermutation) {
     verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
-    verify(isPermutation(parameterPermutation, 0, numberOfDimensions_ - 1), "The parameter must be a permutation.");
+    verify(isPermutation(parameterPermutation, 0u, numberOfDimensions_ - 1u), "The parameter must be a permutation.");
 
     parameterPermutation_ = parameterPermutation;
 
@@ -336,8 +336,8 @@ namespace mant {
 
   template <typename T, typename U>
   void OptimisationProblem<T, U>::reset() noexcept {
-    numberOfEvaluations_ = 0;
-    numberOfDistinctEvaluations_ = 0;
+    numberOfEvaluations_ = 0llu;
+    numberOfDistinctEvaluations_ = 0llu;
     
     cachedObjectiveValues_.clear();
   }
