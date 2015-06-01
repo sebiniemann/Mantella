@@ -18,17 +18,17 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        const T s_;
-        const T mu_;
+        const U s_;
+        const U mu_;
         const arma::Col<T> parameterConditinong_;
 
         arma::Mat<T> rotationR_;
         arma::Mat<T> rotationQ_;
 
-        T getSoftConstraintsValueImplementation(
+        U getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -52,8 +52,8 @@ namespace mant {
     LunacekBiRastriginFunction<T, U>::LunacekBiRastriginFunction(
         const std::size_t numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
-        s_(static_cast<T>(1.0L) - static_cast<T>(0.5L) / (std::sqrt(static_cast<T>(this->numberOfDimensions_) + static_cast<T>(20.0L)) - static_cast<T>(4.1L))),
-        mu_(std::sqrt(static_cast<T>(5.25L) / s_)),
+        s_(static_cast<U>(1.0L) - static_cast<U>(0.5L) / (std::sqrt(static_cast<U>(this->numberOfDimensions_) + static_cast<U>(20.0L)) - static_cast<U>(4.1L))),
+        mu_(std::sqrt(static_cast<U>(5.25L) / s_)),
         parameterConditinong_(this->getParameterConditioning(static_cast<T>(10.0L))) {
       // A vector with all elements randomly and uniformly set to either 2 or -2.
       this->setParameterScaling(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? static_cast<T>(2.0L) : static_cast<T>(-2.0L)));
@@ -80,15 +80,15 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T LunacekBiRastriginFunction<T, U>::getSoftConstraintsValueImplementation(
+    U LunacekBiRastriginFunction<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return static_cast<T>(10000.0L) * this->getBoundConstraintsValue(parameter);
+      return static_cast<U>(10000.0L) * this->getBoundConstraintsValue(parameter);
     }
 
     template <typename T, typename U>
-    T LunacekBiRastriginFunction<T, U>::getObjectiveValueImplementation(
+    U LunacekBiRastriginFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return std::min(std::pow(arma::norm(parameter - static_cast<T>(2.5L)), static_cast<T>(2.0L)), static_cast<T>(this->numberOfDimensions_) + s_ * std::pow(arma::norm(parameter + mu_), static_cast<T>(2.0L))) + static_cast<T>(10.0L) * (static_cast<T>(this->numberOfDimensions_) - arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter - static_cast<T>(2.5L)))))));
+      return std::min(std::pow(static_cast<U>(arma::norm(parameter - static_cast<T>(2.5L))), static_cast<U>(2.0L)), static_cast<U>(this->numberOfDimensions_) + s_ * std::pow(static_cast<U>(arma::norm(parameter + mu_)), static_cast<U>(2.0L))) + static_cast<U>(10.0L) * (static_cast<U>(this->numberOfDimensions_) - static_cast<U>(arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter - static_cast<T>(2.5L))))))));
     }
 
     template <typename T, typename U>

@@ -12,9 +12,9 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        const T max_;
+        const U max_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -38,16 +38,16 @@ namespace mant {
     RosenbrockFunctionRotated<T, U>::RosenbrockFunctionRotated(
         const std::size_t numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
-        max_(std::max(static_cast<T>(1.0L), std::sqrt(static_cast<T>(this->numberOfDimensions_)) / static_cast<T>(8.0L))) {
+        max_(std::max(static_cast<U>(1.0L), std::sqrt(static_cast<U>(this->numberOfDimensions_)) / static_cast<U>(8.0L))) {
       this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
     template <typename T, typename U>
-    T RosenbrockFunctionRotated<T, U>::getObjectiveValueImplementation(
+    U RosenbrockFunctionRotated<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = max_ * parameter + static_cast<T>(0.5L);
 
-      return static_cast<T>(100.0L) * std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), static_cast<T>(2.0L)) + std::pow(arma::norm(z.head(z.n_elem - 1) - static_cast<T>(1.0L)), static_cast<T>(2.0L));
+      return static_cast<U>(100.0L) * std::pow(static_cast<U>(arma::norm(arma::square(z.head(z.n_elem - 1u)) - z.tail(z.n_elem - 1u))), static_cast<U>(2.0L)) + std::pow(static_cast<U>(arma::norm(z.head(z.n_elem - 1u) - static_cast<T>(1.0L))), static_cast<U>(2.0L));
     }
 
     template <typename T, typename U>

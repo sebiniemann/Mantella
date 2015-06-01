@@ -18,16 +18,16 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        const T f0_;
+        const U f0_;
         const arma::Col<T> parameterConditioning_;
 
         arma::Mat<T> rotationR_;
         arma::Mat<T> rotationQ_;
 
-        T getSoftConstraintsValueImplementation(
+        U getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -51,7 +51,7 @@ namespace mant {
     WeierstrassFunction<T, U>::WeierstrassFunction(
         const std::size_t numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
-        f0_(static_cast<T>(-1.99951171875L)),
+        f0_(static_cast<U>(-1.99951171875L)),
         parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(0.01L)))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
       setRotationR(getRandomRotationMatrix(this->numberOfDimensions_));
@@ -77,24 +77,24 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T WeierstrassFunction<T, U>::getSoftConstraintsValueImplementation(
+    U WeierstrassFunction<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return static_cast<T>(10.0L) * this->getBoundConstraintsValue(parameter) / static_cast<T>(this->numberOfDimensions_);
+      return static_cast<U>(10.0L) * this->getBoundConstraintsValue(parameter) / static_cast<U>(this->numberOfDimensions_);
     }
     
     template <typename T, typename U>
-    T WeierstrassFunction<T, U>::getObjectiveValueImplementation(
+    U WeierstrassFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * this->getOscillatedParameter(rotationR_ * parameter)));
 
-      T sum = static_cast<T>(0.0L);
-      for (std::size_t n = 0; n < z.n_elem; ++n) {
-        for (std::size_t k = 0; k < 12; ++k) {
-          sum += std::pow(static_cast<T>(0.5L), k) * std::cos(static_cast<T>(2.0L) * arma::datum::pi * std::pow(static_cast<T>(3.0L), k) * (z(n) + static_cast<T>(0.5L)));
+      U sum = static_cast<U>(0.0L);
+      for (std::size_t n = 0u; n < z.n_elem; ++n) {
+        for (std::size_t k = 0u; k < 12; ++k) {
+          sum += std::pow(static_cast<U>(0.5L), k) * std::cos(static_cast<U>(2.0L) * arma::datum::pi * std::pow(static_cast<U>(3.0L), k) * (static_cast<U>(z(n)) + static_cast<U>(0.5L)));
         }
       }
 
-      return static_cast<T>(10.0L) * std::pow(sum / static_cast<T>(this->numberOfDimensions_) - f0_, static_cast<T>(3.0L));
+      return static_cast<U>(10.0L) * std::pow(sum / static_cast<U>(this->numberOfDimensions_) - f0_, static_cast<U>(3.0L));
     }
 
     template <typename T, typename U>

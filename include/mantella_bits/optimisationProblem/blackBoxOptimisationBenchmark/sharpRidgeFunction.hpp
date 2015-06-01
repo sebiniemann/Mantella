@@ -19,7 +19,7 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -59,10 +59,10 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T SharpRidgeFunction<T, U>::getObjectiveValueImplementation(
+    U SharpRidgeFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = rotationQ_ * (parameterConditioning_ %  parameter);
-      return std::pow(z(0), static_cast<T>(2.0L)) + static_cast<T>(100.0L) * arma::norm(z.tail(z.n_elem - 1));
+      return std::pow(static_cast<U>(z(0)), static_cast<U>(2.0L)) + static_cast<U>(100.0L) * static_cast<U>(arma::norm(z.tail(z.n_elem - 1u)));
     }
 
     template <typename T, typename U>

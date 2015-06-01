@@ -122,21 +122,21 @@ namespace mant {
     template <typename T, typename U>
     T BlackBoxOptimisationBenchmark<T, U>::getOscillatedValue(
         const T value) const noexcept {
-      if (value != static_cast<U>(0.0L)) {
+      if (value != static_cast<T>(0.0L)) {
         T c1;
         T c2;
-        if (value > static_cast<U>(0.0L)) {
-          c1 = static_cast<U>(10.0L);
-          c2 = static_cast<U>(7.9L);
+        if (value > static_cast<T>(0.0L)) {
+          c1 = static_cast<T>(10.0L);
+          c2 = static_cast<T>(7.9L);
         } else {
-          c1 = static_cast<U>(5.5L);
-          c2 = static_cast<U>(3.1L);
+          c1 = static_cast<T>(5.5L);
+          c2 = static_cast<T>(3.1L);
         }
 
         const T& logAbsoluteValue = std::log(std::abs(value));
-        return std::copysign(static_cast<U>(1.0L), value) * std::exp(logAbsoluteValue + static_cast<U>(0.049L) * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
+        return std::copysign(static_cast<T>(1.0L), value) * std::exp(logAbsoluteValue + static_cast<T>(0.049L) * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
       } else {
-        return static_cast<U>(0.0L);
+        return static_cast<T>(0.0L);
       }
     }
 
@@ -158,7 +158,7 @@ namespace mant {
       U boundConstraintsValue = static_cast<U>(0.0L);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        boundConstraintsValue += std::pow(std::max(static_cast<U>(0.0L), std::abs(parameter(n)) - static_cast<U>(5.0L)), static_cast<U>(2.0L));
+        boundConstraintsValue += std::pow(std::max(static_cast<U>(0.0L), std::abs(static_cast<U>(parameter(n))) - static_cast<U>(5.0L)), static_cast<U>(2.0L));
       }
 
       return boundConstraintsValue;

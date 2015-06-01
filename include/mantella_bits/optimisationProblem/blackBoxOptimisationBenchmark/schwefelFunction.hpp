@@ -14,7 +14,7 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -44,14 +44,14 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T SchwefelFunction<T, U>::getObjectiveValueImplementation(
+    U SchwefelFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> s = parameter;
-      s.tail(s.n_elem - 1) += static_cast<T>(0.25L) * (s.head(s.n_elem - 1) - static_cast<T>(4.2096874633L));
+      s.tail(s.n_elem - 1u) += static_cast<T>(0.25L) * (s.head(s.n_elem - 1u) - static_cast<T>(4.2096874633L));
 
       const arma::Col<T>& z = static_cast<T>(100.0L) * (parameterConditioning_ % (s - static_cast<T>(4.2096874633L)) + static_cast<T>(4.2096874633L));
 
-      return static_cast<T>(0.01L) * (static_cast<T>(418.9828872724339L) - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<T>(this->numberOfDimensions_)) + static_cast<T>(100.0L) * this->getBoundConstraintsValue(z / static_cast<T>(100.0L));
+      return static_cast<U>(0.01L) * (static_cast<U>(418.9828872724339L) - static_cast<U>(arma::dot(z, arma::sin(arma::sqrt(arma::abs(z))))) / static_cast<U>(this->numberOfDimensions_)) + static_cast<U>(100.0L) * this->getBoundConstraintsValue(z / static_cast<T>(100.0L));
     }
 
     template <typename T, typename U>

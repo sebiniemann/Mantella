@@ -14,7 +14,7 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -43,11 +43,11 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T RastriginFunction<T, U>::getObjectiveValueImplementation(
+    U RastriginFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = parameterConditioning_ % this->getAsymmetricParameter(static_cast<T>(0.2L), this->getOscillatedParameter(parameter));
 
-      return static_cast<T>(10.0L) * (static_cast<T>(this->numberOfDimensions_) - arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z))) + std::pow(arma::norm(z), static_cast<T>(2.0L));
+      return static_cast<U>(10.0L) * (static_cast<U>(this->numberOfDimensions_) - static_cast<U>(arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z)))) + std::pow(static_cast<U>(arma::norm(z)), static_cast<U>(2.0L));
     }
 
     template <typename T, typename U>

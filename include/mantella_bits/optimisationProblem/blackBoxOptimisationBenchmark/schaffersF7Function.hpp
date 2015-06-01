@@ -19,10 +19,10 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        T getSoftConstraintsValueImplementation(
+        U getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -62,18 +62,18 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T SchaffersF7Function<T, U>::getSoftConstraintsValueImplementation(
+    U SchaffersF7Function<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return static_cast<T>(10.0L) * this->getBoundConstraintsValue(parameter);
+      return static_cast<U>(10.0L) * this->getBoundConstraintsValue(parameter);
     }
 
     template <typename T, typename U>
-    T SchaffersF7Function<T, U>::getObjectiveValueImplementation(
+    U SchaffersF7Function<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& s = arma::square(parameterConditioning_ % (rotationQ_ * this->getAsymmetricParameter(static_cast<T>(0.5L), parameter)));
-      const arma::Col<T>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), static_cast<T>(0.25L));
+      const arma::Col<T>& z = arma::pow(s.head(s.n_elem - 1u) + s.tail(s.n_elem - 1u), static_cast<T>(0.25L));
 
-      return std::pow(arma::mean(z % (static_cast<T>(1.0L) + arma::square(arma::sin(static_cast<T>(50.0L) * arma::pow(z, static_cast<T>(0.4L)))))), static_cast<T>(2.0L));
+      return std::pow(static_cast<U>(arma::mean(z % (static_cast<T>(1.0L) + arma::square(arma::sin(static_cast<T>(50.0L) * arma::pow(z, static_cast<T>(0.4L))))))), static_cast<U>(2.0L));
     }
 
     template <typename T, typename U>

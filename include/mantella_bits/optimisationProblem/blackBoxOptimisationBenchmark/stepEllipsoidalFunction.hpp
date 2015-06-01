@@ -20,10 +20,10 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        T getSoftConstraintsValueImplementation(
+        U getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -64,18 +64,18 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T StepEllipsoidalFunction<T, U>::getSoftConstraintsValueImplementation(
+    U StepEllipsoidalFunction<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       return this->getBoundConstraintsValue(parameter);
     }
     
     template <typename T, typename U>
-    T StepEllipsoidalFunction<T, U>::getObjectiveValueImplementation(
+    U StepEllipsoidalFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& s = firstParameterConditioning_ % parameter;
 
       arma::Col<T> z = s;
-      for (std::size_t n = 0; n < z.n_elem; ++n) {
+      for (std::size_t n = 0u; n < z.n_elem; ++n) {
         const T& value = s(n);
 
         if (std::abs(value) > static_cast<T>(0.5L)) {
@@ -85,7 +85,7 @@ namespace mant {
         }
       }
 
-      return static_cast<T>(0.1L) * std::max(std::abs(s(0)) / static_cast<T>(10000.0L), arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
+      return static_cast<U>(0.1L) * std::max(std::abs(static_cast<U>(s(0u))) / static_cast<U>(10000.0L), static_cast<U>(arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z))));
     }
 
     template <typename T, typename U>
