@@ -100,10 +100,13 @@ namespace mant {
       std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>> cachedObjectiveValues_;
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
       friend class OptimisationAlgorithm;
 
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
       std::vector<double> serialise() const noexcept;
 
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
       void deserialise(
           const std::vector<double>& serialisedOptimisationProblem);
 #endif
@@ -217,7 +220,7 @@ namespace mant {
 
     parameterPermutation_ = parameterPermutation;
 
-    // Resets all counter and caches, as the problem was changed.
+    // Resets all counters and caches, as the problem could be changed.
     reset();
   }
 
@@ -230,7 +233,7 @@ namespace mant {
 
     parameterScaling_ = parameterScaling;
 
-    // Resets all counter and caches, as the problem was changed.
+    // Resets all counters and caches, as the problem could be changed.
     reset();
   }
 
@@ -243,7 +246,7 @@ namespace mant {
 
     parameterTranslation_ = parameterTranslation;
 
-    // Resets all counter and caches, as the problem was changed.
+    // Resets all counters and caches, as the problem could be changed.
     reset();
   }
 
@@ -257,7 +260,7 @@ namespace mant {
 
     parameterRotation_ = parameterRotation;
 
-    // Resets all counter and caches, as the problem was changed.
+    // Resets all counters and caches, as the problem could be changed.
     reset();
   }
 
@@ -266,7 +269,7 @@ namespace mant {
       const U objectiveValueScaling) noexcept {
     objectiveValueScaling_ = objectiveValueScaling;
 
-    // Resets all counter and caches, as the problem was changed.
+    // Resets all counters and caches, as the problem could be changed.
     reset();
   }
 
@@ -275,7 +278,7 @@ namespace mant {
       const U objectiveValueTranslation) noexcept {
     objectiveValueTranslation_ = objectiveValueTranslation;
 
-    // Resets all counter and caches, as the problem was changed.
+    // Resets all counters and caches, as the problem could be changed.
     reset();
   }
 
@@ -314,6 +317,7 @@ namespace mant {
       return index->second;
     }
 #else
+    // Without caching, all function evaluations must be computed.
     ++numberOfDistinctEvaluations_;
       
     return objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
@@ -349,10 +353,10 @@ namespace mant {
     assert(parameter.n_elem == numberOfDimensions_);
 
     if (std::is_floating_point<T>::value) {
-      // For continuous problems, parameter is firstly permutated, than scaled, translated and lastly rotated.
+      // For continuous problems, parameter is firstly permuted, than scaled, translated and lastly rotated.
       return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
     } else {
-      // For discrete problems, the parameter is only permutated.
+      // For discrete problems, the parameter is only permuted.
       return parameter.elem(parameterPermutation_);
     }
   }
