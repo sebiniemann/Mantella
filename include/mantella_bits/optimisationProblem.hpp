@@ -409,7 +409,42 @@ namespace mant {
   template <typename T, typename U>
   void OptimisationProblem<T, U>::deserialise(
       const std::vector<double>& serialisedOptimisationProblem) {
+    lowerBounds_.set_size(this->numberOfDimensions_);
+    for(std::size_t n = 0; n < lowerBounds_.n_elem; ++n) {
+      lowerBounds_(n) = serialisedOptimisationProblem.pop_back();
+    }
+    
+    upperBounds_.set_size(this->numberOfDimensions_);
+    for(std::size_t n = 0; n < upperBounds_.n_elem; ++n) {
+      upperBounds_(n) = serialisedOptimisationProblem.pop_back();
+    }
+    
+    parameterPermutation_.set_size(this->numberOfDimensions_);
+    for(std::size_t n = 0; n < parameterPermutation_.n_elem; ++n) {
+      parameterPermutation_(n) = serialisedOptimisationProblem.pop_back();
+    }
+    
+    if (std::is_floating_point<T>::value) {
+      parameterScaling_.set_size(this->numberOfDimensions_);
+      for(std::size_t n = 0; n < parameterScaling_.n_elem; ++n) {
+        parameterScaling_(n) = serialisedOptimisationProblem.pop_back();
+      }
+      
+      parameterTranslation_.set_size(this->numberOfDimensions_);
+      for(std::size_t n = 0; n < parameterTranslation_.n_elem; ++n) {
+        parameterTranslation_(n) = serialisedOptimisationProblem.pop_back();
+      }
+      
+      parameterRotation_.set_size(this->numberOfDimensions_);
+      for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
+        parameterRotation_(n) = serialisedOptimisationProblem.pop_back();
+      }
+    }
 
+    objectiveValueScaling_ = serialisedOptimisationProblem.pop_back();
+    objectiveValueTranslation_ = serialisedOptimisationProblem.pop_back();
+
+    acceptableObjectiveValue_ = serialisedOptimisationProblem.pop_back();
   }
 #endif
 }
