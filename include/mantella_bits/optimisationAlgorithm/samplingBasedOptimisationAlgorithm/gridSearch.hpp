@@ -46,7 +46,7 @@ namespace mant {
       if (n % this->numberOfNodes_ == this->rank_) {
         ++this->numberOfIterations_;
 
-        arma::Col<T> candidateParameter(this->numberOfDimensions_);;
+        arma::Col<T> candidateParameter(this->numberOfDimensions_);
         for(std::size_t k = 0; k < sampleIndicies.n_elem; ++k) {
           candidateParameter(k) = samples.at(k)(sampleIndicies(k));
         }

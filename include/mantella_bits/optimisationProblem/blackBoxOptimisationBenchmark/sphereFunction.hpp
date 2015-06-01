@@ -49,7 +49,7 @@ namespace mant {
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
     template <typename T>
     std::vector<double> BentCigarFunction<T>::serialise() const noexcept {
-      return BlackBoxOptimisationBenchmark<T, T>::serialise();;
+      return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
     template <typename T>

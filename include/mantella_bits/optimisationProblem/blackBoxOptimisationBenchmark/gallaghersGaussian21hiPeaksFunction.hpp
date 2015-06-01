@@ -73,7 +73,7 @@ namespace mant {
     void GallaghersGaussian21hiPeaksFunction<T>::setLocalParameterConditionings(
         const arma::Mat<T>& localParameterConditionings) {
       verify(localParameterConditionings.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
-      verify(localParameterConditionings.n_cols == 21, "The number of columns must be equal to the number of peaks (21).");;
+      verify(localParameterConditionings.n_cols == 21, "The number of columns must be equal to the number of peaks (21).");
 
       localParameterConditionings_ = localParameterConditionings;
     }
