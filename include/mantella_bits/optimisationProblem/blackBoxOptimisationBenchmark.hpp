@@ -37,12 +37,15 @@ namespace mant {
             const arma::Col<T>& parameter) const noexcept;
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
-        friend class OptimisationAlgorithm;
-            
-        std::vector<double> serialise() const noexcept;
+      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+      friend class OptimisationAlgorithm;
 
-        void deserialise(
-            const std::vector<double>& serialisedOptimisationProblem);
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      std::vector<double> serialise() const noexcept;
+
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      void deserialise(
+          const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -54,7 +57,9 @@ namespace mant {
     BlackBoxOptimisationBenchmark<T, U>::BlackBoxOptimisationBenchmark(
         const std::size_t numberOfDimensions) noexcept
       : OptimisationProblem<T, U>(numberOfDimensions) {
+      // A vector with all elements set to -5.
       this->setLowerBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) - static_cast<T>(5.0L));
+      // A vector with all elements set to 5.
       this->setUpperBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) + static_cast<T>(5.0L));
       this->setObjectiveValueTranslation(std::min(static_cast<U>(1000.0L), std::max(static_cast<U>(-1000.0L), std::floor(std::cauchy_distribution<U>(static_cast<U>(0.0L), static_cast<U>(100.0L))(Rng::getGenerator()) * static_cast<U>(100.0L)) / static_cast<U>(100.0L))));
       this->setAcceptableObjectiveValue(this->objectiveValueTranslation_ + static_cast<U>(1.0e-8L));
