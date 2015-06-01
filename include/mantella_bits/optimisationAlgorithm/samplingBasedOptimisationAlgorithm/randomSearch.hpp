@@ -1,8 +1,8 @@
 namespace mant {
-  template <typename T = double>
-  class RandomSearch : public SamplingBasedOptimisationAlgorithm<T, T> {
+  template <typename T, typename U = double>
+  class RandomSearch : public SamplingBasedOptimisationAlgorithm<T, U> {
     public:
-      using SamplingBasedOptimisationAlgorithm<T, T>::SamplingBasedOptimisationAlgorithm;
+      using SamplingBasedOptimisationAlgorithm<T, U>::SamplingBasedOptimisationAlgorithm;
 
       std::string toString() const noexcept override;
 
@@ -14,8 +14,8 @@ namespace mant {
   // Implementation
   //
 
-  template <typename T>
-  void RandomSearch<T>::optimiseImplementation() noexcept {
+  template <typename T, typename U>
+  void RandomSearch<T, U>::optimiseImplementation() noexcept {
     while(!this->isFinished() && !this->isTerminated()) {
       ++this->numberOfIterations_;
     
@@ -24,8 +24,8 @@ namespace mant {
     };
   }
 
-  template <typename T>
-  std::string RandomSearch<T>::toString() const noexcept {
+  template <typename T, typename U>
+  std::string RandomSearch<T, U>::toString() const noexcept {
     return "random_search";
   }
 }
