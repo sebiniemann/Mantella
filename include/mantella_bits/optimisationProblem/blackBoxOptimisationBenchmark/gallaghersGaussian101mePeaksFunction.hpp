@@ -129,7 +129,7 @@ namespace mant {
         maximalValue = std::max(maximalValue, weight_(k) * std::exp(static_cast<U>(-0.5L) / static_cast<U>(this->numberOfDimensions_) * static_cast<U>(arma::dot(locallyTranslatedParameter, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(k)) * rotationQ_ * locallyTranslatedParameter))));
       }
 
-      return std::pow(this->getOscillatedObjectiveValue(static_cast<U>(10.0L) - maximalValue)), static_cast<U>(2.0L));
+      return std::pow(this->getOscillatedObjectiveValue(static_cast<U>(10.0L) - maximalValue), static_cast<U>(2.0L));
     }
 
     template <typename T, typename U>
