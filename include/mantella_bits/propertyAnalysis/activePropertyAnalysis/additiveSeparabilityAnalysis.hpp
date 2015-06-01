@@ -7,6 +7,8 @@ namespace mant {
       void setMaximalNumberOfIterations(
             const unsigned long long maximalNumberOfIterations) noexcept;
 
+      std::string toString() const noexcept override;
+            
     protected:
       unsigned long long maximalNumberOfIterations_;
 
@@ -114,5 +116,10 @@ namespace mant {
 //        }
 //      }
 //    }
+  }
+  
+  template <typename T, typename U>
+  std::string AdditiveSeparabilityAnalysis<T, U>::toString() const noexcept {
+    return "additive_separability_analysis";
   }
 }
