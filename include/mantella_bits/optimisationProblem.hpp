@@ -172,7 +172,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    const U& softConstraintValue = getSoftConstraintsValueImplementation(parameter);
+    const U softConstraintValue = getSoftConstraintsValueImplementation(parameter);
     
     // All soft-constraint values must be greater than or equal to 0.
     assert(softConstraintValue >= static_cast<U>(0.0L));
@@ -303,7 +303,7 @@ namespace mant {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
-      const U& result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
+      const U result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
       
       cachedObjectiveValues_.insert({parameter, result});
       return result;
