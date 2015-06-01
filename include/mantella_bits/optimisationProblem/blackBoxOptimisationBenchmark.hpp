@@ -61,14 +61,19 @@ namespace mant {
       this->setLowerBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) - static_cast<T>(5.0L));
       // A vector with all elements set to 5.
       this->setUpperBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) + static_cast<T>(5.0L));
+      // The objective value translation is randomly chosen from a Cauchy distribution with an approximate 50% chance to be within [-100, 100], rounded up to 2 decimal places.
+      // The translation is further bounded between -1000 and 1000.
       this->setObjectiveValueTranslation(std::min(static_cast<U>(1000.0L), std::max(static_cast<U>(-1000.0L), std::floor(std::cauchy_distribution<U>(static_cast<U>(0.0L), static_cast<U>(100.0L))(Rng::getGenerator()) * static_cast<U>(100.0L)) / static_cast<U>(100.0L))));
       this->setAcceptableObjectiveValue(this->objectiveValueTranslation_ + static_cast<U>(1.0e-8L));
     }
 
     template <typename T, typename U>
     arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getRandomParameterTranslation() const noexcept {
+      // The parameter space is randomly translated by [-4, 4]^N, rounded up to 4 decimal places.
       arma::Col<T> randomParameterTranslation = arma::floor(arma::randu<arma::Col<T>>(this->numberOfDimensions_) * static_cast<T>(1.0e4L)) / static_cast<T>(1.0e4L) * static_cast<T>(8.0L) - static_cast<T>(4.0L);
+      // In case the parameter space would remain unchanged, it is forcefully translated by -0.00001.
       randomParameterTranslation.elem(arma::find(randomParameterTranslation == static_cast<T>(0.0L))).fill(static_cast<T>(-1.0e-5L));
+      
       return randomParameterTranslation;
     }
 
@@ -77,6 +82,7 @@ namespace mant {
         const T conditionNumber) const noexcept {
       arma::Col<T> parameterConditioning = arma::linspace<arma::Col<T>>(static_cast<T>(0.0L), static_cast<T>(1.0L), this->numberOfDimensions_);
 
+      // In-place calculation of the conditioning.
       for (T& conditioning : parameterConditioning) {
         conditioning = std::pow(conditionNumber, conditioning);
       }
