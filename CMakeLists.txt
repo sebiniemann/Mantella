@@ -209,14 +209,14 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRPR.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRRR.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PUPS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine4PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRPR.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRRR.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine4PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.hpp
   include/mantella_bits/optimisationProblem/robotic/endEffectorPoseError.hpp
   include/mantella_bits/optimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
