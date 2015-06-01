@@ -24,8 +24,11 @@ namespace mant {
             const T asymmetry,
             const arma::Col<T>& parameter) const noexcept;
             
-        T getOscillatedValue(
+        T getOscillatedParameterValue(
             const T oscilliation) const noexcept;
+            
+        U getOscillatedObjectiveValue(
+            const U oscilliation) const noexcept;
 
         arma::Col<T> getOscillatedParameter(
             const arma::Col<T>& parameter) const noexcept;
@@ -120,7 +123,7 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T BlackBoxOptimisationBenchmark<T, U>::getOscillatedValue(
+    T BlackBoxOptimisationBenchmark<T, U>::getOscillatedParameterValue(
         const T value) const noexcept {
       if (value != static_cast<T>(0.0L)) {
         T c1;
@@ -141,12 +144,33 @@ namespace mant {
     }
 
     template <typename T, typename U>
+    U BlackBoxOptimisationBenchmark<T, U>::getOscillatedObjectiveValue(
+        const U value) const noexcept {
+      if (value != static_cast<U>(0.0L)) {
+        U c1;
+        U c2;
+        if (value > static_cast<U>(0.0L)) {
+          c1 = static_cast<U>(10.0L);
+          c2 = static_cast<U>(7.9L);
+        } else {
+          c1 = static_cast<U>(5.5L);
+          c2 = static_cast<U>(3.1L);
+        }
+
+        const U& logAbsoluteValue = std::log(std::abs(value));
+        return std::copysign(static_cast<U>(1.0L), value) * std::exp(logAbsoluteValue + static_cast<U>(0.049L) * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
+      } else {
+        return static_cast<U>(0.0L);
+      }
+    }
+
+    template <typename T, typename U>
     arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getOscillatedParameter(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> oscillatedParameter(parameter.n_elem);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        oscillatedParameter(n) = getOscillatedValue(parameter(n));
+        oscillatedParameter(n) = getOscillatedParameterValue(parameter(n));
       }
 
       return oscillatedParameter;
