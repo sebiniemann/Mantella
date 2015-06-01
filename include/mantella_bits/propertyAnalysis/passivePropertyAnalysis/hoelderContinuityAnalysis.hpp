@@ -1,6 +1,9 @@
 namespace mant {
   template <typename T, typename U = double>
   class HoelderContinuityAnalysis : public PassivePropertyAnalysis<T, U> {
+    static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type.");
+    static_assert(std::is_floating_point<U>::value, "U must be a floating point type.");
+    
     public:
       using PassivePropertyAnalysis<T, U>::PassivePropertyAnalysis;
 
