@@ -217,7 +217,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp
   include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp
   include/mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
-  include/mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp
+  include/mantella_bits/optimisationProblem/robotic/endEffectorPoseError.hpp
   include/mantella_bits/optimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp

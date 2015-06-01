@@ -126,7 +126,7 @@
 #include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp>
 #include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp>
 #include <mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp>
-#include <mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp>
+#include <mantella_bits/optimisationProblem/robotic/endEffectorPoseError.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>

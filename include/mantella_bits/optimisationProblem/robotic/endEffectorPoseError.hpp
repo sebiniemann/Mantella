@@ -1,8 +1,8 @@
 namespace mant {
   namespace robotic {
     template <class Model>
-    class PoseAccuracy : public OptimisationProblem<double> {
-        explicit PoseAccuracy(const Model& model) noexcept;
+    class EndEffectorPoseError : public OptimisationProblem<double> {
+        explicit EndEffectorPoseError(const Model& model) noexcept;
 
         void setEndEffectorTrajectory(
             const arma::Mat<double> endEffectorTrajectory) noexcept;
@@ -17,28 +17,28 @@ namespace mant {
     };
 
     template <class Model>
-    PoseAccuracy<Model>::PoseAccuracy(
+    EndEffectorPoseError<Model>::EndEffectorPoseError(
         const Model& model) noexcept
       : model_(model) {
       setEndEffectorTrajectory();
     }
 
     template <class Model>
-    void PoseAccuracy<Model>::setEndEffectorTrajectory(
+    void EndEffectorPoseError<Model>::setEndEffectorTrajectory(
         const arma::Mat<double> endEffectorTrajectory) noexcept {
       endEffectorTrajectory_ = endEffectorTrajectory;
     }
 
     template <>
-    inline double PoseAccuracy<ParallelKinematicMachine3PRRR>::getObjectiveValueImplementation(
+    inline double EndEffectorPoseError<ParallelKinematicMachine3PRRR>::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept {
-      double poseAccuracy = 0.0;
+      double endEffectorPoseError = 0.0;
 
       for(std::size_t n = 0; n < endEffectorTrajectory_.n_cols; ++n) {
-        poseAccuracy = std::max(poseAccuracy, model_.getEndEffectorPoseAccuracy(endEffectorTrajectory_.col(n), parameter));
+        endEffectorPoseError = std::max(endEffectorPoseError, model_.getEndEffectorPoseError(endEffectorTrajectory_.col(n), parameter));
       }
 
-      return poseAccuracy;
+      return endEffectorPoseError;
     }
   }
 }
