@@ -53,5 +53,18 @@ namespace mant {
     std::string LinearSlope<T>::toString() const noexcept {
       return "bbob_linear_slope";
     }
+    
+#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+    template <typename T, typename U>
+    std::vector<double> LinearSlope<T>::serialise() const noexcept {
+      return BlackBoxOptimisationBenchmark<T, T>::serialise();
+    }
+
+    template <typename T, typename U>
+    void LinearSlope<T>::deserialise(
+        const std::vector<double>& serialisedOptimisationProblem) {
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
