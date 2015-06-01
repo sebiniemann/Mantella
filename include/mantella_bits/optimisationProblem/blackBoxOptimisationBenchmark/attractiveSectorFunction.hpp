@@ -19,7 +19,7 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -59,12 +59,12 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T AttractiveSectorFunction<T, U>::getObjectiveValueImplementation(
+    U AttractiveSectorFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> z = rotationQ_ * (parameterConditioning_ % parameter);
       z.elem(arma::find(z % this->parameterTranslation_ > static_cast<T>(0.0L))) *= static_cast<T>(100.0L);
 
-      return std::pow(this->getOscillatedValue(std::pow(arma::norm(z), static_cast<T>(2.0L))), static_cast<T>(0.9L));
+      return std::pow(this->getOscillatedObjectiveValue(std::pow(static_cast<U>(arma::norm(z)), static_cast<U>(2.0L))), static_cast<U>(0.9L));
     }
 
     template <typename T, typename U>
@@ -78,7 +78,7 @@ namespace mant {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        serialisedOptimisationProblem.push_back(rotationQ_(n));
+        serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
       }
       
       return serialisedOptimisationProblem;
@@ -89,7 +89,7 @@ namespace mant {
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = serialisedOptimisationProblem.pop_back();
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);

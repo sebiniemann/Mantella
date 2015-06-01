@@ -19,10 +19,10 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        T getSoftConstraintsValueImplementation(
+        U getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -62,30 +62,30 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T KatsuuraFunction<T, U>::getSoftConstraintsValueImplementation(
+    U KatsuuraFunction<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       return this->getBoundConstraintsValue(parameter);
     }
 
     template <typename T, typename U>
-    T KatsuuraFunction<T, U>::getObjectiveValueImplementation(
+    U KatsuuraFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> z = rotationQ_ * (parameterConditioning_ % parameter);
 
-      T product = static_cast<T>(1.0L);
+      U product = static_cast<U>(1.0L);
       for (std::size_t n = 0; n < z.n_elem; ++n) {
-          const T& value = z(n);
+          const U value = static_cast<U>(z(n));
 
-          T sum = static_cast<T>(0.0L);
+          U sum = static_cast<U>(0.0L);
           for (std::size_t k = 1; k < 33; ++k) {
-              const T& power = std::pow(static_cast<T>(2.0L), k);
+              const U power = std::pow(static_cast<U>(2.0L), k);
               sum += std::abs(power * value - std::round(power * value)) / power;
           }
 
-          product *= std::pow(static_cast<T>(1.0L) + (static_cast<T>(n) + static_cast<T>(1.0L)) * sum, (static_cast<T>(10.0L) / std::pow(static_cast<T>(this->numberOfDimensions_), static_cast<T>(1.2L))));
+          product *= std::pow(static_cast<U>(1.0L) + (static_cast<U>(n) + static_cast<U>(1.0L)) * sum, (static_cast<U>(10.0L) / std::pow(static_cast<U>(this->numberOfDimensions_), static_cast<U>(1.2L))));
       }
 
-      return static_cast<T>(10.0L) / std::pow(static_cast<T>(this->numberOfDimensions_), static_cast<T>(2.0L)) * (product - static_cast<T>(1.0L));
+      return static_cast<U>(10.0L) / std::pow(static_cast<U>(this->numberOfDimensions_), static_cast<U>(2.0L)) * (product - static_cast<U>(1.0L));
     }
 
     template <typename T, typename U>
@@ -99,7 +99,7 @@ namespace mant {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        serialisedOptimisationProblem.push_back(rotationQ_(n));
+        serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
       }
       
       return serialisedOptimisationProblem;
@@ -110,7 +110,7 @@ namespace mant {
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = serialisedOptimisationProblem.pop_back();
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);

@@ -14,7 +14,7 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -44,9 +44,9 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T EllipsoidalFunctionRotated<T, U>::getObjectiveValueImplementation(
+    U EllipsoidalFunctionRotated<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter)));
+      return static_cast<U>(arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter))));
     }
 
     template <typename T, typename U>

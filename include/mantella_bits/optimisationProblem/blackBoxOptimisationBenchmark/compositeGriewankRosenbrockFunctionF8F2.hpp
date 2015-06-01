@@ -12,9 +12,9 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        const T max_;
+        const U max_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -38,17 +38,17 @@ namespace mant {
     CompositeGriewankRosenbrockFunctionF8F2<T, U>::CompositeGriewankRosenbrockFunctionF8F2(
         const std::size_t numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
-        max_(std::max(static_cast<T>(1.0L), std::sqrt(static_cast<T>(this->numberOfDimensions_)) / static_cast<T>(8.0L))){
+        max_(std::max(static_cast<U>(1.0L), std::sqrt(static_cast<U>(this->numberOfDimensions_)) / static_cast<U>(8.0L))){
       this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
     template <typename T, typename U>
-    T CompositeGriewankRosenbrockFunctionF8F2<T, U>::getObjectiveValueImplementation(
+    U CompositeGriewankRosenbrockFunctionF8F2<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
        const arma::Col<T>& s = max_ * parameter + static_cast<T>(0.5L);
       const arma::Col<T>& z = static_cast<T>(100.0L) * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - static_cast<T>(1.0L));
 
-      return static_cast<T>(10.0L) * (arma::mean(z / static_cast<T>(4000.0L) - arma::cos(z)) + static_cast<T>(1L));
+      return static_cast<U>(10.0L) * (static_cast<U>(arma::mean(z / static_cast<T>(4000.0L) - arma::cos(z))) + static_cast<U>(1L));
     }
 
     template <typename T, typename U>

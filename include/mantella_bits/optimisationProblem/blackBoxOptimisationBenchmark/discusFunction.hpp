@@ -12,7 +12,7 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -41,10 +41,10 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T DiscusFunction<T, U>::getObjectiveValueImplementation(
+    U DiscusFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = arma::square(this->getOscillatedParameter(parameter));
-      return static_cast<T>(1000000.0L) * z(0) + arma::accu(z.tail(z.n_elem - 1));
+      return static_cast<U>(1000000.0L) * static_cast<U>(z(0)) + static_cast<U>(arma::accu(z.tail(z.n_elem - 1)));
     }
 
     template <typename T, typename U>

@@ -21,7 +21,7 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        const typename arma::Col<T>::template fixed<101> weight_;
+        const typename arma::Col<U>::template fixed<101> weight_;
 
         arma::Mat<T> rotationQ_;
         arma::Mat<T> localParameterConditionings_;
@@ -31,10 +31,10 @@ namespace mant {
 
         arma::Mat<T> getRandomLocalParameterTranslations() const noexcept;
 
-        T getSoftConstraintsValueImplementation(
+        U getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -58,7 +58,7 @@ namespace mant {
     GallaghersGaussian101mePeaksFunction<T, U>::GallaghersGaussian101mePeaksFunction(
         const std::size_t numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
-        weight_(arma::join_cols(arma::Col<T>({static_cast<T>(10.0L)}), arma::linspace<arma::Col<T>>(static_cast<T>(1.1L), static_cast<T>(9.1L), 100))) {
+        weight_(arma::join_cols(arma::Col<U>({static_cast<U>(10.0L)}), arma::linspace<arma::Col<U>>(static_cast<U>(1.1L), static_cast<U>(9.1L), 100))) {
       setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
       setLocalParameterConditionings(getRandomLocalParameterConditionings());
       setLocalParameterTranslations(getRandomLocalParameterTranslations());
@@ -115,21 +115,21 @@ namespace mant {
     }
 
     template <typename T, typename U>
-    T GallaghersGaussian101mePeaksFunction<T, U>::getSoftConstraintsValueImplementation(
+    U GallaghersGaussian101mePeaksFunction<T, U>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       return this->getBoundConstraintsValue(parameter);
     }
 
     template <typename T, typename U>
-    T GallaghersGaussian101mePeaksFunction<T, U>::getObjectiveValueImplementation(
+    U GallaghersGaussian101mePeaksFunction<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      T maximalValue = std::numeric_limits<U>::lowest();
+      U maximalValue = std::numeric_limits<U>::lowest();
       for (std::size_t k = 0; k < 101; ++k) {
         const arma::Col<T>& locallyTranslatedParameter = parameter - localParameterTranslations_.col(k);
-        maximalValue = std::max(maximalValue, weight_(k) * std::exp(static_cast<T>(-0.5L) / static_cast<T>(this->numberOfDimensions_) * arma::dot(locallyTranslatedParameter, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(k)) * rotationQ_ * locallyTranslatedParameter)));
+        maximalValue = std::max(maximalValue, weight_(k) * std::exp(static_cast<U>(-0.5L) / static_cast<U>(this->numberOfDimensions_) * static_cast<U>(arma::dot(locallyTranslatedParameter, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(k)) * rotationQ_ * locallyTranslatedParameter))));
       }
 
-      return std::pow(this->getOscillatedValue(static_cast<T>(10.0L) - maximalValue), static_cast<T>(2.0L));
+      return std::pow(this->getOscillatedObjectiveValue(static_cast<U>(10.0L) - maximalValue)), static_cast<U>(2.0L));
     }
 
     template <typename T, typename U>
@@ -143,15 +143,15 @@ namespace mant {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        serialisedOptimisationProblem.push_back(rotationQ_(n));
+        serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
       }
       
       for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
-        serialisedOptimisationProblem.push_back(localParameterConditionings_(n));
+        serialisedOptimisationProblem.push_back(static_cast<double>(localParameterConditionings_(n)));
       }
       
       for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
-        serialisedOptimisationProblem.push_back(localParameterTranslations_(n));
+        serialisedOptimisationProblem.push_back(static_cast<double>(localParameterTranslations_(n)));
       }
       
       return serialisedOptimisationProblem;
@@ -162,17 +162,17 @@ namespace mant {
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = serialisedOptimisationProblem.pop_back();
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
       
       localParameterConditionings_.set_size(this->numberOfDimensions_, 21);
       for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
-        localParameterConditionings_(n) = serialisedOptimisationProblem.pop_back();
+        localParameterConditionings_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
       
       localParameterTranslations_.set_size(this->numberOfDimensions_, 21);
       for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
-        localParameterTranslations_(n) = serialisedOptimisationProblem.pop_back();
+        localParameterTranslations_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);

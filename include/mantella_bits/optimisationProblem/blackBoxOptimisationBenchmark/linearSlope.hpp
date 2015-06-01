@@ -13,9 +13,9 @@ namespace mant {
 
       protected:
         const arma::Col<T> parameterConditioning_;
-        const T f0_;
+        const U f0_;
 
-        T getObjectiveValueImplementation(
+        U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
@@ -40,17 +40,17 @@ namespace mant {
         const std::size_t numberOfDimensions) noexcept
       : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(static_cast<T>(10.0L))),
-        f0_(static_cast<T>(5.0L) * arma::accu(parameterConditioning_)) {
+        f0_(static_cast<U>(5.0L) * static_cast<U>(arma::accu(parameterConditioning_))) {
       this->setParameterRotation(arma::eye<arma::Mat<T>>(this->numberOfDimensions_, this->numberOfDimensions_) * (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? static_cast<T>(1.0L) : static_cast<T>(-1.0L)));
     }
 
     template <typename T, typename U>
-    T LinearSlope<T, U>::getObjectiveValueImplementation(
+    U LinearSlope<T, U>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> z = parameter;
       z.elem(arma::find(parameter >= static_cast<T>(5.0L))).fill(static_cast<T>(5.0L));
 
-      return f0_ - arma::dot(parameterConditioning_, z);
+      return f0_ - static_cast<U>(arma::dot(parameterConditioning_, z));
     }
 
     template <typename T, typename U>
