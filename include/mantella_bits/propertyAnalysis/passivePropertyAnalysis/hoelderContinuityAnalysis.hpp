@@ -1,11 +1,10 @@
 namespace mant {
-  template <typename T, typename U = double>
-  class HoelderContinuityAnalysis : public PassivePropertyAnalysis<T, U> {
-    static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type.");
-    static_assert(std::is_floating_point<U>::value, "U must be a floating point type.");
+  template <typename T = double>
+  class HoelderContinuityAnalysis : public PassivePropertyAnalysis<T, T> {
+    static_assert(std::is_arithmetic<T>::value, "T must be a floating point type.");
     
     public:
-      using PassivePropertyAnalysis<T, U>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T, T>::PassivePropertyAnalysis;
 
       double getHoelderExponent() const noexcept;
 
@@ -15,26 +14,26 @@ namespace mant {
       double hoelderExponent_;
 
       void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template <typename T, typename U>
-  double HoelderContinuityAnalysis<T, U>::getHoelderExponent() const noexcept {
+  template <typename T>
+  double HoelderContinuityAnalysis<T>::getHoelderExponent() const noexcept {
     return hoelderExponent_;
   }
 
-  template <typename T, typename U>
-  void HoelderContinuityAnalysis<T, U>::analyseImplementation(
-          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+  template <typename T>
+  void HoelderContinuityAnalysis<T>::analyseImplementation(
+          const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     assert(parameterToObjectiveValueMappings.size() > 1);
     
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
       const arma::Col<T>& parameter = n->first;
-      const U objectiveValue = n->second;
+      const T objectiveValue = n->second;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
         if (std::is_integral<T>::value) {
           hoelderExponent_ = std::min(hoelderExponent_, std::log(k->second - objectiveValue) / std::log(this->distanceFunction_->getDistance(parameter, k->first)));
@@ -45,8 +44,8 @@ namespace mant {
     }
   }
 
-  template <typename T, typename U>
-  std::string HoelderContinuityAnalysis<T, U>::toString() const noexcept {
+  template <typename T>
+  std::string HoelderContinuityAnalysis<T>::toString() const noexcept {
     return "hoelder_continuity_analysis";
   }
 }

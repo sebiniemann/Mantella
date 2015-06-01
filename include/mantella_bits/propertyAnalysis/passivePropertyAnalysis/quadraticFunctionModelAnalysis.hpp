@@ -1,11 +1,10 @@
 namespace mant {
-  template <typename T, typename U = double>
-  class QuadraticFunctionModelAnalysis : public PassivePropertyAnalysis<T, U> {
-    static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type.");
-    static_assert(std::is_floating_point<U>::value, "U must be a floating point type.");
+  template <typename T = double>
+  class QuadraticFunctionModelAnalysis : public PassivePropertyAnalysis<T, T> {
+    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
     
     public:
-      using PassivePropertyAnalysis<T, U>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T, T>::PassivePropertyAnalysis;
 
       arma::Col<double> getCoefficients() const noexcept;
 
@@ -15,25 +14,25 @@ namespace mant {
       arma::Col<double> coefficients_;
 
       void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template <typename T, typename U>
-  arma::Col<double> QuadraticFunctionModelAnalysis<T, U>::getCoefficients() const noexcept {
+  template <typename T>
+  arma::Col<double> QuadraticFunctionModelAnalysis<T>::getCoefficients() const noexcept {
     return coefficients_;
   }
 
-  template <typename T, typename U>
-  void QuadraticFunctionModelAnalysis<T, U>::analyseImplementation(
-      const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+  template <typename T>
+  void QuadraticFunctionModelAnalysis<T>::analyseImplementation(
+      const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     assert(parameterToObjectiveValueMappings.size() > 1);
     
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem * (parameterToObjectiveValueMappings.cbegin()->first.n_elem + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
-    arma::Col<U> objectiveValues(parameters.n_cols);
+    arma::Col<T> objectiveValues(parameters.n_cols);
 
     std::size_t n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
@@ -61,8 +60,8 @@ namespace mant {
     }
   }
 
-  template <typename T, typename U>
-  std::string QuadraticFunctionModelAnalysis<T, U>::toString() const noexcept {
+  template <typename T>
+  std::string QuadraticFunctionModelAnalysis<T>::toString() const noexcept {
     return "quadratic_function_model_analysis";
   }
 }
