@@ -48,12 +48,12 @@ namespace mant {
     
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
     template <typename T>
-    std::vector<double> BentCigarFunction<T>::serialise() const noexcept {
+    std::vector<double> SphereFunction<T, U>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
     template <typename T>
-    void BentCigarFunction<T>::deserialise(
+    void SphereFunction<T, U>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }

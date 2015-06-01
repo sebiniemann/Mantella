@@ -68,7 +68,7 @@ namespace mant {
 
 #if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
     template <typename T>
-    std::vector<double> AttractiveSectorFunction<T>::serialise() const noexcept {
+    std::vector<double> SharpRidgeFunction<T>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
@@ -79,7 +79,7 @@ namespace mant {
     }
 
     template <typename T>
-    void AttractiveSectorFunction<T>::deserialise(
+    void SharpRidgeFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
