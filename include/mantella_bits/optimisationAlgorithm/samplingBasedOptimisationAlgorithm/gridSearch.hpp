@@ -22,8 +22,8 @@ namespace mant {
 
   template <typename T, typename U>
   GridSearch<T, U>::GridSearch(
-      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
-    : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
+      const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept
+    : SamplingBasedOptimisationAlgorithm<T, U>(optimisationProblem) {
     setNumberOfSamples(arma::zeros(this->numberOfDimensions_) + 10);
   }
 
