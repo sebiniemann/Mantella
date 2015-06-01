@@ -15,7 +15,7 @@ namespace mant {
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
 
-        inline double getEndEffectorPoseAccuracy(
+        inline double getEndEffectorPoseError(
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Mat<double>& redundantJointActuations) const;
 
@@ -145,13 +145,13 @@ namespace mant {
       return actuations;
     }
 
-    inline double MultiLevelStewartPlatform::getEndEffectorPoseAccuracy(
+    inline double MultiLevelStewartPlatform::getEndEffectorPoseError(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Mat<double>& redundantActuationParameters) const {
-      double positionError = platformLevels_.at(0).getEndEffectorPoseAccuracy(endEffectorPose, {});
+      double positionError = platformLevels_.at(0).getEndEffectorPoseError(endEffectorPose, {});
 
       for (std::size_t n = 1; n < platformLevels_.size(); ++n) {
-        positionError += platformLevels_.at(n).getEndEffectorPoseAccuracy(redundantActuationParameters.col(n), {});
+        positionError += platformLevels_.at(n).getEndEffectorPoseError(redundantActuationParameters.col(n), {});
       }
 
       return positionError;

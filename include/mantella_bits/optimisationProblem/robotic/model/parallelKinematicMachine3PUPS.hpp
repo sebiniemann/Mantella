@@ -42,7 +42,7 @@ namespace mant {
             const arma::Row<double>::fixed<3>& endEffectorRotation,
             const arma::Row<double>& redundantJointActuations) const;
 
-        inline double getEndEffectorPoseAccuracy(
+        inline double getEndEffectorPoseError(
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
@@ -199,7 +199,7 @@ namespace mant {
       return arma::sqrt(arma::sum(arma::square(endEffectorJoints - baseJoints)));
     }
 
-    inline double ParallelKinematicMachine3PUPS::getEndEffectorPoseAccuracy(
+    inline double ParallelKinematicMachine3PUPS::getEndEffectorPoseError(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
       const arma::Cube<double>::fixed<3, 3, 2>& model = getModel(endEffectorPose, redundantJointActuations);
