@@ -23,10 +23,7 @@ namespace mant {
         arma::Col<T> getAsymmetricParameter(
             const T asymmetry,
             const arma::Col<T>& parameter) const noexcept;
-
-        U getOscillatedValue(
-            const U oscilliation) const noexcept;
-
+            
         T getOscillatedValue(
             const T oscilliation) const noexcept;
 
@@ -120,27 +117,6 @@ namespace mant {
       }
 
       return asymmetricParameter;
-    }
-
-    template <typename T, typename U>
-    U BlackBoxOptimisationBenchmark<T, U>::getOscillatedValue(
-        const U value) const noexcept {
-      if (value != static_cast<U>(0.0L)) {
-        T c1;
-        T c2;
-        if (value > static_cast<U>(0.0L)) {
-          c1 = static_cast<U>(10.0L);
-          c2 = static_cast<U>(7.9L);
-        } else {
-          c1 = static_cast<U>(5.5L);
-          c2 = static_cast<U>(3.1L);
-        }
-
-        const T& logAbsoluteValue = std::log(std::abs(value));
-        return std::copysign(static_cast<U>(1.0L), value) * std::exp(logAbsoluteValue + static_cast<U>(0.049L) * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
-      } else {
-        return static_cast<U>(0.0L);
-      }
     }
 
     template <typename T, typename U>
