@@ -30,6 +30,8 @@ namespace mant {
   template <typename T, typename U>
   void QuadraticFunctionModelAnalysis<T, U>::analyseImplementation(
       const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+    assert(parameterToObjectiveValueMappings.size() > 1);
+    
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem * (parameterToObjectiveValueMappings.cbegin()->first.n_elem + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
     arma::Col<U> objectiveValues(parameters.n_cols);
 

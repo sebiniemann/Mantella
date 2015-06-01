@@ -209,6 +209,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel.hpp
   include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRPR.hpp
   include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRRR.hpp
   include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRUS.hpp
