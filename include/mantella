@@ -34,7 +34,7 @@
 // Prerequirements
 //
 
-// C++ Standard Library
+// C++ Standard library
 #include <algorithm>
 #include <array>
 #include <cassert>
