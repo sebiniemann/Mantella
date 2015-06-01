@@ -52,7 +52,7 @@ namespace mant {
       : OptimisationProblem<T>(numberOfDimensions) {
       this->setLowerBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) - 5.0);
       this->setUpperBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) + 5.0);
-      this->setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, arma::floor(std::cauchy_distribution<double>(0.0, 100.0)(Rng::getGenerator()) * 100) / 100)));
+      this->setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::floor(std::cauchy_distribution<double>(0.0, 100.0)(Rng::getGenerator()) * 100) / 100)));
       this->setAcceptableObjectiveValue(this->objectiveValueTranslation_ + 1.0e-8);
     }
 
