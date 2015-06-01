@@ -301,8 +301,8 @@ namespace mant {
 
 #if defined(MANTELLA_USE_CACHES)
     // Check if the result is already cached.
-    const auto& cachePosition = cachedObjectiveValues_.find(parameter);
-    if (cachePosition == cachedObjectiveValues_.cend()) {
+    const auto& index = cachedObjectiveValues_.find(parameter);
+    if (index == cachedObjectiveValues_.cend()) {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
@@ -311,7 +311,7 @@ namespace mant {
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
-      return cachePosition->second;
+      return index->second;
     }
 #else
     ++numberOfDistinctEvaluations_;
