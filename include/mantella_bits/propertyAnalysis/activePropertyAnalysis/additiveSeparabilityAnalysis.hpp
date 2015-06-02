@@ -38,7 +38,7 @@ namespace mant {
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;
     for (const auto& partitionCandidate : partitionCandidates) {
-      arma::Col<double> differences(maximalNumberOfIterations_);
+      arma::Col<U> differences(maximalNumberOfIterations_);
 
       for(std::size_t n = 0; n < differences.n_elem; ++n) {
         arma::Col<T> firstPartA = arma::randu<arma::Col<T>>(partitionCandidate.first.n_elem);
