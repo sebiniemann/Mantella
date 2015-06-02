@@ -106,6 +106,10 @@ if(BUILD_TESTS)
   else()
     find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
     find_package(Catch REQUIRED) # Catch (header only)
+    
+    if(USE_MPI)
+      find_package(MPI REQUIRED) # MPI
+    endif()
   endif()
   
   # Include Mantella
@@ -114,6 +118,9 @@ if(BUILD_TESTS)
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
   include_directories(${CATCH_INCLUDE_DIRS}) # Catch
+  if(USE_MPI)
+    include_directories(${MPI_INCLUDE_PATH}) # MPI
+  endif()
 
   # Compile the optimisation library tests
   # All paths must start with "test/"
@@ -159,6 +166,9 @@ if(BUILD_TESTS)
 
   # Link against third party libraries
   target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  if(USE_MPI)
+    target_link_libraries(libraryTest ${MPI_C_LIBRARIES}) # MPI
+  endif()
 
   if(RUN_TESTS)
     message(STATUS "NOTICE: Automatically running all tests after building them.")
