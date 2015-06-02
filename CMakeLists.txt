@@ -35,7 +35,12 @@ if(RUN_TESTS)
   set(BUILD_TESTS ON)
 endif()
 
-mark_as_advanced(BUILD_TESTS RUN_TESTS MEASURE_CODE_COVERAGE)
+mark_as_advanced(
+ BUILD_TESTS
+ RUN_TESTS
+ MEASURE_CODE_COVERAGE
+)
+
 message(STATUS "")
 message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
 if(UNIX)
