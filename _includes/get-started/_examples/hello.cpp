@@ -4,10 +4,10 @@
 int main() {
   // 1. Setup the optimisation problem.
   unsigned int numberOfDimensions = 4;
-  std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(numberOfDimensions));
+  std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob::SphereFunction<double>(numberOfDimensions));
 
   // 2. Run the solver.
-  mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
+  mant::HookeJeevesAlgorithm<double> optimisationAlgorithm(optimisationProblem);
   optimisationAlgorithm.optimise();
 
   // 3. Get your results!

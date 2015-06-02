@@ -2,11 +2,11 @@ isFinished: 1
 isTerminated: 0
 numberOfIterations: 247
 numberOfEvaluations: 247
-numberOfDistinctEvaluations: 202
+numberOfDistinctEvaluations: 180
 bestSoftConstraintsValue: 0
-bestObjectiveValueDelta: -5.17011e-009
-bestParameter:   1.9399e-005
- -5.8373e-005
- -6.1413e-006
- -3.1755e-005
+bestObjectiveValueDelta: -4.00462e-11
+bestParameter:    2.7208
+  -0.8455
+   2.2639
+   2.3872
 
