@@ -29,6 +29,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
 option(RUN_TESTS "Run (and build) tests" OFF)
+option(USE_MPI "Use MPI-support" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 
 if(RUN_TESTS)
@@ -38,6 +39,7 @@ endif()
 mark_as_advanced(
  BUILD_TESTS
  RUN_TESTS
+ USE_MPI
  MEASURE_CODE_COVERAGE
 )
 
