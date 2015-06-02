@@ -10,9 +10,8 @@
 # Authors:
 #   Sebastian Niemann - Lead developer
 #   Romeo Shuka - Developer
+#   Daniel Kiechle - Software tester
 #   Wolff Bock von Wülfingen - Developer
-#   Daniel Kiechle - Developer / Software tester
-#   Oskar Pusz - Developer
 #------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
