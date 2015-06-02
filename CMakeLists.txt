@@ -173,7 +173,11 @@ if(BUILD_TESTS)
   if(RUN_TESTS)
     message(STATUS "NOTICE: Automatically running all tests after building them.")
 
-    add_custom_command(TARGET libraryTest POST_BUILD COMMAND libraryTest ${PROJECT_SOURCE_DIR}/test)
+    if(USE_MPI)
+      add_custom_command(TARGET libraryTest POST_BUILD COMMAND mpiexec -n 4 ${EXECUTABLE_OUTPUT_PATH}/libraryTest ${PROJECT_SOURCE_DIR}/test)
+    else()
+      add_custom_command(TARGET libraryTest POST_BUILD COMMAND libraryTest ${PROJECT_SOURCE_DIR}/test)
+    endif()
   endif()
 endif()
 
