@@ -189,8 +189,6 @@ namespace mant {
   template <typename T, typename U>
   void OptimisationAlgorithm<T, U>::setDistanceFunction(
       const std::shared_ptr<DistanceFunction<T>> distanceFunction) noexcept {
-    static_assert(std::is_integral<T>::value, "T must be an integral type.");
-
     distanceFunction_ = distanceFunction;
   }
 
