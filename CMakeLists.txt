@@ -36,28 +36,27 @@ if(RUN_TESTS)
 endif()
 
 mark_as_advanced(BUILD_TESTS RUN_TESTS MEASURE_CODE_COVERAGE)
+message(STATUS "")
+message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
+if(UNIX)
+  message(STATUS "Or use *sudo make install* as a shortcut.")
+endif()
+message(STATUS "")
 
-if(WIN32)
-  message(STATUS "")
-  message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
-  message(STATUS "")
-else()
+if(UNIX)
   # ---------------
   # PREPARE LIBRARY
   # ---------------
+  
   message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
     
   # Locate third party libraries and headers
   find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
 
-  message(STATUS "")
-  message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive (or use *sudo make install* as a shortcut).")
-  message(STATUS "")
-
   # ----------
   # INSTALLING
   # ----------
-
+  
   if(NOT INSTALL_INCLUDE_DIR)
     set(INSTALL_INCLUDE_DIR "include")
   endif()
@@ -164,6 +163,7 @@ endif()
 # ---------------------
 # Qt Creator workaround
 # ---------------------
+
 add_custom_target(QtWorkaround SOURCES
   # Library
   include/mantella
