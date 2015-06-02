@@ -38,7 +38,7 @@ namespace mant {
 
   inline void Rng::setRandomSeed() noexcept {
     arma::arma_rng::set_seed_random();
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     

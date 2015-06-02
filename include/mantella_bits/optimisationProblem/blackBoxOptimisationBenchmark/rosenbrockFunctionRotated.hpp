@@ -17,7 +17,7 @@ namespace mant {
         U getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
       // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
       friend class OptimisationAlgorithm;
 
@@ -55,7 +55,7 @@ namespace mant {
       return "bbob_rosenbrock_function_rotated";
     }
     
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
     template <typename T, typename U>
     std::vector<double> RosenbrockFunctionRotated<T, U>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();

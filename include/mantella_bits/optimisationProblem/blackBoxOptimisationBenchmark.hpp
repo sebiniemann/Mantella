@@ -36,7 +36,7 @@ namespace mant {
         U getBoundConstraintsValue(
             const arma::Col<T>& parameter) const noexcept;
 
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
       // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
       friend class OptimisationAlgorithm;
 
@@ -188,7 +188,7 @@ namespace mant {
       return boundConstraintsValue;
     }
 
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
     template <typename T, typename U>
     std::vector<double> BlackBoxOptimisationBenchmark<T, U>::serialise() const noexcept {
       return OptimisationProblem<T, U>::serialise();

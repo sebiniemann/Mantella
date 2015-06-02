@@ -99,7 +99,7 @@ namespace mant {
 
       std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>> cachedObjectiveValues_;
 
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
       // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
       friend class OptimisationAlgorithm;
 
@@ -363,7 +363,7 @@ namespace mant {
     return static_cast<U>(0.0L);
   }
 
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
   template <typename T, typename U>
   std::vector<double> OptimisationProblem<T, U>::serialise() const noexcept {
     std::vector<double> serialisedOptimisationProblem;

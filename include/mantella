@@ -23,9 +23,9 @@
 // Configuration
 //
 
-#undef MANTELLA_USE_PARALLEL_ALGORITHMS
+#undef MANTELLA_USE_MPI
 #if defined(MPI_SUCCESS)
-  #define MANTELLA_USE_PARALLEL_ALGORITHMS
+  #define MANTELLA_USE_MPI
 #endif
 
 #define MANTELLA_USE_CACHES
@@ -59,7 +59,7 @@
 // Armadillo
 #include <armadillo>
 
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
   // MPI
   #include <mpi.h>
 #endif

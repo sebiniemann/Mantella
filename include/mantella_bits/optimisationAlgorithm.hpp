@@ -91,7 +91,7 @@ namespace mant {
           const U softConstraintsValue,
           const U objectiveValue) noexcept;
       
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
       void getBestParameter(
           void* firstInput,
           void* secondInput,
@@ -120,7 +120,7 @@ namespace mant {
       setDistanceFunction(std::shared_ptr<DistanceFunction<T>>(new ManhattanDistance<T>));
     }
     
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
 #else
@@ -133,7 +133,7 @@ namespace mant {
   void OptimisationAlgorithm<T, U>::optimise() {
     verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
     
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
     std::vector<double> serialisedOptimisationProblem;
     unsigned int serialisedOptimisationProblemSize;
 
@@ -164,7 +164,7 @@ namespace mant {
 
     optimiseImplementation();
     
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
     MPI_Datatype MANT_MPI_PARAMETER;
     MPI_Type_contiguous(2 + numberOfDimensions_, MPI_DOUBLE, &MANT_MPI_PARAMETER);
     MPI_Type_commit(&MANT_MPI_PARAMETER);
@@ -344,7 +344,7 @@ namespace mant {
     }
   }
   
-#if defined(MANTELLA_USE_PARALLEL_ALGORITHMS)
+#if defined(MANTELLA_USE_MPI)
   template <typename T, typename U>
   void OptimisationAlgorithm<T, U>::getBestParameter(
       void* firstInput,
