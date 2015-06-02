@@ -92,5 +92,7 @@ Vagrant.configure(2) do |config|
     tar -xzf catch.tar.gz -C ./catch --strip-components=1
     sudo cp -R catch/single_include/catch.hpp /usr/local/include/
     rm -Rf catch catch.tar.gz
+    
+    sudo apt-get install -qq libmpich2-dev
   SHELL
 end
