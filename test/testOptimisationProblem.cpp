@@ -2,12 +2,12 @@
 #include <catch.hpp>
 #include "helper.hpp"
 
-// Mantella
-#include <mantella>
-
 // C++ Standard Library
 #include <limits>
 #include <map>
+
+// Mantella
+#include <mantella>
 
 class TestOptimisationProblem : public mant::OptimisationProblem<double> {
   public:
