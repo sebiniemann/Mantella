@@ -75,9 +75,9 @@ TEST_CASE("OptimationProblem.getLowerBounds(...)", "") {
 
   SECTION("Check parameterisation by .setLowerBounds(...)") {
     std::array<arma::Col<double>, 3> expecteds;
-    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1) = arma::Col<double> {-56.89,58.89};
-    expecteds.at(2) = arma::Col<double> {1.0,1.0,1.0,0.0,0.0,0.0};
+    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
+    expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
     for(auto expected : expecteds){
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
@@ -96,9 +96,9 @@ TEST_CASE("OptimationProblem.getUpperBounds(...)", "") {
 
   SECTION("Check parametrisation of the upper bounds.") {
     std::array<arma::Col<double>, 3> expecteds;
-    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1) = arma::Col<double> {-56.89,58.89};
-    expecteds.at(2) = arma::Col<double> {1.0,1.0,1.0,0.0,0.0,0.0};
+    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
+    expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
     for(auto& expected : expecteds){
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
@@ -111,9 +111,9 @@ TEST_CASE("OptimationProblem.getUpperBounds(...)", "") {
 TEST_CASE("OptimationProblem.setLowerBounds(...)", "") {
   SECTION("Check parametrisation of the lower bounds.") {
     std::array<arma::Col<double>, 3> expecteds;
-    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1) = arma::Col<double> {-56.89,58.89};
-    expecteds.at(2) = arma::Col<double> {1.0,1.0,1.0,0.0,0.0,0.0};
+    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
+    expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
     for(auto& expected : expecteds){
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
@@ -139,10 +139,10 @@ TEST_CASE("OptimationProblem.setLowerBounds(...)", "") {
 
 TEST_CASE("OptimationProblem.setUpperBounds(...)", "") {
   SECTION("Check Sets the upper bounds of the search space of the upper bound.") {
-    std::array<arma::Col<double>,3> expecteds;
-    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1) = arma::Col<double> {-56.89,58.89};
-    expecteds.at(2) = arma::Col<double> {1.0,1.0,1.0,0.0,0.0,0.0};
+    std::array<arma::Col<double>, 3> expecteds;
+    expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
+    expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
     for(auto& expected : expecteds){
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
@@ -222,9 +222,9 @@ TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check returns the cached mapping of parameters to objective values."){
-    std::array<std::pair<arma::Col<double>,double>,2> expecteds;
-    expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1).first = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+    std::array<std::pair<arma::Col<double>, double>, 2> expecteds;
+    expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
@@ -263,8 +263,8 @@ TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
   SECTION("Check Counts the number of disctinct, i.e. unique objective function evaluations") {
     int count = 0;
     for (; count < 30; count++){
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78,3),std::fmod(count*3.78,6),std::fmod(count*3.78,9)});
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78,3),std::fmod(count*3.78,6),std::fmod(count*3.78,9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
     CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == count);
   }
@@ -272,8 +272,8 @@ TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
   SECTION("Check use the .reset() method to reset this counter to 0.") {
     int count = 0;
     for (; count < 30; count++){
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78,3),std::fmod(count*3.78,6),std::fmod(count*3.78,9)});
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78,3),std::fmod(count*3.78,6),std::fmod(count*3.78,9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
     optimisationProblem->reset();
     CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == 0);
@@ -286,7 +286,7 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
   SECTION("Check counts the number of ALL objective function evaluations") {
     int count = 0;
     for (; count < 30; count++){
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78,3),std::fmod(count*3.78,6),std::fmod(count*3.78,9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
     CHECK(optimisationProblem->getNumberOfEvaluations() == count);
   }
@@ -294,7 +294,7 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
   SECTION("Check use the .reset() method to reset this counter to 0.") {
     int count = 0;
     for (; count < 30; count++){
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78,3),std::fmod(count*3.78,6),std::fmod(count*3.78,9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
     optimisationProblem->reset();
     CHECK(optimisationProblem->getNumberOfEvaluations() == 0);
@@ -306,9 +306,9 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check calculates the objective value."){
-    std::array<std::pair<arma::Col<double>,double>,2> expecteds;
-    expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1).first = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+    std::array<std::pair<arma::Col<double>, double>, 2> expecteds;
+    expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
@@ -327,9 +327,9 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
   }
 
   SECTION("Check retrieved from cache instead"){
-    std::array<std::pair<arma::Col<double>,double>,3> expecteds;
-    expecteds[0].first = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds[1].first = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+    std::array<std::pair<arma::Col<double>, double>, 3> expecteds;
+    expecteds[0].first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds[1].first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     expecteds[2].first = expecteds[1].first;
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
@@ -367,10 +367,10 @@ TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check the default is to return 0 for all inputs."){
-    std::array<arma::Col<double>,3> expected;
-    expected.at(0) = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expected.at(1) = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-    expected.at(2) = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
+    std::array<arma::Col<double>, 3> expected;
+    expected.at(0) = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expected.at(1) = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    expected.at(2) = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
 
     for(auto value : expected){
       CHECK(optimisationProblem->getSoftConstraintsValue(value) == 0);
@@ -379,10 +379,10 @@ TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
 
   SECTION("Check calculates the soft constraint value"){
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(10));
-    std::array<std::pair<arma::Col<double>,double>,3> expecteds;
-    expecteds.at(0).first = arma::Col<double> {0.0,std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(1).first = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-    expecteds.at(2).first = arma::Col<double> {8578.458,-894.65,458.7,-0.0,0.0,7529.25,-156.694456,8.0,96.96,-96.69};
+    std::array<std::pair<arma::Col<double>, double>, 3> expecteds;
+    expecteds.at(0).first = arma::Col<double> {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    expecteds.at(2).first = arma::Col<double> {8578.458, -894.65, 458.7, -0.0, 0.0, 7529.25, -156.694456, 8.0, 96.96, -96.69};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
@@ -414,12 +414,12 @@ TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(4));
 
   SECTION("Check returns true, if fulfills all bound- and soft-constraints and false otherwise.") {
-    std::array<std::pair<arma::Col<double>,double>,5> expecteds;
-    expecteds.at(0).first = arma::Col<double> {134.0,134.0,-60.96,-171.04};
-    expecteds.at(1).first = arma::Col<double> {-345.0,-345.0,-345.0,-345.0};
-    expecteds.at(2).first = arma::Col<double> {116.85,130.89,-60.96,-186.78};
-    expecteds.at(3).first = arma::Col<double> {std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest()};
-    expecteds.at(4).first = arma::Col<double> {0.0,0.0,0.0,0.0};
+    std::array<std::pair<arma::Col<double>, double>, 5> expecteds;
+    expecteds.at(0).first = arma::Col<double> {134.0, 134.0, -60.96, -171.04};
+    expecteds.at(1).first = arma::Col<double> {-345.0, -345.0, -345.0, -345.0};
+    expecteds.at(2).first = arma::Col<double> {116.85, 130.89, -60.96, -186.78};
+    expecteds.at(3).first = arma::Col<double> {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest()};
+    expecteds.at(4).first = arma::Col<double> {0.0, 0.0, 0.0, 0.0};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
@@ -459,10 +459,10 @@ TEST_CASE("OptimationProblem.isSatisfyingSoftConstraints(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(4));
 
   SECTION("Check returns true, if the soft-constraints value is zero and false otherwise.") {
-    std::array<std::pair<arma::Col<double>,double>,3> expecteds;
-    expecteds.at(0).first = arma::Col<double> {-56.89,58.89,56.89,-58.88};
-    expecteds.at(1).first = arma::Col<double> {std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest()};
-    expecteds.at(2).first = arma::Col<double> {0.0,0.0,0.0,0.0};
+    std::array<std::pair<arma::Col<double>, double>, 3> expecteds;
+    expecteds.at(0).first = arma::Col<double> {-56.89, 58.89, 56.89, -58.88};
+    expecteds.at(1).first = arma::Col<double> {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest()};
+    expecteds.at(2).first = arma::Col<double> {0.0, 0.0, 0.0, 0.0};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
@@ -506,11 +506,11 @@ TEST_CASE("OptimationProblem.isSatisfyingLowerBounds(...)", "") {
   }
 
   SECTION("Check returns true, if expected is element-wise equal to or greater then the lower bound and false otherwise.") {
-    std::array<arma::Col<double>,4> expecteds;
-    expecteds.at(0) = arma::Col<double> {-56.89,58.89,8.98,0.0};
-    expecteds.at(1) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min()};
-    expecteds.at(2) = arma::Col<double> {std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(3) = arma::Col<double> {0.0,0.0,0.0,0.0};
+    std::array<arma::Col<double>, 4> expecteds;
+    expecteds.at(0) = arma::Col<double> {-56.89, 58.89, 8.98, 0.0};
+    expecteds.at(1) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+    expecteds.at(2) = arma::Col<double> {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(3) = arma::Col<double> {0.0, 0.0, 0.0, 0.0};
 
     optimisationProblem->setLowerBounds(expecteds.at(0));
     for(auto expected : expecteds){
@@ -543,11 +543,11 @@ TEST_CASE("OptimationProblem.isSatisfyingUpperBounds(...)", "") {
   }
 
   SECTION("Check returns true, if expected is element-wise equal to or less then the upper bound and false otherwise.") {
-    std::array<arma::Col<double>,4> expecteds;
-    expecteds.at(0) = arma::Col<double> {-56.89,58.89,8.98,0.0};
-    expecteds.at(1) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min()};
-    expecteds.at(2) = arma::Col<double> {std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-    expecteds.at(3) = arma::Col<double> {0.0,0.0,0.0,0.0};
+    std::array<arma::Col<double>, 4> expecteds;
+    expecteds.at(0) = arma::Col<double> {-56.89, 58.89, 8.98, 0.0};
+    expecteds.at(1) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+    expecteds.at(2) = arma::Col<double> {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    expecteds.at(3) = arma::Col<double> {0.0, 0.0, 0.0, 0.0};
 
     optimisationProblem->setUpperBounds(expecteds.at(0));
     for(auto expected : expecteds){
@@ -573,11 +573,11 @@ TEST_CASE("OptimationProblem.isSatisfyingUpperBounds(...)", "") {
 TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
-  std::array<double,4> scales{ {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), 23.8745} };
+  std::array<double, 4> scales{ {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), 23.8745} };
 
-  std::array<std::pair<arma::Col<double>,double>,2> expecteds;
-  expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-  expecteds.at(1).first = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+  std::array<std::pair<arma::Col<double>, double>, 2> expecteds;
+  expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+  expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
   for(unsigned int z = 0; z < expecteds.size(); z++) {
     double defect = 0;
@@ -602,11 +602,11 @@ TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
 TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
-  std::array<double,4> translations{ {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), 23.8745} };
+  std::array<double, 4> translations{ {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), 23.8745} };
 
-  std::array<std::pair<arma::Col<double>,double>,2> expecteds;
-  expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::lowest(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
-  expecteds.at(1).first = arma::Col<double> {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+  std::array<std::pair<arma::Col<double>, double>, 2> expecteds;
+  expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+  expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
   for(unsigned int z = 0; z < expecteds.size(); z++) {
     double defect = 0;
@@ -632,15 +632,15 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the permutation of the dimensions of the objective function."){
-    std::array<arma::Col<unsigned int>,5> permutations = {
-      arma::Col<unsigned int>{0,1,2,3,4},
-      arma::Col<unsigned int>{0,2,1,3,4},
-      arma::Col<unsigned int>{0,1,3,2,4},
-      arma::Col<unsigned int>{4,1,2,3,0},
-      arma::Col<unsigned int>{0,3,2,1,4}
+    std::array<arma::Col<unsigned int>, 5> permutations = {
+      arma::Col<unsigned int>{0, 1, 2, 3, 4},
+      arma::Col<unsigned int>{0, 2, 1, 3, 4},
+      arma::Col<unsigned int>{0, 1, 3, 2, 4},
+      arma::Col<unsigned int>{4, 1, 2, 3, 0},
+      arma::Col<unsigned int>{0, 3, 2, 1, 4}
     };
 
-    arma::Col<double>::fixed<5> vector = {1.0,2.0,3.0,4.0,5.0};
+    arma::Col<double>::fixed<5> vector = {1.0, 2.0, 3.0, 4.0, 5.0};
 
     for (auto permutation : permutations){
       arma::Col<double>::fixed<5> expected;
@@ -672,8 +672,8 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
 
   SECTION("Throws an exception, all elements must be unique and within [0, number of dimensions - 1]") {
     arma::Col<unsigned int> permutations [] = {
-      arma::Col<unsigned int>{0,5,2,3,4},
-      arma::Col<unsigned int>{0,1,1,3,6}};
+      arma::Col<unsigned int>{0, 5, 2, 3, 4},
+      arma::Col<unsigned int>{0, 1, 1, 3, 6}};
 
     for(auto value:permutations){
       // CHECK_THROWS_AS(optimisationProblem->setParameterPermutation(value), std::logic_error);
@@ -685,12 +685,12 @@ TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION(" Parameterises the rotation of the objective function."){
-    arma::Mat<double>::fixed<5,5> rotation = {
-      1.0,0.0,0.0,0.0,0.0,
-      0.0,1.0,0.0,0.0,0.0,
-      0.0,0.0,1.0,0.0,0.0,
-      0.0,0.0,0.0,1.0,0.0,
-      0.0,0.0,0.0,0.0,1.0
+    arma::Mat<double>::fixed<5, 5> rotation = {
+      1.0, 0.0, 0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 1.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 1.0
     };
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
@@ -709,29 +709,29 @@ TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
   }
 
   SECTION("Throws an exception, must be square") {
-    arma::Mat<double> expected (3,7);
+    arma::Mat<double> expected (3, 7);
     CHECK_THROWS_AS(optimisationProblem->setParameterRotation(expected), std::logic_error);
   }
 
   SECTION("Throws an exception, must be orthonormal") {
     arma::Mat<double> expected = {
-      0.0,0.0,0.0,0.0,0.0,
-      0.0,0.0,0.0,0.0,0.0,
-      0.0,0.0,0.0,0.0,0.0,
-      0.0,0.0,0.0,0.0,0.0,
-      0.0,0.0,0.0,0.0,0.0
+      0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0
     };
     
     CHECK_THROWS_AS(optimisationProblem->setParameterRotation(expected), std::logic_error);
   }
 
   SECTION("Throws an exception, the number of elements < problem dimension") {
-    arma::Mat<double> expected (3,3);
+    arma::Mat<double> expected (3, 3);
     CHECK_THROWS_AS(optimisationProblem->setParameterRotation(expected), std::logic_error);
   }
 
   SECTION("Throws an exception, the number of elements > problem dimension") {
-    arma::Mat<double> expected (6,6);
+    arma::Mat<double> expected (6, 6);
     CHECK_THROWS_AS(optimisationProblem->setParameterRotation(expected), std::logic_error);
   }
 }
@@ -741,10 +741,10 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the scaling of the objective function."){
-    std::array<arma::Col<double>,3> scalings;
-    scalings.at(0) = arma::Col<double>{8.56,-9.56,0.0,9.2,77.1};
-    scalings.at(1) = arma::Col<double>{7.8,2.1,-7.2,77.77,8.2};
-    scalings.at(2) = arma::Col<double>{1.0,1.0,1.0,1.0,1.0};
+    std::array<arma::Col<double>, 3> scalings;
+    scalings.at(0) = arma::Col<double>{8.56, -9.56, 0.0, 9.2, 77.1};
+    scalings.at(1) = arma::Col<double>{7.8, 2.1, -7.2, 77.77, 8.2};
+    scalings.at(2) = arma::Col<double>{1.0, 1.0, 1.0, 1.0, 1.0};
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
@@ -779,10 +779,10 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the translation of the objective function."){
-    std::array<arma::Col<double>,3> translations;
-    translations.at(0) = arma::Col<double>{8.56,-9.56,0.0,9.2,77.1};
-    translations.at(1) = arma::Col<double>{7.8,2.1,-7.2,77.77,8.2};
-    translations.at(2) = arma::Col<double>{1.0,1.0,1.0,1.0,1.0};
+    std::array<arma::Col<double>, 3> translations;
+    translations.at(0) = arma::Col<double>{8.56, -9.56, 0.0, 9.2, 77.1};
+    translations.at(1) = arma::Col<double>{7.8, 2.1, -7.2, 77.77, 8.2};
+    translations.at(2) = arma::Col<double>{1.0, 1.0, 1.0, 1.0, 1.0};
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
@@ -816,20 +816,20 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
 TEST_CASE("OptimationProblem.reset(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(4));
 
-  optimisationProblem->setUpperBounds(arma::Col<double> {-56.89,58.89,88.98,78.0});
-  optimisationProblem->setLowerBounds(arma::Col<double> {-56.89,-58.89,-88.98,-78.0});
+  optimisationProblem->setUpperBounds(arma::Col<double> {-56.89, 58.89, 88.98, 78.0});
+  optimisationProblem->setLowerBounds(arma::Col<double> {-56.89, -58.89, -88.98, -78.0});
   optimisationProblem->setAcceptableObjectiveValue(45.458);
 
   for (unsigned int i = 0; i != 23; i++){
-    optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0} * i);
+    optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0} * i);
   }
-  optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0});
-  optimisationProblem->getObjectiveValue(arma::Col<double>{22.0,22.0,22.0,22.0});
+  optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
+  optimisationProblem->getObjectiveValue(arma::Col<double>{22.0, 22.0, 22.0, 22.0});
 
 
   SECTION("Check currect values") {
-    CHECK(optimisationProblem->getNumberOfDistinctEvaluations()==23);
-    CHECK(optimisationProblem->getNumberOfEvaluations()==25);
+    CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == 23);
+    CHECK(optimisationProblem->getNumberOfEvaluations() == 25);
     CHECK(!optimisationProblem->getCachedObjectiveValues().empty());
   }
 
@@ -850,12 +850,12 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
 
   SECTION("Check upper bounds") {
     optimisationProblem->reset();
-    compare(optimisationProblem->getUpperBounds(), arma::Col<double>{-56.89,58.89,88.98,78.0});
+    compare(optimisationProblem->getUpperBounds(), arma::Col<double>{-56.89, 58.89, 88.98, 78.0});
   }
 
   SECTION("Check lower bounds") {
     optimisationProblem->reset();
-    compare(optimisationProblem->getLowerBounds(), arma::Col<double>{-56.89,-58.89,-88.98,-78.0});
+    compare(optimisationProblem->getLowerBounds(), arma::Col<double>{-56.89, -58.89, -88.98, -78.0});
   }
 
   SECTION("Check acceptable objective value") {
@@ -866,38 +866,38 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
   SECTION("Check objective value scaling") {
     optimisationProblem->setObjectiveValueScaling(0.58);
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0}) == 5.0 * 0.58);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0}) == 5.0 * 0.58);
   }
 
   SECTION("Check objective value translation") {
     optimisationProblem->setObjectiveValueTranslation(15);
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0}) == 5.0 + 15.0);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0}) == 5.0 + 15.0);
   }
 
   SECTION("Check parameter permutation") {
-    optimisationProblem->setParameterPermutation(arma::Col<unsigned int> {0,1,3,2});
+    optimisationProblem->setParameterPermutation(arma::Col<unsigned int> {0, 1, 3, 2});
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,2.0}) == 7.0);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 2.0}) == 7.0);
   }
 
   SECTION("Check parameter rotation") {
-    arma::Mat<double>::fixed<4,4> rotation = {
-      1.0,0.0,0.0,0.0,
-      0.0,1.0,0.0,0.0,
-      0.0,0.0,1.0,0.0,
-      0.0,0.0,0.0,1.0,
+    arma::Mat<double>::fixed<4, 4> rotation = {
+      1.0, 0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0, 0.0,
+      0.0, 0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0, 1.0
     };
 
     optimisationProblem->setParameterRotation(rotation);
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0}) == 5.0);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0}) == 5.0);
   }
 
   SECTION("Check parameter scaling") {
-    optimisationProblem->setParameterScaling(arma::Col<double> {0.459,-7.25,6.0,17.08});
+    optimisationProblem->setParameterScaling(arma::Col<double> {0.459, -7.25, 6.0, 17.08});
     optimisationProblem->reset();
-    arma::Col<double> expected = arma::Col<double>{1.0,1.0,1.0,1.0} % arma::Col<double>{0.459,-7.25,6.0,17.08};
+    arma::Col<double> expected = arma::Col<double>{1.0, 1.0, 1.0, 1.0} % arma::Col<double>{0.459, -7.25, 6.0, 17.08};
 
     double defect = 0;
     for( unsigned int i = 0 ; i < expected.n_elem; i++ ){
@@ -905,14 +905,14 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
         if( expected.at(i) > expected.at(j) ) defect++;
       }
     }
-    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0});
+    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
     CHECK(actual == arma::sum(expected) + defect + optimisationProblem->getNumberOfEvaluations());
   }
 
   SECTION("Check parameter translation") {
-    optimisationProblem->setParameterTranslation(arma::Col<double> {5.4569,4.2,5.0,-0.0003});
+    optimisationProblem->setParameterTranslation(arma::Col<double> {5.4569, 4.2, 5.0, -0.0003});
     optimisationProblem->reset();
-    arma::Col<double> expected = arma::Col<double>{1.0,1.0,1.0,1.0} - arma::Col<double>{5.4569,4.2,5.0,-0.0003};
+    arma::Col<double> expected = arma::Col<double>{1.0, 1.0, 1.0, 1.0} - arma::Col<double>{5.4569, 4.2, 5.0, -0.0003};
 
     double defect = 0;
     for( unsigned int i = 0 ; i < expected.n_elem; i++ ){
@@ -920,7 +920,7 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
         if( expected.at(i) > expected.at(j) ) defect++;
       }
     }
-    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0,1.0,1.0,1.0});
+    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
     CHECK(actual == arma::sum(expected) + defect + optimisationProblem->getNumberOfEvaluations());
   }
 }
