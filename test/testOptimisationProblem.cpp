@@ -25,7 +25,9 @@ class TestOptimisationProblem : public mant::OptimisationProblem<double> {
       double defect = 0;
       for (unsigned int i = 0; i < parameter.n_elem; i++) {
         for (unsigned int j = i; j < parameter.n_elem; j++) {
-          if (parameter.at(i) > parameter.at(j)) defect++;
+          if (parameter.at(i) > parameter.at(j)) {
+            defect++;
+          }
         };
       };
       return (defect + arma::sum(parameter) + getNumberOfEvaluations());
@@ -48,7 +50,9 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
       double defect = 0;
       for (unsigned int i = 0; i < parameter.n_elem; i++) {
         for (unsigned int j = i; j < parameter.n_elem; j++) {
-          if (parameter.at(i) > parameter.at(j)) defect++;
+          if (parameter.at(i) > parameter.at(j)) {
+            defect++;
+          }
         };
       };
       return (defect + arma::sum(parameter));
@@ -59,7 +63,9 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
       double defect = 0;
       for (unsigned int i = 0; i < parameter.n_elem; i++) {
         for (unsigned int j = i; j < parameter.n_elem; j++) {
-          if (parameter.at(i) > parameter.at(j)) defect++;
+          if (parameter.at(i) > parameter.at(j)) {
+            defect++;
+          }
         };
       };
       return (defect + arma::sum(parameter) + getNumberOfEvaluations());
@@ -230,7 +236,9 @@ TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
       double defect = 0;
       for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
         for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+            defect++;
+          }
         }
       }
       optimisationProblem->getObjectiveValue(expecteds.at(z).first);
@@ -314,7 +322,9 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
       double defect = 0;
       for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
         for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+            defect++;
+          }
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
@@ -336,7 +346,9 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
       double defect = 0;
       for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
         for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+            defect++;
+          }
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
@@ -388,7 +400,9 @@ TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
       double defect = 0;
       for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
         for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+            defect++;
+          }
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
@@ -425,7 +439,9 @@ TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
       double defect = 0;
       for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
         for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+            defect++;
+          }
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
@@ -468,7 +484,9 @@ TEST_CASE("OptimationProblem.isSatisfyingSoftConstraints(...)", "") {
       double defect = 0;
       for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
         for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+          if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+            defect++;
+          }
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
@@ -583,7 +601,9 @@ TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
     double defect = 0;
     for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
       for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-        if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+        if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+          defect++;
+        }
       }
     }
     expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
@@ -612,7 +632,9 @@ TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
     double defect = 0;
     for (unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++) {
       for (unsigned int j = i; j < expecteds.at(z).first.n_elem; j++) {
-        if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) defect++;
+        if (expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j)) {
+          defect++;
+        }
       }
     }
     expecteds[z].second = defect + arma::sum(expecteds.at(z).first);
@@ -652,7 +674,9 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
 
       for (unsigned int i = 0; i < expected.n_elem; i++) {
         for (unsigned int j = i; j < expected.n_elem; j++) {
-          if (expected.at(i) > expected.at(j)) defect++;
+          if (expected.at(i) > expected.at(j)) {
+            defect++;
+          }
         }
       }
       optimisationProblem->setParameterPermutation(permutation);
@@ -698,7 +722,9 @@ TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
     double defect = 0;
     for (unsigned int i = 0 ; i < parameter.n_elem; i++) {
       for (unsigned int j = i; j < parameter.n_elem; j++) {
-        if (parameter.at(i) > parameter.at(j)) defect++;
+        if (parameter.at(i) > parameter.at(j)) {
+          defect++;
+        }
       }
     }
 
@@ -754,7 +780,9 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
       double defect = 0;
       for (unsigned int i = 0 ; i < expected.n_elem; i++) {
         for (unsigned int j = i; j < expected.n_elem; j++) {
-          if (expected.at(i) > expected.at(j)) defect++;
+          if (expected.at(i) > expected.at(j)) {
+            defect++;
+          }
         }
       }
 
@@ -792,7 +820,9 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
       double defect = 0;
       for (unsigned int i = 0 ; i < expected.n_elem; i++) {
         for (unsigned int j = i; j < expected.n_elem; j++) {
-          if (expected.at(i) > expected.at(j)) defect++;
+          if (expected.at(i) > expected.at(j)) {
+            defect++;
+          }
         }
       }
 
@@ -902,7 +932,9 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
     double defect = 0;
     for (unsigned int i = 0 ; i < expected.n_elem; i++) {
       for (unsigned int j = i; j < expected.n_elem; j++) {
-        if (expected.at(i) > expected.at(j)) defect++;
+        if (expected.at(i) > expected.at(j))  {
+          defect++;
+        }
       }
     }
     double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
@@ -917,7 +949,9 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
     double defect = 0;
     for (unsigned int i = 0 ; i < expected.n_elem; i++) {
       for (unsigned int j = i; j < expected.n_elem; j++) {
-        if (expected.at(i) > expected.at(j)) defect++;
+        if (expected.at(i) > expected.at(j))  {
+          defect++;
+        }
       }
     }
     double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
