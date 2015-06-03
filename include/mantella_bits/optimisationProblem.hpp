@@ -48,10 +48,10 @@ namespace mant {
         const arma::Mat<T>& parameterRotation);
 
       void setObjectiveValueScaling(
-        const U objectiveValueScaling) noexcept;
+        const U objectiveValueScaling);
 
       void setObjectiveValueTranslation(
-        const U objectiveValueTranslation) noexcept;
+        const U objectiveValueTranslation);
       
       void setAcceptableObjectiveValue(
           const U acceptableObjectiveValue) noexcept;
@@ -185,7 +185,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return parameter < lowerBounds_;
+    return parameter >= lowerBounds_;
   }
 
   template <typename T, typename U>
@@ -193,7 +193,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return  parameter > upperBounds_;
+    return  parameter <= upperBounds_;
   }
 
   template <typename T, typename U>
@@ -209,7 +209,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return (!arma::any(isWithinLowerBounds(parameter)) && !arma::any(isWithinUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
+    return (arma::all(isWithinLowerBounds(parameter)) && arma::all(isWithinUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
 
   template <typename T, typename U>
@@ -228,6 +228,7 @@ namespace mant {
   void OptimisationProblem<T, U>::setParameterScaling(
       const arma::Col<T>& parameterScaling) {
     verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(parameterScaling.is_finite(), "All elements must be finite.");
 
     parameterScaling_ = parameterScaling;
 
@@ -239,6 +240,7 @@ namespace mant {
   void OptimisationProblem<T, U>::setParameterTranslation(
       const arma::Col<T>& parameterTranslation) {
     verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(parameterTranslation.is_finite(), "All elements must be finite.");
 
     parameterTranslation_ = parameterTranslation;
 
@@ -260,7 +262,9 @@ namespace mant {
 
   template <typename T, typename U>
   void OptimisationProblem<T, U>::OptimisationProblem::setObjectiveValueScaling(
-      const U objectiveValueScaling) noexcept {
+      const U objectiveValueScaling) {
+    verify(std::isfinite(objectiveValueScaling), "The objective value scaling must be finite.");
+    
     objectiveValueScaling_ = objectiveValueScaling;
 
     // Resets all counters and caches, as the problem could be changed.
@@ -269,7 +273,9 @@ namespace mant {
 
   template <typename T, typename U>
   void OptimisationProblem<T, U>::setObjectiveValueTranslation(
-      const U objectiveValueTranslation) noexcept {
+      const U objectiveValueTranslation) {
+    verify(std::isfinite(objectiveValueTranslation), "The objective value translation must be finite.");
+    
     objectiveValueTranslation_ = objectiveValueTranslation;
 
     // Resets all counters and caches, as the problem could be changed.
@@ -298,8 +304,8 @@ namespace mant {
 
 #if defined(MANTELLA_USE_CACHES)
     // Check if the result is already cached.
-    const auto& index = cachedObjectiveValues_.find(parameter);
-    if (index == cachedObjectiveValues_.cend()) {
+    const auto n = cachedObjectiveValues_.find(parameter);
+    if (n == cachedObjectiveValues_.cend()) {
       // Increase the number of distinct evaluations only if we actually compute the value.
       ++numberOfDistinctEvaluations_;
 
@@ -308,7 +314,7 @@ namespace mant {
       cachedObjectiveValues_.insert({parameter, result});
       return result;
     } else {
-      return index->second;
+      return n->second;
     }
 #else
     // Without caching, all function evaluations must be computed.
