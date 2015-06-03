@@ -48,10 +48,10 @@ namespace mant {
         const arma::Mat<T>& parameterRotation);
 
       void setObjectiveValueScaling(
-        const U objectiveValueScaling) noexcept;
+        const U objectiveValueScaling);
 
       void setObjectiveValueTranslation(
-        const U objectiveValueTranslation) noexcept;
+        const U objectiveValueTranslation);
       
       void setAcceptableObjectiveValue(
           const U acceptableObjectiveValue) noexcept;
@@ -228,6 +228,7 @@ namespace mant {
   void OptimisationProblem<T, U>::setParameterScaling(
       const arma::Col<T>& parameterScaling) {
     verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(parameterScaling.is_finite(), "All elements must be finite.");
 
     parameterScaling_ = parameterScaling;
 
@@ -239,6 +240,7 @@ namespace mant {
   void OptimisationProblem<T, U>::setParameterTranslation(
       const arma::Col<T>& parameterTranslation) {
     verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(parameterTranslation.is_finite(), "All elements must be finite.");
 
     parameterTranslation_ = parameterTranslation;
 
@@ -260,7 +262,9 @@ namespace mant {
 
   template <typename T, typename U>
   void OptimisationProblem<T, U>::OptimisationProblem::setObjectiveValueScaling(
-      const U objectiveValueScaling) noexcept {
+      const U objectiveValueScaling) {
+    verify(std::isfinite(objectiveValueScaling), "The objective value scaling must be finite.");
+    
     objectiveValueScaling_ = objectiveValueScaling;
 
     // Resets all counters and caches, as the problem could be changed.
@@ -269,7 +273,9 @@ namespace mant {
 
   template <typename T, typename U>
   void OptimisationProblem<T, U>::setObjectiveValueTranslation(
-      const U objectiveValueTranslation) noexcept {
+      const U objectiveValueTranslation) {
+    verify(std::isfinite(objectiveValueTranslation), "The objective value translation must be finite.");
+    
     objectiveValueTranslation_ = objectiveValueTranslation;
 
     // Resets all counters and caches, as the problem could be changed.
