@@ -23,8 +23,8 @@ class TestOptimisationProblem : public mant::OptimisationProblem<double> {
     double getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept override {
       double defect = 0;
-      for( unsigned int i = 0; i < parameter.n_elem; i++ ){
-        for( unsigned int j = i; j < parameter.n_elem; j++ ){
+      for( unsigned int i = 0; i < parameter.n_elem; i++ ) {
+        for( unsigned int j = i; j < parameter.n_elem; j++ ) {
           if( parameter.at(i) > parameter.at(j) ) defect++;
         };
       };
@@ -46,8 +46,8 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
     double getSoftConstraintsValueImplementation(
         const arma::Col<double>& parameter) const noexcept override {
       double defect = 0;
-      for( unsigned int i = 0; i < parameter.n_elem; i++ ){
-        for( unsigned int j = i; j < parameter.n_elem; j++ ){
+      for( unsigned int i = 0; i < parameter.n_elem; i++ ) {
+        for( unsigned int j = i; j < parameter.n_elem; j++ ) {
           if( parameter.at(i) > parameter.at(j) ) defect++;
         };
       };
@@ -57,8 +57,8 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
     double getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept override {
       double defect = 0;
-      for( unsigned int i = 0; i < parameter.n_elem; i++ ){
-        for( unsigned int j = i; j < parameter.n_elem; j++ ){
+      for( unsigned int i = 0; i < parameter.n_elem; i++ ) {
+        for( unsigned int j = i; j < parameter.n_elem; j++ ) {
           if( parameter.at(i) > parameter.at(j) ) defect++;
         };
       };
@@ -79,7 +79,7 @@ TEST_CASE("OptimationProblem.getLowerBounds(...)", "") {
     expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
     expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
-    for(auto expected : expecteds){
+    for(auto expected : expecteds) {
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
       optimisationProblem->setLowerBounds(expected);
       compare(optimisationProblem->getLowerBounds(), expected);
@@ -100,7 +100,7 @@ TEST_CASE("OptimationProblem.getUpperBounds(...)", "") {
     expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
     expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
-    for(auto& expected : expecteds){
+    for(auto& expected : expecteds) {
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
       optimisationProblem->setUpperBounds(expected);
       compare(optimisationProblem->getUpperBounds(), expected);
@@ -115,7 +115,7 @@ TEST_CASE("OptimationProblem.setLowerBounds(...)", "") {
     expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
     expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
-    for(auto& expected : expecteds){
+    for(auto& expected : expecteds) {
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
       optimisationProblem->setLowerBounds(expected);
       compare(optimisationProblem->getLowerBounds(), expected);
@@ -144,7 +144,7 @@ TEST_CASE("OptimationProblem.setUpperBounds(...)", "") {
     expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
     expecteds.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 0.0, 0.0, 0.0});
 
-    for(auto& expected : expecteds){
+    for(auto& expected : expecteds) {
       std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(expected.n_elem));
       optimisationProblem->setUpperBounds(expected);
       compare(optimisationProblem->getUpperBounds(), expected);
@@ -221,15 +221,15 @@ TEST_CASE("OptimationProblem.setAcceptableObjectiveValue(...)", "") {
 TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
-  SECTION("Check returns the cached mapping of parameters to objective values."){
+  SECTION("Check returns the cached mapping of parameters to objective values.") {
     std::array<std::pair<arma::Col<double>, double>, 2> expecteds;
     expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
     expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
-      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
           if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
         }
       }
@@ -240,11 +240,11 @@ TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
     std::unordered_map<arma::Col<double>, double, mant::Hash<double>, mant::IsEqual<double>> cache = optimisationProblem->getCachedObjectiveValues();
 
 
-    for(auto value : cache){
+    for(auto value : cache) {
       bool isEqual = true;
-      for(auto expected : expecteds){
-        for(unsigned int i = 0; i != expected.first.n_elem; i++){
-          if(expected.first.at(i) != value.first.at(i)){
+      for(auto expected : expecteds) {
+        for(unsigned int i = 0; i != expected.first.n_elem; i++) {
+          if(expected.first.at(i) != value.first.at(i)) {
             isEqual = false;
             break;
           }
@@ -262,7 +262,7 @@ TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
 
   SECTION("Check Counts the number of disctinct, i.e. unique objective function evaluations") {
     int count = 0;
-    for (; count < 30; count++){
+    for (; count < 30; count++) {
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
@@ -271,7 +271,7 @@ TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
 
   SECTION("Check use the .reset() method to reset this counter to 0.") {
     int count = 0;
-    for (; count < 30; count++){
+    for (; count < 30; count++) {
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
@@ -285,7 +285,7 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
 
   SECTION("Check counts the number of ALL objective function evaluations") {
     int count = 0;
-    for (; count < 30; count++){
+    for (; count < 30; count++) {
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
     CHECK(optimisationProblem->getNumberOfEvaluations() == count);
@@ -293,7 +293,7 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
 
   SECTION("Check use the .reset() method to reset this counter to 0.") {
     int count = 0;
-    for (; count < 30; count++){
+    for (; count < 30; count++) {
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
     }
     optimisationProblem->reset();
@@ -305,28 +305,28 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
 TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
-  SECTION("Check calculates the objective value."){
+  SECTION("Check calculates the objective value.") {
     std::array<std::pair<arma::Col<double>, double>, 2> expecteds;
     expecteds.at(0).first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
     expecteds.at(1).first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
-      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
           if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
     }
 
-    for(auto expected : expecteds){
+    for(auto expected : expecteds) {
       double actual = optimisationProblem->getObjectiveValue(expected.first);
       CHECK(actual == expected.second + optimisationProblem->getNumberOfEvaluations());
     }
   }
 
-  SECTION("Check retrieved from cache instead"){
+  SECTION("Check retrieved from cache instead") {
     std::array<std::pair<arma::Col<double>, double>, 3> expecteds;
     expecteds[0].first = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
     expecteds[1].first = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -334,15 +334,15 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
-      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
           if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
     }
 
-    for(unsigned int i =0; i != expecteds.size(); i++){
+    for(unsigned int i =0; i != expecteds.size(); i++) {
       double result = optimisationProblem->getObjectiveValue(expecteds.at(i).first);
       expecteds.at(i).second = expecteds.at(i).second + optimisationProblem->getNumberOfEvaluations();
 
@@ -366,18 +366,18 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
 TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
-  SECTION("Check the default is to return 0 for all inputs."){
+  SECTION("Check the default is to return 0 for all inputs.") {
     std::array<arma::Col<double>, 3> expected;
     expected.at(0) = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
     expected.at(1) = arma::Col<double> {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     expected.at(2) = arma::Col<double> {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
 
-    for(auto value : expected){
+    for(auto value : expected) {
       CHECK(optimisationProblem->getSoftConstraintsValue(value) == 0);
     }
   }
 
-  SECTION("Check calculates the soft constraint value"){
+  SECTION("Check calculates the soft constraint value") {
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(10));
     std::array<std::pair<arma::Col<double>, double>, 3> expecteds;
     expecteds.at(0).first = arma::Col<double> {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
@@ -386,15 +386,15 @@ TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
-      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
           if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
     }
 
-    for(auto expected : expecteds){
+    for(auto expected : expecteds) {
       CHECK((optimisationProblem->getSoftConstraintsValue(expected.first)) == expected.second);
     }
   }
@@ -423,8 +423,8 @@ TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
-      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
           if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
         }
       }
@@ -434,8 +434,8 @@ TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
     optimisationProblem->setUpperBounds(expecteds.at(0).first);
     optimisationProblem->setLowerBounds(expecteds.at(1).first);
 
-    for(auto expected : expecteds){
-      if(expected.second + optimisationProblem->getNumberOfEvaluations() == 0.0 && arma::all(expected.first <= expecteds.at(0).first) && arma::all(expected.first >= expecteds.at(1).first)){
+    for(auto expected : expecteds) {
+      if(expected.second + optimisationProblem->getNumberOfEvaluations() == 0.0 && arma::all(expected.first <= expecteds.at(0).first) && arma::all(expected.first >= expecteds.at(1).first)) {
         CHECK(optimisationProblem->isSatisfyingConstraints(expected.first));
       }else{
         CHECK_FALSE(optimisationProblem->isSatisfyingConstraints(expected.first));
@@ -466,16 +466,16 @@ TEST_CASE("OptimationProblem.isSatisfyingSoftConstraints(...)", "") {
 
     for(unsigned int z = 0; z < expecteds.size(); z++) {
       double defect = 0;
-      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+      for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+        for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
           if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
         }
       }
       expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
     }
 
-    for(auto expected : expecteds){
-      if(expected.second + optimisationProblem->getNumberOfEvaluations() == 0){
+    for(auto expected : expecteds) {
+      if(expected.second + optimisationProblem->getNumberOfEvaluations() == 0) {
         CHECK(optimisationProblem->isSatisfyingSoftConstraints(expected.first));
       }else{
         REQUIRE_FALSE(optimisationProblem->isSatisfyingSoftConstraints(expected.first));
@@ -513,8 +513,8 @@ TEST_CASE("OptimationProblem.isSatisfyingLowerBounds(...)", "") {
     expecteds.at(3) = arma::Col<double> {0.0, 0.0, 0.0, 0.0};
 
     optimisationProblem->setLowerBounds(expecteds.at(0));
-    for(auto expected : expecteds){
-      if(arma::all(expected >= expecteds.at(0))){
+    for(auto expected : expecteds) {
+      if(arma::all(expected >= expecteds.at(0))) {
         //CHECK(optimisationProblem->isSatisfyingLowerBounds(expected));
       }else{
         //CHECK_FALSE(optimisationProblem->isSatisfyingLowerBounds(expected));
@@ -550,8 +550,8 @@ TEST_CASE("OptimationProblem.isSatisfyingUpperBounds(...)", "") {
     expecteds.at(3) = arma::Col<double> {0.0, 0.0, 0.0, 0.0};
 
     optimisationProblem->setUpperBounds(expecteds.at(0));
-    for(auto expected : expecteds){
-      if(arma::all(expected <= expecteds.at(0))){
+    for(auto expected : expecteds) {
+      if(arma::all(expected <= expecteds.at(0))) {
         //CHECK(optimisationProblem->isSatisfyingUpperBounds(expected));
       }else{
         //CHECK_FALSE(optimisationProblem->isSatisfyingUpperBounds(expected));
@@ -581,18 +581,18 @@ TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
 
   for(unsigned int z = 0; z < expecteds.size(); z++) {
     double defect = 0;
-    for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-      for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+    for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+      for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
         if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
       }
     }
     expecteds.at(z).second = defect + arma::sum(expecteds.at(z).first);
   }
 
-  SECTION("Parameterises the scaling of the objective value."){
-    for(auto scale : scales){
+  SECTION("Parameterises the scaling of the objective value.") {
+    for(auto scale : scales) {
       optimisationProblem->setObjectiveValueScaling(scale);
-      for(auto expected : expecteds){
+      for(auto expected : expecteds) {
         //CHECK((optimisationProblem->getObjectiveValue(expected.first)) == (expected.second + optimisationProblem->getNumberOfEvaluations() * scale));
       }
     }
@@ -610,18 +610,18 @@ TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
 
   for(unsigned int z = 0; z < expecteds.size(); z++) {
     double defect = 0;
-    for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ){
-      for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ){
+    for( unsigned int i = 0; i < expecteds.at(z).first.n_elem; i++ ) {
+      for( unsigned int j = i; j < expecteds.at(z).first.n_elem; j++ ) {
         if( expecteds.at(z).first.at(i) > expecteds.at(z).first.at(j) ) defect++;
       }
     }
     expecteds[z].second = defect + arma::sum(expecteds.at(z).first);
   }
 
-  SECTION("Parameterises the translation of the objective value."){
-    for(auto translation : translations){
+  SECTION("Parameterises the translation of the objective value.") {
+    for(auto translation : translations) {
       optimisationProblem->setObjectiveValueTranslation(translation);
-      for(auto expected : expecteds){
+      for(auto expected : expecteds) {
         //CHECK((optimisationProblem->getObjectiveValue(expected.first)) == (expected.second + optimisationProblem->getNumberOfEvaluations() + translation));
       }
     }
@@ -631,7 +631,7 @@ TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
 TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION("Parameterises the permutation of the dimensions of the objective function."){
+  SECTION("Parameterises the permutation of the dimensions of the objective function.") {
     std::array<arma::Col<unsigned int>, 5> permutations = {
       arma::Col<unsigned int>{0, 1, 2, 3, 4},
       arma::Col<unsigned int>{0, 2, 1, 3, 4},
@@ -642,16 +642,16 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
 
     arma::Col<double>::fixed<5> vector = {1.0, 2.0, 3.0, 4.0, 5.0};
 
-    for (auto permutation : permutations){
+    for (auto permutation : permutations) {
       arma::Col<double>::fixed<5> expected;
       double defect = 0;
 
-      for (unsigned int i=0; i != permutation.n_elem;i++){
+      for (unsigned int i=0; i != permutation.n_elem;i++) {
         expected.at(permutation.at(i)) = vector.at(i);
       }
 
-      for( unsigned int i = 0; i < expected.n_elem; i++ ){
-        for( unsigned int j = i; j < expected.n_elem; j++ ){
+      for( unsigned int i = 0; i < expected.n_elem; i++ ) {
+        for( unsigned int j = i; j < expected.n_elem; j++ ) {
           if( expected.at(i) > expected.at(j) ) defect++;
         }
       }
@@ -675,7 +675,7 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
       arma::Col<unsigned int>{0, 5, 2, 3, 4},
       arma::Col<unsigned int>{0, 1, 1, 3, 6}};
 
-    for(auto value:permutations){
+    for(auto value:permutations) {
       // CHECK_THROWS_AS(optimisationProblem->setParameterPermutation(value), std::logic_error);
     }
   }
@@ -684,7 +684,7 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
 TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION(" Parameterises the rotation of the objective function."){
+  SECTION(" Parameterises the rotation of the objective function.") {
     arma::Mat<double>::fixed<5, 5> rotation = {
       1.0, 0.0, 0.0, 0.0, 0.0,
       0.0, 1.0, 0.0, 0.0, 0.0,
@@ -696,8 +696,8 @@ TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
     double defect = 0;
-    for( unsigned int i = 0 ; i < parameter.n_elem; i++ ){
-      for( unsigned int j = i; j < parameter.n_elem; j++ ){
+    for( unsigned int i = 0 ; i < parameter.n_elem; i++ ) {
+      for( unsigned int j = i; j < parameter.n_elem; j++ ) {
         if( parameter.at(i) > parameter.at(j) ) defect++;
       }
     }
@@ -740,7 +740,7 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION("Parameterises the scaling of the objective function."){
+  SECTION("Parameterises the scaling of the objective function.") {
     std::array<arma::Col<double>, 3> scalings;
     scalings.at(0) = arma::Col<double>{8.56, -9.56, 0.0, 9.2, 77.1};
     scalings.at(1) = arma::Col<double>{7.8, 2.1, -7.2, 77.77, 8.2};
@@ -748,12 +748,12 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
-    for(auto scaling : scalings){
+    for(auto scaling : scalings) {
       arma::Col<double> expected = parameter%scaling;
 
       double defect = 0;
-      for( unsigned int i = 0 ; i < expected.n_elem; i++ ){
-        for( unsigned int j = i; j < expected.n_elem; j++ ){
+      for( unsigned int i = 0 ; i < expected.n_elem; i++ ) {
+        for( unsigned int j = i; j < expected.n_elem; j++ ) {
           if( expected.at(i) > expected.at(j) ) defect++;
         }
       }
@@ -778,7 +778,7 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION("Parameterises the translation of the objective function."){
+  SECTION("Parameterises the translation of the objective function.") {
     std::array<arma::Col<double>, 3> translations;
     translations.at(0) = arma::Col<double>{8.56, -9.56, 0.0, 9.2, 77.1};
     translations.at(1) = arma::Col<double>{7.8, 2.1, -7.2, 77.77, 8.2};
@@ -786,12 +786,12 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
-    for(auto translation : translations){
+    for(auto translation : translations) {
       arma::Col<double> expected = parameter+translation;
 
       double defect = 0;
-      for( unsigned int i = 0 ; i < expected.n_elem; i++ ){
-        for( unsigned int j = i; j < expected.n_elem; j++ ){
+      for( unsigned int i = 0 ; i < expected.n_elem; i++ ) {
+        for( unsigned int j = i; j < expected.n_elem; j++ ) {
           if( expected.at(i) > expected.at(j) ) defect++;
         }
       }
@@ -820,7 +820,7 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
   optimisationProblem->setLowerBounds(arma::Col<double> {-56.89, -58.89, -88.98, -78.0});
   optimisationProblem->setAcceptableObjectiveValue(45.458);
 
-  for (unsigned int i = 0; i != 23; i++){
+  for (unsigned int i = 0; i != 23; i++) {
     optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0} * i);
   }
   optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
@@ -900,8 +900,8 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
     arma::Col<double> expected = arma::Col<double>{1.0, 1.0, 1.0, 1.0} % arma::Col<double>{0.459, -7.25, 6.0, 17.08};
 
     double defect = 0;
-    for( unsigned int i = 0 ; i < expected.n_elem; i++ ){
-      for( unsigned int j = i; j < expected.n_elem; j++ ){
+    for( unsigned int i = 0 ; i < expected.n_elem; i++ ) {
+      for( unsigned int j = i; j < expected.n_elem; j++ ) {
         if( expected.at(i) > expected.at(j) ) defect++;
       }
     }
@@ -915,8 +915,8 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
     arma::Col<double> expected = arma::Col<double>{1.0, 1.0, 1.0, 1.0} - arma::Col<double>{5.4569, 4.2, 5.0, -0.0003};
 
     double defect = 0;
-    for( unsigned int i = 0 ; i < expected.n_elem; i++ ){
-      for( unsigned int j = i; j < expected.n_elem; j++ ){
+    for( unsigned int i = 0 ; i < expected.n_elem; i++ ) {
+      for( unsigned int j = i; j < expected.n_elem; j++ ) {
         if( expected.at(i) > expected.at(j) ) defect++;
       }
     }
