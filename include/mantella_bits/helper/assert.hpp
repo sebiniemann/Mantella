@@ -54,7 +54,16 @@ namespace mant {
       const arma::Col<unsigned int>& parameter,
       const std::size_t lowerBound,
       const std::size_t upperBound) noexcept {
-    // TODO Add logic
+    // Are all elements within [lowerBound, upperBound]?
+    if (arma::any(parameter < lowerBound) || arma::any(parameter > upperBound)) {
+      return false;
+    }
+    
+    // Are all elements unique?
+    if (static_cast<arma::Col<unsigned int>>(arma::unique(parameter)).n_elem != parameter.n_elem) {
+      return false;
+    }
+    
     return true;
   }
 }
