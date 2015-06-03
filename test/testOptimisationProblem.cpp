@@ -31,7 +31,7 @@ class TestOptimisationProblem : public mant::OptimisationProblem<double> {
           }
         };
       };
-      return (defect + std::abs(arma::accu(parameter)) + getNumberOfEvaluations());
+      return defect + std::abs(arma::accu(parameter)) + getNumberOfEvaluations();
     }
 };
 
@@ -56,7 +56,7 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
           }
         };
       };
-      return (defect + std::abs(arma::accu(parameter)));
+      return defect + std::abs(arma::accu(parameter));
     }
 
     double getObjectiveValueImplementation(
