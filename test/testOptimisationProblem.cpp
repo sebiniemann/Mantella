@@ -5,6 +5,7 @@
 // C++ Standard Library
 #include <limits>
 #include <map>
+#include <algorithm>
 
 // Mantella
 #include <mantella>
@@ -30,7 +31,7 @@ class TestOptimisationProblem : public mant::OptimisationProblem<double> {
           }
         };
       };
-      return (defect + arma::accu(parameter) + getNumberOfEvaluations());
+      return (defect + std::abs(arma::accu(parameter)) + getNumberOfEvaluations());
     }
 };
 
@@ -55,7 +56,7 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
           }
         };
       };
-      return (defect + arma::accu(parameter));
+      return (defect + std::abs(arma::accu(parameter)));
     }
 
     double getObjectiveValueImplementation(
@@ -68,7 +69,7 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
           }
         };
       };
-      return (defect + arma::accu(parameter) + getNumberOfEvaluations());
+      return (defect + std::abs(arma::accu(parameter)) + getNumberOfEvaluations());
     }
 };
 
@@ -242,7 +243,7 @@ TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
         }
       }
       optimisationProblem->getObjectiveValue(expecteds.at(z).first);
-      expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first) + optimisationProblem->getNumberOfEvaluations();
+      expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first)) + optimisationProblem->getNumberOfEvaluations();
     }
 
     std::unordered_map<arma::Col<double>, double, mant::Hash<double>, mant::IsEqual<double>> cache = optimisationProblem->getCachedObjectiveValues();
@@ -327,7 +328,7 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
           }
         }
       }
-      expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first);
+      expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
     }
 
     for (auto expected : expecteds) {
@@ -351,7 +352,7 @@ TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
           }
         }
       }
-      expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first);
+      expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
     }
 
     for (unsigned int i =0; i != expecteds.size(); i++) {
@@ -405,7 +406,7 @@ TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
           }
         }
       }
-      expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first);
+      expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
     }
 
     for (auto expected : expecteds) {
@@ -444,7 +445,7 @@ TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
           }
         }
       }
-      expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first);
+      expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
     }
 
     optimisationProblem->setUpperBounds(expecteds.at(0).first);
@@ -489,7 +490,7 @@ TEST_CASE("OptimationProblem.isSatisfyingSoftConstraints(...)", "") {
           }
         }
       }
-      expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first);
+      expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
     }
 
     for (auto expected : expecteds) {
@@ -606,7 +607,7 @@ TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
         }
       }
     }
-    expecteds.at(z).second = defect + arma::accu(expecteds.at(z).first);
+    expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
   }
 
   SECTION("Parameterises the scaling of the objective value.") {
@@ -637,7 +638,7 @@ TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
         }
       }
     }
-    expecteds[z].second = defect + arma::accu(expecteds.at(z).first);
+    expecteds[z].second = defect + std::abs(arma::accu(expecteds.at(z).first));
   }
 
   SECTION("Parameterises the translation of the objective value.") {
@@ -680,7 +681,7 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
         }
       }
       optimisationProblem->setParameterPermutation(permutation);
-      //CHECK (optimisationProblem->getObjectiveValue(vector) == (defect + arma::accu(expected) + optimisationProblem->getNumberOfEvaluations()));
+      //CHECK (optimisationProblem->getObjectiveValue(vector) == (defect + std::abs(arma::accu(expected)) + optimisationProblem->getNumberOfEvaluations()));
     }
   }
 
@@ -731,7 +732,7 @@ TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
 
     optimisationProblem->setParameterRotation(rotation);
     double actual = optimisationProblem->getObjectiveValue(parameter);
-    CHECK (actual == (defect + arma::accu(rotation * parameter) + optimisationProblem->getNumberOfEvaluations()));
+    CHECK (actual == (defect + std::abs(arma::accu(rotation * parameter)) + optimisationProblem->getNumberOfEvaluations()));
 
   }
 
@@ -789,7 +790,7 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 
       optimisationProblem->setParameterScaling(scaling);
 
-      //CHECK (optimisationProblem->getObjectiveValue(parameter) == (defect + arma::accu(expected) + optimisationProblem->getNumberOfEvaluations()));
+      //CHECK (optimisationProblem->getObjectiveValue(parameter) == (defect + std::abs(arma::accu(expected)) + optimisationProblem->getNumberOfEvaluations()));
     }
   }
 
@@ -829,7 +830,7 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
 
       optimisationProblem->setParameterTranslation(translation);
 
-      //CHECK (optimisationProblem->getObjectiveValue(parameter) == (defect + arma::accu(expected) + optimisationProblem->getNumberOfEvaluations()));
+      //CHECK (optimisationProblem->getObjectiveValue(parameter) == (defect + std::abs(arma::accu(expected)) + optimisationProblem->getNumberOfEvaluations()));
     }
   }
 
@@ -939,7 +940,7 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
       }
     }
     double actual = optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0}));
-    CHECK(actual == arma::accu(expected) + defect + optimisationProblem->getNumberOfEvaluations());
+    CHECK(actual == defect + std::abs(arma::accu(expected)) + optimisationProblem->getNumberOfEvaluations());
   }
 
   SECTION("Check parameter translation") {
@@ -956,6 +957,6 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
       }
     }
     double actual = optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0}));
-    CHECK(actual == arma::accu(expected) + defect + optimisationProblem->getNumberOfEvaluations());
+    CHECK(actual == defect + std::abs(arma::accu(expected)) + optimisationProblem->getNumberOfEvaluations());
   }
 }
