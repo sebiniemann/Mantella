@@ -27,8 +27,6 @@ namespace mant {
   template <typename T>
   bool isRotationMatrix(
       const arma::Mat<T>& parameter) noexcept {
-    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
-
     // is suqare?
     if (!parameter.is_square()) {
       return false;
