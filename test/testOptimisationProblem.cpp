@@ -66,8 +66,7 @@ class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<
     }
 };
 
-TEST_CASE("optimationProblem: getLowerBounds(...)", "") {
-
+TEST_CASE("OptimationProblem.getLowerBounds(...)", "") {
   SECTION("Check default value") {
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
     arma::Col<double>::fixed<10> expected;
@@ -88,7 +87,7 @@ TEST_CASE("optimationProblem: getLowerBounds(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: getUpperBounds(...)", "") {
+TEST_CASE("OptimationProblem.getUpperBounds(...)", "") {
   SECTION("Check default value") {
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
     arma::Col<double>::fixed<10> expected;
@@ -109,7 +108,7 @@ TEST_CASE("optimationProblem: getUpperBounds(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setLowerBounds(...)", "") {
+TEST_CASE("OptimationProblem.setLowerBounds(...)", "") {
   SECTION("Check parametrisation of the lower bounds.") {
     std::array<arma::Col<double>, 3> expecteds;
     expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
@@ -138,7 +137,7 @@ TEST_CASE("optimationProblem: setLowerBounds(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setUpperBounds(...)", "") {
+TEST_CASE("OptimationProblem.setUpperBounds(...)", "") {
   SECTION("Check Sets the upper bounds of the search space of the upper bound.") {
     std::array<arma::Col<double>,3> expecteds;
     expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
@@ -167,7 +166,7 @@ TEST_CASE("optimationProblem: setUpperBounds(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: getAcceptableObjectiveValue(...)", "") {
+TEST_CASE("OptimationProblem.getAcceptableObjectiveValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check default value") {
@@ -195,7 +194,7 @@ TEST_CASE("optimationProblem: getAcceptableObjectiveValue(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setAcceptableObjectiveValue(...)", "") {
+TEST_CASE("OptimationProblem.setAcceptableObjectiveValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check  .setAcceptableObjectiveValue(...)") {
@@ -219,7 +218,7 @@ TEST_CASE("optimationProblem: setAcceptableObjectiveValue(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: getCachedObjectiveValues(...)", "") {
+TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check returns the cached mapping of parameters to objective values."){
@@ -258,7 +257,7 @@ TEST_CASE("optimationProblem: getCachedObjectiveValues(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: getNumberOfDistinctEvaluations(...)", "") {
+TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(3));
 
   SECTION("Check Counts the number of disctinct, i.e. unique objective function evaluations") {
@@ -281,7 +280,7 @@ TEST_CASE("optimationProblem: getNumberOfDistinctEvaluations(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: getNumberOfEvaluations(...)", "") {
+TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(3));
 
   SECTION("Check counts the number of ALL objective function evaluations") {
@@ -303,7 +302,7 @@ TEST_CASE("optimationProblem: getNumberOfEvaluations(...)", "") {
 
 }
 
-TEST_CASE("optimationProblem: getObjectiveValue(...)", "") {
+TEST_CASE("OptimationProblem.getObjectiveValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check calculates the objective value."){
@@ -364,7 +363,7 @@ TEST_CASE("optimationProblem: getObjectiveValue(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: getSoftConstraintsValue(...)", "") {
+TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   SECTION("Check the default is to return 0 for all inputs."){
@@ -411,7 +410,7 @@ TEST_CASE("optimationProblem: getSoftConstraintsValue(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: isSatisfyingConstraints(...)", "") {
+TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(4));
 
   SECTION("Check returns true, if fulfills all bound- and soft-constraints and false otherwise.") {
@@ -456,7 +455,7 @@ TEST_CASE("optimationProblem: isSatisfyingConstraints(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: isSatisfyingSoftConstraints(...)", "") {
+TEST_CASE("OptimationProblem.isSatisfyingSoftConstraints(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(4));
 
   SECTION("Check returns true, if the soft-constraints value is zero and false otherwise.") {
@@ -497,7 +496,7 @@ TEST_CASE("optimationProblem: isSatisfyingSoftConstraints(...)", "") {
 
 }
 
-TEST_CASE("optimationProblem: isSatisfyingLowerBounds(...)", "") {
+TEST_CASE("OptimationProblem.isSatisfyingLowerBounds(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(4));
 
   SECTION("Check default value") {
@@ -534,7 +533,7 @@ TEST_CASE("optimationProblem: isSatisfyingLowerBounds(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: isSatisfyingUpperBounds(...)", "") {
+TEST_CASE("OptimationProblem.isSatisfyingUpperBounds(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(4));
 
   SECTION("Check default value") {
@@ -571,7 +570,7 @@ TEST_CASE("optimationProblem: isSatisfyingUpperBounds(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setObjectiveValueScaling(...)", "") {
+TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   std::array<double,4> scales{ {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), 23.8745} };
@@ -600,7 +599,7 @@ TEST_CASE("optimationProblem: setObjectiveValueScaling(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setObjectiveValueTranslation(...)", "") {
+TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
 
   std::array<double,4> translations{ {0.0, std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), 23.8745} };
@@ -629,7 +628,7 @@ TEST_CASE("optimationProblem: setObjectiveValueTranslation(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setParameterPermutation(...)", "") {
+TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the permutation of the dimensions of the objective function."){
@@ -682,7 +681,7 @@ TEST_CASE("optimationProblem: setParameterPermutation(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setParameterRotation(...)", "") {
+TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION(" Parameterises the rotation of the objective function."){
@@ -737,7 +736,7 @@ TEST_CASE("optimationProblem: setParameterRotation(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setParameterScaling(...)", "") {
+TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
@@ -776,7 +775,7 @@ TEST_CASE("optimationProblem: setParameterScaling(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: setParameterTranslation(...)", "") {
+TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the translation of the objective function."){
@@ -814,7 +813,7 @@ TEST_CASE("optimationProblem: setParameterTranslation(...)", "") {
   }
 }
 
-TEST_CASE("optimationProblem: reset(...)", "") {
+TEST_CASE("OptimationProblem.reset(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(4));
 
   optimisationProblem->setUpperBounds(arma::Col<double> {-56.89,58.89,88.98,78.0});
