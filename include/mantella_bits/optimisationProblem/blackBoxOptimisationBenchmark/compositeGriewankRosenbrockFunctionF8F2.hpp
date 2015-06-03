@@ -1,38 +1,32 @@
 namespace mant {
   namespace bbob {
-    class CompositeGriewankRosenbrockFunctionF8F2 : public BlackBoxOptimisationBenchmark {
+    template <typename T = double, typename U = double>
+    class CompositeGriewankRosenbrockFunctionF8F2 : public BlackBoxOptimisationBenchmark<T, U> {
+      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
+    
       public:
-        inline explicit CompositeGriewankRosenbrockFunctionF8F2(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit CompositeGriewankRosenbrockFunctionF8F2(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const double max_;
+        const U max_;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        U getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
+#if defined(MANTELLA_USE_MPI)
+      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+      friend class OptimisationAlgorithm;
 
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-        }
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      std::vector<double> serialise() const noexcept;
 
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<CompositeGriewankRosenbrockFunctionF8F2>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-        }
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      void deserialise(
+          const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -40,27 +34,39 @@ namespace mant {
     // Implementation
     //
 
-    inline CompositeGriewankRosenbrockFunctionF8F2::CompositeGriewankRosenbrockFunctionF8F2(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        max_(std::max(1.0, std::sqrt(static_cast<double>(numberOfDimensions_)) / 8.0)){
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T, typename U>
+    CompositeGriewankRosenbrockFunctionF8F2<T, U>::CompositeGriewankRosenbrockFunctionF8F2(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+        max_(std::max(static_cast<U>(1.0L), std::sqrt(static_cast<U>(this->numberOfDimensions_)) / static_cast<U>(8.0L))){
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline double CompositeGriewankRosenbrockFunctionF8F2::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-       const arma::Col<double>& s = max_ * parameter + 0.5;
-      const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
+    template <typename T, typename U>
+    U CompositeGriewankRosenbrockFunctionF8F2<T, U>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+       const arma::Col<T>& s = max_ * parameter + static_cast<T>(0.5L);
+      const arma::Col<T>& z = static_cast<T>(100.0L) * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - static_cast<T>(1.0L));
 
-      return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1);
+      return static_cast<U>(10.0L) * (static_cast<U>(arma::mean(z / static_cast<T>(4000.0L) - arma::cos(z))) + static_cast<U>(1L));
     }
 
-    inline std::string CompositeGriewankRosenbrockFunctionF8F2::toString() const noexcept {
+    template <typename T, typename U>
+    std::string CompositeGriewankRosenbrockFunctionF8F2<T, U>::toString() const noexcept {
       return "bbob_composite_griewank_rosenbrock_function_f8f2";
     }
+    
+#if defined(MANTELLA_USE_MPI)
+    template <typename T, typename U>
+    std::vector<double> CompositeGriewankRosenbrockFunctionF8F2<T, U>::serialise() const noexcept {
+      return BlackBoxOptimisationBenchmark<T, T>::serialise();
+    }
+
+    template <typename T, typename U>
+    void CompositeGriewankRosenbrockFunctionF8F2<T, U>::deserialise(
+        const std::vector<double>& serialisedOptimisationProblem) {
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
-
-#if defined(MANTELLA_USE_PARALLEL)
-CEREAL_REGISTER_TYPE(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2);
-#endif

@@ -1,42 +1,51 @@
 namespace mant {
   namespace bbob {
-    class BlackBoxOptimisationBenchmark : public OptimisationProblem<double> {
+    template <typename T = double, typename U = double>
+    class BlackBoxOptimisationBenchmark : public OptimisationProblem<T, U> {
+      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
+    
       public:
-        inline explicit BlackBoxOptimisationBenchmark(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit BlackBoxOptimisationBenchmark(
+            const std::size_t numberOfDimensions) noexcept;
 
         virtual ~BlackBoxOptimisationBenchmark() = default;
 
       protected:
-        inline arma::Col<double> getRandomParameterTranslation() const noexcept;
+        arma::Col<T> getRandomParameterTranslation() const noexcept;
 
-        inline arma::Col<double> getParameterConditioning(
-            const double conditionNumber) const noexcept;
+        arma::Col<T> getParameterConditioning(
+            const T conditionNumber) const noexcept;
 
-        inline arma::Col<double> getConditionedParameter(
-            const arma::Col<double>& parameter) const noexcept;
+        arma::Col<T> getConditionedParameter(
+            const arma::Col<T>& parameter) const noexcept;
 
-        inline arma::Col<double> getAsymmetricParameter(
-            const double asymmetry, const arma::Col<double>& parameter) const noexcept;
+        arma::Col<T> getAsymmetricParameter(
+            const T asymmetry,
+            const arma::Col<T>& parameter) const noexcept;
+            
+        T getOscillatedParameterValue(
+            const T oscilliation) const noexcept;
+            
+        U getOscillatedObjectiveValue(
+            const U oscilliation) const noexcept;
 
-        inline double getOscillatedValue(
-            const double oscilliation) const noexcept;
+        arma::Col<T> getOscillatedParameter(
+            const arma::Col<T>& parameter) const noexcept;
 
-        inline arma::Col<double> getOscillatedParameter(
-            const arma::Col<double>& parameter) const noexcept;
+        U getBoundConstraintsValue(
+            const arma::Col<T>& parameter) const noexcept;
 
-        inline double getBoundConstraintsValue(
-            const arma::Col<double>& parameter) const noexcept;
+#if defined(MANTELLA_USE_MPI)
+      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+      friend class OptimisationAlgorithm;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
-        BlackBoxOptimisationBenchmark() = default;
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      std::vector<double> serialise() const noexcept;
 
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("optimisationProblem", cereal::base_class<OptimisationProblem>(this)));
-        }
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      void deserialise(
+          const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -44,35 +53,47 @@ namespace mant {
     // Implementation
     //
 
-    inline BlackBoxOptimisationBenchmark::BlackBoxOptimisationBenchmark(
-        const unsigned int numberOfDimensions) noexcept
-      : OptimisationProblem(numberOfDimensions) {
-      setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
-      setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
-      setObjectiveValueTranslation(std::min(1000.0, std::max(-1000.0, std::cauchy_distribution<double>(0.0, 100.0)(Rng::getGenerator()))));
-      setAcceptableObjectiveValue(objectiveValueTranslation_ + 1.0e-8);
+    template <typename T, typename U>
+    BlackBoxOptimisationBenchmark<T, U>::BlackBoxOptimisationBenchmark(
+        const std::size_t numberOfDimensions) noexcept
+      : OptimisationProblem<T, U>(numberOfDimensions) {
+      // A vector with all elements set to -5.
+      this->setLowerBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) - static_cast<T>(5.0L));
+      // A vector with all elements set to 5.
+      this->setUpperBounds(arma::zeros<arma::Col<T>>(this->numberOfDimensions_) + static_cast<T>(5.0L));
+      // The objective value translation is randomly chosen from a Cauchy distribution with an approximate 50% chance to be within [-100, 100], rounded up to 2 decimal places.
+      // The translation is further bounded between -1000 and 1000.
+      this->setObjectiveValueTranslation(std::min(static_cast<U>(1000.0L), std::max(static_cast<U>(-1000.0L), std::floor(std::cauchy_distribution<U>(static_cast<U>(0.0L), static_cast<U>(100.0L))(Rng::getGenerator()) * static_cast<U>(100.0L)) / static_cast<U>(100.0L))));
+      this->setAcceptableObjectiveValue(this->objectiveValueTranslation_ + static_cast<U>(1.0e-8L));
     }
 
-    inline arma::Col<double> BlackBoxOptimisationBenchmark::getRandomParameterTranslation() const noexcept {
-      arma::Col<double> randomParameterTranslation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
-      randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0)).fill(-1.0e-5);
+    template <typename T, typename U>
+    arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getRandomParameterTranslation() const noexcept {
+      // The parameter space is randomly translated by [-4, 4]^N, rounded up to 4 decimal places.
+      arma::Col<T> randomParameterTranslation = arma::floor(arma::randu<arma::Col<T>>(this->numberOfDimensions_) * static_cast<T>(1.0e4L)) / static_cast<T>(1.0e4L) * static_cast<T>(8.0L) - static_cast<T>(4.0L);
+      // In case the parameter space would remain unchanged, it is forcefully translated by -0.00001.
+      randomParameterTranslation.elem(arma::find(randomParameterTranslation == static_cast<T>(0.0L))).fill(static_cast<T>(-1.0e-5L));
+      
       return randomParameterTranslation;
     }
 
-    inline arma::Col<double> BlackBoxOptimisationBenchmark::getParameterConditioning(
-        const double conditionNumber) const noexcept {
-      arma::Col<double> parameterConditioning = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
+    template <typename T, typename U>
+    arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getParameterConditioning(
+        const T conditionNumber) const noexcept {
+      arma::Col<T> parameterConditioning = arma::linspace<arma::Col<T>>(static_cast<T>(0.0L), static_cast<T>(1.0L), this->numberOfDimensions_);
 
-      for (auto& conditioning : parameterConditioning) {
+      // In-place calculation of the conditioning.
+      for (T& conditioning : parameterConditioning) {
         conditioning = std::pow(conditionNumber, conditioning);
       }
 
       return parameterConditioning;
     }
 
-    inline arma::Col<double> BlackBoxOptimisationBenchmark::getConditionedParameter(
-        const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> conditionedParameter = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
+    template <typename T, typename U>
+    arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getConditionedParameter(
+        const arma::Col<T>& parameter) const noexcept {
+      arma::Col<T> conditionedParameter = arma::linspace<arma::Col<T>>(static_cast<T>(0.0L), static_cast<T>(1.0L), this->numberOfDimensions_);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
         conditionedParameter(n) = std::pow(parameter(n), conditionedParameter(n));
@@ -81,17 +102,18 @@ namespace mant {
       return conditionedParameter;
     }
 
-    inline arma::Col<double> BlackBoxOptimisationBenchmark::getAsymmetricParameter(
-        const double asymmetry,
-        const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> asymmetricParameter(parameter.n_elem);
-      const arma::Col<double>& spacing = arma::linspace<arma::Col<double>>(0.0, 1.0, numberOfDimensions_);
+    template <typename T, typename U>
+    arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getAsymmetricParameter(
+        const T asymmetry,
+        const arma::Col<T>& parameter) const noexcept {
+      arma::Col<T> asymmetricParameter(parameter.n_elem);
+      const arma::Col<T>& spacing = arma::linspace<arma::Col<T>>(static_cast<T>(0.0L), static_cast<T>(1.0L), this->numberOfDimensions_);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        const double value = parameter(n);
+        const T value = parameter(n);
 
-        if (value > 0.0) {
-          asymmetricParameter(n) = std::pow(value, 1 + asymmetry * spacing(n) * std::sqrt(value));
+        if (value > static_cast<T>(0.0L)) {
+          asymmetricParameter(n) = std::pow(value, static_cast<T>(1.0L) + asymmetry * spacing(n) * std::sqrt(value));
         } else {
           asymmetricParameter(n) = value;
         }
@@ -100,46 +122,83 @@ namespace mant {
       return asymmetricParameter;
     }
 
-    inline double BlackBoxOptimisationBenchmark::getOscillatedValue(
-        const double value) const noexcept {
-      if (value != 0.0) {
-        double c1;
-        double c2;
-        if (value > 0.0) {
-          c1 = 10.0;
-          c2 = 7.9;
+    template <typename T, typename U>
+    T BlackBoxOptimisationBenchmark<T, U>::getOscillatedParameterValue(
+        const T value) const noexcept {
+      if (value != static_cast<T>(0.0L)) {
+        T c1;
+        T c2;
+        if (value > static_cast<T>(0.0L)) {
+          c1 = static_cast<T>(10.0L);
+          c2 = static_cast<T>(7.9L);
         } else {
-          c1 = 5.5;
-          c2 = 3.1;
+          c1 = static_cast<T>(5.5L);
+          c2 = static_cast<T>(3.1L);
         }
 
-        const double& logAbsoluteValue = std::log(std::abs(value));
-        return std::copysign(1.0, value) * std::exp(logAbsoluteValue + 0.049 * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
+        const T& logAbsoluteValue = std::log(std::abs(value));
+        return std::copysign(static_cast<T>(1.0L), value) * std::exp(logAbsoluteValue + static_cast<T>(0.049L) * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
       } else {
-        return 0.0;
+        return static_cast<T>(0.0L);
       }
     }
 
-    inline arma::Col<double> BlackBoxOptimisationBenchmark::getOscillatedParameter(
-        const arma::Col<double>& parameter) const noexcept {
-      arma::Col<double> oscillatedParameter(parameter.n_elem);
+    template <typename T, typename U>
+    U BlackBoxOptimisationBenchmark<T, U>::getOscillatedObjectiveValue(
+        const U value) const noexcept {
+      if (value != static_cast<U>(0.0L)) {
+        U c1;
+        U c2;
+        if (value > static_cast<U>(0.0L)) {
+          c1 = static_cast<U>(10.0L);
+          c2 = static_cast<U>(7.9L);
+        } else {
+          c1 = static_cast<U>(5.5L);
+          c2 = static_cast<U>(3.1L);
+        }
+
+        const U& logAbsoluteValue = std::log(std::abs(value));
+        return std::copysign(static_cast<U>(1.0L), value) * std::exp(logAbsoluteValue + static_cast<U>(0.049L) * (std::sin(c1 * logAbsoluteValue) + std::sin(c2 * logAbsoluteValue)));
+      } else {
+        return static_cast<U>(0.0L);
+      }
+    }
+
+    template <typename T, typename U>
+    arma::Col<T> BlackBoxOptimisationBenchmark<T, U>::getOscillatedParameter(
+        const arma::Col<T>& parameter) const noexcept {
+      arma::Col<T> oscillatedParameter(parameter.n_elem);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        oscillatedParameter(n) = getOscillatedValue(parameter(n));
+        oscillatedParameter(n) = getOscillatedParameterValue(parameter(n));
       }
 
       return oscillatedParameter;
     }
 
-    inline double BlackBoxOptimisationBenchmark::getBoundConstraintsValue(
-        const arma::Col<double>& parameter) const noexcept {
-      double boundConstraintsValue = 0.0;
+    template <typename T, typename U>
+    U BlackBoxOptimisationBenchmark<T, U>::getBoundConstraintsValue(
+        const arma::Col<T>& parameter) const noexcept {
+      U boundConstraintsValue = static_cast<U>(0.0L);
 
       for (std::size_t n = 0; n < parameter.n_elem; ++n) {
-        boundConstraintsValue += std::pow(std::max(0.0, std::abs(parameter(n)) - 5.0), 2.0);
+        boundConstraintsValue += std::pow(std::max(static_cast<U>(0.0L), std::abs(static_cast<U>(parameter(n))) - static_cast<U>(5.0L)), static_cast<U>(2.0L));
       }
 
       return boundConstraintsValue;
     }
+
+#if defined(MANTELLA_USE_MPI)
+    template <typename T, typename U>
+    std::vector<double> BlackBoxOptimisationBenchmark<T, U>::serialise() const noexcept {
+      return OptimisationProblem<T, U>::serialise();
+    }
+
+    template <typename T, typename U>
+    void BlackBoxOptimisationBenchmark<T, U>::deserialise(
+        const std::vector<double>& serialisedOptimisationProblem) {
+      OptimisationProblem<T, U>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }

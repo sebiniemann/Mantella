@@ -10,9 +10,8 @@
 # Authors:
 #   Sebastian Niemann - Lead developer
 #   Romeo Shuka - Developer
+#   Daniel Kiechle - Software tester
 #   Wolff Bock von Wülfingen - Developer
-#   Daniel Kiechle - Developer / Software tester
-#   Oskar Pusz - Developer
 #------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
@@ -30,35 +29,41 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
 option(RUN_TESTS "Run (and build) tests" OFF)
+option(USE_MPI "Use MPI-support" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 
 if(RUN_TESTS)
   set(BUILD_TESTS ON)
 endif()
 
-mark_as_advanced(BUILD_TESTS RUN_TESTS MEASURE_CODE_COVERAGE)
+mark_as_advanced(
+ BUILD_TESTS
+ RUN_TESTS
+ USE_MPI
+ MEASURE_CODE_COVERAGE
+)
 
-if(WIN32)
-  message(STATUS "")
-  message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
-  message(STATUS "")
-else()
+message(STATUS "")
+message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
+if(UNIX)
+  message(STATUS "Or use *sudo make install* as a shortcut.")
+endif()
+message(STATUS "")
+
+if(UNIX)
   # ---------------
   # PREPARE LIBRARY
   # ---------------
+  
   message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
     
   # Locate third party libraries and headers
   find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
 
-  message(STATUS "")
-  message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive (or use *sudo make install* as a shortcut).")
-  message(STATUS "")
-
   # ----------
   # INSTALLING
   # ----------
-
+  
   if(NOT INSTALL_INCLUDE_DIR)
     set(INSTALL_INCLUDE_DIR "include")
   endif()
@@ -84,7 +89,7 @@ if(BUILD_TESTS)
   # Display all warnings
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-  # Use native machine features (SSE3, SSE4, AVX, ...), if possible and compiled with Armadillo
+  # Use native machine features (SSE3, SSE4, AVX, ...) if possible
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
   if(MEASURE_CODE_COVERAGE)
@@ -101,6 +106,10 @@ if(BUILD_TESTS)
   else()
     find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
     find_package(Catch REQUIRED) # Catch (header only)
+    
+    if(USE_MPI)
+      find_package(MPI REQUIRED) # MPI
+    endif()
   endif()
   
   # Include Mantella
@@ -109,6 +118,9 @@ if(BUILD_TESTS)
   # Include third party headers
   include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
   include_directories(${CATCH_INCLUDE_DIRS}) # Catch
+  if(USE_MPI)
+    include_directories(${MPI_INCLUDE_PATH}) # MPI
+  endif()
 
   # Compile the optimisation library tests
   # All paths must start with "test/"
@@ -155,17 +167,25 @@ if(BUILD_TESTS)
 
   # Link against third party libraries
   target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
+  if(USE_MPI)
+    target_link_libraries(libraryTest ${MPI_C_LIBRARIES}) # MPI
+  endif()
 
   if(RUN_TESTS)
     message(STATUS "NOTICE: Automatically running all tests after building them.")
 
-    add_custom_command(TARGET libraryTest POST_BUILD COMMAND libraryTest ${PROJECT_SOURCE_DIR}/test)
+    if(USE_MPI)
+      add_custom_command(TARGET libraryTest POST_BUILD COMMAND mpiexec -n 4 ${EXECUTABLE_OUTPUT_PATH}/libraryTest ${PROJECT_SOURCE_DIR}/test)
+    else()
+      add_custom_command(TARGET libraryTest POST_BUILD COMMAND libraryTest ${PROJECT_SOURCE_DIR}/test)
+    endif()
   endif()
 endif()
 
 # ---------------------
 # Qt Creator workaround
 # ---------------------
+
 add_custom_target(QtWorkaround SOURCES
   # Library
   include/mantella
@@ -210,15 +230,16 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRPR.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRRR.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PUPS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine4PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp
-  include/mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp
-  include/mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRPR.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRRR.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine4PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PRUS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PUPS.hpp
+  include/mantella_bits/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.hpp
+  include/mantella_bits/optimisationProblem/robotic/endEffectorPoseError.hpp
   include/mantella_bits/optimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp
@@ -229,16 +250,14 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp
   include/mantella_bits/propertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessCloudCorrelationAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/neighbourFitnessCorrelationAnalysis.hpp
   include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/alphaHoelderContinuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresLinearFunctionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresQuadraticFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.hpp
+  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.hpp
   include/mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp
   include/mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp
   include/mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp

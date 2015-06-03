@@ -1,16 +1,20 @@
 namespace mant {
-  template <typename T>
-  class OrdinaryLeastSquaresLinearFunctionModelAnalysis : public PassivePropertyAnalysis<T> {
+  template <typename T = double>
+  class LinearFunctionModelAnalysis : public PassivePropertyAnalysis<T, T> {
+    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+    
     public:
-      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T, T>::PassivePropertyAnalysis;
 
       arma::Col<double> getCoefficients() const noexcept;
+
+      std::string toString() const noexcept override;
 
     protected:
       arma::Col<double> coefficients_;
 
       void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -18,15 +22,17 @@ namespace mant {
   //
 
   template <typename T>
-  arma::Col<double> OrdinaryLeastSquaresLinearFunctionModelAnalysis<T>::getCoefficients() const noexcept {
+  arma::Col<double> LinearFunctionModelAnalysis<T>::getCoefficients() const noexcept {
     return coefficients_;
   }
 
   template <typename T>
-  void OrdinaryLeastSquaresLinearFunctionModelAnalysis<T>::analyseImplementation(
-      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+  void LinearFunctionModelAnalysis<T>::analyseImplementation(
+      const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+    assert(parameterToObjectiveValueMappings.size() > 1);
+    
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem + 1, parameterToObjectiveValueMappings.size());
-    arma::Col<double> objectiveValues(parameterToObjectiveValueMappings.size());
+    arma::Col<T> objectiveValues(parameters.n_cols);
 
     std::size_t n = 0;
     for(const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
@@ -41,5 +47,10 @@ namespace mant {
     } catch (...) {
       coefficients_ = arma::pinv(parameters * parameters.t()) * parameters * objectiveValues;
     }
+  }
+
+  template <typename T>
+  std::string LinearFunctionModelAnalysis<T>::toString() const noexcept {
+    return "linear_function_model_analysis";
   }
 }

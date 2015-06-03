@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::SphereFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SphereFunction sphereFunction(numberOfDimensions);
+    mant::bbob::SphereFunction<> sphereFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -35,6 +35,6 @@ TEST_CASE("bbob::SphereFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SphereFunction(5).toString() == "bbob_sphere_function");
+    CHECK(mant::bbob::SphereFunction<>(5).toString() == "bbob_sphere_function");
   }
 }

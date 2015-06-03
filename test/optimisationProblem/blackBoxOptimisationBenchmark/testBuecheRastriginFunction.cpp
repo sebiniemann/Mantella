@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::BuecheRastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::BuecheRastriginFunction buecheRastriginFunction(numberOfDimensions);
+    mant::bbob::BuecheRastriginFunction<> buecheRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -38,6 +38,6 @@ TEST_CASE("bbob::BuecheRastriginFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::BuecheRastriginFunction(5).toString() == "bbob_bueche_rastrigin_function");
+    CHECK(mant::bbob::BuecheRastriginFunction<>(5).toString() == "bbob_bueche_rastrigin_function");
   }
 }

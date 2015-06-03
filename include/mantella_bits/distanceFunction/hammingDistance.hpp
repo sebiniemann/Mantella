@@ -49,12 +49,12 @@ namespace mant {
     // The maximal distance of the Hamming distance is limited by the number of elements.
     verify(maximalDistance <= parameter.n_elem, "The maximal distance must be less than or equal to the number of elements.");
 
-    // Chooses randomly and uniformly the number and indicies of the elements to be changed.
+    // Chooses the number and indicies of the elements to be changed.
     for(const T element : getRandomPermutation(parameter.n_elem, std::uniform_int_distribution<T>(minimalDistance, maximalDistance)(Rng::getGenerator()))) {
-      // Selects randomly and uniformly a new value from the range [min, max - 1] ...
+      // Selects a new value from the range [min, max - 1] ...
       T newValue = std::uniform_int_distribution<T>(lowerBound_, upperBound_ - 1)(Rng::getGenerator());
       
-      // ... and adds +1 if it was within [current, max - 1], setting the actual range to
+      // ... and adds +1, if it was within [current, max - 1], setting the actual range to
       // [min, current - 1], [current + 1, max].
       if(parameter(element) >= newValue) {
         newValue += 1;

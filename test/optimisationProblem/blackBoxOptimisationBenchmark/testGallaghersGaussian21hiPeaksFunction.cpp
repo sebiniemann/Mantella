@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::GallaghersGaussian21hiPeaksFunction gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
+    mant::bbob::GallaghersGaussian21hiPeaksFunction<> gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -43,7 +43,7 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
+    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction<>(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
   }
 }
 

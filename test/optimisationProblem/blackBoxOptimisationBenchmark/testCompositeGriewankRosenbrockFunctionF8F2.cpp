@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::CompositeGriewankRosenbrockFunctionF8F2", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::CompositeGriewankRosenbrockFunctionF8F2 compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
+    mant::bbob::CompositeGriewankRosenbrockFunctionF8F2<> compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -35,6 +35,6 @@ TEST_CASE("bbob::CompositeGriewankRosenbrockFunctionF8F2", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2(5).toString() == "bbob_composite_griewank_rosenbrock_function_f8f2");
+    CHECK(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2<>(5).toString() == "bbob_composite_griewank_rosenbrock_function_f8f2");
   }
 }

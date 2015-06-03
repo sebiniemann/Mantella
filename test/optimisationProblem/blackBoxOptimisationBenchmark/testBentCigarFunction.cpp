@@ -15,7 +15,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::BentCigarFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::BentCigarFunction bentCigarFunction(numberOfDimensions);
+    mant::bbob::BentCigarFunction<> bentCigarFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
@@ -39,7 +39,7 @@ TEST_CASE("bbob::BentCigarFunction", "") {
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::BentCigarFunction(5).toString() == "bbob_bent_cigar_function");
+    CHECK(mant::bbob::BentCigarFunction<>(5).toString() == "bbob_bent_cigar_function");
   }
 }
 

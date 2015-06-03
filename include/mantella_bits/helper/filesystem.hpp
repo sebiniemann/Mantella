@@ -10,7 +10,7 @@ namespace mant {
       const std::string& filepath) noexcept {
     if (FILE* file = fopen(filepath.c_str(), "r")) {
       fclose(file);
-        return true;
+      return true;
     } else {
       return false;
     }

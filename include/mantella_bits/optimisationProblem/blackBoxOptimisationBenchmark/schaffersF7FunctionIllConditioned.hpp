@@ -1,48 +1,40 @@
 namespace mant {
   namespace bbob {
-    class SchaffersF7FunctionIllConditioned : public BlackBoxOptimisationBenchmark {
+    template <typename T = double, typename U = double>
+    class SchaffersF7FunctionIllConditioned : public BlackBoxOptimisationBenchmark<T, U> {
+      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
+    
       public:
-        inline explicit SchaffersF7FunctionIllConditioned(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit SchaffersF7FunctionIllConditioned(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> parameterConditioning_;
+        const arma::Col<T> parameterConditioning_;
 
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        U getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        U getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
+        
+#if defined(MANTELLA_USE_MPI)
+      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+      friend class OptimisationAlgorithm;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      std::vector<double> serialise() const noexcept;
 
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
-        }
-
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<SchaffersF7FunctionIllConditioned>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
-        }
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      void deserialise(
+          const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -50,42 +42,67 @@ namespace mant {
     // Implementation
     //
 
-    inline SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T, typename U>
+    SchaffersF7FunctionIllConditioned<T, U>::SchaffersF7FunctionIllConditioned(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+        parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(1000.0L)))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void SchaffersF7FunctionIllConditioned::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T, typename U>
+    void SchaffersF7FunctionIllConditioned<T, U>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double SchaffersF7FunctionIllConditioned::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return 10.0 * getBoundConstraintsValue(parameter);
+    template <typename T, typename U>
+    U SchaffersF7FunctionIllConditioned<T, U>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return static_cast<U>(10.0L) * this->getBoundConstraintsValue(parameter);
     }
 
-    inline double SchaffersF7FunctionIllConditioned::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter)));
-      const arma::Col<double>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
+    template <typename T, typename U>
+    U SchaffersF7FunctionIllConditioned<T, U>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& s = arma::square(parameterConditioning_ % (rotationQ_ * this->getAsymmetricParameter(static_cast<T>(0.5L), parameter)));
+      const arma::Col<T>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), static_cast<T>(0.25L));
 
-      return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);
+      return std::pow(static_cast<U>(arma::mean(z % (static_cast<T>(1.0L) + arma::square(arma::sin(static_cast<T>(50.0L) * arma::pow(z, static_cast<T>(0.4L))))))), static_cast<U>(2.0L));
     }
 
-    inline std::string SchaffersF7FunctionIllConditioned::toString() const noexcept {
+    template <typename T, typename U>
+    std::string SchaffersF7FunctionIllConditioned<T, U>::toString() const noexcept {
       return "bbob_schaffers_f7_function_ill_conditioned";
     }
+
+#if defined(MANTELLA_USE_MPI)
+    template <typename T, typename U>
+    std::vector<double> SchaffersF7FunctionIllConditioned<T, U>::serialise() const noexcept {
+      std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+      
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
+      }
+      
+      return serialisedOptimisationProblem;
+    }
+
+    template <typename T, typename U>
+    void SchaffersF7FunctionIllConditioned<T, U>::deserialise(
+        const std::vector<double>& serialisedOptimisationProblem) {
+      rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+      }
+        
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
-
-#if defined(MANTELLA_USE_PARALLEL)
-CEREAL_REGISTER_TYPE(mant::bbob::SchaffersF7FunctionIllConditioned);
-#endif

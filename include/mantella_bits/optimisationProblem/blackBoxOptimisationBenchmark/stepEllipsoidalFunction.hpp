@@ -1,49 +1,41 @@
 namespace mant {
   namespace bbob {
-    class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark {
+    template <typename T = double, typename U = double>
+    class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark<T, U> {
+      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
+    
       public:
-        inline explicit StepEllipsoidalFunction(
-            const unsigned int numberOfDimensions) noexcept;
+        explicit StepEllipsoidalFunction(
+            const std::size_t numberOfDimensions) noexcept;
 
-        inline void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+        void setRotationQ(
+            const arma::Mat<T>& rotationQ);
 
-        inline std::string toString() const noexcept override;
+        std::string toString() const noexcept override;
 
       protected:
-        const arma::Col<double> firstParameterConditioning_;
-        const arma::Col<double> secondParameterConditioning_;
+        const arma::Col<T> firstParameterConditioning_;
+        const arma::Col<T> secondParameterConditioning_;
 
-        arma::Mat<double> rotationQ_;
+        arma::Mat<T> rotationQ_;
 
-        inline double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        U getSoftConstraintsValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
 
-        inline double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const noexcept override;
+        U getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
+        
+#if defined(MANTELLA_USE_MPI)
+      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+      friend class OptimisationAlgorithm;
 
-#if defined(MANTELLA_USE_PARALLEL)
-        friend class cereal::access;
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      std::vector<double> serialise() const noexcept;
 
-        template <typename Archive>
-        void serialize(
-            Archive& archive) noexcept {
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(this)));
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions_));
-          archive(cereal::make_nvp("rotationQ", rotationQ_));
-        }
-
-        template <typename Archive>
-        static void load_and_construct(
-            Archive& archive,
-            cereal::construct<StepEllipsoidalFunction>& construct) noexcept {
-          unsigned int numberOfDimensions;
-          archive(cereal::make_nvp("numberOfDimensions", numberOfDimensions));
-          construct(numberOfDimensions);
-
-          archive(cereal::make_nvp("BlackBoxOptimisationBenchmark", cereal::base_class<BlackBoxOptimisationBenchmark>(construct.ptr())));
-          archive(cereal::make_nvp("rotationQ", construct->rotationQ_));
-        }
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      void deserialise(
+          const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -51,53 +43,78 @@ namespace mant {
     // Implementation
     //
 
-    inline StepEllipsoidalFunction::StepEllipsoidalFunction(
-        const unsigned int numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
-        secondParameterConditioning_(getParameterConditioning(100)) {
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
-      setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
+    template <typename T, typename U>
+    StepEllipsoidalFunction<T, U>::StepEllipsoidalFunction(
+        const std::size_t numberOfDimensions) noexcept
+      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+        firstParameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))),
+        secondParameterConditioning_(this->getParameterConditioning(static_cast<T>(100.0L))) {
+      this->setParameterTranslation(this->getRandomParameterTranslation());
+      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
+      setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    inline void StepEllipsoidalFunction::setRotationQ(
-        const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+    template <typename T, typename U>
+    void StepEllipsoidalFunction<T, U>::setRotationQ(
+        const arma::Mat<T>& rotationQ) {
+      verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
-    inline double StepEllipsoidalFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      return getBoundConstraintsValue(parameter);
+    template <typename T, typename U>
+    U StepEllipsoidalFunction<T, U>::getSoftConstraintsValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      return this->getBoundConstraintsValue(parameter);
     }
     
-    inline double StepEllipsoidalFunction::getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const noexcept {
-      const arma::Col<double>& s = firstParameterConditioning_ % parameter;
+    template <typename T, typename U>
+    U StepEllipsoidalFunction<T, U>::getObjectiveValueImplementation(
+        const arma::Col<T>& parameter) const noexcept {
+      const arma::Col<T>& s = firstParameterConditioning_ % parameter;
 
-      arma::Col<double> z = s;
+      arma::Col<T> z = s;
       for (std::size_t n = 0; n < z.n_elem; ++n) {
-        const double& value = s(n);
+        const T& value = s(n);
 
-        if (std::abs(value) > 0.5) {
+        if (std::abs(value) > static_cast<T>(0.5L)) {
           z(n) = std::round(value);
         } else {
-          z(n) = std::round(value * 10.0) / 10.0;
+          z(n) = std::round(value * static_cast<T>(10.0L)) / static_cast<T>(10.0L);
         }
       }
 
-      return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
+      return static_cast<U>(0.1L) * std::max(std::abs(static_cast<U>(s(0))) / static_cast<U>(10000.0L), static_cast<U>(arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z))));
     }
 
-    inline std::string StepEllipsoidalFunction::toString() const noexcept {
+    template <typename T, typename U>
+    std::string StepEllipsoidalFunction<T, U>::toString() const noexcept {
       return "bbob_step_ellipsoidal_function";
     }
+
+#if defined(MANTELLA_USE_MPI)
+    template <typename T, typename U>
+    std::vector<double> StepEllipsoidalFunction<T, U>::serialise() const noexcept {
+      std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+      
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
+      }
+      
+      return serialisedOptimisationProblem;
+    }
+
+    template <typename T, typename U>
+    void StepEllipsoidalFunction<T, U>::deserialise(
+        const std::vector<double>& serialisedOptimisationProblem) {
+      rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
+      for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+      }
+        
+      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+    }
+#endif
   }
 }
-
-#if defined(MANTELLA_USE_PARALLEL)
-CEREAL_REGISTER_TYPE(mant::bbob::StepEllipsoidalFunction);
-#endif

@@ -1,17 +1,17 @@
 namespace mant {
-  template <typename T>
-  class GridSearch : public SamplingBasedOptimisationAlgorithm<T> {
+  template <typename T, typename U = double>
+  class GridSearch : public SamplingBasedOptimisationAlgorithm<T, U> {
     public:
       explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept;
 
-      void setSamplingFactors(
-          const arma::Col<double> samplingFactors);
+      void setNumberOfSamples(
+          const arma::Col<unsigned int>& numberOfSamples);
 
       std::string toString() const noexcept override;
 
     protected:
-      arma::Col<double> samplingFactors_;
+      arma::Col<unsigned int> numberOfSamples_;
 
       void optimiseImplementation() noexcept override;
   };
@@ -20,71 +20,66 @@ namespace mant {
   // Implementation
   //
 
-  template <typename T>
-  GridSearch<T>::GridSearch(
-      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
-    : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
-    setSamplingFactors(arma::ones(this->numberOfDimensions_) / static_cast<double>(this->numberOfDimensions_));
+  template <typename T, typename U>
+  GridSearch<T, U>::GridSearch(
+      const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept
+    : SamplingBasedOptimisationAlgorithm<T, U>(optimisationProblem) {
+    setNumberOfSamples(arma::zeros(this->numberOfDimensions_) + 10);
   }
 
-  template <typename T>
-  void GridSearch<T>::optimiseImplementation() noexcept {
-    const arma::Col<double>& scaledSamplingFactors = samplingFactors_(0) / samplingFactors_;
-    const arma::Col<unsigned int>& numberOfSamples_ = arma::conv_to<arma::Col<unsigned int>>::from(scaledSamplingFactors * std::pow(this->maximalNumberOfIterations_ / arma::prod(scaledSamplingFactors), 1.0 / static_cast<double>(this->numberOfDimensions_)));
-
-    std::vector<arma::Col<double>> sampleParameters_;
+  template <typename T, typename U>
+  void GridSearch<T, U>::optimiseImplementation() noexcept {
+    verify(arma::accu(numberOfSamples_) <= this->maximalNumberOfIterations_ * this->numberOfNodes_, "");
+    if (std::is_integral<T>::value) {
+      // For integral types, ensure that each dimension has as least the same amout of elements as
+      // samples. 
+      verify(arma::all(numberOfSamples_ >= this->getUpperBounds() - this->getLowerBounds()), "");
+    }
+    
+    std::vector<arma::Col<T>> samples;
     for (std::size_t n = 0; n < this->numberOfDimensions_; ++n) {
-      sampleParameters_.push_back(arma::linspace(this->getLowerBounds()(n), this->getUpperBounds()(n), numberOfSamples_(n)));
+      samples.push_back(arma::linspace<arma::Col<T>>(this->getLowerBounds()(n), this->getUpperBounds()(n), numberOfSamples_(n)));
     }
 
-    arma::Col<unsigned int> sampleIndicies_ = arma::zeros<arma::Col<unsigned int>>(sampleParameters_.size());
-    arma::Col<double> candidateParameter(this->numberOfDimensions_);
+    arma::Col<unsigned int> sampleIndicies = arma::zeros<arma::Col<unsigned int>>(this->numberOfDimensions_);
+    for(std::size_t n = 0; n < arma::accu(numberOfSamples_); ++n) {
+      if (n % this->numberOfNodes_ == this->rank_) {
+        ++this->numberOfIterations_;
 
-    const unsigned int& overallNumberOfSamples = arma::sum(numberOfSamples_);
-    for(unsigned int n = 0; n < overallNumberOfSamples; ++n) {
-      ++this->numberOfIterations_;
+        arma::Col<T> candidateParameter(this->numberOfDimensions_);
+        for(std::size_t k = 0; k < sampleIndicies.n_elem; ++k) {
+          candidateParameter(k) = samples.at(k)(sampleIndicies(k));
+        }
+        
+        updateBestParameter(candidateParameter, this->getSoftConstraintsValue(candidateParameter), this->getObjectiveValue(candidateParameter));
 
-      for(std::size_t k = 0; k < sampleIndicies_.n_elem; ++k) {
-        candidateParameter(k) = sampleParameters_.at(k)(sampleIndicies_(k));
-      }
-
-      ++sampleIndicies_(0);
-      for(std::size_t k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
-        if(sampleIndicies_(k) >= numberOfSamples_(k)) {
-          sampleIndicies_(k) = 0;
-           ++sampleIndicies_(k + 1);
+        if (this->isFinished()) {
+          break;
         }
       }
-
-      const double& candidateSoftConstraintsValue = this->getSoftConstraintsValue(candidateParameter);
-      const double& candidateObjectiveValue = this->getObjectiveValue(candidateParameter);
-
-      if(candidateSoftConstraintsValue < this->bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == this->bestSoftConstraintsValue_ && candidateObjectiveValue < this->bestObjectiveValue_)) {
-        this->bestParameter_ = candidateParameter;
-        this->bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
-        this->bestObjectiveValue_ = candidateObjectiveValue;
-      }
-
-      if (this->isFinished() || this->isTerminated()) {
-        break;
+      
+      ++sampleIndicies(0);
+      for(std::size_t k = 0; k < sampleIndicies.n_elem - 1; ++k) {
+        if(sampleIndicies(k) >= numberOfSamples_(k)) {
+          sampleIndicies(k) = 0;
+           ++sampleIndicies(k + 1);
+        } else {
+          break;
+        }
       }
     }
   }
 
-  template <typename T>
-  void GridSearch<T>::setSamplingFactors(
-      const arma::Col<double> samplingFactors) {
-    if(samplingFactors.n_elem != this->numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the sampling factors (" + std::to_string(samplingFactors.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
-    } else if(arma::sum(samplingFactors) != 1.0) {
-      throw std::logic_error("The sum of all sampling factors (" + std::to_string(arma::sum(samplingFactors)) + ") must be 1.");
-    }
+  template <typename T, typename U>
+  void GridSearch<T, U>::setNumberOfSamples(
+      const arma::Col<unsigned int>& numberOfSamples) {
+    verify(arma::all(numberOfSamples > 0), "");
 
-    samplingFactors_ = samplingFactors;
+    numberOfSamples_ = numberOfSamples;
   }
 
-  template <typename T>
-  std::string GridSearch<T>::toString() const noexcept {
-    return "GridSearch";
+  template <typename T, typename U>
+  std::string GridSearch<T, U>::toString() const noexcept {
+    return "grid_search";
   }
 }

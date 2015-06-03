@@ -10,9 +10,8 @@
 // Authors:
 //   Sebastian Niemann - Lead developer
 //   Romeo Shuka - Developer
+//   Daniel Kiechle - Software tester
 //   Wolff Bock von Wülfingen - Developer
-//   Daniel Kiechle - Developer / Software tester
-//   Oskar Pusz - Developer
 //------------------------------------------------------------------------------
 #pragma once
 
@@ -24,19 +23,23 @@
 // Configuration
 //
 
-#if !defined(MANTELLA_USE_PARALLEL) && defined(MPI_SUCCESS)
-  #define MANTELLA_USE_PARALLEL
+#undef MANTELLA_USE_MPI
+#if defined(MPI_SUCCESS)
+  #define MANTELLA_USE_MPI
 #endif
+
+#define MANTELLA_USE_CACHES
 
 //
 // Prerequirements
 //
 
-// C++ Standard Library
+// C++ Standard library
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <cstdio>
 #include <functional>
@@ -55,6 +58,11 @@
 
 // Armadillo
 #include <armadillo>
+
+#if defined(MANTELLA_USE_MPI)
+  // MPI
+  #include <mpi.h>
+#endif
 
 //
 // Mantella
@@ -110,15 +118,16 @@
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRPR.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRRR.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PRUS.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine3PUPS.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine4PRUS.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PRUS.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/parallelKinematicMachine6PUPS.hpp>
-#include <mantella_bits/optimisationProblem/robotic/model/multiLevelStewartPlatform.hpp>
-#include <mantella_bits/optimisationProblem/robotic/poseAccuracy.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRPR.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRRR.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRUS.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PUPS.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine4PRUS.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PRUS.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PUPS.hpp>
+#include <mantella_bits/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.hpp>
+#include <mantella_bits/optimisationProblem/robotic/endEffectorPoseError.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
@@ -136,21 +145,12 @@
 #include <mantella_bits/propertyAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessCloudCorrelationAnalysis.hpp>
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/neighbourFitnessCorrelationAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/alphaHoelderContinuityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresLinearFunctionModelAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/ordinaryLeastSquaresQuadraticFunctionModelAnalysis.hpp>
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp>
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.hpp>
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp>
-
-// Parallel optimisation algorithms
-#if defined(MANTELLA_USE_PARALLEL)
-  // MPI
-  #include <mpi.h>
-
-  #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm.hpp>
-  #include <mantella_bits/optimisationAlgorithm/populationBasedAlgorithm/parallelAlgorithm/parallelStandardParticleSwarmOptimisation2011.hpp>
-#endif

@@ -9,8 +9,8 @@ namespace mant {
 
   inline bool isPermutation(
       const arma::Col<unsigned int>& parameter,
-      const unsigned int lowerBound,
-      const unsigned int upperBound) noexcept;
+      const std::size_t lowerBound,
+      const std::size_t upperBound) noexcept;
 
   //
   // Implementation
@@ -20,7 +20,7 @@ namespace mant {
       const bool expression,
       const std::string& errorMessage) {
     if(!expression) {
-      throw std::runtime_error(errorMessage);
+      throw std::logic_error(errorMessage);
     }   
   }
 
@@ -45,8 +45,8 @@ namespace mant {
 
   inline bool isPermutation(
       const arma::Col<unsigned int>& parameter,
-      const unsigned int lowerBound,
-      const unsigned int upperBound) noexcept {
+      const std::size_t lowerBound,
+      const std::size_t upperBound) noexcept {
     // TODO Add logic
     return true;
   }

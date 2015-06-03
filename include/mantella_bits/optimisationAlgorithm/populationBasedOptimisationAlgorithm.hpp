@@ -1,16 +1,25 @@
 namespace mant {
-  template <typename T>
+  template <typename T, typename U = double>
   class PopulationBasedOptimisationAlgorithm : public OptimisationAlgorithm<T> {
+    static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type.");
+    static_assert(std::is_arithmetic<U>::value, "U must be an arithmetic type.");
+    
     public:
+      template <typename V = T, typename std::enable_if<std::is_floating_point<V>::value, bool>::type = false>
       explicit PopulationBasedOptimisationAlgorithm(
-          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
-          const unsigned int populationSize) noexcept;
+          const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem,
+          const std::size_t populationSize) noexcept;
+          
+      template <typename V = T, typename std::enable_if<std::is_integral<V>::value, bool>::type = false>
+      explicit PopulationBasedOptimisationAlgorithm(
+          const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem,
+          const std::size_t populationSize) noexcept;
 
       void setInitialPopulation(
           const arma::Mat<T> initialPopulation);
 
     protected:
-      unsigned int populationSize_;
+      const std::size_t populationSize_;
       arma::Mat<T> initialPopulation_;
   };
 
@@ -18,28 +27,41 @@ namespace mant {
   // Implementation
   //
 
-  template <typename T>
-  PopulationBasedOptimisationAlgorithm<T>::PopulationBasedOptimisationAlgorithm(
-      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
-      const unsigned int populationSize) noexcept
+  template <typename T, typename U>
+  template <typename V, typename std::enable_if<std::is_floating_point<V>::value, bool>::type>
+  PopulationBasedOptimisationAlgorithm<T, U>::PopulationBasedOptimisationAlgorithm(
+      const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem,
+      const std::size_t populationSize) noexcept
     : OptimisationAlgorithm<T>(optimisationProblem),
       populationSize_(populationSize) {
-    // TODO fix for discrete problems
-    arma::Mat<T> population = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, populationSize_);
-    population.each_col() %= this->getUpperBounds() - this->getLowerBounds();
-    population.each_col() += this->getLowerBounds();
+    arma::Mat<T> initialPopulation = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, populationSize_);
+    initialPopulation.each_col() %= this->getUpperBounds() - this->getLowerBounds();
+    initialPopulation.each_col() += this->getLowerBounds();
 
-    setInitialPopulation(population);
+    setInitialPopulation(initialPopulation);
   }
 
-  template <typename T>
-  void PopulationBasedOptimisationAlgorithm<T>::setInitialPopulation(
-      const arma::Mat<T> initialPopulation) {
-    if(initialPopulation.n_rows != this->numberOfDimensions_) {
-      throw std::logic_error("The number of dimensions of the each parameter (" + std::to_string(initialPopulation.n_rows) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(this->numberOfDimensions_) + ").");
+  template <typename T, typename U>
+  template <typename V, typename std::enable_if<std::is_integral<V>::value, bool>::type>
+  PopulationBasedOptimisationAlgorithm<T, U>::PopulationBasedOptimisationAlgorithm(
+      const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem,
+      const std::size_t populationSize) noexcept
+    : OptimisationAlgorithm<T>(optimisationProblem),
+      populationSize_(populationSize) {
+    arma::Mat<T> initialPopulation(this->numberOfDimensions_, populationSize_);
+    for (std::size_t n = 0; n < initialPopulation.n_rows; ++n) {
+      initialPopulation.row(n) = arma::randi<arma::Row<T>>(populationSize_, distr_param(this->getLowerBounds()(n), this->getUpperBounds()(n)));
     }
 
+    setInitialPopulation(initialPopulation);
+  }
+  
+  template <typename T, typename U>
+  void PopulationBasedOptimisationAlgorithm<T, U>::setInitialPopulation(
+      const arma::Mat<T> initialPopulation) {
+    verify(initialPopulation.n_rows == this->numberOfDimensions_, "The number of rows must match the number of dimensions of the optimisation problem.");
+    verify(initialPopulation.n_rows == populationSize_, "The number of cols must match the population size.");
+
     initialPopulation_ = initialPopulation;
-    populationSize_ = initialPopulation_.n_cols;
   }
 }

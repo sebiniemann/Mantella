@@ -42,7 +42,7 @@ namespace mant {
             const arma::Row<double>::fixed<3>& endEffectorRotation,
             const arma::Row<double>& redundantJointActuations) const;
 
-        inline double getEndEffectorPoseAccuracy(
+        inline double getEndEffectorPoseError(
             const arma::Col<double>::fixed<6>& endEffectorPose,
             const arma::Row<double>& redundantJointActuations) const;
 
@@ -232,7 +232,7 @@ namespace mant {
       return arma::join_cols(getTriangulation(passiveJointPositions.col(0), linkLengths_(1, 0), passiveJointPositions.col(1), linkLengths_(1, 1), passiveJointPositions.col(2), linkLengths_(1, 2)), endEffectorRotation);
     }
 
-    inline double ParallelKinematicMachine3PRUS::getEndEffectorPoseAccuracy(
+    inline double ParallelKinematicMachine3PRUS::getEndEffectorPoseError(
         const arma::Col<double>::fixed<6>& endEffectorPose,
         const arma::Row<double>& redundantJointActuations) const {
       const arma::Cube<double>::fixed<3, 3, 3>& model = getModel(endEffectorPose, redundantJointActuations);

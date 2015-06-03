@@ -38,7 +38,14 @@ namespace mant {
 
   inline void Rng::setRandomSeed() noexcept {
     arma::arma_rng::set_seed_random();
+#if defined(MANTELLA_USE_MPI)
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    
+    setSeed(arma::randi<arma::Col<unsigned int>>(1)(0) + rank * arma::randi<arma::Col<unsigned int>>(1)(0));
+#else
     setSeed(arma::randi<arma::Col<unsigned int>>(1)(0));
+#endif
   }
 
   inline unsigned int Rng::getSeed() noexcept {
