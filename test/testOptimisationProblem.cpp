@@ -11,17 +11,15 @@
 
 class TestOptimisationProblem : public mant::OptimisationProblem<double> {
   public:
-
     TestOptimisationProblem(
         const unsigned int numberOfDimensions)
       : mant::OptimisationProblem<double>(numberOfDimensions) {}
 
     std::string toString() const noexcept override {
-      return "TestOptimisationProblem";
+      return "test_optimisation_problem";
     }
 
   protected:
-
     double getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const noexcept override {
       double defect = 0;
@@ -36,17 +34,15 @@ class TestOptimisationProblem : public mant::OptimisationProblem<double> {
 
 class TestSoftConstraintsOptimisationProblem : public mant::OptimisationProblem<double> {
   public:
-
     TestSoftConstraintsOptimisationProblem(
         const unsigned int numberOfDimensions)
       : mant::OptimisationProblem<double>(numberOfDimensions) {}
 
     std::string toString() const noexcept override {
-      return "TestSoftConstraintsOptimisationProblem";
+      return "test_soft_constraints_optimisation_problem";
     }
 
   protected:
-
     double getSoftConstraintsValueImplementation(
         const arma::Col<double>& parameter) const noexcept override {
       double defect = 0;
@@ -93,7 +89,6 @@ TEST_CASE("optimationProblem: getLowerBounds(...)", "") {
 }
 
 TEST_CASE("optimationProblem: getUpperBounds(...)", "") {
-
   SECTION("Check default value") {
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(10));
     arma::Col<double>::fixed<10> expected;
@@ -115,7 +110,6 @@ TEST_CASE("optimationProblem: getUpperBounds(...)", "") {
 }
 
 TEST_CASE("optimationProblem: setLowerBounds(...)", "") {
-
   SECTION("Check parametrisation of the lower bounds.") {
     std::array<arma::Col<double>, 3> expecteds;
     expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
@@ -145,7 +139,6 @@ TEST_CASE("optimationProblem: setLowerBounds(...)", "") {
 }
 
 TEST_CASE("optimationProblem: setUpperBounds(...)", "") {
-
   SECTION("Check Sets the upper bounds of the search space of the upper bound.") {
     std::array<arma::Col<double>,3> expecteds;
     expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::min(),std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
@@ -637,16 +630,16 @@ TEST_CASE("optimationProblem: setObjectiveValueTranslation(...)", "") {
 }
 
 TEST_CASE("optimationProblem: setParameterPermutation(...)", "") {
-
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the permutation of the dimensions of the objective function."){
-    std::array<arma::Col<unsigned int>,5> permutations = {{
-                                                            arma::Col<unsigned int>{0,1,2,3,4},
-                                                            arma::Col<unsigned int>{0,2,1,3,4},
-                                                            arma::Col<unsigned int>{0,1,3,2,4},
-                                                            arma::Col<unsigned int>{4,1,2,3,0},
-                                                            arma::Col<unsigned int>{0,3,2,1,4}}};
+    std::array<arma::Col<unsigned int>,5> permutations = {
+      arma::Col<unsigned int>{0,1,2,3,4},
+      arma::Col<unsigned int>{0,2,1,3,4},
+      arma::Col<unsigned int>{0,1,3,2,4},
+      arma::Col<unsigned int>{4,1,2,3,0},
+      arma::Col<unsigned int>{0,3,2,1,4}
+    };
 
     arma::Col<double>::fixed<5> vector = {1.0,2.0,3.0,4.0,5.0};
 
@@ -693,12 +686,13 @@ TEST_CASE("optimationProblem: setParameterRotation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION(" Parameterises the rotation of the objective function."){
-    arma::Mat<double>::fixed<5,5> rotation = { 1.0,0.0,0.0,0.0,0.0,
-                                               0.0,1.0,0.0,0.0,0.0,
-                                               0.0,0.0,1.0,0.0,0.0,
-                                               0.0,0.0,0.0,1.0,0.0,
-                                               0.0,0.0,0.0,0.0,1.0
-                                             };
+    arma::Mat<double>::fixed<5,5> rotation = {
+      1.0,0.0,0.0,0.0,0.0,
+      0.0,1.0,0.0,0.0,0.0,
+      0.0,0.0,1.0,0.0,0.0,
+      0.0,0.0,0.0,1.0,0.0,
+      0.0,0.0,0.0,0.0,1.0
+    };
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
@@ -721,12 +715,14 @@ TEST_CASE("optimationProblem: setParameterRotation(...)", "") {
   }
 
   SECTION("Throws an exception, must be orthonormal") {
-    arma::Mat<double> expected = { 0.0,0.0,0.0,0.0,0.0,
-                                   0.0,0.0,0.0,0.0,0.0,
-                                   0.0,0.0,0.0,0.0,0.0,
-                                   0.0,0.0,0.0,0.0,0.0,
-                                   0.0,0.0,0.0,0.0,0.0
-                                 };
+    arma::Mat<double> expected = {
+      0.0,0.0,0.0,0.0,0.0,
+      0.0,0.0,0.0,0.0,0.0,
+      0.0,0.0,0.0,0.0,0.0,
+      0.0,0.0,0.0,0.0,0.0,
+      0.0,0.0,0.0,0.0,0.0
+    };
+    
     CHECK_THROWS_AS(optimisationProblem->setParameterRotation(expected), std::logic_error);
   }
 
@@ -781,7 +777,6 @@ TEST_CASE("optimationProblem: setParameterScaling(...)", "") {
 }
 
 TEST_CASE("optimationProblem: setParameterTranslation(...)", "") {
-
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the translation of the objective function."){
@@ -856,12 +851,12 @@ TEST_CASE("optimationProblem: reset(...)", "") {
 
   SECTION("Check upper bounds") {
     optimisationProblem->reset();
-    compare(optimisationProblem->getUpperBounds(), arma::Col<double> {-56.89,58.89,88.98,78.0});
+    compare(optimisationProblem->getUpperBounds(), arma::Col<double>{-56.89,58.89,88.98,78.0});
   }
 
   SECTION("Check lower bounds") {
     optimisationProblem->reset();
-    compare(optimisationProblem->getLowerBounds(), arma::Col<double> {-56.89,-58.89,-88.98,-78.0});
+    compare(optimisationProblem->getLowerBounds(), arma::Col<double>{-56.89,-58.89,-88.98,-78.0});
   }
 
   SECTION("Check acceptable objective value") {
@@ -888,11 +883,12 @@ TEST_CASE("optimationProblem: reset(...)", "") {
   }
 
   SECTION("Check parameter rotation") {
-    arma::Mat<double>::fixed<4,4> rotation = { 1.0,0.0,0.0,0.0,
-                                               0.0,1.0,0.0,0.0,
-                                               0.0,0.0,1.0,0.0,
-                                               0.0,0.0,0.0,1.0,
-                                             };
+    arma::Mat<double>::fixed<4,4> rotation = {
+      1.0,0.0,0.0,0.0,
+      0.0,1.0,0.0,0.0,
+      0.0,0.0,1.0,0.0,
+      0.0,0.0,0.0,1.0,
+    };
 
     optimisationProblem->setParameterRotation(rotation);
     optimisationProblem->reset();
