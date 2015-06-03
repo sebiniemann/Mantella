@@ -80,7 +80,7 @@ TEST_CASE("OptimationProblem.getLowerBounds(...)", "") {
     compare(optimisationProblem->getLowerBounds(), expected.fill(std::numeric_limits<double>::lowest()));
   }
 
-  SECTION("Check parameterisation by .setLowerBounds(...)") {
+  SECTION("Check parametrisation by .setLowerBounds(...)") {
     std::array<arma::Col<double>, 3> expecteds;
     expecteds.at(0) = arma::Col<double> {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
     expecteds.at(1) = arma::Col<double>({-56.89, 58.89});
@@ -158,7 +158,7 @@ TEST_CASE("OptimationProblem.setUpperBounds(...)", "") {
     }
   }
 
-  SECTION("Exeption tests") {
+  SECTION("Exception tests") {
     std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(2));
 
     SECTION("Throws an exception, if the number of elements of the upper bound is higher than the problem dimension") {
@@ -269,7 +269,7 @@ TEST_CASE("OptimationProblem.getCachedObjectiveValues(...)", "") {
 TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(3));
 
-  SECTION("Check Counts the number of disctinct, i.e. unique objective function evaluations") {
+  SECTION("Check Counts the number of distinct, i.e. unique objective function evaluations") {
     int count = 0;
     for (; count < 30; count++) {
       optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
@@ -428,7 +428,7 @@ TEST_CASE("OptimationProblem.getSoftConstraintsValue(...)", "") {
 TEST_CASE("OptimationProblem.isSatisfyingConstraints(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestSoftConstraintsOptimisationProblem(4));
 
-  SECTION("Check returns true, if fulfills all bound- and soft-constraints and false otherwise.") {
+  SECTION("Check returns true, if fulfils all bound- and soft-constraints and false otherwise.") {
     std::array<std::pair<arma::Col<double>, double>, 5> expecteds;
     expecteds.at(0).first = arma::Col<double> {134.0, 134.0, -60.96, -171.04};
     expecteds.at(1).first = arma::Col<double> {-345.0, -345.0, -345.0, -345.0};
@@ -610,7 +610,7 @@ TEST_CASE("OptimationProblem.setObjectiveValueScaling(...)", "") {
     expecteds.at(z).second = defect + std::abs(arma::accu(expecteds.at(z).first));
   }
 
-  SECTION("Parameterises the scaling of the objective value.") {
+  SECTION("Parametrises the scaling of the objective value.") {
     for (auto scale : scales) {
       optimisationProblem->setObjectiveValueScaling(scale);
       for (auto expected : expecteds) {
@@ -641,7 +641,7 @@ TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
     expecteds[z].second = defect + std::abs(arma::accu(expecteds.at(z).first));
   }
 
-  SECTION("Parameterises the translation of the objective value.") {
+  SECTION("Parametrises the translation of the objective value.") {
     for (auto translation : translations) {
       optimisationProblem->setObjectiveValueTranslation(translation);
       for (auto expected : expecteds) {
@@ -654,7 +654,7 @@ TEST_CASE("OptimationProblem.setObjectiveValueTranslation(...)", "") {
 TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION("Parameterises the permutation of the dimensions of the objective function.") {
+  SECTION("Parametrises the permutation of the dimensions of the objective function.") {
     std::array<arma::Col<unsigned int>, 5> permutations = {{
       arma::Col<unsigned int>({0, 1, 2, 3, 4}),
       arma::Col<unsigned int>({0, 2, 1, 3, 4}),
@@ -710,7 +710,7 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
 TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION(" Parameterises the rotation of the objective function.") {
+  SECTION(" Parametrises the rotation of the objective function.") {
     arma::Mat<double>::fixed<5, 5> rotation = {
       1.0, 0.0, 0.0, 0.0, 0.0,
       0.0, 1.0, 0.0, 0.0, 0.0,
@@ -768,7 +768,7 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION("Parameterises the scaling of the objective function.") {
+  SECTION("Parametrises the scaling of the objective function.") {
     std::array<arma::Col<double>, 3> scalings;
     scalings.at(0) = arma::Col<double>({8.56, -9.56, 0.0, 9.2, 77.1});
     scalings.at(1) = arma::Col<double>({7.8, 2.1, -7.2, 77.77, 8.2});
@@ -808,7 +808,7 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
-  SECTION("Parameterises the translation of the objective function.") {
+  SECTION("Parametrises the translation of the objective function.") {
     std::array<arma::Col<double>, 3> translations;
     translations.at(0) = arma::Col<double>({8.56, -9.56, 0.0, 9.2, 77.1});
     translations.at(1) = arma::Col<double>({7.8, 2.1, -7.2, 77.77, 8.2});
@@ -859,7 +859,7 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
   optimisationProblem->getObjectiveValue(arma::Col<double>({22.0, 22.0, 22.0, 22.0}));
 
 
-  SECTION("Check currect values") {
+  SECTION("Check correct values") {
     CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == 23);
     CHECK(optimisationProblem->getNumberOfEvaluations() == 25);
     CHECK(!optimisationProblem->getCachedObjectiveValues().empty());
