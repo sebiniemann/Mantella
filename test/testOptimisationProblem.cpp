@@ -271,8 +271,8 @@ TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
   SECTION("Check Counts the number of disctinct, i.e. unique objective function evaluations") {
     int count = 0;
     for (; count < 30; count++) {
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
     }
     CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == count);
   }
@@ -280,8 +280,8 @@ TEST_CASE("OptimationProblem.getNumberOfDistinctEvaluations(...)", "") {
   SECTION("Check use the .reset() method to reset this counter to 0.") {
     int count = 0;
     for (; count < 30; count++) {
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
     }
     optimisationProblem->reset();
     CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == 0);
@@ -294,7 +294,7 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
   SECTION("Check counts the number of ALL objective function evaluations") {
     int count = 0;
     for (; count < 30; count++) {
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
     }
     CHECK(optimisationProblem->getNumberOfEvaluations() == count);
   }
@@ -302,7 +302,7 @@ TEST_CASE("OptimationProblem.getNumberOfEvaluations(...)", "") {
   SECTION("Check use the .reset() method to reset this counter to 0.") {
     int count = 0;
     for (; count < 30; count++) {
-      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count*3.78, 3), std::fmod(count*3.78, 6), std::fmod(count*3.78, 9)});
+      optimisationProblem->getObjectiveValue(arma::Col<double> {std::fmod(count * 3.78, 3), std::fmod(count * 3.78, 6), std::fmod(count * 3.78, 9)});
     }
     optimisationProblem->reset();
     CHECK(optimisationProblem->getNumberOfEvaluations() == 0);
@@ -730,7 +730,7 @@ TEST_CASE("OptimationProblem.setParameterRotation(...)", "") {
 
     optimisationProblem->setParameterRotation(rotation);
     double actual = optimisationProblem->getObjectiveValue(parameter);
-    CHECK (actual == (defect + arma::sum(rotation*parameter) + optimisationProblem->getNumberOfEvaluations()));
+    CHECK (actual == (defect + arma::sum(rotation * parameter) + optimisationProblem->getNumberOfEvaluations()));
 
   }
 
@@ -815,7 +815,7 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
     for (auto translation : translations) {
-      arma::Col<double> expected = parameter+translation;
+      arma::Col<double> expected = parameter + translation;
 
       double defect = 0;
       for (unsigned int i = 0 ; i < expected.n_elem; i++) {
@@ -865,12 +865,12 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
 
   SECTION("Check number of evaluations") {
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getNumberOfEvaluations()==0);
+    CHECK(optimisationProblem->getNumberOfEvaluations() == 0);
   }
 
   SECTION("Check number of distinct evaluations") {
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getNumberOfDistinctEvaluations()==0);
+    CHECK(optimisationProblem->getNumberOfDistinctEvaluations() == 0);
   }
 
   SECTION("Check cached objective values") {
