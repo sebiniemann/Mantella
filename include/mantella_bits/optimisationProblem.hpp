@@ -185,7 +185,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return parameter < lowerBounds_;
+    return parameter >= lowerBounds_;
   }
 
   template <typename T, typename U>
@@ -193,7 +193,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return  parameter > upperBounds_;
+    return  parameter <= upperBounds_;
   }
 
   template <typename T, typename U>
@@ -209,7 +209,7 @@ namespace mant {
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
-    return (!arma::any(isWithinLowerBounds(parameter)) && !arma::any(isWithinUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
+    return (arma::all(isWithinLowerBounds(parameter)) && arma::all(isWithinUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
 
   template <typename T, typename U>
