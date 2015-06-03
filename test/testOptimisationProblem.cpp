@@ -654,13 +654,13 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(5));
 
   SECTION("Parameterises the permutation of the dimensions of the objective function.") {
-    std::array<arma::Col<unsigned int>, 5> permutations = {
-      arma::Col<unsigned int>{0, 1, 2, 3, 4},
-      arma::Col<unsigned int>{0, 2, 1, 3, 4},
-      arma::Col<unsigned int>{0, 1, 3, 2, 4},
-      arma::Col<unsigned int>{4, 1, 2, 3, 0},
-      arma::Col<unsigned int>{0, 3, 2, 1, 4}
-    };
+    std::array<arma::Col<unsigned int>, 5> permutations = {{
+      arma::Col<unsigned int>({0, 1, 2, 3, 4}),
+      arma::Col<unsigned int>({0, 2, 1, 3, 4}),
+      arma::Col<unsigned int>({0, 1, 3, 2, 4}),
+      arma::Col<unsigned int>({4, 1, 2, 3, 0}),
+      arma::Col<unsigned int>({0, 3, 2, 1, 4})
+    }};
 
     arma::Col<double>::fixed<5> vector = {1.0, 2.0, 3.0, 4.0, 5.0};
 
@@ -696,8 +696,9 @@ TEST_CASE("OptimationProblem.setParameterPermutation(...)", "") {
 
   SECTION("Throws an exception, all elements must be unique and within [0, number of dimensions - 1]") {
     arma::Col<unsigned int> permutations [] = {
-      arma::Col<unsigned int>{0, 5, 2, 3, 4},
-      arma::Col<unsigned int>{0, 1, 1, 3, 6}};
+      arma::Col<unsigned int>({0, 5, 2, 3, 4}),
+      arma::Col<unsigned int>({0, 1, 1, 3, 6})
+    };
 
     for (auto value:permutations) {
       // CHECK_THROWS_AS(optimisationProblem->setParameterPermutation(value), std::logic_error);
@@ -768,9 +769,9 @@ TEST_CASE("OptimationProblem.setParameterScaling(...)", "") {
 
   SECTION("Parameterises the scaling of the objective function.") {
     std::array<arma::Col<double>, 3> scalings;
-    scalings.at(0) = arma::Col<double>{8.56, -9.56, 0.0, 9.2, 77.1};
-    scalings.at(1) = arma::Col<double>{7.8, 2.1, -7.2, 77.77, 8.2};
-    scalings.at(2) = arma::Col<double>{1.0, 1.0, 1.0, 1.0, 1.0};
+    scalings.at(0) = arma::Col<double>({8.56, -9.56, 0.0, 9.2, 77.1});
+    scalings.at(1) = arma::Col<double>({7.8, 2.1, -7.2, 77.77, 8.2});
+    scalings.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 1.0, 1.0});
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
@@ -808,9 +809,9 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
 
   SECTION("Parameterises the translation of the objective function.") {
     std::array<arma::Col<double>, 3> translations;
-    translations.at(0) = arma::Col<double>{8.56, -9.56, 0.0, 9.2, 77.1};
-    translations.at(1) = arma::Col<double>{7.8, 2.1, -7.2, 77.77, 8.2};
-    translations.at(2) = arma::Col<double>{1.0, 1.0, 1.0, 1.0, 1.0};
+    translations.at(0) = arma::Col<double>({8.56, -9.56, 0.0, 9.2, 77.1});
+    translations.at(1) = arma::Col<double>({7.8, 2.1, -7.2, 77.77, 8.2});
+    translations.at(2) = arma::Col<double>({1.0, 1.0, 1.0, 1.0, 1.0});
 
     arma::Col<double> parameter = {0.0, -96.96, 87.56, 5.2, 326.4};
 
@@ -846,15 +847,15 @@ TEST_CASE("OptimationProblem.setParameterTranslation(...)", "") {
 TEST_CASE("OptimationProblem.reset(...)", "") {
   std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new TestOptimisationProblem(4));
 
-  optimisationProblem->setUpperBounds(arma::Col<double> {-56.89, 58.89, 88.98, 78.0});
-  optimisationProblem->setLowerBounds(arma::Col<double> {-56.89, -58.89, -88.98, -78.0});
+  optimisationProblem->setUpperBounds(arma::Col<double>({-56.89, 58.89, 88.98, 78.0}));
+  optimisationProblem->setLowerBounds(arma::Col<double>({-56.89, -58.89, -88.98, -78.0}));
   optimisationProblem->setAcceptableObjectiveValue(45.458);
 
   for (unsigned int i = 0; i != 23; i++) {
-    optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0} * i);
+    optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0}) * i);
   }
-  optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
-  optimisationProblem->getObjectiveValue(arma::Col<double>{22.0, 22.0, 22.0, 22.0});
+  optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0}));
+  optimisationProblem->getObjectiveValue(arma::Col<double>({22.0, 22.0, 22.0, 22.0}));
 
 
   SECTION("Check currect values") {
@@ -880,12 +881,12 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
 
   SECTION("Check upper bounds") {
     optimisationProblem->reset();
-    compare(optimisationProblem->getUpperBounds(), arma::Col<double>{-56.89, 58.89, 88.98, 78.0});
+    compare(optimisationProblem->getUpperBounds(), arma::Col<double>({-56.89, 58.89, 88.98, 78.0}));
   }
 
   SECTION("Check lower bounds") {
     optimisationProblem->reset();
-    compare(optimisationProblem->getLowerBounds(), arma::Col<double>{-56.89, -58.89, -88.98, -78.0});
+    compare(optimisationProblem->getLowerBounds(), arma::Col<double>({-56.89, -58.89, -88.98, -78.0}));
   }
 
   SECTION("Check acceptable objective value") {
@@ -896,19 +897,19 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
   SECTION("Check objective value scaling") {
     optimisationProblem->setObjectiveValueScaling(0.58);
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0}) == 5.0 * 0.58);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0})) == 5.0 * 0.58);
   }
 
   SECTION("Check objective value translation") {
     optimisationProblem->setObjectiveValueTranslation(15);
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0}) == 5.0 + 15.0);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0})) == 5.0 + 15.0);
   }
 
   SECTION("Check parameter permutation") {
-    optimisationProblem->setParameterPermutation(arma::Col<unsigned int> {0, 1, 3, 2});
+    optimisationProblem->setParameterPermutation(arma::Col<unsigned int>({0, 1, 3, 2}));
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 2.0}) == 7.0);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 2.0})) == 7.0);
   }
 
   SECTION("Check parameter rotation") {
@@ -921,13 +922,13 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
 
     optimisationProblem->setParameterRotation(rotation);
     optimisationProblem->reset();
-    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0}) == 5.0);
+    CHECK(optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0})) == 5.0);
   }
 
   SECTION("Check parameter scaling") {
-    optimisationProblem->setParameterScaling(arma::Col<double> {0.459, -7.25, 6.0, 17.08});
+    optimisationProblem->setParameterScaling(arma::Col<double>({0.459, -7.25, 6.0, 17.08}));
     optimisationProblem->reset();
-    arma::Col<double> expected = arma::Col<double>{1.0, 1.0, 1.0, 1.0} % arma::Col<double>{0.459, -7.25, 6.0, 17.08};
+    arma::Col<double> expected = arma::Col<double>({1.0, 1.0, 1.0, 1.0}) % arma::Col<double>({0.459, -7.25, 6.0, 17.08});
 
     double defect = 0;
     for (unsigned int i = 0 ; i < expected.n_elem; i++) {
@@ -937,14 +938,14 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
         }
       }
     }
-    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
+    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0}));
     CHECK(actual == arma::sum(expected) + defect + optimisationProblem->getNumberOfEvaluations());
   }
 
   SECTION("Check parameter translation") {
-    optimisationProblem->setParameterTranslation(arma::Col<double> {5.4569, 4.2, 5.0, -0.0003});
+    optimisationProblem->setParameterTranslation(arma::Col<double>({5.4569, 4.2, 5.0, -0.0003}));
     optimisationProblem->reset();
-    arma::Col<double> expected = arma::Col<double>{1.0, 1.0, 1.0, 1.0} - arma::Col<double>{5.4569, 4.2, 5.0, -0.0003};
+    arma::Col<double> expected = arma::Col<double>({1.0, 1.0, 1.0, 1.0}) - arma::Col<double>({5.4569, 4.2, 5.0, -0.0003});
 
     double defect = 0;
     for (unsigned int i = 0 ; i < expected.n_elem; i++) {
@@ -954,7 +955,7 @@ TEST_CASE("OptimationProblem.reset(...)", "") {
         }
       }
     }
-    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>{1.0, 1.0, 1.0, 1.0});
+    double actual = optimisationProblem->getObjectiveValue(arma::Col<double>({1.0, 1.0, 1.0, 1.0}));
     CHECK(actual == arma::sum(expected) + defect + optimisationProblem->getNumberOfEvaluations());
   }
 }
