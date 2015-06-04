@@ -452,25 +452,6 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
         CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
       }
     }
-      
-    SECTION("Checking the ordering between the permutation, scaling, translation and rotation of the parameter space.") {
-      const arma::Col<unsigned int>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
-      const arma::Col<double>& parameterScaling = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      const arma::Col<double>& parameterTranslation = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      const arma::Mat<double>& parameterRotation = mant::getRandomRotationMatrix(numberOfDimensions);
-    
-      optimisationProblem.setParameterPermutation(parameterPermutation);
-      optimisationProblem.setParameterScaling(parameterScaling);
-      optimisationProblem.setParameterTranslation(parameterTranslation);
-      optimisationProblem.setParameterRotation(parameterRotation);
-      
-      const arma::Col<double>& parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      const double expected = optimisationProblem.getObjectiveValueImplementation(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation));
-        
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
-      // Do it again, to ensure it also works with caching.
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
-    }
 
     SECTION("Exception tests") {
       SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
@@ -503,6 +484,77 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
+  SECTION("OptimisationProblem.reset(...)") {
+    SECTION("Checking if all parametrisations remain as given, after resetting the problem.") {
+      // Parametrises the optimisation problem.
+      const arma::Col<double>& lowerBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
+      optimisationProblem.setLowerBounds(lowerBounds);
+      const arma::Col<double>& upperBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
+      optimisationProblem.setUpperBounds(upperBounds);
+    
+      const double acceptableObjectiveValue = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
+      optimisationProblem.setAcceptableObjectiveValue(acceptableObjectiveValue);
+      
+      const double objectiveValueScaling = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
+      optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
+      const double objectiveValueTranslation = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
+      optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
+      
+      const arma::Col<unsigned int>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
+      optimisationProblem.setParameterPermutation(parameterPermutation);
+      
+      // Reset the problem.
+      optimisationProblem.reset();
+      
+      compare(optimisationProblem.getLowerBounds(), lowerBounds);
+      compare(optimisationProblem.getUpperBounds(), upperBounds);
+      
+      CHECK(optimisationProblem.getAcceptableObjectiveValue() == acceptableObjectiveValue);
+      
+      const arma::Col<double> parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
+      
+      double expected = objectiveValueScaling * optimisationProblem.getSoftConstraintsValueImplementation(parameter);
+      CHECK(optimisationProblem.getSoftConstraintsValue(parameter) == expected);
+      expected = objectiveValueScaling * optimisationProblem.getObjectiveValueImplementation(parameter.elem(parameterPermutation)) + objectiveValueTranslation;
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
+    }
+    
+    SECTION("Checking if all counters are reset and the cache is emptied.") {
+      // Increase the evaluation counter ad populate the cache.
+      for (std::size_t n = 0; n < 10; ++n) {
+        optimisationProblem.getSoftConstraintsValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
+        optimisationProblem.getObjectiveValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
+      }
+      
+      // Reset the problem.
+      optimisationProblem.reset();
+      
+      CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
+      CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
+      CHECK(optimisationProblem.getCachedObjectiveValues().size() == 0);
+    }
+  }
+}
+
+TEST_CASE("OptimisationProblem<T> (floating point type)") {
+  class DummyOptimisationProblem : public mant::OptimisationProblem<double> {
+    public:
+      using mant::OptimisationProblem<double>::OptimisationProblem;
+
+      std::string toString() const noexcept override {
+        return "test_optimisation_problem";
+      }
+    
+      double getObjectiveValueImplementation(
+          const arma::Col<double>& parameter) const noexcept override {
+        // The objective value is a weighted sum of the parameter values.
+        return arma::accu(parameter % arma::linspace<arma::Col<double>>(1, numberOfDimensions_, numberOfDimensions_));
+      }
+  };
+
+  std::size_t numberOfDimensions = 5;
+  DummyOptimisationProblem optimisationProblem(numberOfDimensions);
+
   SECTION("OptimisationProblem.setParameterRotation(...)") {
     SECTION("Checking the parametrisation of the rotation of the parameter space.") {
       std::array<arma::Mat<double>, 2> parameterRotations = {{
@@ -522,8 +574,24 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       }
     }
     
-    // The ordering between between the permutation, scaling, translation and rotation of the
-    // parameter space is already checked within OptimisationProblem.setParameterPermutation(...).
+    SECTION("Checking the ordering between the permutation, scaling, translation and rotation of the parameter space.") {
+      const arma::Col<unsigned int>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
+      const arma::Col<double>& parameterScaling = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
+      const arma::Col<double>& parameterTranslation = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
+      const arma::Mat<double>& parameterRotation = mant::getRandomRotationMatrix(numberOfDimensions);
+    
+      optimisationProblem.setParameterPermutation(parameterPermutation);
+      optimisationProblem.setParameterScaling(parameterScaling);
+      optimisationProblem.setParameterTranslation(parameterTranslation);
+      optimisationProblem.setParameterRotation(parameterRotation);
+      
+      const arma::Col<double>& parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
+      const double expected = optimisationProblem.getObjectiveValueImplementation(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation));
+        
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
+      // Do it again, to ensure it also works with caching.
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
+    }
 
     SECTION("Exception tests") {
       SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
@@ -556,7 +624,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
     
     // The ordering between between the permutation, scaling, translation and rotation of the
-    // parameter space is already checked within OptimisationProblem.setParameterPermutation(...).
+    // parameter space is already checked within OptimisationProblem.setParameterRotation(...).
 
     SECTION("Exception tests") {
       SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
@@ -592,7 +660,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
     
     // The ordering between between the permutation, scaling, translation and rotation of the
-    // parameter space is already checked within OptimisationProblem.setParameterPermutation(...).
+    // parameter space is already checked within OptimisationProblem.setParameterRotation(...).
 
     SECTION("Exception tests") {
       SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
@@ -616,22 +684,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
 
   SECTION("OptimisationProblem.reset(...)") {
     SECTION("Checking if all parametrisations remain as given, after resetting the problem.") {
-      // Fully parametrise the optimisation problem.
-      const arma::Col<double>& lowerBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      optimisationProblem.setLowerBounds(lowerBounds);
-      const arma::Col<double>& upperBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      optimisationProblem.setUpperBounds(upperBounds);
-    
-      const double acceptableObjectiveValue = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
-      optimisationProblem.setAcceptableObjectiveValue(acceptableObjectiveValue);
-      
-      const double objectiveValueScaling = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
-      optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      const double objectiveValueTranslation = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
-      optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-      
-      const arma::Col<unsigned int>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
-      optimisationProblem.setParameterPermutation(parameterPermutation);
+      // Parametrises the optimisation problem.
       const arma::Mat<double>& parameterRotation = mant::getRandomRotationMatrix(numberOfDimensions);
       optimisationProblem.setParameterRotation(parameterRotation);
       const arma::Col<double>& parameterScaling = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
@@ -642,32 +695,9 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       // Reset the problem.
       optimisationProblem.reset();
       
-      compare(optimisationProblem.getLowerBounds(), lowerBounds);
-      compare(optimisationProblem.getUpperBounds(), upperBounds);
-      
-      CHECK(optimisationProblem.getAcceptableObjectiveValue() == acceptableObjectiveValue);
-      
       const arma::Col<double> parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      
-      double expected = objectiveValueScaling * optimisationProblem.getSoftConstraintsValueImplementation(parameter);
-      CHECK(optimisationProblem.getSoftConstraintsValue(parameter) == expected);
-      expected = objectiveValueScaling * optimisationProblem.getObjectiveValueImplementation(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation;
+      const double expected =  optimisationProblem.getObjectiveValueImplementation(parameterRotation * (parameterScaling % parameter - parameterTranslation));
       CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
-    }
-    
-    SECTION("Checking if all counters are reset and the cache is emptied.") {
-      // Increase the evaluation counter ad populate the cache.
-      for (std::size_t n = 0; n < 10; ++n) {
-        optimisationProblem.getSoftConstraintsValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
-        optimisationProblem.getObjectiveValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
-      }
-      
-      // Reset the problem.
-      optimisationProblem.reset();
-      
-      CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-      CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-      CHECK(optimisationProblem.getCachedObjectiveValues().size() == 0);
     }
   }
 }
