@@ -11,26 +11,40 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 TEST_CASE("bbob::AttractiveSectorFunction", "") {
-  for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::AttractiveSectorFunction<> attractiveSectorFunction(numberOfDimensions);
+  arma::Mat<double> parameters;
+  arma::Col<double> translation;
+  arma::Mat<double> rotationR;
+  arma::Mat<double> rotationQ;
+  arma::Col<double> expected;
 
-    arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+  SECTION("Dimmension 2"){
+    mant::bbob::AttractiveSectorFunction<> attractiveSectorFunction(2);
 
-    arma::Col<double> translation;
-    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    parameters = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_2x10.input"
+    };
+    parameters.reshape(2,10);
 
-    arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    translation = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_2x1.input"
+    };
+    translation.reshape(2,1);
 
-    arma::Mat<double> rotationQ;
-    rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationR = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_2x2_2.input"
+    };
+    rotationR.reshape(2,2);
 
-    arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedAttractiveSectorFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    rotationQ = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_2x2_1.input"
+    };
+    rotationQ.reshape(2,2);
+
+    expected = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_attractiveSectorFunction_dim2.expected"
+    };
+    expected.reshape(10,1);
 
     attractiveSectorFunction.setObjectiveValueTranslation(0);
     attractiveSectorFunction.setParameterTranslation(translation);
@@ -41,6 +55,45 @@ TEST_CASE("bbob::AttractiveSectorFunction", "") {
       CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
+
+  SECTION("Dimmension 40"){
+    mant::bbob::AttractiveSectorFunction<> attractiveSectorFunction(40);
+
+    parameters = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x10.input"
+    };
+    parameters.reshape(40,10);
+
+    translation = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_40x1.input"
+    };
+    translation.reshape(40,1);
+
+    rotationR = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_40x40_2.input"
+    };
+    rotationR.reshape(40,40);
+
+    rotationQ = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_40x40_1.input"
+    };
+    rotationQ.reshape(40,40);
+
+    expected = {
+  #include "../../data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_attractiveSectorFunction_dim40.expected"
+    };
+    expected.reshape(10,1);
+
+    attractiveSectorFunction.setObjectiveValueTranslation(0);
+    attractiveSectorFunction.setParameterTranslation(translation);
+    attractiveSectorFunction.setParameterRotation(rotationR);
+    attractiveSectorFunction.setRotationQ(rotationQ);
+
+    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+      CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+    }
+  }
+
 
   SECTION("Returns the specified class name.") {
     CHECK(mant::bbob::AttractiveSectorFunction<>(5).toString() == "bbob_attractive_sector_function");
