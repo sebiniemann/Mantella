@@ -27,16 +27,23 @@ namespace mant {
   template <typename T>
   bool isRotationMatrix(
       const arma::Mat<T>& parameter) noexcept {
-    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
-
-    // is suqare?
+    // Is the rotation matrix square?
     if (!parameter.is_square()) {
       return false;
-    // is orthonormal?
-    } else if(arma::any(arma::vectorise(arma::abs(parameter.i() - parameter.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(parameter))))))) {
+    }
+      
+    // Is its determinant either 1 or -1?
+    if(std::abs(std::abs(arma::det(parameter)) - 1.0) > 1.0e-12) {
       return false;
-    // determinant is either 1 or -1?
-    } else if(std::abs(std::abs(arma::det(parameter)) - 1.0) > 1.0e-12) {
+    }
+      
+    // Is the rotation matrix square?
+    // For (nearly) singular matrices, the inversion might throw an exception.
+    try {
+      if(arma::any(arma::vectorise(arma::abs(parameter.i() - parameter.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(parameter))))))) {
+        return false;
+      }
+    } catch (...) {
       return false;
     }
 
@@ -47,7 +54,16 @@ namespace mant {
       const arma::Col<unsigned int>& parameter,
       const std::size_t lowerBound,
       const std::size_t upperBound) noexcept {
-    // TODO Add logic
+    // Are all elements within [lowerBound, upperBound]?
+    if (arma::any(parameter < lowerBound) || arma::any(parameter > upperBound)) {
+      return false;
+    }
+    
+    // Are all elements unique?
+    if (static_cast<arma::Col<unsigned int>>(arma::unique(parameter)).n_elem != parameter.n_elem) {
+      return false;
+    }
+    
     return true;
   }
 }
