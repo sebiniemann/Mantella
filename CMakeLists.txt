@@ -158,7 +158,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
