@@ -141,7 +141,7 @@ if(BUILD_TESTS)
     test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp

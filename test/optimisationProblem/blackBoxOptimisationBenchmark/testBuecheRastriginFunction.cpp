@@ -18,16 +18,13 @@ TEST_CASE("bbob::BuecheRastriginFunction", "") {
     mant::bbob::BuecheRastriginFunction<> buecheRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
 
     arma::Col<double> translation;
-    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/translation,dim" + std::to_string(numberOfDimensions) +".mat");
-    for (std::size_t n = 0; n < translation.n_elem; n += 2) {
-      translation(n) = std::abs(translation(n));
-    }
+    REQUIRE(translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translationEvenAbs_" + std::to_string(numberOfDimensions) + "x1.input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedBuecheRastriginFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_buecheRastriginFunction_dim" + std::to_string(numberOfDimensions) +".expected"));
 
     buecheRastriginFunction.setObjectiveValueTranslation(0);
     buecheRastriginFunction.setParameterTranslation(translation);
