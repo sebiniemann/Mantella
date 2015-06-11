@@ -18,16 +18,19 @@ TEST_CASE("bbob::LinearSlope", "") {
     mant::bbob::LinearSlope<> linearSlope(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
 
     arma::Mat<double> one;
-    one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/one,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_one_" + std::to_string(numberOfDimensions) +"x1.input"));
+
+    arma::Mat<double> rotation;
+    REQUIRE(rotation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_rotationsMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) +".input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedLinearSlope,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_linearSlope_dim" + std::to_string(numberOfDimensions) +".expected"));
 
     linearSlope.setObjectiveValueTranslation(0);
-    linearSlope.setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions) * (one(0) > 0 ? 1.0 : -1.0));
+    linearSlope.setParameterRotation(rotation);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));

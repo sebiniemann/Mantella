@@ -150,7 +150,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
