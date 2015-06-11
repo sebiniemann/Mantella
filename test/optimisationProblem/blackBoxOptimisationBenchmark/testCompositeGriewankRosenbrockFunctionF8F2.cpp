@@ -18,13 +18,13 @@ TEST_CASE("bbob::CompositeGriewankRosenbrockFunctionF8F2", "") {
     mant::bbob::CompositeGriewankRosenbrockFunctionF8F2<> compositeGriewankRosenbrockFunctionF8F2(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedCompositeGriewankRosenbrockFunctionF8F2,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_compositeGriewankRosenbrockFunctionF8F2_dim" + std::to_string(numberOfDimensions) +".expected"));
 
     compositeGriewankRosenbrockFunctionF8F2.setObjectiveValueTranslation(0);
     compositeGriewankRosenbrockFunctionF8F2.setParameterRotation(rotationR);
