@@ -162,7 +162,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
   )
 
   # Link against third party libraries
