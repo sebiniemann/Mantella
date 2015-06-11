@@ -153,7 +153,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
