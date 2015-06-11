@@ -145,7 +145,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
 #   test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
