@@ -18,13 +18,13 @@ TEST_CASE("bbob::RosenbrockFunctionRotated", "") {
     mant::bbob::RosenbrockFunctionRotated<> rosenbrockFunctionRotated(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedRosenbrockFunctionRotated,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_rosenbrockFunctionRotated_dim" + std::to_string(numberOfDimensions) +".expected"));
 
     rosenbrockFunctionRotated.setObjectiveValueTranslation(0);
     rosenbrockFunctionRotated.setParameterRotation(rotationR);
