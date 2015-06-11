@@ -18,16 +18,16 @@ TEST_CASE("bbob::BentCigarFunction", "") {
     mant::bbob::BentCigarFunction<> bentCigarFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    CHECK(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input") );
+    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
 
     arma::Col<double> translation;
-    CHECK(translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) + "x1.input") );
+    REQUIRE(translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) + "x1.input"));
 
     arma::Mat<double> rotationR;
-    CHECK(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input") );
+    REQUIRE(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input"));
 
     arma::Col<double> expected;
-    CHECK(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_bentCigarFunction_dim" + std::to_string(numberOfDimensions) + ".expected") );
+    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_bentCigarFunction_dim" + std::to_string(numberOfDimensions) + ".expected"));
 
     bentCigarFunction.setObjectiveValueTranslation(0);
     bentCigarFunction.setParameterTranslation(translation);
