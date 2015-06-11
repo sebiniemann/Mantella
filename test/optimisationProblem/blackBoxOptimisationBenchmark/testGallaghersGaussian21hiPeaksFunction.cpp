@@ -18,19 +18,19 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
     mant::bbob::GallaghersGaussian21hiPeaksFunction<> gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input"));
 
     arma::Mat<double> deltaC21;
-    deltaC21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/deltaC21,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(deltaC21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_deltaC21_21x1_dim" + std::to_string(numberOfDimensions) +".input"));
 
     arma::Mat<double> localOptimaY21;
-    localOptimaY21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/localOptimaY21,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(localOptimaY21.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptimaY21_" + std::to_string(numberOfDimensions) +"x21.input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedGallaghersGaussian21hiPeaksFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_gallaghersGaussian21hiPeaksFunction_dim" + std::to_string(numberOfDimensions) +".expected"));
 
     gallaghersGaussian21hiPeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian21hiPeaksFunction.setRotationQ(rotationR);
