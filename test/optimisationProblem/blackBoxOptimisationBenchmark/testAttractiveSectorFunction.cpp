@@ -18,19 +18,19 @@ TEST_CASE("bbob::AttractiveSectorFunction", "") {
     mant::bbob::AttractiveSectorFunction<> attractiveSectorFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    CHECK( parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +"x10.input") );
 
     arma::Col<double> translation;
-    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    CHECK( translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +"x1.input") );
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    CHECK( rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input") );
 
     arma::Mat<double> rotationQ;
-    rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
+    CHECK( rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_1.input") );
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedAttractiveSectorFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    CHECK( expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_attractiveSectorFunction_dim" + std::to_string(numberOfDimensions) +".expected") );
 
     attractiveSectorFunction.setObjectiveValueTranslation(0);
     attractiveSectorFunction.setParameterTranslation(translation);
