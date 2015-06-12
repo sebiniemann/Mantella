@@ -73,8 +73,8 @@ int main() {
 Compile and build an executable from your source.
 ```bash
 c++ -std=c++11 hello.cpp -larmadillo -o hello
-# In case armadillo and mantella were not installed/placed into 
-# standardly included/searched system direcories, use the following
+# In case Armadillo and Mantella were not installed/placed into 
+# standardly included/searched system directories, use the following
 c++ -std=c++11 hello.cpp -L/path/to/armaillo/lib -larmadillo -I/path/to/armadillo/include -I/path/to/mantella/include -o hello
 ```
 
