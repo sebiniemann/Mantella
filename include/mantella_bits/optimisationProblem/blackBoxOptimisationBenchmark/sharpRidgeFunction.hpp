@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class SharpRidgeFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class SharpRidgeFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit SharpRidgeFunction(
@@ -19,7 +18,7 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_MPI)
@@ -39,18 +38,18 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    SharpRidgeFunction<T, U>::SharpRidgeFunction(
+    template <typename T>
+    SharpRidgeFunction<T>::SharpRidgeFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
       this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    template <typename T, typename U>
-    void SharpRidgeFunction<T, U>::setRotationQ(
+    template <typename T>
+    void SharpRidgeFunction<T>::setRotationQ(
         const arma::Mat<T>& rotationQ) {
       verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
@@ -58,21 +57,21 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    template <typename T, typename U>
-    U SharpRidgeFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double SharpRidgeFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = rotationQ_ * (parameterConditioning_ %  parameter);
-      return std::pow(static_cast<U>(z(0)), static_cast<U>(2.0L)) + static_cast<U>(100.0L) * static_cast<U>(arma::norm(z.tail(z.n_elem - 1)));
+      return std::pow(static_cast<double>(z(0)), 2.0) + 100.0 * static_cast<double>(arma::norm(z.tail(z.n_elem - 1)));
     }
 
-    template <typename T, typename U>
-    std::string SharpRidgeFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string SharpRidgeFunction<T>::toString() const noexcept {
       return "bbob_sharp_ridge_function";
     }
 
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> SharpRidgeFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> SharpRidgeFunction<T>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
@@ -82,8 +81,8 @@ namespace mant {
       return serialisedOptimisationProblem;
     }
 
-    template <typename T, typename U>
-    void SharpRidgeFunction<T, U>::deserialise(
+    template <typename T>
+    void SharpRidgeFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {

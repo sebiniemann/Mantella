@@ -1,10 +1,10 @@
 namespace mant {
   template <typename T = double>
-  class QuadraticFunctionModelAnalysis : public PassivePropertyAnalysis<T, T> {
-    static_assert(std::is_floating_point<T>::value, "T must be a floating point type.");
+  class QuadraticFunctionModelAnalysis : public PassivePropertyAnalysis<T> {
+    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
     
     public:
-      using PassivePropertyAnalysis<T, T>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
 
       arma::Col<double> getCoefficients() const noexcept;
 
@@ -14,7 +14,7 @@ namespace mant {
       arma::Col<double> coefficients_;
 
       void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
@@ -28,12 +28,11 @@ namespace mant {
 
   template <typename T>
   void QuadraticFunctionModelAnalysis<T>::analyseImplementation(
-      const std::unordered_map<arma::Col<T>, T, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     assert(parameterToObjectiveValueMappings.size() > 1);
     
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem * (parameterToObjectiveValueMappings.cbegin()->first.n_elem + 3) / 2 + 1, parameterToObjectiveValueMappings.size());
-    arma::Col<T> objectiveValues(parameters.n_cols);
-
+    arma::Col<double> objectiveValues(parameters.n_cols);
     std::size_t n = 0;
     for (const auto& parameterToObjectiveValueMapping : parameterToObjectiveValueMappings) {
       const arma::Col<T>& parameter = parameterToObjectiveValueMapping.first;
@@ -51,12 +50,12 @@ namespace mant {
       objectiveValues(n) = parameterToObjectiveValueMapping.second;
       ++n;
     }
-    parameters.row(parameters.n_rows - 1).fill(1.0);
+    parameters.row(parameters.n_rows - 1).fill(static_cast<T>(1.0L));
 
     try {
-      coefficients_ = (parameters * parameters.t()).i() * parameters * objectiveValues;
+      coefficients_ = arma::conv_to<arma::Mat<double>>::from((parameters * parameters.t()).i() * parameters) * objectiveValues;
     } catch (...) {
-      coefficients_ = arma::pinv(parameters * parameters.t()) * parameters * objectiveValues;
+      coefficients_ = arma::conv_to<arma::Mat<double>>::from(arma::pinv(parameters * parameters.t()) * parameters) * objectiveValues;
     }
   }
 

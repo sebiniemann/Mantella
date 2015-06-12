@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit StepEllipsoidalFunction(
@@ -20,10 +19,10 @@ namespace mant {
 
         arma::Mat<T> rotationQ_;
 
-        U getSoftConstraintsValueImplementation(
+        double getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_MPI)
@@ -43,10 +42,10 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    StepEllipsoidalFunction<T, U>::StepEllipsoidalFunction(
+    template <typename T>
+    StepEllipsoidalFunction<T>::StepEllipsoidalFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
         firstParameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))),
         secondParameterConditioning_(this->getParameterConditioning(static_cast<T>(100.0L))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
@@ -54,8 +53,8 @@ namespace mant {
       setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    template <typename T, typename U>
-    void StepEllipsoidalFunction<T, U>::setRotationQ(
+    template <typename T>
+    void StepEllipsoidalFunction<T>::setRotationQ(
         const arma::Mat<T>& rotationQ) {
       verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
@@ -63,14 +62,14 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    template <typename T, typename U>
-    U StepEllipsoidalFunction<T, U>::getSoftConstraintsValueImplementation(
+    template <typename T>
+    double StepEllipsoidalFunction<T>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       return this->getBoundConstraintsValue(parameter);
     }
     
-    template <typename T, typename U>
-    U StepEllipsoidalFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double StepEllipsoidalFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& s = firstParameterConditioning_ % parameter;
 
@@ -85,17 +84,17 @@ namespace mant {
         }
       }
 
-      return static_cast<U>(0.1L) * std::max(std::abs(static_cast<U>(s(0))) / static_cast<U>(10000.0L), static_cast<U>(arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z))));
+      return 0.1 * std::max(std::abs(static_cast<double>(s(0))) / 10000.0, static_cast<double>(arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z))));
     }
 
-    template <typename T, typename U>
-    std::string StepEllipsoidalFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string StepEllipsoidalFunction<T>::toString() const noexcept {
       return "bbob_step_ellipsoidal_function";
     }
 
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> StepEllipsoidalFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> StepEllipsoidalFunction<T>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
@@ -105,8 +104,8 @@ namespace mant {
       return serialisedOptimisationProblem;
     }
 
-    template <typename T, typename U>
-    void StepEllipsoidalFunction<T, U>::deserialise(
+    template <typename T>
+    void StepEllipsoidalFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {

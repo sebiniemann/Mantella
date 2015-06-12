@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class RastriginFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class RastriginFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit RastriginFunction(
@@ -14,7 +13,7 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_MPI)
@@ -34,35 +33,35 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    RastriginFunction<T, U>::RastriginFunction(
+    template <typename T>
+    RastriginFunction<T>::RastriginFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
     }
 
-    template <typename T, typename U>
-    U RastriginFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double RastriginFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       const arma::Col<T>& z = parameterConditioning_ % this->getAsymmetricParameter(static_cast<T>(0.2L), this->getOscillatedParameter(parameter));
 
-      return static_cast<U>(10.0L) * (static_cast<U>(this->numberOfDimensions_) - static_cast<U>(arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z)))) + std::pow(static_cast<U>(arma::norm(z)), static_cast<U>(2.0L));
+      return 10.0 * (static_cast<double>(this->numberOfDimensions_) - static_cast<double>(arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z)))) + std::pow(static_cast<double>(arma::norm(z)), 2.0);
     }
 
-    template <typename T, typename U>
-    std::string RastriginFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string RastriginFunction<T>::toString() const noexcept {
       return "bbob_rastrigin_function";
     }
     
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> RastriginFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> RastriginFunction<T>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
-    template <typename T, typename U>
-    void RastriginFunction<T, U>::deserialise(
+    template <typename T>
+    void RastriginFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }

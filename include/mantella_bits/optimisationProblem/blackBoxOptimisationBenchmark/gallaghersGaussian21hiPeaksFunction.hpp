@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class GallaghersGaussian21hiPeaksFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit GallaghersGaussian21hiPeaksFunction(
@@ -21,7 +20,7 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        const typename arma::Col<U>::template fixed<21> weight_;
+        const typename arma::Col<double>::fixed<21> weight_;
 
         arma::Mat<T> rotationQ_;
         arma::Mat<T> localParameterConditionings_;
@@ -31,10 +30,10 @@ namespace mant {
 
         arma::Mat<T> getRandomLocalParameterTranslations() const noexcept;
 
-        U getSoftConstraintsValueImplementation(
+        double getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_MPI)
@@ -54,18 +53,18 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    GallaghersGaussian21hiPeaksFunction<T, U>::GallaghersGaussian21hiPeaksFunction(
+    template <typename T>
+    GallaghersGaussian21hiPeaksFunction<T>::GallaghersGaussian21hiPeaksFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
-        weight_(arma::join_cols(arma::Col<U>({static_cast<U>(10.0L)}), arma::linspace<arma::Col<U>>(static_cast<U>(1.1L), static_cast<U>(9.1L), 20))) {
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
+        weight_(arma::join_cols(arma::Col<double>({10.0}), arma::linspace<arma::Col<double>>(1.1, 9.1, 20))) {
       setRotationQ(getRandomRotationMatrix(this->numberOfDimensions_));
       setLocalParameterConditionings(getRandomLocalParameterConditionings());
       setLocalParameterTranslations(getRandomLocalParameterTranslations());
     }
 
-    template <typename T, typename U>
-    void GallaghersGaussian21hiPeaksFunction<T, U>::setRotationQ(
+    template <typename T>
+    void GallaghersGaussian21hiPeaksFunction<T>::setRotationQ(
         const arma::Mat<T>& rotationQ) {
       verify(rotationQ.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
@@ -73,8 +72,8 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    template <typename T, typename U>
-    void GallaghersGaussian21hiPeaksFunction<T, U>::setLocalParameterConditionings(
+    template <typename T>
+    void GallaghersGaussian21hiPeaksFunction<T>::setLocalParameterConditionings(
         const arma::Mat<T>& localParameterConditionings) {
       verify(localParameterConditionings.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(localParameterConditionings.n_cols == 21, "The number of columns must be equal to the number of peaks (21).");
@@ -82,8 +81,8 @@ namespace mant {
       localParameterConditionings_ = localParameterConditionings;
     }
 
-    template <typename T, typename U>
-    void GallaghersGaussian21hiPeaksFunction<T, U>::setLocalParameterTranslations(
+    template <typename T>
+    void GallaghersGaussian21hiPeaksFunction<T>::setLocalParameterTranslations(
         const arma::Mat<T>& localParameterTranslations) {
       verify(localParameterTranslations.n_rows == this->numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
       verify(localParameterTranslations.n_cols == 21, "The number of columns must be equal to the number of peaks (21).");
@@ -91,8 +90,8 @@ namespace mant {
       localParameterTranslations_ = localParameterTranslations;
     }
 
-    template <typename T, typename U>
-    arma::Mat<T> GallaghersGaussian21hiPeaksFunction<T, U>::getRandomLocalParameterConditionings() const noexcept {
+    template <typename T>
+    arma::Mat<T> GallaghersGaussian21hiPeaksFunction<T>::getRandomLocalParameterConditionings() const noexcept {
       arma::Col<T> conditions(21);
       conditions(0) = static_cast<T>(19.0L);
       conditions.tail(conditions.n_elem - 1) = arma::conv_to<arma::Col<T>>::from(getRandomPermutation(conditions.n_elem - 1));
@@ -106,40 +105,40 @@ namespace mant {
       return localParameterConditionings;
     }
 
-    template <typename T, typename U>
-    arma::Mat<T> GallaghersGaussian21hiPeaksFunction<T, U>::getRandomLocalParameterTranslations() const noexcept {
+    template <typename T>
+    arma::Mat<T> GallaghersGaussian21hiPeaksFunction<T>::getRandomLocalParameterTranslations() const noexcept {
       arma::Mat<T> localParameterTranslations = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, 21) * static_cast<T>(9.8L) - static_cast<T>(4.9L);
       localParameterTranslations.col(0) = static_cast<T>(0.8L) * localParameterTranslations.col(0);
 
       return localParameterTranslations;
     }
 
-    template <typename T, typename U>
-    U GallaghersGaussian21hiPeaksFunction<T, U>::getSoftConstraintsValueImplementation(
+    template <typename T>
+    double GallaghersGaussian21hiPeaksFunction<T>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       return this->getBoundConstraintsValue(parameter);
     }
 
-    template <typename T, typename U>
-    U GallaghersGaussian21hiPeaksFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double GallaghersGaussian21hiPeaksFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      U maximalValue = std::numeric_limits<U>::lowest();
+      double maximalValue = std::numeric_limits<double>::lowest();
       for (std::size_t k = 0; k < 21; ++k) {
         const arma::Col<T>& locallyTranslatedParameter = parameter - localParameterTranslations_.col(k);
-        maximalValue = std::max(maximalValue, weight_(k) * std::exp(static_cast<U>(-0.5L) / static_cast<U>(this->numberOfDimensions_) * static_cast<U>(arma::dot(locallyTranslatedParameter, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(k)) * rotationQ_ * locallyTranslatedParameter))));
+        maximalValue = std::max(maximalValue, weight_(k) * std::exp(-0.5 / static_cast<double>(this->numberOfDimensions_) * static_cast<double>(arma::dot(locallyTranslatedParameter, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(k)) * rotationQ_ * locallyTranslatedParameter))));
       }
 
-      return std::pow(this->getOscillatedObjectiveValue(static_cast<U>(10.0L) - maximalValue), static_cast<U>(2.0L));
+      return std::pow(this->getOscillatedValue(10.0 - maximalValue), 2.0);
     }
 
-    template <typename T, typename U>
-    std::string GallaghersGaussian21hiPeaksFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string GallaghersGaussian21hiPeaksFunction<T>::toString() const noexcept {
       return "bbob_gallaghers_gaussian_21hi_peaks_function";
     }
 
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> GallaghersGaussian21hiPeaksFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> GallaghersGaussian21hiPeaksFunction<T>::serialise() const noexcept {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
@@ -157,8 +156,8 @@ namespace mant {
       return serialisedOptimisationProblem;
     }
 
-    template <typename T, typename U>
-    void GallaghersGaussian21hiPeaksFunction<T, U>::deserialise(
+    template <typename T>
+    void GallaghersGaussian21hiPeaksFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {

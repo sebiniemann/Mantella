@@ -1,6 +1,8 @@
 namespace mant {
-  template <typename T, typename U = double>
-  class AdditiveSeparabilityAnalysis : public ActivePropertyAnalysis<T, U> {
+  template <typename T = double>
+  class AdditiveSeparabilityAnalysis : public ActivePropertyAnalysis<T> {
+    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+    
     public:
       explicit AdditiveSeparabilityAnalysis() noexcept;
 
@@ -13,32 +15,32 @@ namespace mant {
       unsigned long long maximalNumberOfIterations_;
 
       void analyseImplementation(
-          std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept override;
+          std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template <typename T, typename U>
-  AdditiveSeparabilityAnalysis<T, U>::AdditiveSeparabilityAnalysis() noexcept {
+  template <typename T>
+  AdditiveSeparabilityAnalysis<T>::AdditiveSeparabilityAnalysis() noexcept {
       setMaximalNumberOfIterations(1000);
   }
 
-  template <typename T, typename U>
-  void AdditiveSeparabilityAnalysis<T, U>::setMaximalNumberOfIterations(
+  template <typename T>
+  void AdditiveSeparabilityAnalysis<T>::setMaximalNumberOfIterations(
         const unsigned long long maximalNumberOfIterations) noexcept {
       maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 
-  template <typename T, typename U>
-  void AdditiveSeparabilityAnalysis<T, U>::analyseImplementation(
-      std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept {
+  template <typename T>
+  void AdditiveSeparabilityAnalysis<T>::analyseImplementation(
+      std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept {
     std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->numberOfDimensions_);
 
     std::vector<std::vector<arma::Col<unsigned int>>> partitions;
     for (const auto& partitionCandidate : partitionCandidates) {
-      arma::Col<U> differences(maximalNumberOfIterations_);
+      arma::Col<double> differences(maximalNumberOfIterations_);
 
       for(std::size_t n = 0; n < differences.n_elem; ++n) {
         arma::Col<T> firstPartA = arma::randu<arma::Col<T>>(partitionCandidate.first.n_elem);
@@ -118,8 +120,8 @@ namespace mant {
 //    }
   }
   
-  template <typename T, typename U>
-  std::string AdditiveSeparabilityAnalysis<T, U>::toString() const noexcept {
+  template <typename T>
+  std::string AdditiveSeparabilityAnalysis<T>::toString() const noexcept {
     return "additive_separability_analysis";
   }
 }

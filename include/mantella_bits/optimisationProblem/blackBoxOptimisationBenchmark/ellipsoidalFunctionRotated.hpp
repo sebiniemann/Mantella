@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class EllipsoidalFunctionRotated : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class EllipsoidalFunctionRotated : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit EllipsoidalFunctionRotated(
@@ -14,7 +13,7 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_MPI)
@@ -34,34 +33,34 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    EllipsoidalFunctionRotated<T, U>::EllipsoidalFunctionRotated(
+    template <typename T>
+    EllipsoidalFunctionRotated<T>::EllipsoidalFunctionRotated(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(static_cast<T>(1000000.0L))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
       this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
     }
 
-    template <typename T, typename U>
-    U EllipsoidalFunctionRotated<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double EllipsoidalFunctionRotated<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return static_cast<U>(arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter))));
+      return static_cast<double>(arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter))));
     }
 
-    template <typename T, typename U>
-    std::string EllipsoidalFunctionRotated<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string EllipsoidalFunctionRotated<T>::toString() const noexcept {
       return "bbob_ellipsoidal_function_rotated";
     }
     
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> EllipsoidalFunctionRotated<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> EllipsoidalFunctionRotated<T>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
-    template <typename T, typename U>
-    void EllipsoidalFunctionRotated<T, U>::deserialise(
+    template <typename T>
+    void EllipsoidalFunctionRotated<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }

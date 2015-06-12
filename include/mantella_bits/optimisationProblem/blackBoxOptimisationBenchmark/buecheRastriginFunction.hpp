@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class BuecheRastriginFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit BuecheRastriginFunction(
@@ -14,10 +13,10 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        U getSoftConstraintsValueImplementation(
+        double getSoftConstraintsValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_MPI)
@@ -37,10 +36,10 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    BuecheRastriginFunction<T, U>::BuecheRastriginFunction(
+    template <typename T>
+    BuecheRastriginFunction<T>::BuecheRastriginFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(std::sqrt(static_cast<T>(10.0L)))) {
       arma::Col<T> parameterTranslation = this->getRandomParameterTranslation();
       for (std::size_t n = 0; n < parameterTranslation.n_elem; n += 2) {
@@ -49,38 +48,38 @@ namespace mant {
       this->setParameterTranslation(parameterTranslation);
     }
 
-    template <typename T, typename U>
-    U BuecheRastriginFunction<T, U>::getSoftConstraintsValueImplementation(
+    template <typename T>
+    double BuecheRastriginFunction<T>::getSoftConstraintsValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return static_cast<U>(100.0L) * this->getBoundConstraintsValue(parameter);
+      return 100.0 * this->getBoundConstraintsValue(parameter);
     }
 
-    template <typename T, typename U>
-    U BuecheRastriginFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double BuecheRastriginFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
       arma::Col<T> z = parameterConditioning_ % this->getOscillatedParameter(parameter);
       for (std::size_t n = 0; n < z.n_elem; n += 2) {
-        if (z(n) > static_cast<T>(0.0L)) {
-          z(n) *= static_cast<T>(10.0L);
+        if (z(n) > 0.0) {
+          z(n) *= 10.0;
         }
       }
 
-      return static_cast<U>(10.0L) * (static_cast<U>(this->numberOfDimensions_) - static_cast<U>(arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z)))) + std::pow(static_cast<U>(arma::norm(z)), static_cast<U>(2.0L));
+      return 10.0 * (static_cast<double>(this->numberOfDimensions_) - static_cast<double>(arma::accu(arma::cos(static_cast<T>(2.0L) * arma::datum::pi * z)))) + std::pow(static_cast<double>(arma::norm(z)), 2.0);
     }
 
-    template <typename T, typename U>
-    std::string BuecheRastriginFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string BuecheRastriginFunction<T>::toString() const noexcept {
       return "bbob_bueche_rastrigin_function";
     }
     
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> BuecheRastriginFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> BuecheRastriginFunction<T>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
-    template <typename T, typename U>
-    void BuecheRastriginFunction<T, U>::deserialise(
+    template <typename T>
+    void BuecheRastriginFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }

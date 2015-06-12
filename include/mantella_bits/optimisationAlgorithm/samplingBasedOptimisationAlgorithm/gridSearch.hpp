@@ -1,9 +1,11 @@
 namespace mant {
-  template <typename T, typename U = double>
-  class GridSearch : public SamplingBasedOptimisationAlgorithm<T, U> {
+  template <typename T = double>
+  class GridSearch : public SamplingBasedOptimisationAlgorithm<T> {
+    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
+    
     public:
       explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept;
+          const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       void setNumberOfSamples(
           const arma::Col<unsigned int>& numberOfSamples);
@@ -20,21 +22,16 @@ namespace mant {
   // Implementation
   //
 
-  template <typename T, typename U>
-  GridSearch<T, U>::GridSearch(
-      const std::shared_ptr<OptimisationProblem<T, U>> optimisationProblem) noexcept
-    : SamplingBasedOptimisationAlgorithm<T, U>(optimisationProblem) {
+  template <typename T>
+  GridSearch<T>::GridSearch(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+    : SamplingBasedOptimisationAlgorithm<T>(optimisationProblem) {
     setNumberOfSamples(arma::zeros(this->numberOfDimensions_) + 10);
   }
 
-  template <typename T, typename U>
-  void GridSearch<T, U>::optimiseImplementation() noexcept {
+  template <typename T>
+  void GridSearch<T>::optimiseImplementation() noexcept {
     verify(arma::accu(numberOfSamples_) <= this->maximalNumberOfIterations_ * this->numberOfNodes_, "");
-    if (std::is_integral<T>::value) {
-      // For integral types, ensure that each dimension has as least the same amout of elements as
-      // samples. 
-      verify(arma::all(numberOfSamples_ >= this->getUpperBounds() - this->getLowerBounds()), "");
-    }
     
     std::vector<arma::Col<T>> samples;
     for (std::size_t n = 0; n < this->numberOfDimensions_; ++n) {
@@ -70,16 +67,16 @@ namespace mant {
     }
   }
 
-  template <typename T, typename U>
-  void GridSearch<T, U>::setNumberOfSamples(
+  template <typename T>
+  void GridSearch<T>::setNumberOfSamples(
       const arma::Col<unsigned int>& numberOfSamples) {
     verify(arma::all(numberOfSamples > 0), "");
 
     numberOfSamples_ = numberOfSamples;
   }
 
-  template <typename T, typename U>
-  std::string GridSearch<T, U>::toString() const noexcept {
+  template <typename T>
+  std::string GridSearch<T>::toString() const noexcept {
     return "grid_search";
   }
 }
