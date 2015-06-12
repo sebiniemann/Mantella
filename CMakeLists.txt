@@ -135,9 +135,6 @@ if(BUILD_TESTS)
     test/helper/testSetTheory.cpp
     test/helper/testString.cpp
     test/helper/testUnorderedContainer.cpp
-    test/testDistanceFunction.cpp
-    test/distanceFunction/testHammingDistance.cpp
-    test/distanceFunction/testManhattanDistance.cpp
     test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
@@ -201,9 +198,6 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/helper/string.hpp
   include/mantella_bits/helper/trajectory.hpp
   include/mantella_bits/helper/unorderedContainer.hpp
-  include/mantella_bits/distanceFunction.hpp
-  include/mantella_bits/distanceFunction/hammingDistance.hpp
-  include/mantella_bits/distanceFunction/manhattanDistance.hpp
   include/mantella_bits/optimisationProblem.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.hpp
