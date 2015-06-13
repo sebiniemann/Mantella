@@ -57,13 +57,13 @@ int main() {
   optimisationAlgorithm.optimise();
 
   // 3. Get your results!
-  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << "\n";
-  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << "\n";
-  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << "\n";
-  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << "\n";
-  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << "\n";
-  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << "\n";
-  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << "\n";
+  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << '\n';
+  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << '\n';
+  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << '\n';
+  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << '\n';
+  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << '\n';
+  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << '\n';
+  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << '\n';
   std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
 
   return 0;
