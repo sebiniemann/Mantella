@@ -50,22 +50,22 @@ Create a new source file called **hello.cpp** on your computer.
 int main() {
   // 1. Setup the optimisation problem.
   unsigned int numberOfDimensions = 10;
-  std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob::SphereFunction<double>(numberOfDimensions));
+  std::shared_ptr<mant::OptimisationProblem<>> optimisationProblem(new mant::bbob::SphereFunction<>(numberOfDimensions));
 
   // 2. Run the solver.
-  mant::HookeJeevesAlgorithm<double> optimisationAlgorithm(optimisationProblem);
+  mant::HookeJeevesAlgorithm<> optimisationAlgorithm(optimisationProblem);
   optimisationAlgorithm.optimise();
 
   // 3. Get your results!
-  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;
-  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << std::endl;
-  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << std::endl;
-  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
-  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
-  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << std::endl;
-  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
+  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << "\n";
+  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << "\n";
+  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << "\n";
+  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << "\n";
+  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << "\n";
+  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << "\n";
+  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << "\n";
   std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
-  
+
   return 0;
 }
 ```
