@@ -1,5 +1,5 @@
 namespace mant {
-  template <typename T>
+  template <typename T = double>
   class StandardParticleSwarmOptimisation2011 : public PopulationBasedOptimisationAlgorithm<T> {
     public:
       inline explicit StandardParticleSwarmOptimisation2011(

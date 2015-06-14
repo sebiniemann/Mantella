@@ -1,6 +1,6 @@
 // TODO Add restarting
 namespace mant {
-  template <typename T>
+  template <typename T = double>
   class HookeJeevesAlgorithm : public TrajectoryBasedOptimisationAlgorithm<T> {
     public:
       inline explicit HookeJeevesAlgorithm(
