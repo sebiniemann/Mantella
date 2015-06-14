@@ -14,8 +14,6 @@ Mantella is written in C++11 and uses [Armadillo](http://arma.sourceforge.net/) 
 - [Got a Problem or Question?](#got-a-problem-or-question)
 - [Found an Issue or Bug?](#found-an-issue-or-bug)
 - [Requesting a Feature?](#requesting-a-feature)
-- [Implemented features](#implemented-features)
-- [Roadmap](#roadmap)
 - [License](#license)
 
 <a name="getting-started"></a> Getting started
@@ -51,32 +49,32 @@ Create a new source file called **hello.cpp** on your computer.
 
 int main() {
   // 1. Setup the optimisation problem.
-  unsigned int numberOfDimensions = 4;
-  std::shared_ptr<mant::OptimisationProblem<double>> optimisationProblem(new mant::bbob2015::SphereFunction(numberOfDimensions));
+  unsigned int numberOfDimensions = 10;
+  std::shared_ptr<mant::OptimisationProblem<>> optimisationProblem(new mant::bbob::SphereFunction<>(numberOfDimensions));
 
   // 2. Run the solver.
-  mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
+  mant::HookeJeevesAlgorithm<> optimisationAlgorithm(optimisationProblem);
   optimisationAlgorithm.optimise();
 
   // 3. Get your results!
-  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << std::endl;
-  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << std::endl;
-  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << std::endl;
-  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << std::endl;
-  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << std::endl;
-  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << std::endl;
-  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << std::endl;
+  std::cout << "isFinished: " << optimisationAlgorithm.isFinished() << '\n';
+  std::cout << "isTerminated: " << optimisationAlgorithm.isTerminated() << '\n';
+  std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << '\n';
+  std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << '\n';
+  std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << '\n';
+  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << '\n';
+  std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << '\n';
   std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
-    
-  return 1;
+
+  return 0;
 }
 ```
 
 Compile and build an executable from your source.
 ```bash
 c++ -std=c++11 hello.cpp -larmadillo -o hello
-# In case armadillo and mantella were not installed/placed into 
-# standardly included/searched system direcories, use the following
+# In case Armadillo and Mantella were not installed/placed into 
+# standardly included/searched system directories, use the following
 c++ -std=c++11 hello.cpp -L/path/to/armaillo/lib -larmadillo -I/path/to/armadillo/include -I/path/to/mantella/include -o hello
 ```
 
@@ -84,19 +82,26 @@ Run your application.
 ```bash
 ./hello
 ```
+
 Output (may vary due to random initialised problems and algorithms):
 ```
 isFinished: 1
 isTerminated: 0
-numberOfIterations: 263
-numberOfEvaluations: 263
-numberOfDistinctEvaluations: 195
+numberOfIterations: 697
+numberOfEvaluations: 697
+numberOfDistinctEvaluations: 586
 bestSoftConstraintsValue: 0
-bestObjectiveValueDelta: -4.81944e-09
+bestObjectiveValueDelta: -2.42667e-09
 bestParameter:    2.7208
   -0.8456
    2.2640
    2.3872
+   3.2928
+  -2.4200
+  -1.3184
+   2.1456
+  -1.7784
+   0.4313
 ```
 
 <a name="got-a-problem-or-question"></a> Got a Problem or Question?
@@ -114,80 +119,6 @@ You are welcomed to submit a pull request with your fix afterwards, if at hand.
 If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues) labelled `feature request`.
 
 Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.
-
-<a name="implemented-features"></a> Implemented features
---------------------------------------------------------
-### Optimisation Algorithms
-- **Trajectory-based algorithms**
-  - Hill Climbing
-  - Pure random search
-  - Hooke Jeeves algorithm
-- **Populations-based algorithms**
-  - Standard particle swarm optimisation 2011
-  - Parallel standard particle swarm optimisation 2011 (**MPI** support)
-
-### Optimisation Problems
-Support of real-world robotic optimisation problems
-- **Optimisation problems (supported by each mechanism)**
-  - Position error minimisation
-- **Mechanisms**
-  -  2-dimensional 
-    - Parallel kinematic machine 3(P)RRR
-    - Parallel kinematic machine 3(P)RPR
-  - 3-dimensional
-    - Parallel kinematic machine 6(P)RPR
-    - Parallel kinematic machine 6(P)RPR
-    - Multi-level Stewart platforms
-
-Full support of the [black-box optimisation benchmark (from 2009–2015)](http://coco.gforge.inria.fr), developed by Nikolaus Hansen et al., INRIA, France
-- **Separable functions**
-  - Sphere function
-  - Ellipsoidal function
-  - Rastrigin function
-  - Büche-Rastrigin function
-  - Linear Slope
-- **Functions with low or moderate conditioning**
-  - Attractive sector function
-  - Step ellipsoidal function
-  - Rosenbrock function
-  - Rosenbrock function, rotated
-- **Functions with high conditioning and unimodal**
-  - Ellipsoidal function, rotated
-  - Discus function
-  - Bent Cigar function
-  - Sharp ridge function
-  - Different powers function
-- **Multi-modal functions with adequate global structure**
-  - Rastrigin function
-  - Weierstraß function
-  - Schaffers F7 function
-  - Schaffers F7 function, moderately ill-conditioned
-  - Composite Griewank-Rosenbrock function F8F2
-- **Multi-modal functions with weak global structure**
-  - Schwefel function
-  - Gallagher's Gaussian 101-me peaks function
-  - Gallagher's Gaussian 21-hi peaks function
-  - Katsuura function
-  - Lunacek bi-Rastrigin function
-
-<a name="roadmap"></a> Roadmap
-------------------------------
-- **Planned for 1.0.0**
-  - ~~Adding robots with a 3-dimensional workspace (6(P)RUS, 6(P)UPS and multi-level Stewart platforms)~~ **(done)**
-  - ~~Adding objective function analysis (Multi-linear regression, quadratic regression, Lipschitz continuity)~~ **(done)**
-  - Adding the Role-based imitation algorithm, developed by Emre Çakar
-  - ~~Set installation of parallised implementations to be optional~~ **(done)**
-  - ~~Adding a grid search algorithm~~ **(done)**
-  - Adding a multi resolution grid search algorithm
-- **Planned for 1.1.0**
-  - ~~Adding the Covariance Matrix Adaptation Evolution Strategy (in its most basic implementation at the beginning), developed by Nikolaus Hansen~~ **(done)**
-  - Adding the Multilevel Coordinate Search Algorithm, developed by Waltraud Huyer
-  - Adding the Nelder–Mead method, developed by John Nelder and Roger Mead
-  - Adding parallel (MPI-based) sample-based algorithms
-- **Planned for 1.2.0**
-  - Adding a seperate website (besides this README on Github), including a user documentation and a *getting started*
-- **Backlog**
-  - ~~Adding the black-boxoptimisation benchmark 2015 as well as 2009, 2010 and 2012~~ **(done)**
 
 <a name="license"></a> License
 ------------------------------

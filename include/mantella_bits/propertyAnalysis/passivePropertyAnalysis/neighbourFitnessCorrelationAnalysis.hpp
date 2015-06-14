@@ -1,11 +1,10 @@
 namespace mant {
-  template <typename T, typename U = double>
-  class NeighbourFitnessCorrelationAnalysis : public PassivePropertyAnalysis<T, U> {
-    static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type.");
-    static_assert(std::is_floating_point<U>::value, "U must be a floating point type.");
+  template <typename T = double>
+  class NeighbourFitnessCorrelationAnalysis : public PassivePropertyAnalysis<T> {
+    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
     
     public:
-      using PassivePropertyAnalysis<T, U>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
 
       void setMaximalNeighbourDistance(
           const T maximalNeighbourDistance);
@@ -20,34 +19,34 @@ namespace mant {
       double correlationCoefficient_;
 
       inline void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
   };
 
   //
   // Implementation
   //
 
-  template <typename T, typename U>
-  void NeighbourFitnessCorrelationAnalysis<T, U>::setMaximalNeighbourDistance(
+  template <typename T>
+  void NeighbourFitnessCorrelationAnalysis<T>::setMaximalNeighbourDistance(
       const T maximalNeighbourDistance) {
     verify(maximalNeighbourDistance > 0, "");
       
     maximalNeighbourDistance_ = maximalNeighbourDistance;
   }
 
-  template <typename T, typename U>
-  double NeighbourFitnessCorrelationAnalysis<T, U>::getCorrelationCoefficient() const noexcept {
+  template <typename T>
+  double NeighbourFitnessCorrelationAnalysis<T>::getCorrelationCoefficient() const noexcept {
     return correlationCoefficient_;
   }
 
-  template <typename T, typename U>
-  void NeighbourFitnessCorrelationAnalysis<T, U>::analyseImplementation(
-      const std::unordered_map<arma::Col<T>, U, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
+  template <typename T>
+  void NeighbourFitnessCorrelationAnalysis<T>::analyseImplementation(
+      const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
     assert(parameterToObjectiveValueMappings.size() > 1);
     
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
     
-    arma::Col<U> objectiveValues(parameters.n_cols);
+    arma::Col<double> objectiveValues(parameters.n_cols);
     arma::Mat<unsigned int> neighbours(parameters.n_cols, parameters.n_cols);
     
     std::size_t nn = 0;
@@ -58,19 +57,14 @@ namespace mant {
       
       std::size_t kk = 0;
       for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
-        if (std::is_integral<T>::value) {
-          neighbours(nn, kk) = arma::find(this->distanceFunction_->getDistance(parameter, k->first) <= maximalNeighbourDistance_);
-        } else {
-          neighbours(nn, kk) = arma::find(arma::norm(k->first - parameter) <= maximalNeighbourDistance_); 
-        }
-        
+        neighbours(nn, kk) = arma::find(arma::norm(k->first - parameter) <= maximalNeighbourDistance_); 
         ++kk;
       }
       ++nn;
     }
     neighbours = arma::symmatu(neighbours);
     
-    arma::Col<U> medianNeighbourObjectiveValues(objectiveValues.n_elem);
+    arma::Col<double> medianNeighbourObjectiveValues(objectiveValues.n_elem);
     for (std::size_t n = 0; n < objectiveValues.n_elem; ++n) {
       medianNeighbourObjectiveValues(n) = arma::median(objectiveValues.elem(neighbours.col(n)));
     }
@@ -78,8 +72,8 @@ namespace mant {
     correlationCoefficient_ = arma::as_scalar(arma::cor(objectiveValues, medianNeighbourObjectiveValues));
   }
 
-  template <typename T, typename U>
-  std::string NeighbourFitnessCorrelationAnalysis<T, U>::toString() const noexcept {
+  template <typename T>
+  std::string NeighbourFitnessCorrelationAnalysis<T>::toString() const noexcept {
     return "neighbour_fitness_correlation_analysis";
   }
 }

@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class SphereFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class SphereFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit SphereFunction(
@@ -12,19 +11,19 @@ namespace mant {
         std::string toString() const noexcept override;
 
       protected:
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
         
 #if defined(MANTELLA_USE_MPI)
-      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
-      friend class OptimisationAlgorithm;
+        // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+        friend class OptimisationAlgorithm;
 
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      std::vector<double> serialise() const noexcept;
+        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        std::vector<double> serialise() const noexcept;
 
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      void deserialise(
-          const std::vector<double>& serialisedOptimisationProblem);
+        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        void deserialise(
+            const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -32,32 +31,32 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    SphereFunction<T, U>::SphereFunction(
+    template <typename T>
+    SphereFunction<T>::SphereFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions) {
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
     }
 
-    template <typename T, typename U>
-    U SphereFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double SphereFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return std::pow(static_cast<U>(arma::norm(parameter)), static_cast<U>(2.0L));
+      return std::pow(static_cast<double>(arma::norm(parameter)), 2.0);
     }
 
-    template <typename T, typename U>
-    std::string SphereFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string SphereFunction<T>::toString() const noexcept {
       return "bbob_sphere_function";
     }
     
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> SphereFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> SphereFunction<T>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
-    template <typename T, typename U>
-    void SphereFunction<T, U>::deserialise(
+    template <typename T>
+    void SphereFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }

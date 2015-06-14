@@ -1,9 +1,8 @@
 namespace mant {
   namespace bbob {
-    template <typename T = double, typename U = double>
-    class EllipsoidalFunction : public BlackBoxOptimisationBenchmark<T, U> {
+    template <typename T = double>
+    class EllipsoidalFunction : public BlackBoxOptimisationBenchmark<T> {
       static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-      static_assert(std::is_floating_point<U>::value, "The codomain type U must be a floating point type.");
     
       public:
         explicit EllipsoidalFunction(
@@ -14,19 +13,19 @@ namespace mant {
       protected:
         const arma::Col<T> parameterConditioning_;
 
-        U getObjectiveValueImplementation(
+        double getObjectiveValueImplementation(
             const arma::Col<T>& parameter) const noexcept override;
 
 #if defined(MANTELLA_USE_MPI)
-      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
-      friend class OptimisationAlgorithm;
+        // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
+        friend class OptimisationAlgorithm;
 
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      std::vector<double> serialise() const noexcept;
+        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        std::vector<double> serialise() const noexcept;
 
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      void deserialise(
-          const std::vector<double>& serialisedOptimisationProblem);
+        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        void deserialise(
+            const std::vector<double>& serialisedOptimisationProblem);
 #endif
     };
 
@@ -34,33 +33,33 @@ namespace mant {
     // Implementation
     //
 
-    template <typename T, typename U>
-    EllipsoidalFunction<T, U>::EllipsoidalFunction(
+    template <typename T>
+    EllipsoidalFunction<T>::EllipsoidalFunction(
         const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T, U>(numberOfDimensions),
+      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
         parameterConditioning_(this->getParameterConditioning(static_cast<T>(1000000.0L))) {
       this->setParameterTranslation(this->getRandomParameterTranslation());
     }
 
-    template <typename T, typename U>
-    U EllipsoidalFunction<T, U>::getObjectiveValueImplementation(
+    template <typename T>
+    double EllipsoidalFunction<T>::getObjectiveValueImplementation(
         const arma::Col<T>& parameter) const noexcept {
-      return static_cast<U>(arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter))));
+      return static_cast<double>(arma::dot(parameterConditioning_, arma::square(this->getOscillatedParameter(parameter))));
     }
 
-    template <typename T, typename U>
-    std::string EllipsoidalFunction<T, U>::toString() const noexcept {
+    template <typename T>
+    std::string EllipsoidalFunction<T>::toString() const noexcept {
       return "bbob_ellipsoidal_function";
     }
     
 #if defined(MANTELLA_USE_MPI)
-    template <typename T, typename U>
-    std::vector<double> EllipsoidalFunction<T, U>::serialise() const noexcept {
+    template <typename T>
+    std::vector<double> EllipsoidalFunction<T>::serialise() const noexcept {
       return BlackBoxOptimisationBenchmark<T, T>::serialise();
     }
 
-    template <typename T, typename U>
-    void EllipsoidalFunction<T, U>::deserialise(
+    template <typename T>
+    void EllipsoidalFunction<T>::deserialise(
         const std::vector<double>& serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }
