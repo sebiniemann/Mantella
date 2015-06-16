@@ -8,14 +8,14 @@ namespace mant {
       inline static std::mt19937_64& getGenerator() noexcept;
 
       inline static void setSeed(
-          const unsigned int seed) noexcept;
+          const std::mt19937_64::result_type seed) noexcept;
 
       inline static void setRandomSeed() noexcept;
 
-      inline static unsigned int getSeed() noexcept;
+      inline static std::mt19937_64::result_type getSeed() noexcept;
 
     protected:
-      inline static unsigned int& seed_() noexcept;
+      inline static std::mt19937_64::result_type& seed_() noexcept;
   };
 
   //
@@ -28,7 +28,7 @@ namespace mant {
   }
 
   inline void Rng::setSeed(
-      const unsigned int seed) noexcept {
+      const std::mt19937_64::result_type seed) noexcept {
    seed_() = seed;
 
     getGenerator().seed(seed_());
@@ -48,12 +48,12 @@ namespace mant {
 #endif
   }
 
-  inline unsigned int Rng::getSeed() noexcept {
+  inline std::mt19937_64::result_type Rng::getSeed() noexcept {
     return seed_();
   }
 
-  inline unsigned int& Rng::seed_() noexcept {
-    static unsigned int seed;
+  inline std::mt19937_64::result_type& Rng::seed_() noexcept {
+    static std::mt19937_64::result_type seed;
     return seed;
   }
 }
