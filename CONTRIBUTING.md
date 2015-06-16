@@ -30,5 +30,5 @@ Describe the details of your changes as specific as possible. Do not be afraid t
 End the commit message of your pull request by signing your work, i.e. adding some contact details.
 
 ```
-Signed-off-by: Random J Developer <random@developer.example.org>
+Random J Developer <random@developer.example.org>
 ```
