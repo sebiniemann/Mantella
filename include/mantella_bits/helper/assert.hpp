@@ -9,8 +9,8 @@ namespace mant {
 
   inline bool isPermutation(
       const arma::Col<unsigned int>& parameter,
-      const std::size_t lowerBound,
-      const std::size_t upperBound) noexcept;
+      const std::size_t numberOfPermutations,
+      const std::size_t numberOfElements) noexcept;
 
   //
   // Implementation
@@ -52,10 +52,15 @@ namespace mant {
 
   inline bool isPermutation(
       const arma::Col<unsigned int>& parameter,
-      const std::size_t lowerBound,
-      const std::size_t upperBound) noexcept {
-    // Are all elements within [lowerBound, upperBound]?
-    if (arma::any(parameter < lowerBound) || arma::any(parameter > upperBound)) {
+      const std::size_t numberOfPermutations,
+      const std::size_t numberOfElements) noexcept {
+    // Are there as many permutations as expected?
+    if (parameter.n_elem != numberOfPermutations) {
+      return false;
+    }
+    
+    // Are all elements within [0, numberOfElements - 1]?
+    if (arma::any(parameter < 0) || arma::any(parameter > numberOfElements - 1)) {
       return false;
     }
     

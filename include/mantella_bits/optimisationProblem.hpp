@@ -213,7 +213,7 @@ namespace mant {
   void OptimisationProblem<T>::setParameterPermutation(
       const arma::Col<unsigned int>& parameterPermutation) {
     verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
-    verify(isPermutation(parameterPermutation, 0, numberOfDimensions_ - 1), "The parameter must be a permutation.");
+    verify(isPermutation(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "The parameter must be a permutation.");
 
     parameterPermutation_ = parameterPermutation;
 
