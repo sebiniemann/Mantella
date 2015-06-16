@@ -20,10 +20,6 @@ int main(const int argc, const char* argv[]) {
 
     testDirectory = argv[1];
 
-    if (!mant::fileExists(testDirectory + "/main.cpp")) {
-      throw std::invalid_argument("The speficied test directory (" + testDirectory + ") does not exists.");
-    }
-
     mant::Rng::setSeed(123456789);
 
     return Catch::Session().run();

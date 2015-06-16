@@ -127,7 +127,6 @@ if(BUILD_TESTS)
   add_executable(libraryTest
     test/main.cpp
     test/helper/testRng.cpp
-    test/helper/testFilesystem.cpp
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
@@ -188,7 +187,6 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella
   include/mantella_bits/helper/assert.hpp
   include/mantella_bits/helper/rng.hpp
-  include/mantella_bits/helper/filesystem.hpp
   include/mantella_bits/helper/geometry.hpp
   include/mantella_bits/helper/printable.hpp
   include/mantella_bits/helper/quasiRandomSequence.hpp
