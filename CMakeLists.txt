@@ -193,7 +193,6 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/helper/printable.hpp
   include/mantella_bits/helper/quasiRandomSequence.hpp
   include/mantella_bits/helper/random.hpp
-  include/mantella_bits/helper/regression.hpp
   include/mantella_bits/helper/setTheory.hpp
   include/mantella_bits/helper/string.hpp
   include/mantella_bits/helper/trajectory.hpp
