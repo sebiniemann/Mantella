@@ -80,6 +80,8 @@ namespace mant {
           const arma::Col<T>& parameter,
           const T minimalDistance,
           const T maximalDistance);
+      arma::Col<T> boundaryHandling(
+          arma::Col<T> parameter) const noexcept;
           
       bool updateBestParameter(
           const arma::Col<T>& parameter,
@@ -306,6 +308,18 @@ namespace mant {
     neighbour.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
     
     return neighbour;
+  }
+  
+  template <typename T>
+  arma::Col<T> OptimisationAlgorithm<T>::boundaryHandling(
+      arma::Col<T> parameter) const noexcept {
+    const arma::Col<unsigned int>& belowLowerBound = arma::find(parameter < getLowerBounds());
+    const arma::Col<unsigned int>& aboveUpperBound = arma::find(parameter > getUpperBounds());
+
+    parameter.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
+    parameter.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
+    
+    return parameter;
   }
   
   template <typename T>
