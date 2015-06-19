@@ -79,7 +79,8 @@ namespace mant {
       arma::Col<T> getRandomNeighbour(
           const arma::Col<T>& parameter,
           const T minimalDistance,
-          const T maximalDistance);
+          const T maximalDistance) const noexcept;
+     
       arma::Col<T> boundaryHandling(
           arma::Col<T> parameter) const noexcept;
           
@@ -298,7 +299,7 @@ namespace mant {
   arma::Col<T> OptimisationAlgorithm<T>::getRandomNeighbour(
       const arma::Col<T>& parameter,
       const T minimalDistance,
-      const T maximalDistance) {
+      const T maximalDistance) const noexcept {
     arma::Col<T> neighbour = parameter + arma::normalise(arma::randn<arma::Col<T>>(parameter.n_elem)) * std::uniform_real_distribution<T>(minimalDistance, maximalDistance)(Rng::getGenerator());
     
     return neighbour;
