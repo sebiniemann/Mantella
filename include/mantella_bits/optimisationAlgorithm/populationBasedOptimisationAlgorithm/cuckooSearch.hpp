@@ -112,6 +112,6 @@ namespace mant {
 
   template <typename T>
   std::string CuckooSearch<T>::toString() const noexcept {
-    return "CuckooSearch";
+    return "cuckoo_search";
   }
 }
