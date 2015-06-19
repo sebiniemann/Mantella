@@ -2,22 +2,22 @@ namespace mant {
   template <typename T>
   class CuckooSearch : public PopulationBasedOptimisationAlgorithm<T>{
     public:
-      inline explicit CuckooSearch(
+      explicit CuckooSearch(
           const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
           const unsigned int populationSize) noexcept;
 		  
-      inline void setDiscoveryProbability(
-					const T prob) noexcept;
-      inline void setLevyStepSize(
-					const T stepSize) noexcept;
+      void setDiscoveryProbability(
+					const T discoveryProbability) noexcept;
+      void setLevyStepSize(
+					const T levyStepSize) noexcept;
 	  
-			inline std::string toString() const noexcept override;
+			std::string toString() const noexcept override;
 
     protected:
       T discoveryProbability_;
       T levyStepSize_;
 
-      inline void optimiseImplementation() override;
+      void optimiseImplementation() override;
   };
 
   //
@@ -25,7 +25,7 @@ namespace mant {
   //
 
   template <typename T>
-  inline CuckooSearch<T>::CuckooSearch(
+  CuckooSearch<T>::CuckooSearch(
       const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
       const unsigned int populationSize) noexcept
     : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize){
@@ -34,7 +34,7 @@ namespace mant {
   }
 
   template <typename T>
-  inline void CuckooSearch<T>::optimiseImplementation(){
+  void CuckooSearch<T>::optimiseImplementation(){
     arma::Mat<T> hostNests = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, this->populationSize_);
     hostNests.each_col() %= this->getUpperBounds() - this->getLowerBounds();
     hostNests.each_col() += this->getLowerBounds();
@@ -99,19 +99,19 @@ namespace mant {
   }
 
   template <typename T>
-  inline void CuckooSearch<T>::setDiscoveryProbability(
-      const T prob) noexcept{
-    discoveryProbability_ = prob;
+  void CuckooSearch<T>::setDiscoveryProbability(
+      const T discoveryProbability) noexcept{
+    discoveryProbability_ = discoveryProbability;
   }
 
   template <typename T>
-  inline void CuckooSearch<T>::setLevyStepSize(
-      const T stepSize) noexcept{
-    levyStepSize_ = stepSize;
+  void CuckooSearch<T>::setLevyStepSize(
+      const T levyStepSize) noexcept{
+    levyStepSize_ = levyStepSize;
   }
 
   template <typename T>
-  inline std::string CuckooSearch<T>::toString() const noexcept {
+  std::string CuckooSearch<T>::toString() const noexcept {
     return "CuckooSearch";
   }
 }
