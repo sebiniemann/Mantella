@@ -35,7 +35,7 @@ namespace mant {
   void PopulationBasedOptimisationAlgorithm<T>::setInitialPopulation(
       const arma::Mat<T> initialPopulation) {
     verify(initialPopulation.n_rows == this->numberOfDimensions_, "The number of rows must match the number of dimensions of the optimisation problem.");
-    verify(initialPopulation.n_rows == populationSize_, "The number of cols must match the population size.");
+    verify(initialPopulation.n_cols == populationSize_, "The number of cols must match the population size.");
 
     initialPopulation_ = initialPopulation;
   }
