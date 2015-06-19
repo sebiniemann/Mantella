@@ -300,12 +300,6 @@ namespace mant {
       const T minimalDistance,
       const T maximalDistance) {
     arma::Col<T> neighbour = parameter + arma::normalise(arma::randn<arma::Col<T>>(parameter.n_elem)) * std::uniform_real_distribution<T>(minimalDistance, maximalDistance)(Rng::getGenerator());
-      
-    const arma::Col<unsigned int>& belowLowerBound = arma::find(neighbour < getLowerBounds());
-    const arma::Col<unsigned int>& aboveUpperBound = arma::find(neighbour > getUpperBounds());
-
-    neighbour.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
-    neighbour.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
     
     return neighbour;
   }
