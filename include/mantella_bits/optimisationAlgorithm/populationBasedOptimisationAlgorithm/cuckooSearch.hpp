@@ -1,6 +1,6 @@
 namespace mant {
   template <typename T>
-  class CuckooSearch : public PopulationBasedOptimisationAlgorithm<T>{
+  class CuckooSearch : public PopulationBasedOptimisationAlgorithm<T> {
     public:
       explicit CuckooSearch(
           const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
@@ -44,6 +44,7 @@ namespace mant {
       nestFitness(i) = this->getObjectiveValue(hostNests.col(i));
 			++this->numberOfIterations_;
     }
+    
 		unsigned int rankIndex;
 		nestFitness.min(rankIndex);
 		this->bestObjectiveValue_ = nestFitness(rankIndex);
