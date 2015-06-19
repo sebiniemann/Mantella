@@ -7,14 +7,14 @@ namespace mant {
           const unsigned int populationSize) noexcept;
 		  
       void setDiscoveryProbability(
-					const T discoveryProbability) noexcept;
+					const double discoveryProbability) noexcept;
       void setLevyStepSize(
 					const T levyStepSize) noexcept;
 	  
 			std::string toString() const noexcept override;
 
     protected:
-      T discoveryProbability_;
+      double discoveryProbability_;
       T levyStepSize_;
 
       void optimiseImplementation() override;
@@ -100,7 +100,7 @@ namespace mant {
 
   template <typename T>
   void CuckooSearch<T>::setDiscoveryProbability(
-      const T discoveryProbability) noexcept{
+      const double discoveryProbability) noexcept{
     discoveryProbability_ = discoveryProbability;
   }
 
