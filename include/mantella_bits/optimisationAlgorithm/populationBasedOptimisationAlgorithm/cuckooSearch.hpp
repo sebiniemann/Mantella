@@ -28,86 +28,66 @@ namespace mant {
   CuckooSearch<T>::CuckooSearch(
       const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
       const unsigned int populationSize) noexcept
-    : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize){
+    : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize) {
     setDiscoveryProbability(0.25);
     setLevyStepSize(1.0);
   }
 
   template <typename T>
-  void CuckooSearch<T>::optimiseImplementation(){
-    arma::Mat<T> hostNests = arma::randu<arma::Mat<T>>(this->numberOfDimensions_, this->populationSize_);
-    hostNests.each_col() %= this->getUpperBounds() - this->getLowerBounds();
-    hostNests.each_col() += this->getLowerBounds();
+  void CuckooSearch<T>::optimiseImplementation() {
+    arma::Mat<T> nests = this->getRandomPopulation();
 
-    arma::Col<T> nestFitness(this->populationSize_);
-    for(std::size_t i = 0; i < this->populationSize_; ++i){
-      nestFitness(i) = this->getObjectiveValue(hostNests.col(i));
+    arma::Col<double> objectiveValues(this->populationSize_);
+    for (std::size_t n = 0; n < this->populationSize_; ++n) {
 			++this->numberOfIterations_;
+      this->updateBestParameter(nests.col(n), this->getSoftConstraintsValue(nests.col(n)), this->getObjectiveValue(nests.col(n)));
     }
     
 		unsigned int rankIndex;
-		nestFitness.min(rankIndex);
-		this->bestObjectiveValue_ = nestFitness(rankIndex);
-		this->bestParameter_ = hostNests.col(rankIndex);
-
     while(!this->isFinished() && !this->isTerminated()){
 			++this->numberOfIterations_;
       
-			nestFitness.min(rankIndex);			
-			arma::Col<T> newCuckoo = hostNests.col(rankIndex);
-			
-			//bei BentCigar gitb das in einer Expression bessere Ergebnisse aus
-			//bei SphereFunction das aufgeteilte
-			//Levy flights by Mantegna's algorithm
-			arma::Col<T> u = arma::randn<arma::Col<T>>(this->numberOfDimensions_) * pow((tgamma(1+(3/2))*sin(M_PI*(3/2)/2)/(tgamma((1+(3/2))/2)*(3/2)*pow(2,(((3/2)-1)/2)))),(1/(3/2)));
-			arma::Col<T> step = u/pow(abs(arma::randn<arma::Col<T>>(this->numberOfDimensions_)),1/(3/2));
-			arma::Col<T> stepSize = levyStepSize_ * 0.01 * step % (newCuckoo - hostNests(rankIndex));
-			newCuckoo += stepSize ;
-			//in one expression:
-			//newCuckoo += levyStepSize_ * 0.01 * ((arma::randn<arma::Col<T>>(this->numberOfDimensions_) 
-			//						 * pow((tgamma(1+(3/2))*sin(M_PI*(3/2)/2)/(tgamma((1+(3/2))/2)*(3/2)*pow(2,(((3/2)-1)/2)))),(1/(3/2))))
-			//						 / pow(abs(arma::randn<arma::Col<T>>(this->numberOfDimensions_)),1/(3/2))) % (newCuckoo - hostNests(rankIndex));
-			
-			const arma::Col<unsigned int>& belowLowerBound = arma::find(newCuckoo < this->getLowerBounds());
-			const arma::Col<unsigned int>& aboveUpperBound = arma::find(newCuckoo > this->getUpperBounds());
-
-			newCuckoo.elem(belowLowerBound) = this->getLowerBounds().elem(belowLowerBound);
-			newCuckoo.elem(aboveUpperBound) = this->getUpperBounds().elem(aboveUpperBound);
-
-			nestFitness.max(rankIndex);
-			if(this->getObjectiveValue(newCuckoo) < nestFitness(rankIndex)){
-				hostNests.col(rankIndex) = newCuckoo;
-				nestFitness(rankIndex) = this->getObjectiveValue(hostNests.col(rankIndex));
+			objectiveValues.min(rankIndex);			
+      const arma::Col<T>& cuckooCandidate = this->boundaryHandling(nests.col(rankIndex) + levyStepSize_ * 0.01 * ((arma::randn<arma::Col<T>>(this->numberOfDimensions_) * std::pow(std::tgamma(2.5) * std::sin(arma::datum::pi * 0.75) / (std::tgamma(1.25) * 1.5 * std::pow(2, 0.25)), 2/3)) / arma::pow(arma::abs(arma::randn<arma::Col<T>>(this->numberOfDimensions_)), 2/3)) % (nests.col(rankIndex) - this->bestParameter_));
+      const double objectiveValue = this->getObjectiveValue(cuckooCandidate);
+      
+			objectiveValues.max(rankIndex);
+			if(objectiveValue < objectiveValues(rankIndex)) {
+				nests.col(rankIndex) = cuckooCandidate;
+				objectiveValues(rankIndex) = objectiveValue;
 			}			
-
+      
+			this->updateBestParameter(cuckooCandidate, 0.0, objectiveValue);
+      
+      if(this->isFinished() || this->isTerminated()) {
+        break;
+      }
+        
 			for(std::size_t i = 0; i < std::floor(discoveryProbability_ * this->populationSize_); ++i){
 				++this->numberOfIterations_;
 					
-				nestFitness.max(rankIndex);
-				hostNests.col(rankIndex) = this->getRandomParameter();
-				nestFitness(rankIndex) = this->getObjectiveValue(hostNests.col(rankIndex));
-				if(this->isFinished() || this->isTerminated())break;
+				objectiveValues.max(rankIndex);
+				nests.col(rankIndex) = this->getRandomParameter();
+				objectiveValues(rankIndex) = this->getObjectiveValue(nests.col(rankIndex));
+        
+        this->updateBestParameter(nests.col(rankIndex), 0.0, objectiveValues(rankIndex));
+      
+				if(this->isFinished() || this->isTerminated()) {
+          break;
+        }
 			}
-
-			nestFitness.min(rankIndex);
-			if (this->getObjectiveValue(hostNests.col(rankIndex)) < this->bestObjectiveValue_) {
-				this->bestObjectiveValue_ = nestFitness(rankIndex);
-				this->bestParameter_ = hostNests.col(rankIndex);
-			}
-			//funktioniert nicht
-			//this->updateBestParameter(hostNests.col(rankIndex), 0.0, nestFitness(rankIndex));
     }
   }
 
   template <typename T>
   void CuckooSearch<T>::setDiscoveryProbability(
-      const double discoveryProbability) noexcept{
+      const double discoveryProbability) noexcept {
     discoveryProbability_ = discoveryProbability;
   }
 
   template <typename T>
   void CuckooSearch<T>::setLevyStepSize(
-      const T levyStepSize) noexcept{
+      const T levyStepSize) noexcept {
     levyStepSize_ = levyStepSize;
   }
 
