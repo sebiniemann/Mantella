@@ -80,7 +80,7 @@ namespace mant {
 				nestFitness(rankIndex) = this->getObjectiveValue(hostNests.col(rankIndex));
 			}			
 
-			for(std::size_t i = 0; i < discoveryProbability_ * this->populationSize_; ++i){
+			for(std::size_t i = 0; i < std::floor(discoveryProbability_ * this->populationSize_); ++i){
 				++this->numberOfIterations_;
 					
 				nestFitness.max(rankIndex);
