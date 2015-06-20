@@ -40,17 +40,19 @@ namespace mant {
     arma::Col<double> objectiveValues(this->populationSize_);
     for (std::size_t n = 0; n < this->populationSize_; ++n) {
 			++this->numberOfIterations_;
-      this->updateBestParameter(nests.col(n), this->getSoftConstraintsValue(nests.col(n)), this->getObjectiveValue(nests.col(n)));
+			objectiveValues(n) = this->getObjectiveValue(nests.col(n));
+      this->updateBestParameter(nests.col(n), this->getSoftConstraintsValue(nests.col(n)), objectiveValues(n));
     }
     
 		unsigned int rankIndex;
     while(!this->isFinished() && !this->isTerminated()){
 			++this->numberOfIterations_;
       
-			objectiveValues.min(rankIndex);			
-      const arma::Col<T>& cuckooCandidate = this->boundaryHandling(nests.col(rankIndex) + levyStepSize_ * 0.01 * ((arma::randn<arma::Col<T>>(this->numberOfDimensions_) * std::pow(std::tgamma(2.5) * std::sin(arma::datum::pi * 0.75) / (std::tgamma(1.25) * 1.5 * std::pow(2, 0.25)), 2/3)) / arma::pow(arma::abs(arma::randn<arma::Col<T>>(this->numberOfDimensions_)), 2/3)) % (nests.col(rankIndex) - this->bestParameter_));
+			objectiveValues.min(rankIndex);	
+      const arma::Col<T>& cuckooCandidate = this->boundaryHandling(nests.col(rankIndex) + (levyStepSize_ / 100) * (arma::randn<arma::Col<T>>(this->numberOfDimensions_) * (std::pow(std::tgamma(2.5) * std::sin(arma::datum::pi * 0.75) / (std::tgamma(1.25) * 1.5 * std::pow(2, 0.25)), 2/3)) / (arma::pow(arma::abs(arma::randn<arma::Col<T>>(this->numberOfDimensions_)), 2/3))));
+			
       const double objectiveValue = this->getObjectiveValue(cuckooCandidate);
-      
+
 			objectiveValues.max(rankIndex);
 			if(objectiveValue < objectiveValues(rankIndex)) {
 				nests.col(rankIndex) = cuckooCandidate;
