@@ -324,7 +324,7 @@ namespace mant {
       const double objectiveValue) noexcept {
     assert(parameter.n_elem == numberOfDimensions_);
       
-    if(softConstraintsValue < bestSoftConstraintsValue_ || (softConstraintsValue == bestSoftConstraintsValue_ && objectiveValue < objectiveValue)) {
+    if(softConstraintsValue < bestSoftConstraintsValue_ || (softConstraintsValue == bestSoftConstraintsValue_ && objectiveValue < bestObjectiveValue_)) {
       bestParameter_ = parameter;
       bestSoftConstraintsValue_ = softConstraintsValue;
       bestObjectiveValue_ = objectiveValue;
