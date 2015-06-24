@@ -132,7 +132,6 @@ if(BUILD_TESTS)
     test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
     test/helper/testSetTheory.cpp
-    test/helper/testString.cpp
     test/helper/testUnorderedContainer.cpp
     test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
@@ -193,7 +192,6 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/helper/quasiRandomSequence.hpp
   include/mantella_bits/helper/random.hpp
   include/mantella_bits/helper/setTheory.hpp
-  include/mantella_bits/helper/string.hpp
   include/mantella_bits/helper/unorderedContainer.hpp
   include/mantella_bits/optimisationProblem.hpp
   include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp

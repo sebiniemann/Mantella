@@ -18,3 +18,14 @@ TEST_CASE("printable: Printable", "") {
     CHECK(testPrintable.toString() == "ThisIsTestPrintable");
   }
 }
+
+TEST_CASE("string: to_string(Printable*)", "") {
+  SECTION("Returns the specified class name.") {
+    std::shared_ptr<mant::Printable> testPrintable = std::shared_ptr<mant::Printable>(new TestPrintable);
+
+    CHECK(mant::to_string(testPrintable) == "ThisIsTestPrintable");
+  }
+}
+
+
+

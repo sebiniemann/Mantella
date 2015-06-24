@@ -80,7 +80,6 @@
 #include <mantella_bits/helper/quasiRandomSequence.hpp>
 #include <mantella_bits/helper/random.hpp>
 #include <mantella_bits/helper/setTheory.hpp>
-#include <mantella_bits/helper/string.hpp>
 #include <mantella_bits/helper/unorderedContainer.hpp>
 
 // Optimisation problems
