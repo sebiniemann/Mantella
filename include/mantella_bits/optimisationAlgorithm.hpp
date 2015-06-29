@@ -46,7 +46,7 @@ namespace mant {
 
       std::vector<std::pair<arma::Col<T>, double>> parameterHistory_;
 
-      int rank_;
+      int nodeRank_;
       
       int numberOfNodes_;
 
@@ -115,10 +115,10 @@ namespace mant {
     setMaximalNumberOfIterations(1000);
     
 #if defined(MANTELLA_USE_MPI)
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
+    MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
 #else
-    rank_ = 0;
+    nodeRank_ = 0;
     numberOfNodes_ = 1;
 #endif
   }
@@ -131,20 +131,20 @@ namespace mant {
     std::vector<double> serialisedOptimisationProblem;
     unsigned int serialisedOptimisationProblemSize;
 
-    if (rank_ == 0) {
+    if (nodeRank_ == 0) {
       serialisedOptimisationProblem = optimisationProblem_->serialise();
       serialisedOptimisationProblemSize = static_cast<unsigned int>(serialisedOptimisationProblem.size());
     }
 
     MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
 
-    if (rank_ != 0) {
+    if (nodeRank_ != 0) {
       serialisedOptimisationProblem.resize(serialisedOptimisationProblemSize);
     }
 
     MPI_Bcast(&serialisedOptimisationProblem[0], serialisedOptimisationProblemSize, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    if (rank_ != 0) {
+    if (nodeRank_ != 0) {
       optimisationProblem_->deserialise(serialisedOptimisationProblem);
     }
 #endif
