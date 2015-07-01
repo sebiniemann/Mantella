@@ -2,6 +2,10 @@
  * Style tweaks
  * --------------------------------------------------
  */
+ 
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+}
 
 @media screen {
   body {
@@ -28,7 +32,7 @@
   }
   
 .landing-page-first {
-    padding: 140px 20% 100px;
+    padding: 150px 20%;
   }
 }
 
@@ -52,7 +56,6 @@
 .landing-page-first h1 {
   font-family: "Open Sans";
   font-size: 126px;
-  color: rgb(233, 53, 53);
 }
 
 .landing-page .btn {
@@ -345,4 +348,23 @@ h1 {
   .tab-content > .tab-pane {
     display: block;
   }
+}
+
+.btn-lg,
+.btn-group-lg > .btn {
+  padding: 10px 30px;
+  border-radius: 3px;
+}
+
+.landing-page-first .lead {
+  margin-bottom: 50px;
+}
+
+.navbar-toggle {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.affix-top  {
+  background: none;
 }
