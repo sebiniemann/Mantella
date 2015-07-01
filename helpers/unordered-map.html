@@ -1,0 +1,52 @@
+---
+layout: page
+---
+{% include h1 title="Unordered Map" %}
+
+<p>Adds support for <code>arma::Col&lt;T&gt;</code> to be used as a key in <code>std::unordered_map&lt;arma::Col&lt;T&gt;, U, Hash&lt;T&gt;, IsEqual&lt;T&gt;&gt;</code>, with any value type <code>U</code>.</p>
+
+<p>This is often used by the library for sets of pairs of parameters <code>arma::Col&lt;T&gt;</code> with their objective value <code>U</code></p>
+
+{% highlight cpp %}
+#include <mantella>
+#include <unordered_map>
+
+int main() {
+  // Creates an unordered map
+  std::unordered_map<arma::Col<double>, double, mant::Hash<double>, mant::IsEqual<double>> parameterToObjectiveValueMapping;
+  
+  // Populates the map
+  for (unsigned int n = 0; n < 1000; ++n) {
+    const arma::Col<double>& parameter = arma::randu<doubles>(4); // Random search
+    parameterToObjectiveValueMapping.insert({parameter, arma::norm(parameter)}); // 4-dimensional sphere function
+  }
+  
+  // Find the best (minimal) objective value and its parameter.
+  double bestObjectiveValue = std::numeric_limits<double>::infty;
+  arma::Col<double> bestParameter;
+  for (auto parameterToObjectiveValue : parameterToObjectiveValueMapping) {
+    if (parameterToObjectiveValue.second < bestObjectiveValue) {
+      bestObjectiveValue = parameterToObjectiveValue.second;
+      bestParameter = parameterToObjectiveValue.first;
+    }
+  }
+  
+  std::cout << "Best parameter: " << bestParameter << '\n';
+  std::cout << "Best objective: " << bestObjectiveValue << std::endl;
+  
+  return 0;
+}
+{% endhighlight %}
+
+{% include api call="Hash.operator()" returns="std::size_t" params="arma::Col&lt;T&gt; X" %}
+
+<ul>
+  <li>Generates a hash value for <code>X</code>, with a very small collision probability (less than 1 in 1.000.000).</li>
+</ul>
+
+{% include api call="IsEqual.operator()" returns="bool" params="arma::Col&lt;T&gt; A, arma::Col&lt;T&gt; B" %}
+
+<ul>
+  <li>Returns true if both vectors are equal, i.e. contain the same elements, in the same order, and false otherwise.</li>
+  <li><strong>Requirement:</strong> The number of elements in <code>A</code> must be equal to the number of elements in <code>B</code>.</li>
+</ul>

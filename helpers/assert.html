@@ -1,0 +1,73 @@
+---
+layout: page
+---
+{% include h1 title="Assert" %}
+
+<div class="panel panel-info">
+  <div class="panel-heading">Advanced topic</div>
+  <div class="panel-body">
+    This topic is intended for developers reasonably comfortable with Mantella and C++, that want to extend the functionality of this library.
+  </div>
+</div>
+
+<p>These helper functions are used to validate the input of public and internal APIs.</p>
+
+For user inputs, a common error function (<code>verify(...)</code>) is provided, as well as non-trivial <code>is...</code> checks (e.g. <code>isRotationMatrix(...)</code>) to reduce code duplication.
+
+{% include api call="verify" returns="void" params="bool B, std::string E" %}
+
+<p>Requires that <code>B</code> is <code>true</code>. Otherwise, a <code>std::logic_error(E)</code> exception is thrown.</p>
+
+<ul>
+  <li>This should always be used to verify that the user input of a public API meets its requirements.</li>
+  <li>For internal checks, that should not fail because of user input – but only because of internal bugs – we recommend to use <code>assert(B)</code> instead.</li>
+  <li>This is equal in behaviour to <code>if(!B) { throw std::logic_error(E) }</code>.</li>
+</ul>
+
+{% highlight cpp %}
+class BaseClass {
+  public: 
+    void blob(const arma::Mat<double>& parameter) {
+      verify(parameter.n_rows > 2, "The parameter must have at least 3 rows.");;
+      
+      // The parameter must not be a rotation matrix in all implementations of blob.
+      blobImplementation(parameter);
+    }
+    
+    virtual ~BaseClass() = default;
+    
+  protected:
+    virtual void blobImplementation(const arma::Mat<double>& parameter) = 0;
+};
+
+class DerivedClass : public BaseClass {
+  protected:
+    void blobImplementation(const arma::Mat<double>& parameter) override {
+      // Additional requirement for this implementation. 
+      verify(isRotationMatrix(parameter), "The parameter must be rotation matrix.");
+      
+      // Internal check, will be ignored in release builds.
+      assert(parameter.n_rows > 2);
+      
+      // Do something ...
+    }
+};
+{% endhighlight %}
+
+{% include api call="isRotationMatrix" returns="bool" params="arma::Mat&lt;T&gt; X" %}
+
+Returns true if <code>X</code> is a rotation matrix, and false otherwise.
+
+<ul>
+  <li><code>X</code> must be orthonormal with determinant 1 or -1, to be accepted as a rotation matrix.</li>
+  <li>This is similar in behaviour to <code>X.n_rows == X.n_cols && arma::all(X.t() == X.i()) && std::abs(arma::det(X)) == 1</code>, but not as restrictive, in order to account for rounding errors when calculating the inverse or determinant.</li>
+</ul>
+
+{% include api call="isPermutation" returns="bool" params="arma::Col&lt;unsigned int&gt; X, std::size_t S, std::size_t N" %}
+
+Returns true if <code>X</code> is a permutation on {0, 1, ..., <code>N - 1</code>} with permutation size <code>S</code>.
+
+<ul>
+  <li><code>X</code> must have exactly <code>S</code> elements, which are all unique and within {0, 1, ..., <code>N - 1</code>}.
+  <li>This is equal in behaviour to <code>X.n_elem == S && arma::all(X >= 0) && arma::all(X <= N - 1) && arma::all(arma::unique(X) == X)</code>.</li>
+</ul>

@@ -1,0 +1,72 @@
+---
+layout: default
+---
+<div class="container-fluid text-center landing-page landing-page-first">
+  <h1><img src="./assets/images/logo.png" alt="Logo"> Mantella</h1>
+  <p class="lead">An efficiency-focused, modern C++ library for analysing<br> and solving optimisation problems.</p>
+  <p>
+    <a role="button" class="btn btn-primary btn-lg" href="https://github.com/SebastianNiemann/Mantella/archive/master.zip"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download</a>
+    <a role="button" class="btn btn-primary btn-lg" href="/getting-started/">Get Started <span class="glyphicon glyphicon-send" aria-hidden="true"></span></a>
+  </p>
+</div>
+
+<div class="container-fluid text-center landing-page landing-page-second">
+  <h2>Painless installation within 1 minute<br>
+  <small>Mantella is a header-only C++11 library, you don't need to build the library.</small></h2>
+  
+  <pre>git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+sudo cp -R Mantella/include/* /usr/local/include/</pre>
+
+  <strong>Done!</strong>
+</div>
+
+<div class="container-fluid text-center landing-page landing-page-third">
+  <h2>Mantella is new, but easy to use and master<br>
+  <small>Mantella helps you being productive and lets you focus on your own application.</small></h2>
+
+{% highlight cpp %}
+#include <iostream>
+#include <mantella>
+
+int main() {
+  // 1. Setup the optimisation problem.
+  std::shared_ptr<mant::OptimisationProblem<>> optimisationProblem(new mant::bbob::SphereFunction<>(10));
+
+  // 2. Run the solver.
+  mant::HookeJeevesAlgorithm<> optimisationAlgorithm(optimisationProblem);
+  optimisationAlgorithm.optimise();
+
+  // 3. Get your result!
+  std::cout << "Best solution: " << optimisationAlgorithm.getBestParameter() << std::endl;
+
+  return 0;
+}
+{% endhighlight %}
+
+Mantella also provides a wide range of competitive, state of the art optimisation algorithms.
+</div>
+
+<div class="container-fluid text-center landing-page landing-page-fourth">
+  <h2>Mantella is fast and scales with your (multi-core) hardware<br>
+  <small>We are not in the 90's, support of SIMD vectorisation, parallelisation and HPCs are a given!</small></h2>
+
+  <p class="lead">Mantella is built upon <a href="http://arma.sourceforge.net/">Armadillo C++</a>, supporting 64 bit operation systems and speedups by SIMD vectorisation (e.g. SSE2, SSE3, SS4 and AVX).</p>  
+  <p class="lead">When compiled with MPI-support, Mantella automatically uses high performance cluster algorithms, no need for source code changes.</p>
+</div>
+
+<div class="container-fluid text-center landing-page landing-page-fifth">
+  <h2>Mantella has a permissive license<br>
+  <small>No need to be restrictive.</small></h2>
+
+  <p class="lead">Mantella is licensed under the <a href="http://opensource.org/licenses/MIT" target="_blank">MIT license</a>.</p>
+</div>
+
+<div class="container-fluid text-center landing-page landing-page-sixth">
+  <h2>So, what are you waiting for?<br>
+  <small>Download Mantella and get started.</small></h2>
+  <p class="lead">
+    <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download</button>
+    Mantella and
+    <button type="button" class="btn btn-default btn-lg">Get Started <span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>
+  </p>
+</div>

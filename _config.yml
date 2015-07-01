@@ -1,33 +1,65 @@
 # Site settings
-baseurl: http://mantella.info
+#baseurl: http://mantella.info
 
 # Note, it is not required for the title to match the project name
 title: Mantella
-subtitle: An efficiency-focused, modern C++ library for analysing and solving optimisation problems.
 description: Mantella is an efficiency-focused, modern C++ library for analysing and solving optimisation problems.
-author: Core Mantella team
-  
-project_name: Mantella
-github-url: https://github.com/SebastianNiemann/Mantella
 
-navigation:
- - Get Started
- - API Reference
- - Changelog
- - Questions
- 
-api_version:
- - 1.x
- - Draft
+github: https://github.com/SebastianNiemann/Mantella
 
-# Avoids the need of .html suffixes
+# Sections
+sections:
+  - title: Overview
+  - title: Why Mantella?
+  - title: Getting Started
+    subsections:
+      - Installation
+      - Hello World
+      - Solving your own Problems
+      - Fine-tuning
+      - Benchmarking
+      - Parallelisation
+  - title: Optimisation Algorithms
+    subsections:
+      - Random Search
+      - Grid Search
+      - Hill Climbing
+      - Simulated Annealing
+      - Hooke-Jeeves Algorithm
+      - Particle Swarm Optimisation
+  - title: Optimisation Problems
+    subsections:
+      - Black-box Optimisation Benchmark
+      - Robot Pose Accuracy
+      - Robot Models
+  - title: Property Analyses
+    subsections:
+      - Fitness Distance Correlation
+      - Fitness Cloud Correlation
+      - Lipschitz Continuity
+      - Hölder Continuity
+      - Linear Model Analysis
+      - Quadratic Model Analysis
+      - Additive Separability
+      - Multiplicative Separability
+      - Linear Proportionality
+  - title: Helpers
+    subsections:
+      - Assert
+      - Random Number Generator
+      - Geometry
+      - Random Matrix Generator
+      - Quasi Random Sequence
+      - Set Theory
+      - Printable
+      - Unordered Map
+  - title: Changelog
+
+# Avoids .html suffixes
 permalink: pretty
-  
-# Parse Markdown inside HTML blocks
-kramdown:
-  parse_block_html: true
 
-# Provide SASS files as compressed CSS files
-sass:
-  sass_dir: _sass
-  style: :compressed
+# Build settings
+markdown: kramdown
+
+error_mode: :strict
+array: []

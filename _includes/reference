@@ -1,1 +1,0 @@
-<a href="#{{ include.prefix }}{{ include.name | slugify }}">{{ include.name }}</a>

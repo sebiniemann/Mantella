@@ -1,0 +1,1 @@
+<h1 id="top">{{ include.title }} <a class="anchor pull-right hidden-print" href="#top" aria-hidden="true">#</a></h1>

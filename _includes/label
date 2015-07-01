@@ -1,3 +1,0 @@
-{% capture anchor %}{{ include.prefix }}{{ include.name | slugify }}{% endcapture %}
-<a class="custom-anchor" href="#{{ anchor }}"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
-<a name="{{ anchor }}"></a>

@@ -1,0 +1,27 @@
+<hr>
+
+<h3 id="{{ include.call | slugify }}">
+  <strong>
+    {% if include.call contains "::" %}static {% endif %}
+    {% if include.returns %}<small>{{ include.returns }}</small> {% endif %}
+    {{ include.call }}(<a class="anchor pull-right hidden-print" href="#{{ include.call | slugify }}" aria-hidden="true">#</a>{% if include.params %}
+      {% assign params = include.params | split: ", " %}
+      <span style="display:table;margin-left:20px;">
+        {% for param in params %}
+          {% assign pair = param | split: " " %}
+          {% assign name = pair[-1] %}
+          {% assign type = pair | pop | join: " " %}
+          <span style="display:table-row">
+            <span style="display:table-cell;padding-right:20px;"><small>{{ type }}</small></span>
+            <span style="display:table-cell;padding-right:20px;font-size:65%">{{ name }}</span>
+          </span>
+        {% endfor %}
+      </span>
+    {% endif %})
+    {% if include.returns %}
+      {% if include.call contains "." or include.call contains "::" %}{% else %} <small>(stand-alone function)</small>{% endif %}
+    {% else %}
+      <small>(constructor)</small>
+    {% endif %}
+  </strong>
+</h3>

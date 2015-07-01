@@ -1,0 +1,36 @@
+---
+layout: page
+---
+{% include h1 title="Installation" %}
+
+<div class="panel panel-info">
+  <div class="panel-heading">Is my OS supported?</div>
+  <div class="panel-body">
+    We are actively supporting all big operation systems (Unix and Linux variants, Mac OS X and Windows), provided all necessarily dependencies are already installed.
+  </div>
+</div>
+
+{% include h2 title="Prerequirements" %}
+
+<ul>
+  <li>GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler</li>
+  <li>Armadillo C++ 4.650.0 (project page)</li>
+</ul>
+
+<p>Installing Armadillo C++ on Ubuntu (visit the Armadillo’s download page to find installation instructions for other operating systems):</p>
+<pre>sudo apt-get install libblas-dev liblapack-dev
+wget http://downloads.sourceforge.net/project/arma/armadillo-4.650.3.tar.gz
+tar -xzf armadillo-4.650.3.tar.gz
+cd armadillo-4.650.3
+cmake .
+make
+sudo make install</pre>
+
+{% include h2 title="Download and Install" %}
+
+<p>Mantella is a header-only library, downloading the latest stable version and placing the header files into a directory standardly searched by your compiler finishes the installation.</p>
+
+<pre>git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+sudo cp -R Mantella/include/* /usr/local/include/</pre>
+
+<strong>Done.</strong> You can now start creating applications with Mantella.

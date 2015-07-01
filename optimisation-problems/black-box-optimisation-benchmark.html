@@ -1,0 +1,877 @@
+---
+layout: page
+optimisation_problems:
+- Attractive Sector Function
+- Bent Cigar Function
+- Büche-Rastrigin Function
+- Composite Griewank-Rosenbrock Function F8F2
+- Different Powers Function
+- Discus Function
+- Ellipsoidal Function
+- Ellipsoidal Function, rotated
+- Gallagher's Gaussian 101-me Peaks Function
+- Gallagher's Gaussian 21-hi Peaks Function
+- Katsuura Function
+- Linear Slope
+- Lunacek bi-Rastrigin Function
+- Rastrigin Function
+- Rastrigin Function, rotated
+- Rosenbrock Function
+- Rosenbrock Function, rotated
+- Schaffers F7 Function
+- Schaffers F7 Function, ill-conditioned
+- Schwefel Function
+- Sharp Ridge Function
+- Sphere Function
+- Step Ellipsoidal Function
+- Weierstrass Function
+---
+{% include h1 title="Black-box Optimisation Benchmark" %}
+<div class="panel panel-info">
+  <div class="panel-heading">Namespace, Inheritance and Templating</div>
+  <div class="panel-body">
+    <p>These classes are placed within the <code>mant::bbob::</code> namespace, avoiding naming conflicts with similar benchmarks.</p>
+    
+    <p>All specific optimisation problems (e.g. Attractive Sector Function, Bent Cigar Function, ...) listed below extend <code>BlackBoxOptimisationBenchmark&lt;T&gt;</code>, which itself extends <code>OptimisationProblem&lt;T&gt;</code>.</p>
+    
+    <p>Only floating point types (<code>double</code>, <code>float</code>, ...) are valid template parameter for <code>T</code>. The template parameter specifies the type for the parameter <code>X</code> to be optimised. Per default (using an empty <code>&lt;&gt;</code>), <code>double</code> is used as type.</p>
+  </div>
+</div>
+
+<p>The black-box optimisation benchmark, developed by <a href="https://www.lri.fr/~hansen/">Nikolaus Hansen</a> et al., is a popular benchmark for continuous, single-objective black-box optimisation algorithms and used in competitions at the <a href="http://coco.gforge.inria.fr/doku.php?id=bbob-2009">GECCO 2009</a>, <a href="http://coco.gforge.inria.fr/doku.php?id=bbob-2010">2010</a>, <a href="http://coco.gforge.inria.fr/doku.php?id=bbob-2012">2012</a>, <a href="http://coco.gforge.inria.fr/doku.php?id=bbob-2013">2013</a>, <a href="http://coco.gforge.inria.fr/doku.php?id=bbob-2015">2015</a> and <a href="http://coco.gforge.inria.fr/doku.php?id=cec-bbob-2015">CEC 2015</a>. It consist of 24 synthetic optimisation problems and focuses on <em>comprehensible</em> instances, in order to get a better cause-effect between the algorithms and problems at hand.</p>
+
+<p>Below is one of our larger example codes, demonstrating the common usage of (any) optimisation benchmark. It individually evaluates the performance of the Hooke-Jeeves algorithm for each of the 24 black box optimisation benchmark problems. The evaluation is rerun 100 times (without resetting the random number generator), to get some statistical insights about the actual performance, despite measuring only a single instance.</p>
+
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+  <li role="presentation" class="active"><a href="#bbob-evaluation-cpp" aria-controls="bbob-evaluation-cpp" role="tab" data-toggle="tab">C++</a></li>
+  <li role="presentation"><a href="#bbob-evaluation-output" aria-controls="bbob-evaluation-output" role="tab" data-toggle="tab">Output</a></li>
+</ul>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="bbob-evaluation-cpp">
+{% highlight cpp %}
+#include <array>
+#include <memory>
+#include <mantella>
+
+int main() {
+  // Initialises the random number generator
+  mant::Rng::setRandomSeed();
+  
+  unsigned int numberOfDimensions = 10;
+  // Creates an array containing all 24 black box optimisation benchmark problems.
+  std::array<std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>, 24> optimisationProblems = {
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new AttractiveSectorFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new BentCigarFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new BuecheRastriginFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new CompositeGriewankRosenbrockFunctionF8F2<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new DifferentPowersFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new DiscusFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new EllipsoidalFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new EllipsoidalFunctionRotated<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new GallaghersGaussian101mePeaks Function<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new GallaghersGaussian21hiPeaks Function<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new KatsuuraFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new LinearSlope<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new LunacekbiRastrigin Function<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new RastriginFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new RastriginFunctionRotated<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new RosenbrockFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new RosenbrockFunctionRotated<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new SchaffersF7Function<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new SchaffersF7FunctionIllConditioned<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new SchwefelFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new SharpRidgeFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new SphereFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new StepEllipsoidalFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new WeierstrassFunction<>(numberOfDimensions))
+  };
+  
+  // Evaluating the performance of the Hooke-Jeeves algorithm.
+  // Rerun the evaluation 100 times, to account for random effects.
+  unsigned int numberOfRuns = 100;
+  arma::Mat<unsigned int> numberOfDistinctEvaluations(numberOfRuns, optimisationProblems.size());
+  for (std::size_t n = 0; n < numberOfRuns; ++n) {
+    for (std::size_t k = 0; k < optimisationProblems.size(); ++k) {
+      mant::HookeJeevesAlgorithm<> optimisationAlgorithm(optimisationProblems.at(k));
+      optimisationAlgorithm.optimise();
+      // Store the results, each column stands for an optimisation problem and each row for a run.
+      numberOfDistinctEvaluations(n, k) = optimisationProblem->getNumberOfDistinctEvaluations();
+    }
+  }
+
+  // Print the results, together with some statistics
+  std::cout << "Evaluation results for the Hooke-Jeeves algorithm:" << '\n' << std::endl;
+  for (std::size_t n = 0; n < optimisationProblems.size(); ++n) {
+    std::cout << "Number of distinct evaluations for the " << mant::to_string(optimisationProblems.at(n)) << '\n'; // C++ STL style alternative to ->toString().
+    std::cout << "  Minimal: " << arma::min(numberOfDistinctEvaluations.col(n)) << '\n';
+    std::cout << "  Maximal: " << arma::max(numberOfDistinctEvaluations.col(n)) << '\n';
+    std::cout << "  Mean: " << arma::mean(numberOfDistinctEvaluations.col(n)) << '\n';
+    std::cout << "  Median: " << arma::median(numberOfDistinctEvaluations.col(n)) << '\n';
+    std::cout << "  Standard deviation: " << arma::stddev(numberOfDistinctEvaluations.col(n)) << '\n';
+    std::cout << std::endl;
+  }
+  
+  return 0;
+}
+{% endhighlight %}
+  </div>
+  <div role="tabpanel" class="tab-pane" id="bbob-evaluation-output">
+{% highlight text %}
+[...]
+
+Number of distinct evaluations for the bbob_gallaghers_gaussian_21hi_peaks_function
+  Minimal: 708
+  Maximal: 870
+  Mean: 786
+  Median: 782
+  Standard deviation: 33
+
+Number of distinct evaluations for the bbob_katsuura_function
+  Minimal: 634
+  Maximal: 862
+  Mean: 745
+  Median: 739
+  Standard deviation: 44
+
+Number of distinct evaluations for the bbob_linear_slope
+  Minimal: 21
+  Maximal: 21
+  Mean: 21
+  Median: 21
+  Standard deviation: 0
+  
+[...]
+{% endhighlight %}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">Reproducing evaluations</div>
+  <div class="panel-body">
+    In order to rerun previous evaluations, you might want to store/control the seeding of the random number generator, instead of simply calling <code>mant::Rng::setRandomSeed()</code>. See <a href="/helpers/random-number-generator/">Helper -> Random Number Generator</a> for a short example on how to do this.
+  </div>
+</div>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <a class="panel-heading" role="tab" id="heading-general-settings" data-toggle="collapse" data-parent="#accordion" href="#collapse-general-settings" aria-expanded="true" aria-controls="collapse-general-settings">
+      General Settings
+    </a>
+    <div id="collapse-general-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-general-settings">
+      <div class="panel-body">
+        <div class="panel panel-info">
+          <div class="panel-heading">Adjusting the lower and upper bound</div>
+          <div class="panel-body">
+            It is not recommended to change the lower and upper bounds, as some optimisation problems will only perform as described within these boundaries.
+          </div>
+        </div>
+        
+        <h4>Default initialisation</h4>
+        <ul>
+          <li>The lower bounds are set to \((-5, \ldots, -5)\).</li>
+          <li>The upper bounds are set to \((5, \ldots, 5)\).</li>
+          <li>The parameter space is randomly translated by a Cauchy distribution with an approximate 50% chance for the optimal objective value to be within \(\left[-100, 100\right]\), rounded up to 2 decimal places. The optimal objective value is further bounded to be between \(-1000\) and \(1000\).</li>
+          <li>The acceptable objective value threshold is set to be \(1.0e-8\) above the minimal objective value within the solution space.</li>
+        </ul>
+
+        <h4>Parameter space transformations</h4>
+
+        <p>Most functions within the benchmark perform additional transformations on the parameter space (\(T_\text{conditioning}\), \(T_\text{conditioned}\), \(T_\text{asymmetric}\) and \(T_\text{oscillated}\)), in order to adjust local optima, the conditioning and separability of a problem.</p>
+
+        $$\begin{align}
+          {T_\text{conditioning}^C}_i &:= C^\frac{i}{N - 1}\\
+          {T_\text{conditioned}(X)}_i &:= X_i^\frac{i}{N - 1}\\
+          {T_\text{asymmetric}^A(X)}_i &:= \begin{cases}
+            X_i^{1 + A \cdot \frac{i}{N - 1} \cdot \sqrt{X_i}} & \text{if } X > 0 \\
+            X_i & \text{otherwise}
+          \end{cases}\\
+          T_\text{oscillated}(X), X \text{ is a scalar} &:= \begin{cases}
+            e^{\text{log}\left(\left|X\right|\right) + 0.049 \left(\sin\left(10 \text{log}\left(\left|X\right|\right)\right) + \sin\left(7.9 \text{log}\left(\left|X\right|\right)\right)\right)} & \text{if } X > 0 \\
+            -e^{\text{log}\left(\left|X\right|\right) + 0.049 \left(\sin\left(5.5 \text{log}\left(\left|X\right|\right)\right) + \sin\left(3.1 \text{log}\left(\left|X\right|\right)\right)\right)} & \text{if } X < 0 \\
+            0 & \text{otherwise}
+          \end{cases}\\
+          T_\text{oscillated}(X)_i, X \text{ is a vector} &:= T_\text{oscillated}(X_i)
+        \end{align}$$
+
+        <h4>Soft-constraints value</h4>
+
+        <p>Some functions within the benchmark have a non-zero soft-constraints function (based on \\(F_\text{penality}\\)), which acts as an additional boundary constraint.</p>
+
+        $$F_\text{penality}(X) := \sum_{i = 0}^N\max\left(0, \left|X_i\right| - 5\right)^2$$
+      </div>
+    </div>
+  </div>
+</div>
+{% for optimisation_problem in page.optimisation_problems %}
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <a class="panel-heading" role="tab" id="heading-{{ optimisation_problem | slugify }}" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ optimisation_problem | slugify }}" aria-expanded="true" aria-controls="collapse-{{ optimisation_problem | slugify }}">
+        {{ optimisation_problem }}
+      </a>
+      <div id="collapse-{{ optimisation_problem | slugify }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ optimisation_problem | slugify }}">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-6">
+              <a href="/assets/images/black-box-optimisation-benchmark/{{ optimisation_problem | slugify }}-surface.png" class="thumbnail" target="_blank">
+                <img class="img-responsive center-block" src="/assets/images/black-box-optimisation-benchmark/{{ optimisation_problem | slugify }}-surface.png" alt="{{ optimisation_problem}} surface plot">
+              </a>
+            </div>
+            <div class="col-xs-6">
+              <a href="/assets/images/black-box-optimisation-benchmark/{{ optimisation_problem | slugify }}-contour.png" class="thumbnail" target="_blank">
+                <img class="img-responsive center-block" src="/assets/images/black-box-optimisation-benchmark/{{ optimisation_problem | slugify }}-contour.png" alt="{{ optimisation_problem}} contour plot">
+              </a>
+            </div>
+          </div>
+          
+          {% case optimisation_problem %}
+            {% when "Attractive Sector Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= T_\text{oscillated}\left(\left\Vert S \right\Vert_2^2\right)^{0.9} \\
+                Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot X\\
+                S_i &:= \begin{cases}
+                  100 Z_{i} & \text{if } Z_{i} \cdot {X_T}_i > 0 \\
+                  Z_{i} & \text{otherwise}
+                \end{cases}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="AttractiveSectorFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_attractive_sector_function</code>.</p>
+            {% when "Bent Cigar Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= Z_{1} + 1000000 \sum_{i = 2}^{N} Z_{i}\\
+                Z &:= \left( Q \cdot T_\text{asymmetric}^{0.5} \cdot \left( Q \cdot X \right) \right)^{2}\\
+                F_0 &:= \sum_{i=0}^{11} 0.5^i \cos\left( \pi 3^j \right)\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}\\
+                (\ldots)^p &:= \text{Element-wise power}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="BentCigarFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_bent_cigar_function</code>.</p>
+            {% when "Büche-Rastrigin Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 10 N - \sum_{i = 1}^{N} \left( \cos{2 \pi S_{i}} \right) + \left\Vert S \right\Vert_{2}^{2}\\
+                Z &:= T_\text{conditioning}^\sqrt{10} \cdot T_\text{oscillated} \left( X \right)\\
+                S_{i} &:= \begin{cases}
+                  10 Z_{i} & \text{if } i \text{ is odd and } Z_{i} > 0\\
+                  Z_{i} & \text{otherwise}
+                \end{cases}\\
+                N &:= \text{The number of dimensions.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 100 \cdot F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]\) for odd and within \([0, 4]\) for even dimensions, rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) for odd and to \(0.00001\) for even dimensions instead.</li>
+              </ul>
+                            {% include api call="BuecheRastriginFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_bueche_rastrigin_function</code>.</p>
+            {% when "Composite Griewank-Rosenbrock Function F8F2" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 10 \left( \frac{\sum_{i = 1}^{N} \frac{S_i}{4000} - \cos\left( S_i \right)}{N} + 1 \right)\\
+                M &:= \max\left( 1, \frac{\sqrt{N}}{8} \right)\\
+                Z &:= M \cdot X + 0.5\\
+                S &:= 100 \left( \sum_{i = 1}^{N - 1} \left( Z_{i}^{2} - Z_{i + 1} \right) \right)^{2} + \left( \sum_{i = 1}^{N-1} \left( 1 - Z_{i} \right) \right)^{2}\\
+                N &:= \text{The number of dimensions.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+              </ul>
+                            {% include api call="CompositeGriewankRosenbrockFunctionF8F2&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_composite_griewank_rosenbrock_function_f8f2</code>.</p>
+            {% when "Different Powers Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= \left\Vert \prod_{i = 1}^{N} \left| X_i \right| Z_i \right\Vert_{2}\\
+                Z &:= T_\text{conditioned} \left( X^{2} \right)\\
+                N &:= \text{The number of dimensions.}\\
+                (\ldots)^p &:= \text{Element-wise power}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+              </ul>
+                            {% include api call="DifferentPowersFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_different_powers_function</code>.</p>
+            {% when "Discus Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 1000000 Z_{1} + \sum_{i = 2}^{N} Z_{i}\\
+                Z &:= T_\text{oscillated} \left( X \right)^{2}\\
+                N &:= \text{The number of dimensions.}\\
+                (\ldots)^p &:= \text{Element-wise power}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+              </ul>
+                            {% include api call="DiscusFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_discus_function</code>.</p>
+            {% when "Ellipsoidal Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:=  T_\text{conditioning}^{1000000} \cdot T_{oscillated} \left( X \right)^{2} \\
+                (\ldots)^p &:= \text{Element-wise power}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+              </ul>
+                            {% include api call="EllipsoidalFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_ellipsoidal_function</code>.</p>
+            {% when "Ellipsoidal Function, rotated" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:=  T_\text{conditioning}^{1000000} \cdot T_{oscillated} \left( X \right)^{2}\\
+                (\ldots)^p &:= \text{Element-wise power}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+              </ul>
+                            {% include api call="EllipsoidalFunctionRotated&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_ellipsoidal_function_rotated</code>.</p>
+            {% when "Gallagher's Gaussian 101-me Peaks Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= T_\text{oscillated} \left( 10 - \max_{i = 1}^{101} \left( W_i \exp \left(-\frac{1}{2N} \left( X - Y_i \right) \cdot \left(R^T \cdot C_i \cdot Q \cdot \left( X - Y_i \right) \right) \right) \right) \right)^{2}\\
+                W_i &:= \begin{cases}
+                1.1 + 8 \cdot \frac{i - 2}{99} & \text{for } i = 2, \ldots, 101 \\
+                10 & \text{for  } i = 1
+                \end{cases}\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}\\
+                C_i &:= \text{Some local parameter conditionings.}\\
+                Y_i &:= \text{Some local parameter translations}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+                <li>The first local parameter conditioning \(C_0\) is set to<br>
+                  <span style="padding-left: 20px;">
+                    $$\frac{T_\text{conditioning}^{10^{1.5}}}{10^{0.75}}$$
+                  </span><br>
+                  and all others are set to a randomly and uniformly selected without repetition from<br>
+                  <span style="padding-left: 20px;">
+                    $$\left\{\frac{T_\text{conditioning}^{10^\frac{c}{33}}}{10^\frac{c}{66}} : c \in \left\{ 0, \ldots, 100 \right\}\right\}$$
+                  </span></li>
+                <li>The first local parameter translation \(Y_0\) is randomly and uniformly chosen from \([-4, 4]^N\) and all others are each chosen from \([-5, 5]^N\).</li>
+              </ul>
+                            {% include api call="GallaghersGaussian101mePeaksFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_gallaghers_gaussian_101me_peaks_function</code>.</p>
+            {% when "Gallagher's Gaussian 21-hi Peaks Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= T_\text{oscillated} \left( 10 - \max_{i = 1}^{21} \left( W_i \exp \left(-\frac{1}{2N} \left( X - Y_i \right) \cdot \left(R^T \cdot C_i \cdot Q \cdot \left( X - Y_i \right) \right) \right) \right) \right)^{2}\\
+                W_i &:= \begin{cases}
+                1.1 + 8 \cdot \frac{i - 2}{19} & \text{for } i = 2, \ldots, 21 \\
+                10 & \text{for  } i = 1
+                \end{cases}\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}\\
+                C_i &:= \text{Some local parameter conditionings.}\\
+                Y_i &:= \text{Some local parameter translations.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</lI>
+                <li>The first local parameter conditioning \(C_0\) is set to<br>
+                  <span style="padding-left: 20px;">
+                    $$\frac{T_\text{conditioning}^{1000}}{\sqrt{1000}}$$
+                  </span><br>
+                  and all others are set to a randomly and uniformly selected without repetition from<br>
+                  <span style="padding-left: 20px;">
+                    $$\left\{\frac{T_\text{conditioning}^{1000^\frac{c}{19}}}{1000^\frac{c}{38}} : c \in \left\{ 0, \ldots, 20 \right\}\right\}$$
+                  </span></li>
+                <li>The first local parameter translation \(Y_0\) is randomly and uniformly chosen from \([-3.92, 3.92]^N\) and all others are each chosen from \([-4.9, 4.9]^N\).</li>
+              </ul>
+                            {% include api call="GallaghersGaussian21hiPeaksFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_gallaghers_gaussian_21hi_peaks_function</code>.</p>
+            {% when "Katsuura Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= \frac{10}{N^{2}} \left( \prod_{i=1}^{N}\left( 1 + i \sum_{j=1}^{32} \frac{\left| 2^{j}Z_i - \left[2^{j}Z_{i}\right]\right|}{2^j} \right)^{\frac{10}{N^{1.2}}} - 1 \right)\\
+                Z &:= Q \cdot T_\text{conditioned}^{10} \cdot X\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}\\
+                [\cdot] &:= \text{Rounding to the nearest integer value}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="KatsuuraFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_katsuura_function</code>.</p>
+            {% when "Linear Slope" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= F_0 - S \cdot Z\\
+                S &:= T_\text{conditioning}^\sqrt{10}\\
+                Z_i &:= \begin{cases}
+                X_i & \text{if } X_{i} > {C_L}_i \\
+                {C_L}_i & \text{otherwise}
+                \end{cases}\\
+                F_0 &:= \left\Vert 5 S \right\Vert_2^2\\
+                C_L &:= \text{The lower bounds of the search space.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The parameter space is randomly and uniformly rotated by either 180° or 0° (performing no rotation at all).</li>
+              </ul>
+                            {% include api call="LinearSlope&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_linear_slope</code>.</p>
+            {% when "Lunacek bi-Rastrigin Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= \min\left( \sum_{i=1}^{N} \left( X_i - 2.5 \right)^2, N + S \sum_{i=1}^{N} \left( X_i + \mu \right)^2 \right) + 10 \left( N - \sum_{i=1}^N \cos\left( 2 \pi Z_i \right)\right)\\
+                Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot R \cdot \left( X - 2.5 \right)\\
+                S &:= 1 - \frac{0.5}{\sqrt{N + 20} - 4.1}\\
+                \mu &:= \sqrt{5.25 / S}\\
+                N &:= \text{The number of dimensions.}\\
+                R &:= \text{Some rotation matrix.}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 10000 F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The parameter space scaling is randomly and uniformly chosen to be either set to \((-2, \ldots, -2)\) or \((2, \ldots, 2)\).</li>
+                <li>\(R\) is set to a randomly and uniformly chosen rotation matrix.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="LunacekBiRastriginFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_lunacek_bi_rastrigin_function</code>.</p>
+            {% when "Rastrigin Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 10 \left( N - \sum_{i=1}^N \cos\left( 2\pi Z_i \right) \right) + \left\Vert Z \right\Vert_2^2\\
+                Z &:= T_\text{conditioning}^\sqrt{10} \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( X \right) \right)\\
+                N &:= \text{The number of dimensions.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+              </ul>
+                            {% include api call="RastriginFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rastrigin_function</code>.</p>
+            {% when "Rastrigin Function, rotated" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 10 \left( N - \sum_{i=1}^N \cos\left( 2\pi Z_i \right) \right) + \left\Vert Z \right\Vert_2^2\\
+                Z &:= R \cdot T_\text{conditioning}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.2} \left(T_\text{oscillated} \left( R \cdot X \right) \right)\\
+                N &:= \text{The number of dimensions.}\\
+                R &:= \text{Some rotation matrix.}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <li>\(R\) is set to a randomly and uniformly chosen rotation matrix.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="RastriginFunctionRotated&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rastrigin_function_rotated</code>.</p>
+            {% when "Rosenbrock Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 100 \sum_{i=1}^{N-1} \left( X_i^2 - X_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( X_i + 1 \right)^2\\
+                Z & := \max\left(1, \sqrt{\frac{N}{2}} \right) \cdot X + 1 \\
+                N &:= \text{The number of dimensions.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+              </ul>
+                            {% include api call="RosenbrockFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rosenbrock_function</code>.</p>
+            {% when "Rosenbrock Function, rotated" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 100 \sum_{i=1}^{N-1} \left( Z_i^2 - Z_{i+1} \right)^2 + \sum_{i=1}^{N-1} \left( Z_i + 1 \right)^2 \\
+                Z & := \max\left(1, \sqrt{\frac{N}{2}} \right) \cdot X + 0.5 \\
+                N &:= \text{The number of dimensions.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+              </ul>
+                            {% include api call="RosenbrockFunctionRotated&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rosenbrock_function_rotated</code>.</p>
+            {% when "Schaffers F7 Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= \left( \frac{\sum_{i=1}^{N-1} S_i \cdot \left(1 + \sin\left(50 S_i^{0.4}\right)^2\right)}{N - 1} \right)^2\\
+                Z &:= T_\text{conditioning}^\sqrt{10} \cdot Q \cdot T_\text{asymmetric}^{0.5}\left( X \right)\\
+                S_i &:= \left(Z_i^2 + Z_{i+1}^2 \right)^{0.25}\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 10 F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="SchaffersF7Function&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_schaffers_f7_function</code>.</p>
+            {% when "Schaffers F7 Function, ill-conditioned" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= \left( \frac{\sum_{i=1}^{N-1} S_i \cdot \left(1 + \sin\left(50 S_i^{0.4}\right)^2\right)}{N - 1} \right)^2\\
+                Z &:= T_\text{conditioning}^\sqrt{1000} \cdot Q \cdot T_\text{asymmetric}^{0.5}\left( X \right)\\
+                S_i &:= \left(Z_i^2 + Z_{i+1}^2 \right)^{0.25}\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 10 F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="SchaffersF7FunctionIllConditioned&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_schaffers_f7_function_ill_conditioned</code>.</p>
+            {% when "Schwefel Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 0.01 (418.9828872724339 - \frac{\sum_{i=1}^{N} S_i \cdot \sin\left( \sqrt{\left| S_i \right|} \right)}{N})+ 100 F_\text{penality}\left( \frac{Z}{100} \right)\\
+                Z_i &:= \begin{cases}
+                X_i + 0.25 \left( X_{i-1} - 4.2096874633 \right) & \text{for } i = 2, \ldots, N \\
+                X_i & \text{for } i = 1
+                \end{cases}\\
+                S &:= 100 \left( T_\text{conditioning}^\sqrt{10} \cdot \left( Z - 4.2096874633 \right) + 4.2096874633 \right)\\
+                N &:= \text{The number of dimensions.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The parameter space scaling is randomly and uniformly chosen to be either set to \((-2, \ldots, -2)\) or \((2, \ldots, 2)\).</li>
+              </ul>
+                            {% include api call="SchwefelFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_schwefel_function</code>.</p>
+            {% when "Sharp Ridge Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= Z_1^2 + 100 \left\Vert \left(Z_2, \ldots, Z_N \right) \right\Vert_2\\
+                Z &:= Q \cdot T_\text{conditioning}^\sqrt{10} \cdot X\\
+                N &:= \text{The number of dimensions.}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="SharpRidgeFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_sharp_ridge_function</code>.</p>
+            {% when "Sphere Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= \left\Vert X \right\Vert_2
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := 0, \ \forall X$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+              </ul>
+                            {% include api call="SphereFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_sphere_function</code>.</p>
+            {% when "Step Ellipsoidal Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:=  0.1 \max\left( \frac{\left| Z_1 \right|}{10000}, T_\text{conditioning}^{100} \cdot Q \cdot \tilde{Z} \right)\\
+                Z &:= T_\text{conditioning}^\sqrt{10} \cdot X \\
+                \tilde{Z} &:= \begin{cases}
+                \left\lfloor 0.5 + Z_i\right\rfloor & \text{if } Z_i > 0.5\\
+                \frac{\left\lfloor 0.5 + 10Z_i\right\rfloor}{10} & \text{otherwise}\\
+                \end{cases}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := F_\text{penality}(X)$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
+                <lI>The parameter space is randomly and uniformly rotated.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="StepEllipsoidalFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_step_ellipsoidal_function</code>.</p>
+            {% when "Weierstrass Function" %}
+              <h4>Objective function:</h4>
+
+              $$\begin{align}
+                F(X) &:= 10 \left( \frac{\sum_{i=1}^N \sum_{j=0}^{11} 0.5^j \cos\left( 2 \pi 3^j \left(Z_i + 0.5 \right) \right)}{N}  - F_0 \right)^3\\
+                Z &:= R \cdot T_\text{conditioning}^\frac{1}{10} \cdot Q \cdot T_\text{oscillated} \left( R \cdot X \right)\\
+                F_0 &:= -1.99951171875\\
+                N &:= \text{The number of dimensions.}\\
+                R &:= \text{The rotation of the parameter space.}\\
+                Q &:= \text{Some rotation matrix.}
+              \end{align}$$
+
+              <h4>Soft-constraints function:</h4>
+
+              $$C(X) := \frac{10 F_\text{penality}(X)}{N}$$
+              
+              <h4>Default initialisation:</h4>
+              <ul>
+                <li>The parameter space scaling is randomly and uniformly chosen to be either set to \((-2, \ldots, -2)\) or \((2, \ldots, 2)\).</li>
+                <li>\(R\) is set to a randomly and uniformly chosen rotation matrix.</li>
+                <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
+              </ul>
+                            {% include api call="WeierstrassFunction&lt;T&gt;" params="unsigned int N" %}
+
+              <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
+                            {% include api call=".toString" returns="std::string" %}
+
+              <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_weierstrass_function</code>.</p>
+          {% endcase %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
