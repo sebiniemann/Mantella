@@ -24,6 +24,7 @@ body {
 .landing-page {
   background-size: cover;
   background-position-x: center;
+  padding-bottom: 30px;
 }
 
 @media (min-width: 992px) {
