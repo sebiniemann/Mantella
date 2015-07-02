@@ -49,7 +49,7 @@ body {
     linear-gradient(
       rgba(58, 58, 60, 0.9),
       rgba(58, 58, 60, 0.9)),
-    url(/assets/images/background_1.png);
+    url(/assets/images/background_1.jpg);
   color: white;
 }
 
@@ -68,7 +68,7 @@ body {
     linear-gradient(
       rgba(56, 180, 159, 0.85),
       rgba(56, 180, 159, 0.85)),
-    url(/assets/images/background_2.png);
+    url(/assets/images/background_2.jpg);
   color: white;
 }
 
@@ -81,7 +81,7 @@ body {
     linear-gradient(
       rgba(219, 78, 78, 0.85),
       rgba(219, 78, 78, 0.85)),
-    url(/assets/images/background_3.png);
+    url(/assets/images/background_3.jpg);
   color: white;
 }
 
