@@ -4,7 +4,7 @@
   <strong>
     {% if include.call contains "::" %}static {% endif %}
     {% if include.returns %}<small>{{ include.returns }}</small> {% endif %}
-    {{ include.call }}(<a class="anchor pull-right hidden-print" href="#{{ include.call | slugify }}" aria-hidden="true">#</a>{% if include.params %}
+    {{ include.call }}(<a class="anchor pull-right hidden-print hidden-xs" href="#{{ include.call | slugify }}" aria-hidden="true">#</a>{% if include.params %}
       {% assign params = include.params | split: ", " %}
       <span style="display:table;margin-left:20px;">
         {% for param in params %}
