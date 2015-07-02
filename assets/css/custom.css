@@ -287,6 +287,15 @@ h3:before {
   margin: -80px 0 0;
 }
 
+h2 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+pre {
+  margin: 20px 0;
+}
+
 .highlight pre {
     word-wrap: normal;
 }
