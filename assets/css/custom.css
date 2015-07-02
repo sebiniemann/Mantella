@@ -54,7 +54,13 @@ body {
 }
 
 .landing-page-first h1 {
-  font-size: 126px;
+  font-size: 70px;
+}
+
+@media (min-width: 768px) {
+  .landing-page-first h1 {
+    font-size: 126px;
+  }
 }
 
 .landing-page .btn {
