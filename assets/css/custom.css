@@ -389,3 +389,17 @@ h1 {
     background: none;
   }
 }
+
+@media (max-width: 768px) {
+  .pager .previous > a,
+  .pager .previous > span,
+  .pager .next > a,
+  .pager .next > span  {
+    float: none;
+  }
+  
+  .pager .next > a,
+  .pager .next > span  {
+    margin-top: 20px;
+  }
+}
