@@ -403,3 +403,7 @@ h1 {
     margin-top: 20px;
   }
 }
+
+.container > .row > div ul {
+  margin: 10px 0;
+}
