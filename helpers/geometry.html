@@ -5,24 +5,29 @@ layout: page
 
 {% include api call="get2DRotation" returns="arma::Mat&lt;T&gt;::fixed&lt;2, 2&gt;" params="T R" %}
 
+<p>Generates a 2-dimensional rotation matrix with rotation angle <code>R</code>.</p>
+
 <ul>
-  <li>Generates a 2-dimensional rotation matrix with rotation angle <code>R</code>.</li>
   <li>The rotation angle <code>R</code> is assumed to be measured in radians.</li>
   <li><strong>Note:</strong> Post-multiplication with a column vector will rotate the vector in the opposite direction.</li>
 </ul>
 
 {% include api call="get3DRotation" returns="arma::Mat&lt;T&gt;::fixed&lt;3, 3&gt;" params="T R, T P, T Y" %}
 
+<p>Generates a 3-dimensional rotation matrix with roll angle <code>R</code>, pitch angle <code>P</code> and yaw angle <code>Y</code>.</p>
+
 <ul>
-  <li>Generates a 3-dimensional rotation matrix with roll angle <code>R</code>, pitch angle <code>P</code> and yaw angle <code>Y</code>.</li>
   <li>All rotation angles (<code>R</code>, <code>P</code> and <code>Y</code>), are assumed to be measured in radians.</li>
   <li><strong>Note:</strong> Post-multiplication with a column vector will rotate the vector in the opposite directions.</li>
 </ul>
 
 {% include api call="getCircleCircleIntersection" returns="arma::Col&lt;T&gt;::fixed&lt;2&gt;" params="arma::Col&lt;T&gt;::fixed&lt;3&gt; C1, T R1, arma::Col&lt;T&gt;::fixed&lt;3&gt; C2, T R2" %}
 
+<img class="img-responsive center-block" src="/assets/images/api/circle-circle-intersection.png" alt="Circle circle intersection">
+
+<p>Calculates the (lower) intersection points between two circles in a 2-dimensional space.</p>
+
 <ul>
-  <li>Calculates the (lower) intersection points between two circles in a 2-dimensional space.</li>
   <li>The first circle is specified by its centre <code>C1</code> and radius <code>R1</code>.</li>
   <li>The second circle is specified by its centre <code>C2</code> and radius <code>R2</code>.</li>
   <li><strong>Note:</strong> The behaviour of this helper function is only based on the usage within the library, for which all other results are invalid.</li>
@@ -31,11 +36,14 @@ layout: page
 </ul>
 
 {% include api call="getCircleSphereIntersection" returns="arma::Col&lt;T&gt;::fixed&lt;3&gt;" params="arma::Col&lt;T&gt;::fixed&lt;3&gt; CC, T CR, arma::Col&lt;T&gt;::fixed&lt;3&gt; CN, arma::Col&lt;T&gt;::fixed&lt;3&gt; SC, T SR" %}
+
+<img class="img-responsive center-block" src="/assets/images/api/circle-sphere-intersection.png" alt="Circle sphere intersection">
+
+<p>Calculates the (lower) intersection points between a circle and a sphere in a 3-dimensional space.</p>
       
 <ul>
-  <li>Calculates the (lower) intersection points between a circle and a sphere in a 3-dimensional space.</li>
-  <li>The circle is specified by its centre <code>CC</code>, its radius <code>CR</code> and a normal vector <code>CN</code>, standing orthonormal to the circle.</li>
-  <li>The sphere is specified by its centre <code>SC</code> and its radius <code>SR</code>.</li>
+  <li>The circle is specified by its centre <code>CC</code>, radius <code>CR</code> and a normal vector <code>CN</code>, standing orthonormal to the circle.</li>
+  <li>The sphere is specified by its centre <code>SC</code> and radius <code>SR</code>.</li>
   <li><strong>Note:</strong> The behaviour of this helper function is only based on the usage within the library, for which all other results are invalid.</li>
   <li><strong>Requirement:</strong> The number of elements in <code>CC</code> must be equal to the number of elements in <code>CN</code> and <code>SC</code>.</li>
   <li><strong>Requirement:</strong> The circle and the sphere must intersect in exactly two points.</li>
