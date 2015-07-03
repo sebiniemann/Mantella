@@ -303,6 +303,10 @@ pre {
   margin: 20px 0;
 }
 
+.tab-pane pre {
+  margin: 20px 0;
+}
+
 .highlight pre {
     word-wrap: normal;
 }
