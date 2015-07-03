@@ -404,6 +404,10 @@ h1 {
   }
 }
 
-.container > .row > div ul {
+.container ul {
   margin: 10px 0;
+}
+
+.container .nav ul {
+  margin: 0;
 }
