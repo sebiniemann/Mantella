@@ -5,7 +5,9 @@ layout: page
 
 {% include api call="get2DRotation" returns="arma::Mat&lt;T&gt;::fixed&lt;2, 2&gt;" params="T R" %}
 
-<p>Generates a 2-dimensional rotation matrix with rotation angle <code>R</code>.</p>
+<img class="img-responsive center-block" src="/assets/images/api/2d-rotation.png" alt="2D Rotation">
+
+<p>Generates a 2-dimensional rotation matrix with counterclockwise rotation angle <code>R</code>.</p>
 
 <ul>
   <li>The rotation angle <code>R</code> is assumed to be measured in radians.</li>
@@ -13,6 +15,8 @@ layout: page
 </ul>
 
 {% include api call="get3DRotation" returns="arma::Mat&lt;T&gt;::fixed&lt;3, 3&gt;" params="T R, T P, T Y" %}
+
+<img class="img-responsive center-block" src="/assets/images/api/3d-rotation.png" alt="3D Rotation">
 
 <p>Generates a 3-dimensional rotation matrix with roll angle <code>R</code>, pitch angle <code>P</code> and yaw angle <code>Y</code>.</p>
 
