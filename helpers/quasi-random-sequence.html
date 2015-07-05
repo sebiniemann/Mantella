@@ -3,3 +3,40 @@ layout: page
 ---
 {% include h1 title="Quasi Random Sequence" %}
 
+<div class="row">
+  <div class="col-xs-6">
+    <a href="/assets/images/api/pseudo_random_sequence.png" class="thumbnail" target="_blank">
+      <img class="img-responsive center-block" src="/assets/images/api/pseudo_random_sequence.png" alt="{{ optimisation_problem}} contour plot">
+    </a>
+  </div>
+  <div class="col-xs-6">
+    <a href="/assets/images/api/halton_sequence.png" class="thumbnail" target="_blank">
+      <img class="img-responsive center-block" src="/assets/images/api/halton_sequence.png" alt="{{ optimisation_problem}} surface plot">
+    </a>
+  </div>
+</div>
+
+{% include api call="getHaltonSequence" returns="arma::Mat&lt;T&gt;" params="arma::Col&lt;unsigned int&gt; B, arma::Col&lt;unsigned int&gt; S, unsigned int N" %}
+
+<p>Generates a multi-dimensional quasi-random sequence with length <code>N</code>, based on the <a href="http://en.wikipedia.org/wiki/Halton_sequence">Halton sequence</a>.</p>
+
+<ul>
+  <li>The number of columns is equal to the number of bases in <code>B</code>, as well as seeds in <code>S</code>.</li>
+  <li>For the <code>i</code>-te sequence, the first \(S_i\) elements are skipped.</li>
+  <li>The <code>(k, i)</code>-te element of the result matrix is the <code>k</code>-te element of the <code>i</code>-te sequence.</li>
+  <li><strong>Note:</strong> Each base within <code>B</code> should be a (unique) prime number, however this is left unchecked.</li>
+  <li><strong>Note:</strong> If <code>B</code> holds only a single element, the result is equal to <code>getVanDerCorputSequence(B(0), S(0), N)</code>.</li>
+  <li><strong>Requirement:</strong> The number of elements in <code>B</code> must be equal to the number of elements in <code>S</code>.</li>
+  <li><strong>Requirement:</strong> Each base within <code>B</code> must be greater than or equal to 2.</li>
+  <li><strong>Requirement:</strong> The number of elements <code>N</code> must be greater than or equal to 1.</li>
+</ul>
+
+{% include api call="getVanDerCorputSequence" returns="arma::Col&lt;T&gt;" params="unsigned int B, unsigned int S, unsigned int N" %}
+
+<p>Generates a one-dimensional quasi-random sequence with length <code>N</code>, based on the <a href="http://en.wikipedia.org/wiki/Van_der_Corput_sequence">van der Corput sequence</a></p>
+.
+<ul>
+ <li><strong>Note:</strong> The base should be a prime number, however this is left unchecked.</li>
+ <li><strong>Requirement:</strong> The base <code>B</code> must be greater than or equal to 2.</li>
+ <li><strong>Requirement:</strong> The number of elements <code>N</code> must be greater than or equal to 1.</li>
+</ul>
