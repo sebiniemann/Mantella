@@ -94,7 +94,7 @@ arma::Col<double> function randomStep(
 
 {% include api call="Rng::getGenerator" returns="std::mt19937_64" %}
 
-Returns the random number generator used by Mantelall i.e. a reference to <code>std::mt19937_64</code>.
+<p>Returns the random number generator used by Mantelall i.e. a reference to <code>std::mt19937_64</code>.</p>
 
 {% include api call="Rng::setSeed" returns="void" params="std::mt19937_64::result_type S" %}
 
@@ -141,7 +141,7 @@ int main(int argc, char* argv[]) {
 
 {% include api call="Rng::setSeed" returns="std::mt19937_64::result_type" %}
 
-Returns the seed used with <code>Rng::getGenerator()</code>, as well as Armadillo C++'s random generator.
+<p>Returns the seed used with <code>Rng::getGenerator()</code>, as well as Armadillo C++'s random generator.</p>
 
 <ul>
   <li>If neither <code>Rng::setRandomSeed()</code> nor <code>Rng::setSeed(...)</code> was called prior to this, the result can be anything (but will most likely be 5489, i.e. <code>std::mt19937_64::default_seed</code>).</li>

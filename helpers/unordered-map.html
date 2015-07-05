@@ -40,13 +40,12 @@ int main() {
 
 {% include api call="Hash.operator()" returns="std::size_t" params="arma::Col&lt;T&gt; X" %}
 
-<ul>
-  <li>Generates a hash value for <code>X</code>, with a very small collision probability (less than 1 in 1.000.000).</li>
-</ul>
+<p>Generates a hash value for <code>X</code>, with a very small collision probability (less than 1 in 1.000.000).</p>
 
 {% include api call="IsEqual.operator()" returns="bool" params="arma::Col&lt;T&gt; A, arma::Col&lt;T&gt; B" %}
 
+<p>Returns true if both vectors are equal, i.e. contain the same elements, in the same order, and false otherwise.</p>
+
 <ul>
-  <li>Returns true if both vectors are equal, i.e. contain the same elements, in the same order, and false otherwise.</li>
   <li><strong>Requirement:</strong> The number of elements in <code>A</code> must be equal to the number of elements in <code>B</code>.</li>
 </ul>

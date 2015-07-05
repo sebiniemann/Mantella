@@ -56,7 +56,7 @@ class DerivedClass : public BaseClass {
 
 {% include api call="isRotationMatrix" returns="bool" params="arma::Mat&lt;T&gt; X" %}
 
-Returns true if <code>X</code> is a rotation matrix, and false otherwise.
+<p>Returns true if <code>X</code> is a rotation matrix, and false otherwise.</p>
 
 <ul>
   <li><code>X</code> must be orthonormal with determinant 1 or -1, to be accepted as a rotation matrix.</li>
@@ -65,7 +65,7 @@ Returns true if <code>X</code> is a rotation matrix, and false otherwise.
 
 {% include api call="isPermutation" returns="bool" params="arma::Col&lt;unsigned int&gt; X, std::size_t S, std::size_t N" %}
 
-Returns true if <code>X</code> is a permutation on {0, 1, ..., <code>N - 1</code>} with permutation size <code>S</code>.
+<p>Returns true if <code>X</code> is a permutation on {0, 1, ..., <code>N - 1</code>} with permutation size <code>S</code>.</p>
 
 <ul>
   <li><code>X</code> must have exactly <code>S</code> elements, which are all unique and within {0, 1, ..., <code>N - 1</code>}.
