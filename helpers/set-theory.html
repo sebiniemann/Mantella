@@ -3,3 +3,77 @@ layout: page
 ---
 {% include h1 title="Set Theory" %}
 
+{% include api call="getTwoSetsPartitions" returns="std::vector&lt;std::pair&lt;arma::Col&lt;unsigned int&gt;, arma::Col&lt;unsigned int&gt;&gt;&gt;" params="unsigned int N" %}
+
+<p>Calculates all partitions of \(\left\{0, 1, \ldots, N-1\right\}\) into exactly two sets.</p>
+
+<ul>
+  <li><strong>Note:</strong> The partitions are not guaranteed to be ordered.</li>
+  <li><strong>Requirement:</strong> The number of elements <code>N</code> must be greater than or equal to 2.</li>
+</ul>
+
+Example code, generating all two set partitions of \(\left\{0, 1, 2, 3, 4, 5\right\}\).
+
+<ul class="nav nav-tabs" role="tablist" id="getTwoSetsPartitions">
+  <li role="presentation" class="active"><a href="#getTwoSetsPartitions-cpp" aria-controls="getTwoSetsPartitions-cpp" role="tab" data-toggle="tab">C++</a></li>
+  <li role="presentation"><a href="#getTwoSetsPartitions-output" aria-controls="getTwoSetsPartitions-output" role="tab" data-toggle="tab">Output</a></li>
+</ul>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="getTwoSetsPartitions-cpp">
+{% highlight cpp %}
+#include <mantella>
+#include <iostream>
+
+int main() {
+  for (const auto& twoSetsPartition : mant::getTwoSetsPartitions(6)) {
+    std::cout << "{ ";
+    for (const auto value : twoSetsPartition.first) {
+      std::cout << value << " ";
+    }
+    std::cout << "}, { ";
+    for (const auto value : twoSetsPartition.second) {
+      std::cout << value << " ";
+    }
+    std::cout << "}" << std::endl;
+  }
+  
+  return 0;
+}
+{% endhighlight %}
+  </div>
+  <div role="tabpanel" class="tab-pane" id="getTwoSetsPartitions-output">
+{% highlight text %}
+{ 0 }, { 1 2 3 4 5 }
+{ 1 }, { 0 2 3 4 5 }
+{ 2 }, { 0 1 3 4 5 }
+{ 3 }, { 0 1 2 4 5 }
+{ 4 }, { 0 1 2 3 5 }
+{ 5 }, { 0 1 2 3 4 }
+{ 0 1 }, { 2 3 4 5 }
+{ 0 2 }, { 1 3 4 5 }
+{ 0 3 }, { 1 2 4 5 }
+{ 0 4 }, { 1 2 3 5 }
+{ 0 5 }, { 1 2 3 4 }
+{ 1 5 }, { 0 2 3 4 }
+{ 1 2 }, { 0 5 3 4 }
+{ 1 3 }, { 0 5 2 4 }
+{ 1 4 }, { 0 5 2 3 }
+{ 5 4 }, { 0 1 2 3 }
+{ 5 2 }, { 0 1 4 3 }
+{ 5 3 }, { 0 1 4 2 }
+{ 4 3 }, { 0 1 5 2 }
+{ 4 2 }, { 0 1 5 3 }
+{ 3 2 }, { 0 1 5 4 }
+{ 0 1 2 }, { 3 4 5 }
+{ 0 1 3 }, { 2 4 5 }
+{ 0 1 4 }, { 2 3 5 }
+{ 0 1 5 }, { 2 3 4 }
+{ 0 2 5 }, { 1 3 4 }
+{ 0 2 3 }, { 1 5 4 }
+{ 0 2 4 }, { 1 5 3 }
+{ 0 5 4 }, { 1 2 3 }
+{ 0 5 3 }, { 1 2 4 }
+{ 0 4 3 }, { 1 2 5 }
+{% endhighlight %}
+  </div>
+</div>
