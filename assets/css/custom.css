@@ -413,3 +413,44 @@ h1 {
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.carousel-control.left,
+.carousel-control.right {
+  background: none;
+}
+
+.carousel-control .icon-prev,
+.carousel-control .icon-next,
+.carousel-control .glyphicon-chevron-left,
+.carousel-control .glyphicon-chevron-right {
+  display: none;
+}
+
+.carousel-control:focus span,
+.carousel-control:hover span {
+  display: inline-block;
+}
+
+.carousel-control.left:focus,
+.carousel-control.left:hover  {
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.5) 0, rgba(0,0,0,0.0001) 100%);
+  background-image: -o-linear-gradient(left, rgba(0,0,0,0.5) 0, rgba(0,0,0,0.0001) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0,0,0,0.5)), to(rgba(0,0,0,0.0001)));
+  background-image: linear-gradient(to right, rgba(0,0,0,0.5) 0, rgba(0,0,0,0.0001) 100%);
+}
+
+.carousel-control.right:focus,
+.carousel-control.right:hover {
+  background-image: -webkit-linear-gradient(left,rgba(0,0,0,.0001) 0,rgba(0,0,0,.5) 100%);
+  background-image: -o-linear-gradient(left,rgba(0,0,0,.0001) 0,rgba(0,0,0,.5) 100%);
+  background-image: -webkit-gradient(linear,left top,right top,from(rgba(0,0,0,.0001)),to(rgba(0,0,0,.5)));
+  background-image: linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,.5) 100%);
+}
+
+.carousel-indicators li {
+  border: 1px solid #ee6e73;
+}
+
+.carousel-indicators .active {
+  background-color: #ee6e73;
+}
