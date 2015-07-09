@@ -79,7 +79,10 @@ namespace mant {
       arma::Col<T> getRandomNeighbour(
           const arma::Col<T>& parameter,
           const T minimalDistance,
-          const T maximalDistance);
+          const T maximalDistance) const noexcept;
+     
+      arma::Col<T> boundaryHandling(
+          arma::Col<T> parameter) const noexcept;
           
       bool updateBestParameter(
           const arma::Col<T>& parameter,
@@ -296,16 +299,22 @@ namespace mant {
   arma::Col<T> OptimisationAlgorithm<T>::getRandomNeighbour(
       const arma::Col<T>& parameter,
       const T minimalDistance,
-      const T maximalDistance) {
+      const T maximalDistance) const noexcept {
     arma::Col<T> neighbour = parameter + arma::normalise(arma::randn<arma::Col<T>>(parameter.n_elem)) * std::uniform_real_distribution<T>(minimalDistance, maximalDistance)(Rng::getGenerator());
-      
-    const arma::Col<unsigned int>& belowLowerBound = arma::find(neighbour < getLowerBounds());
-    const arma::Col<unsigned int>& aboveUpperBound = arma::find(neighbour > getUpperBounds());
-
-    neighbour.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
-    neighbour.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
     
     return neighbour;
+  }
+  
+  template <typename T>
+  arma::Col<T> OptimisationAlgorithm<T>::boundaryHandling(
+      arma::Col<T> parameter) const noexcept {
+    const arma::Col<unsigned int>& belowLowerBound = arma::find(parameter < getLowerBounds());
+    const arma::Col<unsigned int>& aboveUpperBound = arma::find(parameter > getUpperBounds());
+
+    parameter.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
+    parameter.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
+    
+    return parameter;
   }
   
   template <typename T>
@@ -315,7 +324,7 @@ namespace mant {
       const double objectiveValue) noexcept {
     assert(parameter.n_elem == numberOfDimensions_);
       
-    if(softConstraintsValue < bestSoftConstraintsValue_ || (softConstraintsValue == bestSoftConstraintsValue_ && objectiveValue < objectiveValue)) {
+    if(softConstraintsValue < bestSoftConstraintsValue_ || (softConstraintsValue == bestSoftConstraintsValue_ && objectiveValue < bestObjectiveValue_)) {
       bestParameter_ = parameter;
       bestSoftConstraintsValue_ = softConstraintsValue;
       bestObjectiveValue_ = objectiveValue;
