@@ -17,12 +17,12 @@ int main() {
   
   // Populates the map
   for (unsigned int n = 0; n < 1000; ++n) {
-    const arma::Col<double>& parameter = arma::randu<doubles>(4); // Random search
+    const arma::Col<double>& parameter = arma::randu<arma::Col<double>>(4); // Random search
     parameterToObjectiveValueMapping.insert({parameter, arma::norm(parameter)}); // 4-dimensional sphere function
   }
   
   // Find the best (minimal) objective value and its parameter.
-  double bestObjectiveValue = std::numeric_limits<double>::infty;
+  double bestObjectiveValue = std::numeric_limits<double>::infinity();
   arma::Col<double> bestParameter;
   for (auto parameterToObjectiveValue : parameterToObjectiveValueMapping) {
     if (parameterToObjectiveValue.second < bestObjectiveValue) {
