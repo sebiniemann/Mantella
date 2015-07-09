@@ -137,28 +137,28 @@ if(BUILD_TESTS)
     test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
-#   test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
   )
 
   # Link against third party libraries
