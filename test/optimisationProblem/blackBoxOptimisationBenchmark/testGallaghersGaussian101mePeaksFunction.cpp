@@ -23,19 +23,19 @@ TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction", "") {
     arma::Mat<double> rotationR;
     REQUIRE(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input"));
 
-    arma::Mat<double> deltaC101;
-    REQUIRE(deltaC101.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_deltaC101_101x1_dim" + std::to_string(numberOfDimensions) +".input"));
+    arma::Mat<double> conditionings;
+    REQUIRE(conditionings.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_conditionings_101x1_dim" + std::to_string(numberOfDimensions) +".input"));
 
-    arma::Mat<double> localOptimaY101;
-    REQUIRE(localOptimaY101.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptimaY101_" + std::to_string(numberOfDimensions) +"x101.input"));
+    arma::Mat<double> localOptima;
+    REQUIRE(localOptima.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptima_" + std::to_string(numberOfDimensions) +"x101.input"));
 
     arma::Col<double> expected;
     REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_gallaghersGaussian101mePeaksFunction_dim" + std::to_string(numberOfDimensions) +".expected"));
 
     gallaghersGaussian101mePeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian101mePeaksFunction.setRotationQ(rotationR);
-    gallaghersGaussian101mePeaksFunction.setLocalParameterTranslations(localOptimaY101);
-    gallaghersGaussian101mePeaksFunction.setLocalParameterConditionings(deltaC101);
+    gallaghersGaussian101mePeaksFunction.setLocalParameterTranslations(localOptima);
+    gallaghersGaussian101mePeaksFunction.setLocalParameterConditionings(conditionings);
 
     for (std::size_t n = 0; n < parameters.n_cols; ++n) {
       CHECK(gallaghersGaussian101mePeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
