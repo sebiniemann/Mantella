@@ -414,43 +414,77 @@ h1 {
   margin-bottom: 0;
 }
 
-.carousel-control.left,
-.carousel-control.right {
-  background: none;
+.carousel-caption {
+  position: static;
+  color: rgb(51, 51, 51);
+  padding: 0 20px;
+  text-shadow: none;
 }
 
-.carousel-control .icon-prev,
-.carousel-control .icon-next,
-.carousel-control .glyphicon-chevron-left,
-.carousel-control .glyphicon-chevron-right {
-  display: none;
+.carousel-caption p {
+  text-align: left;
 }
 
-.carousel-control:focus span,
-.carousel-control:hover span {
-  display: inline-block;
+.carousel-control {
+  width: 40px;
+  color: #8E8E8E;
+}
+
+.carousel-control.left {
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.0001) 100%);
+  background-image: -o-linear-gradient(left, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.0001) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0,0,0,0.1)), to(rgba(0,0,0,0.0001)));
+  background-image: linear-gradient(to right, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.0001) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1A000000', endColorstr='#00000000', GradientType=1);
 }
 
 .carousel-control.left:focus,
-.carousel-control.left:hover  {
+.carousel-control.left:hover {
   background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.5) 0, rgba(0,0,0,0.0001) 100%);
   background-image: -o-linear-gradient(left, rgba(0,0,0,0.5) 0, rgba(0,0,0,0.0001) 100%);
   background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0,0,0,0.5)), to(rgba(0,0,0,0.0001)));
   background-image: linear-gradient(to right, rgba(0,0,0,0.5) 0, rgba(0,0,0,0.0001) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+}
+
+.carousel-control.right {
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.0001) 0, rgba(0,0,0,0.1) 100%);
+  background-image: -o-linear-gradient(left, rgba(0,0,0,0.0001) 0, rgba(0,0,0,0.1) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0,0,0,0.0001)), to(rgba(0,0,0,0.1)));
+  background-image: linear-gradient(to right, rgba(0,0,0,0.0001) 0, rgba(0,0,0,0.1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1A000000', GradientType=1);
 }
 
 .carousel-control.right:focus,
 .carousel-control.right:hover {
-  background-image: -webkit-linear-gradient(left,rgba(0,0,0,.0001) 0,rgba(0,0,0,.5) 100%);
-  background-image: -o-linear-gradient(left,rgba(0,0,0,.0001) 0,rgba(0,0,0,.5) 100%);
-  background-image: -webkit-gradient(linear,left top,right top,from(rgba(0,0,0,.0001)),to(rgba(0,0,0,.5)));
-  background-image: linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,.5) 100%);
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.0001) 0, rgba(0,0,0,0.5) 100%);
+  background-image: -o-linear-gradient(left, rgba(0,0,0,0.0001) 0, rgba(0,0,0,0.5) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0,0,0,0.0001)), to(rgba(0,0,0,0.5)));
+  background-image: linear-gradient(to right, rgba(0,0,0,0.0001) 0, rgba(0,0,0,0.5) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+}
+
+.carousel-inner {
+  padding: 0 20px;
+}
+
+.carousel-indicators {
+  position: static;
+  display: list-item;
+  text-align: center;
+  width: 100%;
+  margin-left: 0;
 }
 
 .carousel-indicators li {
   border: 1px solid #ee6e73;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
 }
 
 .carousel-indicators .active {
   background-color: #ee6e73;
+  width: 22px;
+  height: 22px;
 }
