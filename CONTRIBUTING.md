@@ -26,8 +26,8 @@ Add a short description (usually no more than 15 words) about the content  of yo
 ### Body
 Describe the details of your changes as specific as possible. Do not be afraid to add multiple lines. Please try to make your explanation as specific as possible and avoid vague descriptions.
 
-### Signature
-End the commit message of your pull request by signing your work, i.e. adding some contact details.
+### Signature [optional]
+Optionally, end the commit message of your pull request by signing your work, i.e. adding some contact details.
 
 ```
 Random J Developer <random@developer.example.org>
