@@ -159,6 +159,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.cpp
   )
 
   # Link against third party libraries
