@@ -68,8 +68,8 @@ int main() {
     std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new DiscusFunction<>(numberOfDimensions)),
     std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new EllipsoidalFunction<>(numberOfDimensions)),
     std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new EllipsoidalFunctionRotated<>(numberOfDimensions)),
-    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new GallaghersGaussian101mePeaks Function<>(numberOfDimensions)),
-    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new GallaghersGaussian21hiPeaks Function<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new GallaghersGaussian101mePeaksFunction<>(numberOfDimensions)),
+    std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new GallaghersGaussian21hiPeaksFunction<>(numberOfDimensions)),
     std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new KatsuuraFunction<>(numberOfDimensions)),
     std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new LinearSlope<>(numberOfDimensions)),
     std::shared_ptr<mant::BlackBoxOptimisationBenchmark<>>(new LunacekbiRastrigin Function<>(numberOfDimensions)),
@@ -247,10 +247,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <lI>The parameter space is randomly and uniformly rotated.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="AttractiveSectorFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="AttractiveSectorFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_attractive_sector_function</code>.</p>
             {% when "Bent Cigar Function" %}
@@ -274,10 +276,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="BentCigarFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="BentCigarFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_bent_cigar_function</code>.</p>
             {% when "Büche-Rastrigin Function" %}
@@ -301,10 +305,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]\) for odd and within \([0, 4]\) for even dimensions, rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) for odd and to \(0.00001\) for even dimensions instead.</li>
               </ul>
-                            {% include api call="BuecheRastriginFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="BuecheRastriginFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_bueche_rastrigin_function</code>.</p>
             {% when "Composite Griewank-Rosenbrock Function F8F2" %}
@@ -326,10 +332,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <lI>The parameter space is randomly and uniformly rotated.</li>
               </ul>
-                            {% include api call="CompositeGriewankRosenbrockFunctionF8F2&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="CompositeGriewankRosenbrockFunctionF8F2&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_composite_griewank_rosenbrock_function_f8f2</code>.</p>
             {% when "Different Powers Function" %}
@@ -351,10 +359,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
                 <lI>The parameter space is randomly and uniformly rotated.</li>
               </ul>
-                            {% include api call="DifferentPowersFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="DifferentPowersFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_different_powers_function</code>.</p>
             {% when "Discus Function" %}
@@ -376,10 +386,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
                 <lI>The parameter space is randomly and uniformly rotated.</li>
               </ul>
-                            {% include api call="DiscusFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="DiscusFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_discus_function</code>.</p>
             {% when "Ellipsoidal Function" %}
@@ -398,10 +410,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
               </ul>
-                            {% include api call="EllipsoidalFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="EllipsoidalFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_ellipsoidal_function</code>.</p>
             {% when "Ellipsoidal Function, rotated" %}
@@ -421,10 +435,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
                 <lI>The parameter space is randomly and uniformly rotated.</li>
               </ul>
-                            {% include api call="EllipsoidalFunctionRotated&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="EllipsoidalFunctionRotated&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_ellipsoidal_function_rotated</code>.</p>
             {% when "Gallagher's Gaussian 101-me Peaks Function" %}
@@ -459,10 +475,12 @@ Number of distinct evaluations for the bbob_linear_slope
                   </span></li>
                 <li>The first local parameter translation \(Y_0\) is randomly and uniformly chosen from \([-4, 4]^N\) and all others are each chosen from \([-5, 5]^N\).</li>
               </ul>
-                            {% include api call="GallaghersGaussian101mePeaksFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="GallaghersGaussian101mePeaksFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_gallaghers_gaussian_101me_peaks_function</code>.</p>
             {% when "Gallagher's Gaussian 21-hi Peaks Function" %}
@@ -497,10 +515,12 @@ Number of distinct evaluations for the bbob_linear_slope
                   </span></li>
                 <li>The first local parameter translation \(Y_0\) is randomly and uniformly chosen from \([-3.92, 3.92]^N\) and all others are each chosen from \([-4.9, 4.9]^N\).</li>
               </ul>
-                            {% include api call="GallaghersGaussian21hiPeaksFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="GallaghersGaussian21hiPeaksFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_gallaghers_gaussian_21hi_peaks_function</code>.</p>
             {% when "Katsuura Function" %}
@@ -524,10 +544,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <lI>The parameter space is randomly and uniformly rotated.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="KatsuuraFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="KatsuuraFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_katsuura_function</code>.</p>
             {% when "Linear Slope" %}
@@ -552,10 +574,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The parameter space is randomly and uniformly rotated by either 180° or 0° (performing no rotation at all).</li>
               </ul>
-                            {% include api call="LinearSlope&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="LinearSlope&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_linear_slope</code>.</p>
             {% when "Lunacek bi-Rastrigin Function" %}
@@ -581,10 +605,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>\(R\) is set to a randomly and uniformly chosen rotation matrix.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="LunacekBiRastriginFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="LunacekBiRastriginFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_lunacek_bi_rastrigin_function</code>.</p>
             {% when "Rastrigin Function" %}
@@ -604,10 +630,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
               </ul>
-                            {% include api call="RastriginFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="RastriginFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rastrigin_function</code>.</p>
             {% when "Rastrigin Function, rotated" %}
@@ -631,10 +659,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>\(R\) is set to a randomly and uniformly chosen rotation matrix.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="RastriginFunctionRotated&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="RastriginFunctionRotated&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rastrigin_function_rotated</code>.</p>
             {% when "Rosenbrock Function" %}
@@ -654,10 +684,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
               </ul>
-                            {% include api call="RosenbrockFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="RosenbrockFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rosenbrock_function</code>.</p>
             {% when "Rosenbrock Function, rotated" %}
@@ -678,10 +710,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
                 <lI>The parameter space is randomly and uniformly rotated.</li>
               </ul>
-                            {% include api call="RosenbrockFunctionRotated&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="RosenbrockFunctionRotated&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_rosenbrock_function_rotated</code>.</p>
             {% when "Schaffers F7 Function" %}
@@ -705,10 +739,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <lI>The parameter space is randomly and uniformly rotated.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="SchaffersF7Function&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="SchaffersF7Function&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_schaffers_f7_function</code>.</p>
             {% when "Schaffers F7 Function, ill-conditioned" %}
@@ -732,10 +768,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <lI>The parameter space is randomly and uniformly rotated.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="SchaffersF7FunctionIllConditioned&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="SchaffersF7FunctionIllConditioned&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_schaffers_f7_function_ill_conditioned</code>.</p>
             {% when "Schwefel Function" %}
@@ -759,10 +797,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The parameter space scaling is randomly and uniformly chosen to be either set to \((-2, \ldots, -2)\) or \((2, \ldots, 2)\).</li>
               </ul>
-                            {% include api call="SchwefelFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="SchwefelFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_schwefel_function</code>.</p>
             {% when "Sharp Ridge Function" %}
@@ -785,10 +825,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <lI>The parameter space is randomly and uniformly rotated.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="SharpRidgeFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="SharpRidgeFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_sharp_ridge_function</code>.</p>
             {% when "Sphere Function" %}
@@ -806,10 +848,12 @@ Number of distinct evaluations for the bbob_linear_slope
               <ul>
                 <li>The optimal parameter is randomly and uniformly translated to be within \([-4, 4]^N\), rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) instead.</li>
               </ul>
-                            {% include api call="SphereFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="SphereFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_sphere_function</code>.</p>
             {% when "Step Ellipsoidal Function" %}
@@ -835,10 +879,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <lI>The parameter space is randomly and uniformly rotated.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="StepEllipsoidalFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="StepEllipsoidalFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_step_ellipsoidal_function</code>.</p>
             {% when "Weierstrass Function" %}
@@ -863,10 +909,12 @@ Number of distinct evaluations for the bbob_linear_slope
                 <li>\(R\) is set to a randomly and uniformly chosen rotation matrix.</li>
                 <li>\(Q\) is set to a randomly and uniformly chosen rotation matrix.</li>
               </ul>
-                            {% include api call="WeierstrassFunction&lt;T&gt;" params="unsigned int N" %}
+              
+              {% include api call="WeierstrassFunction&lt;T&gt;" params="unsigned int N" %}
 
               <p>Instantiates an <code>N</code>-dimensional optimisation problem of this class.</p>
-                            {% include api call=".toString" returns="std::string" %}
+              
+              {% include api call=".toString" returns="std::string" %}
 
               <p>Returns a filesystem friendly name for the problem, i.e. <code>bbob_weierstrass_function</code>.</p>
           {% endcase %}
