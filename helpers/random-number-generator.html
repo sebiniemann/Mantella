@@ -101,7 +101,7 @@ arma::Col<double> function randomStep(
 <p>Seeds the random generator provided by <code>Rng::getGenerator()</code>, as well as Armadillo C++'s random generator with <code>S</code>.</p>
 
 <ul>
-  <li>If used together with MPI, avoid global calls to this method. This will synchronise (and therefore degenerate) the randomness between all processes. We recommend to use <code>RNG::setRandomSeed()</code> instead, or setting the seed of each process individually.</li>
+  <li>If used together with MPI, avoid global calls to this method. This will synchronise (and therefore degenerate) the randomness between all processes. We recommend to use <code>Rng::setRandomSeed()</code> instead, or setting the seed of each process individually.</li>
 </ul>
 {% highlight cpp %}
 int rank;
