@@ -26,7 +26,7 @@ TEST_CASE("RandomSerach.optimise()", "") {
         marks.push_back(mark.first.at(dimension));
       }
 
-      arma::Col<unsigned int> histogram = arma::hist(arma::Col<double>(marks), arma::linspace<arma::Col<double>>(-5.0, 5.0, 100));
+      arma::Col<unsigned int> histogram = arma::hist(arma::Col<double>(marks), arma::linspace<arma::Col<double>>(randomProblem->getLowerBounds().at(dimension), randomProblem->getUpperBounds().at(dimension), 100));
       CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / marks.size());
     }
   }
