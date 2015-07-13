@@ -22,14 +22,14 @@ int main(const int argc, const char *argv[]) {
   if (argc > 1) {
     // Reproduce the results of a previous run.
     seed = std::stoi(argv[1]);
-    mant::RNG::setSeed(seed);
+    mant::Rng::setSeed(seed);
   
     std::cout << "Restored run with seed: " << seed << std::endl;
   } else {
     // Randomly and uniformly initialise the random number generator.
-    mant::RNG::setRandomSeed();
+    mant::Rng::setRandomSeed();
     // Current seed. You may want to log this value, in order to reproduce this run later on.
-    seed =  mant::RNG::getSeed();
+    seed =  mant::Rng::getSeed();
   
     std::cout << "Initialised run with random seed: " << seed << std::endl;
   }
@@ -57,14 +57,14 @@ int main(int argc, char *argv[]) {
   if (argc > rank + 1) {
     // Reproduce the results of a previous run.
     seed = std::stoi(argv[rank + 1]);
-    mant::RNG::setSeed(seed);
+    mant::Rng::setSeed(seed);
   
     std::cout << "Restored run with seed: " << seed << std::endl;
   } else {
     // Randomly and uniformly initialise the random number generator.
-    mant::RNG::setRandomSeed();
+    mant::Rng::setRandomSeed();
     // Current seed. You may want to log this value, in order to reproduce this run later on.
-    seed =  mant::RNG::getSeed();
+    seed =  mant::Rng::getSeed();
   
     std::cout << "Initialised run with random seed: " << seed << std::endl;
   }
