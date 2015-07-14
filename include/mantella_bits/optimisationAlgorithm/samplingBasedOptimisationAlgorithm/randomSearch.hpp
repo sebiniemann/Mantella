@@ -16,13 +16,13 @@ namespace mant {
 
   template <typename T>
   void RandomSearch<T>::optimiseImplementation() noexcept {
-    while(!this->isFinished() && !this->isTerminated()) {
+    do {
       ++this->numberOfIterations_;
     
       const arma::Col<T>& candidateParameter = this->getRandomParameter();
-      
-      updateBestParameter(candidateParameter, this->getSoftConstraintsValue(candidateParameter), this->getObjectiveValue(candidateParameter));
-    };
+
+      this->updateBestParameter(candidateParameter, this->getSoftConstraintsValue(candidateParameter), this->getObjectiveValue(candidateParameter));
+    } while(!this->isFinished() && !this->isTerminated());
   }
 
   template <typename T>
