@@ -3,7 +3,6 @@
 
 // C++ Standard Library
 #include <cstdlib>
-#include <string>
 
 // Armadillo
 #include <armadillo>
