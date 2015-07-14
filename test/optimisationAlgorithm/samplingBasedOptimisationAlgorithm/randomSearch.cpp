@@ -16,12 +16,12 @@ TEST_CASE("RandomSerach.optimise()", "") {
   randomSearch.setMaximalNumberOfIterations(1000000);
   randomSearch.optimise();
 
-  std::vector<std::pair<arma::Col<double>,double>> history = randomSearch.getParameterHistory();
+  std::vector<std::pair<arma::Col<double>, double>> history = randomSearch.getParameterHistory();
 
   SECTION("Checks if the parameters are uniformly distributed"){
     for (double dimension : arma::linspace(0, optimisationProblem->numberOfDimensions_ - 1, optimisationProblem->numberOfDimensions_)) {
       std::vector<double> marks;
-      for (auto mark : history) {
+      for (const auto& mark : history) {
         marks.push_back(mark.first.at(dimension));
       }
 
