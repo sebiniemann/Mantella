@@ -12,11 +12,11 @@
 
 TEST_CASE("RandomSerach.optimise()", "") {
   std::shared_ptr<mant::OptimisationProblem<>> optimisationProblem(new mant::bbob::SphereFunction<>(2));
-  mant::RandomSearch<> testRandomSearch(randomProblem);
-  testRandomSearch.setMaximalNumberOfIterations(1000000);
-  testRandomSearch.optimise();
+  mant::RandomSearch<> randomSearch(optimisationProblem);
+  randomSearch.setMaximalNumberOfIterations(1000000);
+  randomSearch.optimise();
 
-  std::vector<std::pair<arma::Col<double>,double>> history = testRandomSearch.getParameterHistory();
+  std::vector<std::pair<arma::Col<double>,double>> history = randomSearch.getParameterHistory();
 
   SECTION("Checks if the parameters are uniformly distributed"){
     for (double dimension : arma::linspace(0, optimisationProblem->numberOfDimensions_ - 1, optimisationProblem->numberOfDimensions_)) {
