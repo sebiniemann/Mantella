@@ -59,11 +59,6 @@
 // Armadillo
 #include <armadillo>
 
-#if defined(MANTELLA_USE_MPI)
-  // MPI
-  #include <mpi.h>
-#endif
-
 //
 // Mantella
 //
