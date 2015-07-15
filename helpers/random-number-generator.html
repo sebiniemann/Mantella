@@ -59,17 +59,19 @@ int main(int argc, char *argv[]) {
     seed = std::stoi(argv[rank + 1]);
     mant::Rng::setSeed(seed);
   
-    std::cout << "Restored run with seed: " << seed << std::endl;
+    std::cout << "Restored run at node " <<  rank<< " with seed: " << seed << std::endl;
   } else {
     // Randomly and uniformly initialise the random number generator.
     mant::Rng::setRandomSeed();
     // Current seed. You may want to log this value, in order to reproduce this run later on.
     seed =  mant::Rng::getSeed();
   
-    std::cout << "Initialised run with random seed: " << seed << std::endl;
+    std::cout << "Initialised run at node " <<  rank<< " with random seed: " << seed << std::endl;
   }
 
   // Do something ...
+  
+  MPI_Finalize();
   
   return 0;
 }
