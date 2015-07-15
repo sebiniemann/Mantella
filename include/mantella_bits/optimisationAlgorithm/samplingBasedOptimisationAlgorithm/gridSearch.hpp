@@ -40,7 +40,7 @@ namespace mant {
 
     arma::Col<unsigned int> sampleIndicies = arma::zeros<arma::Col<unsigned int>>(this->numberOfDimensions_);
     for(std::size_t n = 0; n < arma::accu(numberOfSamples_); ++n) {
-      if (n % this->numberOfNodes_ == this->rank_) {
+      if (n % this->numberOfNodes_ == this->nodeRank_) {
         ++this->numberOfIterations_;
 
         arma::Col<T> candidateParameter(this->numberOfDimensions_);
