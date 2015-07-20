@@ -16,6 +16,7 @@ namespace mant {
     void setStepSize(const arma::Col<double> sigma); //insigma
     void setStartingPoint(const arma::Col<double> xStart); //xstart
     void setPopulationSize(const unsigned int popSize);
+    double getIncPopSize() const; //IncPopSize
     
     double getCcov1() const;
     void setCcov1(double ccov1);
@@ -121,7 +122,11 @@ namespace mant {
   
   template <typename T>
   void CovarianceMatrixAdaptationEvolutionStrategy<T>::initializeRun() {
-    numberOfParents = this->populationSize_ / 2;
+    //TODO: figure out what to do with lambda0 and popsize settings
+    //it gets split into lambda and popsize, but neither variable is written to ever again in CMAES
+    //xacmes also writes these variables again...
+    lambda0 = std::floor(this->populationSize_ * std::pow(incPopSize, irun - 1));
+    this->populationSize_ = lambda0;
     
     sigma = arma::max(stepSize);
     pc = arma::zeros(this->numberOfDimensions_);
@@ -176,12 +181,6 @@ namespace mant {
     if(!runInitialized) {
       initializeRun();
     }
-    //TODO: figure out what to do with lambda0 and popsize settings
-    //-this overrides the constructor value,also it gets split into lambda and popsize,
-    //but neither variable is written to ever again
-    //xacmes also writes these variables again...
-    lambda0 = std::floor(this->populationSize_ * std::pow(incPopSize, irun - 1));
-    this->populationSize_ = lambda0;
 
     bool stopFlag = false;
     while (!stopFlag) {
@@ -219,6 +218,11 @@ namespace mant {
   template <typename T>
   void CovarianceMatrixAdaptationEvolutionStrategy<T>::setPopulationSize(const unsigned int popSize) {
     this->populationSize_ = popSize;
+  }
+  
+  template <typename T>
+  void CovarianceMatrixAdaptationEvolutionStrategy<typename T>::getIncPopSize() const {
+    return incPopSize;
   }
 
   template <typename T>
