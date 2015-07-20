@@ -26,8 +26,8 @@ namespace mant {
     void setCcum(double ccum);
     double getCs() const;
     void setCs(double cs);
-    unsigned int getNumberOfParents() const;
-    void setNumberOfParents(unsigned int numberOfParents);
+    unsigned int getMu() const;
+    void setMu(unsigned int numberOfParents);
     double getToleranceFun() const;
     void setToleranceFun(double toleranceFun);
     double getToleranceHistFun() const;
@@ -64,11 +64,13 @@ namespace mant {
     bool evalParallel = true; //defopts.EvalParallel; objective function FUN accepts NxM matrix, with M>1?
     unsigned int restarts = 9; //defopts.Restarts - HCMA default is 9
     double incPopSize; //defopts.IncPopSize; multiplier for population size before each restart
-    unsigned int numberOfParents; //defopts.ParentNumber
-    unsigned int recombinationWeightsType = 0; //defotps.RecombinationWeights - 0 = superlinear decrease, 1 = linear, 2 = equal
-    double cs; //defopts.CMA.cs; cumulation constant for step-size
+    unsigned int mu; //defopts.ParentNumber/mu
+    double mueff; //mueff
+    unsigned int recombinationWeightsType = 2; //defotps.RecombinationWeights - 0 = equal, 1 = linear, 2 = superlinear decrease
+    arma::Col<double> recombinationWeights; //weights
+    double cs; //defopts.CMA.cs/cs; cumulation constant for step-size
     double damping; //defopts.CMA.damps; damping for step-size
-    double ccum; //defopts.CMA.ccum; 
+    double ccum; //defopts.CMA.ccum/cc; 
     double ccov1; //defopts.CMA.ccov1;
     double ccovmu; //defopts.CMA.ccovmu;
     unsigned int activeCMA; ////defopts.CMA.active; active CMA 1: neg. updates with pos. def. check, 2: neg. updates
@@ -99,6 +101,7 @@ namespace mant {
     bool singleIteration = false;
     //helper variable to check if run was initialized
     bool runInitialized = false;
+    unsigned int countiter = 0; //countiter - counts main loop evaluations, NOT function evaluations
 
     void optimiseImplementation() override;
   };
@@ -183,8 +186,44 @@ namespace mant {
     }
 
     bool stopFlag = false;
+    double lambda_last = 0;
     while (!stopFlag) {
-
+      //TODO: lambda_last??? see studip
+      //;set internal parameters
+      if(countiter == 0 || this->populationSize_ != lambda_last) {
+        lambda_last = this->populationSize_;
+        mu = std::floor(this->populationSize_ / 2.0);
+        recombinationWeights = arma::zeros(mu);
+        if(recombinationWeightsType == 0) {//equal
+          recombinationWeights = arma::ones(mu);
+        } else if(recombinationWeightsType == 1) {//linear
+          recombinationWeights = mu+0.5 - arma::linspace(1,mu,1).t();
+        } else if(recombinationWeightsType == 2) {//superlinear
+          recombinationWeights = arma::log(mu+0.5)-arma::log(arma::linspace(1,mu,1)).t();
+          //;muXone array for weighted recombination
+          //;qqq mu can be non-integer and
+          //;should become ceil(mu-0.5) (minor correction)
+        } else {
+          //TODO: CMAES throws error here cause type not implemented
+        }
+        mueff = std::pow(arma::sum(recombinationWeights),2)/arma::sum(arma::pow(recombinationWeights,2));//;variance-effective size of mu
+        recombinationWeights = recombinationWeights / arma::sum(recombinationWeights);//;normalize recombination weights array
+        //error check omitted, shouldn't happen
+        
+        //TODO: these values are from HCMA, standard CMAES are different. not sure how to impl
+        ccum = std::pow((this->numberOfDimensions_ + 2*mueff/this->numberOfDimensions_) / (4 + mueff/this->numberOfDimensions_),-1); //;time constant for cumulation for covariance matrix
+        cs = (mueff+2)/(this->numberOfDimensions_+mueff+3);
+        
+        ccov1 = std::min(2,this->populationSize_/3.0) / (std::pow(this->numberOfDimensions_+1.3,2)+mueff);
+        ccovmu = std::min(2,this->populationSize_/3.0) / (mueff-2+1.0/mueff) / (std::pow(this->numberOfDimensions_+2,2)+mueff);
+        
+        damping = 1 + 2 * std::max(0,std::sqrt((mueff-1)/(this->numberOfDimensions_+1))-1) + cs;
+      }
+      
+      countiter++;
+      
+      //;Generate and evaluate lambda offspring
+      
     }
   }
 
@@ -276,13 +315,13 @@ namespace mant {
   }
 
   template <typename T>
-  unsigned int CovarianceMatrixAdaptationEvolutionStrategy<T>::getNumberOfParents() const {
-    return numberOfParents;
+  unsigned int CovarianceMatrixAdaptationEvolutionStrategy<T>::getMu() const {
+    return mu;
   }
 
   template <typename T>
-  void CovarianceMatrixAdaptationEvolutionStrategy<T>::setNumberOfParents(unsigned int numberOfParents) {
-    this->numberOfParents = numberOfParents;
+  void CovarianceMatrixAdaptationEvolutionStrategy<T>::setMu(unsigned int numberOfParents) {
+    this->mu = numberOfParents;
   }
 
   template <typename T>
