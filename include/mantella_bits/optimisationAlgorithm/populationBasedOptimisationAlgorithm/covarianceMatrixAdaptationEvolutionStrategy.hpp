@@ -6,10 +6,12 @@ namespace mant {
     explicit CovarianceMatrixAdaptationEvolutionStrategy(
         const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
         const unsigned int populationSize) noexcept;
-    
+
+    explicit CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
+
     //used (i.e. by HCMA) to compute certain values after changing them after instantiation
     void initializeRun();
-    
+
     unsigned int getIRun();
     void setIRun(const unsigned int irun); //irun
     void setLambda0(const double lambda0); //lambda0
@@ -17,7 +19,7 @@ namespace mant {
     void setStartingPoint(const arma::Col<double> xStart); //xstart
     void setPopulationSize(const unsigned int popSize);
     double getIncPopSize() const; //IncPopSize
-    
+
     double getCcov1() const;
     void setCcov1(double ccov1);
     double getCcovmu() const;
@@ -42,7 +44,7 @@ namespace mant {
     void setSingleIteration(const bool DoSingleIteration);
 
     std::string toString() const noexcept override;
-    
+
 
   protected:
     //Notation: comments always start with matlab name of variable
@@ -60,7 +62,7 @@ namespace mant {
     bool stopOnWarnings = true; //defopts.StopOnWarnings
     bool stopOnEqualFunctionValues = true; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
     //seems strange since it's never used in an integer check, just a bool check
-    
+
     bool evalParallel = true; //defopts.EvalParallel; objective function FUN accepts NxM matrix, with M>1?
     unsigned int restarts = 9; //defopts.Restarts - HCMA default is 9
     double incPopSize; //defopts.IncPopSize; multiplier for population size before each restart
@@ -89,13 +91,16 @@ namespace mant {
     arma::Col<double> diagC; //diagC
     arma::Col<double> diagD; //diagD; diagonal matrix D defines the scaling
     double chiN; //chiN
-    
+
     bool boundaryActive = false; //bnd.isactive
     arma::Col<double> boundaryWeights; //bnd.weights
     arma::Col<double> boundaryScale; //bnd.scale
     arma::Col<bool> boundaryExists; //bnd.isbounded
     arma::Col<double> boundaryDeltaFitHistory; //bnd.dfithist; delta fit for setting weights
     bool boundaryInitialPhase; //bnd.iniphase
+    void capToBoundary(arma::Mat<double> x); //xintobounds.m - slightly modified to only take matrices
+
+    arma::Mat<double> fitnessRaw; //fitness.raw
 
     //HCMA needs to be able to do single iterations of CMAES, for that this bool can be set.
     bool singleIteration = false;
@@ -109,28 +114,39 @@ namespace mant {
   template <typename T>
   CovarianceMatrixAdaptationEvolutionStrategy<T>::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
-      const unsigned int populationSize = 0) noexcept
+      const unsigned int populationSize) noexcept
   : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize) {
-    //TODO: is defaulting popSize to 0 to use CMAES-default okay?
-    if (populationSize == 0) {
-      this->populationSize_ = 4 + std::floor(3 * log(this->numberOfDimensions_));
-    }   
+    //HCMA settings coming from xacmes.m - 
+    setStartingPoint(-4 + 8 * arma::randu(this->numberOfDimensions_));
+    setStepSize(arma::Col<double>{2.0});
+
+    xmean = startingPoint;
+  }
+
+  template <typename T>
+  CovarianceMatrixAdaptationEvolutionStrategy<T>::CovarianceMatrixAdaptationEvolutionStrategy(
+      const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept
+  : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem,
+      4 + std::floor(3 * log(this->numberOfDimensions_))) {
+
+    //TODO: is the variable passed to parentclass above already initialized at that point?
 
     //HCMA settings coming from xacmes.m - 
     setStartingPoint(-4 + 8 * arma::randu(this->numberOfDimensions_));
     setStepSize(arma::Col<double>{2.0});
 
-    xmean = arma::Col<double>(this->numberOfDimensions_);
+    xmean = startingPoint;
   }
-  
+
   template <typename T>
   void CovarianceMatrixAdaptationEvolutionStrategy<T>::initializeRun() {
     //TODO: figure out what to do with lambda0 and popsize settings
+    //this overrides constructor settings on restart runs
     //it gets split into lambda and popsize, but neither variable is written to ever again in CMAES
     //xacmes also writes these variables again...
     lambda0 = std::floor(this->populationSize_ * std::pow(incPopSize, irun - 1));
     this->populationSize_ = lambda0;
-    
+
     sigma = arma::max(stepSize);
     pc = arma::zeros(this->numberOfDimensions_);
     ps = arma::zeros(this->numberOfDimensions_);
@@ -145,20 +161,20 @@ namespace mant {
     C = arma::diagmat(diagC); //;covariance matrix == BD*(BD)'
 
     //TODO: cmaes_initializeRun initialized fitness history here, but we have that already in mantella
-    
+
     /////BOUNDARY
     boundaryActive = arma::any(this->getLowerBounds() > -arma::datum::inf) || arma::any(this->getUpperBounds() > -arma::datum::inf);
-    if(boundaryActive) {
+    if (boundaryActive) {
       //sanity check omitted, is done in mantella else where (?)
       //TODO: sanity check for initial point?
       boundaryWeights = arma::zeros(this->numberOfDimensions_);
-      
+
       boundaryScale = arma::ones(this->numberOfDimensions_);
-      
+
       //mark all dimensions which have a boundary
       boundaryExists = arma::Col<bool>(this->numberOfDimensions_);
-      for(int i = 0; i < this->getLowerBounds().n_elem; i++) {
-        if(this->getLowerBounds()(i) != arma::datum::inf || this->getUpperBounds()(i) != arma::datum::inf) {
+      for (int i = 0; i < this->getLowerBounds().n_elem; i++) {
+        if (this->getLowerBounds()(i) != arma::datum::inf || this->getUpperBounds()(i) != arma::datum::inf) {
           boundaryExists(i) = true;
         } else {
           boundaryExists(i) = false;
@@ -168,61 +184,72 @@ namespace mant {
       boundaryDeltaFitHistory = arma::ones(1); //gets elongated later
       boundaryInitialPhase = true;
     }
-    
+
     //TODO: cmaes evaluates starting point once here for output and caches that in evaluation history,
     //seems unnecessary (?)
-    
-    chiN = std::pow(this->numberOfDimensions_,0.5) * (1-1.0/(4*this->numberOfDimensions_)+1.0/(21*std::pow(this->numberOfDimensions_,2)));
+
+    chiN = std::pow(this->numberOfDimensions_, 0.5) * (1 - 1.0 / (4 * this->numberOfDimensions_) + 1.0 / (21 * std::pow(this->numberOfDimensions_, 2)));
     //;expectation of||N(0,I)|| == norm(randn(N,1))
-    
+
     runInitialized = true;
   }
 
   template <typename T>
   void CovarianceMatrixAdaptationEvolutionStrategy<T>::optimiseImplementation() {
     //do some necessary initialization stuff
-    if(!runInitialized) {
+    if (!runInitialized) {
       initializeRun();
     }
 
     bool stopFlag = false;
-    double lambda_last = 0;
+    unsigned int lambda_last = this->populationSize_;
     while (!stopFlag) {
       //TODO: lambda_last??? see studip
       //;set internal parameters
-      if(countiter == 0 || this->populationSize_ != lambda_last) {
+      if (countiter == 0 || this->populationSize_ != lambda_last) {
         lambda_last = this->populationSize_;
         mu = std::floor(this->populationSize_ / 2.0);
         recombinationWeights = arma::zeros(mu);
-        if(recombinationWeightsType == 0) {//equal
+        if (recombinationWeightsType == 0) {//equal
           recombinationWeights = arma::ones(mu);
-        } else if(recombinationWeightsType == 1) {//linear
-          recombinationWeights = mu+0.5 - arma::linspace(1,mu,1).t();
-        } else if(recombinationWeightsType == 2) {//superlinear
-          recombinationWeights = arma::log(mu+0.5)-arma::log(arma::linspace(1,mu,1)).t();
+        } else if (recombinationWeightsType == 1) {//linear
+          recombinationWeights = mu + 0.5 - arma::linspace(1, mu, 1).t();
+        } else if (recombinationWeightsType == 2) {//superlinear
+          recombinationWeights = std::log(mu + 0.5) - arma::log(arma::linspace(1, mu, 1)).t();
           //;muXone array for weighted recombination
           //;qqq mu can be non-integer and
           //;should become ceil(mu-0.5) (minor correction)
         } else {
           //TODO: CMAES throws error here cause type not implemented
         }
-        mueff = std::pow(arma::sum(recombinationWeights),2)/arma::sum(arma::pow(recombinationWeights,2));//;variance-effective size of mu
-        recombinationWeights = recombinationWeights / arma::sum(recombinationWeights);//;normalize recombination weights array
+        mueff = std::pow(arma::sum(recombinationWeights), 2) / arma::sum(arma::pow(recombinationWeights, 2)); //;variance-effective size of mu
+        recombinationWeights = recombinationWeights / arma::sum(recombinationWeights); //;normalize recombination weights array
         //error check omitted, shouldn't happen
-        
+
         //TODO: these values are from HCMA, standard CMAES are different. not sure how to impl
-        ccum = std::pow((this->numberOfDimensions_ + 2*mueff/this->numberOfDimensions_) / (4 + mueff/this->numberOfDimensions_),-1); //;time constant for cumulation for covariance matrix
-        cs = (mueff+2)/(this->numberOfDimensions_+mueff+3);
-        
-        ccov1 = std::min(2,this->populationSize_/3.0) / (std::pow(this->numberOfDimensions_+1.3,2)+mueff);
-        ccovmu = std::min(2,this->populationSize_/3.0) / (mueff-2+1.0/mueff) / (std::pow(this->numberOfDimensions_+2,2)+mueff);
-        
-        damping = 1 + 2 * std::max(0,std::sqrt((mueff-1)/(this->numberOfDimensions_+1))-1) + cs;
+        ccum = std::pow((this->numberOfDimensions_ + 2 * mueff / this->numberOfDimensions_) / (4 + mueff / this->numberOfDimensions_), -1); //;time constant for cumulation for covariance matrix
+        cs = (mueff + 2) / (this->numberOfDimensions_ + mueff + 3);
+
+        ccov1 = std::min(2, this->populationSize_ / 3.0) / (std::pow(this->numberOfDimensions_ + 1.3, 2) + mueff);
+        ccovmu = std::min(2, this->populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(this->numberOfDimensions_ + 2, 2) + mueff);
+
+        damping = 1 + 2 * std::max(0, std::sqrt((mueff - 1) / (this->numberOfDimensions_ + 1)) - 1) + cs;
       }
-      
+
       countiter++;
-      
+
       //;Generate and evaluate lambda offspring
+      fitnessRaw = arma::repmat(arma::datum::nan, 1, this->populationSize_);
+
+      arma::Mat<double> newGenerationRaw = getRandomPopulation(); //arz
+      arma::Mat<double> newGeneration = arma::repmat(xmean, 1, this->populationSize_) + sigma * (BD * newGenerationRaw); //arx
+
+      arma::Mat<double> newGenerationValid;
+      if (!boundaryActive) {
+        newGenerationValid = newGeneration;
+      } else {
+        newGenerationValid = capToBoundary(newGeneration);
+      }
       
     }
   }
@@ -258,9 +285,9 @@ namespace mant {
   void CovarianceMatrixAdaptationEvolutionStrategy<T>::setPopulationSize(const unsigned int popSize) {
     this->populationSize_ = popSize;
   }
-  
+
   template <typename T>
-  void CovarianceMatrixAdaptationEvolutionStrategy<typename T>::getIncPopSize() const {
+  double CovarianceMatrixAdaptationEvolutionStrategy<T>::getIncPopSize() const {
     return incPopSize;
   }
 
@@ -372,5 +399,34 @@ namespace mant {
   template <typename T>
   void CovarianceMatrixAdaptationEvolutionStrategy<T>::setXmean(arma::Col<double> xmean) {
     this->xmean = xmean;
+  }
+
+  template <typename T>
+  void CovarianceMatrixAdaptationEvolutionStrategy<T>::capToBoundary(arma::Mat<double> x) {
+    for (int i = 0; i < x.n_cols; i++) {
+      //another workaround. subview col doesn't have eleme method...
+      arma::Col<double> curCol = x.col(i);
+      arma::Col<uint> violatingIndexes = arma::find(curCol < getLowerBounds()(i));
+      //workaround since arma doesnt allow single value assign... but single value everything else...
+      arma::Col<double> workaroundCol = arma::ones(violatingIndexes.n_elem);
+      workaroundCol *= getLowerBounds()(i);
+      if (violatingIndexes.n_elem > 0) {
+        curCol.elem(violatingIndexes) = workaroundCol;
+      }
+      x.col(i) = curCol;
+    }
+    for (int i = 0; i < x.n_cols; i++) {
+      //another workaround. subview col doesn't have eleme method...
+      arma::Col<double> curCol = x.col(i);
+      arma::Col<uint> violatingIndexes = arma::find(curCol > getUpperBounds()(i));
+      //workaround since arma doesnt allow single value assign... but single value everything else...
+      arma::Col<double> workaroundCol = arma::ones(violatingIndexes.n_elem);
+      workaroundCol *= getUpperBounds()(i);
+      if (violatingIndexes.n_elem > 0) {
+        curCol.elem(violatingIndexes) = workaroundCol;
+      }
+      x.col(i) = curCol;
+    }
+    return x;
   }
 }
