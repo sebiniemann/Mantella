@@ -199,7 +199,7 @@ namespace mant {
   template <typename T>
   inline void StandardParticleSwarmOptimisation2011<T>::setNeighbourhoodProbability(
       const T neighbourhoodProbability) noexcept {
-    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1, "The neighbourhoodProbability muss be a double value between 0 and 1");
+    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1, "The neighbourhoodProbability muss be a value between 0 and 1");
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 
