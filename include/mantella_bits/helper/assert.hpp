@@ -8,7 +8,7 @@ namespace mant {
       const arma::Mat<T>& parameter) noexcept;
 
   inline bool isPermutation(
-      const arma::Col<unsigned int>& parameter,
+      const arma::Col<arma::uword>& parameter,
       const std::size_t numberOfPermutations,
       const std::size_t numberOfElements) noexcept;
 
@@ -51,7 +51,7 @@ namespace mant {
   }
 
   inline bool isPermutation(
-      const arma::Col<unsigned int>& parameter,
+      const arma::Col<arma::uword>& parameter,
       const std::size_t numberOfPermutations,
       const std::size_t numberOfElements) noexcept {
     // Are there as many permutations as expected?
@@ -65,7 +65,7 @@ namespace mant {
     }
     
     // Are all elements unique?
-    if (static_cast<arma::Col<unsigned int>>(arma::unique(parameter)).n_elem != parameter.n_elem) {
+    if (static_cast<arma::Col<arma::uword>>(arma::unique(parameter)).n_elem != parameter.n_elem) {
       return false;
     }
     

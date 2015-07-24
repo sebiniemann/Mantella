@@ -36,7 +36,7 @@ namespace mant {
       unsigned int particleIndex_;
       arma::Col<T> particle_;
 
-      arma::Col<unsigned int> neighbourhoodParticlesIndecies_;
+      arma::Col<arma::uword> neighbourhoodParticlesIndecies_;
       unsigned int neighbourhoodBestParticleIndex_;
 
       arma::Col<T> attractionCenter_;
@@ -88,7 +88,7 @@ namespace mant {
         randomizeTopology_ = false;
       }
 
-      const arma::Col<unsigned int>& permutation = getRandomPermutation(this->populationSize_);
+      const arma::Col<arma::uword>& permutation = getRandomPermutation(this->populationSize_);
       for (std::size_t n = 0; n < this->populationSize_; ++n) {
         ++this->numberOfIterations_;
 
@@ -108,8 +108,8 @@ namespace mant {
         arma::Col<T> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
         arma::Col<T> solutionCandidate = particle_ + velocityCandidate;
 
-        const arma::Col<unsigned int>& belowLowerBound = arma::find(solutionCandidate < this->getLowerBounds());
-        const arma::Col<unsigned int>& aboveUpperBound = arma::find(solutionCandidate > this->getUpperBounds());
+        const arma::Col<arma::uword>& belowLowerBound = arma::find(solutionCandidate < this->getLowerBounds());
+        const arma::Col<arma::uword>& aboveUpperBound = arma::find(solutionCandidate > this->getUpperBounds());
 
         velocityCandidate.elem(belowLowerBound) *= -0.5;
         velocityCandidate.elem(aboveUpperBound) *= -0.5;

@@ -1,7 +1,7 @@
 namespace mant {
    inline arma::Mat<double> getHaltonSequence(
-       const arma::Col<unsigned int>& base,
-       const arma::Col<unsigned int>& seed,
+       const arma::Col<arma::uword>& base,
+       const arma::Col<arma::uword>& seed,
        const unsigned int numberOfColumms);
 
    inline arma::Col<double> getVanDerCorputSequence(
@@ -14,8 +14,8 @@ namespace mant {
    //
 
    inline arma::Mat<double> getHaltonSequence(
-       const arma::Col<unsigned int>& base,
-       const arma::Col<unsigned int>& seed,
+       const arma::Col<arma::uword>& base,
+       const arma::Col<arma::uword>& seed,
        const unsigned int numberOfColumms) {
      verify(base.n_elem == seed.n_elem, "The number of dimensions of the base parameter must match the number of dimensions of the seed parameter.");
 

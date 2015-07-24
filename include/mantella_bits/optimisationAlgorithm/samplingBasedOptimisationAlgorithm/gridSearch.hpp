@@ -8,12 +8,12 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept;
 
       void setNumberOfSamples(
-          const arma::Col<unsigned int>& numberOfSamples);
+          const arma::Col<arma::uword>& numberOfSamples);
 
       std::string toString() const noexcept override;
 
     protected:
-      arma::Col<unsigned int> numberOfSamples_;
+      arma::Col<arma::uword> numberOfSamples_;
 
       void optimiseImplementation() noexcept override;
   };
@@ -38,7 +38,7 @@ namespace mant {
       samples.push_back(arma::linspace<arma::Col<T>>(this->getLowerBounds()(n), this->getUpperBounds()(n), numberOfSamples_(n)));
     }
 
-    arma::Col<unsigned int> sampleIndicies = arma::zeros<arma::Col<unsigned int>>(this->numberOfDimensions_);
+    arma::Col<arma::uword> sampleIndicies = arma::zeros<arma::Col<arma::uword>>(this->numberOfDimensions_);
     for(std::size_t n = 0; n < arma::accu(numberOfSamples_); ++n) {
       if (n % this->numberOfNodes_ == this->nodeRank_) {
         ++this->numberOfIterations_;
@@ -69,7 +69,7 @@ namespace mant {
 
   template <typename T>
   void GridSearch<T>::setNumberOfSamples(
-      const arma::Col<unsigned int>& numberOfSamples) {
+      const arma::Col<arma::uword>& numberOfSamples) {
     verify(arma::all(numberOfSamples > 0), "");
 
     numberOfSamples_ = numberOfSamples;

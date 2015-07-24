@@ -52,7 +52,7 @@ namespace mant {
 		unsigned int rankIndex;
     while(!this->isFinished() && !this->isTerminated()) {
 			++this->numberOfIterations_;
-			arma::Col<unsigned int> indices = arma::sort_index(objectiveValues);
+			arma::Col<arma::uword> indices = arma::sort_index(objectiveValues);
 			
 			for(std::size_t i = std::ceil((1 - worstNestPortion_) * this->populationSize_); i < this->populationSize_; ++i) {
 				++this->numberOfIterations_;

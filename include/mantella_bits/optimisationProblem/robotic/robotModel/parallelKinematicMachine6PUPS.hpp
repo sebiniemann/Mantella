@@ -64,7 +64,7 @@ namespace mant {
 
         arma::Mat<double>::fixed<3, 6> redundantJointStartToEndPositions_;
 
-        arma::Col<unsigned int> redundantJointIndicies_;
+        arma::Col<arma::uword> redundantJointIndicies_;
         arma::Mat<double> redundantJointAngles_;
     };
 

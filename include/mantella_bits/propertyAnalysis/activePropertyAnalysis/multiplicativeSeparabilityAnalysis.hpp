@@ -36,9 +36,9 @@ namespace mant {
   template <typename T>
   void MultiplicativeSeparabilityAnalysis<T>::analyseImplementation(
       std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept {
-    std::vector<std::pair<arma::Col<unsigned int>, arma::Col<unsigned int>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->numberOfDimensions_);
+    std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem->numberOfDimensions_);
 
-    std::vector<std::vector<arma::Col<unsigned int>>> partitions;
+    std::vector<std::vector<arma::Col<arma::uword>>> partitions;
     for (const auto& partitionCandidate : partitionCandidates) {
       arma::Col<T> differences(maximalNumberOfIterations_);
 

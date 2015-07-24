@@ -70,10 +70,10 @@ namespace mant {
       
       arma::Col<T> getUpperBounds() const noexcept;
 
-      arma::Col<unsigned int> isWithinLowerBounds(
+      arma::Col<arma::uword> isWithinLowerBounds(
           const arma::Col<T>& parameter) const noexcept;
         
-      arma::Col<unsigned int> isWithinUpperBounds(
+      arma::Col<arma::uword> isWithinUpperBounds(
           const arma::Col<T>& parameter) const noexcept;
         
       bool isSatisfyingSoftConstraints(
@@ -242,7 +242,7 @@ namespace mant {
   }
 
   template <typename T>
-  arma::Col<unsigned int> OptimisationAlgorithm<T>::isWithinLowerBounds(
+  arma::Col<arma::uword> OptimisationAlgorithm<T>::isWithinLowerBounds(
     const arma::Col<T>& parameter) const noexcept {
     assert(parameter.n_elem == numberOfDimensions_);
     
@@ -250,7 +250,7 @@ namespace mant {
   }
 
   template <typename T>
-  arma::Col<unsigned int> OptimisationAlgorithm<T>::isWithinUpperBounds(
+  arma::Col<arma::uword> OptimisationAlgorithm<T>::isWithinUpperBounds(
     const arma::Col<T>& parameter) const noexcept {
     assert(parameter.n_elem == numberOfDimensions_);
     
@@ -318,8 +318,8 @@ namespace mant {
   template <typename T>
   arma::Col<T> OptimisationAlgorithm<T>::boundaryHandling(
       arma::Col<T> parameter) const noexcept {
-    const arma::Col<unsigned int>& belowLowerBound = arma::find(parameter < getLowerBounds());
-    const arma::Col<unsigned int>& aboveUpperBound = arma::find(parameter > getUpperBounds());
+    const arma::Col<arma::uword>& belowLowerBound = arma::find(parameter < getLowerBounds());
+    const arma::Col<arma::uword>& aboveUpperBound = arma::find(parameter > getUpperBounds());
 
     parameter.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
     parameter.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);

@@ -22,10 +22,10 @@ namespace mant {
       double getSoftConstraintsValue(
         const arma::Col<T>& parameter);
 
-      arma::Col<unsigned int> isWithinLowerBounds(
+      arma::Col<arma::uword> isWithinLowerBounds(
         const arma::Col<T>& parameter);
 
-      arma::Col<unsigned int> isWithinUpperBounds(
+      arma::Col<arma::uword> isWithinUpperBounds(
         const arma::Col<T>& parameter);
 
       bool isSatisfyingSoftConstraints(
@@ -35,7 +35,7 @@ namespace mant {
         const arma::Col<T>& parameter);
 
       void setParameterPermutation(
-          const arma::Col<unsigned int>& parameterPermutation);
+          const arma::Col<arma::uword>& parameterPermutation);
 
       void setParameterScaling(
         const arma::Col<T>& parameterScaling);
@@ -81,7 +81,7 @@ namespace mant {
       arma::Col<T> lowerBounds_;
       arma::Col<T> upperBounds_;
 
-      arma::Col<unsigned int> parameterPermutation_;
+      arma::Col<arma::uword> parameterPermutation_;
       arma::Col<T> parameterScaling_;
       arma::Col<T> parameterTranslation_;
       arma::Mat<T> parameterRotation_;
@@ -122,7 +122,7 @@ namespace mant {
     setUpperBounds(arma::zeros<arma::Col<T>>(numberOfDimensions_) + std::numeric_limits<T>::max());
     
     // (0, ..., numberOfDimensions - 1) 
-    setParameterPermutation(arma::linspace<arma::Col<unsigned int>>(0, numberOfDimensions_ - 1, numberOfDimensions));
+    setParameterPermutation(arma::linspace<arma::Col<arma::uword>>(0, numberOfDimensions_ - 1, numberOfDimensions));
       
     setParameterScaling(arma::ones<arma::Col<T>>(numberOfDimensions_));
     setParameterTranslation(arma::zeros<arma::Col<T>>(numberOfDimensions_));
@@ -173,7 +173,7 @@ namespace mant {
   }
 
   template <typename T>
-  arma::Col<unsigned int> OptimisationProblem<T>::isWithinLowerBounds(
+  arma::Col<arma::uword> OptimisationProblem<T>::isWithinLowerBounds(
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
@@ -181,7 +181,7 @@ namespace mant {
   }
 
   template <typename T>
-  arma::Col<unsigned int> OptimisationProblem<T>::isWithinUpperBounds(
+  arma::Col<arma::uword> OptimisationProblem<T>::isWithinUpperBounds(
       const arma::Col<T>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
@@ -206,7 +206,7 @@ namespace mant {
 
   template <typename T>
   void OptimisationProblem<T>::setParameterPermutation(
-      const arma::Col<unsigned int>& parameterPermutation) {
+      const arma::Col<arma::uword>& parameterPermutation) {
     verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
     verify(isPermutation(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "The parameter must be a permutation.");
 

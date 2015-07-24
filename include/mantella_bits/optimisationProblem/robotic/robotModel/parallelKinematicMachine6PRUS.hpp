@@ -61,7 +61,7 @@ namespace mant {
         arma::Cube<double>::fixed<3, 3, 6> baseJointRotations_;
         arma::Mat<double>::fixed<3, 6> baseJointNormals_;
 
-        arma::Col<unsigned int> redundantJointIndicies_;
+        arma::Col<arma::uword> redundantJointIndicies_;
         arma::Mat<double> redundantJointAngles_;
     };
 

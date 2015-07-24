@@ -2,11 +2,11 @@ namespace mant {
   inline arma::Mat<double> getRandomRotationMatrix(
       const unsigned int numberOfDimensions) noexcept;
 
-  inline arma::Col<unsigned int> getRandomPermutation(
+  inline arma::Col<arma::uword> getRandomPermutation(
       const unsigned int numberOfElements,
       const unsigned int cycleLength);
 
-  inline arma::Col<unsigned int> getRandomPermutation(
+  inline arma::Col<arma::uword> getRandomPermutation(
       const unsigned int numberOfElements) noexcept;
 
   //
@@ -40,12 +40,12 @@ namespace mant {
     }
   }
 
-  inline arma::Col<unsigned int> getRandomPermutation(
+  inline arma::Col<arma::uword> getRandomPermutation(
       const unsigned int numberOfElements,
       const unsigned int cycleSize) {
     verify(cycleSize <= numberOfElements , "The cycle size must be lower than or equal to the number of elements.");
 
-    arma::Col<unsigned int> permutation(numberOfElements);
+    arma::Col<arma::uword> permutation(numberOfElements);
     for (std::size_t n = 0; n < numberOfElements; ++n) {
       permutation(n) = n;
     }
@@ -58,7 +58,7 @@ namespace mant {
     return permutation.head(cycleSize);
   }
 
-  inline arma::Col<unsigned int> getRandomPermutation(
+  inline arma::Col<arma::uword> getRandomPermutation(
       const unsigned int numberOfElements) noexcept {
     return getRandomPermutation(numberOfElements, numberOfElements);
   }
