@@ -150,8 +150,8 @@ namespace mant {
 #endif
     
     // Resets the results, counters and caches
-    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
+    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestParameter_.reset();
     numberOfIterations_ = 0;
     optimisationProblem_->reset();
@@ -164,14 +164,14 @@ namespace mant {
     MPI_Type_commit(&MANT_MPI_PARAMETER);
   
     MPI_Op MANT_MPI_GET_BEST_PARAMETER;
-    MPI_Op_create(getBestParameter, true, &MANT_MPI_GET_BEST_PARAMETER);
+    MPI_Op_create(&OptimisationAlgorithm<T>::getBestParameter, true, &MANT_MPI_GET_BEST_PARAMETER);
     
     arma::Col<double> mpiInputParameter(2 + numberOfDimensions_);
     arma::Col<double> mpiOutputParameter(2 + numberOfDimensions_);
     
-    mpiInputParameter.at(0) = softConstraintsValue;
-    mpiInputParameter.at(1) = objectiveValue;
-    mpiInputParameter.tail(numberOfDimensions_) = parameter;
+    mpiInputParameter.at(0) = bestSoftConstraintsValue_;
+    mpiInputParameter.at(1) = bestObjectiveValue_;
+    mpiInputParameter.tail(numberOfDimensions_) = bestParameter_;
     
     MPI_Reduce(mpiInputParameter.memptr(), mpiOutputParameter.memptr(), 1, MANT_MPI_PARAMETER, MANT_MPI_GET_BEST_PARAMETER, 0, MPI_COMM_WORLD);
 
