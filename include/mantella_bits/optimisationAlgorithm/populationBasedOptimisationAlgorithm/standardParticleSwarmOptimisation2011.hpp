@@ -48,13 +48,13 @@ namespace mant {
 
       bool randomizeTopology_;
 
-      arma::Mat<unsigned int> topology_;
+      arma::Mat<arma::uword>topology_;
 
       inline void optimiseImplementation() noexcept override;
 
       inline void initialiseSwarm() noexcept;
 
-      inline arma::Mat<unsigned int> getRandomNeighbourhoodTopology() noexcept;
+      inline arma::Mat<arma::uword>getRandomNeighbourhoodTopology() noexcept;
 
       inline T getAcceleration() noexcept;
       inline arma::Col<T> getVelocity() noexcept;
@@ -189,8 +189,8 @@ namespace mant {
   }
 
   template <typename T>
-  inline arma::Mat<unsigned int> StandardParticleSwarmOptimisation2011<T>::getRandomNeighbourhoodTopology() noexcept {
-    arma::Mat<unsigned int> topology = (arma::randu<arma::Mat<T>>(this->populationSize_, this->populationSize_) <= neighbourhoodProbability_);
+  inline arma::Mat<arma::uword>StandardParticleSwarmOptimisation2011<T>::getRandomNeighbourhoodTopology() noexcept {
+    arma::Mat<arma::uword>topology = (arma::randu<arma::Mat<T>>(this->populationSize_, this->populationSize_) <= neighbourhoodProbability_);
     topology.diag() += 1.0;
 
     return topology;

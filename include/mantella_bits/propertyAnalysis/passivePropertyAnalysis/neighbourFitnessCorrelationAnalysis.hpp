@@ -47,7 +47,7 @@ namespace mant {
     arma::Mat<T> parameters(parameterToObjectiveValueMappings.cbegin()->first.n_elem, parameterToObjectiveValueMappings.size());
     
     arma::Col<double> objectiveValues(parameters.n_cols);
-    arma::Mat<unsigned int> neighbours(parameters.n_cols, parameters.n_cols);
+    arma::Mat<arma::uword>neighbours(parameters.n_cols, parameters.n_cols);
     
     std::size_t nn = 0;
     for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
