@@ -1,4 +1,20 @@
 namespace mant {
+
+#if defined(MANTELLA_USE_MPI)
+  void mpiGetBestParameter(
+      void* firstInput,
+      void* secondInput,
+      int* size,
+      MPI_Datatype* type) {
+    double* firstParameters = static_cast<double*>(firstInput);
+    double* secondParameters = static_cast<double*>(secondInput);
+  
+    if(firstParameters[1] < secondParameters[1] || (firstParameters[1] == secondParameters[1] && firstParameters[2] < secondParameters[2])) {
+      std::copy(&firstParameters[1], &firstParameters[2 + static_cast<unsigned int>(secondParameters[0])], &secondParameters[1]);
+    }
+  }
+#endif
+
   template <typename T = double>
   class OptimisationAlgorithm : public Printable {
     static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
@@ -88,14 +104,6 @@ namespace mant {
           const arma::Col<T>& parameter,
           const double softConstraintsValue,
           const double objectiveValue) noexcept;
-      
-#if defined(MANTELLA_USE_MPI)
-      void getBestParameter(
-          void* firstInput,
-          void* secondInput,
-          int* size,
-          MPI_Datatype* type) const noexcept;
-#endif
 
       virtual void optimiseImplementation() = 0;
   };
@@ -334,20 +342,4 @@ namespace mant {
       return false;
     }
   }
-  
-#if defined(MANTELLA_USE_MPI)
-  template <typename T>
-  void OptimisationAlgorithm<T>::getBestParameter(
-      void* firstInput,
-      void* secondInput,
-      int* size,
-      MPI_Datatype* type) const noexcept {
-    double* firstParameters = static_cast<double*>(firstInput);
-    double* secondParameters = static_cast<double*>(secondInput);
-    
-    if(firstParameters[0] < secondParameters[0] || (firstParameters[0] == secondParameters[0] && firstParameters[0 + 1] < secondParameters[0 + 1])) {
-      std::copy(&firstParameters[0], &firstParameters[0 + numberOfDimensions_ - 1], &secondParameters[0]);
-    }
-  }
-#endif
 }
