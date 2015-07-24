@@ -119,7 +119,8 @@ namespace mant {
       numberOfDimensions_(optimisationProblem_->numberOfDimensions_),
       numberOfIterations_(0),
       bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
-      bestObjectiveValue_(std::numeric_limits<double>::infinity()) {
+      bestObjectiveValue_(std::numeric_limits<double>::infinity()),
+      bestParameter_(numberOfDimensions_) {
     setMaximalNumberOfIterations(1000);
     
 #if defined(MANTELLA_USE_MPI)
@@ -160,7 +161,7 @@ namespace mant {
     // Resets the results, counters and caches
     bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
-    bestParameter_.reset();
+    bestParameter_.fill(std::numeric_limits<T>::quiet_NaN());
     numberOfIterations_ = 0;
     optimisationProblem_->reset();
 
