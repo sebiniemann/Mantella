@@ -424,7 +424,7 @@ namespace mant {
       serialisedOptimisationProblem.pop_back();
     }
     
-    parameterRotation_.set_size(this->numberOfDimensions_);
+    parameterRotation_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
     for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
       parameterRotation_(n) = static_cast<T>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
