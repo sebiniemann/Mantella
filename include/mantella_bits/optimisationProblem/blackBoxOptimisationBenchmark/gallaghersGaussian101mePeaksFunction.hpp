@@ -161,17 +161,20 @@ namespace mant {
         std::vector<double> serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.back());
+        serialisedOptimisationProblem.pop_back();
       }
       
       localParameterConditionings_.set_size(this->numberOfDimensions_, 21);
       for(std::size_t n = 0; n < localParameterConditionings_.n_elem; ++n) {
-        localParameterConditionings_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+        localParameterConditionings_(n) = static_cast<T>(serialisedOptimisationProblem.back());
+        serialisedOptimisationProblem.pop_back();
       }
       
       localParameterTranslations_.set_size(this->numberOfDimensions_, 21);
       for(std::size_t n = 0; n < localParameterTranslations_.n_elem; ++n) {
-        localParameterTranslations_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+        localParameterTranslations_(n) = static_cast<T>(serialisedOptimisationProblem.back());
+        serialisedOptimisationProblem.pop_back();
       }
         
       BlackBoxOptimisationBenchmark<T>::deserialise(serialisedOptimisationProblem);

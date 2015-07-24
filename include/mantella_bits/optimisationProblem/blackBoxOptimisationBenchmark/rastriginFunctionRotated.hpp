@@ -104,12 +104,14 @@ namespace mant {
         std::vector<double> serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+        rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.back());
+        serialisedOptimisationProblem.pop_back();
       }
       
       rotationR_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationR_.n_elem; ++n) {
-        rotationR_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
+        rotationR_(n) = static_cast<T>(serialisedOptimisationProblem.back());
+        serialisedOptimisationProblem.pop_back();
       }
         
       BlackBoxOptimisationBenchmark<T>::deserialise(serialisedOptimisationProblem);
