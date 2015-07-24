@@ -107,7 +107,7 @@ namespace mant {
 
       // The type is intentionally fixed to ease usage with MPI_DOUBLE.
       void deserialise(
-          const std::vector<double>& serialisedOptimisationProblem);
+          std::vector<double> serialisedOptimisationProblem);
 #endif
   };
 
@@ -398,7 +398,7 @@ namespace mant {
 
   template <typename T>
   void OptimisationProblem<T>::deserialise(
-      const std::vector<double>& serialisedOptimisationProblem) {
+      std::vector<double> serialisedOptimisationProblem) {
     lowerBounds_.set_size(this->numberOfDimensions_);
     for(std::size_t n = 0; n < lowerBounds_.n_elem; ++n) {
       lowerBounds_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());

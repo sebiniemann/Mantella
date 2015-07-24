@@ -33,7 +33,7 @@ namespace mant {
 
         // The type is intentionally fixed to ease usage with MPI_DOUBLE.
         void deserialise(
-            const std::vector<double>& serialisedOptimisationProblem);
+            std::vector<double> serialisedOptimisationProblem);
 #endif
     };
 
@@ -94,7 +94,7 @@ namespace mant {
 
     template <typename T>
     void SchaffersF7Function<T>::deserialise(
-        const std::vector<double>& serialisedOptimisationProblem) {
+        std::vector<double> serialisedOptimisationProblem) {
       rotationQ_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());

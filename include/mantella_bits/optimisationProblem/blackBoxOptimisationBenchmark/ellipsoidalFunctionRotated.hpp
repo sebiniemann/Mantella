@@ -25,7 +25,7 @@ namespace mant {
 
         // The type is intentionally fixed to ease usage with MPI_DOUBLE.
         void deserialise(
-            const std::vector<double>& serialisedOptimisationProblem);
+            std::vector<double> serialisedOptimisationProblem);
 #endif
     };
 
@@ -61,7 +61,7 @@ namespace mant {
 
     template <typename T>
     void EllipsoidalFunctionRotated<T>::deserialise(
-        const std::vector<double>& serialisedOptimisationProblem) {
+        std::vector<double> serialisedOptimisationProblem) {
       BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
     }
 #endif
