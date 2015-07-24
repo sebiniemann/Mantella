@@ -61,13 +61,13 @@ namespace mant {
 #if defined(MANTELLA_USE_MPI)
     template <typename T>
     std::vector<double> SchwefelFunction<T>::serialise() const noexcept {
-      return BlackBoxOptimisationBenchmark<T, T>::serialise();
+      return BlackBoxOptimisationBenchmark<T>::serialise();
     }
 
     template <typename T>
     void SchwefelFunction<T>::deserialise(
         std::vector<double> serialisedOptimisationProblem) {
-      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+      BlackBoxOptimisationBenchmark<T>::deserialise(serialisedOptimisationProblem);
     }
 #endif
   }

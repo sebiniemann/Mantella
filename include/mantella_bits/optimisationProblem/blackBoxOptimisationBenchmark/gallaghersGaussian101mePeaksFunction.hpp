@@ -139,7 +139,7 @@ namespace mant {
 #if defined(MANTELLA_USE_MPI)
     template <typename T>
     std::vector<double> GallaghersGaussian101mePeaksFunction<T>::serialise() const noexcept {
-      std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T, T>::serialise();
+      std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark<T>::serialise();
       
       for(std::size_t n = 0; n < rotationQ_.n_elem; ++n) {
         serialisedOptimisationProblem.push_back(static_cast<double>(rotationQ_(n)));
@@ -174,7 +174,7 @@ namespace mant {
         localParameterTranslations_(n) = static_cast<T>(serialisedOptimisationProblem.pop_back());
       }
         
-      BlackBoxOptimisationBenchmark<T, T>::deserialise(serialisedOptimisationProblem);
+      BlackBoxOptimisationBenchmark<T>::deserialise(serialisedOptimisationProblem);
     }
 #endif
   }
