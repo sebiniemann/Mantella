@@ -11,12 +11,12 @@
 #include <armadillo>
 
 template <typename T>
-void compare(
+void COMPARE(
     const arma::Col<T>& actual,
     const arma::Col<T>& expected);
 
 template <typename T>
-void compare(
+void COMPARE(
     const arma::Mat<T>& actual,
     const arma::Mat<T>& expected);
     
@@ -25,7 +25,7 @@ void compare(
 //
 
 template <typename T>
-void compare(
+void COMPARE(
     const arma::Col<T>& actual,
     const arma::Col<T>& expected) {
   REQUIRE(actual.n_elem == expected.n_elem);
@@ -40,11 +40,12 @@ void compare(
 }
 
 template <typename T>
-void compare(
+void COMPARE(
     const arma::Mat<T>& actual,
     const arma::Mat<T>& expected) {
   REQUIRE(actual.n_cols == expected.n_cols);
 
   for(std::size_t n = 0; n < expected.n_cols; ++n) {
+    COMPARE<T>(static_cast<arma::Col<T>>(actual.col(n)), static_cast<arma::Col<T>>(expected.col(n)));
   }
 }

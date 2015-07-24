@@ -36,7 +36,7 @@ TEST_CASE("Rng", "") {
         actualValues.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
       }
 
-      compare(actualValues, expectedValues);
+      COMPARE(actualValues, expectedValues);
     }
 
     SECTION("Works with Armadillo.") {
@@ -44,7 +44,7 @@ TEST_CASE("Rng", "") {
       mant::Rng::setSeed(seed);
       arma::Col<double>::fixed<10> actualValues = arma::randu<arma::Col<double>>(10);
 
-      compare(actualValues, expectedValues);
+      COMPARE(actualValues, expectedValues);
     }
 
     // Returns last seed

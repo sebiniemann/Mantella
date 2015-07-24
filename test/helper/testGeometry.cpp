@@ -20,7 +20,7 @@ TEST_CASE("geometry: get2DRotation(...)", "") {
         std::sin(angle), std::cos(angle)
       });
 
-      compare(mant::get2DRotation(angle), expected);
+      COMPARE(mant::get2DRotation(angle), expected);
     }
   }
 }
@@ -52,7 +52,7 @@ TEST_CASE("geometry: get3DRotation(...)", "") {
             0.0, 0.0, 1.0
           });
 
-          compare<double>(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
+          COMPARE<double>(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
         }
       }
     }
@@ -64,10 +64,10 @@ TEST_CASE("geometry: getCircleCircleIntersection(...)", "") {
     arma::Col<double>::fixed<2> expected;
 
     expected = {-2.5522451636, 1.8231290303};
-    compare(mant::getCircleCircleIntersection({-2.0, 3.0}, 1.3, {-1.5, 2.4}, 1.2), expected);
+    COMPARE(mant::getCircleCircleIntersection({-2.0, 3.0}, 1.3, {-1.5, 2.4}, 1.2), expected);
 
     expected = {-0.1804143359, 0.9753358195};
-    compare(mant::getCircleCircleIntersection({1.8, -2.5}, 4.0, {-3.0, 2.0}, 3.0), expected);
+    COMPARE(mant::getCircleCircleIntersection({1.8, -2.5}, 4.0, {-3.0, 2.0}, 3.0), expected);
   }
 
   SECTION("Throws an exception, if both centers are on the same spot.") {
@@ -97,13 +97,13 @@ TEST_CASE("geometry: getCircleSphereIntersection(...)", "") {
     arma::Col<double>::fixed<3> expected;
 
     expected = {-2.095, 1.1962336728, 0.0};
-    compare(mant::getCircleSphereIntersection({-2.0, 0.0, 0.0}, 1.2, {0.0, 0.0, 1.0}, {-3.0, 0.0, 0.0}, 1.5), expected);
+    COMPARE(mant::getCircleSphereIntersection({-2.0, 0.0, 0.0}, 1.2, {0.0, 0.0, 1.0}, {-3.0, 0.0, 0.0}, 1.5), expected);
 
     expected = {-2.5522451636, 1.8231290303, 0.0};
-    compare(mant::getCircleSphereIntersection({-2.0, 3.0, 0.0}, 1.3, {0.0, 0.0, 1.0}, {-1.5, 2.4, 0.0}, 1.2), expected);
+    COMPARE(mant::getCircleSphereIntersection({-2.0, 3.0, 0.0}, 1.3, {0.0, 0.0, 1.0}, {-1.5, 2.4, 0.0}, 1.2), expected);
 
     expected = {-0.1804143359, 0.9753358195, 0.0};
-    compare(mant::getCircleSphereIntersection({1.8, -2.5, 0.0}, 4.0, {0.0, 0.0, 1.0}, {-3.0, 2.0, 0.0}, 3.0), expected);
+    COMPARE(mant::getCircleSphereIntersection({1.8, -2.5, 0.0}, 4.0, {0.0, 0.0, 1.0}, {-3.0, 2.0, 0.0}, 3.0), expected);
   }
 
   SECTION("Throws an exception, if both centers are on the same spot.") {

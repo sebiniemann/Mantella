@@ -54,7 +54,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     SECTION("Checking the default value.") {
       // Each dimension of the lower bound is set to the lowest, representable value.
       arma::Col<double> expected = arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::lowest();
-      compare(optimisationProblem.getLowerBounds(), expected);
+      COMPARE(optimisationProblem.getLowerBounds(), expected);
     }
   }
 
@@ -62,7 +62,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     SECTION("Checking the default value.") {
       // Each dimension of the lower bound is set to the largest, representable value.
       arma::Col<double> expected = arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::max();
-      compare(optimisationProblem.getUpperBounds(), expected);
+      COMPARE(optimisationProblem.getUpperBounds(), expected);
     }
   }
 
@@ -71,7 +71,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       arma::Col<double> lowerBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 
       optimisationProblem.setLowerBounds(lowerBounds);
-      compare(optimisationProblem.getLowerBounds(), lowerBounds);
+      COMPARE(optimisationProblem.getLowerBounds(), lowerBounds);
     }
     
     SECTION("Exception tests") {
@@ -92,7 +92,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       arma::Col<double> upperBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 
       optimisationProblem.setUpperBounds(upperBounds);
-      compare(optimisationProblem.getUpperBounds(), upperBounds);
+      COMPARE(optimisationProblem.getUpperBounds(), upperBounds);
     }
 
     SECTION("Exception tests") {
@@ -309,7 +309,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       // All elements of the upper bound are set to 2.
       optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.0);
       
-      compare(optimisationProblem.isWithinLowerBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -0.5}), {0, 1, 1, 0, 1});
+      COMPARE(optimisationProblem.isWithinLowerBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -0.5}), {0, 1, 1, 0, 1});
     }
     
     SECTION("Exception tests") {
@@ -332,7 +332,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       // All elements of the upper bound are set to 2.
       optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.0);
       
-      compare(optimisationProblem.isWithinUpperBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), 2.0}), {1, 0, 0, 1, 1});
+      COMPARE(optimisationProblem.isWithinUpperBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), 2.0}), {1, 0, 0, 1, 1});
     }
     
     SECTION("Exception tests") {
@@ -506,8 +506,8 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       // Reset the problem.
       optimisationProblem.reset();
       
-      compare(optimisationProblem.getLowerBounds(), lowerBounds);
-      compare(optimisationProblem.getUpperBounds(), upperBounds);
+      COMPARE(optimisationProblem.getLowerBounds(), lowerBounds);
+      COMPARE(optimisationProblem.getUpperBounds(), upperBounds);
       
       CHECK(optimisationProblem.getAcceptableObjectiveValue() == acceptableObjectiveValue);
       
