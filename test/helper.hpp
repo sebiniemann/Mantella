@@ -19,11 +19,6 @@ template <typename T>
 void compare(
     const arma::Mat<T>& actual,
     const arma::Mat<T>& expected);
-
-template <typename T>
-void compare(
-    const std::vector<arma::Col<T>>& actual,
-    const arma::Mat<T>& expected);
     
 //
 // Implementation
@@ -51,17 +46,5 @@ void compare(
   REQUIRE(actual.n_cols == expected.n_cols);
 
   for(std::size_t n = 0; n < expected.n_cols; ++n) {
-    compare<T>(static_cast<arma::Col<T>>(actual.col(n)), static_cast<arma::Col<T>>(expected.col(n)));
-  }
-}
-
-template <typename T>
-void compare(
-    const std::vector<arma::Col<T>>& actual,
-    const arma::Mat<T>& expected) {
-  REQUIRE(actual.size() == expected.n_cols);
-
-  for(std::size_t n = 0; n < expected.n_cols; ++n) {
-    compare<T>(actual.at(n), expected.col(n));
   }
 }
