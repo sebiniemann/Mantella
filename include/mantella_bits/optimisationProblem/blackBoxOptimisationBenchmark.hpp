@@ -8,6 +8,13 @@ namespace mant {
         explicit BlackBoxOptimisationBenchmark(
             const std::size_t numberOfDimensions) noexcept;
 
+        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        std::vector<double> serialise() const noexcept;
+
+        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        void deserialise(
+            std::vector<double> serialisedOptimisationProblem);
+
         virtual ~BlackBoxOptimisationBenchmark() = default;
 
       protected:
@@ -31,18 +38,6 @@ namespace mant {
 
         double getBoundConstraintsValue(
             const arma::Col<T>& parameter) const noexcept;
-
-#if defined(MANTELLA_USE_MPI)
-      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
-      friend class OptimisationAlgorithm;
-
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      std::vector<double> serialise() const noexcept;
-
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      void deserialise(
-          std::vector<double> serialisedOptimisationProblem);
-#endif
     };
 
     //

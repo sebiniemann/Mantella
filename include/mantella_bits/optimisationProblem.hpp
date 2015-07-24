@@ -68,6 +68,13 @@ namespace mant {
 
       std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>> getCachedObjectiveValues() const noexcept;
 
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      std::vector<double> serialise() const noexcept;
+
+      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+      void deserialise(
+          std::vector<double> serialisedOptimisationProblem);
+
       virtual ~OptimisationProblem() = default;
 
     protected:
@@ -97,18 +104,6 @@ namespace mant {
         const arma::Col<T>& parameter) const noexcept = 0;
 
       std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>> cachedObjectiveValues_;
-
-#if defined(MANTELLA_USE_MPI)
-      // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
-      friend class OptimisationAlgorithm;
-
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      std::vector<double> serialise() const noexcept;
-
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-      void deserialise(
-          std::vector<double> serialisedOptimisationProblem);
-#endif
   };
 
   //

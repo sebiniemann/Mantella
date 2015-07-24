@@ -10,23 +10,18 @@ namespace mant {
 
         std::string toString() const noexcept override;
 
-      protected:
-        const double max_;
-
-        double getObjectiveValueImplementation(
-            const arma::Col<T>& parameter) const noexcept override;
-
-#if defined(MANTELLA_USE_MPI)
-        // Grants direct access to the otherwise hidden .serialise() and .deserialise(...) methods.
-        friend class OptimisationAlgorithm;
-
         // The type is intentionally fixed to ease usage with MPI_DOUBLE.
         std::vector<double> serialise() const noexcept;
 
         // The type is intentionally fixed to ease usage with MPI_DOUBLE.
         void deserialise(
             std::vector<double> serialisedOptimisationProblem);
-#endif
+
+      protected:
+        const double max_;
+
+        double getObjectiveValueImplementation(
+            const arma::Col<T>& parameter) const noexcept override;
     };
 
     //
