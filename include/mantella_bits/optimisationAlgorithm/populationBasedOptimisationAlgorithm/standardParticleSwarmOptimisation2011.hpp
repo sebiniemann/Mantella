@@ -37,7 +37,7 @@ namespace mant {
       arma::Col<T> particle_;
 
       arma::Col<arma::uword> neighbourhoodParticlesIndecies_;
-      unsigned int neighbourhoodBestParticleIndex_;
+      arma::uword neighbourhoodBestParticleIndex_;
 
       arma::Col<T> attractionCenter_;
 

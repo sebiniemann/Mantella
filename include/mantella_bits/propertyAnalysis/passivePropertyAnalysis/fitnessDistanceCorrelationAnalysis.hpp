@@ -41,7 +41,7 @@ namespace mant {
       ++n;
     }
 
-    unsigned int bestParameterIndex;
+    arma::uword bestParameterIndex;
     objectiveValues.min(bestParameterIndex);
 
     parameters.each_col() -= parameters.col(bestParameterIndex);

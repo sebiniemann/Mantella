@@ -44,7 +44,7 @@ namespace mant {
       this->updateBestParameter(nests.col(n), this->getSoftConstraintsValue(nests.col(n)), objectiveValues(n));
     }
     
-		unsigned int rankIndex;
+		arma::uword rankIndex;
     while(!this->isFinished() && !this->isTerminated()){
 			++this->numberOfIterations_;
       
