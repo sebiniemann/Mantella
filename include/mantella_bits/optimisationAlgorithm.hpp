@@ -1,7 +1,7 @@
 namespace mant {
 
 #if defined(MANTELLA_USE_MPI)
-  void mpiGetBestParameter(
+  inline void mpiGetBestParameter(
       void* firstInput,
       void* secondInput,
       int* size,
