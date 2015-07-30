@@ -4,10 +4,10 @@ namespace mant {
     static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
     
     public:
-      const std::size_t numberOfDimensions_;
+      const arma::uword numberOfDimensions_;
 
       explicit OptimisationProblem(
-        const std::size_t numberOfDimensions) noexcept;
+        const arma::uword numberOfDimensions) noexcept;
 
       void setLowerBounds(
         const arma::Col<T>& lowerBounds);
@@ -60,9 +60,9 @@ namespace mant {
       double getObjectiveValue(
         const arma::Col<T>& parameter);
 
-      unsigned long long getNumberOfEvaluations() const noexcept;
+      arma::uword getNumberOfEvaluations() const noexcept;
 
-      unsigned long long getNumberOfDistinctEvaluations() const noexcept;
+      arma::uword getNumberOfDistinctEvaluations() const noexcept;
       
       void reset() noexcept;
 
@@ -91,8 +91,8 @@ namespace mant {
 
       double acceptableObjectiveValue_;
 
-      unsigned long long numberOfEvaluations_;
-      unsigned long long numberOfDistinctEvaluations_;
+      arma::uword numberOfEvaluations_;
+      arma::uword numberOfDistinctEvaluations_;
 
       arma::Col<T> getDiversifiedParameter(
         const arma::Col<T>& parameter) const noexcept;
@@ -112,7 +112,7 @@ namespace mant {
 
   template <typename T>
   OptimisationProblem<T>::OptimisationProblem(
-      const std::size_t numberOfDimensions) noexcept
+      const arma::uword numberOfDimensions) noexcept
     : numberOfDimensions_(numberOfDimensions) {
     reset();
     
@@ -316,12 +316,12 @@ namespace mant {
   }
 
   template <typename T>
-  unsigned long long OptimisationProblem<T>::getNumberOfEvaluations() const noexcept {
+  arma::uword OptimisationProblem<T>::getNumberOfEvaluations() const noexcept {
     return numberOfEvaluations_;
   }
 
   template <typename T>
-  unsigned long long OptimisationProblem<T>::getNumberOfDistinctEvaluations() const noexcept {
+  arma::uword OptimisationProblem<T>::getNumberOfDistinctEvaluations() const noexcept {
     return numberOfDistinctEvaluations_;
   }
 
@@ -359,27 +359,27 @@ namespace mant {
   std::vector<double> OptimisationProblem<T>::serialise() const noexcept {
     std::vector<double> serialisedOptimisationProblem;
 
-    for(std::size_t n = 0; n < lowerBounds_.n_elem; ++n) {
+    for(arma::uword n = 0; n < lowerBounds_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(static_cast<double>(lowerBounds_(n)));
     }
 
-    for(std::size_t n = 0; n < upperBounds_.n_elem; ++n) {
+    for(arma::uword n = 0; n < upperBounds_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(static_cast<double>(upperBounds_(n)));
     }
 
-    for(std::size_t n = 0; n < parameterPermutation_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterPermutation_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(static_cast<double>(parameterPermutation_(n)));
     }
 
-    for(std::size_t n = 0; n < parameterScaling_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterScaling_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(static_cast<double>(parameterScaling_(n)));
     }
 
-    for(std::size_t n = 0; n < parameterTranslation_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterTranslation_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(static_cast<double>(parameterTranslation_(n)));
     }
 
-    for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterRotation_.n_elem; ++n) {
       serialisedOptimisationProblem.push_back(static_cast<double>(parameterRotation_(n)));
     }
 
@@ -404,37 +404,37 @@ namespace mant {
     serialisedOptimisationProblem.pop_back();
     
     parameterRotation_.set_size(this->numberOfDimensions_, this->numberOfDimensions_);
-    for(std::size_t n = 0; n < parameterRotation_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterRotation_.n_elem; ++n) {
       parameterRotation_(n) = static_cast<T>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
     }
     
     parameterTranslation_.set_size(this->numberOfDimensions_);
-    for(std::size_t n = 0; n < parameterTranslation_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterTranslation_.n_elem; ++n) {
       parameterTranslation_(n) = static_cast<T>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
     }
     
     parameterScaling_.set_size(this->numberOfDimensions_);
-    for(std::size_t n = 0; n < parameterScaling_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterScaling_.n_elem; ++n) {
       parameterScaling_(n) = static_cast<T>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
     }
     
     parameterPermutation_.set_size(this->numberOfDimensions_);
-    for(std::size_t n = 0; n < parameterPermutation_.n_elem; ++n) {
+    for(arma::uword n = 0; n < parameterPermutation_.n_elem; ++n) {
       parameterPermutation_(n) = static_cast<unsigned int>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
     }
     
     upperBounds_.set_size(this->numberOfDimensions_);
-    for(std::size_t n = 0; n < upperBounds_.n_elem; ++n) {
+    for(arma::uword n = 0; n < upperBounds_.n_elem; ++n) {
       upperBounds_(n) = static_cast<T>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
     }
     
     lowerBounds_.set_size(this->numberOfDimensions_);
-    for(std::size_t n = 0; n < lowerBounds_.n_elem; ++n) {
+    for(arma::uword n = 0; n < lowerBounds_.n_elem; ++n) {
       lowerBounds_(n) = static_cast<T>(serialisedOptimisationProblem.back());
       serialisedOptimisationProblem.pop_back();
     }
