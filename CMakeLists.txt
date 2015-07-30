@@ -233,6 +233,7 @@ add_custom_target(QtWorkaround SOURCES
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp
   include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp
+  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/selectTheEasiestPoint.hpp
   include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp
   include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp
   include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp
