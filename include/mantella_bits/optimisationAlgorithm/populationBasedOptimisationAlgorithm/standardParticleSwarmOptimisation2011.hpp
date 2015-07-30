@@ -158,7 +158,7 @@ namespace mant {
 
     localBestSolutions_ = particles_;
 
-    for (arma::uword = 0; n < this->populationSize_; ++n) {
+    for (arma::uword n = 0; n < this->populationSize_; ++n) {
       ++this->numberOfIterations_;
 
       arma::Col<double> localBestSolution = localBestSolutions_.col(n);
