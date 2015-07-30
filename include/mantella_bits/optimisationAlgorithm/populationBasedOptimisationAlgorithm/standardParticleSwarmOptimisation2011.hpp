@@ -4,7 +4,7 @@ namespace mant {
     public:
       inline explicit StandardParticleSwarmOptimisation2011(
           const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
-          const unsigned int populationSize) noexcept;
+          const arma::uword populationSize) noexcept;
 
       inline void setNeighbourhoodProbability(
           const T neighbourhoodProbability) noexcept;
@@ -67,7 +67,7 @@ namespace mant {
   template <typename T>
   inline StandardParticleSwarmOptimisation2011<T>::StandardParticleSwarmOptimisation2011(
       const std::shared_ptr<OptimisationProblem<T>> optimisationProblem,
-      const unsigned int populationSize) noexcept
+      const arma::uword populationSize) noexcept
     : PopulationBasedOptimisationAlgorithm<T>(optimisationProblem, populationSize),
       localBestObjectiveValues_(this->populationSize_),
       randomizeTopology_(true) {
@@ -89,7 +89,7 @@ namespace mant {
       }
 
       const arma::Col<arma::uword>& permutation = getRandomPermutation(this->populationSize_);
-      for (std::size_t n = 0; n < this->populationSize_; ++n) {
+      for (arma::uword n = 0; n < this->populationSize_; ++n) {
         ++this->numberOfIterations_;
 
         particleIndex_ = permutation(n);
@@ -158,7 +158,7 @@ namespace mant {
 
     localBestSolutions_ = particles_;
 
-    for (std::size_t n = 0; n < this->populationSize_; ++n) {
+    for (arma::uword = 0; n < this->populationSize_; ++n) {
       ++this->numberOfIterations_;
 
       arma::Col<double> localBestSolution = localBestSolutions_.col(n);
