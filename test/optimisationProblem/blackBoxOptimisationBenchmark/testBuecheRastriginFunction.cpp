@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -15,7 +16,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::BuecheRastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::BuecheRastriginFunction<> buecheRastriginFunction(numberOfDimensions);
+    mant::bbob::BuecheRastriginFunction buecheRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
@@ -29,12 +30,12 @@ TEST_CASE("bbob::BuecheRastriginFunction", "") {
     buecheRastriginFunction.setObjectiveValueTranslation(0);
     buecheRastriginFunction.setParameterTranslation(translation);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       CHECK(buecheRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::BuecheRastriginFunction<>(5).toString() == "bbob_bueche_rastrigin_function");
+    CHECK(mant::bbob::BuecheRastriginFunction(5).toString() == "bbob_bueche_rastrigin_function");
   }
 }

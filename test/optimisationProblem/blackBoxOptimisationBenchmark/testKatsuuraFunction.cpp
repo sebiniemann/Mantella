@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -15,7 +16,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::KatsuuraFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::KatsuuraFunction<> katsuuraFunction(numberOfDimensions);
+    mant::bbob::KatsuuraFunction katsuuraFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
@@ -37,13 +38,13 @@ TEST_CASE("bbob::KatsuuraFunction", "") {
     katsuuraFunction.setParameterRotation(rotationR);
     katsuuraFunction.setRotationQ(rotationQ);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       CHECK(katsuuraFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::KatsuuraFunction<>(5).toString() == "bbob_katsuura_function");
+    CHECK(mant::bbob::KatsuuraFunction(5).toString() == "bbob_katsuura_function");
   }
 }
 

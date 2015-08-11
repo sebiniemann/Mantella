@@ -1,10 +1,9 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
 // Mantella
 #include <mantella>
-
-#include "../helper.hpp"
 
 TEST_CASE("quasiRandomSequence: getHaltonSequence(...)", "") {
   SECTION("Generates a Halton sequance without an offset.") {

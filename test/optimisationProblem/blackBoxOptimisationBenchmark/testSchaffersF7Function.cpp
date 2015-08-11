@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -15,7 +16,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::SchaffersF7Function", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SchaffersF7Function<> schaffersF7Function(numberOfDimensions);
+    mant::bbob::SchaffersF7Function schaffersF7Function(numberOfDimensions);
 
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
@@ -37,12 +38,12 @@ TEST_CASE("bbob::SchaffersF7Function", "") {
     schaffersF7Function.setParameterRotation(rotationR);
     schaffersF7Function.setRotationQ(rotationQ);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       CHECK(schaffersF7Function.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchaffersF7Function<>(5).toString() == "bbob_schaffers_f7_function");
+    CHECK(mant::bbob::SchaffersF7Function(5).toString() == "bbob_schaffers_f7_function");
   }
 }

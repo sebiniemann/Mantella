@@ -1,48 +1,28 @@
+#pragma once
+
+// C++ standard library
+#include <unordered_map>
+#include <string>
+
+// Armadillo
+#include <armadillo>
+
+// Mantella
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
+#include <mantella_bits/helper/unorderedContainer.hpp>
+
 namespace mant {
-  template <typename T = double>
-  class HoelderContinuityAnalysis : public PassivePropertyAnalysis<T> {
-    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-    
+  class HoelderContinuityAnalysis : public PassivePropertyAnalysis {
     public:
-      using PassivePropertyAnalysis<T>::PassivePropertyAnalysis;
+      using PassivePropertyAnalysis::PassivePropertyAnalysis;
 
-      double getHoelderExponent() const noexcept;
+      double getHoelderExponent() const;
 
-      std::string toString() const noexcept override;
+      std::string toString() const override;
       
     protected:
       double hoelderExponent_;
 
-      void analyseImplementation(
-          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept override;
+      void analyseImplementation() override;
   };
-
-  //
-  // Implementation
-  //
-
-  template <typename T>
-  double HoelderContinuityAnalysis<T>::getHoelderExponent() const noexcept {
-    return hoelderExponent_;
-  }
-
-  template <typename T>
-  void HoelderContinuityAnalysis<T>::analyseImplementation(
-          const std::unordered_map<arma::Col<T>, double, Hash<T>, IsEqual<T>>& parameterToObjectiveValueMappings) noexcept {
-    assert(parameterToObjectiveValueMappings.size() > 1);
-    
-    hoelderExponent_= std::numeric_limits<double>::max();
-    for (auto n = parameterToObjectiveValueMappings.cbegin(); n != parameterToObjectiveValueMappings.cend();) {
-      const arma::Col<T>& parameter = n->first;
-      const T objectiveValue = n->second;
-      for (auto k = ++n; k != parameterToObjectiveValueMappings.cend(); ++k) {
-        hoelderExponent_ = std::min(hoelderExponent_, std::log(k->second - objectiveValue) / std::log(static_cast<double>(arma::norm(k->first - parameter)))); 
-      }
-    }
-  }
-
-  template <typename T>
-  std::string HoelderContinuityAnalysis<T>::toString() const noexcept {
-    return "hoelder_continuity_analysis";
-  }
 }

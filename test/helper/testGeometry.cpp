@@ -1,14 +1,13 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cmath>
 #include <array>
 
 // Mantella
 #include <mantella>
-
-#include "../helper.hpp"
 
 TEST_CASE("geometry: get2DRotation(...)", "") {
   SECTION("Generates 2D rotation matrix.") {
@@ -52,7 +51,7 @@ TEST_CASE("geometry: get3DRotation(...)", "") {
             0.0, 0.0, 1.0
           });
 
-          COMPARE<double>(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
+          COMPARE(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
         }
       }
     }
