@@ -99,7 +99,7 @@ addons:
 
 script:
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=ON .; fi
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=On .; fi
   - make -j 4
   - sudo make install
   
