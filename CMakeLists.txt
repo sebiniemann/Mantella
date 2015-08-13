@@ -143,6 +143,13 @@ add_library(mantella SHARED
   src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
   src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
+    
+  # Samples selection
+  src/samplesSelection.cpp
+  src/samplesSelection/bestFittingSamplesSelection.cpp
+  src/samplesSelection/bestNeighbourhoodSamplesSelection.cpp
+  src/samplesSelection/bestSamplesSelection.cpp
+  src/samplesSelection/randomSamplesSelection.cpp
 
   # Property analyses
   src/propertyAnalysis.cpp
@@ -239,6 +246,13 @@ if(BUILD_TESTS)
     # Optimisation algorithms
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    
+    # Samples selection
+    test/testSamplesSelection.cpp
+    test/samplesSelection/testBestFittingSamplesSelection.cpp
+    test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
+    test/samplesSelection/testBestSamplesSelection.cpp
+    test/samplesSelection/testRandomSamplesSelection.cpp
     
     # Property analysis
     test/testPropertyAnalysis.cpp

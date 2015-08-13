@@ -85,6 +85,13 @@
 #include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp>
 
+// Samples selection
+#include <mantella_bits/samplesSelection.hpp>
+#include <mantella_bits/samplesSelection/bestFittingSamplesSelection.hpp>
+#include <mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp>
+#include <mantella_bits/samplesSelection/bestSamplesSelection.hpp>
+#include <mantella_bits/samplesSelection/randomSamplesSelection.hpp>
+
 // Property analyses
 #include <mantella_bits/propertyAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
