@@ -38,6 +38,7 @@ TEST_CASE("LinearFunctionModelAnalysis", "") {
       
       COMPARE(linearFunctionModelAnalysis.getCoefficients(), coefficients);
       CHECK(linearFunctionModelAnalysis.getErrorTerm() == Approx(errorTerm));
+      COMPARE(linearFunctionModelAnalysis.getResiduals(), arma::zeros<arma::Col<double>>(numberOfParameters));
     } 
   }
 

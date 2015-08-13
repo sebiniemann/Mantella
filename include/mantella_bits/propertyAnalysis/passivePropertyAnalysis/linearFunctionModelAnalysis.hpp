@@ -14,16 +14,21 @@
 namespace mant {
   class LinearFunctionModelAnalysis : public PassivePropertyAnalysis {
     public:
-      using PassivePropertyAnalysis::PassivePropertyAnalysis;
+      explicit LinearFunctionModelAnalysis(
+          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
 
       arma::Col<double> getCoefficients() const;
       double getErrorTerm() const;
 
+      arma::Col<double> getResiduals() const;
+      
       std::string toString() const override;
 
     protected:
       arma::Col<double> coefficients_;
       double errorTerm_;
+      
+      arma::Col<double> residuals_;
 
       void analyseImplementation() override;
   };

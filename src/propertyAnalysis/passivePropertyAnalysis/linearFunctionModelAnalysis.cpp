@@ -4,6 +4,13 @@
 #include <cassert>
 
 namespace mant {
+  LinearFunctionModelAnalysis::LinearFunctionModelAnalysis(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
+    : PassivePropertyAnalysis(samples),
+      residuals_(samples_.size()) {
+    
+  }
+  
   void LinearFunctionModelAnalysis::analyseImplementation() {
     assert(samples_.size() > 1);
     
@@ -27,6 +34,10 @@ namespace mant {
     
     coefficients_ = model.head(numberOfDimensions_);
     errorTerm_ = model(model.n_elem - 1);
+    
+    for (arma::uword n = 0; n < samples_.size(); ++n) {
+      residuals_(n) = objectiveValues(n) - arma::dot(parameters.col(n), model);
+    }
   }
   
   arma::Col<double> LinearFunctionModelAnalysis::getCoefficients() const {
@@ -35,6 +46,10 @@ namespace mant {
   
   double LinearFunctionModelAnalysis::getErrorTerm() const {
     return errorTerm_;
+  }
+  
+  arma::Col<double> LinearFunctionModelAnalysis::getResiduals() const {
+    return residuals_;
   }
 
   std::string LinearFunctionModelAnalysis::toString() const {
