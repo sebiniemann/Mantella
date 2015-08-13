@@ -1,11 +1,11 @@
-#include <mantella_bits/samplesSelection/randomSamplesSelection.hpp>
+#include <mantella_bits/samplesSelection/bestSamplesSelection.hpp>
 
 namespace mant {
   void BestSamplesSelection::selectImplementation() {
     
   }
   
-  std::string RandomSamplesSelection::toString() const {
+  std::string BestSamplesSelection::toString() const {
     return "best_samples_selection";
   }
 }
