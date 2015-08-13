@@ -20,6 +20,8 @@ namespace mant {
       arma::Mat<double> getQuadraticCoefficients() const;
       arma::Col<double> getLinearCoefficients() const;
       double getErrorTerm() const;
+      
+      arma::Col<double> getResiduals() const;
 
       std::string toString() const override;
 
@@ -27,6 +29,8 @@ namespace mant {
       arma::Mat<double> quadraticCoefficients_;
       arma::Col<double> linearCoefficients_;
       double errorTerm_;
+      
+      arma::Col<double> residuals_;
 
       void analyseImplementation() override;
   };

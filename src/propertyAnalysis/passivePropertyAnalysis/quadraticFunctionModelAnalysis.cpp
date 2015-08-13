@@ -7,7 +7,8 @@ namespace mant {
   QuadraticFunctionModelAnalysis::QuadraticFunctionModelAnalysis(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
     : PassivePropertyAnalysis(samples),
-      quadraticCoefficients_(numberOfDimensions_, numberOfDimensions_) {
+      quadraticCoefficients_(numberOfDimensions_, numberOfDimensions_),
+      residuals_(samples_.size()) {
     
   }
 
@@ -20,12 +21,12 @@ namespace mant {
     for (const auto& sample : samples_) {
       const arma::Col<double>& parameter = sample.first;
 
-      parameters.submat(0, n, parameter.n_elem - 1, n) = parameter;
-      parameters.submat(parameter.n_elem, n, 2 * parameter.n_elem - 1,  n) = arma::square(parameter);
+      parameters.submat(0, n, numberOfDimensions_ - 1, n) = parameter;
+      parameters.submat(numberOfDimensions_, n, 2 * numberOfDimensions_ - 1,  n) = arma::square(parameter);
 
-      arma::uword k = 2 * parameter.n_elem;
-      for (arma::uword l = 0; l < parameter.n_elem; ++l) {
-        for (arma::uword m = l + 1; m < parameter.n_elem; ++m) {
+      arma::uword k = 2 * numberOfDimensions_;
+      for (arma::uword l = 0; l < numberOfDimensions_; ++l) {
+        for (arma::uword m = l + 1; m < numberOfDimensions_; ++m) {
           parameters(k++, n) = parameter(l) * parameter(m);
         }
       }
@@ -37,9 +38,9 @@ namespace mant {
     
     arma::Col<double> model;
     try {
-      model = arma::conv_to<arma::Mat<double>>::from((parameters * parameters.t()).i() * parameters) * objectiveValues;
+      model = (parameters * parameters.t()).i() * parameters * objectiveValues;
     } catch (...) {
-      model = arma::conv_to<arma::Mat<double>>::from(arma::pinv(parameters * parameters.t()) * parameters) * objectiveValues;
+      model = arma::pinv(parameters * parameters.t()) * parameters * objectiveValues;
     }
     
     quadraticCoefficients_.diag() = model.subvec(numberOfDimensions_, 2 * numberOfDimensions_ - 1);
@@ -54,6 +55,10 @@ namespace mant {
     
     linearCoefficients_ = model.head(numberOfDimensions_);
     errorTerm_ = model(model.n_elem - 1);
+    
+    for (arma::uword n = 0; n < samples_.size(); ++n) {
+      residuals_(n) = objectiveValues(n) - arma::dot(parameters.col(n), model);
+    }
   }
       
   arma::Mat<double> QuadraticFunctionModelAnalysis::getQuadraticCoefficients() const {
@@ -66,6 +71,10 @@ namespace mant {
       
   double QuadraticFunctionModelAnalysis::getErrorTerm() const {
     return errorTerm_;
+  }
+  
+  arma::Col<double> QuadraticFunctionModelAnalysis::getResiduals() const {
+    return residuals_;
   }
 
   std::string QuadraticFunctionModelAnalysis::toString() const {

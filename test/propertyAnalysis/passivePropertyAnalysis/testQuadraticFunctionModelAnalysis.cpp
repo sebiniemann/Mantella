@@ -39,6 +39,7 @@ TEST_CASE("QuadraticFunctionModelAnalysis", "") {
       COMPARE(quadraticFunctionModelAnalysis.getQuadraticCoefficients(), quadraticCoefficients);
       COMPARE(quadraticFunctionModelAnalysis.getLinearCoefficients(), linearCoefficients);
       CHECK(quadraticFunctionModelAnalysis.getErrorTerm() == Approx(errorTerm));
+      COMPARE(quadraticFunctionModelAnalysis.getResiduals(), arma::zeros<arma::Col<double>>(numberOfParameters));
     } 
   }
 
