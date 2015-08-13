@@ -80,15 +80,15 @@ namespace mant {
 
     void WeierstrassFunction::deserialise(
         std::vector<double> serialisedOptimisationProblem) {
-      rotationQ_.set_size(numberOfDimensions_, numberOfDimensions_);
-      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = serialisedOptimisationProblem.back();
-        serialisedOptimisationProblem.pop_back();
-      }
-      
       rotationR_.set_size(numberOfDimensions_, numberOfDimensions_);
       for(arma::uword n = 0; n < rotationR_.n_elem; ++n) {
         rotationR_(n) = serialisedOptimisationProblem.back();
+        serialisedOptimisationProblem.pop_back();
+      }
+      
+      rotationQ_.set_size(numberOfDimensions_, numberOfDimensions_);
+      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = serialisedOptimisationProblem.back();
         serialisedOptimisationProblem.pop_back();
       }
         

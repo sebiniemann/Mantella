@@ -111,9 +111,9 @@ namespace mant {
 
     void GallaghersGaussian21hiPeaksFunction::deserialise(
         std::vector<double> serialisedOptimisationProblem) {
-      rotationQ_.set_size(numberOfDimensions_, numberOfDimensions_);
-      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
-        rotationQ_(n) = serialisedOptimisationProblem.back();
+      localParameterTranslations_.set_size(numberOfDimensions_, 21);
+      for(arma::uword n = 0; n < localParameterTranslations_.n_elem; ++n) {
+        localParameterTranslations_(n) = serialisedOptimisationProblem.back();
         serialisedOptimisationProblem.pop_back();
       }
       
@@ -123,9 +123,9 @@ namespace mant {
         serialisedOptimisationProblem.pop_back();
       }
       
-      localParameterTranslations_.set_size(numberOfDimensions_, 21);
-      for(arma::uword n = 0; n < localParameterTranslations_.n_elem; ++n) {
-        localParameterTranslations_(n) = serialisedOptimisationProblem.back();
+      rotationQ_.set_size(numberOfDimensions_, numberOfDimensions_);
+      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
+        rotationQ_(n) = serialisedOptimisationProblem.back();
         serialisedOptimisationProblem.pop_back();
       }
         
