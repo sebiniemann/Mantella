@@ -13,5 +13,5 @@ namespace mant {
 
     protected:
       void selectImplementation() override;
-  }
+  };
 }

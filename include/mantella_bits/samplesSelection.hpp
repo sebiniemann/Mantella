@@ -24,6 +24,6 @@ namespace mant {
         std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
         std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples_;
         
-        virtual void selectImplementation = 0;
+        virtual void selectImplementation() = 0;
   };
 }

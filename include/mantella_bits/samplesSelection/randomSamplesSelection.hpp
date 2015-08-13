@@ -7,11 +7,11 @@
 #include <mantella_bits/samplesSelection.hpp>
 
 namespace mant {
-  class NearestToBestSamplesSelection : public SamplesSelection {
+  class RandomSamplesSelection : public SamplesSelection {
     public:
       std::string toString() const override;
 
     protected:
       void selectImplementation() override;
-  }
+  };
 }
