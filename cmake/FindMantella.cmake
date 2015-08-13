@@ -1,5 +1,5 @@
-find_path(MANTELLA_INCLUDE_DIR mantella
-  PATHS "$ENV{ProgramFiles}/Mantella")
+find_path(MANTELLA_INCLUDE_DIR mantella)
+find_library(MANTELLA_LIBRARIES mantella)
 
 if(MANTELLA_INCLUDE_DIR)
   set(MANTELLA_VERSION_MAJOR 0)
@@ -21,8 +21,9 @@ endif ()
   
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Mantella
-  REQUIRED_VARS MANTELLA_INCLUDE_DIR
+  REQUIRED_VARS MANTELLA_LIBRARIES MANTELLA_INCLUDE_DIR
   VERSION_VAR MANTELLA_VERSION_STRING)
 
-mark_as_advanced(MANTELLA_INCLUDE_DIR)
-
+mark_as_advanced(
+  MANTELLA_LIBRARIES
+  MANTELLA_INCLUDE_DIR)
