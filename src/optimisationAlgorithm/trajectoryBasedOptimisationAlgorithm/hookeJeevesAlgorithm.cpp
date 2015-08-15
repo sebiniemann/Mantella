@@ -92,7 +92,7 @@ namespace mant {
   }
 
   void HookeJeevesAlgorithm::setStepSizeDecrease(
-      const arma::Col<double> stepSizeDecrease) {
+      const arma::Col<double>& stepSizeDecrease) {
     if(stepSizeDecrease.n_rows != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the step size decrease (" + std::to_string(stepSizeDecrease.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     } else if(arma::any(stepSizeDecrease <= 0) || arma::any(stepSizeDecrease >= 1)) {

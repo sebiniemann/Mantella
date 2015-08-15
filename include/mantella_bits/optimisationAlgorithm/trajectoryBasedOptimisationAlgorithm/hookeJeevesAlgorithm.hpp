@@ -17,7 +17,7 @@ namespace mant {
           const arma::Col<double>& initialStepSize);
 
       void setStepSizeDecrease(
-          const arma::Col<double> stepSizeDecrease);
+          const arma::Col<double>& stepSizeDecrease);
 
       std::string toString() const override;
 
