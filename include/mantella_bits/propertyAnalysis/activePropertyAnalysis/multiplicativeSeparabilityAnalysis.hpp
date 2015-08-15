@@ -20,10 +20,18 @@ namespace mant {
       void setMaximalNumberOfIterations(
             const arma::uword maximalNumberOfIterations);
 
+      arma::uword getMaximalNumberOfIterations();
+      
+      std::vector<arma::Col<arma::uword>> getPartition();
+      double getDeviation();
+
       std::string toString() const override;
             
     protected:
       arma::uword maximalNumberOfIterations_;
+      
+      std::vector<arma::Col<arma::uword>> partition_;
+      double deviation_;
 
       void analyseImplementation() override;
   };
