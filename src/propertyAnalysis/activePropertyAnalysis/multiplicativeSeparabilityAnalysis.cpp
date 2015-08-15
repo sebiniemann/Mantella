@@ -6,8 +6,6 @@
 // Mantella
 #include <mantella_bits/helper/setTheory.hpp>
 
-#include <iostream>
-
 namespace mant {
   MultiplicativeSeparabilityAnalysis::MultiplicativeSeparabilityAnalysis(
       std::shared_ptr<OptimisationProblem> optimisationProblem)
