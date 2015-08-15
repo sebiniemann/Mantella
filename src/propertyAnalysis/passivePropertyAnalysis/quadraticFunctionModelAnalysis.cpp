@@ -8,6 +8,7 @@ namespace mant {
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
     : PassivePropertyAnalysis(samples),
       quadraticCoefficients_(numberOfDimensions_, numberOfDimensions_),
+      errorTerm_(0),
       residuals_(samples_.size()) {
     
   }
