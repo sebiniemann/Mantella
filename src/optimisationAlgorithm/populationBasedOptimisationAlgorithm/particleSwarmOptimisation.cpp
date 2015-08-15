@@ -13,8 +13,7 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::uword populationSize)
     : PopulationBasedOptimisationAlgorithm(optimisationProblem, populationSize),
-      localBestObjectiveValues_(populationSize_),
-      randomizeTopology_(true) {
+      localBestObjectiveValues_(populationSize_) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));
@@ -25,6 +24,8 @@ namespace mant {
   void ParticleSwarmOptimisation::optimiseImplementation() {
     initialiseSwarm();
 
+    arma::Mat<arma::uword> topology_ = getRandomNeighbourhoodTopology();
+    bool randomizeTopology_ = false;
     while(!isFinished() && !isTerminated()) {
       if (randomizeTopology_) {
         topology_ = getRandomNeighbourhoodTopology();
@@ -35,10 +36,11 @@ namespace mant {
       for (arma::uword n = 0; n < populationSize_; ++n) {
         ++numberOfIterations_;
 
-        particleIndex_ = permutation(n);
-        particle_ = particles_.col(particleIndex_);
+        arma::uword particleIndex_ = permutation(n);
+        arma::Col<double> particle_ = particles_.col(particleIndex_);
 
-        neighbourhoodParticlesIndecies_ = arma::find(topology_.col(particleIndex_));
+        arma::uword neighbourhoodBestParticleIndex_;
+        arma::Col<arma::uword> neighbourhoodParticlesIndecies_ = arma::find(topology_.col(particleIndex_));
         static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies_)).min(neighbourhoodBestParticleIndex_);
         neighbourhoodBestParticleIndex_ = neighbourhoodParticlesIndecies_(neighbourhoodBestParticleIndex_);
 
@@ -116,8 +118,6 @@ namespace mant {
         break;
       }
     }
-
-    randomizeTopology_ = true;
   }
 
   double ParticleSwarmOptimisation::getAcceleration() {
@@ -128,7 +128,7 @@ namespace mant {
     return arma::normalise(arma::randn<arma::Col<double>>(numberOfDimensions_)) * std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
   }
 
-  arma::Mat<arma::uword>ParticleSwarmOptimisation::getRandomNeighbourhoodTopology() {
+  arma::Mat<arma::uword> ParticleSwarmOptimisation::getRandomNeighbourhoodTopology() {
     arma::Mat<arma::uword>topology = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
     topology.diag() += 1.0;
 
@@ -162,6 +162,6 @@ namespace mant {
   }
 
   std::string ParticleSwarmOptimisation::toString() const {
-    return "standard_particle_swarm_optimisation_2011";
+    return "particle_swarm_optimisation";
   }
 }

@@ -40,27 +40,17 @@ namespace mant {
       arma::Mat<double> particles_;
       arma::Mat<double> velocities_;
 
-      arma::uword particleIndex_;
-      arma::Col<double> particle_;
-
-      arma::Col<arma::uword> neighbourhoodParticlesIndecies_;
-      arma::uword neighbourhoodBestParticleIndex_;
-
       arma::Col<double> attractionCenter_;
 
       arma::Mat<double> localBestSolutions_;
       arma::Row<double> localBestSoftConstraintsValues_;
       arma::Row<double> localBestObjectiveValues_;
 
-      bool randomizeTopology_;
-
-      arma::Mat<arma::uword>topology_;
-
       void optimiseImplementation() override;
 
       void initialiseSwarm();
 
-      arma::Mat<arma::uword>getRandomNeighbourhoodTopology();
+      arma::Mat<arma::uword> getRandomNeighbourhoodTopology();
 
       double getAcceleration();
       arma::Col<double> getVelocity();
