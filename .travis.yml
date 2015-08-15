@@ -98,8 +98,8 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=ON -DMEASURE_CODE_COVERAGE=On .; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=On .; fi
+  - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
   - make -j 4
   - sudo make install
   
