@@ -211,17 +211,6 @@ namespace mant {
     return neighbour;
   }
   
-  arma::Col<double> OptimisationAlgorithm::boundaryHandling(
-      arma::Col<double> parameter) const {
-    const arma::Col<arma::uword>& belowLowerBound = arma::find(parameter < getLowerBounds());
-    const arma::Col<arma::uword>& aboveUpperBound = arma::find(parameter > getUpperBounds());
-
-    parameter.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
-    parameter.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
-    
-    return parameter;
-  }
-  
   bool OptimisationAlgorithm::updateBestParameter(
       const arma::Col<double>& parameter,
       const double softConstraintsValue,

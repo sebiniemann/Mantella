@@ -87,9 +87,6 @@ namespace mant {
           const arma::Col<double>& parameter,
           const double minimalDistance,
           const double maximalDistance) const;
-     
-      arma::Col<double> boundaryHandling(
-          arma::Col<double> parameter) const;
           
       bool updateBestParameter(
           const arma::Col<double>& parameter,
