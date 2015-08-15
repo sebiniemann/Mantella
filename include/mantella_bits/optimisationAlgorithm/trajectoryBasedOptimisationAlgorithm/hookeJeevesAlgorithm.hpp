@@ -14,7 +14,7 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       void setInitialStepSize(
-          const arma::Col<double> initialStepSize);
+          const arma::Col<double>& initialStepSize);
 
       void setStepSizeDecrease(
           const arma::Col<double> stepSizeDecrease);

@@ -81,7 +81,7 @@ namespace mant {
   }
 
   void HookeJeevesAlgorithm::setInitialStepSize(
-      const arma::Col<double> initialStepSize) {
+      const arma::Col<double>& initialStepSize) {
     if(initialStepSize.n_rows != numberOfDimensions_) {
       throw std::logic_error("The number of dimensions of the initial step size (" + std::to_string(initialStepSize.n_elem) + ") must match the number of dimensions of the optimisation problem (" + std::to_string(numberOfDimensions_) + ").");
     } else if (arma::any(initialStepSize <= 0)) {
