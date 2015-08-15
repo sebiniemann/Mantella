@@ -69,6 +69,7 @@ Vagrant.configure(2) do |config|
     
     sudo apt-get install -qq htop
     sudo apt-get install -qq build-essential
+    sudo apt-get install -qq git
     
     sudo apt-get install -qq clang
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang 90
@@ -97,6 +98,5 @@ Vagrant.configure(2) do |config|
     rm -Rf catch catch.tar.gz
     
     sudo apt-get install -qq libmpich2-dev
-    sudo apt-get install -qq git
   SHELL
 end
