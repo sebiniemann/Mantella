@@ -7,6 +7,7 @@ namespace mant {
   LinearFunctionModelAnalysis::LinearFunctionModelAnalysis(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
     : PassivePropertyAnalysis(samples),
+      errorTerm_(0),
       residuals_(samples_.size()) {
     
   }
