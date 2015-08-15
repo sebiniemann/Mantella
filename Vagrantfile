@@ -98,5 +98,7 @@ Vagrant.configure(2) do |config|
     rm -Rf catch catch.tar.gz
     
     sudo apt-get install -qq libmpich2-dev
+    
+    sudo apt-get install -qq lcov
   SHELL
 end
