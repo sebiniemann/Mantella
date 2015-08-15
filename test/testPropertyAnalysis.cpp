@@ -5,7 +5,5 @@
 #include <mantella>
 
 TEST_CASE("PropertyAnalysis") {
-  SECTION(".analyse") {
-  
-  }
+ // Nothing to test here
 }
