@@ -14,7 +14,7 @@ namespace mant {
           const arma::uword populationSize);
 
       void setInitialPopulation(
-          const arma::Mat<double> initialPopulation);
+          const arma::Mat<double>& initialPopulation);
 
       arma::Mat<double> getRandomPopulation() const;
 
