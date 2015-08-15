@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -15,7 +16,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::SchaffersF7FunctionIllConditioned", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SchaffersF7FunctionIllConditioned<> schaffersF7FunctionIllConditioned(numberOfDimensions);
+    mant::bbob::SchaffersF7FunctionIllConditioned schaffersF7FunctionIllConditioned(numberOfDimensions);
 
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
@@ -37,12 +38,12 @@ TEST_CASE("bbob::SchaffersF7FunctionIllConditioned", "") {
     schaffersF7FunctionIllConditioned.setParameterRotation(rotationR);
     schaffersF7FunctionIllConditioned.setRotationQ(rotationQ);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       CHECK(schaffersF7FunctionIllConditioned.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchaffersF7FunctionIllConditioned<>(5).toString() == "bbob_schaffers_f7_function_ill_conditioned");
+    CHECK(mant::bbob::SchaffersF7FunctionIllConditioned(5).toString() == "bbob_schaffers_f7_function_ill_conditioned");
   }
 }

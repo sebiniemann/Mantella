@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -15,7 +16,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::GallaghersGaussian21hiPeaksFunction<> gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
+    mant::bbob::GallaghersGaussian21hiPeaksFunction gallaghersGaussian21hiPeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
@@ -37,13 +38,13 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
     gallaghersGaussian21hiPeaksFunction.setLocalParameterTranslations(localOptima);
     gallaghersGaussian21hiPeaksFunction.setLocalParameterConditionings(conditionings);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       CHECK(gallaghersGaussian21hiPeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction<>(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
+    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
   }
 }
 

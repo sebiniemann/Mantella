@@ -1,12 +1,13 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
 // Mantella
 #include <mantella>
 
 class TestPrintable : public mant::Printable {
   public:
-    std::string toString() const noexcept override {
+    std::string toString() const override {
       return "ThisIsTestPrintable";
     }
 };

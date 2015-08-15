@@ -1,8 +1,8 @@
 // Catch
 #include <catch.hpp>
-#include "helper.hpp"
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <limits>
 #include <map>
 #include <algorithm>
@@ -10,22 +10,18 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("OptimisationProblem<T> (general case)") {
-  class DummyOptimisationProblem : public mant::OptimisationProblem<double> {
+TEST_CASE("OptimisationProblem") {
+  class DummyOptimisationProblem : public mant::OptimisationProblem {
     public:
-      using mant::OptimisationProblem<double>::OptimisationProblem;
-
-      std::string toString() const noexcept override {
-        return "test_optimisation_problem";
-      }
+      using mant::OptimisationProblem::OptimisationProblem;
 
       double getDefaultSoftConstraintsValue(
-          const arma::Col<double>& parameter) const noexcept {
-        return mant::OptimisationProblem<double>::getSoftConstraintsValueImplementation(parameter);
+          const arma::Col<double>& parameter) const {
+        return mant::OptimisationProblem::getSoftConstraintsValueImplementation(parameter);
       }
 
       double getSoftConstraintsValueImplementation(
-          const arma::Col<double>& parameter) const noexcept override {
+          const arma::Col<double>& parameter) const override {
         // All parameters with more negative than positive values fulfil the soft-constraint.
         if(arma::accu(parameter < 0.0) <= std::floor(numberOfDimensions_ / 2.0)) {
           return 1.0;
@@ -35,22 +31,26 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       }
     
       double getObjectiveValueImplementation(
-          const arma::Col<double>& parameter) const noexcept override {
+          const arma::Col<double>& parameter) const override {
         // The objective value is a weighted sum of the parameter values.
         return arma::accu(parameter % arma::linspace<arma::Col<double>>(1, numberOfDimensions_, numberOfDimensions_));
       }
+
+      std::string toString() const override {
+        return "test_optimisation_problem";
+      }
   };
 
-  std::size_t numberOfDimensions = 5;
+  arma::uword numberOfDimensions = 5;
   DummyOptimisationProblem optimisationProblem(numberOfDimensions);
   
-  SECTION("OptimisationProblem.numberOfDimensions_.") {
+  SECTION(".numberOfDimensions_") {
     SECTION("Checking the parametrisation by the constructor.") {
       CHECK(optimisationProblem.numberOfDimensions_ == numberOfDimensions);
     }
   }
   
-  SECTION("OptimisationProblem.getLowerBounds()") {
+  SECTION(".getLowerBounds") {
     SECTION("Checking the default value.") {
       // Each dimension of the lower bound is set to the lowest, representable value.
       arma::Col<double> expected = arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::lowest();
@@ -58,7 +58,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.getUpperBounds()") {
+  SECTION(".getUpperBounds") {
     SECTION("Checking the default value.") {
       // Each dimension of the lower bound is set to the largest, representable value.
       arma::Col<double> expected = arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::max();
@@ -66,8 +66,8 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.setLowerBounds(...)") {
-    SECTION("Checking the parametrisation by .setLowerBounds(...)") {
+  SECTION(".setLowerBounds") {
+    SECTION("Checking the parametrisation by .setLowerBounds") {
       arma::Col<double> lowerBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 
       optimisationProblem.setLowerBounds(lowerBounds);
@@ -87,8 +87,8 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.setUpperBounds(...)") {
-    SECTION("Checking the parametrisation by .setUpperBounds(...)") {      
+  SECTION(".setUpperBounds") {
+    SECTION("Checking the parametrisation by .setUpperBounds") {      
       arma::Col<double> upperBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 
       optimisationProblem.setUpperBounds(upperBounds);
@@ -108,13 +108,13 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.getAcceptableObjectiveValue()") {
+  SECTION(".getAcceptableObjectiveValue") {
     SECTION("Checking the default value.") {
       CHECK(optimisationProblem.getAcceptableObjectiveValue() == std::numeric_limits<double>::lowest());
     }
   }
 
-  SECTION("OptimisationProblem.setAcceptableObjectiveValue(...)") {
+  SECTION(".setAcceptableObjectiveValue") {
     SECTION("Checking the parametrisation of the acceptable objective value.") {
       std::array<double, 3> expecteds = {{
         std::numeric_limits<double>::infinity(),
@@ -129,24 +129,24 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.getCachedObjectiveValues()") {
+  SECTION(".getCachedSamples") {
     SECTION("Checking the cached mapping of parameters to objective values..") {
       arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 4) * 200.0 - 100.0;
     
       // Generate all expected results and populate the cache
-      std::unordered_map<arma::Col<double>, double, mant::Hash<double>, mant::IsEqual<double>> expected;
-      for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+      std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> expected;
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         expected.insert({parameter, optimisationProblem.getObjectiveValue(parameter)});
       }
       
       // Call *.getObjectiveValue(...)* multiple times to ensure correct duplication handling.
-      for (std::size_t n = 0; n < 2 * parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(std::uniform_int_distribution<std::size_t>(0, parameters.n_cols - 1)(mant::Rng::getGenerator())));
+      for (arma::uword n = 0; n < 2 * parameters.n_cols; ++n) {
+        optimisationProblem.getObjectiveValue(parameters.col(std::uniform_int_distribution<arma::uword>(0, parameters.n_cols - 1)(mant::Rng::getGenerator())));
       }
       
       // Compare both unordered maps
-      std::unordered_map<arma::Col<double>, double, mant::Hash<double>, mant::IsEqual<double>> actual = optimisationProblem.getCachedObjectiveValues();
+      std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> actual = optimisationProblem.getCachedSamples();
       
       CHECK(actual.size() == expected.size());
       for (const auto& expectedPair : expected) {
@@ -158,44 +158,44 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.getNumberOfDistinctEvaluations(...)") {
+  SECTION(".getNumberOfDistinctEvaluations") {
     SECTION("Checking the number of distinct, i.e. unique objective function evaluations.") {
       arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 4) * 200.0 - 100.0;
     
       // Populate the cache
-      for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         optimisationProblem.getObjectiveValue(parameter);
       }
       
       // Call *.getObjectiveValue(...)* multiple times to ensure correct duplication handling.
-      for (std::size_t n = 0; n < 2 * parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(std::uniform_int_distribution<std::size_t>(0, parameters.n_cols - 1)(mant::Rng::getGenerator())));
+      for (arma::uword n = 0; n < 2 * parameters.n_cols; ++n) {
+        optimisationProblem.getObjectiveValue(parameters.col(std::uniform_int_distribution<arma::uword>(0, parameters.n_cols - 1)(mant::Rng::getGenerator())));
       }
       
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == parameters.n_cols);
     }
   }
 
-  SECTION("OptimisationProblem.getNumberOfEvaluations(...)") {
+  SECTION(".getNumberOfEvaluations") {
     SECTION("Checking the number of ALL objective function evaluations.") {
       // Generate some 
       arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 4) * 200.0 - 100.0;
     
       // Call *.getObjectiveValue(...)* multiple times.
-      for (std::size_t n = 0; n < 3 * parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(std::uniform_int_distribution<std::size_t>(0, parameters.n_cols - 1)(mant::Rng::getGenerator())));
+      for (arma::uword n = 0; n < 3 * parameters.n_cols; ++n) {
+        optimisationProblem.getObjectiveValue(parameters.col(std::uniform_int_distribution<arma::uword>(0, parameters.n_cols - 1)(mant::Rng::getGenerator())));
       }
       
       CHECK(optimisationProblem.getNumberOfEvaluations() == 3 * parameters.n_cols);
     }
   }
 
-  SECTION("OptimisationProblem.getObjectiveValue(...)") {
+  SECTION(".getObjectiveValue") {
     SECTION("Checking the objective value.") {
       arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 10) * 200.0 - 100.0;
       
-      for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         CHECK(optimisationProblem.getObjectiveValue(parameter) == optimisationProblem.getObjectiveValueImplementation(parameter));
       }
@@ -214,11 +214,11 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.getSoftConstraintsValue(...)") {
+  SECTION(".getSoftConstraintsValue") {
     SECTION("Checking the default value.") {
       arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 10) * 200.0 - 100.0;
       
-      for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         CHECK(optimisationProblem.getDefaultSoftConstraintsValue(parameter) == 0.0);
       }
@@ -227,7 +227,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     SECTION("Checking the soft-constraints value.") {
       arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 10) * 200.0 - 100.0;
       
-      for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         CHECK(optimisationProblem.getObjectiveValue(parameter) == optimisationProblem.getObjectiveValueImplementation(parameter));
       }
@@ -246,7 +246,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.isSatisfyingConstraints(...)") {
+  SECTION(".isSatisfyingConstraints") {
     SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
       // All elements of the lower bound are set to -0.5.
       optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
@@ -274,7 +274,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.isSatisfyingSoftConstraints(...)") {
+  SECTION(".isSatisfyingSoftConstraints") {
     SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
       // All elements of the lower bound are set to -0.5.
       optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
@@ -302,7 +302,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.isWithinLowerBounds(...)") {
+  SECTION(".isWithinLowerBounds") {
     SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
       // All elements of the lower bound are set to -0.5.
       optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
@@ -325,7 +325,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.isWithinUpperBounds(...)") {
+  SECTION(".isWithinUpperBounds") {
     SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
       // All elements of the lower bound are set to -0.5.
       optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
@@ -347,8 +347,8 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       }
     }
   }
-
-  SECTION("OptimisationProblem.setObjectiveValueScaling(...)") {
+  
+  SECTION(".setObjectiveValueScaling") {
     SECTION("Checking the parametrisation of the scaling of the soft-constraints value.") {
       const double objectiveValueScaling = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
@@ -393,7 +393,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.setObjectiveValueTranslation(...)") {
+  SECTION(".setObjectiveValueTranslation") {
     SECTION("Checking the parametrisation of the scaling of the objective value.") {
       const double objectiveValueTranslation = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
@@ -416,11 +416,11 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
   }
 
-  SECTION("OptimisationProblem.setParameterPermutation(...)") {
+  SECTION(".setParameterPermutation") {
     SECTION("Checking the parametrisation of the permutation of the dimensions of the soft-constraints function.") {
-      std::array<arma::Col<unsigned int>, 2> parameterPermutations = {{
+      std::array<arma::Col<arma::uword>, 2> parameterPermutations = {{
         // Neutral permutation (0, 1, ..., numberOfDimensions - 1)
-        arma::linspace<arma::Mat<unsigned int>>(0, numberOfDimensions - 1, numberOfDimensions),
+        arma::linspace<arma::Mat<arma::uword>>(0, numberOfDimensions - 1, numberOfDimensions),
         mant::getRandomPermutation(numberOfDimensions)
       }};
 
@@ -435,9 +435,9 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     }
     
     SECTION("Checking the parametrisation of the permutation of the dimensions of the objective function.") {
-      std::array<arma::Col<unsigned int>, 2> parameterPermutations = {{
+      std::array<arma::Col<arma::uword>, 2> parameterPermutations = {{
         // Neutral permutation (0, 1, ..., numberOfDimensions - 1)
-        arma::linspace<arma::Mat<unsigned int>>(0, numberOfDimensions - 1, numberOfDimensions),
+        arma::linspace<arma::Mat<arma::uword>>(0, numberOfDimensions - 1, numberOfDimensions),
         mant::getRandomPermutation(numberOfDimensions)
       }};
 
@@ -452,39 +452,38 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
         CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
       }
     }
-
+    
     SECTION("Exception tests") {
       SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
-        arma::Col<unsigned int> parameterPermutations(numberOfDimensions + 1);
+        arma::Col<arma::uword> parameterPermutations(numberOfDimensions + 1);
         CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutations), std::logic_error);
       }
 
       SECTION("Throw an exception, if the number of elements is lower than the problem dimension.") {
-        arma::Col<unsigned int> parameterPermutations(numberOfDimensions - 1);
+        arma::Col<arma::uword> parameterPermutations(numberOfDimensions - 1);
         CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutations), std::logic_error);
       }
  
       SECTION("Throw an exception, if any elements is duplicated.") {
-        arma::Col<unsigned int> parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
+        arma::Col<arma::uword> parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
         parameterPermutation(0) = parameterPermutation(numberOfDimensions - 1);
 
         CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
       }
       
       SECTION("Throw an exception, if any elements lies not within [0, numberOfDimensions - 1].") {
-        arma::Col<unsigned int> parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
+        arma::Col<arma::uword> parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
         
         // Sets the largest index to be greater than the upper bound.
-        parameterPermutation.elem(arma::find(parameterPermutation == numberOfDimensions - 1)) = arma::Col<unsigned int>({static_cast<unsigned int>(numberOfDimensions)});
+        parameterPermutation.elem(arma::find(parameterPermutation == numberOfDimensions - 1)) = arma::Col<arma::uword>({numberOfDimensions});
         CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
         
-        // Checking the lower bound is unnecessary, as 0 is already the lowest representable
-        // unsigned integer.
+        // Checking the lower bound is unnecessary, as 0 is already the lowest representable unsigned integer value.
       }
     }
   }
-
-  SECTION("OptimisationProblem.reset(...)") {
+  
+  SECTION(".reset") {
     SECTION("Checking if all parametrisations remain as given, after resetting the problem.") {
       // Parametrises the optimisation problem.
       const arma::Col<double>& lowerBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
@@ -500,7 +499,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       const double objectiveValueTranslation = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
       
-      const arma::Col<unsigned int>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
       optimisationProblem.setParameterPermutation(parameterPermutation);
       
       // Reset the problem.
@@ -508,7 +507,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       
       COMPARE(optimisationProblem.getLowerBounds(), lowerBounds);
       COMPARE(optimisationProblem.getUpperBounds(), upperBounds);
-      
+
       CHECK(optimisationProblem.getAcceptableObjectiveValue() == acceptableObjectiveValue);
       
       const arma::Col<double> parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
@@ -521,7 +520,7 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
     
     SECTION("Checking if all counters are reset and the cache is emptied.") {
       // Increase the evaluation counter ad populate the cache.
-      for (std::size_t n = 0; n < 10; ++n) {
+      for (arma::uword n = 0; n < 10; ++n) {
         optimisationProblem.getSoftConstraintsValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
         optimisationProblem.getObjectiveValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
       }
@@ -531,15 +530,15 @@ TEST_CASE("OptimisationProblem<T> (general case)") {
       
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-      CHECK(optimisationProblem.getCachedObjectiveValues().size() == 0);
+      CHECK(optimisationProblem.getCachedSamples().size() == 0);
     }
   }
 }
 
-TEST_CASE("OptimisationProblem<T> (floating point type)") {
-  class DummyOptimisationProblem : public mant::OptimisationProblem<double> {
+TEST_CASE("OptimisationProblem Ext") {
+  class DummyOptimisationProblem : public mant::OptimisationProblem {
     public:
-      using mant::OptimisationProblem<double>::OptimisationProblem;
+      using mant::OptimisationProblem::OptimisationProblem;
 
       std::string toString() const noexcept override {
         return "test_optimisation_problem";
@@ -552,10 +551,10 @@ TEST_CASE("OptimisationProblem<T> (floating point type)") {
       }
   };
 
-  std::size_t numberOfDimensions = 5;
+  arma::uword numberOfDimensions = 5;
   DummyOptimisationProblem optimisationProblem(numberOfDimensions);
 
-  SECTION("OptimisationProblem.setParameterRotation(...)") {
+  SECTION(".setParameterRotation") {
     SECTION("Checking the parametrisation of the rotation of the parameter space.") {
       std::array<arma::Mat<double>, 2> parameterRotations = {{
         arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions),
@@ -575,7 +574,7 @@ TEST_CASE("OptimisationProblem<T> (floating point type)") {
     }
     
     SECTION("Checking the ordering between the permutation, scaling, translation and rotation of the parameter space.") {
-      const arma::Col<unsigned int>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = mant::getRandomPermutation(numberOfDimensions);
       const arma::Col<double>& parameterScaling = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
       const arma::Col<double>& parameterTranslation = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
       const arma::Mat<double>& parameterRotation = mant::getRandomRotationMatrix(numberOfDimensions);
@@ -610,7 +609,7 @@ TEST_CASE("OptimisationProblem<T> (floating point type)") {
     }
   }
 
-  SECTION("OptimisationProblem.setParameterScaling(...)") {
+  SECTION(".setParameterScaling") {
     SECTION("Checking the parametrisation of the scaling of the parameter space.") {
       const arma::Col<double>& parameterScaling = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
       optimisationProblem.setParameterScaling(parameterScaling);
@@ -646,7 +645,7 @@ TEST_CASE("OptimisationProblem<T> (floating point type)") {
     }
   }
 
-  SECTION("OptimisationProblem.setParameterTranslation(...)") {
+  SECTION(".setParameterTranslation") {
     SECTION("Checking the parametrisation of the translation of the parameter space.") {
       const arma::Col<double>& parameterTranslation = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
       optimisationProblem.setParameterTranslation(parameterTranslation);
@@ -682,7 +681,7 @@ TEST_CASE("OptimisationProblem<T> (floating point type)") {
     }
   }
 
-  SECTION("OptimisationProblem.reset(...)") {
+  SECTION(".reset") {
     SECTION("Checking if all parametrisations remain as given, after resetting the problem.") {
       // Parametrises the optimisation problem.
       const arma::Mat<double>& parameterRotation = mant::getRandomRotationMatrix(numberOfDimensions);

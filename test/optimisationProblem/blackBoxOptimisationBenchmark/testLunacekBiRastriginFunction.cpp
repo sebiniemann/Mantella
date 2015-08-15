@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -15,7 +16,7 @@ extern std::string testDirectory;
 
 TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::LunacekBiRastriginFunction<> lunacekBiRastriginFunction(numberOfDimensions);
+    mant::bbob::LunacekBiRastriginFunction lunacekBiRastriginFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
@@ -40,12 +41,12 @@ TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
     lunacekBiRastriginFunction.setRotationR(rotationR);
     lunacekBiRastriginFunction.setRotationQ(rotationQ);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       CHECK(lunacekBiRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
     }
   }
 
   SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::LunacekBiRastriginFunction<>(5).toString() == "bbob_lunacek_bi_rastrigin_function");
+    CHECK(mant::bbob::LunacekBiRastriginFunction(5).toString() == "bbob_lunacek_bi_rastrigin_function");
   }
 }

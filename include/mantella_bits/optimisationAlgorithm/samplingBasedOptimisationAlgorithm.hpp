@@ -1,9 +1,14 @@
+#pragma once
+
+// Armadillo
+#include <armadillo>
+
+// Mantella
+#include <mantella_bits/optimisationAlgorithm.hpp>
+
 namespace mant {
-  template <typename T = double>
-  class SamplingBasedOptimisationAlgorithm : public OptimisationAlgorithm<T> {
-    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-    
+  class SamplingBasedOptimisationAlgorithm : public OptimisationAlgorithm {
     public:
-      using OptimisationAlgorithm<T>::OptimisationAlgorithm;
+      using OptimisationAlgorithm::OptimisationAlgorithm;
   };
 }

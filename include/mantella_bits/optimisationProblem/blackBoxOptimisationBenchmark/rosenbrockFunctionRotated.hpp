@@ -1,17 +1,26 @@
+#pragma once
+
+// C++ standard library
+#include <string>
+#include <vector>
+
+// Armadillo
+#include <armadillo>
+
+// Mantella
+#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp>
+
 namespace mant {
   namespace bbob {
-    template <typename T = double>
-    class RosenbrockFunctionRotated : public BlackBoxOptimisationBenchmark<T> {
-      static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-    
+    class RosenbrockFunctionRotated : public BlackBoxOptimisationBenchmark {
       public:
         explicit RosenbrockFunctionRotated(
-            const std::size_t numberOfDimensions) noexcept;
+            const arma::uword numberOfDimensions);
 
-        std::string toString() const noexcept override;
+        std::string toString() const override;
 
         // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-        std::vector<double> serialise() const noexcept;
+        std::vector<double> serialise() const;
 
         // The type is intentionally fixed to ease usage with MPI_DOUBLE.
         void deserialise(
@@ -21,45 +30,7 @@ namespace mant {
         const double max_;
 
         double getObjectiveValueImplementation(
-            const arma::Col<T>& parameter) const noexcept override;
+            const arma::Col<double>& parameter) const override;
     };
-
-    //
-    // Implementation
-    //
-
-    template <typename T>
-    RosenbrockFunctionRotated<T>::RosenbrockFunctionRotated(
-        const std::size_t numberOfDimensions) noexcept
-      : BlackBoxOptimisationBenchmark<T>(numberOfDimensions),
-        max_(std::max(1.0, std::sqrt(static_cast<double>(this->numberOfDimensions_)) / 8.0)) {
-      this->setParameterRotation(getRandomRotationMatrix(this->numberOfDimensions_));
-    }
-
-    template <typename T>
-    double RosenbrockFunctionRotated<T>::getObjectiveValueImplementation(
-        const arma::Col<T>& parameter) const noexcept {
-      const arma::Col<T>& z = max_ * parameter + static_cast<T>(0.5L);
-
-      return 100.0 * std::pow(static_cast<double>(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1))), 2.0) + std::pow(static_cast<double>(arma::norm(z.head(z.n_elem - 1) - static_cast<T>(1.0L))), 2.0);
-    }
-
-    template <typename T>
-    std::string RosenbrockFunctionRotated<T>::toString() const noexcept {
-      return "bbob_rosenbrock_function_rotated";
-    }
-    
-#if defined(MANTELLA_USE_MPI)
-    template <typename T>
-    std::vector<double> RosenbrockFunctionRotated<T>::serialise() const noexcept {
-      return BlackBoxOptimisationBenchmark<T>::serialise();
-    }
-
-    template <typename T>
-    void RosenbrockFunctionRotated<T>::deserialise(
-        std::vector<double> serialisedOptimisationProblem) {
-      BlackBoxOptimisationBenchmark<T>::deserialise(serialisedOptimisationProblem);
-    }
-#endif
   }
 }

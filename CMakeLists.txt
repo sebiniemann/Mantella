@@ -1,18 +1,3 @@
-#------------------------------------------------------------------------------
-# Copyright 2013-2015 Sebastian Niemann <niemann@sra.uni-hannover.de>.
-#
-# Licensed under the MIT License (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://opensource.org/licenses/MIT
-#
-# Authors:
-#   Sebastian Niemann - Lead developer
-#   Romeo Shuka - Developer
-#   Daniel Kiechle - Software tester
-#   Wolff Bock von Wülfingen - Developer
-#------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
 # Mantella, C++ optimisation framework
@@ -26,106 +11,203 @@ set(MANTELLA_VERSION "${MANTELLA_MAJOR}.${MANTELLA_MINOR}.${MANTELLA_PATCH}")
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
+option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
+option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
-option(RUN_TESTS "Run (and build) tests" OFF)
-option(USE_MPI "Use MPI-support" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
-
-if(RUN_TESTS)
-  set(BUILD_TESTS ON)
-endif()
 
 mark_as_advanced(
  BUILD_TESTS
- RUN_TESTS
- USE_MPI
  MEASURE_CODE_COVERAGE
 )
 
-message(STATUS "")
-message(STATUS "INSTALLATION INSTRUCTION: Mantella is a header-only C++11 library, it is only required to copy the include/ directory into a folder searched by the #include preprocessor directive.")
-if(UNIX)
-  message(STATUS "Or use *sudo make install* as a shortcut.")
-endif()
-message(STATUS "")
+message(STATUS "") 
+message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 
-if(UNIX)
-  # ---------------
-  # PREPARE LIBRARY
-  # ---------------
+# ------------------------
+# CHECKING PREREQUIREMENTS
+# ------------------------
+
+message(STATUS "") 
+message(STATUS "Checking prerequirements.")
   
-  message(STATUS "NOTICE: Checking prerequirements for the Mantella library (version: ${MANTELLA_VERSION}).")
+find_package(Armadillo 4.650.0 REQUIRED)
+include_directories(${ARMADILLO_INCLUDE_DIR})
+  
+if(SUPPORT_MPI)
+  find_package(MPI REQUIRED)
+  include_directories(${MPI_INCLUDE_PATH})
+endif()
+
+# ----------------------
+# SETTING COMPILER FLAGS
+# ----------------------
+
+message(STATUS "") 
+message(STATUS "Setting compiler flags.")
+
+message(STATUS "- Enabling C++11 features.")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+message(STATUS "- Displaying all warnings.")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+if(SUPPORT_SIMD)
+  message(STATUS "- Adding SSE3, SSE4, AVX, ... support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=Off' to exclude this.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+else()
+  message(STATUS "- Excluding SSE3, SSE4, AVX, ... support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=On' to add this.")
+endif()
+
+if(MEASURE_CODE_COVERAGE)
+  message(STATUS "- Adding code coverage measurements, forcing debug build and deactivating code optimisation.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
+  set(CMAKE_BUILD_TYPE "Debug")
+else()
+  message(STATUS "- Using level 2 code optimisation.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+endif()
+
+# ----------------
+# BUILDING LIBRARY
+# ----------------
+
+message(STATUS "") 
+message(STATUS "Configuring library build.")
+
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+endif()
+if(NOT ARCHIVE_OUTPUT_DIRECTORY)
+  set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+endif()
+   
+# Include Mantella
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+# All paths must start with "src/"
+add_library(mantella SHARED
+  src/config.cpp
+  src/helper/assert.cpp
+
+  # Random number generator
+  src/helper/rng.cpp
+
+  # Helper
+  src/helper/geometry.cpp
+  src/helper/printable.cpp
+  src/helper/quasiRandomSequence.cpp
+  src/helper/random.cpp
+  src/helper/setTheory.cpp
+  src/helper/unorderedContainer.cpp
+
+  # Optimisation problems
+  src/optimisationProblem.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/discusFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
+
+  # Optimisation algorithms
+  src/optimisationAlgorithm.cpp
+  src/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.cpp
+  src/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.cpp
+  src/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.cpp
+  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.cpp
+  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.cpp
+  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.cpp
+  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.cpp
+  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
+  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
     
-  # Locate third party libraries and headers
-  find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
+  # Samples selection
+  src/samplesSelection.cpp
+  src/samplesSelection/bestFittingSamplesSelection.cpp
+  src/samplesSelection/bestNeighbourhoodSamplesSelection.cpp
+  src/samplesSelection/bestSamplesSelection.cpp
+  src/samplesSelection/randomSamplesSelection.cpp
 
-  # ----------
-  # INSTALLING
-  # ----------
-  
-  if(NOT INSTALL_INCLUDE_DIR)
-    set(INSTALL_INCLUDE_DIR "include")
-  endif()
+  # Property analyses
+  src/propertyAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
+)
 
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
+# Linking against prerequirements
+target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
+if(SUPPORT_MPI)
+  message(STATUS "- Adding MPI support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
+  target_link_libraries(mantella ${MPI_C_LIBRARIES})
+else()
+  message(STATUS "- Excluding MPI support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=On' to add this.")
 endif()
 
-# -----------
-# BUILD TESTS
-# -----------
+# -------------------
+# BUILDING UNIT TESTS
+# -------------------
 
 if(BUILD_TESTS)
-  message(STATUS "NOTICE: Configuring tests")
+  message(STATUS "") 
+  message(STATUS "Configuring unit tests.")
+  message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
 
-  # Set output directories
+  message(STATUS "- Forcing debug build for unit tests.")
+  set(CMAKE_BUILD_TYPE "Debug")
+  
   if(NOT EXECUTABLE_OUTPUT_PATH)
     set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
   endif()
 
-  # Enable C++11 features
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-  # Display all warnings
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-
-  # Use native machine features (SSE3, SSE4, AVX, ...) if possible
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-
-  if(MEASURE_CODE_COVERAGE)
-    # Use debug mode, no optimisation, measure coverage
-    message(STATUS "NOTICE: Measure code coverage.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
-  endif()
-
-  # Locate third party libraries and headers
-  if(WIN32)
-    find_library(ARMADILLO_LIBRARIES openblas HINTS "C:/Program\ Files/OpenBLAS/lib")
-    find_path(ARMADILLO_INCLUDE_DIR armadillo HINTS "C:/Program\ Files/Armadillo/include")
-    find_path(CATCH_INCLUDE_DIRS catch.hpp HINTS "C:/Program\ Files/Catch")
-  else()
-    find_package(Armadillo 4.650.0 REQUIRED) # Armadillo C++
-    find_package(Catch REQUIRED) # Catch (header only)
-    
-    if(USE_MPI)
-      find_package(MPI REQUIRED) # MPI
-    endif()
-  endif()
-  
-  # Include Mantella
-  include_directories(${PROJECT_SOURCE_DIR}/include)
-  
-  # Include third party headers
-  include_directories(${ARMADILLO_INCLUDE_DIR}) # Armadillo C++
+  # Check additional prerequirements
+  find_package(Catch REQUIRED) # Catch (header only)
   include_directories(${CATCH_INCLUDE_DIRS}) # Catch
-  if(USE_MPI)
-    include_directories(${MPI_INCLUDE_PATH}) # MPI
-  endif()
-
-  # Compile the optimisation library tests
+  
+  # Include catch extensions
+  include_directories(${PROJECT_SOURCE_DIR}/test)
+  
+  # Compile tests
   # All paths must start with "test/"
-  add_executable(libraryTest
+  add_executable(mantellaTest
     test/main.cpp
+    test/catchExtension.cpp
+    
+    # Helper
     test/helper/testRng.cpp
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
@@ -133,6 +215,8 @@ if(BUILD_TESTS)
     test/helper/testRandom.cpp
     test/helper/testSetTheory.cpp
     test/helper/testUnorderedContainer.cpp
+    
+    # Optimisation problems
     test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
@@ -158,99 +242,75 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
-    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.cpp
+    
+    # Optimisation algorithms
+    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
+    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    
+    # Samples selection
+    test/testSamplesSelection.cpp
+    test/samplesSelection/testBestFittingSamplesSelection.cpp
+    test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
+    test/samplesSelection/testBestSamplesSelection.cpp
+    test/samplesSelection/testRandomSamplesSelection.cpp
+    
+    # Property analysis
+    test/testPropertyAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testFitnessDistanceCorrelationAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testLipschitzContinuityAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testHoelderContinuityAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testLinearFunctionModelAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testQuadraticFunctionModelAnalysis.cpp
+    test/propertyAnalysis/testActivePropertyAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testLinearProportionalityAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
   )
 
-  # Link against third party libraries
-  target_link_libraries(libraryTest ${ARMADILLO_LIBRARIES}) # Armadillo C++
-  if(USE_MPI)
-    target_link_libraries(libraryTest ${MPI_C_LIBRARIES}) # MPI
+  # Link against prerequirements
+  target_link_libraries(mantellaTest mantella)
+  target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})
+  if(SUPPORT_MPI)
+    target_link_libraries(mantellaTest ${MPI_C_LIBRARIES})
   endif()
 
-  if(RUN_TESTS)
-    message(STATUS "NOTICE: Automatically running all tests after building them.")
-
-    if(USE_MPI)
-      add_custom_command(TARGET libraryTest POST_BUILD COMMAND mpiexec -n 4 ${EXECUTABLE_OUTPUT_PATH}/libraryTest ${PROJECT_SOURCE_DIR}/test)
-    else()
-      add_custom_command(TARGET libraryTest POST_BUILD COMMAND libraryTest ${PROJECT_SOURCE_DIR}/test)
-    endif()
+  if(SUPPORT_MPI)
+    message(STATUS "- Performing tests with MPI")
+    add_custom_command(TARGET mantellaTest POST_BUILD COMMAND mpiexec -n 4 ${EXECUTABLE_OUTPUT_PATH}/mantellaTest ${PROJECT_SOURCE_DIR}/test)
+  else()
+    add_custom_command(TARGET mantellaTest POST_BUILD COMMAND mantellaTest ${PROJECT_SOURCE_DIR}/test)
   endif()
+
+  message(STATUS "- All tests will automatically be started after the library is build.")
+else()
+  message(STATUS "") 
+  message(STATUS "Skipping unit tests.")
+  message(STATUS "- Use 'cmake ... -DBUILD_TESTS=On' to add this.")
 endif()
 
-# ---------------------
-# Qt Creator workaround
-# ---------------------
+# -------------
+# BUILD LIBRARY
+# -------------
 
-add_custom_target(QtWorkaround SOURCES
-  # Library
-  include/mantella
-  include/mantella_bits/helper/assert.hpp
-  include/mantella_bits/helper/rng.hpp
-  include/mantella_bits/helper/geometry.hpp
-  include/mantella_bits/helper/printable.hpp
-  include/mantella_bits/helper/quasiRandomSequence.hpp
-  include/mantella_bits/helper/random.hpp
-  include/mantella_bits/helper/setTheory.hpp
-  include/mantella_bits/helper/unorderedContainer.hpp
-  include/mantella_bits/optimisationProblem.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/discusFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp
-  include/mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRPR.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRRR.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine3PUPS.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine4PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PRUS.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/parallelKinematicMachine6PUPS.hpp
-  include/mantella_bits/optimisationProblem/robotic/robotModel/multiLevelStewartPlatform.hpp
-  include/mantella_bits/optimisationProblem/robotic/endEffectorPoseError.hpp
-  include/mantella_bits/optimisationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp
-  include/mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/standardParticleSwarmOptimisation2011.hpp
-  include/mantella_bits/propertyAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/neighbourFitnessCorrelationAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp
-  include/mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp
-  # Tests
-  test/helper.hpp
-)
+message(STATUS "")
+message(STATUS "Configuring library installation.")
+message(STATUS "")
+
+if(NOT INSTALL_INCLUDE_DIR)
+  set(INSTALL_INCLUDE_DIR "include")
+endif()
+
+set_property(TARGET mantella PROPERTY VERSION ${MANTELLA_VERSION})
+set_property(TARGET mantella PROPERTY SOVERSION ${MANTELLA_MAJOR})
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
+
+if(NOT INSTALL_LIB_DIR)
+  set(INSTALL_LIB_DIR "lib")
+endif()
+
+install(TARGETS mantella
+  ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
+  LIBRARY DESTINATION ${INSTALL_LIB_DIR})

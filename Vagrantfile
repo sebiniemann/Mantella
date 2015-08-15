@@ -43,13 +43,13 @@ Vagrant.configure(2) do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
+     # Customize the amount of memory on the VM:
+     vb.memory = "1024"
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -67,17 +67,20 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
     
+    sudo apt-get install -qq htop
     sudo apt-get install -qq build-essential
     
     sudo apt-get install -qq clang
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang 90
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++ 90
+    
+    sudo apt-get install -qq gdb
   
     sudo apt-get install -qq cmake
   
     sudo apt-get install -qq libblas-dev
     sudo apt-get install -qq liblapack-dev
-    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-4.650.3.tar.gz
+    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.300.4.tar.gz
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo

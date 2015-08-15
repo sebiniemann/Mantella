@@ -1,20 +1,21 @@
-namespace mant {
-  template <typename T = double>
-  class LinearProportionalityAnalysis : public ActivePropertyAnalysis<T> {
-    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-    
-    public:
-      using ActivePropertyAnalysis<T>::ActivePropertyAnalysis;
+#pragma once
 
-      std::string toString() const noexcept override;
+// C++ standard library
+#include <memory>
+#include <string>
+
+// Mantella
+#include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
+#include <mantella_bits/optimisationProblem.hpp>
+
+namespace mant {
+  class LinearProportionalityAnalysis : public ActivePropertyAnalysis {
+    public:
+      using ActivePropertyAnalysis::ActivePropertyAnalysis;
+
+      std::string toString() const override;
       
     protected:
-      void analyseImplementation(
-          std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept override;
+      void analyseImplementation() override;
   };
-  
-  template <typename T>
-  std::string LinearProportionalityAnalysis<T>::toString() const noexcept {
-    return "linear_proportionality_analysis";
-  }
 }
