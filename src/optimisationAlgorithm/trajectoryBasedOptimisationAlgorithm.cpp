@@ -11,7 +11,7 @@ namespace mant {
   }
 
   void TrajectoryBasedOptimisationAlgorithm::setInitialParameter(
-      const arma::Col<double> initialParameter) {
+      const arma::Col<double>& initialParameter) {
     verify(initialParameter.n_elem == numberOfDimensions_, "The number of dimensions of the initial parameter must match the number of dimensions of the optimisation problem.");
 
     initialParameter_ = initialParameter;

@@ -13,7 +13,7 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       void setInitialParameter(
-          const arma::Col<double> initialParameter);
+          const arma::Col<double>& initialParameter);
 
     protected:
       arma::Col<double> initialParameter_;
