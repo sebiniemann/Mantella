@@ -4,8 +4,8 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("PropertyAnalysis") {
-  SECTION(".analyse") {
+TEST_CASE("BestFittingSamplesSelection") {
+  SECTION(".select") {
   
   }
 }

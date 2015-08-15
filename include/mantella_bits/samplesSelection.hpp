@@ -14,7 +14,8 @@ namespace mant {
   class SamplesSelection : public Printable {
     public:
       SamplesSelection(
-          std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples);
+          std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples,
+          arma::uword numberOfSelectedSamples);
       
       void select();
       
@@ -22,6 +23,8 @@ namespace mant {
       
       protected:
         std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+        
+        arma::uword numberOfSelectedSamples_;
         std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples_;
         
         virtual void selectImplementation() = 0;

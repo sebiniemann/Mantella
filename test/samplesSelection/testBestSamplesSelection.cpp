@@ -1,11 +1,11 @@
-// Catch
+// Catch// Catch
 #include <catch.hpp>
 
 // Mantella
 #include <mantella>
 
-TEST_CASE("PropertyAnalysis") {
-  SECTION(".analyse") {
+TEST_CASE("BestSamplesSelection") {
+  SECTION(".select") {
   
   }
 }
