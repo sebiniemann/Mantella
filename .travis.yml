@@ -104,8 +104,9 @@ script:
   - sudo make install
   
 after_success:
-  - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/libTest.dir/test/; fi
+  - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi
   - if [ "$CXX" == "g++" ]; then lcov --directory . --capture --output-file coverage.info; fi
   - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
+  - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '*.hpp' --output-file coverage.info; fi
   - if [ "$CXX" == "g++" ]; then lcov --list coverage.info; fi
   - if [ "$CXX" == "g++" ]; then coveralls-lcov coverage.info; fi
