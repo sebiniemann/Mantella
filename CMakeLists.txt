@@ -246,6 +246,9 @@ if(BUILD_TESTS)
     # Optimisation algorithms
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
+    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
     
     # Samples selection
     test/testSamplesSelection.cpp
