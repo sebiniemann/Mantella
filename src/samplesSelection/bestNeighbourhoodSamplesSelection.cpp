@@ -24,6 +24,6 @@ namespace mant {
   }
   
   std::string BestNeighbourhoodSamplesSelection::toString() const {
-    return "nearest_to_best_samples_selection";
+    return "best_neighbourhood_samples_selection";
   }
 }
