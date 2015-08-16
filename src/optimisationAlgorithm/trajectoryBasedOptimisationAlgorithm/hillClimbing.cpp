@@ -37,6 +37,6 @@ namespace mant {
   }
 
   std::string HillClimbing::toString() const {
-    return "HillClimbing";
+    return "hill_climbing";
   }
 }

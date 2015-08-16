@@ -103,6 +103,6 @@ namespace mant {
   }
 
   std::string HookeJeevesAlgorithm::toString() const {
-    return "HookeJeevesAlgorithm";
+    return "hooke_jeeves_algorithm";
   }
 }
