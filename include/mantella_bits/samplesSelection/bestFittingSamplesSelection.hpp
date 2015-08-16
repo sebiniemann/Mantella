@@ -9,6 +9,8 @@
 namespace mant {
   class BestFittingSamplesSelection : public SamplesSelection {
     public:
+      using SamplesSelection::SamplesSelection;
+    
       std::string toString() const override;
 
     protected:
