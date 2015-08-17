@@ -6,6 +6,7 @@
 #include <limits>
 #include <map>
 #include <algorithm>
+#include <array>
 
 // Mantella
 #include <mantella>
