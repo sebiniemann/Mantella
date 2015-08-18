@@ -3,6 +3,10 @@
 
 // C++ standard library
 #include <random>
+#include <memory>
+
+// Armadillo
+#include <armadillo>
 
 // Mantella
 #include <mantella>

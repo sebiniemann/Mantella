@@ -10,7 +10,7 @@ namespace mant {
   }
 
   void Rng::setSeed(
-      const std::mt19937_64::result_type seed) {
+      const arma::uword seed) {
    seed_() = seed;
 
     getGenerator().seed(seed_());
@@ -30,12 +30,12 @@ namespace mant {
 #endif
   }
 
-  std::mt19937_64::result_type Rng::getSeed() {
+  arma::uword Rng::getSeed() {
     return seed_();
   }
 
-  std::mt19937_64::result_type& Rng::seed_() {
-    static std::mt19937_64::result_type seed;
+  arma::uword& Rng::seed_() {
+    static arma::uword seed;
     return seed;
   }
 }
