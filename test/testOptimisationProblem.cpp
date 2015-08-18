@@ -408,12 +408,12 @@ TEST_CASE("OptimisationProblem Ext") {
     public:
       using mant::OptimisationProblem::OptimisationProblem;
 
-      std::string toString() const noexcept override {
+      std::string toString() const override {
         return "test_optimisation_problem";
       }
     
       double getObjectiveValueImplementation(
-          const arma::Col<double>& parameter) const noexcept override {
+          const arma::Col<double>& parameter) const override {
         // The objective value is a weighted sum of the parameter values.
         return arma::accu(parameter % arma::linspace<arma::Col<double>>(1, numberOfDimensions_, numberOfDimensions_));
       }
