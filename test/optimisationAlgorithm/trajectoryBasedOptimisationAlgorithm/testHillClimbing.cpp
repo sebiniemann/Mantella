@@ -3,6 +3,7 @@
 
 // C++ Standard Library
 #include <memory>
+#include <random>
 
 // Mantella
 #include <mantella>
@@ -60,8 +61,8 @@ TEST_CASE("HillClimbing", "") {
     }
 
     SECTION("Throws an exception, if the size of MaximalStepSize is not equal to the number of dimension of the problem") {
-      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100, 100, 100}), std::logic_error);
-      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100}), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(std::uniform_int_distribution<arma::uword>(3, 10)(mant::Rng::getGenerator())) * 200 - 100), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(1) * 200 - 100), std::logic_error);
     }
 
   }
