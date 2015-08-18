@@ -12,7 +12,7 @@ class TestHillClimbing : public mant::HillClimbing {
     TestHillClimbing(
         const std::shared_ptr<mant::OptimisationProblem> optimisationProblem)
       : mant::HillClimbing(optimisationProblem),
-        neighboursIndex_(0){
+        neighboursIndex_(0) {
 
     }
 
