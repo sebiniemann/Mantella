@@ -8,7 +8,7 @@ namespace mant {
   HillClimbing::HillClimbing(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : TrajectoryBasedOptimisationAlgorithm(optimisationProblem) {
-    setMaximalStepSize((getLowerBounds() - getUpperBounds()) * 0.1);
+    setMaximalStepSize((getUpperBounds() - getLowerBounds()) * 0.1);
   }
 
   void HillClimbing::optimiseImplementation() {
