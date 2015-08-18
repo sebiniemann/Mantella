@@ -22,10 +22,10 @@ class TestHillClimbing : public mant::HillClimbing {
     }
 
   protected:
-
-    arma::Col<double> getRandomNeighbour(const arma::Col<double>& parameter,
-                                         const double minimalDistance,
-                                         const double maximalDistance) override {
+    arma::Col<double> getRandomNeighbour(
+        const arma::Col<double>& parameter,
+        const arma::Col<double>& minimalDistance,
+        const arma::Col<double>& maximalDistance) override {
       return neighbours_.col(neighboursIndex_++);
     }
 
