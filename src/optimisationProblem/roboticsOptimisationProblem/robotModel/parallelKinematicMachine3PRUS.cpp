@@ -56,7 +56,7 @@ namespace mant {
       }
 
       for (arma::uword n = 0; n < baseJointRotationAngles_.n_cols; ++n) {
-        baseJointRotations_.slice(n) = get3DRotation(redundantJointRotationAngles_(0, n), 0, redundantJointRotationAngles_(1, n));
+        baseJointRotations_.slice(n) = get3DRotation(baseJointRotationAngles_(0, n), 0, baseJointRotationAngles_(1, n));
       }
 
       for (arma::uword n = 0; n < baseJointRotations_.n_slices; ++n) {
