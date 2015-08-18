@@ -161,7 +161,7 @@ namespace mant {
     const arma::Col<double>& parameter) {
     assert(parameter.n_elem == numberOfDimensions_);
     
-    if (storeSamplingProgress) {
+    if (recordSamples) {
       const double& objectiveValue = optimisationProblem_->getObjectiveValue(parameter);
       samplingProgress_.push_back({parameter, objectiveValue});
       return objectiveValue;

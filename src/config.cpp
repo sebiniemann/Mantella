@@ -2,5 +2,5 @@
 
 namespace mant {
   std::atomic<bool> cacheSamples(true);
-  std::atomic<bool> storeSamplingProgress(false);
+  std::atomic<bool> recordSamples(false);
 }
