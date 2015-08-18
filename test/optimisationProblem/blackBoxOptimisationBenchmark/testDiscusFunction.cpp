@@ -39,7 +39,9 @@ TEST_CASE("bbob::DiscusFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::DiscusFunction(5).toString() == "bbob_discus_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::DiscusFunction(5).toString() == "bbob_discus_function");
+    }
   }
 }

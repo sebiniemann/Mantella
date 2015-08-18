@@ -20,12 +20,8 @@ namespace mant {
         void setRotationQ(
             const arma::Mat<double>& rotationQ);
 
-        std::string toString() const override;
-
-        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-        std::vector<double> serialise() const;
-
-        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        std::string toString() const override;
+        std::vector<double> serialise() const;
         void deserialise(
             std::vector<double> serialisedOptimisationProblem);
 
@@ -34,9 +30,6 @@ namespace mant {
         const arma::Col<double> secondParameterConditioning_;
 
         arma::Mat<double> rotationQ_;
-
-        double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const override;
 
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const override;

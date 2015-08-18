@@ -28,19 +28,10 @@ namespace mant {
 
       arma::Col<double> getUpperBounds() const;
 
-      double getSoftConstraintsValue(
-        const arma::Col<double>& parameter);
-
       arma::Col<arma::uword> isWithinLowerBounds(
         const arma::Col<double>& parameter);
 
       arma::Col<arma::uword> isWithinUpperBounds(
-        const arma::Col<double>& parameter);
-
-      bool isSatisfyingSoftConstraints(
-        const arma::Col<double>& parameter);
-
-      bool isSatisfyingConstraints(
         const arma::Col<double>& parameter);
 
       void setParameterPermutation(
@@ -104,9 +95,6 @@ namespace mant {
       arma::uword numberOfDistinctEvaluations_;
 
       arma::Col<double> getDiversifiedParameter(
-        const arma::Col<double>& parameter) const;
-
-      virtual double getSoftConstraintsValueImplementation(
         const arma::Col<double>& parameter) const;
 
       virtual double getObjectiveValueImplementation(

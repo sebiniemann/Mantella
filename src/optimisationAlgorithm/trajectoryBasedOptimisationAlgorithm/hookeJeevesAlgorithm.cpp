@@ -16,7 +16,6 @@ namespace mant {
     ++numberOfIterations_;
 
     bestParameter_ = initialParameter_;
-    bestSoftConstraintsValue_ = getSoftConstraintsValue(initialParameter_);
     bestObjectiveValue_ = getObjectiveValue(initialParameter_);
 
     bool reduceStepSize = false;
@@ -38,15 +37,10 @@ namespace mant {
         }
 
         ++numberOfIterations_;
-        double candidateSoftConstraintsValue = getSoftConstraintsValue(candidateParameter);
         double candidateObjectiveValue = getObjectiveValue(candidateParameter);
 
-        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_)) {
+        if(updateBestParameter(candidateParameter, candidateObjectiveValue)) {
           reduceStepSize = false;
-
-          bestParameter_ = candidateParameter;
-          bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
-          bestObjectiveValue_ = candidateObjectiveValue;
         }
 
         if (isFinished() || isTerminated()) {
@@ -60,15 +54,10 @@ namespace mant {
         }
 
         ++numberOfIterations_;
-        candidateSoftConstraintsValue = getSoftConstraintsValue(candidateParameter);
         candidateObjectiveValue = getObjectiveValue(candidateParameter);
 
-        if(candidateSoftConstraintsValue < bestSoftConstraintsValue_ || (candidateSoftConstraintsValue == bestSoftConstraintsValue_ && candidateObjectiveValue < bestObjectiveValue_)) {
+        if(updateBestParameter(candidateParameter, candidateObjectiveValue)) {
           reduceStepSize = false;
-
-          bestParameter_ = candidateParameter;
-          bestSoftConstraintsValue_ = candidateSoftConstraintsValue;
-          bestObjectiveValue_ = candidateObjectiveValue;
         }
 
         if (isFinished() || isTerminated()) {

@@ -43,7 +43,9 @@ TEST_CASE("bbob::SchaffersF7FunctionIllConditioned", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchaffersF7FunctionIllConditioned(5).toString() == "bbob_schaffers_f7_function_ill_conditioned");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::SchaffersF7FunctionIllConditioned(5).toString() == "bbob_schaffers_f7_function_ill_conditioned");
+    }
   }
 }

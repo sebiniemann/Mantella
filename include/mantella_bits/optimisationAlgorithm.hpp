@@ -34,9 +34,8 @@ namespace mant {
       arma::uword getNumberOfIterations() const;
       arma::uword getMaximalNumberOfIterations() const;
 
-      arma::Col<double> getBestParameter() const;
-      double getBestSoftConstraintsValue() const;
       double getBestObjectiveValue() const;
+      arma::Col<double> getBestParameter() const;
       
       bool isFinished() const;
       virtual bool isTerminated() const;
@@ -54,7 +53,6 @@ namespace mant {
       arma::uword numberOfIterations_;
       arma::uword maximalNumberOfIterations_;
 
-      double bestSoftConstraintsValue_;
       double bestObjectiveValue_;
       arma::Col<double> bestParameter_;
 
@@ -70,15 +68,9 @@ namespace mant {
           const arma::Col<double>& parameter) const;
       arma::Col<arma::uword> isWithinUpperBounds(
           const arma::Col<double>& parameter) const;
-      bool isSatisfyingSoftConstraints(
-          const arma::Col<double>& parameter) const;
-      bool isSatisfyingConstraints(
-          const arma::Col<double>& parameter) const;
 
       double getAcceptableObjectiveValue() const;
 
-      double getSoftConstraintsValue(
-          const arma::Col<double>& parameter) const;
       double getObjectiveValue(
           const arma::Col<double>& parameter);
       
@@ -90,7 +82,6 @@ namespace mant {
           
       bool updateBestParameter(
           const arma::Col<double>& parameter,
-          const double softConstraintsValue,
           const double objectiveValue);
 
       virtual void optimiseImplementation() = 0;

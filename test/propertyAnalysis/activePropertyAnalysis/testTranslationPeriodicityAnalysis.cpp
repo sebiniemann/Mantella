@@ -18,8 +18,10 @@ TEST_CASE("TranslationPeriodicityAnalysis", "") {
     } 
   }
 
-  SECTION("Returns the specified class name.") {
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
-    CHECK(mant::TranslationPeriodicityAnalysis(optimisationProblem).toString() == "translation_periodicity_analysis");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
+      CHECK(mant::TranslationPeriodicityAnalysis(optimisationProblem).toString() == "translation_periodicity_analysis");
+    }
   }
 }

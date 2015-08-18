@@ -15,12 +15,10 @@ namespace mant {
       
       void setLowerBounds(
         const arma::Col<double>& lowerBounds);
-
       void setUpperBounds(
         const arma::Col<double>& upperBounds);
 
       arma::Col<double> getLowerBounds() const;
-
       arma::Col<double> getUpperBounds() const;
       
       void analyse();

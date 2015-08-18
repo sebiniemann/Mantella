@@ -28,7 +28,7 @@ namespace mant {
           candidateParameter(k) = samples.at(k)(sampleIndicies(k));
         }
         
-        updateBestParameter(candidateParameter, getSoftConstraintsValue(candidateParameter), getObjectiveValue(candidateParameter));
+        updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
 
         if (isFinished()) {
           break;

@@ -66,13 +66,6 @@ namespace mant {
       return localParameterTranslations;
     }
 
-    double GallaghersGaussian21hiPeaksFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return getBoundConstraintsValue(parameter);
-    }
-
     double GallaghersGaussian21hiPeaksFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);

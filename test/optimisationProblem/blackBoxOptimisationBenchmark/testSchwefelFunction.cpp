@@ -38,7 +38,9 @@ TEST_CASE("bbob::SchwefelFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SchwefelFunction(5).toString() == "bbob_schwefel_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::SchwefelFunction(5).toString() == "bbob_schwefel_function");
+    }
   }
 }

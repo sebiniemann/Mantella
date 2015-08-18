@@ -43,7 +43,9 @@ TEST_CASE("bbob::SharpRidgeFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SharpRidgeFunction(5).toString() == "bbob_sharp_ridge_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::SharpRidgeFunction(5).toString() == "bbob_sharp_ridge_function");
+    }
   }
 }

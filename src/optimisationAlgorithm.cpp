@@ -19,8 +19,8 @@ namespace mant {
     double* firstParameters = static_cast<double*>(firstInput);
     double* secondParameters = static_cast<double*>(secondInput);
   
-    if(firstParameters[1] < secondParameters[1] || (firstParameters[1] == secondParameters[1] && firstParameters[2] < secondParameters[2])) {
-      std::copy(&firstParameters[1], &firstParameters[2 + static_cast<unsigned int>(secondParameters[0])], &secondParameters[1]);
+    if(firstParameters[1] < secondParameters[1]) {
+      std::copy(&firstParameters[1], &firstParameters[1 + static_cast<unsigned int>(secondParameters[0])], &secondParameters[1]);
     }
   }
 #endif
@@ -30,7 +30,6 @@ namespace mant {
     : optimisationProblem_(optimisationProblem),
       numberOfDimensions_(optimisationProblem_->numberOfDimensions_),
       numberOfIterations_(0),
-      bestSoftConstraintsValue_(std::numeric_limits<double>::infinity()),
       bestObjectiveValue_(std::numeric_limits<double>::infinity()),
       bestParameter_(numberOfDimensions_) {
     setMaximalNumberOfIterations(1000);
@@ -70,7 +69,6 @@ namespace mant {
 #endif
     
     // Resets the results, counters and caches
-    bestSoftConstraintsValue_ = std::numeric_limits<double>::infinity();
     bestObjectiveValue_ = std::numeric_limits<double>::infinity();
     bestParameter_.fill(std::numeric_limits<double>::quiet_NaN());
     numberOfIterations_ = 0;
@@ -90,7 +88,6 @@ namespace mant {
     arma::Col<double> mpiOutputParameter(3 + numberOfDimensions_);
     
     mpiInputParameter.at(0) = static_cast<double>(numberOfDimensions_);
-    mpiInputParameter.at(1) = bestSoftConstraintsValue_;
     mpiInputParameter.at(2) = bestObjectiveValue_;
     mpiInputParameter.tail(numberOfDimensions_) = bestParameter_;
     
@@ -114,20 +111,16 @@ namespace mant {
     return maximalNumberOfIterations_;
   }
 
-  arma::Col<double> OptimisationAlgorithm::getBestParameter() const {
-    return bestParameter_;
-  }
-
-  double OptimisationAlgorithm::getBestSoftConstraintsValue() const {
-    return bestSoftConstraintsValue_;
-  }
-
   double OptimisationAlgorithm::getBestObjectiveValue() const {
     return bestObjectiveValue_;
   }
 
+  arma::Col<double> OptimisationAlgorithm::getBestParameter() const {
+    return bestParameter_;
+  }
+
   bool OptimisationAlgorithm::isFinished() const {
-    return (isSatisfyingConstraints(bestParameter_) && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
+    return (arma::all(optimisationProblem_->isWithinLowerBounds(bestParameter_)) && arma::all(optimisationProblem_->isWithinUpperBounds(bestParameter_))&& bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
   }
 
   bool OptimisationAlgorithm::isTerminated() const {
@@ -159,30 +152,9 @@ namespace mant {
     
     return optimisationProblem_->isWithinUpperBounds(parameter);
   }
-
-  bool OptimisationAlgorithm::isSatisfyingSoftConstraints(
-    const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-    
-    return optimisationProblem_->isSatisfyingSoftConstraints(parameter);
-  }
-
-  bool OptimisationAlgorithm::isSatisfyingConstraints(
-    const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-    
-    return optimisationProblem_->isSatisfyingConstraints(parameter);
-  }
   
   double OptimisationAlgorithm::getAcceptableObjectiveValue() const {
     return optimisationProblem_->getAcceptableObjectiveValue();
-  }
-
-  double OptimisationAlgorithm::getSoftConstraintsValue(
-    const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-    
-    return optimisationProblem_->getSoftConstraintsValue(parameter);
   }
 
   double OptimisationAlgorithm::getObjectiveValue(
@@ -213,18 +185,16 @@ namespace mant {
   
   bool OptimisationAlgorithm::updateBestParameter(
       const arma::Col<double>& parameter,
-      const double softConstraintsValue,
       const double objectiveValue) {
-    // assert(parameter.n_elem == numberOfDimensions_);
+    assert(parameter.n_elem == numberOfDimensions_);
       
-    // if(softConstraintsValue < bestSoftConstraintsValue_ || (softConstraintsValue == bestSoftConstraintsValue_ && objectiveValue < bestObjectiveValue_)) {
-      // bestParameter_ = parameter;
-      // bestSoftConstraintsValue_ = softConstraintsValue;
-      // bestObjectiveValue_ = objectiveValue;
+    if(objectiveValue < bestObjectiveValue_) {
+      bestParameter_ = parameter;
+      bestObjectiveValue_ = objectiveValue;
       
-      // return true;
-    // } else {
+      return true;
+    } else {
       return false;
-    // }
+    }
   }
 }

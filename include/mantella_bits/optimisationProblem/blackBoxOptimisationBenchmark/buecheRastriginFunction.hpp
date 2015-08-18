@@ -17,20 +17,13 @@ namespace mant {
         explicit BuecheRastriginFunction(
             const arma::uword numberOfDimensions);
 
-        std::string toString() const override;
-
-        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-        std::vector<double> serialise() const;
-
-        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+        std::string toString() const override;
+        std::vector<double> serialise() const;
         void deserialise(
             std::vector<double> serialisedOptimisationProblem);
 
       protected:
         const arma::Col<double> parameterConditioning_;
-
-        double getSoftConstraintsValueImplementation(
-            const arma::Col<double>& parameter) const override;
 
         double getObjectiveValueImplementation(
             const arma::Col<double>& parameter) const override;

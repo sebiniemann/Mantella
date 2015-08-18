@@ -43,11 +43,13 @@ TEST_CASE("QuadraticFunctionModelAnalysis", "") {
     } 
   }
 
-  SECTION("Returns the specified class name.") {
-    mant::cacheSamples = true;
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
-    mant::RandomSearch randomSearch(optimisationProblem);
-    randomSearch.optimise();
-    CHECK(mant::QuadraticFunctionModelAnalysis(optimisationProblem->getCachedSamples()).toString() == "quadratic_function_model_analysis");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      mant::cacheSamples = true;
+      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
+      mant::RandomSearch randomSearch(optimisationProblem);
+      randomSearch.optimise();
+      CHECK(mant::QuadraticFunctionModelAnalysis(optimisationProblem->getCachedSamples()).toString() == "quadratic_function_model_analysis");
+    }
   }
 }

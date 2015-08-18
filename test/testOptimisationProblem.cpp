@@ -15,21 +15,6 @@ TEST_CASE("OptimisationProblem") {
   class DummyOptimisationProblem : public mant::OptimisationProblem {
     public:
       using mant::OptimisationProblem::OptimisationProblem;
-
-      double getDefaultSoftConstraintsValue(
-          const arma::Col<double>& parameter) const {
-        return mant::OptimisationProblem::getSoftConstraintsValueImplementation(parameter);
-      }
-
-      double getSoftConstraintsValueImplementation(
-          const arma::Col<double>& parameter) const override {
-        // All parameters with more negative than positive values fulfil the soft-constraint.
-        if(arma::accu(parameter < 0.0) <= std::floor(numberOfDimensions_ / 2.0)) {
-          return 1.0;
-        } else {
-          return 0.0;
-        }
-      }
     
       double getObjectiveValueImplementation(
           const arma::Col<double>& parameter) const override {
@@ -215,96 +200,8 @@ TEST_CASE("OptimisationProblem") {
     }
   }
 
-  SECTION(".getSoftConstraintsValue") {
-    SECTION("Checking the default value.") {
-      arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 10) * 200.0 - 100.0;
-      
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        const arma::Col<double>& parameter = parameters.col(n);
-        CHECK(optimisationProblem.getDefaultSoftConstraintsValue(parameter) == 0.0);
-      }
-    }
-
-    SECTION("Checking the soft-constraints value.") {
-      arma::Mat<double> parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, 10) * 200.0 - 100.0;
-      
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        const arma::Col<double>& parameter = parameters.col(n);
-        CHECK(optimisationProblem.getObjectiveValue(parameter) == optimisationProblem.getObjectiveValueImplementation(parameter));
-      }
-    }
-
-    SECTION("Exception tests") {
-      SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
-        arma::Col<double> parameter(numberOfDimensions + 1);
-        CHECK_THROWS_AS(optimisationProblem.getSoftConstraintsValue(parameter), std::logic_error);
-      }
-
-      SECTION("Throw an exception, if the number of elements is lower than the problem dimension.") {
-        arma::Col<double> parameter(numberOfDimensions - 1);
-        CHECK_THROWS_AS(optimisationProblem.getSoftConstraintsValue(parameter), std::logic_error);
-      }
-    }
-  }
-
-  SECTION(".isSatisfyingConstraints") {
-    SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
-      // All elements of the lower bound are set to -0.5.
-      optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
-      // All elements of the upper bound are set to 2.
-      optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.0);
-      
-      // All parameters with more negative than positive values fulfil the soft-constraint.
-      CHECK(optimisationProblem.isSatisfyingConstraints({-0.5, 2.0, -0.3, 0.0, -0.1}) == true);
-      // Using 0.0001 instead of arma::datum::eps to avoid unexpected loss of precision. 
-      CHECK(optimisationProblem.isSatisfyingConstraints({-0.50001, 2.0, -1.0, 0.0, -0.5}) == false); // Out of lower bound
-      CHECK(optimisationProblem.isSatisfyingConstraints({-0.5, 2.1, -0.3, 0.0, 2.0}) == false); // Out of upper bound
-      CHECK(optimisationProblem.isSatisfyingConstraints({-0.5, 2.0, 1.0, 0.0, -0.1}) == false); // Does not satisfy the soft-constraints.
-    }
-    
-    SECTION("Exception tests") {
-      SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
-        arma::Col<double> parameter(numberOfDimensions + 1);
-        CHECK_THROWS_AS(optimisationProblem.isSatisfyingConstraints(parameter), std::logic_error);
-      }
-
-      SECTION("Throw an exception, if the number of elements is lower than the problem dimension.") {
-        arma::Col<double> parameter(numberOfDimensions - 1);
-        CHECK_THROWS_AS(optimisationProblem.isSatisfyingConstraints(parameter), std::logic_error);
-      }
-    }
-  }
-
-  SECTION(".isSatisfyingSoftConstraints") {
-    SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
-      // All elements of the lower bound are set to -0.5.
-      optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
-      // All elements of the upper bound are set to 2.
-      optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.0);
-      
-      // All parameters with more negative than positive values fulfil the soft-constraint.
-      CHECK(optimisationProblem.isSatisfyingSoftConstraints({-0.5, 2.0, -0.3, 0.0, -0.1}) == true);
-      // Using 0.0001 instead of arma::datum::eps to avoid unexpected loss of precision. 
-      CHECK(optimisationProblem.isSatisfyingSoftConstraints({-0.50001, 2.0, -1.0, 0.0, -0.5}) == true); // Out of lower bound
-      CHECK(optimisationProblem.isSatisfyingSoftConstraints({-0.5, 2.1, -0.3, 0.0, 2.0}) == false); // Out of upper bound
-      CHECK(optimisationProblem.isSatisfyingSoftConstraints({-0.5, 2.0, 1.0, 0.0, -0.1}) == false); // Does not satisfy the soft-constraints.
-    }
-    
-    SECTION("Exception tests") {
-      SECTION("Throw an exception, if the number of elements is higher than the problem dimension.") {
-        arma::Col<double> parameter(numberOfDimensions + 1);
-        CHECK_THROWS_AS(optimisationProblem.isSatisfyingSoftConstraints(parameter), std::logic_error);
-      }
-
-      SECTION("Throw an exception, if the number of elements is lower than the problem dimension.") {
-        arma::Col<double> parameter(numberOfDimensions - 1);
-        CHECK_THROWS_AS(optimisationProblem.isSatisfyingSoftConstraints(parameter), std::logic_error);
-      }
-    }
-  }
-
   SECTION(".isWithinLowerBounds") {
-    SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
+    SECTION("Checking if it returns true if all bound-constraints are fulfilled and false otherwise.") {
       // All elements of the lower bound are set to -0.5.
       optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
       // All elements of the upper bound are set to 2.
@@ -327,7 +224,7 @@ TEST_CASE("OptimisationProblem") {
   }
 
   SECTION(".isWithinUpperBounds") {
-    SECTION("Checking if it returns true if all bound- and soft-constraints are fulfilled and false otherwise.") {
+    SECTION("Checking if it returns true if all bound-constraints are fulfilled and false otherwise.") {
       // All elements of the lower bound are set to -0.5.
       optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 0.5);
       // All elements of the upper bound are set to 2.
@@ -350,16 +247,6 @@ TEST_CASE("OptimisationProblem") {
   }
   
   SECTION(".setObjectiveValueScaling") {
-    SECTION("Checking the parametrisation of the scaling of the soft-constraints value.") {
-      const double objectiveValueScaling = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
-      optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-        
-      const arma::Col<double>& parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-      const double expected = objectiveValueScaling * optimisationProblem.getSoftConstraintsValueImplementation(parameter);
-      
-      CHECK(optimisationProblem.getSoftConstraintsValue(parameter) == expected);
-    } 
-    
     SECTION("Checking the parametrisation of the scaling of the objective value.") {
       const double objectiveValueScaling = std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
@@ -418,23 +305,6 @@ TEST_CASE("OptimisationProblem") {
   }
 
   SECTION(".setParameterPermutation") {
-    SECTION("Checking the parametrisation of the permutation of the dimensions of the soft-constraints function.") {
-      std::array<arma::Col<arma::uword>, 2> parameterPermutations = {{
-        // Neutral permutation (0, 1, ..., numberOfDimensions - 1)
-        arma::linspace<arma::Mat<arma::uword>>(0, numberOfDimensions - 1, numberOfDimensions),
-        mant::getRandomPermutation(numberOfDimensions)
-      }};
-
-      for (auto parameterPermutation : parameterPermutations) {
-        optimisationProblem.setParameterPermutation(parameterPermutation);
-        
-        const arma::Col<double>& parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
-        const double expected = optimisationProblem.getSoftConstraintsValueImplementation(parameter.elem(parameterPermutation));
-        
-        CHECK(optimisationProblem.getSoftConstraintsValue(parameter) == expected);
-      }
-    }
-    
     SECTION("Checking the parametrisation of the permutation of the dimensions of the objective function.") {
       std::array<arma::Col<arma::uword>, 2> parameterPermutations = {{
         // Neutral permutation (0, 1, ..., numberOfDimensions - 1)
@@ -513,16 +383,13 @@ TEST_CASE("OptimisationProblem") {
       
       const arma::Col<double> parameter = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
       
-      double expected = objectiveValueScaling * optimisationProblem.getSoftConstraintsValueImplementation(parameter);
-      CHECK(optimisationProblem.getSoftConstraintsValue(parameter) == expected);
-      expected = objectiveValueScaling * optimisationProblem.getObjectiveValueImplementation(parameter.elem(parameterPermutation)) + objectiveValueTranslation;
+      double expected = objectiveValueScaling * optimisationProblem.getObjectiveValueImplementation(parameter.elem(parameterPermutation)) + objectiveValueTranslation;
       CHECK(optimisationProblem.getObjectiveValue(parameter) == expected);
     }
     
     SECTION("Checking if all counters are reset and the cache is emptied.") {
       // Increase the evaluation counter ad populate the cache.
       for (arma::uword n = 0; n < 10; ++n) {
-        optimisationProblem.getSoftConstraintsValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
         optimisationProblem.getObjectiveValue(arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0);
       }
       
@@ -541,12 +408,12 @@ TEST_CASE("OptimisationProblem Ext") {
     public:
       using mant::OptimisationProblem::OptimisationProblem;
 
-      std::string toString() const noexcept override {
+      std::string toString() const override {
         return "test_optimisation_problem";
       }
     
       double getObjectiveValueImplementation(
-          const arma::Col<double>& parameter) const noexcept override {
+          const arma::Col<double>& parameter) const override {
         // The objective value is a weighted sum of the parameter values.
         return arma::accu(parameter % arma::linspace<arma::Col<double>>(1, numberOfDimensions_, numberOfDimensions_));
       }

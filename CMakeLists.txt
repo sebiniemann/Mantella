@@ -3,10 +3,12 @@ cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 # Mantella, C++ optimisation framework
 project(Mantella CXX C)
 
-set(MANTELLA_MAJOR 0)
-set(MANTELLA_MINOR 9)
-set(MANTELLA_PATCH 0)
-set(MANTELLA_VERSION "${MANTELLA_MAJOR}.${MANTELLA_MINOR}.${MANTELLA_PATCH}")
+# Retrieve the version numbers from "include/mantella"
+file(STRINGS "${PROJECT_SOURCE_DIR}/include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
+string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_CONTENTS}")
+string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
+string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
+set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
@@ -32,7 +34,7 @@ message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 message(STATUS "") 
 message(STATUS "Checking prerequirements.")
   
-find_package(Armadillo 4.650.0 REQUIRED)
+find_package(Armadillo 5.100.2 REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIR})
   
 if(SUPPORT_MPI)
@@ -131,6 +133,17 @@ add_library(mantella SHARED
   src/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
   src/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
   src/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
+  src/optimisationProblem/roboticsOptimisationProblem.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRPR.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRRR.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRUS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PUPS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PRUS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.cpp
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
@@ -165,6 +178,16 @@ add_library(mantella SHARED
   src/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
+
+  # Surrogate models
+  src/surrogateModel.cpp
+  src/surrogateModel/artificialNeuralNetwork.cpp
+  src/surrogateModel/gaussianMixtureModel.cpp
+  src/surrogateModel/krigingModel.cpp
+  src/surrogateModel/linearFunctionModel.cpp
+  src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
+  src/surrogateModel/quadraticFunctionModel.cpp
+  src/surrogateModel/radialBasisFunctionModel.cpp
 )
 
 # Linking against prerequirements
@@ -242,13 +265,28 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationProblem/testRoboticsOptimisationProblem.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/testRobotModel.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRPR.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRRR.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRUS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PUPS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine4PRUS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PRUS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PUPS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testMultiLevelStewartPlatform.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/testEndEffectorPoseError.cpp
     
     # Optimisation algorithms
+    test/testOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
     test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
     test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
+    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
     
     # Samples selection
@@ -271,6 +309,16 @@ if(BUILD_TESTS)
     test/propertyAnalysis/activePropertyAnalysis/testLinearProportionalityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
+
+    # Surrogate models
+    test/testSurrogateModel.cpp
+    test/surrogateModel/testArtificialNeuralNetwork.cpp
+    test/surrogateModel/testGaussianMixtureModel.cpp
+    test/surrogateModel/testKrigingModel.cpp
+    test/surrogateModel/testLinearFunctionModel.cpp
+    test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    test/surrogateModel/testQuadraticFunctionModel.cpp
+    test/surrogateModel/testRadialBasisFunctionModel.cpp
   )
 
   # Link against prerequirements
@@ -307,7 +355,7 @@ if(NOT INSTALL_INCLUDE_DIR)
 endif()
 
 set_property(TARGET mantella PROPERTY VERSION ${MANTELLA_VERSION})
-set_property(TARGET mantella PROPERTY SOVERSION ${MANTELLA_MAJOR})
+set_property(TARGET mantella PROPERTY SOVERSION ${MANTELLA_VERSION_MAJOR})
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 

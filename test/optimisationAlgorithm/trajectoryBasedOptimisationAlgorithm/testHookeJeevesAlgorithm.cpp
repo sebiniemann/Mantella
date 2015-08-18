@@ -12,8 +12,10 @@ TEST_CASE("HookeJeevesAlgorithm", "") {
     // TODO
   }
 
-  SECTION("Returns the specified class name.") {
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-    CHECK(mant::HookeJeevesAlgorithm(optimisationProblem).toString() == "hooke_jeeves_algorithm");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+      CHECK(mant::HookeJeevesAlgorithm(optimisationProblem).toString() == "hooke_jeeves_algorithm");
+    }
   }
 }

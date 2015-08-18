@@ -21,13 +21,6 @@ namespace mant {
       setParameterTranslation(parameterTranslation);
     }
 
-    double BuecheRastriginFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return 100.0 * getBoundConstraintsValue(parameter);
-    }
-
     double BuecheRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);

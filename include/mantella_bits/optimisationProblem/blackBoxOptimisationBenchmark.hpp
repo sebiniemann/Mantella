@@ -14,12 +14,8 @@ namespace mant {
     class BlackBoxOptimisationBenchmark : public OptimisationProblem {
       public:
         explicit BlackBoxOptimisationBenchmark(
-            const arma::uword numberOfDimensions);
-
-        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
-        std::vector<double> serialise() const;
-
-        // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+            const arma::uword numberOfDimensions);
+        std::vector<double> serialise() const;
         void deserialise(
             std::vector<double> serialisedOptimisationProblem);
 

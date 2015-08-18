@@ -18,7 +18,7 @@
 #pragma once
 
 #define MANTELLA_VERSION_MAJOR 0
-#define MANTELLA_VERSION_MINOR 9
+#define MANTELLA_VERSION_MINOR 10
 #define MANTELLA_VERSION_PATCH 0
 
 //
@@ -72,6 +72,17 @@
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRPR.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRRR.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRUS.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PUPS.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PRUS.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.hpp>
+#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
@@ -106,3 +117,13 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
+
+// Surrogate models
+#include <mantella_bits/surrogateModel.hpp>
+#include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>
+#include <mantella_bits/surrogateModel/gaussianMixtureModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel.hpp>
+#include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
+#include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
+#include <mantella_bits/surrogateModel/quadraticFunctionModel.hpp>
+#include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>

@@ -35,7 +35,9 @@ TEST_CASE("bbob::CompositeGriewankRosenbrockFunctionF8F2", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2(5).toString() == "bbob_composite_griewank_rosenbrock_function_f8f2");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2(5).toString() == "bbob_composite_griewank_rosenbrock_function_f8f2");
+    }
   }
 }

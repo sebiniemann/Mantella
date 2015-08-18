@@ -42,8 +42,10 @@ TEST_CASE("bbob::AttractiveSectorFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::AttractiveSectorFunction(5).toString() == "bbob_attractive_sector_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::AttractiveSectorFunction(5).toString() == "bbob_attractive_sector_function");
+    }
   }
 }
 
