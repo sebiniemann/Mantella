@@ -17,11 +17,9 @@ namespace mant {
       public:
         const arma::uword numberOfPlatformLevels_;
       
+        explicit MultiLevelStewartPlatform();
+      
         explicit MultiLevelStewartPlatform(
-            const arma::uword numberOfPlatformLevels,
-            const arma::uword numberOfRedundantJoints);
-
-        void setPlatformLevels(
             const std::vector<ParallelKinematicMachine6PUPS>& platformLevels);
 
         std::vector<ParallelKinematicMachine6PUPS> getPlatformLevels() const;
@@ -29,7 +27,7 @@ namespace mant {
         std::string toString() const;
 
       protected:
-        std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
+        const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
         
         arma::Cube<double> getModelImplementation(
             const arma::Col<double>& endEffectorPose,

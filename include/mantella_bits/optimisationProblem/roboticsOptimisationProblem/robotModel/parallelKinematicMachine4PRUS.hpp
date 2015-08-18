@@ -13,19 +13,14 @@ namespace mant {
   namespace robotics {
     class ParallelKinematicMachine4PRUS : public RobotModel {
       public:
-        explicit ParallelKinematicMachine4PRUS(
-            const arma::uword numberOfRedundantJoints);
+        explicit ParallelKinematicMachine4PRUS();
             
-        void setLinkLengths(
-            arma::Mat<double>::fixed<2, 4> linkLengths);
-        void setEndEffectorJointPositions(
-            arma::Mat<double>::fixed<3, 4> endEffectorJointPositions);
-        void setBaseJointRotationAngles(
-            arma::Mat<double>::fixed<2, 4> baseJointRotationAngles);
-        void setRedundantJointStartPositions(
-            arma::Mat<double>::fixed<3, 4> redundantJointStartPositions);
-        void setRedundantJointEndPositions(
-            arma::Mat<double>::fixed<3, 4> redundantJointEndPositions);
+        explicit ParallelKinematicMachine4PRUS(
+            const arma::Mat<double>::fixed<2, 4>& linkLengths,
+            const arma::Mat<double>::fixed<3, 4>& endEffectorJointPositions,
+            const arma::Mat<double>::fixed<2, 4>& baseJointRotationAngles,
+            const arma::Mat<double>::fixed<3, 4>& redundantJointStartPositions,
+            const arma::Mat<double>::fixed<3, 4>& redundantJointEndPositions);
             
         arma::Mat<double>::fixed<2, 4> getLinkLengths() const;
         arma::Mat<double>::fixed<3, 4> getEndEffectorJointPositions() const;
@@ -36,18 +31,17 @@ namespace mant {
         std::string toString() const;
 
       protected:
-        arma::Mat<double>::fixed<2, 4> linkLengths_;
-        arma::Mat<double>::fixed<3, 4> endEffectorJointPositions_;
-        arma::Mat<double>::fixed<2, 4> baseJointRotationAngles_;
-        arma::Mat<double>::fixed<3, 4> redundantJointStartPositions_;
-        arma::Mat<double>::fixed<3, 4> redundantJointEndPositions_;
-        
+        const arma::Mat<double>::fixed<2, 4> linkLengths_;
+        const arma::Mat<double>::fixed<3, 4> endEffectorJointPositions_;
+        const arma::Mat<double>::fixed<2, 4> baseJointRotationAngles_;
+        const arma::Mat<double>::fixed<3, 4> redundantJointStartPositions_;
+        const arma::Mat<double>::fixed<3, 4> redundantJointEndPositions_;
 
-        arma::Mat<double>::fixed<3, 4> redundantJointStartToEndPositions_;
+        const arma::Mat<double>::fixed<3, 4> redundantJointStartToEndPositions_;
+        const arma::Col<arma::uword> redundantJointIndicies_;
+        arma::Mat<double> redundantJointRotationAngles_;
         arma::Cube<double>::fixed<3, 4, 3> baseJointRotations_;
         arma::Mat<double>::fixed<3, 4> baseJointNormals_;
-        arma::Col<arma::uword> redundantJointIndicies_;
-        arma::Mat<double> redundantJointRotationAngles_;
         
         arma::Cube<double> getModelImplementation(
             const arma::Col<double>& endEffectorPose,

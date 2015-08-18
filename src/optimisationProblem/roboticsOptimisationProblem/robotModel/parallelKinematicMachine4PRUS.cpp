@@ -9,44 +9,51 @@
 
 namespace mant {
   namespace robotics {
+    ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS()
+      : ParallelKinematicMachine4PRUS(
+          // linkLengths
+          {0.24, 0.56,
+           0.24, 0.56,
+           0.24, 0.56,
+           0.24, 0.56},
+          // endEffectorJointPositions
+          { 0.073, 0.0, 0.0,
+            0.0, 0.073, 0.0,
+           -0.073, 0.0, 0.0,
+            0.0, -0.073, 0.0},
+          // baseJointRotationAngles
+          {0.0, 0.0,
+           0.0, 1.570796326794897,
+           0.0, 3.141592653589793,
+           0.0, 4.712388980384690},
+          // redundantJointStartPositions
+          { 0.364, 0.0, -0.6,
+            0.0, 0.364, -0.6,
+           -0.364, 0.0, -0.6,
+            0.0, -0.364, -0.6},
+          // redundantJointEndPositions
+          { 0.364, 0.0, 0.2,
+            0.0, 0.364, 0.2,
+           -0.364, 0.0, 0.2,
+            0.0, -0.364, 0.2}) {
+
+    }
+            
     ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS(
-        const arma::uword numberOfRedundantJoints) 
-      : RobotModel(4, numberOfRedundantJoints) {
-      setLinkLengths({
-        0.24, 0.56,
-        0.24, 0.56,
-        0.24, 0.56,
-        0.24, 0.56});
-
-      setEndEffectorJointPositions({
-        0.073, 0.0, 0.0,
-        0.0, 0.073, 0.0,
-        -0.073, 0.0, 0.0,
-        0.0, -0.073, 0.0});
-
-      setBaseJointRotationAngles({
-        0.0, 0.0,
-        0.0, 1.570796326794897,
-        0.0, 3.141592653589793,
-        0.0, 4.712388980384690});
-
-      setRedundantJointStartPositions({
-        0.364, 0.0, -0.6,
-        0.0, 0.364, -0.6,
-        -0.364, 0.0, -0.6,
-        0.0, -0.364, -0.6});
-
-      setRedundantJointEndPositions({
-        0.364, 0.0, 0.2,
-        0.0, 0.364, 0.2,
-        -0.364, 0.0, 0.2,
-        0.0, -0.364, 0.2});
-
-      redundantJointStartToEndPositions_ = redundantJointEndPositions_ - redundantJointStartPositions_;
-      redundantJointIndicies_ = arma::find(arma::any(redundantJointStartToEndPositions_));
-
-      redundantJointRotationAngles_.set_size(3, redundantJointIndicies_.n_elem);
-
+        const arma::Mat<double>::fixed<2, 4>& linkLengths,
+        const arma::Mat<double>::fixed<3, 4>& endEffectorJointPositions,
+        const arma::Mat<double>::fixed<2, 4>& baseJointRotationAngles,
+        const arma::Mat<double>::fixed<3, 4>& redundantJointStartPositions,
+        const arma::Mat<double>::fixed<3, 4>& redundantJointEndPositions)
+      : RobotModel(4, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
+        linkLengths_(linkLengths),
+        endEffectorJointPositions_(endEffectorJointPositions),
+        baseJointRotationAngles_(baseJointRotationAngles),
+        redundantJointStartPositions_(redundantJointStartPositions),
+        redundantJointEndPositions_(redundantJointEndPositions),
+        redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
+        redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
+        redundantJointRotationAngles_(4, redundantJointIndicies_.n_elem) {
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const double& redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
         const double& redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_(2, n), redundantJointStartToEndPositions_(1, n));
@@ -61,32 +68,6 @@ namespace mant {
         baseJointNormals_.col(n) = arma::normalise(arma::cross(baseJointRotations_.slice(n).col(0), baseJointRotations_.slice(n).col(2)));
       }
     }
-            
-    void ParallelKinematicMachine4PRUS::setLinkLengths(
-        arma::Mat<double>::fixed<2, 4> linkLengths) {
-      linkLengths_ = linkLengths;
-    }
-    
-    void ParallelKinematicMachine4PRUS::setEndEffectorJointPositions(
-        arma::Mat<double>::fixed<3, 4> endEffectorJointPositions) {
-      endEffectorJointPositions_ = endEffectorJointPositions;
-    }
-    
-    void ParallelKinematicMachine4PRUS::setBaseJointRotationAngles(
-        arma::Mat<double>::fixed<2, 4> baseJointRotationAngles) {
-      baseJointRotationAngles_ = baseJointRotationAngles;
-    }
-    
-    void ParallelKinematicMachine4PRUS::setRedundantJointStartPositions(
-        arma::Mat<double>::fixed<3, 4> redundantJointStartPositions) {
-      redundantJointStartPositions_ = redundantJointStartPositions;
-    }
-    
-    void ParallelKinematicMachine4PRUS::setRedundantJointEndPositions(
-        arma::Mat<double>::fixed<3, 4> redundantJointEndPositions) {
-      redundantJointEndPositions_ = redundantJointEndPositions;
-    }
-    
         
     arma::Mat<double>::fixed<2, 4> ParallelKinematicMachine4PRUS::getLinkLengths() const {
       return linkLengths_;
@@ -112,7 +93,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_));
+      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
 
       arma::Cube<double> model;
 
@@ -141,7 +122,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_));
+      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
       const arma::Cube<double>& model = getModel(endEffectorPose, redundantJointsActuation);
 
@@ -162,7 +143,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_));
+      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
       const arma::Cube<double>& model = getModel(endEffectorPose, redundantJointsActuation);
 

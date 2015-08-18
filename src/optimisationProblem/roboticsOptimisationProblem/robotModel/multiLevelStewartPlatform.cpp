@@ -8,30 +8,26 @@
 
 namespace mant {
   namespace robotics {
-    MultiLevelStewartPlatform::MultiLevelStewartPlatform(
-        const arma::uword numberOfPlatformLevels,
-        const arma::uword numberOfRedundantJoints) 
-      : RobotModel(6 * numberOfPlatformLevels, numberOfRedundantJoints),
-        numberOfPlatformLevels_(numberOfPlatformLevels) {
-      for (arma::uword n = 0; n < numberOfPlatformLevels_; ++n) {
-        platformLevels_.push_back(ParallelKinematicMachine6PUPS(0));
-      }
-    }
-
-    void MultiLevelStewartPlatform::setPlatformLevels(
-        const std::vector<ParallelKinematicMachine6PUPS>& platformLevels) {
-      for (arma::uword n = 0; n < numberOfPlatformLevels_; ++n) {
-        verify(platformLevels.at(n).numberOfRedundantJoints_ == 0, ""); // TODO
-      }
+    MultiLevelStewartPlatform::MultiLevelStewartPlatform() 
+      : MultiLevelStewartPlatform({ParallelKinematicMachine6PUPS(), ParallelKinematicMachine6PUPS(), ParallelKinematicMachine6PUPS(), ParallelKinematicMachine6PUPS()}) {
       
-      platformLevels_ = platformLevels;
+    }
+      
+    MultiLevelStewartPlatform::MultiLevelStewartPlatform(
+        const std::vector<ParallelKinematicMachine6PUPS>& platformLevels)
+      : RobotModel(6, 6 * platformLevels.size() - 6),
+        numberOfPlatformLevels_(platformLevels.size()),
+        platformLevels_(platformLevels) {
+      for (arma::uword n = 0; n < numberOfPlatformLevels_; ++n) {
+        verify(platformLevels_.at(n).numberOfRedundantJoints_ == 0, ""); // TODO
+      }
     }
 
     arma::Cube<double> MultiLevelStewartPlatform::getModelImplementation(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_));
+      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
       arma::Cube<double> model = platformLevels_.at(0).getModel(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
@@ -45,14 +41,14 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_));
+      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
       arma::Row<double> actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
         const arma::Row<double>& partialActuation = platformLevels_.at(n).getActuation(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {});
         
         assert(partialActuation.n_elem == numberOfActiveJoints_);
-        assert(!arma::any(partialActuation < minimalActiveJointsActuation_) && !arma::any(partialActuation > maximalActiveJointsActuation_));
+        assert(!arma::any(partialActuation < platformLevels_.at(n).getMinimalActiveJointsActuation()) && !arma::any(partialActuation > platformLevels_.at(n).getMaximalActiveJointsActuation()));
         
         actuation = arma::join_rows(actuation, partialActuation);
       }
@@ -64,7 +60,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_));
+      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
       double endEffectorPoseError = platformLevels_.at(0).getEndEffectorPoseError(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
