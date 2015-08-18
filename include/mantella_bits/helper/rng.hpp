@@ -3,6 +3,9 @@
 // C++ standard library
 #include <random>
 
+// Armadillo
+#include <armadillo>
+
 namespace mant {
   class Rng {
     public:
@@ -13,13 +16,13 @@ namespace mant {
       static std::mt19937_64& getGenerator();
 
       static void setSeed(
-          const std::mt19937_64::result_type seed);
+          const arma::uword seed);
 
       static void setRandomSeed();
 
-      static std::mt19937_64::result_type getSeed();
+      static arma::uword getSeed();
 
     protected:
-      static std::mt19937_64::result_type& seed_();
+      static arma::uword& seed_();
   };
 }
