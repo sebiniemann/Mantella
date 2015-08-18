@@ -81,7 +81,7 @@ Vagrant.configure(2) do |config|
   
     sudo apt-get install -qq libblas-dev
     sudo apt-get install -qq liblapack-dev
-    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.300.4.tar.gz
+    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo
