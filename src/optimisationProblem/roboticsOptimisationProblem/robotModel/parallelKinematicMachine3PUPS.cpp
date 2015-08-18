@@ -78,7 +78,7 @@ namespace mant {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
 
-      arma::Cube<double> model(3, 3, 2);
+      arma::Cube<double>::fixed<3, 3, 2> model;
 
       const arma::Col<double>& endEffectorPosition = endEffectorPose.subvec(0, 2);
       const double& endEffectorRollAngle = endEffectorPose(3);
