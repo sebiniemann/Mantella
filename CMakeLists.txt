@@ -133,6 +133,17 @@ add_library(mantella SHARED
   src/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
   src/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
   src/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
+  src/optimisationProblem/roboticsOptimisationProblem.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRPR.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRRR.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRUS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PUPS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PRUS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.cpp
+  src/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.cpp
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
@@ -254,13 +265,28 @@ if(BUILD_TESTS)
     test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationProblem/testRoboticsOptimisationProblem.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/testRobotModel.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRPR.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRRR.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRUS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PUPS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine4PRUS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PRUS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PUPS.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testMultiLevelStewartPlatform.cpp
+    test/optimisationProblem/roboticsOptimisationProblem/testEndEffectorPoseError.cpp
     
     # Optimisation algorithms
+    test/testOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
     test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
     test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
+    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
     
     # Samples selection
@@ -283,6 +309,16 @@ if(BUILD_TESTS)
     test/propertyAnalysis/activePropertyAnalysis/testLinearProportionalityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
+
+    # Surrogate models
+    test/testSurrogateModel.cpp
+    test/surrogateModel/testArtificialNeuralNetwork.cpp
+    test/surrogateModel/testGaussianMixtureModel.cpp
+    test/surrogateModel/testKrigingModel.cpp
+    test/surrogateModel/testLinearFunctionModel.cpp
+    test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    test/surrogateModel/testQuadraticFunctionModel.cpp
+    test/surrogateModel/testRadialBasisFunctionModel.cpp
   )
 
   # Link against prerequirements

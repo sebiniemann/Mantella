@@ -20,7 +20,7 @@ TEST_CASE("Rng", "") {
   }
 
   SECTION("Can specify a seed.") {
-    unsigned int seed = 12345;
+    arma::uword seed = 12345;
     mant::Rng::setSeed(seed);
 
     SECTION("Works with the C++ standard library.") {
