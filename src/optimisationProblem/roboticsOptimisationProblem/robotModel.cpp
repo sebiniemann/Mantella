@@ -68,7 +68,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_), "The redundant joints must be actuated within the given bounds.");
+      verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1), "The redundant joints must be actuated within [0, 1].");
 
       return getModelImplementation(endEffectorPose, redundantJointsActuation);
     }
@@ -77,7 +77,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_), "The redundant joints must be actuated within the given bounds.");
+      verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1), "The redundant joints must be actuated within [0, 1].");
       
       const arma::Row<double>& actuation = getActuationImplementation(endEffectorPose, redundantJointsActuation);
       assert(!any(actuation < minimalActiveJointsActuation_) && !any(actuation > maximalActiveJointsActuation_));
@@ -89,7 +89,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(!arma::any(redundantJointsActuation < minimalRedundantJointsActuation_) && !arma::any(redundantJointsActuation > maximalRedundantJointsActuation_), "The redundant joints must be actuated within the given bounds.");
+      verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1), "The redundant joints must be actuated within [0, 1].");
       
       const double& endEffectorPoseError = getEndEffectorPoseErrorImplementation(endEffectorPose, redundantJointsActuation);
       assert(endEffectorPoseError >= 0);
