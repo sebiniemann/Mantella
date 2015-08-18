@@ -10,8 +10,8 @@ namespace mant {
   namespace robotics {
     class RobotModel : public Printable {
       public:
-        arma::uword numberOfActiveJoints_;
-        arma::uword numberOfRedundantJoints_;
+        const arma::uword numberOfActiveJoints_;
+        const arma::uword numberOfRedundantJoints_;
         
         explicit RobotModel(
             const arma::uword numberOfActiveJoints,
