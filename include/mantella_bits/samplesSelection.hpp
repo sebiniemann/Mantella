@@ -19,15 +19,16 @@ namespace mant {
       
       void select();
       
-       std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getSelectedSamples() const;
-      
-      protected:
-        std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getSelectedSamples() const;
         
-        arma::uword numberOfSelectedSamples_;
-        std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples_;
-        
-        virtual void selectImplementation() = 0;
       virtual ~SamplesSelection() = default;
+      
+    protected:
+      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+      
+      arma::uword numberOfSelectedSamples_;
+      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples_;
+      
+      virtual void selectImplementation() = 0;
   };
 }
