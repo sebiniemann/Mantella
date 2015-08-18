@@ -65,7 +65,7 @@ namespace mant {
         velocities_.col(particleIndex_) = velocityCandidate;
         particles_.col(particleIndex_) = solutionCandidate;
 
-        const double& objectiveValue = getObjectiveValue(solutionCandidate) + getSoftConstraintsValue(solutionCandidate);
+        const double& objectiveValue = getObjectiveValue(solutionCandidate);
 
         if (objectiveValue < localBestObjectiveValues_(particleIndex_)) {
           localBestObjectiveValues_(particleIndex_) = objectiveValue;
@@ -106,7 +106,7 @@ namespace mant {
       ++numberOfIterations_;
 
       arma::Col<double> localBestSolution = localBestSolutions_.col(n);
-      double localBestObjectiveValue = getObjectiveValue(localBestSolution) + getSoftConstraintsValue(localBestSolution);
+      double localBestObjectiveValue = getObjectiveValue(localBestSolution);
       localBestObjectiveValues_(n) = localBestObjectiveValue;
 
       if (localBestObjectiveValue < bestObjectiveValue_) {

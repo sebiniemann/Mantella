@@ -52,18 +52,6 @@ namespace mant {
     return upperBounds_;
   }
 
-  double OptimisationProblem::getSoftConstraintsValue(
-      const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-
-    const double softConstraintValue = getSoftConstraintsValueImplementation(parameter);
-    
-    // All soft-constraint values must be greater than or equal to 0.
-    assert(softConstraintValue >= 0.0);
-    
-    return objectiveValueScaling_ * softConstraintValue;
-  }
-
   arma::Col<arma::uword> OptimisationProblem::isWithinLowerBounds(
       const arma::Col<double>& parameter) {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
@@ -76,20 +64,6 @@ namespace mant {
     verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     return  parameter <= upperBounds_;
-  }
-
-  bool OptimisationProblem::isSatisfyingSoftConstraints(
-      const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-
-    return (getSoftConstraintsValue(parameter) == 0.0);
-  }
-
-  bool OptimisationProblem::isSatisfyingConstraints(
-      const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-
-    return (arma::all(isWithinLowerBounds(parameter)) && arma::all(isWithinUpperBounds(parameter)) && isSatisfyingSoftConstraints(parameter));
   }
 
   void OptimisationProblem::setParameterPermutation(
@@ -218,13 +192,6 @@ namespace mant {
     assert(parameter.n_elem == numberOfDimensions_);
 
     return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
-  }
-
-  double OptimisationProblem::getSoftConstraintsValueImplementation(
-      const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    return 0.0;
   }
 
 #if defined(MANTELLA_USE_MPI)

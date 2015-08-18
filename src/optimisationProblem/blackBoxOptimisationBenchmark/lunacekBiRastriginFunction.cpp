@@ -41,13 +41,6 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    double LunacekBiRastriginFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return 10000.0 * getBoundConstraintsValue(parameter);
-    }
-
     double LunacekBiRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);

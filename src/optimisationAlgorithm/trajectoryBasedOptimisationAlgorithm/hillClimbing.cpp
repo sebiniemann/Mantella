@@ -15,7 +15,6 @@ namespace mant {
     ++numberOfIterations_;
 
     bestParameter_ = initialParameter_;
-    bestSoftConstraintsValue_ = getSoftConstraintsValue(initialParameter_);
     bestObjectiveValue_ = getObjectiveValue(initialParameter_);
 
     while(!isFinished() && !isTerminated()) {
@@ -23,7 +22,7 @@ namespace mant {
 
       const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, 0.0, maximalStepSize_);
 
-      updateBestParameter(candidateParameter, getSoftConstraintsValue(candidateParameter), getObjectiveValue(candidateParameter));
+      updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
     }
   }
 

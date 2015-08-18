@@ -6,7 +6,7 @@ namespace mant {
       ++numberOfIterations_;
     
       const arma::Col<double>& candidateParameter = getRandomParameter();
-      updateBestParameter(candidateParameter, getSoftConstraintsValue(candidateParameter), getObjectiveValue(candidateParameter));
+      updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
     }
   }
 

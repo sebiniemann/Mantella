@@ -29,13 +29,6 @@ namespace mant {
 
       rotationQ_ = rotationQ;
     }
-
-    double StepEllipsoidalFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return getBoundConstraintsValue(parameter);
-    }
     
     double StepEllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {

@@ -28,13 +28,6 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    double KatsuuraFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return getBoundConstraintsValue(parameter);
-    }
-
     double KatsuuraFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);

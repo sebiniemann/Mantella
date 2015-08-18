@@ -35,13 +35,6 @@ namespace mant {
 
       rotationQ_ = rotationQ;
     }
-
-    double WeierstrassFunction::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return 10.0 * getBoundConstraintsValue(parameter) / static_cast<double>(numberOfDimensions_);
-    }
     
     double WeierstrassFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {

@@ -27,13 +27,6 @@ namespace mant {
       rotationQ_ = rotationQ;
     }
 
-    double SchaffersF7Function::getSoftConstraintsValueImplementation(
-        const arma::Col<double>& parameter) const {
-      assert(parameter.n_elem == numberOfDimensions_);
-        
-      return 10.0 * getBoundConstraintsValue(parameter);
-    }
-
     double SchaffersF7Function::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);

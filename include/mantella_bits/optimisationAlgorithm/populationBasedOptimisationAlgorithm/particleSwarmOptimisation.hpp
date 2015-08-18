@@ -43,7 +43,6 @@ namespace mant {
       arma::Col<double> attractionCenter_;
 
       arma::Mat<double> localBestSolutions_;
-      arma::Row<double> localBestSoftConstraintsValues_;
       arma::Row<double> localBestObjectiveValues_;
 
       void optimiseImplementation() override;
