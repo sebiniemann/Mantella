@@ -59,7 +59,7 @@ namespace mant {
 
       arma::Cube<double>::fixed<2, 3, 3> model;
 
-      const arma::Col<double>& endEffectorPosition = endEffectorPose.subvec(0, 1);
+      const arma::Col<double>::fixed<2>& endEffectorPosition = endEffectorPose.subvec(0, 1);
       const double& endEffectorAngle = endEffectorPose(2);
 
       model.slice(0) = redundantJointStartPositions_;
@@ -84,14 +84,14 @@ namespace mant {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
-      const arma::Cube<double>& model = getModel(endEffectorPose, redundantJointsActuation);
+      const arma::Cube<double>::fixed<2, 3, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
-      const arma::Mat<double>& baseJointPositions = model.slice(0);
-      const arma::Mat<double>& passiveJointPositions = model.slice(1);
+      const arma::Mat<double>::fixed<2, 3>& baseJointPositions = model.slice(0);
+      const arma::Mat<double>::fixed<2, 3>& passiveJointPositions = model.slice(1);
 
-      const arma::Mat<double>& baseToPassiveJointPositions = passiveJointPositions - baseJointPositions;
+      const arma::Mat<double>::fixed<2, 3>& baseToPassiveJointPositions = passiveJointPositions - baseJointPositions;
 
-      arma::Row<double> actuation;
+      arma::Row<double>::fixed<3> actuation;
       for (arma::uword n = 0; n < baseToPassiveJointPositions.n_elem; ++n) {
         actuation(n) = std::atan2(baseToPassiveJointPositions(1, n), baseToPassiveJointPositions(0, n));
       }
@@ -105,21 +105,21 @@ namespace mant {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
       
-      const arma::Cube<double>& model = getModel(endEffectorPose, redundantJointsActuation);
+      const arma::Cube<double>::fixed<2, 3, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
-      const arma::Mat<double>& baseJoints = model.slice(0);
+      const arma::Mat<double>::fixed<2, 3>& baseJoints = model.slice(0);
 
-      const arma::Mat<double>& endEffectorJoints = model.slice(2);
-      arma::Mat<double> endEffectorJointsRotated = endEffectorJoints;
+      const arma::Mat<double>::fixed<2, 3>& endEffectorJoints = model.slice(2);
+      arma::Mat<double>::fixed<2, 3> endEffectorJointsRotated = endEffectorJoints;
       endEffectorJointsRotated.each_col() -= endEffectorPose.subvec(0, 1);
 
-      const arma::Mat<double>& passiveJoints = model.slice(1);
+      const arma::Mat<double>::fixed<2, 3>& passiveJoints = model.slice(1);
 
-      arma::Mat<double> forwardKinematic;
+      arma::Mat<double>::fixed<3, 3> forwardKinematic;
       forwardKinematic.head_rows(2) = endEffectorJoints - passiveJoints;
       forwardKinematic.row(2) = -forwardKinematic.row(0) % endEffectorJointsRotated.row(1) + forwardKinematic.row(1) % endEffectorJointsRotated.row(0);
 
-      const arma::Mat<double>& baseToPassiveJoints = passiveJoints - baseJoints;
+      const arma::Mat<double>::fixed<2, 3>& baseToPassiveJoints = passiveJoints - baseJoints;
       arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = forwardKinematic.row(0) % baseToPassiveJoints.row(1) - forwardKinematic.row(1) % baseToPassiveJoints.row(0);
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
