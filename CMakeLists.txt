@@ -167,6 +167,16 @@ add_library(mantella SHARED
   src/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
+
+  # Surrogate models
+  src/surrogateModel.cpp
+  src/surrogateModel/artificialNeuralNetwork.cpp
+  src/surrogateModel/gaussianMixtureModel.cpp
+  src/surrogateModel/krigingModel.cpp
+  src/surrogateModel/linearFunctionModel.cpp
+  src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
+  src/surrogateModel/quadraticFunctionModel.cpp
+  src/surrogateModel/radialBasisFunctionModel.cpp
 )
 
 # Linking against prerequirements

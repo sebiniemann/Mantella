@@ -106,3 +106,13 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
+
+// Surrogate models
+#include <mantella_bits/surrogateModel.hpp>
+#include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>
+#include <mantella_bits/surrogateModel/gaussianMixtureModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel.hpp>
+#include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
+#include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
+#include <mantella_bits/surrogateModel/quadraticFunctionModel.hpp>
+#include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>
