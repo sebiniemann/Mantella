@@ -56,12 +56,12 @@ TEST_CASE("HillClimbing", "") {
     mant::HillClimbing hillClimbing(optimisationProblem);
 
     SECTION("Throws an exception, if the MaximalStepSize zero") {
-//      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({0, 0}), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({0, 0}), std::logic_error);
     }
 
     SECTION("Throws an exception, if the size of MaximalStepSize is not equal to the number of dimension of the problem") {
-//      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100, 100, 100}), std::logic_error);
-//      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100}), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100, 100, 100}), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100}), std::logic_error);
     }
 
   }
