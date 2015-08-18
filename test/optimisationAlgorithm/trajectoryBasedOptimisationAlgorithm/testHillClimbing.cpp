@@ -30,7 +30,7 @@ class TestHillClimbing : public mant::HillClimbing {
     }
 
     unsigned int neighboursIndex_;
-    arma::mat neighbours_;
+    arma::Mat<double> neighbours_;
 };
 
 TEST_CASE("HillClimbing", "") {
