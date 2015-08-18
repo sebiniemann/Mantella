@@ -13,7 +13,7 @@
 namespace mant {
   class SamplesSelection : public Printable {
     public:
-      SamplesSelection(
+      explicit SamplesSelection(
           std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples,
           arma::uword numberOfSelectedSamples);
       
