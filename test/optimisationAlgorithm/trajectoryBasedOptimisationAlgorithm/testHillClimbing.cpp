@@ -16,7 +16,8 @@ class TestHillClimbing : public mant::HillClimbing {
 
     }
 
-    void setVelocitys(arma::mat neighbours){
+    void setVelocitys(
+      const arma::Mat<double>& neighbours){
       neighbours_ = neighbours;
     }
 
