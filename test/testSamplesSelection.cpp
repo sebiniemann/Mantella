@@ -5,7 +5,5 @@
 #include <mantella>
 
 TEST_CASE("SamplesSelection") {
-  SECTION(".analyse") {
-  
-  }
+
 }

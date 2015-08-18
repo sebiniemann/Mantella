@@ -4,8 +4,6 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("SamplesSelection") {
-  SECTION(".analyse") {
-  
-  }
+TEST_CASE("OptimisationAlgorithm") {
+
 }
