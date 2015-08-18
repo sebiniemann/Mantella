@@ -34,7 +34,7 @@ message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 message(STATUS "") 
 message(STATUS "Checking prerequirements.")
   
-find_package(Armadillo 4.650.0 REQUIRED)
+find_package(Armadillo 5.100.2 REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIR})
   
 if(SUPPORT_MPI)
