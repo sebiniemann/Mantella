@@ -39,8 +39,10 @@ TEST_CASE("bbob::BentCigarFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::BentCigarFunction(5).toString() == "bbob_bent_cigar_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::BentCigarFunction(5).toString() == "bbob_bent_cigar_function");
+    }
   }
 }
 

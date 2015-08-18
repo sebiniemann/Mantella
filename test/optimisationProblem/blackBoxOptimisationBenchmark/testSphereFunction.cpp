@@ -35,7 +35,9 @@ TEST_CASE("bbob::SphereFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SphereFunction(5).toString() == "bbob_sphere_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::SphereFunction(5).toString() == "bbob_sphere_function");
+    }
   }
 }

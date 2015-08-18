@@ -35,7 +35,9 @@ TEST_CASE("bbob::RastriginFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::RastriginFunction(5).toString() == "bbob_rastrigin_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::RastriginFunction(5).toString() == "bbob_rastrigin_function");
+    }
   }
 }

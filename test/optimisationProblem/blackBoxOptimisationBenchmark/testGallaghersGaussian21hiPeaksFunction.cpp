@@ -43,8 +43,10 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::GallaghersGaussian21hiPeaksFunction(5).toString() == "bbob_gallaghers_gaussian_21hi_peaks_function");
+    }
   }
 }
 

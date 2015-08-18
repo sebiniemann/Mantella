@@ -39,7 +39,9 @@ TEST_CASE("bbob::EllipsoidalFunctionRotated", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::EllipsoidalFunctionRotated(5).toString() == "bbob_ellipsoidal_function_rotated");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::EllipsoidalFunctionRotated(5).toString() == "bbob_ellipsoidal_function_rotated");
+    }
   }
 }

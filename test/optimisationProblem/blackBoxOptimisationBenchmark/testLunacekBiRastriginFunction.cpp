@@ -46,7 +46,9 @@ TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::LunacekBiRastriginFunction(5).toString() == "bbob_lunacek_bi_rastrigin_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::LunacekBiRastriginFunction(5).toString() == "bbob_lunacek_bi_rastrigin_function");
+    }
   }
 }

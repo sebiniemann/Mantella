@@ -12,8 +12,10 @@ TEST_CASE("ParticleSwarmOptimisation", "") {
     // TODO
   }
 
-  SECTION("Returns the specified class name.") {
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-    CHECK(mant::ParticleSwarmOptimisation(optimisationProblem, 10).toString() == "particle_swarm_optimisation");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+      CHECK(mant::ParticleSwarmOptimisation(optimisationProblem, 10).toString() == "particle_swarm_optimisation");
+    }
   }
 }

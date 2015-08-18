@@ -39,7 +39,9 @@ TEST_CASE("bbob::DifferentPowersFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::DifferentPowersFunction(5).toString() == "bbob_different_powers_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::DifferentPowersFunction(5).toString() == "bbob_different_powers_function");
+    }
   }
 }

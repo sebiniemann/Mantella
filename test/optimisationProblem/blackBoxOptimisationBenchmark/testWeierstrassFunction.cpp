@@ -43,7 +43,9 @@ TEST_CASE("bbob::WeierstrassFunction", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::WeierstrassFunction(5).toString() == "bbob_weierstrass_function");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      CHECK(mant::bbob::WeierstrassFunction(5).toString() == "bbob_weierstrass_function");
+    }
   }
 }

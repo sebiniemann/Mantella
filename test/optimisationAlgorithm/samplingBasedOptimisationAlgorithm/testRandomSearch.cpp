@@ -51,8 +51,10 @@ TEST_CASE("RandomSearch", "") {
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-    CHECK(mant::RandomSearch(optimisationProblem).toString() == "random_search");
+  SECTION(".toString") {
+    SECTION("Returns the expected class name.") {
+      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+      CHECK(mant::RandomSearch(optimisationProblem).toString() == "random_search");
+    }
   }
 }
