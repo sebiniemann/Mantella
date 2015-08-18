@@ -20,7 +20,7 @@ namespace mant {
 
     arma::Col<arma::uword> sampleIndicies = arma::zeros<arma::Col<arma::uword>>(numberOfDimensions_);
     for(arma::uword n = 0; n < arma::prod(numberOfSamplesPerDimension_); ++n) {
-      if (n % numberOfNodes_ == nodeRank_) {
+      if (static_cast<int>(n) % numberOfNodes_ == nodeRank_) {
         ++numberOfIterations_;
 
         arma::Col<double> candidateParameter(numberOfDimensions_);
