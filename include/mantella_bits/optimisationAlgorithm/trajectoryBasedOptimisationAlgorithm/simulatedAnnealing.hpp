@@ -14,12 +14,12 @@ namespace mant {
           const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
       void setMaximalStepSize(
-          const double maximalStepSize);
+          const arma::Col<double>& maximalStepSize);
 
       std::string toString() const override;
 
     protected:
-      double maximalStepSize_;
+      arma::Col<double> maximalStepSize_;
 
       virtual bool isAcceptableState(
           const double candidateObjectiveValue);

@@ -3,6 +3,7 @@
 
 // C++ Standard Library
 #include <memory>
+#include <random>
 
 // Mantella
 #include <mantella>
@@ -12,24 +13,25 @@ class TestHillClimbing : public mant::HillClimbing {
     TestHillClimbing(
         const std::shared_ptr<mant::OptimisationProblem> optimisationProblem)
       : mant::HillClimbing(optimisationProblem),
-        neighboursIndex_(0){
+        neighboursIndex_(0) {
 
     }
 
-    void setVelocitys(arma::mat neighbours){
+    void setVelocitys(
+      const arma::Mat<double>& neighbours){
       neighbours_ = neighbours;
     }
 
   protected:
-
-    arma::Col<double> getRandomNeighbour(const arma::Col<double>& parameter,
-                                         const double minimalDistance,
-                                         const double maximalDistance) override {
+    arma::Col<double> getRandomNeighbour(
+        const arma::Col<double>& parameter,
+        const arma::Col<double>& minimalDistance,
+        const arma::Col<double>& maximalDistance) override {
       return neighbours_.col(neighboursIndex_++);
     }
 
-    unsigned int neighboursIndex_;
-    arma::mat neighbours_;
+    arma::uword neighboursIndex_;
+    arma::Mat<double> neighbours_;
 };
 
 TEST_CASE("HillClimbing", "") {
@@ -55,12 +57,12 @@ TEST_CASE("HillClimbing", "") {
     mant::HillClimbing hillClimbing(optimisationProblem);
 
     SECTION("Throws an exception, if the MaximalStepSize zero") {
-//      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({0, 0}), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({0, 0}), std::logic_error);
     }
 
     SECTION("Throws an exception, if the size of MaximalStepSize is not equal to the number of dimension of the problem") {
-//      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100, 100, 100}), std::logic_error);
-//      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({100}), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(std::uniform_int_distribution<arma::uword>(3, 10)(mant::Rng::getGenerator())) * 200 - 100), std::logic_error);
+      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(1) * 200 - 100), std::logic_error);
     }
 
   }

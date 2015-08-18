@@ -77,8 +77,8 @@ namespace mant {
       arma::Col<double> getRandomParameter() const;
       virtual arma::Col<double> getRandomNeighbour(
           const arma::Col<double>& parameter,
-          const double minimalDistance,
-          const double maximalDistance);
+          const arma::Col<double>& minimalDistance,
+          const arma::Col<double>& maximalDistance);
           
       bool updateBestParameter(
           const arma::Col<double>& parameter,

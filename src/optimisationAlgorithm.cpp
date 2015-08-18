@@ -176,11 +176,12 @@ namespace mant {
   
   arma::Col<double> OptimisationAlgorithm::getRandomNeighbour(
       const arma::Col<double>& parameter,
-      const double minimalDistance,
-      const double maximalDistance) {
-    arma::Col<double> neighbour = parameter + arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * std::uniform_real_distribution<double>(minimalDistance, maximalDistance)(Rng::getGenerator());
-    
-    return neighbour;
+      const arma::Col<double>& minimalDistance,
+      const arma::Col<double>& maximalDistance) {
+    assert(arma::all(maximalDistance > 0));
+    assert(arma::all(minimalDistance <= maximalDistance));
+      
+    return parameter + arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) % (minimalDistance + arma::randu<arma::Col<double>>(parameter.n_elem) % (maximalDistance - minimalDistance));
   }
   
   bool OptimisationAlgorithm::updateBestParameter(
