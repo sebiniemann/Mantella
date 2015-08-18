@@ -11,6 +11,6 @@ namespace mant {
   }
   
   std::string RadialBasisFunctionModel::toString() const {
-    return "radial_basis_function";
+    return "radial_basis_function_model";
   }
 }
