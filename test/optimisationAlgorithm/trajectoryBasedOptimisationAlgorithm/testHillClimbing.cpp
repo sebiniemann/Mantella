@@ -29,7 +29,7 @@ class TestHillClimbing : public mant::HillClimbing {
       return neighbours_.col(neighboursIndex_++);
     }
 
-    unsigned int neighboursIndex_;
+    arma::uword neighboursIndex_;
     arma::Mat<double> neighbours_;
 };
 
