@@ -12,12 +12,12 @@ class TestHillClimbing : public mant::HillClimbing {
     TestHillClimbing(
         const std::shared_ptr<mant::OptimisationProblem> optimisationProblem)
       : mant::HillClimbing(optimisationProblem),
-        velocityIndex_(0){
+        neighboursIndex_(0){
 
     }
 
-    void setVelocitys(arma::mat velocities){
-      velocities_ = velocities;
+    void setVelocitys(arma::mat neighbours){
+      neighbours_ = neighbours;
     }
 
   protected:
@@ -25,11 +25,11 @@ class TestHillClimbing : public mant::HillClimbing {
     arma::Col<double> getRandomNeighbour(const arma::Col<double>& parameter,
                                          const double minimalDistance,
                                          const double maximalDistance) const override {
-      return velocities_.col(velocityIndex_++);
+      return neighbours_.col(neighboursIndex_++);
     }
 
-    unsigned int velocityIndex_;
-    arma::mat velocities_;
+    unsigned int neighboursIndex_;
+    arma::mat neighbours_;
 };
 
 TEST_CASE("HillClimbing", "") {
