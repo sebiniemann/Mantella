@@ -39,10 +39,20 @@ namespace mant {
   
   double SurrogateModel::getFirstOrderDerivative(
       const arma::Col<double>& parameter) const {
-    return std::numeric_limits<double>::quiet_NaN();
+    return getFirstOrderDerivativeImplementation(parameter);
   }
   
   double SurrogateModel::getSecondOrderDerivative(
+      const arma::Col<double>& parameter) const {
+    return getSecondOrderDerivativeImplementation(parameter);
+  }
+  
+  double SurrogateModel::getFirstOrderDerivativeImplementation(
+      const arma::Col<double>& parameter) const {
+    return std::numeric_limits<double>::quiet_NaN();
+  }
+  
+  double SurrogateModel::getSecondOrderDerivativeImplementation(
       const arma::Col<double>& parameter) const {
     return std::numeric_limits<double>::quiet_NaN();
   }
