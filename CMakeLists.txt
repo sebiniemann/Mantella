@@ -104,6 +104,7 @@ add_library(mantella SHARED
   src/helper/quasiRandomSequence.cpp
   src/helper/random.cpp
   src/helper/setTheory.cpp
+  src/helper/statistic.cpp
   src/helper/unorderedContainer.cpp
 
   # Optimisation problems
