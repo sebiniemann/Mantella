@@ -20,6 +20,11 @@ namespace mant {
 
       arma::Col<double> getLowerBounds() const;
       arma::Col<double> getUpperBounds() const;
+
+      void setMaximalNumberOfIterations(
+            const arma::uword maximalNumberOfIterations);
+
+      arma::uword getMaximalNumberOfIterations();
       
       void analyse();
 
@@ -28,6 +33,8 @@ namespace mant {
     
       arma::Col<double> lowerBounds_;
       arma::Col<double> upperBounds_;
+    
+      arma::uword maximalNumberOfIterations_;
     
       virtual void analyseImplementation() = 0;
   };

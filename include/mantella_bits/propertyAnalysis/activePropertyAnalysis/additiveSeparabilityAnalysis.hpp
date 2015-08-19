@@ -16,11 +16,6 @@ namespace mant {
     public:
       explicit AdditiveSeparabilityAnalysis(
           std::shared_ptr<OptimisationProblem> optimisationProblem);
-
-      void setMaximalNumberOfIterations(
-            const arma::uword maximalNumberOfIterations);
-
-      arma::uword getMaximalNumberOfIterations();
       
       std::vector<arma::Col<arma::uword>> getPartition();
       double getDeviation();
@@ -28,8 +23,6 @@ namespace mant {
       std::string toString() const override;
             
     protected:
-      arma::uword maximalNumberOfIterations_;
-      
       std::vector<arma::Col<arma::uword>> partition_;
       double deviation_;
 

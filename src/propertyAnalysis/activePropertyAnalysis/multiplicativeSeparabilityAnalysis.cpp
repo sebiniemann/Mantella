@@ -13,15 +13,6 @@ namespace mant {
       deviation_(std::numeric_limits<double>::infinity()) {
       setMaximalNumberOfIterations(1000);
   }
-
-  void MultiplicativeSeparabilityAnalysis::setMaximalNumberOfIterations(
-        const arma::uword maximalNumberOfIterations) {
-      maximalNumberOfIterations_ = maximalNumberOfIterations;
-  }
-
-  arma::uword MultiplicativeSeparabilityAnalysis::getMaximalNumberOfIterations() {
-    return maximalNumberOfIterations_;
-  }
   
   std::vector<arma::Col<arma::uword>> MultiplicativeSeparabilityAnalysis::getPartition() {
     return partition_;

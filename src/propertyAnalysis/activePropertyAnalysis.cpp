@@ -28,6 +28,15 @@ namespace mant {
   arma::Col<double> ActivePropertyAnalysis::getUpperBounds() const {
     return upperBounds_;
   }
+
+  void ActivePropertyAnalysis::setMaximalNumberOfIterations(
+        const arma::uword maximalNumberOfIterations) {
+      maximalNumberOfIterations_ = maximalNumberOfIterations;
+  }
+
+  arma::uword ActivePropertyAnalysis::getMaximalNumberOfIterations() {
+    return maximalNumberOfIterations_;
+  }
   
   void ActivePropertyAnalysis::analyse() {
     verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
