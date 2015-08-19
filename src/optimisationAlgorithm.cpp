@@ -10,21 +10,6 @@
 #include <mantella_bits/helper/rng.hpp>
 
 namespace mant {
-#if defined(MANTELLA_USE_MPI)
-  void mpiGetBestParameter(
-      void* firstInput,
-      void* secondInput,
-      int* size,
-      MPI_Datatype* type) {
-    double* firstParameters = static_cast<double*>(firstInput);
-    double* secondParameters = static_cast<double*>(secondInput);
-  
-    if(firstParameters[1] < secondParameters[1]) {
-      std::copy(&firstParameters[1], &firstParameters[1 + static_cast<unsigned int>(secondParameters[0])], &secondParameters[1]);
-    }
-  }
-#endif
-
   OptimisationAlgorithm::OptimisationAlgorithm(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : optimisationProblem_(optimisationProblem),

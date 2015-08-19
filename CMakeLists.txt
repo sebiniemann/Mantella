@@ -97,7 +97,10 @@ add_library(mantella SHARED
 
   # Random number generator
   src/helper/rng.cpp
-
+  
+  # MPI
+  src/helper/mpi.cpp
+  
   # Helper
   src/helper/geometry.cpp
   src/helper/printable.cpp

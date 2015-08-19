@@ -10,17 +10,10 @@
 
 // Mantella
 #include <mantella_bits/helper/printable.hpp>
+#include <mantella_bits/helper/mpi.hpp>
 #include <mantella_bits/optimisationProblem.hpp>
 
 namespace mant {
-#if defined(MANTELLA_USE_MPI)
-  void mpiGetBestParameter(
-      void* firstInput,
-      void* secondInput,
-      int* size,
-      MPI_Datatype* type);
-#endif
-
   class OptimisationAlgorithm : public Printable {
     public:
       explicit OptimisationAlgorithm(

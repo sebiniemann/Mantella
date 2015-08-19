@@ -37,6 +37,9 @@
 // Random number generator
 #include <mantella_bits/helper/rng.hpp>
 
+// MPI
+#include <mantella_bits/helper/mpi.hpp>
+
 // Helper
 #include <mantella_bits/helper/geometry.hpp>
 #include <mantella_bits/helper/printable.hpp>
