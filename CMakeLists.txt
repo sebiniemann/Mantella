@@ -241,6 +241,7 @@ if(BUILD_TESTS)
     test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
     test/helper/testSetTheory.cpp
+    test/helper/testStatistic.cpp
     test/helper/testUnorderedContainer.cpp
     
     # Optimisation problems
