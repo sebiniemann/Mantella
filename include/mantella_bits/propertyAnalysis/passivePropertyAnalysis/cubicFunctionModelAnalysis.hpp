@@ -12,11 +12,12 @@
 #include <mantella_bits/helper/unorderedContainer.hpp>
 
 namespace mant {
-  class QuadraticFunctionModelAnalysis : public PassivePropertyAnalysis {
+  class CubicFunctionModelAnalysis : public PassivePropertyAnalysis {
     public:
-      explicit QuadraticFunctionModelAnalysis(
+      explicit CubicFunctionModelAnalysis(
           const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
 
+      arma::Cube<double> getCubicCoefficients() const;
       arma::Mat<double> getQuadraticCoefficients() const;
       arma::Col<double> getLinearCoefficients() const;
       double getErrorTerm() const;
@@ -26,6 +27,7 @@ namespace mant {
       std::string toString() const override;
 
     protected:
+      arma::Cube<double> cubicCoefficients_;
       arma::Mat<double> quadraticCoefficients_;
       arma::Col<double> linearCoefficients_;
       double errorTerm_;
