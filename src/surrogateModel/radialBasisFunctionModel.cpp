@@ -1,12 +1,6 @@
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>
 
 namespace mant {
-  RadialBasisFunctionModel::RadialBasisFunctionModel(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)
-    : SurrogateModel(samples) {
-    
-  }
-
   void RadialBasisFunctionModel::modelImplementation() {
   
   }
