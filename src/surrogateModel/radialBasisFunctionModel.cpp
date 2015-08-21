@@ -1,6 +1,12 @@
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>
 
 namespace mant {
+  RadialBasisFunctionModel::RadialBasisFunctionModel(
+      const arma::uword numberOfDimensions)
+    : SurrogateModel(numberOfDimensions, false, false) {
+    
+  }
+
   void RadialBasisFunctionModel::modelImplementation() {
   
   }

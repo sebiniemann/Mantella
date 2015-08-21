@@ -9,7 +9,8 @@
 namespace mant {
   class MultivariateAdaptiveRegressionSplinesModel : public SurrogateModel {
     public:
-      using SurrogateModel::SurrogateModel;
+      explicit MultivariateAdaptiveRegressionSplinesModel(
+          const arma::uword numberOfDimensions);
     
       std::string toString() const override;
   

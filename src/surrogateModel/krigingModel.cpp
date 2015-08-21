@@ -1,6 +1,12 @@
 #include <mantella_bits/surrogateModel/krigingModel.hpp>
 
 namespace mant {
+  KrigingModel::KrigingModel(
+      const arma::uword numberOfDimensions)
+    : SurrogateModel(numberOfDimensions, false, false) {
+    
+  }
+
   void KrigingModel::modelImplementation() {
   
   }

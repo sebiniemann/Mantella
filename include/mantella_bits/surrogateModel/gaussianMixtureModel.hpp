@@ -9,7 +9,8 @@
 namespace mant {
   class GaussianMixtureModel : public SurrogateModel {
     public:
-      using SurrogateModel::SurrogateModel;
+      explicit GaussianMixtureModel(
+          const arma::uword numberOfDimensions);
     
       std::string toString() const override;
   

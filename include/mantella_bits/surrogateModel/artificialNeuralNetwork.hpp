@@ -9,7 +9,8 @@
 namespace mant {
   class ArtificialNeuralNetwork : public SurrogateModel {
     public:
-      using SurrogateModel::SurrogateModel;
+      explicit ArtificialNeuralNetwork(
+          const arma::uword numberOfDimensions);
     
       std::string toString() const override;
   

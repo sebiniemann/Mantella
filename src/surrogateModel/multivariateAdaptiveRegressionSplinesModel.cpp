@@ -1,6 +1,12 @@
 #include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
 
 namespace mant {
+  MultivariateAdaptiveRegressionSplinesModel::MultivariateAdaptiveRegressionSplinesModel(
+      const arma::uword numberOfDimensions)
+    : SurrogateModel(numberOfDimensions, false, false) {
+    
+  }
+
   void MultivariateAdaptiveRegressionSplinesModel::modelImplementation() {
   
   }
