@@ -4,6 +4,28 @@
 #include <algorithm>
 
 namespace mant {
+  std::vector<arma::Col<arma::uword>> getCombinations(
+      const arma::uword numberOfElements,
+      const arma::uword combinationSize) {
+    std::vector<arma::Col<arma::uword>> combinations;
+      
+    std::vector<int> bitmask(numberOfElements);
+    std::fill(bitmask.begin(), bitmask.begin() + combinationSize, 1);
+    do {
+      arma::Col<arma::uword> combination(combinationSize);
+      arma::uword k = 0;
+      for (arma::uword n = 0; n < numberOfElements; ++n) {
+        if (bitmask.at(n)) {
+          combination(k++) = n;
+        }
+      }
+      
+      combinations.push_back(combination);
+    } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
+      
+    return combinations;
+  }
+
   std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> getTwoSetsPartitions(
       const arma::uword numberOfElements) {
     arma::Col<arma::uword> elements = arma::linspace<arma::Col<arma::uword>>(0, numberOfElements - 1, numberOfElements);
