@@ -33,7 +33,8 @@ message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 
 message(STATUS "") 
 message(STATUS "Checking prerequirements.")
-  
+
+# TODO Add support for installation not using libarmadillo.so but LAPACK, BLAS or OpenBlas.
 find_package(Armadillo 5.100.2 REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIR})
   
