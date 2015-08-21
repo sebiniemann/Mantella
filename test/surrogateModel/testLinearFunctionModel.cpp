@@ -22,7 +22,9 @@ TEST_CASE("LinearFunctionModel") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.optimise();
-      CHECK(mant::LinearFunctionModel(optimisationProblem->getCachedSamples()).toString() == "linear_function_model");
+      mant::LinearFunctionModelAnalysis linearFunctionModelAnalysis(optimisationProblem->getCachedSamples());
+      linearFunctionModelAnalysis.analyse();
+      CHECK(mant::LinearFunctionModel(linearFunctionModelAnalysis.getCoefficients(), linearFunctionModelAnalysis.getErrorTerm()).toString() == "linear_function_model");
     }
   }
 }
