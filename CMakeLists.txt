@@ -34,8 +34,22 @@ message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 message(STATUS "") 
 message(STATUS "Checking prerequirements.")
 
-# TODO Add support for installation not using libarmadillo.so but LAPACK, BLAS or OpenBlas.
-find_package(Armadillo 5.100.2 REQUIRED)
+set(REQUIRED_ARMADILLO_VERSION "5.100.2")
+file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
+if(ARMA_USE_WRAPPER)
+  find_package(Armadillo ${REQUIRED_ARMADILLO_VERSION} REQUIRED)
+else()
+  find_package(Armadillo QUIET)
+  
+  if(NOT ARMADILLO_INCLUDE_DIR )
+    message(FATAL_ERROR "Could NOT find Armadillo includes.")
+  elseif(ARMADILLO_VERSION_STRING VERSION_LESS REQUIRED_ARMADILLO_VERSION)
+    message(FATAL_ERROR "Found unsuitable Armadillo version ${ARMADILLO_VERSION_STRING}, but required is at least ${REQUIRED_ARMADILLO_VERSION} (found at ${ARMADILLO_INCLUDE_DIR}).")
+  else()
+    message(STATUS "Found Armadillo: ${ARMADILLO_INCLUDE_DIR} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
+    find_package(OpenBLAS REQUIRED)
+  endif()
+endif()
 include_directories(${ARMADILLO_INCLUDE_DIR})
   
 if(SUPPORT_MPI)
@@ -202,7 +216,12 @@ add_library(mantella SHARED
 )
 
 # Linking against prerequirements
-target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
+if(ARMA_USE_WRAPPER)
+  target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
+else()
+  target_link_libraries(mantella ${OPENBLAS_LIBRARIES})
+endif()
+
 if(SUPPORT_MPI)
   message(STATUS "- Adding MPI support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
@@ -333,7 +352,13 @@ if(BUILD_TESTS)
 
   # Link against prerequirements
   target_link_libraries(mantellaTest mantella)
-  target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})
+  
+  if(ARMA_USE_WRAPPER)
+    target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
+  else()
+    target_link_libraries(mantella ${OPENBLAS_LIBRARIES})
+  endif()
+
   if(SUPPORT_MPI)
     target_link_libraries(mantellaTest ${MPI_C_LIBRARIES})
   endif()
