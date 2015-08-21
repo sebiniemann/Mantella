@@ -14,7 +14,7 @@ namespace mant {
     // Nothing to do here
   }
       
-  double LinearFunctionModel::getJacobian(
+  arma::Col<double> LinearFunctionModel::getJacobianImplementation(
       const arma::Col<double>& parameter) const {
     return coefficients_;
   }

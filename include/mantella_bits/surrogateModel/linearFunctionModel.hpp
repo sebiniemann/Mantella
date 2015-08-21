@@ -21,7 +21,7 @@ namespace mant {
     protected:
       void modelImplementation() override;
       
-      arma::Col<double> getJacobian(
+      arma::Col<double> getJacobianImplementation(
           const arma::Col<double>& parameter) const override;
       
       double getObjectiveValueImplementation(

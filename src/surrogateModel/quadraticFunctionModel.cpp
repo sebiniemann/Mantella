@@ -17,12 +17,12 @@ namespace mant {
     // Nothing to do here
   }
       
-  arma::Col<double> QuadraticFunctionModel::getJacobian(
+  arma::Col<double> QuadraticFunctionModel::getJacobianImplementation(
       const arma::Col<double>& parameter) const {
     return arma::dot(hessian_, parameter);
   }
 
-  arma::Mat<double> QuadraticFunctionModel::getHessian(
+  arma::Mat<double> QuadraticFunctionModel::getHessianImplementation(
       const arma::Col<double>& parameter) const {
     return hessian_;
   }
