@@ -9,19 +9,17 @@
 namespace mant {
   class QuadraticFunctionModel : public SurrogateModel {
     public:
-      const arma::Mat<double> quadraticCoefficients_;
-      const arma::Col<double> linearCoefficients_;
-      const double errorTerm_;
-    
-      explicit QuadraticFunctionModel(
-          const arma::Mat<double>& quadraticCoefficients,
-          const arma::Col<double>& linearCoefficients,
-          const double errorTerm);
+      using SurrogateModel::SurrogateModel;
+  
+      
   
       std::string toString() const override;
   
     protected:
-      const arma::Mat<double> hessian_;
+      arma::Mat<double> quadraticCoefficients_;
+      arma::Col<double> linearCoefficients_;
+      double errorTerm_;
+      arma::Mat<double> hessian_;
     
       void modelImplementation() override;
       

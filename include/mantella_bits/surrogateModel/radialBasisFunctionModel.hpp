@@ -9,8 +9,7 @@
 namespace mant {
   class RadialBasisFunctionModel : public SurrogateModel {
     public:
-      explicit RadialBasisFunctionModel(
-          const arma::uword numberOfDimensions);
+      using SurrogateModel::SurrogateModel;
     
       std::string toString() const override;
   

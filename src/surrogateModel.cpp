@@ -5,12 +5,9 @@
 
 namespace mant {
   SurrogateModel::SurrogateModel(
-      const arma::uword numberOfDimensions,
-      const bool isFirstOrderDifferentiable,
-      const bool isSecondOrderDifferentiable) 
-    : numberOfDimensions_(numberOfDimensions),
-      isFirstOrderDifferentiable_(isFirstOrderDifferentiable),
-      isSecondOrderDifferentiable_(isSecondOrderDifferentiable) {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
+    : numberOfDimensions_ (samples.cbegin()->first.n_elem),
+      samples_(samples) {
       
   }
   

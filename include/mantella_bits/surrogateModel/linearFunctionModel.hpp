@@ -9,16 +9,16 @@
 namespace mant {
   class LinearFunctionModel : public SurrogateModel {
     public:
-      const arma::Col<double> coefficients_;
-      const double errorTerm_;
+      using SurrogateModel::SurrogateModel;
     
-      explicit LinearFunctionModel(
-          const arma::Col<double>& coefficients,
-          const double errorTerm);
+    
     
       std::string toString() const override;
   
     protected:
+      arma::Col<double> coefficients_;
+      double errorTerm_;
+      
       void modelImplementation() override;
       
       arma::Col<double> getJacobianImplementation(

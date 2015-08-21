@@ -1,15 +1,7 @@
 #include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
 
-namespace mant {
-  LinearFunctionModel::LinearFunctionModel(
-      const arma::Col<double>& coefficients,
-      const double errorTerm)
-    : SurrogateModel(coefficients.n_elem, true, false),
-      coefficients_(coefficients),
-      errorTerm_(errorTerm) {
-    
-  }
 
+namespace mant {
   void LinearFunctionModel::modelImplementation() {
     // Nothing to do here
   }

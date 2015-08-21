@@ -1,12 +1,6 @@
 #include <mantella_bits/surrogateModel/gaussianMixtureModel.hpp>
 
 namespace mant {
-  GaussianMixtureModel::GaussianMixtureModel(
-      const arma::uword numberOfDimensions)
-    : SurrogateModel(numberOfDimensions, false, false) {
-    
-  }
-
   void GaussianMixtureModel::modelImplementation() {
   
   }

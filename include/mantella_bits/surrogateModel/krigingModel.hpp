@@ -9,8 +9,7 @@
 namespace mant {
   class KrigingModel : public SurrogateModel {
     public:
-      explicit KrigingModel(
-          const arma::uword numberOfDimensions);
+      using SurrogateModel::SurrogateModel;
     
       std::string toString() const override;
   

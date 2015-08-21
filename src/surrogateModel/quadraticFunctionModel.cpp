@@ -1,18 +1,7 @@
 #include <mantella_bits/surrogateModel/quadraticFunctionModel.hpp>
 
-namespace mant {
-  QuadraticFunctionModel::QuadraticFunctionModel(
-      const arma::Mat<double>& quadraticCoefficients,
-      const arma::Col<double>& linearCoefficients,
-      const double errorTerm) 
-    : SurrogateModel(quadraticCoefficients.n_cols, true, true),
-      quadraticCoefficients_(quadraticCoefficients),
-      linearCoefficients_(linearCoefficients),
-      errorTerm_(errorTerm),
-      hessian_(quadraticCoefficients_ + quadraticCoefficients_.t()) {
-    
-  }
 
+namespace mant {
   void QuadraticFunctionModel::modelImplementation() {
     // Nothing to do here
   }

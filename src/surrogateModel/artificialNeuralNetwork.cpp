@@ -1,12 +1,6 @@
 #include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>
 
 namespace mant {
-  ArtificialNeuralNetwork::ArtificialNeuralNetwork(
-      const arma::uword numberOfDimensions)
-    : SurrogateModel(numberOfDimensions, false, false) {
-    
-  }
-
   void ArtificialNeuralNetwork::modelImplementation() {
   
   }

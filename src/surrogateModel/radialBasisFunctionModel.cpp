@@ -2,8 +2,8 @@
 
 namespace mant {
   RadialBasisFunctionModel::RadialBasisFunctionModel(
-      const arma::uword numberOfDimensions)
-    : SurrogateModel(numberOfDimensions, false, false) {
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)
+    : SurrogateModel(samples) {
     
   }
 

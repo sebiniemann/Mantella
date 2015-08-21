@@ -16,8 +16,6 @@ namespace mant {
       const arma::uword numberOfDimensions_;
     
       explicit SurrogateModel(
-          const bool isFirstOrderDifferentiable,
-          const bool isSecondOrderDifferentiable);
           const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
       
       void setLowerBounds(
