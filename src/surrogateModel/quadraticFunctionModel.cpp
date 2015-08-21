@@ -19,7 +19,7 @@ namespace mant {
       
   arma::Col<double> QuadraticFunctionModel::getJacobianImplementation(
       const arma::Col<double>& parameter) const {
-    return arma::dot(hessian_, parameter);
+    return hessian_ * parameter;
   }
 
   arma::Mat<double> QuadraticFunctionModel::getHessianImplementation(
