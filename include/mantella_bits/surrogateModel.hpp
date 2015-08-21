@@ -14,13 +14,11 @@ namespace mant {
   class SurrogateModel : public Printable {
     public:
       const arma::uword numberOfDimensions_;
-      const bool isFirstOrderDifferentiable_;
-      const bool isSecondOrderDifferentiable_;
     
       explicit SurrogateModel(
-          const arma::uword numberOfDimensions,
           const bool isFirstOrderDifferentiable,
           const bool isSecondOrderDifferentiable);
+          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
       
       void setLowerBounds(
         const arma::Col<double>& lowerBounds);
