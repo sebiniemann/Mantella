@@ -35,10 +35,15 @@ message(STATUS "")
 message(STATUS "Checking prerequirements.")
 
 set(REQUIRED_ARMADILLO_VERSION "5.100.2")
+# Whenever or not Mantella should be used with the Armadillo runtime library, or should be linked directly with LAPACK/BLAS can by deduced by ARMA_USE_WRAPPER.
+# **Note:** The Armadillo header files are always required.
 file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
 if(ARMA_USE_WRAPPER)
+  # Using the Armadillo runtime library (this is the recommended way).
   find_package(Armadillo ${REQUIRED_ARMADILLO_VERSION} REQUIRED)
 else()
+  # Using Armadillo's headers, but directly linking to OpenBLAS.
+  # Since this would also work if libarmadillo.lib was never build, but it is always required by find_package(...), we have to check all pieces manually. *sigh ...*
   find_package(Armadillo QUIET)
   
   if(NOT ARMADILLO_INCLUDE_DIR )
