@@ -5,7 +5,7 @@ namespace mant {
       const arma::Mat<double>& quadraticCoefficients,
       const arma::Col<double>& linearCoefficients,
       const double errorTerm) 
-    : SurrogateModel(true, true),
+    : SurrogateModel(quadraticCoefficients.n_cols, true, true),
       quadraticCoefficients_(quadraticCoefficients),
       linearCoefficients_(linearCoefficients),
       errorTerm_(errorTerm),

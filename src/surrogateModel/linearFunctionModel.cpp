@@ -4,7 +4,7 @@ namespace mant {
   LinearFunctionModel::LinearFunctionModel(
       const arma::Col<double>& coefficients,
       const double errorTerm)
-    : SurrogateModel(true, false),
+    : SurrogateModel(coefficients.n_elem, true, false),
       coefficients_(coefficients),
       errorTerm_(errorTerm) {
     
