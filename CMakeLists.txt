@@ -220,9 +220,6 @@ if(BUILD_TESTS)
   message(STATUS "") 
   message(STATUS "Configuring unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
-
-  message(STATUS "- Forcing debug build for unit tests.")
-  set(CMAKE_BUILD_TYPE "Debug")
   
   if(NOT EXECUTABLE_OUTPUT_PATH)
     set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
