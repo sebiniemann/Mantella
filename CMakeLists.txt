@@ -72,6 +72,10 @@ if(MEASURE_CODE_COVERAGE)
 else()
   message(STATUS "- Using level 2 code optimisation.")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+  
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+  endif()
 endif()
 
 # ----------------
