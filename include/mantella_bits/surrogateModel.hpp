@@ -13,10 +13,12 @@
 namespace mant {
   class SurrogateModel : public Printable {
     public:
+      const arma::uword numberOfDimensions_;
       const bool isFirstOrderDifferentiable_;
       const bool isSecondOrderDifferentiable_;
     
       explicit SurrogateModel(
+          const arma::uword numberOfDimensions,
           const bool isFirstOrderDifferentiable,
           const bool isSecondOrderDifferentiable);
       
@@ -30,10 +32,10 @@ namespace mant {
       
       void model();
       
-      double getFirstOrderDerivative(
+      arma::Col<double> getJacobian(
           const arma::Col<double>& parameter) const;
       
-      double getSecondOrderDerivative(
+      arma::Mat<double> getHessian(
           const arma::Col<double>& parameter) const;
       
       double getObjectiveValue(
@@ -49,10 +51,10 @@ namespace mant {
     
       virtual void modelImplementation() = 0;
       
-      virtual double getFirstOrderDerivativeImplementation(
+      virtual arma::Col<double> getJacobianImplementation(
           const arma::Col<double>& parameter) const;
       
-      virtual double getSecondOrderDerivativeImplementation(
+      virtual arma::Mat<double> getHessianImplementation(
           const arma::Col<double>& parameter) const;
       
       virtual double getObjectiveValueImplementation(

@@ -5,9 +5,11 @@
 
 namespace mant {
   SurrogateModel::SurrogateModel(
+      const arma::uword numberOfDimensions,
       const bool isFirstOrderDifferentiable,
       const bool isSecondOrderDifferentiable) 
-    : isFirstOrderDifferentiable_(isFirstOrderDifferentiable),
+    : numberOfDimensions_(numberOfDimensions),
+      isFirstOrderDifferentiable_(isFirstOrderDifferentiable),
       isSecondOrderDifferentiable_(isSecondOrderDifferentiable) {
       
   }
@@ -32,24 +34,24 @@ namespace mant {
     modelImplementation();
   }
   
-  double SurrogateModel::getFirstOrderDerivative(
+  arma::Col<double> SurrogateModel::getJacobian(
       const arma::Col<double>& parameter) const {
-    return getFirstOrderDerivativeImplementation(parameter);
+    return getJacobianImplementation(parameter);
   }
   
-  double SurrogateModel::getSecondOrderDerivative(
+  arma::Mat<double> SurrogateModel::getHessian(
       const arma::Col<double>& parameter) const {
-    return getSecondOrderDerivativeImplementation(parameter);
+    return getHessianImplementation(parameter);
   }
   
-  double SurrogateModel::getFirstOrderDerivativeImplementation(
+  arma::Col<double> SurrogateModel::getJacobianImplementation(
       const arma::Col<double>& parameter) const {
-    return std::numeric_limits<double>::quiet_NaN();
+    return arma::Col<double>(numberOfDimensions_, arma::fill::zeros);
   }
   
-  double SurrogateModel::getSecondOrderDerivativeImplementation(
+  arma::Mat<double> SurrogateModel::getHessianImplementation(
       const arma::Col<double>& parameter) const {
-    return std::numeric_limits<double>::quiet_NaN();
+    return arma::Mat<double>(numberOfDimensions_, numberOfDimensions_, arma::fill::zeros);
   }
   
   double SurrogateModel::getObjectiveValue(
