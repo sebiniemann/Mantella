@@ -17,7 +17,6 @@ namespace mant {
       const bool isSecondOrderDifferentiable_;
     
       explicit SurrogateModel(
-          std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples);
           const bool isFirstOrderDifferentiable,
           const bool isSecondOrderDifferentiable);
       

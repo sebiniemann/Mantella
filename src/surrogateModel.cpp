@@ -5,7 +5,6 @@
 
 namespace mant {
   SurrogateModel::SurrogateModel(
-      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples) {
       const bool isFirstOrderDifferentiable,
       const bool isSecondOrderDifferentiable) 
     : isFirstOrderDifferentiable_(isFirstOrderDifferentiable),
