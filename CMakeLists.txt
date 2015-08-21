@@ -180,6 +180,7 @@ add_library(mantella SHARED
   src/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/quadraticProportionalityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
 
@@ -312,6 +313,7 @@ if(BUILD_TESTS)
     test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testLinearProportionalityAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testQuadraticProportionalityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
 

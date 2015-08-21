@@ -119,6 +119,7 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.hpp>
+#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/quadraticProportionalityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
 
