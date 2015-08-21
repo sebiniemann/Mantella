@@ -201,6 +201,7 @@ add_library(mantella SHARED
   src/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.cpp
   src/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.cpp
   src/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/cubicFunctionModelAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.cpp
@@ -336,6 +337,7 @@ if(BUILD_TESTS)
     test/propertyAnalysis/passivePropertyAnalysis/testHoelderContinuityAnalysis.cpp
     test/propertyAnalysis/passivePropertyAnalysis/testLinearFunctionModelAnalysis.cpp
     test/propertyAnalysis/passivePropertyAnalysis/testQuadraticFunctionModelAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testCubicFunctionModelAnalysis.cpp
     test/propertyAnalysis/testActivePropertyAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp

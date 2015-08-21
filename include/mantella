@@ -115,6 +115,7 @@
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.hpp>
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/cubicFunctionModelAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp>
