@@ -86,7 +86,7 @@ Vagrant.configure(2) do |config|
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo
     cmake .
-    make -j 4
+    make
     sudo make install
     cd ..
     rm -Rf armadillo armadillo.tar.gz
