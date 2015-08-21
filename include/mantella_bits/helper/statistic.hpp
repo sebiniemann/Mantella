@@ -4,6 +4,9 @@
 #include <armadillo>
 
 namespace mant {
+  double getMedianAbsoluteError(
+      const arma::Col<double>& data);
+      
   double getPercentile(
       const arma::Col<double>& data,
       const double nthPercentile);

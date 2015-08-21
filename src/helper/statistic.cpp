@@ -4,6 +4,11 @@
 #include <cmath>
 
 namespace mant {
+  double getMedianAbsoluteError(
+      const arma::Col<double>& data) {
+    return getMedian(arma::abs(data - getMedian(data)));
+  }
+      
   double getPercentile(
       const arma::Col<double>& data,
       const double nthPercentile) {
