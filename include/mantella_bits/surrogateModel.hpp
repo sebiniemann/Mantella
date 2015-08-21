@@ -13,11 +13,13 @@
 namespace mant {
   class SurrogateModel : public Printable {
     public:
+      const bool isFirstOrderDifferentiable_;
+      const bool isSecondOrderDifferentiable_;
+    
       explicit SurrogateModel(
           std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples);
-      
-      virtual bool isFirstOrderDifferentiable() const;
-      virtual bool isSecondOrderDifferentiable() const;
+          const bool isFirstOrderDifferentiable,
+          const bool isSecondOrderDifferentiable);
       
       void setLowerBounds(
         const arma::Col<double>& lowerBounds);
