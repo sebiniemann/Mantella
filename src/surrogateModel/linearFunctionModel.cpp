@@ -1,9 +1,15 @@
 #include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
 
+// Mantella
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.hpp>
 
 namespace mant {
   void LinearFunctionModel::modelImplementation() {
-    // Nothing to do here
+      mant::LinearFunctionModelAnalysis linearFunctionModelAnalysis(samples_);
+      linearFunctionModelAnalysis.analyse();
+      
+      coefficients_ = linearFunctionModelAnalysis.getCoefficients();
+      errorTerm_ = linearFunctionModelAnalysis.getErrorTerm();
   }
       
   arma::Col<double> LinearFunctionModel::getJacobianImplementation(

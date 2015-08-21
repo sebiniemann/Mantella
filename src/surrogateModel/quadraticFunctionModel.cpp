@@ -1,9 +1,18 @@
 #include <mantella_bits/surrogateModel/quadraticFunctionModel.hpp>
 
+// Mantella
+#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.hpp>
 
 namespace mant {
   void QuadraticFunctionModel::modelImplementation() {
-    // Nothing to do here
+    QuadraticFunctionModelAnalysis quadraticFunctionModelAnalysis(samples_);
+    quadraticFunctionModelAnalysis.analyse();
+    
+    quadraticCoefficients_ = quadraticFunctionModelAnalysis.getQuadraticCoefficients();
+    linearCoefficients_ = quadraticFunctionModelAnalysis.getLinearCoefficients();
+    errorTerm_ = quadraticFunctionModelAnalysis.getErrorTerm();
+    
+    hessian_ = quadraticCoefficients_ + quadraticCoefficients_.t();
   }
       
   arma::Col<double> QuadraticFunctionModel::getJacobianImplementation(
