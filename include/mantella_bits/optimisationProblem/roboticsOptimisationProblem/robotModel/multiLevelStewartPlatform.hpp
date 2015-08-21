@@ -15,20 +15,18 @@ namespace mant {
   namespace robotics {
     class MultiLevelStewartPlatform : public RobotModel {
       public:
+        const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
+        
         const arma::uword numberOfPlatformLevels_;
       
         explicit MultiLevelStewartPlatform();
       
         explicit MultiLevelStewartPlatform(
             const std::vector<ParallelKinematicMachine6PUPS>& platformLevels);
-
-        std::vector<ParallelKinematicMachine6PUPS> getPlatformLevels() const;
             
         std::string toString() const;
 
       protected:
-        const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
-        
         arma::Cube<double> getModelImplementation(
             const arma::Col<double>& endEffectorPose,
             const arma::Row<double>& redundantJointsActuation) const override;

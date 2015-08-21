@@ -13,6 +13,12 @@ namespace mant {
   namespace robotics {
     class ParallelKinematicMachine4PRUS : public RobotModel {
       public:
+        const arma::Mat<double>::fixed<2, 4> linkLengths_;
+        const arma::Mat<double>::fixed<3, 4> endEffectorJointPositions_;
+        const arma::Mat<double>::fixed<2, 4> baseJointRotationAngles_;
+        const arma::Mat<double>::fixed<3, 4> redundantJointStartPositions_;
+        const arma::Mat<double>::fixed<3, 4> redundantJointEndPositions_;
+        
         explicit ParallelKinematicMachine4PRUS();
             
         explicit ParallelKinematicMachine4PRUS(
@@ -22,21 +28,9 @@ namespace mant {
             const arma::Mat<double>::fixed<3, 4>& redundantJointStartPositions,
             const arma::Mat<double>::fixed<3, 4>& redundantJointEndPositions);
             
-        arma::Mat<double>::fixed<2, 4> getLinkLengths() const;
-        arma::Mat<double>::fixed<3, 4> getEndEffectorJointPositions() const;
-        arma::Mat<double>::fixed<2, 4> getBaseJointRotationAngles() const;
-        arma::Mat<double>::fixed<3, 4> getRedundantJointStartPositions() const;
-        arma::Mat<double>::fixed<3, 4> getRedundantJointEndPositions() const;
-            
         std::string toString() const;
 
       protected:
-        const arma::Mat<double>::fixed<2, 4> linkLengths_;
-        const arma::Mat<double>::fixed<3, 4> endEffectorJointPositions_;
-        const arma::Mat<double>::fixed<2, 4> baseJointRotationAngles_;
-        const arma::Mat<double>::fixed<3, 4> redundantJointStartPositions_;
-        const arma::Mat<double>::fixed<3, 4> redundantJointEndPositions_;
-
         const arma::Mat<double>::fixed<3, 4> redundantJointStartToEndPositions_;
         const arma::Col<arma::uword> redundantJointIndicies_;
         arma::Mat<double> redundantJointRotationAngles_;

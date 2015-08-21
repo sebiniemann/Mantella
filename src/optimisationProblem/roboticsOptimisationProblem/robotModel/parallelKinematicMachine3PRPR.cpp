@@ -53,26 +53,6 @@ namespace mant {
       }
     }
 
-    arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRPR::getEndEffectorJointPositions() const {
-      return endEffectorJointPositions_;
-    }
-    
-    arma::Row<double>::fixed<3> ParallelKinematicMachine3PRPR::getMinimalActiveJointsActuation() const {
-      return minimalActiveJointsActuation_;
-    }
-    
-    arma::Row<double>::fixed<3> ParallelKinematicMachine3PRPR::getMaximalActiveJointsActuation() const {
-      return maximalActiveJointsActuation_;
-    }
-    
-    arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRPR::getRedundantJointStartPositions() const {
-      return redundantJointStartPositions_;
-    }
-    
-    arma::Mat<double>::fixed<2, 3> ParallelKinematicMachine3PRPR::getRedundantJointEndPositions() const {
-      return redundantJointEndPositions_;
-    }
-
     arma::Cube<double> ParallelKinematicMachine3PRPR::getModelImplementation(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {

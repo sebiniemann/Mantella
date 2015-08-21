@@ -78,26 +78,6 @@ namespace mant {
         baseJointNormals_.col(n) = arma::normalise(arma::cross(baseJointRotations_.slice(n).col(0), baseJointRotations_.slice(n).col(2)));
       }
     }
-        
-    arma::Mat<double>::fixed<2, 6> ParallelKinematicMachine6PRUS::getLinkLengths() const {
-      return linkLengths_;
-    }
-    
-    arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PRUS::getEndEffectorJointPositions() const {
-      return endEffectorJointPositions_;
-    }
-    
-    arma::Mat<double>::fixed<2, 6> ParallelKinematicMachine6PRUS::getBaseJointRotationAngles() const {
-      return baseJointRotationAngles_;
-    }
-    
-    arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PRUS::getRedundantJointStartPositions() const {
-      return redundantJointStartPositions_;
-    }
-    
-    arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PRUS::getRedundantJointEndPositions() const {
-      return redundantJointEndPositions_;
-    }
 
     arma::Cube<double> ParallelKinematicMachine6PRUS::getModelImplementation(
         const arma::Col<double>& endEffectorPose,

@@ -60,26 +60,6 @@ namespace mant {
         redundantJointRotationAngles_.col(n) = arma::Col<double>({std::cos(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointYAngle)});
       }
     }
-    
-    arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PUPS::getEndEffectorJointPositions() const {
-      return endEffectorJointPositions_;
-    }
-    
-    arma::Row<double>::fixed<6> ParallelKinematicMachine6PUPS::getMinimalActiveJointsActuation() const {
-      return minimalActiveJointsActuation_;
-    }
-    
-    arma::Row<double>::fixed<6> ParallelKinematicMachine6PUPS::getMaximalActiveJointsActuation() const {
-      return maximalActiveJointsActuation_;
-    }
-    
-    arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PUPS::getRedundantJointStartPositions() const{
-      return redundantJointStartPositions_;
-    }
-    
-    arma::Mat<double>::fixed<3, 6> ParallelKinematicMachine6PUPS::getRedundantJointEndPositions() const{
-      return redundantJointEndPositions_;
-    }
 
     arma::Cube<double> ParallelKinematicMachine6PUPS::getModelImplementation(
         const arma::Col<double>& endEffectorPose,
