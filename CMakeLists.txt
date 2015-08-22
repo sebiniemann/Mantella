@@ -14,6 +14,7 @@ set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANT
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
+option(SUPPORT_OMP "Add OpenMP support" ON)
 option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
@@ -94,6 +95,21 @@ else()
   if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
   endif()
+endif()
+
+if(SUPPORT_OMP)
+  message(STATUS "- Adding OpenMP support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=Off' to exclude this.")
+  find_package(OpenMP)
+  if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+  else()
+    message(STATUS "- OpenMP is not supported by your compiler.")
+  endif()
+else()
+  message(STATUS "- Excluding OpenMP support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=On' to add this.")
 endif()
 
 # ----------------
