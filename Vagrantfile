@@ -110,5 +110,9 @@ Vagrant.configure(2) do |config|
     
     sudo apt-get install -qq libmpich2-dev
     
+    wget --quiet -O redis.tar.gz http://download.redis.io/releases/redis-3.0.3.tar.gz
+    tar -xzf redis.tar.gz
+    cd redis
+    make
   SHELL
 end
