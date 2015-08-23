@@ -127,12 +127,12 @@
 
 // Surrogate models
 #include <mantella_bits/surrogateModel.hpp>
-#include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>
-#include <mantella_bits/surrogateModel/krigingModel.hpp>
 #include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
-#include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
 #include <mantella_bits/surrogateModel/quadraticFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/polyharmonicSplineRadialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/gaussianRadialBasisFunctionModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel.hpp>
+#include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
+#include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>

@@ -228,15 +228,15 @@ add_library(mantella SHARED
 
   # Surrogate models
   src/surrogateModel.cpp
-  src/surrogateModel/artificialNeuralNetwork.cpp
-  src/surrogateModel/krigingModel.cpp
   src/surrogateModel/linearFunctionModel.cpp
-  src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
   src/surrogateModel/quadraticFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel/polyharmonicSplineRadialBasisFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel/gaussianRadialBasisFunctionModel.cpp
+  src/surrogateModel/krigingModel.cpp
+  src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
+  src/surrogateModel/artificialNeuralNetwork.cpp
 )
 
 # Linking against prerequirements
@@ -367,15 +367,15 @@ if(BUILD_TESTS)
 
     # Surrogate models
     test/testSurrogateModel.cpp
-    test/surrogateModel/testArtificialNeuralNetwork.cpp
-    test/surrogateModel/testKrigingModel.cpp
     test/surrogateModel/testLinearFunctionModel.cpp
-    test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
     test/surrogateModel/testQuadraticFunctionModel.cpp
     test/surrogateModel/testRadialBasisFunctionModel.cpp
     test/surrogateModel/radialBasisFunctionModel/testPolyharmonicSplineRadialBasisFunctionModel.cpp
     test/surrogateModel/radialBasisFunctionModel/testMultiquadraticRadialBasisFunctionModel.cpp
     test/surrogateModel/radialBasisFunctionModel/testGaussianRadialBasisFunctionModel.cpp
+    test/surrogateModel/testKrigingModel.cpp
+    test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    test/surrogateModel/testArtificialNeuralNetwork.cpp
   )
 
   # Link against prerequirements
