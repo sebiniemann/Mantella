@@ -234,6 +234,9 @@ add_library(mantella SHARED
   src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
   src/surrogateModel/quadraticFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel.cpp
+  src/surrogateModel/radialBasisFunctionModel/polyharmonicSplineRadialBasisFunctionModel.cpp
+  src/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.cpp
+  src/surrogateModel/radialBasisFunctionModel/gaussianRadialBasisFunctionModel.cpp
 )
 
 # Linking against prerequirements
@@ -370,6 +373,9 @@ if(BUILD_TESTS)
     test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
     test/surrogateModel/testQuadraticFunctionModel.cpp
     test/surrogateModel/testRadialBasisFunctionModel.cpp
+    test/surrogateModel/radialBasisFunctionModel/testPolyharmonicSplineRadialBasisFunctionModel.cpp
+    test/surrogateModel/radialBasisFunctionModel/testMultiquadraticRadialBasisFunctionModel.cpp
+    test/surrogateModel/radialBasisFunctionModel/testGaussianRadialBasisFunctionModel.cpp
   )
 
   # Link against prerequirements
