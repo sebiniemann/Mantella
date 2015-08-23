@@ -15,6 +15,12 @@ namespace mant {
     return estimate;
   }
   
+  arma::Col<double> getGeneralisedLeastSquaresEstimate(
+      const arma::Mat<double>& parameters,
+      const arma::Col<double>& objectiveValues,
+      const arma::Mat<double>& variance) {
+    arma::Mat<double> cholesky = arma::chol(variance);
+    return getOrdinaryLeastSquaresEstimate(cholesky * parameters, cholesky * objectiveValues);
+  }
 }
-
 
