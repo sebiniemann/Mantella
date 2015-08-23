@@ -76,6 +76,7 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++ 90
     
     sudo apt-get install -qq gdb
+    sudo apt-get install -qq lcov
   
     sudo apt-get install -qq cmake
   
@@ -109,6 +110,5 @@ Vagrant.configure(2) do |config|
     
     sudo apt-get install -qq libmpich2-dev
     
-    sudo apt-get install -qq lcov
   SHELL
 end
