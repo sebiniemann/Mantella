@@ -229,7 +229,6 @@ add_library(mantella SHARED
   # Surrogate models
   src/surrogateModel.cpp
   src/surrogateModel/artificialNeuralNetwork.cpp
-  src/surrogateModel/gaussianMixtureModel.cpp
   src/surrogateModel/krigingModel.cpp
   src/surrogateModel/linearFunctionModel.cpp
   src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
@@ -366,7 +365,6 @@ if(BUILD_TESTS)
     # Surrogate models
     test/testSurrogateModel.cpp
     test/surrogateModel/testArtificialNeuralNetwork.cpp
-    test/surrogateModel/testGaussianMixtureModel.cpp
     test/surrogateModel/testKrigingModel.cpp
     test/surrogateModel/testLinearFunctionModel.cpp
     test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp

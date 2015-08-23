@@ -128,7 +128,6 @@
 // Surrogate models
 #include <mantella_bits/surrogateModel.hpp>
 #include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>
-#include <mantella_bits/surrogateModel/gaussianMixtureModel.hpp>
 #include <mantella_bits/surrogateModel/krigingModel.hpp>
 #include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
