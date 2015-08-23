@@ -3,6 +3,9 @@
 // C++ standard library
 #include <cassert>
 
+// Mantella
+#include <mantella_bits/helper/regression.hpp>
+
 namespace mant {
   LinearFunctionModelAnalysis::LinearFunctionModelAnalysis(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
@@ -26,12 +29,7 @@ namespace mant {
     }
     parameters.row(parameters.n_rows - 1).fill(1.0);
 
-    arma::Col<double> model;
-    try {
-      model = arma::conv_to<arma::Mat<double>>::from((parameters * parameters.t()).i() * parameters) * objectiveValues;
-    } catch (...) {
-      model = arma::conv_to<arma::Mat<double>>::from(arma::pinv(parameters * parameters.t()) * parameters) * objectiveValues;
-    }
+    const arma::Col<double>& model = getOrdinaryLeastSquaresEstimate(parameters, objectiveValues);
     
     coefficients_ = model.head(numberOfDimensions_);
     errorTerm_ = model(model.n_elem - 1);

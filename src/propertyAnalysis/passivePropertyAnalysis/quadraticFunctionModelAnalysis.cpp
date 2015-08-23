@@ -3,6 +3,9 @@
 // C++ standard library
 #include <cassert>
 
+// Mantella
+#include <mantella_bits/helper/regression.hpp>
+
 namespace mant {
   QuadraticFunctionModelAnalysis::QuadraticFunctionModelAnalysis(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
@@ -36,12 +39,7 @@ namespace mant {
       ++n;
     }
     
-    arma::Col<double> model;
-    try {
-      model = (parameters * parameters.t()).i() * parameters * objectiveValues;
-    } catch (...) {
-      model = arma::pinv(parameters * parameters.t()) * parameters * objectiveValues;
-    }
+    const arma::Col<double>& model = getOrdinaryLeastSquaresEstimate(parameters, objectiveValues);
     
     n = 0;
     for (arma::uword k = 0; k < numberOfDimensions_; ++k) {
