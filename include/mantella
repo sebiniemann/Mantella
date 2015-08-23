@@ -129,6 +129,7 @@
 #include <mantella_bits/surrogateModel.hpp>
 #include <mantella_bits/surrogateModel/linearFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/quadraticFunctionModel.hpp>
+#include <mantella_bits/surrogateModel/cubicFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/polyharmonicSplineRadialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.hpp>
