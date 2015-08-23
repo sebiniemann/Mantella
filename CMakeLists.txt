@@ -146,6 +146,7 @@ add_library(mantella SHARED
   src/helper/printable.cpp
   src/helper/quasiRandomSequence.cpp
   src/helper/random.cpp
+  src/helper/regression.cpp
   src/helper/setTheory.cpp
   src/helper/statistic.cpp
   src/helper/unorderedContainer.cpp
@@ -284,6 +285,7 @@ if(BUILD_TESTS)
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
+    test/helper/testRegression.cpp
     test/helper/testSetTheory.cpp
     test/helper/testStatistic.cpp
     test/helper/testUnorderedContainer.cpp
