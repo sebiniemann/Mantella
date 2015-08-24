@@ -6,9 +6,11 @@
 namespace mant {
   KrigingModel::KrigingModel(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-      const arma::uword polynomialOrder)
+      const std::shared_ptr<RegressionFunction> regressionFunction,
+      const std::shared_ptr<CorrelationFunction> correlationFunction)
     : SurrogateModel(samples),
-      polynomialOrder_(polynomialOrder) {
+      regressionFunction_(regressionFunction),
+      correlationFunction_(correlationFunction) {
       
   }
   
@@ -40,11 +42,10 @@ namespace mant {
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
       const arma::Col<double>& parameter = parameters.col(n);
       for (arma::uword k = n + 1; k < parameters.n_cols; ++k) {
-        correlations(n, k) = getCorrelationCoefficient(parameters.col(k) - parameter);
-       ;
+        correlations(n, k) = correlationFunction_->getCorrelationCoefficient(parameters.col(k) - parameter);
       }
       
-      parameters.col(n) = getNthOrderRegression(parameter);
+      parameters.col(n) = regressionFunction_->getRegression(parameter);
     }
     correlations = arma::symmatu(correlations);
 
@@ -55,38 +56,6 @@ namespace mant {
       gamma_ = arma::pinv(correlations) * (objectiveValues - parameters * beta_);
     }
   }
-      
-  arma::Col<double> KrigingModel::getNthOrderRegression(
-      const arma::Col<double>& parameter) const {
-    arma::Col<double> regression;
-    
-    switch (polynomialOrder_) {
-      case 0:
-        regression.set_size(numberOfDimensions_);
-        regression.ones();
-        break;
-      case 1:
-        regression.set_size(2 * numberOfDimensions_);
-        regression.head(numberOfDimensions_).ones();
-        regression.tail(numberOfDimensions_) = parameter;
-        break;
-      case 2:
-        regression.set_size(numberOfDimensions_ * (numberOfDimensions_ + 1) / 2 + numberOfDimensions_ + 1);
-        
-        regression.head(numberOfDimensions_).ones();
-        regression.subvec(numberOfDimensions_, 2 * numberOfDimensions_ - 1) = parameter;
-        
-        arma::uword n = 2 * numberOfDimensions_;
-        for (arma::uword k = 0; k < numberOfDimensions_; ++k) {
-          for (arma::uword l = k; l < numberOfDimensions_; ++l) {
-            regression(n++) = parameter(k) * parameter(l);
-          }
-        }
-        break;
-    }
-    
-    return regression;
-  }
   
   double KrigingModel::getObjectiveValueImplementation(
       const arma::Col<double>& parameter) const {
@@ -95,9 +64,13 @@ namespace mant {
     arma::Col<double> correlations(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
-      correlations(n++) = getCorrelationCoefficient(sample.first - normalisedParameter);
+      correlations(n++) = correlationFunction_->getCorrelationCoefficient(sample.first - normalisedParameter);
     }
     
-    return meanObjectiveValue_ + (arma::dot(beta_, getNthOrderRegression(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
+    return meanObjectiveValue_ + (arma::dot(beta_, regressionFunction_->getRegression(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
+  }
+  
+  std::string KrigingModel::toString() const {
+    return "kriging_model";
   }
 }

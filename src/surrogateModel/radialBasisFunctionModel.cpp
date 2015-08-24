@@ -2,8 +2,10 @@
 
 namespace mant {
   RadialBasisFunctionModel::RadialBasisFunctionModel(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const std::shared_ptr<RadialBasisFunction> radialBasisFunction)
     : SurrogateModel(samples),
+      radialBasisFunction_(radialBasisFunction),
       coefficients_(samples_.size()),
       tail_(numberOfDimensions_ + 1) {
       
@@ -22,7 +24,7 @@ namespace mant {
       
       arma::uword j = 0;
       for (auto k = ++n; k != samples_.cend(); ++k) {
-        Phi(i, j) = getBasisFunctionValue(arma::norm(k->first - parameter));
+        Phi(i, j) = radialBasisFunction_->getBasisFunctionValue(arma::norm(k->first - parameter));
         ++j;
       }
       
@@ -44,10 +46,14 @@ namespace mant {
       
     arma::uword n = 0;
     for(const auto& sample : samples_) {
-      objectiveValue += coefficients_(n) * getBasisFunctionValue(arma::norm(parameter - sample.first));
+      objectiveValue += coefficients_(n) * radialBasisFunction_->getBasisFunctionValue(arma::norm(parameter - sample.first));
       ++n;
     }
     
-    return objectiveValue + getPolynomialTailValue(parameter);
+    return objectiveValue + radialBasisFunction_->getPolynomialTailValue(parameter, tail_);
+  }
+  
+  std::string RadialBasisFunctionModel::toString() const {
+    return "radial_basis_function_model";
   }
 }

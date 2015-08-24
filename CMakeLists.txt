@@ -151,6 +151,33 @@ add_library(mantella SHARED
   src/helper/statistic.cpp
   src/helper/unorderedContainer.cpp
 
+  # Regression functions
+  src/regressionFunction.cpp
+  src/regressionFunction/constantPolynomialRegressionFunction.cpp
+  src/regressionFunction/linearPolynomialRegressionFunction.cpp
+  src/regressionFunction/quadraticPolynomialRegressionFunction.cpp
+  src/regressionFunction/cubicPolynomialRegressionFunction.cpp
+
+  # Correlation functions
+  src/correlationFunction.cpp
+  src/correlationFunction/polynomialCorrelationFunction.cpp
+  src/correlationFunction/splineCorrelationFunction.cpp
+  src/correlationFunction/exponentialCorrelationFunction.cpp
+  src/correlationFunction/gaussianCorrelationFunction.cpp
+  
+  # Radial basis functions
+  src/radialBasisFunction.cpp
+  src/radialBasisFunction/polyharmonicSplineRadialBasisFunction.cpp
+  src/radialBasisFunction/multiquadraticRadialBasisFunction.cpp
+  src/radialBasisFunction/gaussianRadialBasisFunction.cpp
+  
+  # Samples selections
+  src/samplesSelection.cpp
+  src/samplesSelection/bestFittingSamplesSelection.cpp
+  src/samplesSelection/bestNeighbourhoodSamplesSelection.cpp
+  src/samplesSelection/bestSamplesSelection.cpp
+  src/samplesSelection/randomSamplesSelection.cpp
+  
   # Optimisation problems
   src/optimisationProblem.cpp
   src/optimisationProblem/blackBoxOptimisationBenchmark.cpp
@@ -201,46 +228,26 @@ add_library(mantella SHARED
   src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
   src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
-    
-  # Samples selection
-  src/samplesSelection.cpp
-  src/samplesSelection/bestFittingSamplesSelection.cpp
-  src/samplesSelection/bestNeighbourhoodSamplesSelection.cpp
-  src/samplesSelection/bestSamplesSelection.cpp
-  src/samplesSelection/randomSamplesSelection.cpp
-
+  
   # Property analyses
   src/propertyAnalysis.cpp
   src/propertyAnalysis/passivePropertyAnalysis.cpp
   src/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.cpp
   src/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.cpp
   src/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/linearFunctionModelAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/quadraticFunctionModelAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/cubicFunctionModelAnalysis.cpp
+  src/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/linearProportionalityAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/quadraticProportionalityAnalysis.cpp
+  src/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
-
+  
   # Surrogate models
   src/surrogateModel.cpp
   src/surrogateModel/polynomialFunctionModel.cpp
-  src/surrogateModel/polynomialFunctionModel/linearFunctionModel.cpp
-  src/surrogateModel/polynomialFunctionModel/quadraticFunctionModel.cpp
-  src/surrogateModel/polynomialFunctionModel/cubicFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel.cpp
-  src/surrogateModel/radialBasisFunctionModel/polyharmonicSplineRadialBasisFunctionModel.cpp
-  src/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.cpp
-  src/surrogateModel/radialBasisFunctionModel/gaussianRadialBasisFunctionModel.cpp
   src/surrogateModel/krigingModel.cpp
-  src/surrogateModel/krigingModel/polynomialKrigingModel.cpp
-  src/surrogateModel/krigingModel/splineKrigingModel.cpp
-  src/surrogateModel/krigingModel/exponentialKrigingModel.cpp
-  src/surrogateModel/krigingModel/gaussianKrigingModel.cpp
   src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
   src/surrogateModel/artificialNeuralNetwork.cpp
 )
@@ -360,32 +367,19 @@ if(BUILD_TESTS)
     test/propertyAnalysis/passivePropertyAnalysis/testFitnessDistanceCorrelationAnalysis.cpp
     test/propertyAnalysis/passivePropertyAnalysis/testLipschitzContinuityAnalysis.cpp
     test/propertyAnalysis/passivePropertyAnalysis/testHoelderContinuityAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testLinearFunctionModelAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testQuadraticFunctionModelAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testCubicFunctionModelAnalysis.cpp
+    test/propertyAnalysis/passivePropertyAnalysis/testPolynomialFunctionModelAnalysis.cpp
     test/propertyAnalysis/testActivePropertyAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testLinearProportionalityAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testQuadraticProportionalityAnalysis.cpp
+    test/propertyAnalysis/activePropertyAnalysis/testPolynomialProportionalityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
 
     # Surrogate models
     test/testSurrogateModel.cpp
     test/surrogateModel/testPolynomialFunctionModel.cpp
-    test/surrogateModel/polynomialFunctionModel/testLinearFunctionModel.cpp
-    test/surrogateModel/polynomialFunctionModel/testQuadraticFunctionModel.cpp
-    test/surrogateModel/polynomialFunctionModel/testCubicFunctionModel.cpp
     test/surrogateModel/testRadialBasisFunctionModel.cpp
-    test/surrogateModel/radialBasisFunctionModel/testPolyharmonicSplineRadialBasisFunctionModel.cpp
-    test/surrogateModel/radialBasisFunctionModel/testMultiquadraticRadialBasisFunctionModel.cpp
-    test/surrogateModel/radialBasisFunctionModel/testGaussianRadialBasisFunctionModel.cpp
     test/surrogateModel/testKrigingModel.cpp
-    test/surrogateModel/krigingModel/testPolynomialKrigingModel.cpp
-    test/surrogateModel/krigingModel/testSplineKrigingModel.cpp
-    test/surrogateModel/krigingModel/testExponentialKrigingModel.cpp
-    test/surrogateModel/krigingModel/testGaussianKrigingModel.cpp
     test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
     test/surrogateModel/testArtificialNeuralNetwork.cpp
   )
