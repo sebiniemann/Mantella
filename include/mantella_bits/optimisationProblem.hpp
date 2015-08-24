@@ -98,7 +98,7 @@ namespace mant {
         const arma::Col<double>& parameter) const;
 
       virtual double getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const= 0;
+        const arma::Col<double>& parameter) const = 0;
 
       std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
   };

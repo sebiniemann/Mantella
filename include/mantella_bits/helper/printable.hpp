@@ -7,7 +7,7 @@
 namespace mant {
   class Printable {
     public:
-      virtual std::string toString() const= 0;
+      virtual std::string toString() const = 0;
   };
 
   std::string to_string(
