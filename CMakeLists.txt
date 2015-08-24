@@ -236,6 +236,10 @@ add_library(mantella SHARED
   src/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel/gaussianRadialBasisFunctionModel.cpp
   src/surrogateModel/krigingModel.cpp
+  src/surrogateModel/krigingModel/polynomialKrigingModel.cpp
+  src/surrogateModel/krigingModel/splineKrigingModel.cpp
+  src/surrogateModel/krigingModel/exponentialKrigingModel.cpp
+  src/surrogateModel/krigingModel/gaussianKrigingModel.cpp
   src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
   src/surrogateModel/artificialNeuralNetwork.cpp
 )
@@ -376,6 +380,10 @@ if(BUILD_TESTS)
     test/surrogateModel/radialBasisFunctionModel/testMultiquadraticRadialBasisFunctionModel.cpp
     test/surrogateModel/radialBasisFunctionModel/testGaussianRadialBasisFunctionModel.cpp
     test/surrogateModel/testKrigingModel.cpp
+    test/surrogateModel/krigingModel/testPolynomialKrigingModel.cpp
+    test/surrogateModel/krigingModel/testSplineKrigingModel.cpp
+    test/surrogateModel/krigingModel/testExponentialKrigingModel.cpp
+    test/surrogateModel/krigingModel/testGaussianKrigingModel.cpp
     test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
     test/surrogateModel/testArtificialNeuralNetwork.cpp
   )

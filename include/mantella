@@ -135,5 +135,9 @@
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/radialBasisFunctionModel/gaussianRadialBasisFunctionModel.hpp>
 #include <mantella_bits/surrogateModel/krigingModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel/polynomialKrigingModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel/splineKrigingModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel/exponentialKrigingModel.hpp>
+#include <mantella_bits/surrogateModel/krigingModel/gaussianKrigingModel.hpp>
 #include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
 #include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>
