@@ -228,9 +228,10 @@ add_library(mantella SHARED
 
   # Surrogate models
   src/surrogateModel.cpp
-  src/surrogateModel/linearFunctionModel.cpp
-  src/surrogateModel/quadraticFunctionModel.cpp
-  src/surrogateModel/cubicFunctionModel.cpp
+  src/surrogateModel/polynomialFunctionModel.cpp
+  src/surrogateModel/polynomialFunctionModel/linearFunctionModel.cpp
+  src/surrogateModel/polynomialFunctionModel/quadraticFunctionModel.cpp
+  src/surrogateModel/polynomialFunctionModel/cubicFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel/polyharmonicSplineRadialBasisFunctionModel.cpp
   src/surrogateModel/radialBasisFunctionModel/multiquadraticRadialBasisFunctionModel.cpp
@@ -372,9 +373,10 @@ if(BUILD_TESTS)
 
     # Surrogate models
     test/testSurrogateModel.cpp
-    test/surrogateModel/testLinearFunctionModel.cpp
-    test/surrogateModel/testQuadraticFunctionModel.cpp
-    test/surrogateModel/testCubicFunctionModel.cpp
+    test/surrogateModel/testPolynomialFunctionModel.cpp
+    test/surrogateModel/polynomialFunctionModel/testLinearFunctionModel.cpp
+    test/surrogateModel/polynomialFunctionModel/testQuadraticFunctionModel.cpp
+    test/surrogateModel/polynomialFunctionModel/testCubicFunctionModel.cpp
     test/surrogateModel/testRadialBasisFunctionModel.cpp
     test/surrogateModel/radialBasisFunctionModel/testPolyharmonicSplineRadialBasisFunctionModel.cpp
     test/surrogateModel/radialBasisFunctionModel/testMultiquadraticRadialBasisFunctionModel.cpp

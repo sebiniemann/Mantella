@@ -11,8 +11,6 @@ namespace mant {
     public:
       using SurrogateModel::SurrogateModel;
   
-      
-  
       std::string toString() const override;
   
     protected:
