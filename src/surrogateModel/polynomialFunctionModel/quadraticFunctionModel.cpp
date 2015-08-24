@@ -14,16 +14,6 @@ namespace mant {
     
     hessian_ = quadraticCoefficients_ + quadraticCoefficients_.t();
   }
-      
-  arma::Col<double> QuadraticFunctionModel::getJacobianImplementation(
-      const arma::Col<double>& parameter) const {
-    return hessian_ * parameter;
-  }
-
-  arma::Mat<double> QuadraticFunctionModel::getHessianImplementation(
-      const arma::Col<double>& parameter) const {
-    return hessian_;
-  }
   
   double QuadraticFunctionModel::getObjectiveValueImplementation(
       const arma::Col<double>& parameter) const {

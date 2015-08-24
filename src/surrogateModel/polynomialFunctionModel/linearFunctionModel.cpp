@@ -11,11 +11,6 @@ namespace mant {
       coefficients_ = linearFunctionModelAnalysis.getCoefficients();
       errorTerm_ = linearFunctionModelAnalysis.getErrorTerm();
   }
-      
-  arma::Col<double> LinearFunctionModel::getJacobianImplementation(
-      const arma::Col<double>& parameter) const {
-    return coefficients_;
-  }
   
   double LinearFunctionModel::getObjectiveValueImplementation(
       const arma::Col<double>& parameter) const {

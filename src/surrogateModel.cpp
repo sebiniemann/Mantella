@@ -31,26 +31,6 @@ namespace mant {
     modelImplementation();
   }
   
-  arma::Col<double> SurrogateModel::getJacobian(
-      const arma::Col<double>& parameter) const {
-    return getJacobianImplementation(parameter);
-  }
-  
-  arma::Mat<double> SurrogateModel::getHessian(
-      const arma::Col<double>& parameter) const {
-    return getHessianImplementation(parameter);
-  }
-  
-  arma::Col<double> SurrogateModel::getJacobianImplementation(
-      const arma::Col<double>& parameter) const {
-    return arma::Col<double>(numberOfDimensions_, arma::fill::zeros);
-  }
-  
-  arma::Mat<double> SurrogateModel::getHessianImplementation(
-      const arma::Col<double>& parameter) const {
-    return arma::Mat<double>(numberOfDimensions_, numberOfDimensions_, arma::fill::zeros);
-  }
-  
   double SurrogateModel::getObjectiveValue(
       const arma::Col<double>& parameter) const {
     return getObjectiveValueImplementation(parameter);

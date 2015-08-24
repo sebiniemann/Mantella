@@ -21,12 +21,6 @@ namespace mant {
     
       void modelImplementation() override;
       
-      arma::Col<double> getJacobianImplementation(
-          const arma::Col<double>& parameter) const override;
-  
-      arma::Mat<double> getHessianImplementation(
-          const arma::Col<double>& parameter) const override;
-      
       double getObjectiveValueImplementation(
           const arma::Col<double>& parameter) const override;
   };

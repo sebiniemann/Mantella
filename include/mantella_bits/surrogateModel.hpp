@@ -28,12 +28,6 @@ namespace mant {
       
       void model();
       
-      arma::Col<double> getJacobian(
-          const arma::Col<double>& parameter) const;
-      
-      arma::Mat<double> getHessian(
-          const arma::Col<double>& parameter) const;
-      
       double getObjectiveValue(
           const arma::Col<double>& parameter) const;
         
@@ -46,12 +40,6 @@ namespace mant {
       arma::Col<double> upperBounds_;
     
       virtual void modelImplementation() = 0;
-      
-      virtual arma::Col<double> getJacobianImplementation(
-          const arma::Col<double>& parameter) const;
-      
-      virtual arma::Mat<double> getHessianImplementation(
-          const arma::Col<double>& parameter) const;
       
       virtual double getObjectiveValueImplementation(
           const arma::Col<double>& parameter) const = 0;
