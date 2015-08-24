@@ -16,6 +16,8 @@ namespace mant {
       explicit RadialBasisFunctionModel(
           const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
   
+      virtual ~RadialBasisFunctionModel() = default;
+      
     protected:
       arma::Col<double> coefficients_;
       arma::Col<double> tail_;

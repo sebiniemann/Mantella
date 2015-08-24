@@ -19,6 +19,8 @@ namespace mant {
       KrigingModel(
           const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
           const arma::uword polynomialOrder);
+  
+      virtual ~KrigingModel() = default;
           
     protected:
       arma::Col<double> meanParameter_;
