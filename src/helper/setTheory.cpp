@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <algorithm>
+#include <iterator>
 
 namespace mant {
   std::vector<arma::Col<arma::uword>> getCombinations(
@@ -9,8 +10,8 @@ namespace mant {
       const arma::uword combinationSize) {
     std::vector<arma::Col<arma::uword>> combinations;
       
-    std::vector<int> bitmask(numberOfElements);
-    std::fill(bitmask.begin(), bitmask.begin() + combinationSize, 1);
+    std::vector<arma::uword> bitmask(numberOfElements);
+    std::fill(bitmask.begin(), std::next(bitmask.begin(), static_cast<std::vector<arma::uword>::difference_type>(combinationSize)), 1);
     do {
       arma::Col<arma::uword> combination(combinationSize);
       arma::uword k = 0;
@@ -46,10 +47,10 @@ namespace mant {
         lastIndex = 1;
       }
 
-        std::iter_swap(firstSet.begin() + index, secondSet.begin() + counter(index));
       while (shiftedIndex > lastIndex) {
         const arma::uword& index = shiftedIndex - 1;
       
+        std::iter_swap(std::next(firstSet.begin(), static_cast<std::vector<arma::uword>::difference_type>(index)), std::next(secondSet.begin(), static_cast<std::vector<arma::uword>::difference_type>(counter(index))));
         partitions.push_back({firstSet, secondSet});
 
         if(counter(index) < secondSet.n_elem - 1) {
