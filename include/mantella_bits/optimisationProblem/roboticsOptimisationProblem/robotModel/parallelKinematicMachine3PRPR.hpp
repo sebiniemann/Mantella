@@ -20,6 +20,9 @@ namespace mant {
         const arma::Mat<double>::fixed<2, 3> redundantJointEndPositions_;
         
         explicit ParallelKinematicMachine3PRPR();
+         
+        ParallelKinematicMachine3PRPR(
+          const ParallelKinematicMachine3PRPR& parallelKinematicMachine3PRPR);
             
         explicit ParallelKinematicMachine3PRPR(
             const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions,

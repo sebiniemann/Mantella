@@ -29,6 +29,12 @@ namespace mant {
            1.2, -0.2}) {
 
     }
+         
+    ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR(
+        const ParallelKinematicMachine3PRRR& parallelKinematicMachine3PRRR) 
+      : ParallelKinematicMachine3PRRR(parallelKinematicMachine3PRRR.linkLengths_, parallelKinematicMachine3PRRR.endEffectorJointPositions_, parallelKinematicMachine3PRRR.redundantJointStartPositions_, parallelKinematicMachine3PRRR.redundantJointEndPositions_) {
+        
+    }
 
     ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR(
         const arma::Mat<double>::fixed<2, 3>& linkLengths,

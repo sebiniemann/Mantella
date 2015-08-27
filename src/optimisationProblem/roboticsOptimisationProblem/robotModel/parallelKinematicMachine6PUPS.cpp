@@ -38,6 +38,12 @@ namespace mant {
            -0.376506012872349, 0.068069033993384, 0.086602540378444}) {
 
     }
+         
+    ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS(
+        const ParallelKinematicMachine6PUPS& parallelKinematicMachine6PUPS) 
+      : ParallelKinematicMachine6PUPS(parallelKinematicMachine6PUPS.endEffectorJointPositions_, parallelKinematicMachine6PUPS.minimalActiveJointsActuation_, parallelKinematicMachine6PUPS.maximalActiveJointsActuation_, parallelKinematicMachine6PUPS.redundantJointStartPositions_, parallelKinematicMachine6PUPS.redundantJointEndPositions_) {
+        
+    }
             
     ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS(
         const arma::Mat<double>::fixed<3, 6>& endEffectorJointPositions,

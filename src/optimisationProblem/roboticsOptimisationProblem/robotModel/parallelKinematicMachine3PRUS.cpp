@@ -33,6 +33,12 @@ namespace mant {
            -0.286835914312847, -0.224100777018540, 0.2}) {
 
     }
+         
+    ParallelKinematicMachine3PRUS::ParallelKinematicMachine3PRUS(
+        const ParallelKinematicMachine3PRUS& parallelKinematicMachine3PRUS) 
+      : ParallelKinematicMachine3PRUS(parallelKinematicMachine3PRUS.linkLengths_, parallelKinematicMachine3PRUS.endEffectorJointPositions_, parallelKinematicMachine3PRUS.baseJointRotationAngles_, parallelKinematicMachine3PRUS.redundantJointStartPositions_, parallelKinematicMachine3PRUS.redundantJointEndPositions_) {
+        
+    }
             
     ParallelKinematicMachine3PRUS::ParallelKinematicMachine3PRUS(
         const arma::Mat<double>::fixed<2, 3>& linkLengths,
