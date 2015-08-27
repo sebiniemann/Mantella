@@ -16,7 +16,6 @@ namespace mant {
     class MultiLevelStewartPlatform : public RobotModel {
       public:
         const std::vector<ParallelKinematicMachine6PUPS> platformLevels_;
-        
         const arma::uword numberOfPlatformLevels_;
       
         explicit MultiLevelStewartPlatform();
