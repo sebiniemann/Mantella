@@ -8,6 +8,7 @@ namespace mant {
   HillClimbing::HillClimbing(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
     : TrajectoryBasedOptimisationAlgorithm(optimisationProblem) {
+    setMinimalStepSize(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setMaximalStepSize((getUpperBounds() - getLowerBounds()) * 0.1);
   }
 
@@ -20,9 +21,17 @@ namespace mant {
     while(!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
-      const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, arma::zeros<arma::Col<double>>(numberOfDimensions_), maximalStepSize_);
+      const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
       updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
     }
+  }
+
+  void HillClimbing::setMinimalStepSize(
+      const arma::Col<double>& minimalStepSize) {
+    verify(minimalStepSize.n_elem == numberOfDimensions_, "The number of dimensions of the minimal step size must match the number of dimensions of the optimisation problem.");
+    verify(arma::all(minimalStepSize >= 0), "The minimal step size must be at least 0 for each dimension.");
+
+    minimalStepSize_ = minimalStepSize;
   }
 
   void HillClimbing::setMaximalStepSize(
