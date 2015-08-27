@@ -15,7 +15,7 @@ namespace mant {
       arma::Col<arma::uword> combination(combinationSize);
       arma::uword k = 0;
       for (arma::uword n = 0; n < numberOfElements; ++n) {
-        if (bitmask.at(n)) {
+        if (bitmask.at(n) > 0) {
           combination(k++) = n;
         }
       }
