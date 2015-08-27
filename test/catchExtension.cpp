@@ -1,5 +1,8 @@
 #include <catchExtension.hpp>
 
+// C++ standard library
+#include <cmath>
+
 void COMPARE_SET(
     const std::vector<std::pair<arma::Col<double>, double>>& actual,
     const std::vector<arma::Col<double>>& expected) {
@@ -35,7 +38,8 @@ void COMPARE(
     if(std::isfinite(expected.at(n))) {
       CHECK(actual.at(n) == Approx(expected.at(n)));
     } else {
-      CHECK(actual.at(n) == expected.at(n));
+      CHECK(std::isinf(actual.at(n)));
+      CHECK(std::signbit(actual.at(n)) == std::signbit(expected.at(n)));
     }
   }
 }
@@ -46,7 +50,12 @@ void COMPARE(
   CHECK(actual.n_elem == expected.n_elem);
 
   for (arma::uword n = 0; n < expected.n_elem; ++n) {
-    CHECK(actual.at(n) == expected.at(n));
+    if(std::isfinite(expected.at(n))) {
+      CHECK(actual.at(n) == Approx(expected.at(n)));
+    } else {
+      CHECK(std::isinf(actual.at(n)));
+      CHECK(std::signbit(actual.at(n)) == std::signbit(expected.at(n)));
+    }
   }
 }
 
@@ -60,7 +69,8 @@ void COMPARE(
     if(std::isfinite(expected.at(n))) {
       CHECK(actual.at(n) == Approx(expected.at(n)));
     } else {
-      CHECK(actual.at(n) == expected.at(n));
+      CHECK(std::isinf(actual.at(n)));
+      CHECK(std::signbit(actual.at(n)) == std::signbit(expected.at(n)));
     }
   }
 }
