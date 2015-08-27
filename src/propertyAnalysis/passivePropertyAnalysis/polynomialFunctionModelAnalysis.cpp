@@ -30,7 +30,7 @@ namespace mant {
     
     coefficients_ = getOrdinaryLeastSquaresEstimate(parameters, objectiveValues);
     
-    for (arma::uword n = 0; n < samples_.size(); ++n) {
+    for (n = 0; n < samples_.size(); ++n) {
       residuals_(n) = objectiveValues(n) - arma::dot(parameters.col(n), coefficients_);
     }
   }

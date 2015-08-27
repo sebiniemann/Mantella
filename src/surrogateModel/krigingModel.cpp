@@ -39,7 +39,7 @@ namespace mant {
     arma::Mat<double> correlations(parameters.n_cols, parameters.n_cols);
     correlations.diag().zeros();
     
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+    for (n = 0; n < parameters.n_cols; ++n) {
       const arma::Col<double>& parameter = parameters.col(n);
       for (arma::uword k = n + 1; k < parameters.n_cols; ++k) {
         correlations(n, k) = correlationFunction_->getCorrelationCoefficient(parameters.col(k) - parameter);
