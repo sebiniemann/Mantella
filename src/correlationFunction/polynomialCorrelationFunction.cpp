@@ -17,10 +17,11 @@ namespace mant {
       const arma::Col<double>& parameter) const {
     const arma::Col<double>& boundedParameter = arma::min(arma::abs(parameter), arma::ones(numberOfDimensions_));
     double correlationCoefficient = 0.0;
+    
     switch (polynomialOrder_) {
       case 1:
-        break;
         correlationCoefficient = arma::prod(boundedParameter);
+        break;
       case 2:
         correlationCoefficient = arma::prod(1 - boundedParameter % (1.5 - 0.5 * arma::pow(boundedParameter, 2.0)));
         break;
