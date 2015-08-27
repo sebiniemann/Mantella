@@ -16,12 +16,15 @@ namespace mant {
       const double distance) const {
     return std::exp(-exponent_ * std::pow(distance, 2.0));
   }
-  
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
   double GaussianRadialBasisFunction::getPolynomialTailValueImplementation(
       const arma::Col<double>& parameter,
       const arma::Col<double>& polynomialCoefficients) const {
     return 0;
   }
+#pragma clang diagnostic pop
   
   std::string GaussianRadialBasisFunction::toString() const {
     return "gaussian_radial_basis_function";
