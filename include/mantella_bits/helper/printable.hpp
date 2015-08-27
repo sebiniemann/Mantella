@@ -8,6 +8,8 @@ namespace mant {
   class Printable {
     public:
       virtual std::string toString() const = 0;
+      
+      virtual ~Printable() = default;
   };
 
   std::string to_string(

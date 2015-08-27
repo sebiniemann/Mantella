@@ -19,7 +19,7 @@ namespace mant {
       arma::Col<double> getRegression(
           const arma::Col<double>& parameter) const;
       
-      ~RegressionFunction() = default;
+      virtual ~RegressionFunction() = default;
       
     protected:
       virtual arma::Col<double> getRegressionImplementation(
