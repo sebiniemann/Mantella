@@ -50,7 +50,7 @@ namespace mant {
       while (shiftedIndex > lastIndex) {
         const arma::uword& index = shiftedIndex - 1;
       
-        std::iter_swap(std::next(firstSet.begin(), static_cast<std::vector<arma::uword>::difference_type>(index)), std::next(secondSet.begin(), static_cast<std::vector<arma::uword>::difference_type>(counter(index))));
+        std::iter_swap(firstSet.begin() + index, secondSet.begin() + counter(index));
         partitions.push_back({firstSet, secondSet});
 
         if(counter(index) < secondSet.n_elem - 1) {
