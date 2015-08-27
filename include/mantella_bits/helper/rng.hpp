@@ -16,13 +16,13 @@ namespace mant {
       static std::mt19937_64& getGenerator();
 
       static void setSeed(
-          const arma::uword seed);
+          const arma::arma_rng::seed_type seed);
 
       static void setRandomSeed();
 
-      static arma::uword getSeed();
+      static arma::arma_rng::seed_type getSeed();
 
     protected:
-      static arma::uword& seed_();
+      static arma::arma_rng::seed_type& seed_();
   };
 }

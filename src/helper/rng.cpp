@@ -10,7 +10,7 @@ namespace mant {
   }
 
   void Rng::setSeed(
-      const arma::uword seed) {
+      const arma::arma_rng::seed_type seed) {
    seed_() = seed;
 
     getGenerator().seed(seed_());
@@ -24,18 +24,18 @@ namespace mant {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     
-    setSeed(arma::randi<arma::Col<arma::uword>>(1)(0) + rank * arma::randi<arma::Col<arma::uword>>(1)(0));
+    setSeed(arma::randi<arma::Col<arma::arma_rng::seed_type>>(1)(0) + rank * arma::randi<arma::Col<arma::arma_rng::seed_type>>(1)(0));
 #else
-    setSeed(arma::randi<arma::Col<arma::uword>>(1)(0));
+    setSeed(arma::randi<arma::Col<arma::arma_rng::seed_type>>(1)(0));
 #endif
   }
 
-  arma::uword Rng::getSeed() {
+  arma::arma_rng::seed_type Rng::getSeed() {
     return seed_();
   }
 
-  arma::uword& Rng::seed_() {
-    static arma::uword seed;
+  arma::arma_rng::seed_type& Rng::seed_() {
+    static arma::arma_rng::seed_type seed;
     return seed;
   }
 }
