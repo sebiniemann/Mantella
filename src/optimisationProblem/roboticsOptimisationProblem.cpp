@@ -7,7 +7,7 @@ namespace mant {
       : OptimisationProblem(robotModel->numberOfRedundantJoints_),
         robotModel_(robotModel) {
         
-    };
+    }
 
     void RoboticsOptimisationProblem::setEndEffectorTrajectory(
         const arma::Mat<double>& endEffectorTrajectory) {
