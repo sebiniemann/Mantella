@@ -17,14 +17,11 @@ namespace mant {
     return std::sqrt(std::pow(distance, 2.0) + std::pow(exponent_, 2.0));
   }
   
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
   double MultiquadraticRadialBasisFunction::getPolynomialTailValueImplementation(
       const arma::Col<double>& parameter,
       const arma::Col<double>& polynomialCoefficients) const {
     return polynomialCoefficients(polynomialCoefficients.n_elem - 1);
   }
-#pragma clang diagnostic pop
   
   std::string MultiquadraticRadialBasisFunction::toString() const {
     return "multiquadratic_radial_basis_function";
