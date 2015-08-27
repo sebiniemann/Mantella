@@ -6,7 +6,7 @@
 namespace mant {
   void RandomSamplesSelection::selectImplementation() {
     for (const auto& i : mant::getRandomPermutation(samples_.size(), numberOfSelectedSamples_)) {
-      const auto& selectedSample = std::next(std::begin(samples_), i);
+      const auto& selectedSample = std::next(std::begin(samples_), static_cast<decltype(samples_)::difference_type>(i));
       selectedSamples_.insert({selectedSample->first, selectedSample->second});
     }
   }

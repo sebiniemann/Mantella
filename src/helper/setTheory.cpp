@@ -11,7 +11,7 @@ namespace mant {
     std::vector<arma::Col<arma::uword>> combinations;
       
     std::vector<arma::uword> bitmask(numberOfElements);
-    std::fill(bitmask.begin(), std::next(bitmask.begin(), static_cast<std::vector<arma::uword>::difference_type>(combinationSize)), 1);
+    std::fill(bitmask.begin(), std::next(bitmask.begin(), static_cast<decltype(bitmask)::difference_type>(combinationSize)), 1);
     do {
       arma::Col<arma::uword> combination(combinationSize);
       arma::uword k = 0;

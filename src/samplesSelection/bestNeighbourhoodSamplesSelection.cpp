@@ -18,7 +18,7 @@ namespace mant {
     }
 
     for (const auto& i : static_cast<arma::Col<arma::uword>>(static_cast<arma::Col<arma::uword>>(arma::sort_index(distances)).head(numberOfSelectedSamples_))) {
-      const auto& selectedSample = std::next(std::begin(samples_), i);
+      const auto& selectedSample = std::next(std::begin(samples_), static_cast<decltype(samples_)::difference_type>(i));
       selectedSamples_.insert({selectedSample->first, selectedSample->second});
     }
   }
