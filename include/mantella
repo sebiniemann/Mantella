@@ -115,6 +115,12 @@
 #include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.hpp>
 #include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.hpp>
 #include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/artificialNeuralNetwork.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
@@ -148,11 +154,3 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
-
-// Surrogate models
-#include <mantella_bits/surrogateModel.hpp>
-#include <mantella_bits/surrogateModel/polynomialFunctionModel.hpp>
-#include <mantella_bits/surrogateModel/radialBasisFunctionModel.hpp>
-#include <mantella_bits/surrogateModel/krigingModel.hpp>
-#include <mantella_bits/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
-#include <mantella_bits/surrogateModel/artificialNeuralNetwork.hpp>

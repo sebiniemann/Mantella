@@ -153,6 +153,11 @@ add_library(mantella SHARED
   src/helper/statistic.cpp
   src/helper/unorderedContainer.cpp
 
+  # Distance functions
+  src/distanceFunction.cpp
+  src/distanceFunction/pNorm.cpp
+  src/distanceFunction/mahalabonisDistance.cpp
+  
   # Regression functions
   src/regressionFunction.cpp
   src/regressionFunction/constantPolynomialRegressionFunction.cpp
@@ -250,6 +255,10 @@ add_library(mantella SHARED
   src/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
+  
+  # Cluster analyses
+  src/clusterAnalysis.cpp
+  src/clusterAnalysis/basicSequentialAlgorithmicScheme.cpp
 )
 
 # Linking against prerequirements
