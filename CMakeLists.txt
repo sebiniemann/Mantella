@@ -343,6 +343,11 @@ if(BUILD_TESTS)
     test/helper/testSetTheory.cpp
     test/helper/testStatistic.cpp
     test/helper/testUnorderedContainer.cpp
+
+    # Distance functions
+    test/testDistanceFunction.cpp
+    test/distanceFunction/testPNorm.cpp
+    test/distanceFunction/testMahalabonisDistance.cpp
     
     # Regression functions
     test/testRegressionFunction.cpp
