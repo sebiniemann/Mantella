@@ -1,4 +1,4 @@
-#include <mantella_bits/surrogateModel/polynomialFunctionModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp>
 
 // Mantella
 #include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp>

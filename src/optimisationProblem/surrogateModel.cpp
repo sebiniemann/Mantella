@@ -1,4 +1,4 @@
-#include <mantella_bits/surrogateModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
 
 namespace mant {
   SurrogateModel::SurrogateModel(

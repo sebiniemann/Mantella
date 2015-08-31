@@ -1,4 +1,4 @@
-#include <mantella_bits/surrogateModel/krigingModel.hpp>
+#include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
 
 // Mantella
 #include <mantella_bits/helper/regression.hpp>

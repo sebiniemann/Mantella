@@ -218,6 +218,12 @@ add_library(mantella SHARED
   src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.cpp
   src/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.cpp
   src/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.cpp
+  src/optimisationProblem/surrogateModel.cpp
+  src/optimisationProblem/surrogateModel/polynomialFunctionModel.cpp
+  src/optimisationProblem/surrogateModel/radialBasisFunctionModel.cpp
+  src/optimisationProblem/surrogateModel/krigingModel.cpp
+  src/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
+  src/optimisationProblem/surrogateModel/artificialNeuralNetwork.cpp
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
@@ -244,14 +250,6 @@ add_library(mantella SHARED
   src/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
   src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
-  
-  # Surrogate models
-  src/surrogateModel.cpp
-  src/surrogateModel/polynomialFunctionModel.cpp
-  src/surrogateModel/radialBasisFunctionModel.cpp
-  src/surrogateModel/krigingModel.cpp
-  src/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
-  src/surrogateModel/artificialNeuralNetwork.cpp
 )
 
 # Linking against prerequirements
