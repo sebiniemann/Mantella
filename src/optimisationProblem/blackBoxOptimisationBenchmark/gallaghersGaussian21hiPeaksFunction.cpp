@@ -52,7 +52,7 @@ namespace mant {
 
       arma::Mat<double> localParameterConditionings(numberOfDimensions_, conditions.n_elem);
       for (arma::uword n = 0; n < conditions.n_elem; ++n) {
-        const double& condition = std::pow(1000.0, conditions(n) / 19.0);
+        const double condition = std::pow(1000.0, conditions(n) / 19.0);
         localParameterConditionings.col(n) = getParameterConditioning(condition) / std::sqrt(condition);
       }
 

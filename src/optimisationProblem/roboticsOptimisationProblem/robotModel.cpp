@@ -42,7 +42,7 @@ namespace mant {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
       verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1), "The redundant joints must be actuated within [0, 1].");
       
-      const double& endEffectorPoseError = getEndEffectorPoseErrorImplementation(endEffectorPose, redundantJointsActuation);
+      const double endEffectorPoseError = getEndEffectorPoseErrorImplementation(endEffectorPose, redundantJointsActuation);
       assert(endEffectorPoseError >= 0);
       
       return endEffectorPoseError;

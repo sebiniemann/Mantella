@@ -64,7 +64,7 @@ namespace mant {
       
       double endEffectorPoseError = platformLevels_.at(0).getEndEffectorPoseError(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
-        const double& partialEndEffectorPoseError = platformLevels_.at(n).getEndEffectorPoseError(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {});
+        const double partialEndEffectorPoseError = platformLevels_.at(n).getEndEffectorPoseError(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {});
       
         assert(partialEndEffectorPoseError >= 0);
       

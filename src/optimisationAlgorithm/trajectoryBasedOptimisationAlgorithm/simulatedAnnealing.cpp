@@ -26,7 +26,7 @@ namespace mant {
       ++numberOfIterations_;
 
       const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, arma::zeros<arma::Col<double>>(numberOfDimensions_), maximalStepSize_);
-      const double& candidateObjectiveValue = getObjectiveValue(candidateParameter);
+      const double candidateObjectiveValue = getObjectiveValue(candidateParameter);
 
       if (updateBestParameter(candidateParameter, candidateObjectiveValue) || isAcceptableState(candidateObjectiveValue)) {
         state = candidateParameter;

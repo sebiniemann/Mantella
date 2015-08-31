@@ -48,7 +48,7 @@ namespace mant {
       }
 
       while (shiftedIndex > lastIndex) {
-        const arma::uword& index = shiftedIndex - 1;
+        const arma::uword index = shiftedIndex - 1;
       
         std::iter_swap(firstSet.begin() + index, secondSet.begin() + counter(index));
         partitions.push_back({firstSet, secondSet});

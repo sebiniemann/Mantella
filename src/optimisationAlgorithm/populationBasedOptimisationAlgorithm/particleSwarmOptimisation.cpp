@@ -65,7 +65,7 @@ namespace mant {
         velocities_.col(particleIndex_) = velocityCandidate;
         particles_.col(particleIndex_) = solutionCandidate;
 
-        const double& objectiveValue = getObjectiveValue(solutionCandidate);
+        const double objectiveValue = getObjectiveValue(solutionCandidate);
 
         if (objectiveValue < localBestObjectiveValues_(particleIndex_)) {
           localBestObjectiveValues_(particleIndex_) = objectiveValue;

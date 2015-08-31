@@ -71,8 +71,8 @@ namespace mant {
         redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
         redundantJointRotationAngles_(6, redundantJointIndicies_.n_elem) {
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const double& redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
-        const double& redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_(2, n), redundantJointStartToEndPositions_(1, n));
+        const double redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
+        const double redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_(2, n), redundantJointStartToEndPositions_(1, n));
         redundantJointRotationAngles_.col(n) = arma::Col<double>({std::cos(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointXAngle) * std::cos(redundantJointYAngle), std::sin(redundantJointYAngle)});
       }
 
@@ -94,13 +94,13 @@ namespace mant {
       arma::Cube<double>::fixed<3, 6, 3> model;
 
       const arma::Col<double>::fixed<3>& endEffectorPosition = endEffectorPose.subvec(0, 2);
-      const double& endEffectorRollAngle = endEffectorPose(3);
-      const double& endEffectorPitchAngle = endEffectorPose(4);
-      const double& endEffectorYawAngle = endEffectorPose(5);
+      const double endEffectorRollAngle = endEffectorPose(3);
+      const double endEffectorPitchAngle = endEffectorPose(4);
+      const double endEffectorYawAngle = endEffectorPose(5);
 
       model.slice(0) = redundantJointStartPositions_;
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const arma::uword& redundantJointIndex = redundantJointIndicies_(n);
+        const arma::uword redundantJointIndex = redundantJointIndicies_(n);
         model.slice(0).col(redundantJointIndex) += redundantJointsActuation(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
@@ -167,7 +167,7 @@ namespace mant {
       arma::Mat<double> inverseKinematic(6, 6 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = forwardKinematic.row(0) % relativeBaseToPassiveJoints.row(1) - forwardKinematic.row(1) % relativeBaseToPassiveJoints.row(0);
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const arma::uword& redundantJointIndex = redundantJointIndicies_(n);
+        const arma::uword redundantJointIndex = redundantJointIndicies_(n);
         inverseKinematic(n, 6 + n) = arma::dot(baseToEndEffectorJoints.col(redundantJointIndex), redundantJointRotationAngles_.col(redundantJointIndex));
       }
 

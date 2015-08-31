@@ -66,11 +66,11 @@ namespace mant {
       arma::Cube<double>::fixed<2, 3, 3> model;
 
       const arma::Col<double>::fixed<2>& endEffectorPosition = endEffectorPose.subvec(0, 1);
-      const double& endEffectorAngle = endEffectorPose(2);
+      const double endEffectorAngle = endEffectorPose(2);
 
       model.slice(0) = redundantJointStartPositions_;
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const arma::uword& redundantJointIndex = redundantJointIndicies_(n);
+        const arma::uword redundantJointIndex = redundantJointIndicies_(n);
         model.slice(0).col(redundantJointIndex) += redundantJointsActuation(redundantJointIndex) * redundantJointStartToEndPositions_.col(redundantJointIndex);
       }
 
@@ -129,7 +129,7 @@ namespace mant {
       arma::Mat<double> inverseKinematic(3, 3 + redundantJointIndicies_.n_elem, arma::fill::zeros);
       inverseKinematic.diag() = forwardKinematic.row(0) % baseToPassiveJoints.row(1) - forwardKinematic.row(1) % baseToPassiveJoints.row(0);
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
-        const arma::uword& redundantJointIndex = redundantJointIndicies_(n);
+        const arma::uword redundantJointIndex = redundantJointIndicies_(n);
         inverseKinematic(n, 3 + n) = -(forwardKinematic(redundantJointIndex, 0) * redundantJointAngleCosines_(n) + forwardKinematic(redundantJointIndex, 1) * redundantJointAngleSines_(n));
       }
 

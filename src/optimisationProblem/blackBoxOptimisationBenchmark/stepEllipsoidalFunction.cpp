@@ -38,7 +38,7 @@ namespace mant {
 
       arma::Col<double> z = s;
       for (arma::uword n = 0; n < z.n_elem; ++n) {
-        const double& value = s(n);
+        const double value = s(n);
 
         if (std::abs(value) > 0.5) {
           z(n) = std::round(value);

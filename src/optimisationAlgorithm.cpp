@@ -147,7 +147,7 @@ namespace mant {
     assert(parameter.n_elem == numberOfDimensions_);
     
     if (recordSamples) {
-      const double& objectiveValue = optimisationProblem_->getObjectiveValue(parameter);
+      const double objectiveValue = optimisationProblem_->getObjectiveValue(parameter);
       samplingProgress_.push_back({parameter, objectiveValue});
       return objectiveValue;
     } else {
