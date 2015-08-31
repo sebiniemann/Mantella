@@ -310,8 +310,19 @@ if(BUILD_TESTS)
     test/main.cpp
     test/catchExtension.cpp
     
-    # Helper
+    # Configuration
+    test/testConfig.cpp
+    
+    # Asserts
+    test/helper/testAssert.cpp
+
+    # Random number generator
     test/helper/testRng.cpp
+    
+    # MPI
+    test/helper/testMpi.cpp
+    
+    # Helper
     test/helper/testGeometry.cpp
     test/helper/testPrintable.cpp
     test/helper/testQuasiRandomSequence.cpp
@@ -321,6 +332,33 @@ if(BUILD_TESTS)
     test/helper/testStatistic.cpp
     test/helper/testUnorderedContainer.cpp
     
+    # Regression functions
+    test/testRegressionFunction.cpp
+    test/regressionFunction/testConstantPolynomialRegressionFunction.cpp
+    test/regressionFunction/testLinearPolynomialRegressionFunction.cpp
+    test/regressionFunction/testQuadraticPolynomialRegressionFunction.cpp
+    test/regressionFunction/testCubicPolynomialRegressionFunction.cpp
+
+    # Correlation functions
+    test/testCorrelationFunction.cpp
+    test/correlationFunction/testPolynomialCorrelationFunction.cpp
+    test/correlationFunction/testSplineCorrelationFunction.cpp
+    test/correlationFunction/testExponentialCorrelationFunction.cpp
+    test/correlationFunction/testGaussianCorrelationFunction.cpp
+      
+    # Radial basis functions
+    test/testRadialBasisFunction.cpp
+    test/radialBasisFunction/testPolyharmonicSplineRadialBasisFunction.cpp
+    test/radialBasisFunction/testMultiquadraticRadialBasisFunction.cpp
+    test/radialBasisFunction/testGaussianRadialBasisFunction.cpp
+      
+    # Samples selections
+    test/testSamplesSelection.cpp
+    test/samplesSelection/testBestFittingSamplesSelection.cpp
+    test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
+    test/samplesSelection/testBestSamplesSelection.cpp
+    test/samplesSelection/testRandomSamplesSelection.cpp
+
     # Optimisation problems
     test/testOptimisationProblem.cpp
     test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
@@ -358,6 +396,12 @@ if(BUILD_TESTS)
     test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PUPS.cpp
     test/optimisationProblem/roboticsOptimisationProblem/robotModel/testMultiLevelStewartPlatform.cpp
     test/optimisationProblem/roboticsOptimisationProblem/testEndEffectorPoseError.cpp
+    test/optimisationProblem/testSurrogateModel.cpp
+    test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
+    test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
+    test/optimisationProblem/surrogateModel/testKrigingModel.cpp
+    test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
     
     # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
@@ -390,14 +434,10 @@ if(BUILD_TESTS)
     test/propertyAnalysis/activePropertyAnalysis/testPolynomialProportionalityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
     test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
-
-    # Surrogate models
-    test/testSurrogateModel.cpp
-    test/surrogateModel/testPolynomialFunctionModel.cpp
-    test/surrogateModel/testRadialBasisFunctionModel.cpp
-    test/surrogateModel/testKrigingModel.cpp
-    test/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
-    test/surrogateModel/testArtificialNeuralNetwork.cpp
+  
+    # Cluster analyses
+    test/testClusterAnalysis.cpp
+    test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
   )
 
   # Link against prerequirements
