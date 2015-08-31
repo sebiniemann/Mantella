@@ -134,7 +134,10 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
 
 # All paths must start with "src/"
 add_library(mantella SHARED
+  # Configuration
   src/config.cpp
+  
+  # Asserts
   src/helper/assert.cpp
 
   # Random number generator
