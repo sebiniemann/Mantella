@@ -11,7 +11,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("NeighbourhoodPeriodicityAnalysis", "") {
+TEST_CASE("NeighbourhoodPeriodicityAnalysis") {
   SECTION(".analyse") {
     SECTION("Checking the procedure.") {
       

@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::SharpRidgeFunction", "") {
+TEST_CASE("bbob::SharpRidgeFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
 

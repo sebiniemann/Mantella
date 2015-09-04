@@ -34,7 +34,7 @@ class TestHillClimbing : public mant::HillClimbing {
     arma::Mat<double> neighbours_;
 };
 
-TEST_CASE("HillClimbing", "") {
+TEST_CASE("HillClimbing") {
   SECTION(".setMaximalStepSize") {
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
     mant::HillClimbing hillClimbing(optimisationProblem);

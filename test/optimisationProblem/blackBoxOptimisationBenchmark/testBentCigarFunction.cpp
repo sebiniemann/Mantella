@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::BentCigarFunction", "") {
+TEST_CASE("bbob::BentCigarFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::BentCigarFunction bentCigarFunction(numberOfDimensions);
 

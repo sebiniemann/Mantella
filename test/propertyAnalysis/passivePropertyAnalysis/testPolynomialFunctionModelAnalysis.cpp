@@ -13,7 +13,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("PolynomialFunctionModelAnalysis", "") {
+TEST_CASE("PolynomialFunctionModelAnalysis") {
   SECTION(".analyse") {
 
   }

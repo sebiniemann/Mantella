@@ -7,7 +7,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("HookeJeevesAlgorithm", "") {
+TEST_CASE("HookeJeevesAlgorithm") {
   SECTION(".optimise") {
     // TODO
   }

@@ -8,7 +8,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("unorderedContainer: Hash", "") {
+TEST_CASE("unorderedContainer: Hash") {
   SECTION("Generates hashes within a low number of collisions.") {
     std::unordered_set<arma::uword> hashes;
 
@@ -25,7 +25,7 @@ TEST_CASE("unorderedContainer: Hash", "") {
   }
 }
 
-TEST_CASE("unorderedContainer: IsKeyEqual", "") {
+TEST_CASE("unorderedContainer: IsKeyEqual") {
   SECTION("Returns true if both vectors are equal.") {
     mant::IsEqual isEqual;
     CHECK(isEqual(arma::Col<double>::fixed<5>({1.0, 0.0, 6.5, -312.4}), arma::Col<double>::fixed<5>({1.0, 0.0, 6.5, -312.4})) == true);

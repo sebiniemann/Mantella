@@ -7,7 +7,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("SimulatedAnnealing", "") {
+TEST_CASE("SimulatedAnnealing") {
   SECTION(".optimise") {
     // TODO
   }

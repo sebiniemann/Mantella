@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::BuecheRastriginFunction", "") {
+TEST_CASE("bbob::BuecheRastriginFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::BuecheRastriginFunction buecheRastriginFunction(numberOfDimensions);
 

@@ -11,7 +11,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("FitnessDistanceCorrelationAnalysis", "") {
+TEST_CASE("FitnessDistanceCorrelationAnalysis") {
   SECTION(".analyse") {
     SECTION("Checking the procedure.") {
       arma::Mat<double>::fixed<11, 2> firstOfAnscombesQuartet({

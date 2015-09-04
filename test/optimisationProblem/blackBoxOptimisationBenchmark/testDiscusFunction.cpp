@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::DiscusFunction", "") {
+TEST_CASE("bbob::DiscusFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::DiscusFunction discusFunction(numberOfDimensions);
 

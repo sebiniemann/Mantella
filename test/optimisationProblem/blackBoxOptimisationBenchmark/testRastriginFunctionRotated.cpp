@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::RastriginFunctionRotated", "") {
+TEST_CASE("bbob::RastriginFunctionRotated") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::RastriginFunctionRotated rastriginFunctionRotated(numberOfDimensions);
 

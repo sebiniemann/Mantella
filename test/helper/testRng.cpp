@@ -8,7 +8,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("Rng", "") {
+TEST_CASE("Rng") {
   SECTION("Getting a working generator.") {
     arma::Col<double>::fixed<1000> values;
     for (arma::uword n = 0; n < values.n_elem; ++n) {

@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::EllipsoidalFunction", "") {
+TEST_CASE("bbob::EllipsoidalFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::EllipsoidalFunction ellipsoidalFunction(numberOfDimensions);
 

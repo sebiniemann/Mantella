@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::DifferentPowersFunction", "") {
+TEST_CASE("bbob::DifferentPowersFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::DifferentPowersFunction differentPowersFunction(numberOfDimensions);
 

@@ -13,7 +13,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::AttractiveSectorFunction", "") {
+TEST_CASE("bbob::AttractiveSectorFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
 

@@ -9,7 +9,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("geometry: get2DRotation(...)", "") {
+TEST_CASE("get2DRotation(...)") {
   SECTION("Generates 2D rotation matrix.") {
     const std::array<double, 15>& angles = {{0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0}};
 
@@ -24,7 +24,7 @@ TEST_CASE("geometry: get2DRotation(...)", "") {
   }
 }
 
-TEST_CASE("geometry: get3DRotation(...)", "") {
+TEST_CASE("get3DRotation(...)") {
   SECTION("Generates 3D rotation matrix.") {
     const std::array<double, 14>& rollAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -45, 276, -56, -45.89}};
     const std::array<double, 14>& pitchAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -90, -89, 78, -245}};
@@ -58,7 +58,7 @@ TEST_CASE("geometry: get3DRotation(...)", "") {
   }
 }
 
-TEST_CASE("geometry: getCircleCircleIntersection(...)", "") {
+TEST_CASE("getCircleCircleIntersection(...)") {
   SECTION("Finds the intersection between two circles.") {
     arma::Col<double>::fixed<2> expected;
 
@@ -91,7 +91,7 @@ TEST_CASE("geometry: getCircleCircleIntersection(...)", "") {
   }
 }
 
-TEST_CASE("geometry: getCircleSphereIntersection(...)", "") {
+TEST_CASE("getCircleSphereIntersection(...)") {
   SECTION("Finds the intersection between a circle and a sphere.") {
     arma::Col<double>::fixed<3> expected;
 

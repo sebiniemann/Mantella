@@ -11,7 +11,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("GridSearch", "") {
+TEST_CASE("GridSearch") {
   SECTION(".optimise") {
     SECTION("Checking the procedure with the default number of samples per dimension.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));

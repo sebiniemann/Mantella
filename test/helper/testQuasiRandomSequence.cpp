@@ -5,7 +5,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("quasiRandomSequence: getHaltonSequence(...)", "") {
+TEST_CASE("quasiRandomSequence: getHaltonSequence(...)") {
   SECTION("Generates a Halton sequance without an offset.") {
     arma::Mat<double>::fixed<2, 5> expected = {
       0.0, 0.0,
@@ -34,7 +34,7 @@ TEST_CASE("quasiRandomSequence: getHaltonSequence(...)", "") {
   }
 }
 
-TEST_CASE("quasiRandomSequence: getVanDerCorputSequence(...)", "") {
+TEST_CASE("quasiRandomSequence: getVanDerCorputSequence(...)") {
   SECTION("Generates a Van der Corput sequence without an offset.") {
     COMPARE(mant::getVanDerCorputSequence(2, 0, 5), {0.0, 1.0/2.0, 1.0/4.0, 3.0/4.0, 1.0/8.0});
   }

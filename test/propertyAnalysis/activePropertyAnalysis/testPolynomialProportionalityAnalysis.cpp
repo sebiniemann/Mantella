@@ -11,7 +11,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("QuadraticProportionalityAnalysis", "") {
+TEST_CASE("QuadraticProportionalityAnalysis") {
   SECTION(".analyse") {
     SECTION("Checking the procedure.") {
       

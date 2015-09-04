@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::KatsuuraFunction", "") {
+TEST_CASE("bbob::KatsuuraFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::KatsuuraFunction katsuuraFunction(numberOfDimensions);
 

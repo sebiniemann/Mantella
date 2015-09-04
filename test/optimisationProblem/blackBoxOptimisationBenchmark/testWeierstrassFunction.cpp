@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::WeierstrassFunction", "") {
+TEST_CASE("bbob::WeierstrassFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::WeierstrassFunction weierstrassFunction(numberOfDimensions);
 

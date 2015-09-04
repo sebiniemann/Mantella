@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::LunacekBiRastriginFunction", "") {
+TEST_CASE("bbob::LunacekBiRastriginFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::LunacekBiRastriginFunction lunacekBiRastriginFunction(numberOfDimensions);
 

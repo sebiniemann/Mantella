@@ -7,7 +7,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("ParticleSwarmOptimisation", "") {
+TEST_CASE("ParticleSwarmOptimisation") {
   SECTION(".optimise") {
     // TODO
   }

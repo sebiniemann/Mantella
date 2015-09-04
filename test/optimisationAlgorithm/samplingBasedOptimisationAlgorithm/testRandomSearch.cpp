@@ -10,7 +10,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("RandomSearch", "") {
+TEST_CASE("RandomSearch") {
   SECTION(".optimise") {
     SECTION("Checks if all parameters are uniformly distributed.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));

@@ -11,7 +11,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("HoelderContinuityAnalysis", "") {
+TEST_CASE("HoelderContinuityAnalysis") {
   SECTION(".analyse") {
     SECTION("Checking the procedure.") {
       const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());

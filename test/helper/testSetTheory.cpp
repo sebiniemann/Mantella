@@ -8,7 +8,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("setTheory: getTwoSetsPartitions(...)", "") {
+TEST_CASE("setTheory: getTwoSetsPartitions(...)") {
   SECTION("Generates all unique partitions with exactly two sets.") {
     std::array<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>, 31> expected = {{
       {{0},{1,2,3,4,5}},

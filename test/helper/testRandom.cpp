@@ -9,7 +9,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("random: getRandomRotationMatrix", "") {
+TEST_CASE("random: getRandomRotationMatrix") {
   SECTION("Generates uniform distributed 2-dimensional rotation.") {
     arma::Col<double>::fixed<10000> angles;
     for (arma::uword n = 0; n < angles.n_elem; ++n) {
@@ -45,7 +45,7 @@ TEST_CASE("random: getRandomRotationMatrix", "") {
   }
 }
 
-TEST_CASE("random: getRandomPermutation", "") {
+TEST_CASE("random: getRandomPermutation") {
   SECTION("Generates uniform distributed partitial permutations.") {
     arma::Mat<arma::uword>::fixed<10, 40000> permutations;
     for (arma::uword n = 0; n < permutations.n_cols; ++n) {
@@ -68,7 +68,7 @@ TEST_CASE("random: getRandomPermutation", "") {
   }
 }
 
-TEST_CASE("random: getRandomPermutation(unsigned int)", "") {
+TEST_CASE("random: getRandomPermutation(unsigned int)") {
   SECTION("Generates uniform distributed permutations.") {
     arma::Mat<arma::uword>::fixed<10, 10000> permutations;
     for (arma::uword n = 0; n < permutations.n_cols; ++n) {

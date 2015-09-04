@@ -14,7 +14,7 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::SchaffersF7Function", "") {
+TEST_CASE("bbob::SchaffersF7Function") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::SchaffersF7Function schaffersF7Function(numberOfDimensions);
 
