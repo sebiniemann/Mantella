@@ -26,11 +26,7 @@ namespace mant {
       
     // Is its transpose also its inverse?
     // For (nearly) singular matrices, the inversion might throw an exception.
-    try {
-      if(arma::any(arma::vectorise(arma::abs(parameter.i() - parameter.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(parameter))))))) {
-        return false;
-      }
-    } catch (...) {
+    if(arma::any(arma::vectorise(arma::abs(arma::pinv(rotationMatrixCandidate).t() - rotationMatrixCandidate)) > 1.0e-12 * arma::max(arma::ones(rotationMatrixCandidate.n_elem), arma::vectorise(rotationMatrixCandidate)))) {
       return false;
     }
 
