@@ -13,18 +13,18 @@ namespace mant {
   }
 
   bool isRotationMatrix(
-      const arma::Mat<double>& parameter) {
+      const arma::Mat<double>& rotationMatrixCandidate) {
     // Is the rotation matrix square?
-    if (!parameter.is_square()) {
+    if (!rotationMatrixCandidate.is_square()) {
       return false;
     }
       
     // Is its determinant either 1 or -1?
-    if(std::abs(std::abs(arma::det(parameter)) - 1.0) > 1.0e-12) {
+    if(std::abs(std::abs(arma::det(rotationMatrixCandidate)) - 1.0) > 1.0e-12) {
       return false;
     }
       
-    // Is the rotation matrix square?
+    // Is its transpose also its inverse?
     // For (nearly) singular matrices, the inversion might throw an exception.
     try {
       if(arma::any(arma::vectorise(arma::abs(parameter.i() - parameter.t()) > 1.0e-12 * std::max(1.0, std::abs(arma::median(arma::vectorise(parameter))))))) {
@@ -38,21 +38,21 @@ namespace mant {
   }
 
   bool isPermutation(
-      const arma::Col<arma::uword>& parameter,
+      const arma::Col<arma::uword>& permutationCandidate,
       const arma::uword numberOfPermutations,
       const arma::uword numberOfElements) {
     // Are there as many permutations as expected?
-    if (parameter.n_elem != numberOfPermutations) {
+    if (permutationCandidate.n_elem != numberOfPermutations) {
       return false;
     }
     
     // Are all elements within [0, numberOfElements - 1]?
-    if (arma::any(parameter < 0) || arma::any(parameter > numberOfElements - 1)) {
+    if (arma::any(permutationCandidate < 0) || arma::any(permutationCandidate > numberOfElements - 1)) {
       return false;
     }
     
     // Are all elements unique?
-    if (static_cast<arma::Col<arma::uword>>(arma::unique(parameter)).n_elem != parameter.n_elem) {
+    if (static_cast<arma::Col<arma::uword>>(arma::unique(permutationCandidate)).n_elem != permutationCandidate.n_elem) {
       return false;
     }
     

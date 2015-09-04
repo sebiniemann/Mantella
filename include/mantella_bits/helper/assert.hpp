@@ -16,10 +16,10 @@ namespace mant {
       const std::string& errorMessage);
 
   bool isRotationMatrix(
-      const arma::Mat<double>& parameter);
+      const arma::Mat<double>& rotationMatrixCandidate);
 
   bool isPermutation(
-      const arma::Col<arma::uword>& parameter,
+      const arma::Col<arma::uword>& permutationCandidate,
       const arma::uword numberOfPermutations,
       const arma::uword numberOfElements);
       
