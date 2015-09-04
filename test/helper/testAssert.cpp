@@ -3,6 +3,8 @@
 
 // C++ standard library
 #include <stdexcept>
+#include <unordered_map>
+#include <memory>
 
 // Mantella
 #include <mantella>
