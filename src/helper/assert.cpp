@@ -41,6 +41,11 @@ namespace mant {
       const arma::Col<arma::uword>& permutationCandidate,
       const arma::uword numberOfPermutations,
       const arma::uword numberOfElements) {
+    // Are there as more permutations than elements?
+    if (numberOfPermutations > numberOfElements) {
+      return false;
+    }
+    
     // Are there as many permutations as expected?
     if (permutationCandidate.n_elem != numberOfPermutations) {
       return false;
