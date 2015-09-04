@@ -1,6 +1,10 @@
 // Catch
 #include <catch.hpp>
 
+// C++ standard library
+#include <memory>
+#include <random>
+
 // Mantella
 #include <mantella>
 
