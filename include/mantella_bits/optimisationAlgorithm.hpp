@@ -33,7 +33,7 @@ namespace mant {
       bool isFinished() const;
       virtual bool isTerminated() const;
 
-      std::vector<std::pair<arma::Col<double>, double>> getSamplingProgress() const;
+      std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
       
       virtual ~OptimisationAlgorithm() = default;
 
@@ -49,7 +49,7 @@ namespace mant {
       double bestObjectiveValue_;
       arma::Col<double> bestParameter_;
 
-      std::vector<std::pair<arma::Col<double>, double>> samplingProgress_;
+      std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
 
       int nodeRank_;
       int numberOfNodes_;

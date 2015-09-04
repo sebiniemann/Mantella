@@ -112,8 +112,8 @@ namespace mant {
     return (numberOfIterations_ >= maximalNumberOfIterations_);
   }
 
-  std::vector<std::pair<arma::Col<double>, double>> OptimisationAlgorithm::getSamplingProgress() const {
-    return samplingProgress_;
+  std::vector<std::pair<arma::Col<double>, double>> OptimisationAlgorithm::getSamplingHistory() const {
+    return samplingHistory_;
   }
 
   arma::Col<double> OptimisationAlgorithm::getLowerBounds() const {
@@ -148,7 +148,7 @@ namespace mant {
     
     if (recordSamples) {
       const double objectiveValue = optimisationProblem_->getObjectiveValue(parameter);
-      samplingProgress_.push_back({parameter, objectiveValue});
+      samplingHistory_.push_back({parameter, objectiveValue});
       return objectiveValue;
     } else {
       return optimisationProblem_->getObjectiveValue(parameter);
