@@ -16,7 +16,10 @@ TEST_CASE("cacheSamples") {
   SECTION("Activates the sample caching") {
     mant::cacheSamples = true;
     
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+    CAPTURE(numberOfDimensions);
+    
+    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
     mant::RandomSearch optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
     
@@ -26,7 +29,10 @@ TEST_CASE("cacheSamples") {
   SECTION("Deactivates the sample caching") {
     mant::cacheSamples = false;
     
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+    CAPTURE(numberOfDimensions);
+    
+    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
     mant::RandomSearch optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
     
@@ -42,7 +48,10 @@ TEST_CASE("recordSamples") {
   SECTION("Activates the sample recording") {
     mant::recordSamples = true;
     
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+    CAPTURE(numberOfDimensions);
+    
+    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
     mant::RandomSearch optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
     
@@ -52,7 +61,10 @@ TEST_CASE("recordSamples") {
   SECTION("Deactivates the sample recording") {
     mant::recordSamples = false;
     
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
+    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+    CAPTURE(numberOfDimensions);
+    
+    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
     mant::RandomSearch optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
     
