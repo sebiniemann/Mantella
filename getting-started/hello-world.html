@@ -19,10 +19,10 @@ layout: page
 int main() {
   // 1. Setup the optimisation problem.
   unsigned int numberOfDimensions = 10;
-  std::shared_ptr<mant::OptimisationProblem<>> optimisationProblem(new mant::bbob::SphereFunction<>(numberOfDimensions));
+  std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
 
   // 2. Run the solver.
-  mant::HookeJeevesAlgorithm<> optimisationAlgorithm(optimisationProblem);
+  mant::HookeJeevesAlgorithm optimisationAlgorithm(optimisationProblem);
   optimisationAlgorithm.optimise();
 
   // 3. Get your results!
@@ -31,7 +31,6 @@ int main() {
   std::cout << "numberOfIterations: " << optimisationAlgorithm.getNumberOfIterations() << '\n';
   std::cout << "numberOfEvaluations: " << optimisationProblem->getNumberOfEvaluations() << '\n';
   std::cout << "numberOfDistinctEvaluations: " << optimisationProblem->getNumberOfDistinctEvaluations() << '\n';
-  std::cout << "bestSoftConstraintsValue: " << optimisationAlgorithm.getBestSoftConstraintsValue() << '\n';
   std::cout << "bestObjectiveValueDelta: " << optimisationAlgorithm.getBestObjectiveValue() - optimisationProblem->getAcceptableObjectiveValue() << '\n';
   std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
 
@@ -44,7 +43,7 @@ int main() {
 c++ -std=c++11 hello.cpp -larmadillo -o hello
 # In case Armadillo and Mantella were not installed/placed into 
 # standardly included/searched system directories, use the following
-c++ -std=c++11 hello.cpp -L/path/to/armaillo/lib -larmadillo -I/path/to/armadillo/include -I/path/to/mantella/include -o hello</div>
+c++ -std=c++11 hello.cpp -L/path/to/armaillo/lib -larmadillo -lmantella -I/path/to/armadillo/include -I/path/to/mantella/include -o hello</div>
 {% endhighlight %}
   </div>
   <div role="tabpanel" class="tab-pane" id="hello-world-run">
