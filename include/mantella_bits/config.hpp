@@ -8,7 +8,8 @@ namespace mant {
   extern std::atomic<bool> recordSamples; /* = false (default) */
 }
 
-#undef MANTELLA_USE_MPI
-#if defined(MPI_SUCCESS)
-  #define MANTELLA_USE_MPI
+// MPI
+#define SUPPORT_MPI
+#if defined(SUPPORT_MPI)
+  #include <mpi.h>
 #endif

@@ -9,7 +9,7 @@
 namespace mant {
   class MahalabonbisDistance : public DistanceFunction {
     public:
-      MahalabonbisDistance::
+      using DistanceFunction::DistanceFunction;
     
       std::string toString() const;
     

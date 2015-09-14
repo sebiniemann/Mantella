@@ -271,6 +271,7 @@ add_library(mantella SHARED
   # Cluster analyses
   src/clusterAnalysis.cpp
   src/clusterAnalysis/basicSequentialAlgorithmicScheme.cpp
+  src/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.cpp
 )
 
 # Linking against prerequirements
@@ -340,125 +341,126 @@ if(BUILD_TESTS)
     
     # Helper
     test/helper/testGeometry.cpp
-    test/helper/testPrintable.cpp
-    test/helper/testQuasiRandomSequence.cpp
-    test/helper/testRandom.cpp
-    test/helper/testRegression.cpp
-    test/helper/testSetTheory.cpp
-    test/helper/testStatistic.cpp
-    test/helper/testUnorderedContainer.cpp
+    # test/helper/testPrintable.cpp
+    # test/helper/testQuasiRandomSequence.cpp
+    # test/helper/testRandom.cpp
+    # test/helper/testRegression.cpp
+    # test/helper/testSetTheory.cpp
+    # test/helper/testStatistic.cpp
+    # test/helper/testUnorderedContainer.cpp
 
-    # Distance functions
-    test/testDistanceFunction.cpp
-    test/distanceFunction/testPNorm.cpp
-    test/distanceFunction/testMahalabonisDistance.cpp
+    # # Distance functions
+    # test/testDistanceFunction.cpp
+    # test/distanceFunction/testPNorm.cpp
+    # test/distanceFunction/testMahalabonisDistance.cpp
     
-    # Regression functions
-    test/testRegressionFunction.cpp
-    test/regressionFunction/testConstantPolynomialRegressionFunction.cpp
-    test/regressionFunction/testLinearPolynomialRegressionFunction.cpp
-    test/regressionFunction/testQuadraticPolynomialRegressionFunction.cpp
-    test/regressionFunction/testCubicPolynomialRegressionFunction.cpp
+    # # Regression functions
+    # test/testRegressionFunction.cpp
+    # test/regressionFunction/testConstantPolynomialRegressionFunction.cpp
+    # test/regressionFunction/testLinearPolynomialRegressionFunction.cpp
+    # test/regressionFunction/testQuadraticPolynomialRegressionFunction.cpp
+    # test/regressionFunction/testCubicPolynomialRegressionFunction.cpp
 
-    # Correlation functions
-    test/testCorrelationFunction.cpp
-    test/correlationFunction/testPolynomialCorrelationFunction.cpp
-    test/correlationFunction/testSplineCorrelationFunction.cpp
-    test/correlationFunction/testExponentialCorrelationFunction.cpp
-    test/correlationFunction/testGaussianCorrelationFunction.cpp
+    # # Correlation functions
+    # test/testCorrelationFunction.cpp
+    # test/correlationFunction/testPolynomialCorrelationFunction.cpp
+    # test/correlationFunction/testSplineCorrelationFunction.cpp
+    # test/correlationFunction/testExponentialCorrelationFunction.cpp
+    # test/correlationFunction/testGaussianCorrelationFunction.cpp
       
-    # Radial basis functions
-    test/testRadialBasisFunction.cpp
-    test/radialBasisFunction/testPolyharmonicSplineRadialBasisFunction.cpp
-    test/radialBasisFunction/testMultiquadraticRadialBasisFunction.cpp
-    test/radialBasisFunction/testGaussianRadialBasisFunction.cpp
+    # # Radial basis functions
+    # test/testRadialBasisFunction.cpp
+    # test/radialBasisFunction/testPolyharmonicSplineRadialBasisFunction.cpp
+    # test/radialBasisFunction/testMultiquadraticRadialBasisFunction.cpp
+    # test/radialBasisFunction/testGaussianRadialBasisFunction.cpp
       
-    # Samples selections
-    test/testSamplesSelection.cpp
-    test/samplesSelection/testBestFittingSamplesSelection.cpp
-    test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
-    test/samplesSelection/testBestSamplesSelection.cpp
-    test/samplesSelection/testRandomSamplesSelection.cpp
+    # # Samples selections
+    # test/testSamplesSelection.cpp
+    # test/samplesSelection/testBestFittingSamplesSelection.cpp
+    # test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
+    # test/samplesSelection/testBestSamplesSelection.cpp
+    # test/samplesSelection/testRandomSamplesSelection.cpp
 
-    # Optimisation problems
-    test/testOptimisationProblem.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
-    test/optimisationProblem/testRoboticsOptimisationProblem.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/testRobotModel.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRPR.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRRR.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRUS.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PUPS.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine4PRUS.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PRUS.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PUPS.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/robotModel/testMultiLevelStewartPlatform.cpp
-    test/optimisationProblem/roboticsOptimisationProblem/testEndEffectorPoseError.cpp
-    test/optimisationProblem/testSurrogateModel.cpp
-    test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
-    test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
-    test/optimisationProblem/surrogateModel/testKrigingModel.cpp
-    test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
-    test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
+    # # Optimisation problems
+    # test/testOptimisationProblem.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
+    # test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    # test/optimisationProblem/testRoboticsOptimisationProblem.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/testRobotModel.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRPR.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRRR.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRUS.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PUPS.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine4PRUS.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PRUS.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PUPS.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testMultiLevelStewartPlatform.cpp
+    # test/optimisationProblem/roboticsOptimisationProblem/testEndEffectorPoseError.cpp
+    # test/optimisationProblem/testSurrogateModel.cpp
+    # test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
+    # test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
+    # test/optimisationProblem/surrogateModel/testKrigingModel.cpp
+    # test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    # test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
     
-    # Optimisation algorithms
-    test/testOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
-    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
-    test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
-    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
-    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
-    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
+    # # Optimisation algorithms
+    # test/testOptimisationAlgorithm.cpp
+    # test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
+    # test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
+    # test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    # test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
+    # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
+    # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
+    # test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
+    # test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
     
-    # Samples selection
-    test/testSamplesSelection.cpp
-    test/samplesSelection/testBestFittingSamplesSelection.cpp
-    test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
-    test/samplesSelection/testBestSamplesSelection.cpp
-    test/samplesSelection/testRandomSamplesSelection.cpp
+    # # Samples selection
+    # test/testSamplesSelection.cpp
+    # test/samplesSelection/testBestFittingSamplesSelection.cpp
+    # test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
+    # test/samplesSelection/testBestSamplesSelection.cpp
+    # test/samplesSelection/testRandomSamplesSelection.cpp
     
-    # Property analysis
-    test/testPropertyAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testFitnessDistanceCorrelationAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testLipschitzContinuityAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testHoelderContinuityAnalysis.cpp
-    test/propertyAnalysis/passivePropertyAnalysis/testPolynomialFunctionModelAnalysis.cpp
-    test/propertyAnalysis/testActivePropertyAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testPolynomialProportionalityAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
-    test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
+    # # Property analysis
+    # test/testPropertyAnalysis.cpp
+    # test/propertyAnalysis/passivePropertyAnalysis/testFitnessDistanceCorrelationAnalysis.cpp
+    # test/propertyAnalysis/passivePropertyAnalysis/testLipschitzContinuityAnalysis.cpp
+    # test/propertyAnalysis/passivePropertyAnalysis/testHoelderContinuityAnalysis.cpp
+    # test/propertyAnalysis/passivePropertyAnalysis/testPolynomialFunctionModelAnalysis.cpp
+    # test/propertyAnalysis/testActivePropertyAnalysis.cpp
+    # test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
+    # test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp
+    # test/propertyAnalysis/activePropertyAnalysis/testPolynomialProportionalityAnalysis.cpp
+    # test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
+    # test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
   
-    # Cluster analyses
-    test/testClusterAnalysis.cpp
-    test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
+    # # Cluster analyses
+    # test/testClusterAnalysis.cpp
+    # test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
+    # test/clusterAnalysis/testTwoThresholdSequentialAlgorithmicScheme.cpp
   )
 
   # Link against prerequirements
