@@ -5,6 +5,10 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <memory>
+#include <random>
+
+// Armadillo
+#include <armadillo>
 
 // Mantella
 #include <mantella>
