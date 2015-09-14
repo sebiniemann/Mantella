@@ -132,6 +132,15 @@ endif()
 # Include Mantella
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
 
+if(SUPPORT_MPI)
+  message(STATUS "- Adding MPI support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
+else()
+  message(STATUS "- Excluding MPI support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=On' to add this.")
+endif()
+configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
+
 # All paths must start with "src/"
 add_library(mantella SHARED
   # Configuration
@@ -272,12 +281,7 @@ else()
 endif()
 
 if(SUPPORT_MPI)
-  message(STATUS "- Adding MPI support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
   target_link_libraries(mantella ${MPI_C_LIBRARIES})
-else()
-  message(STATUS "- Excluding MPI support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=On' to add this.")
 endif()
 
 # -------------------
@@ -507,7 +511,6 @@ endif()
 install(TARGETS mantella
   ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
   LIBRARY DESTINATION ${INSTALL_LIB_DIR})
-
 
 message(STATUS "")
 message(STATUS "Noticable CMAKE variables:")

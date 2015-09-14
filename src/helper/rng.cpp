@@ -20,7 +20,7 @@ namespace mant {
 
   void Rng::setRandomSeed() {
     arma::arma_rng::set_seed_random();
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     

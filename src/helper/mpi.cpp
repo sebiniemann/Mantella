@@ -3,7 +3,7 @@
 // C++ standard library
 #include <algorithm>
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
 namespace mant {
   void mpiGetBestParameter(
       void* firstInput,

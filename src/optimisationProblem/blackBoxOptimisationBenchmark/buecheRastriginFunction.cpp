@@ -39,7 +39,7 @@ namespace mant {
       return "bbob_bueche_rastrigin_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> BuecheRastriginFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

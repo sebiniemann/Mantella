@@ -41,7 +41,7 @@ namespace mant {
       return "bbob_attractive_sector_function";
     }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> AttractiveSectorFunction::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
       

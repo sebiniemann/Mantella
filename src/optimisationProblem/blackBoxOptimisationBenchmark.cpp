@@ -117,7 +117,7 @@ namespace mant {
       return boundConstraintsValue;
     }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> BlackBoxOptimisationBenchmark::serialise() const {
       return OptimisationProblem::serialise();
     }

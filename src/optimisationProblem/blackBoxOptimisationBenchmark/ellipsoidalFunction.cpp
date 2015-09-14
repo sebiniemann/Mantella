@@ -26,7 +26,7 @@ namespace mant {
       return "bbob_ellipsoidal_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> EllipsoidalFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

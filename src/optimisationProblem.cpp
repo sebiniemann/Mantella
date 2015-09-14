@@ -194,7 +194,7 @@ namespace mant {
     return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
   }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
   std::vector<double> OptimisationProblem::serialise() const {
     std::vector<double> serialisedOptimisationProblem;
 

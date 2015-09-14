@@ -32,7 +32,7 @@ namespace mant {
       return "bbob_composite_griewank_rosenbrock_function_f8f2";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> CompositeGriewankRosenbrockFunctionF8F2::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

@@ -28,7 +28,7 @@ namespace mant {
       return "bbob_different_powers_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> DifferentPowersFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

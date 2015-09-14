@@ -28,7 +28,7 @@ namespace mant {
       return "bbob_ellipsoidal_function_rotated";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> EllipsoidalFunctionRotated::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

@@ -32,7 +32,7 @@ namespace mant {
       return "bbob_linear_slope";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> LinearSlope::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

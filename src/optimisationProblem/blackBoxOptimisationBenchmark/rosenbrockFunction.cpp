@@ -30,7 +30,7 @@ namespace mant {
       return "bbob_rosenbrock_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> RosenbrockFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

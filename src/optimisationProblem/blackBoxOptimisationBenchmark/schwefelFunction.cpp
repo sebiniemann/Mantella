@@ -35,7 +35,7 @@ namespace mant {
       return "bbob_schwefel_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> SchwefelFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

@@ -27,7 +27,7 @@ namespace mant {
       return "bbob_sphere_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> SphereFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

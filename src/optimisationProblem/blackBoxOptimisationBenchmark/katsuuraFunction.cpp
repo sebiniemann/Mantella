@@ -54,7 +54,7 @@ namespace mant {
       return "bbob_katsuura_function";
     }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> KatsuuraFunction::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
       

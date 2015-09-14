@@ -29,7 +29,7 @@ namespace mant {
       return "bbob_rastrigin_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> RastriginFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }

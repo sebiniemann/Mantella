@@ -41,7 +41,7 @@ namespace mant {
       return "bbob_schaffers_f7_function_ill_conditioned";
     }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> SchaffersF7FunctionIllConditioned::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
       

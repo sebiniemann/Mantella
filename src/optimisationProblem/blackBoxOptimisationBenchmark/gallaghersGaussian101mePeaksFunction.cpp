@@ -83,7 +83,7 @@ namespace mant {
       return "bbob_gallaghers_gaussian_101me_peaks_function";
     }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> GallaghersGaussian101mePeaksFunction::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
       

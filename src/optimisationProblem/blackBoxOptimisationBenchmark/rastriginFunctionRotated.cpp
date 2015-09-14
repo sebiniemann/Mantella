@@ -48,7 +48,7 @@ namespace mant {
       return "bbob_rastrigin_function_rotated";
     }
 
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> RastriginFunctionRotated::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
       

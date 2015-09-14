@@ -6,6 +6,7 @@
 
 // Mantella
 #include <mantella_bits/config.hpp>
+#include <mantella_bits/helper/mpi.hpp>
 #include <mantella_bits/helper/assert.hpp>
 #include <mantella_bits/helper/rng.hpp>
 
@@ -19,7 +20,7 @@ namespace mant {
       bestParameter_(numberOfDimensions_) {
     setMaximalNumberOfIterations(1000);
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
 #else
@@ -31,7 +32,7 @@ namespace mant {
   void OptimisationAlgorithm::optimise() {
     verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> serialisedOptimisationProblem;
     unsigned int serialisedOptimisationProblemSize;
 
@@ -61,7 +62,7 @@ namespace mant {
 
     optimiseImplementation();
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     MPI_Datatype MANT_MPI_PARAMETER;
     MPI_Type_contiguous(3 + numberOfDimensions_, MPI_DOUBLE, &MANT_MPI_PARAMETER);
     MPI_Type_commit(&MANT_MPI_PARAMETER);

@@ -28,7 +28,7 @@ namespace mant {
       return "bbob_discus_function";
     }
     
-#if defined(MANTELLA_USE_MPI)
+#if defined(SUPPORT_MPI)
     std::vector<double> DiscusFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();
     }
