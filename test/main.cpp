@@ -12,7 +12,11 @@
 
 std::string testDirectory;
 
-int main(const int argc, const char* argv[]) {
+int main(int argc, char* argv[]) {
+#if defined(SUPPORT_MPI)
+  MPI_Init(&argc, &argv);
+#endif
+
   try {
     if (argc != 2) {
       throw std::invalid_argument("The location of the test directory must be added to the command line.");
@@ -26,4 +30,8 @@ int main(const int argc, const char* argv[]) {
   } catch(const std::exception& exception) {
     std::cout << exception.what();
   }
+  
+#if defined(SUPPORT_MPI)
+  MPI_Finalize();
+#endif
 }
