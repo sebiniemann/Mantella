@@ -7,6 +7,7 @@
 #include <armadillo>
 
 // Mantella
+#include <mantella_bits/config.hpp>
 #include <mantella_bits/optimisationProblem.hpp>
 
 namespace mant {
@@ -15,9 +16,11 @@ namespace mant {
       public:
         explicit BlackBoxOptimisationBenchmark(
             const arma::uword numberOfDimensions);
+#if defined(SUPPORT_MPI)
         std::vector<double> serialise() const;
         void deserialise(
             std::vector<double> serialisedOptimisationProblem);
+#endif
 
         virtual ~BlackBoxOptimisationBenchmark() = default;
 

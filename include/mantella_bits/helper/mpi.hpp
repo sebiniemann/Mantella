@@ -1,5 +1,7 @@
 #pragma once
 
+#include <mantella_bits/config.hpp>
+
 #if defined(SUPPORT_MPI)
 namespace mant {
   void mpiGetBestParameter(

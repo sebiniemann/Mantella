@@ -7,6 +7,7 @@
 #include <armadillo>
 
 // Mantella
+#include <mantella_bits/config.hpp>
 #include <mantella_bits/helper/printable.hpp>
 #include <mantella_bits/helper/unorderedContainer.hpp>
 
@@ -68,12 +69,12 @@ namespace mant {
 
       std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
 
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
+#if defined(SUPPORT_MPI)
       std::vector<double> serialise() const;
 
-      // The type is intentionally fixed to ease usage with MPI_DOUBLE.
       void deserialise(
           std::vector<double> serialisedOptimisationProblem);
+#endif
 
       virtual ~OptimisationProblem() = default;
 

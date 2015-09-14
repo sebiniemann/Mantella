@@ -8,6 +8,7 @@
 #include <armadillo>
 
 // Mantella
+#include <mantella_bits/config.hpp>
 #include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp>
 
 namespace mant {
@@ -24,9 +25,11 @@ namespace mant {
             const arma::Mat<double>& rotationQ);
             
         std::string toString() const override;
+#if defined(SUPPORT_MPI)
         std::vector<double> serialise() const;
         void deserialise(
             std::vector<double> serialisedOptimisationProblem);
+#endif
 
       protected:
         const double f0_;
