@@ -38,7 +38,7 @@ TEST_CASE("bbob::AttractiveSectorFunction") {
     attractiveSectorFunction.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

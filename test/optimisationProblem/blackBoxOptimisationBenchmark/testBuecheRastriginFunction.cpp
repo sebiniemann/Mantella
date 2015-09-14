@@ -31,7 +31,7 @@ TEST_CASE("bbob::BuecheRastriginFunction") {
     buecheRastriginFunction.setParameterTranslation(translation);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(buecheRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(buecheRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

@@ -39,7 +39,7 @@ TEST_CASE("bbob::RastriginFunctionRotated") {
     rastriginFunctionRotated.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(rastriginFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(rastriginFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

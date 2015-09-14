@@ -35,11 +35,11 @@ void COMPARE(
   CHECK(actual.n_elem == expected.n_elem);
 
   for (arma::uword n = 0; n < expected.n_elem; ++n) {
-    if(std::isfinite(expected.at(n))) {
-      CHECK(actual.at(n) == Approx(expected.at(n)));
+    if(std::isfinite(expected(n))) {
+      CHECK(actual(n) == Approx(expected(n)));
     } else {
-      CHECK(std::isinf(actual.at(n)));
-      CHECK(std::signbit(actual.at(n)) == std::signbit(expected.at(n)));
+      CHECK(std::isinf(actual(n)));
+      CHECK(std::signbit(actual(n)) == std::signbit(expected(n)));
     }
   }
 }
@@ -50,11 +50,11 @@ void COMPARE(
   CHECK(actual.n_elem == expected.n_elem);
 
   for (arma::uword n = 0; n < expected.n_elem; ++n) {
-    if(std::isfinite(expected.at(n))) {
-      CHECK(actual.at(n) == Approx(expected.at(n)));
+    if(std::isfinite(expected(n))) {
+      CHECK(actual(n) == Approx(expected(n)));
     } else {
-      CHECK(std::isinf(actual.at(n)));
-      CHECK(std::signbit(actual.at(n)) == std::signbit(expected.at(n)));
+      CHECK(std::isinf(actual(n)));
+      CHECK(std::signbit(actual(n)) == std::signbit(expected(n)));
     }
   }
 }
@@ -66,11 +66,11 @@ void COMPARE(
   CHECK(actual.n_cols == expected.n_cols);
 
   for(arma::uword n = 0; n < expected.n_cols; ++n) {
-    if(std::isfinite(expected.at(n))) {
-      CHECK(actual.at(n) == Approx(expected.at(n)));
+    if(std::isfinite(expected(n))) {
+      CHECK(actual(n) == Approx(expected(n)));
     } else {
-      CHECK(std::isinf(actual.at(n)));
-      CHECK(std::signbit(actual.at(n)) == std::signbit(expected.at(n)));
+      CHECK(std::isinf(actual(n)));
+      CHECK(std::signbit(actual(n)) == std::signbit(expected(n)));
     }
   }
 }

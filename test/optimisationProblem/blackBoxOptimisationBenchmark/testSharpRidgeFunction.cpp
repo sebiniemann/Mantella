@@ -39,7 +39,7 @@ TEST_CASE("bbob::SharpRidgeFunction") {
     sharpRidgeFunction.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(sharpRidgeFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(sharpRidgeFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

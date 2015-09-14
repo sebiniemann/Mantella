@@ -73,8 +73,8 @@ namespace mant {
     arma::Col<double> mpiInputParameter(3 + numberOfDimensions_);
     arma::Col<double> mpiOutputParameter(3 + numberOfDimensions_);
     
-    mpiInputParameter.at(0) = static_cast<double>(numberOfDimensions_);
-    mpiInputParameter.at(2) = bestObjectiveValue_;
+    mpiInputParameter(0) = static_cast<double>(numberOfDimensions_);
+    mpiInputParameter(2) = bestObjectiveValue_;
     mpiInputParameter.tail(numberOfDimensions_) = bestParameter_;
     
     MPI_Reduce(mpiInputParameter.memptr(), mpiOutputParameter.memptr(), 1, MANT_MPI_PARAMETER, MANT_MPI_GET_BEST_PARAMETER, 0, MPI_COMM_WORLD);

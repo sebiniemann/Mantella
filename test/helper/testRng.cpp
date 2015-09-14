@@ -14,13 +14,12 @@ TEST_CASE("Rng") {
     SECTION("Is a valid (working) generator for C++ standard library random functions") {
       arma::Col<double>::fixed<10000> randomValues;
       for (arma::uword n = 0; n < randomValues.n_elem; ++n) {
-        randomValues.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
+        randomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
       }
 
       const arma::Col<arma::uword>& histogram = arma::hist(randomValues, 10);
       CAPTURE(histogram);
       
-      // Assumes that all values are drawn from [0, 1]
       CHECK(std::abs(static_cast<double>(histogram.max() - histogram.min()) < 0.05 * randomValues.n_elem));
     }
   }
@@ -34,7 +33,7 @@ TEST_CASE("Rng") {
       SECTION("Works with C++ standard library random functions") {
       arma::Col<double>::fixed<10> expectedRandomValues;
         for (arma::uword n = 0; n < expectedRandomValues.n_elem; ++n) {
-          expectedRandomValues.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
+          expectedRandomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
         }
         CAPTURE(expectedRandomValues);
 
@@ -42,7 +41,7 @@ TEST_CASE("Rng") {
         
         arma::Col<double>::fixed<10> actualRandomValues;
         for (arma::uword n = 0; n < actualRandomValues.n_elem; ++n) {
-          actualRandomValues.at(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
+          actualRandomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
         }
         CAPTURE(actualRandomValues);
 
@@ -93,7 +92,6 @@ TEST_CASE("Rng") {
       const arma::Mat<arma::uword>& histogram = arma::hist(randomValues, 10);
       CAPTURE(histogram);
       
-      // Assumes that all values are drawn from [0, 1]
       for (arma::uword n = 0; n < randomValues.n_cols; ++n) {
         CHECK(std::abs(static_cast<double>(histogram.col(n).max() - histogram.col(n).min()) < 0.05 * randomValues.n_rows));
       }

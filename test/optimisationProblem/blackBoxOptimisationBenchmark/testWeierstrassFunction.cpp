@@ -39,7 +39,7 @@ TEST_CASE("bbob::WeierstrassFunction") {
     weierstrassFunction.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(weierstrassFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(weierstrassFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

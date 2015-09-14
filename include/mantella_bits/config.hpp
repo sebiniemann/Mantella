@@ -9,7 +9,7 @@ namespace mant {
 }
 
 // MPI
-#define SUPPORT_MPI
+/* #undef SUPPORT_MPI */
 #if defined(SUPPORT_MPI)
   #include <mpi.h>
 #endif

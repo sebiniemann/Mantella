@@ -34,7 +34,7 @@ TEST_CASE("bbob::SchwefelFunction") {
     schwefelFunction.setParameterScaling(scaling);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(schwefelFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

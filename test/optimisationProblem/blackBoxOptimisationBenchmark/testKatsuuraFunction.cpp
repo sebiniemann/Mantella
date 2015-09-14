@@ -39,7 +39,7 @@ TEST_CASE("bbob::KatsuuraFunction") {
     katsuuraFunction.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(katsuuraFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(katsuuraFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

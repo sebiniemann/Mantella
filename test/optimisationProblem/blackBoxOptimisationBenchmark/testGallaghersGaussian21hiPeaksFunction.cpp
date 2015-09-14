@@ -39,7 +39,7 @@ TEST_CASE("bbob::GallaghersGaussian21hiPeaksFunction") {
     gallaghersGaussian21hiPeaksFunction.setLocalParameterConditionings(conditionings);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(gallaghersGaussian21hiPeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(gallaghersGaussian21hiPeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

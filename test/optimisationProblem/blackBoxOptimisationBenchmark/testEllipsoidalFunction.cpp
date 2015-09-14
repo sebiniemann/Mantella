@@ -31,7 +31,7 @@ TEST_CASE("bbob::EllipsoidalFunction") {
     ellipsoidalFunction.setParameterTranslation(translation);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(ellipsoidalFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(ellipsoidalFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

@@ -35,7 +35,7 @@ TEST_CASE("bbob::DiscusFunction") {
     discusFunction.setParameterRotation(rotationR);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(discusFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(discusFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

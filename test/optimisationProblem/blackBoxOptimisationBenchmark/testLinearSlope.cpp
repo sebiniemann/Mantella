@@ -35,7 +35,7 @@ TEST_CASE("bbob::LinearSlope") {
       linearSlope.setParameterRotation(rotation);
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+        CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
       }
     }
   }

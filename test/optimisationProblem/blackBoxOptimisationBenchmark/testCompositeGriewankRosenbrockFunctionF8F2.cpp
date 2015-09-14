@@ -31,7 +31,7 @@ TEST_CASE("bbob::CompositeGriewankRosenbrockFunctionF8F2") {
     compositeGriewankRosenbrockFunctionF8F2.setParameterRotation(rotationR);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(compositeGriewankRosenbrockFunctionF8F2.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(compositeGriewankRosenbrockFunctionF8F2.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

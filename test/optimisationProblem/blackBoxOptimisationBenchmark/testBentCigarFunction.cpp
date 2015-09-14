@@ -35,7 +35,7 @@ TEST_CASE("bbob::BentCigarFunction") {
     bentCigarFunction.setRotationQ(rotationR);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(bentCigarFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(bentCigarFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

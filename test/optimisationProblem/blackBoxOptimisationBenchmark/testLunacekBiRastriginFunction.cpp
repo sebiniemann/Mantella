@@ -42,7 +42,7 @@ TEST_CASE("bbob::LunacekBiRastriginFunction") {
     lunacekBiRastriginFunction.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(lunacekBiRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(lunacekBiRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

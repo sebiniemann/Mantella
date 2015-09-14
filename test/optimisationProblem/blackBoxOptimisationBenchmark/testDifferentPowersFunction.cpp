@@ -35,7 +35,7 @@ TEST_CASE("bbob::DifferentPowersFunction") {
     differentPowersFunction.setParameterRotation(rotationR);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(differentPowersFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(differentPowersFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

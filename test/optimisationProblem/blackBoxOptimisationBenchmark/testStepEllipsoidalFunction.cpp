@@ -39,7 +39,7 @@ TEST_CASE("bbob::StepEllipsoidalFunction") {
     stepEllipsoidalFunction.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(stepEllipsoidalFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(stepEllipsoidalFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

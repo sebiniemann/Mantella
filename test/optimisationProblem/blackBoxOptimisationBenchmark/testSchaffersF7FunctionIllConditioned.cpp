@@ -39,7 +39,7 @@ TEST_CASE("bbob::SchaffersF7FunctionIllConditioned") {
     schaffersF7FunctionIllConditioned.setRotationQ(rotationQ);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(schaffersF7FunctionIllConditioned.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(schaffersF7FunctionIllConditioned.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

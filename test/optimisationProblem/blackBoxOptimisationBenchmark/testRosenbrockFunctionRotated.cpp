@@ -31,7 +31,7 @@ TEST_CASE("bbob::RosenbrockFunctionRotated") {
     rosenbrockFunctionRotated.setParameterRotation(rotationR);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(rosenbrockFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(rosenbrockFunctionRotated.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

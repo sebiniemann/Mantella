@@ -31,7 +31,7 @@ TEST_CASE("bbob::RastriginFunction") {
     rastriginFunction.setParameterTranslation(translation);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(rastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(rastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 

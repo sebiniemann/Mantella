@@ -31,7 +31,7 @@ TEST_CASE("bbob::RosenbrockFunction") {
     rosenbrockFunction.setParameterTranslation(translation);
 
     for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(rosenbrockFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+      CHECK(rosenbrockFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 
