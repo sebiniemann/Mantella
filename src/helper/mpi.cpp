@@ -5,7 +5,7 @@
 
 #if defined(SUPPORT_MPI)
 namespace mant {
-  void mpiGetBestParameter(
+  void mpiGetBestSample(
       void* firstInput,
       void* secondInput,
       int* size,

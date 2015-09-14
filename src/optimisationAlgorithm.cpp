@@ -68,7 +68,7 @@ namespace mant {
     MPI_Type_commit(&MANT_MPI_PARAMETER);
   
     MPI_Op MANT_MPI_GET_BEST_PARAMETER;
-    MPI_Op_create(&mpiGetBestParameter, true, &MANT_MPI_GET_BEST_PARAMETER);
+    MPI_Op_create(&mpiGetBestSample, true, &MANT_MPI_GET_BEST_PARAMETER);
     
     arma::Col<double> mpiInputParameter(3 + numberOfDimensions_);
     arma::Col<double> mpiOutputParameter(3 + numberOfDimensions_);
