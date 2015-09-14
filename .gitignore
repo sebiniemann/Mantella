@@ -2,6 +2,7 @@
 bin/
 build/
 lib/
+include/mantella_bits/config.hpp
 
 # Qt Designer
 *.autosave
