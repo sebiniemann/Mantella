@@ -15,11 +15,13 @@
 TEST_CASE("get2DRotation") {
   SECTION("Generates 2D rotation matrix.") {
     const double angle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
+    CAPTURE(angle);
     
     arma::Mat<double>::fixed<2, 2> expected({
       std::cos(angle), -std::sin(angle),
       std::sin(angle), std::cos(angle)
     });
+    CAPTURE(expected);
 
     COMPARE(mant::get2DRotation(angle), expected);
   }
@@ -30,26 +32,35 @@ TEST_CASE("get3DRotation") {
     const double rollAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
     const double pitchAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
     const double yawAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
+    CAPTURE(rollAngle);
+    CAPTURE(pitchAngle);
+    CAPTURE(yawAngle);
     
     arma::Mat<double>::fixed<3, 3> rollRotationMatrix({
       1.0, 0.0, 0.0,
       0.0, std::cos(rollAngle), -std::sin(rollAngle),
       0.0, std::sin(rollAngle), std::cos(rollAngle),
     });
+    CAPTURE(rollRotationMatrix);
 
     arma::Mat<double>::fixed<3, 3> pitchRotationMatrix({
       std::cos(pitchAngle), 0.0, std::sin(pitchAngle),
       0.0, 1.0, 0.0,
       -std::sin(pitchAngle), 0.0, std::cos(pitchAngle)
     });
+    CAPTURE(pitchRotationMatrix);
 
     arma::Mat<double>::fixed<3, 3> yawRotationMatrix({
       std::cos(yawAngle), -std::sin(yawAngle), 0.0,
       std::sin(yawAngle), std::cos(yawAngle), 0.0,
       0.0, 0.0, 1.0
     });
+    CAPTURE(yawRotationMatrix);
 
-    COMPARE(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), rollRotationMatrix * pitchRotationMatrix * yawRotationMatrix);
+    const arma::Mat<double>& expected = rollRotationMatrix * pitchRotationMatrix * yawRotationMatrix;
+    CAPTURE(expected);
+    
+    COMPARE(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expected);
   }
 }
 
