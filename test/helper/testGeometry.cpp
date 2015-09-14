@@ -4,57 +4,52 @@
 
 // C++ standard library
 #include <cmath>
-#include <array>
+#include <random>
+
+// Armadillo
+#include <armadillo>
 
 // Mantella
 #include <mantella>
 
 TEST_CASE("get2DRotation") {
   SECTION("Generates 2D rotation matrix.") {
-    const std::array<double, 15>& angles = {{0.0,  45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 360.0, -0.0, -45.0, -90.0, -180.0, -225.0, -315.0}};
+    const double angle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
+    
+    arma::Mat<double>::fixed<2, 2> expected({
+      std::cos(angle), -std::sin(angle),
+      std::sin(angle), std::cos(angle)
+    });
 
-    for (const auto& angle : angles) {
-      arma::Mat<double>::fixed<2, 2> expected({
-        std::cos(angle), -std::sin(angle),
-        std::sin(angle), std::cos(angle)
-      });
-
-      COMPARE(mant::get2DRotation(angle), expected);
-    }
+    COMPARE(mant::get2DRotation(angle), expected);
   }
 }
 
 TEST_CASE("get3DRotation") {
   SECTION("Generates 3D rotation matrix.") {
-    const std::array<double, 14>& rollAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -45, 276, -56, -45.89}};
-    const std::array<double, 14>& pitchAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -90, -89, 78, -245}};
-    const std::array<double, 14>& yawAngles = {{0.0, 45.0, 90.0, 135.0, 180.0, 225, 270, 315, 360, -0, -225, -310, -90, 345}};
+    const double rollAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
+    const double pitchAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
+    const double yawAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
+    
+    arma::Mat<double>::fixed<3, 3> rollRotationMatrix({
+      1.0, 0.0, 0.0,
+      0.0, std::cos(rollAngle), -std::sin(rollAngle),
+      0.0, std::sin(rollAngle), std::cos(rollAngle),
+    });
 
-    for (const auto& rollAngle : rollAngles) {
-      for (const auto& pitchAngle : pitchAngles) {
-        for (const auto& yawAngle : yawAngles) {
-          arma::Mat<double>::fixed<3, 3> expectedRoll({
-            1.0, 0.0, 0.0,
-            0.0, std::cos(rollAngle), -std::sin(rollAngle),
-            0.0, std::sin(rollAngle), std::cos(rollAngle),
-          });
+    arma::Mat<double>::fixed<3, 3> pitchRotationMatrix({
+      std::cos(pitchAngle), 0.0, std::sin(pitchAngle),
+      0.0, 1.0, 0.0,
+      -std::sin(pitchAngle), 0.0, std::cos(pitchAngle)
+    });
 
-          arma::Mat<double>::fixed<3, 3> expectedPitch({
-            std::cos(pitchAngle), 0.0, std::sin(pitchAngle),
-            0.0, 1.0, 0.0,
-            -std::sin(pitchAngle), 0.0, std::cos(pitchAngle)
-          });
+    arma::Mat<double>::fixed<3, 3> yawRotationMatrix({
+      std::cos(yawAngle), -std::sin(yawAngle), 0.0,
+      std::sin(yawAngle), std::cos(yawAngle), 0.0,
+      0.0, 0.0, 1.0
+    });
 
-          arma::Mat<double>::fixed<3, 3> expectedYaw({
-            std::cos(yawAngle), -std::sin(yawAngle), 0.0,
-            std::sin(yawAngle), std::cos(yawAngle), 0.0,
-            0.0, 0.0, 1.0
-          });
-
-          COMPARE(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), expectedRoll * expectedPitch * expectedYaw);
-        }
-      }
-    }
+    COMPARE(mant::get3DRotation(rollAngle, pitchAngle, yawAngle), rollRotationMatrix * pitchRotationMatrix * yawRotationMatrix);
   }
 }
 
