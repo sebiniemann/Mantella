@@ -22,14 +22,11 @@
 #define MANTELLA_VERSION_PATCH 0
 
 //
-// Configuration
-//
-
-#include <mantella_bits/config.hpp>
-
-//
 // Mantella
 //
+
+// Configuration
+#include <mantella_bits/config.hpp>
 
 // Assert
 #include <mantella_bits/helper/assert.hpp>
@@ -49,6 +46,11 @@
 #include <mantella_bits/helper/setTheory.hpp>
 #include <mantella_bits/helper/statistic.hpp>
 #include <mantella_bits/helper/unorderedContainer.hpp>
+
+// Distance functions
+#include <mantella_bits/distanceFunction.hpp>
+#include <mantella_bits/distanceFunction/pNorm.hpp>
+#include <mantella_bits/distanceFunction/mahalabonisDistance.hpp>
 
 // Regression functions
 #include <mantella_bits/regressionFunction.hpp>
@@ -154,3 +156,8 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
+  
+// Cluster analyses
+#include <mantella_bits/clusterAnalysis.hpp>
+#include <mantella_bits/clusterAnalysis/basicSequentialAlgorithmicScheme.hpp>
+#include <mantella_bits/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.hpp>
