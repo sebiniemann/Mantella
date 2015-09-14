@@ -9,7 +9,7 @@ namespace mant {
 
   arma::Col<arma::uword> getRandomPermutation(
       const arma::uword numberOfElements,
-      const arma::uword cycleLength);
+      const arma::uword cycleSize);
 
   arma::Col<arma::uword> getRandomPermutation(
       const arma::uword numberOfElements);
