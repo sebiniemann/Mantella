@@ -1,7 +1,6 @@
 #include <mantella_bits/helper/mpi.hpp>
 
 // C++ standard library
-#include <iostream>
 #include <algorithm>
 
 // Armadillo

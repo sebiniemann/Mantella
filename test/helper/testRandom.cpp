@@ -1,6 +1,5 @@
 // Catch
 #include <catch.hpp>
-#include <catchExtension.hpp>
 
 // C++ standard library
 #include <cstdlib>

@@ -4,7 +4,6 @@
 
 // C++ standard library
 #include <random>
-#include <iostream>
 
 // Armadillo
 #include <armadillo>
