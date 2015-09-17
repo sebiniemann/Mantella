@@ -3,17 +3,17 @@ cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 # Mantella, C++ optimisation framework
 project(Mantella CXX C)
 
-# Retrieve the version numbers from "include/mantella"
+# Retrieves the version numbers from "include/mantella"
 file(STRINGS "${PROJECT_SOURCE_DIR}/include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
-# Add additional cmake modules
+# Adds additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
-# Add Clang detection
+# Adds Clang detection
 if (CMAKE_CXX_COMPILER MATCHES ".*clang")
   set(CMAKE_COMPILER_IS_CLANGXX 1)
 endif ()
@@ -24,10 +24,12 @@ option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
+option(RUN_IWYU "Run include-what-you-use" OFF)
 
 mark_as_advanced(
  BUILD_TESTS
  MEASURE_CODE_COVERAGE
+ RUN_IWYU
 )
 
 message(STATUS "") 
@@ -67,6 +69,33 @@ if(SUPPORT_MPI)
   include_directories(${MPI_INCLUDE_PATH})
 endif()
 
+# --------------------
+# CONFIGURING COMPILER
+# --------------------
+
+message(STATUS "") 
+message(STATUS "Configuring compiler.")
+
+if(RUN_IWYU)
+  message(STATUS "- Running IWYU (instead of generating an excecutable/library).")
+  message(STATUS "  - Use 'cmake ... -DRUN_IWYU=Off' to exclude this.")
+  include(CMakeForceCompiler)
+  CMAKE_FORCE_C_COMPILER(include-what-you-use CLANG)
+  CMAKE_FORCE_CXX_COMPILER(include-what-you-use CLANG)
+else()
+  # Use ccache to speed up recompilation, if possible. 
+  find_program(CCACHE_FOUND ccache)
+  if(CCACHE_FOUND)
+    message(STATUS "- Using ccache to speed up recompilations.")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    
+    if(CMAKE_COMPILER_IS_CLANGXX)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
+    endif()
+  endif()
+endif()
+
 # ----------------------
 # SETTING COMPILER FLAGS
 # ----------------------
@@ -91,8 +120,8 @@ if(MEASURE_CODE_COVERAGE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
   set(CMAKE_BUILD_TYPE "Debug")
 else()
-  message(STATUS "- Using level 2 code optimisation.")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+  message(STATUS "- Using level 3 code optimisation.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
   
   if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
@@ -293,7 +322,7 @@ if(BUILD_TESTS)
   message(STATUS "") 
   message(STATUS "Configuring unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
-
+  
   if(CMAKE_COMPILER_IS_CLANGXX OR CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "- Displaying compiler warnings.")
     if(CMAKE_COMPILER_IS_CLANGXX)
@@ -310,6 +339,11 @@ if(BUILD_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
   endif()
   
+  if(CMAKE_COMPILER_IS_CLANGXX)
+    message(STATUS "- Including a undefined behavior checker and memory error detector.")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --fsanitize=undefined -fsanitize=address")
+  endif()
+    
   if(NOT EXECUTABLE_OUTPUT_PATH)
     set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
   endif()
@@ -327,24 +361,24 @@ if(BUILD_TESTS)
     test/main.cpp
     test/catchExtension.cpp
     
-    # Configuration
-    test/testConfig.cpp
+    # # Configuration
+    # test/testConfig.cpp
     
-    # Asserts
-    test/helper/testAssert.cpp
+    # # Asserts
+    # test/helper/testAssert.cpp
 
-    # Random number generator
-    test/helper/testRng.cpp
+    # # Random number generator
+    # test/helper/testRng.cpp
     
-    # MPI
-    test/helper/testMpi.cpp
+    # # MPI
+    # test/helper/testMpi.cpp
     
-    # Helper
-    test/helper/testGeometry.cpp
+    # # Helper
+    # test/helper/testGeometry.cpp
     # test/helper/testPrintable.cpp
     # test/helper/testQuasiRandomSequence.cpp
-    # test/helper/testRandom.cpp
-    # test/helper/testRegression.cpp
+    test/helper/testRandom.cpp
+    test/helper/testRegression.cpp
     # test/helper/testSetTheory.cpp
     # test/helper/testStatistic.cpp
     # test/helper/testUnorderedContainer.cpp
