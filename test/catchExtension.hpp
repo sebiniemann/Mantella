@@ -4,7 +4,6 @@
 #include <catch.hpp>
 
 // C++ standard library
-#include <cstdlib>
 #include <vector>
 
 // Armadillo

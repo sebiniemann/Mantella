@@ -3,7 +3,6 @@
 #include <catchExtension.hpp>
 
 // C++ standard library
-#include <cstdlib>
 #include <string>
 
 // Armadillo

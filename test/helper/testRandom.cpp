@@ -88,8 +88,14 @@ TEST_CASE("getRandomPermutation") {
     CHECK(arma::all(static_cast<arma::Row<arma::uword>>(arma::abs(arma::max(histogram) - arma::min(histogram)) < 0.05 * static_cast<double>(permutations.n_cols))));
   }
 
-  SECTION("Throws an exception, if cycle size > number of elements.") {
-    CHECK_THROWS_AS(mant::getRandomPermutation(10, 11), std::logic_error);
+  SECTION("Throws an exception, if the cycle size is larger than the number of elements.") {
+    const arma::uword numberOfElements = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+    CAPTURE(numberOfElements);
+    
+    const arma::uword cycleSize = numberOfElements + std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+    CAPTURE(cycleSize);
+  
+    CHECK_THROWS_AS(mant::getRandomPermutation(numberOfElements, cycleSize), std::logic_error);
   }
 }
 

@@ -28,9 +28,11 @@ TEST_CASE("quasiRandomSequence: getHaltonSequence(...)") {
     COMPARE(mant::getHaltonSequence({2, 3}, {3, 4}, 5), expected);
   }
 
-  SECTION("Throw an exception, if the size of the base and seed mismatch.") {
-    CHECK_THROWS_AS(mant::getHaltonSequence({1}, {3, 3}, 5), std::logic_error);
-    CHECK_THROWS_AS(mant::getHaltonSequence({4, 5}, {3}, 6), std::logic_error);
+  SECTION("Exception tests") {
+    SECTION("Throw an exception, if the size of the base and seed mismatch.") {
+      CHECK_THROWS_AS(mant::getHaltonSequence({1}, {3, 3}, 5), std::logic_error);
+      CHECK_THROWS_AS(mant::getHaltonSequence({4, 5}, {3}, 6), std::logic_error);
+    }
   }
 }
 
