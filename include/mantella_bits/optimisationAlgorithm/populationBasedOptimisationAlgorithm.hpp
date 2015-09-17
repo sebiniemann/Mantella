@@ -14,7 +14,7 @@ namespace mant {
    public:
     explicit PopulationBasedOptimisationAlgorithm(
         const std::shared_ptr<OptimisationProblem> optimisationProblem,
-            const arma::uword populationSize);
+        const arma::uword populationSize);
 
     void setInitialPopulation(
         const arma::Mat<double>& initialPopulation);
