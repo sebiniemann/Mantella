@@ -11,14 +11,14 @@
 
 namespace mant {
   class QuadraticRegressionFunction : public RegressionFunction {
-    public:
-      explicit QuadraticRegressionFunction(
-          const arma::uword numberOfParameterDimensions);
-    
-      std::string toString() const override;
-    
-    protected:
-      arma::Col<double> getRegressionImplementation(
-          const arma::Col<double>& parameter) const override;
+   public:
+    explicit QuadraticRegressionFunction(
+        const arma::uword numberOfParameterDimensions);
+
+    std::string toString() const override;
+
+   protected:
+    arma::Col<double> getRegressionImplementation(
+        const arma::Col<double>& parameter) const override;
   };
 }

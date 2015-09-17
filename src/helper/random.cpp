@@ -14,7 +14,7 @@ namespace mant {
     arma::Mat<double> Q;
     arma::Mat<double> R;
 
-    if(arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions))) {
+    if (arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions))) {
       return Q * arma::sign(arma::diagmat(R));
     } else {
       const arma::Col<double>& angles = arma::datum::pi * arma::randu<arma::Col<double>>(numberOfDimensions);
@@ -22,7 +22,7 @@ namespace mant {
       const arma::Col<double>& cosineAngles = arma::cos(angles);
 
       arma::Mat<double> rotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
-      for(arma::uword n = 0; n < angles.n_elem; ++n) {
+      for (arma::uword n = 0; n < angles.n_elem; ++n) {
         arma::Mat<double> subRotationMatrix = arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions);
         subRotationMatrix(0, 0) = sineAngles(n);
         subRotationMatrix(0, n) = cosineAngles(n);
@@ -39,7 +39,8 @@ namespace mant {
   arma::Col<arma::uword> getRandomPermutation(
       const arma::uword numberOfElements,
       const arma::uword cycleSize) {
-    verify(cycleSize <= numberOfElements , "The cycle size must be lower than or equal to the number of elements.");
+    verify(cycleSize <= numberOfElements,
+        "The cycle size must be lower than or equal to the number of elements.");
 
     arma::Col<arma::uword> permutation(numberOfElements);
     for (arma::uword n = 0; n < numberOfElements; ++n) {

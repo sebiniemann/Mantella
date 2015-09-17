@@ -5,13 +5,15 @@
 
 namespace mant {
   PassivePropertyAnalysis::PassivePropertyAnalysis(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) 
-    : numberOfDimensions_ (samples.cbegin()->first.n_elem),
-      samples_(samples) {
-    verify(samples_.size() > 1, "");
-    verify(isDimensionallyConsistent(samples), "");
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)
+      : numberOfDimensions_(samples.cbegin()->first.n_elem),
+        samples_(samples) {
+    verify(samples_.size() > 1,
+        "");
+    verify(isDimensionallyConsistent(samples),
+        "");
   }
-  
+
   void PassivePropertyAnalysis::analyse() {
     analyseImplementation();
   }

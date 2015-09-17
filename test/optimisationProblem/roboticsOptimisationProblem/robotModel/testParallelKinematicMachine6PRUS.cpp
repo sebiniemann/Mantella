@@ -4,6 +4,6 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("ParallelKinematicMachine6PRUS") {
-
+TEST_CASE(
+    "ParallelKinematicMachine6PRUS") {
 }

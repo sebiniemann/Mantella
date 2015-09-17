@@ -9,22 +9,22 @@
 namespace mant {
   MultiplicativeSeparabilityAnalysis::MultiplicativeSeparabilityAnalysis(
       std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : ActivePropertyAnalysis(optimisationProblem),
-      deviation_(std::numeric_limits<double>::infinity()) {
-      setMaximalNumberOfIterations(1000);
+      : ActivePropertyAnalysis(optimisationProblem),
+        deviation_(std::numeric_limits<double>::infinity()) {
+    setMaximalNumberOfIterations(1000);
   }
-  
+
   std::vector<arma::Col<arma::uword>> MultiplicativeSeparabilityAnalysis::getPartition() {
     return partition_;
   }
-  
+
   double MultiplicativeSeparabilityAnalysis::getDeviation() {
     return deviation_;
   }
 
   void MultiplicativeSeparabilityAnalysis::analyseImplementation() {
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem_->numberOfDimensions_);
-    
+
     arma::Col<double> deviations(partitionCandidates.size(), arma::fill::zeros);
     for (arma::uword n = 0; n < partitionCandidates.size(); ++n) {
       std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>> partitionCandidate = partitionCandidates.at(n);
@@ -51,22 +51,22 @@ namespace mant {
         parameterBA.elem(partitionCandidate.second) = secondSubPartA;
 
         deviations(n) += std::pow(
-          (optimisationProblem_->getObjectiveValue(parameterAA) * optimisationProblem_->getObjectiveValue(parameterBB)) -
-          (optimisationProblem_->getObjectiveValue(parameterAB) * optimisationProblem_->getObjectiveValue(parameterBA)),
-        2.0);
-        
+            (optimisationProblem_->getObjectiveValue(parameterAA) * optimisationProblem_->getObjectiveValue(parameterBB)) -
+                (optimisationProblem_->getObjectiveValue(parameterAB) * optimisationProblem_->getObjectiveValue(parameterBA)),
+            2.0);
+
         if (deviation_ + arma::datum::eps < deviations(n)) {
           break;
         }
       }
       deviation_ = std::min(deviation_, deviations(n));
     }
-    
+
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> bestPartitionCandidates;
     for (const auto bestPartitionCandidateIndex : static_cast<arma::Col<arma::uword>>(arma::find(deviations <= deviation_ + arma::datum::eps))) {
       bestPartitionCandidates.push_back(partitionCandidates.at(bestPartitionCandidateIndex));
     }
-    
+
     if (bestPartitionCandidates.size() > 1) {
       std::set<arma::uword> skipableDimensions;
       for (arma::uword n = 0; n < optimisationProblem_->numberOfDimensions_; ++n) {
@@ -81,7 +81,7 @@ namespace mant {
               contatiningPartitions.push_back(bestPartitionCandidate.second);
             }
           }
-          
+
           std::vector<arma::uword> part;
           part.push_back(n);
           for (arma::uword k = n + 1; k < optimisationProblem_->numberOfDimensions_; ++k) {
@@ -92,13 +92,13 @@ namespace mant {
                 break;
               }
             }
-            
+
             if (isWithinAllPartitions) {
               part.push_back(k);
               skipableDimensions.insert(k);
             }
           }
-          
+
           partition_.push_back(arma::Col<arma::uword>(part));
         }
       }
@@ -106,7 +106,7 @@ namespace mant {
       partition_ = {bestPartitionCandidates.at(0).first, bestPartitionCandidates.at(0).second};
     }
   }
-  
+
   std::string MultiplicativeSeparabilityAnalysis::toString() const {
     return "multiplicative_separability_analysis";
   }

@@ -13,18 +13,22 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("PolynomialFunctionModelAnalysis") {
-  SECTION(".analyse") {
-
+TEST_CASE(
+    "PolynomialFunctionModelAnalysis") {
+  SECTION(
+      ".analyse") {
   }
 
-  SECTION(".toString") {
-    SECTION("Returns the expected class name.") {
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
       mant::cacheSamples = true;
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.optimise();
-      CHECK(mant::PolynomialFunctionModelAnalysis(optimisationProblem->getCachedSamples(), std::shared_ptr<mant::RegressionFunction>(new mant::LinearRegressionFunction(optimisationProblem->numberOfDimensions_))).toString() == "polynomial_function_model_analysis");
+      CHECK(mant::PolynomialFunctionModelAnalysis(optimisationProblem->getCachedSamples(), std::shared_ptr<mant::RegressionFunction>(new mant::LinearRegressionFunction(optimisationProblem->numberOfDimensions_))).toString() ==
+            "polynomial_function_model_analysis");
     }
   }
 }

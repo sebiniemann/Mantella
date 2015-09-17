@@ -14,22 +14,22 @@
 namespace mant {
   namespace bbob {
     class CompositeGriewankRosenbrockFunctionF8F2 : public BlackBoxOptimisationBenchmark {
-      public:
-        explicit CompositeGriewankRosenbrockFunctionF8F2(
-            const arma::uword numberOfDimensions);
+     public:
+      explicit CompositeGriewankRosenbrockFunctionF8F2(
+          const arma::uword numberOfDimensions);
 
-        std::string toString() const override;
+      std::string toString() const override;
 #if defined(SUPPORT_MPI)
-        std::vector<double> serialise() const;
-        void deserialise(
-            std::vector<double> serialisedOptimisationProblem);
+      std::vector<double> serialise() const;
+      void deserialise(
+          std::vector<double> serialisedOptimisationProblem);
 #endif
 
-      protected:
-        const double max_;
+     protected:
+      const double max_;
 
-        double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(
+          const arma::Col<double>& parameter) const override;
     };
   }
 }

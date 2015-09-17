@@ -3,8 +3,7 @@
 namespace mant {
   LinearRegressionFunction::LinearRegressionFunction(
       const arma::uword numberOfParameterDimensions)
-    : RegressionFunction(numberOfParameterDimensions, numberOfParameterDimensions + 1) {
-    
+      : RegressionFunction(numberOfParameterDimensions, numberOfParameterDimensions + 1) {
   }
 
   arma::Col<double> LinearRegressionFunction::getRegressionImplementation(
@@ -13,10 +12,10 @@ namespace mant {
 
     regression.head(numberOfParameterDimensions_) = parameter;
     regression(numberOfParameterDimensions_) = 1;
-    
+
     return regression;
   }
-  
+
   std::string LinearRegressionFunction::toString() const {
     return "linear_regression_function";
   }

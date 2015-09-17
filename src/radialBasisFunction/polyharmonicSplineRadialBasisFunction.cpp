@@ -6,12 +6,11 @@
 namespace mant {
   PolyharmonicSplineRadialBasisFunction::PolyharmonicSplineRadialBasisFunction(
       const arma::uword numberOfDimensions,
-      const arma::uword polynomialOrder) 
-    : RadialBasisFunction(numberOfDimensions),
-      polynomialOrder_(polynomialOrder) {
-      
+      const arma::uword polynomialOrder)
+      : RadialBasisFunction(numberOfDimensions),
+        polynomialOrder_(polynomialOrder) {
   }
-  
+
   double PolyharmonicSplineRadialBasisFunction::getBasisFunctionValueImplementation(
       const double distance) const {
     if (polynomialOrder_ % 2 == 0) {
@@ -20,7 +19,7 @@ namespace mant {
       return std::pow(distance, polynomialOrder_);
     }
   }
-  
+
   double PolyharmonicSplineRadialBasisFunction::getPolynomialTailValueImplementation(
       const arma::Col<double>& parameter,
       const arma::Col<double>& polynomialCoefficients) const {
@@ -30,7 +29,7 @@ namespace mant {
       return polynomialCoefficients(polynomialCoefficients.n_elem - 1);
     }
   }
-  
+
   std::string PolyharmonicSplineRadialBasisFunction::toString() const {
     return "polyharmonic_spline_radial_basis_function";
   }

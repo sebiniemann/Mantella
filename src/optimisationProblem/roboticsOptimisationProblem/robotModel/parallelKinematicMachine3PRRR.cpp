@@ -9,31 +9,21 @@
 
 namespace mant {
   namespace robotics {
-    ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR() 
-      : ParallelKinematicMachine3PRRR(
-          // linkLengths
-          {0.6, 0.6,
-           0.6, 0.6,
-           0.6, 0.6},
-          // endEffectorJointPositions
-          {-0.000066580445834,  0.106954081945581,
-           -0.092751709777083, -0.053477040972790,
-            0.092818290222917, -0.053477040972790},
-          // redundantJointStartPositions
-          {0.1, 1.0392,
-           0.0, 0.8,
-           1.2, 0.8},
-          // redundantJointEndPositions
-          {1.1, 1.0392,
-           0.0, -0.2,
-           1.2, -0.2}) {
-
+    ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR()
+        : ParallelKinematicMachine3PRRR(
+              // linkLengths
+              {0.6, 0.6, 0.6, 0.6, 0.6, 0.6},
+              // endEffectorJointPositions
+              {-0.000066580445834, 0.106954081945581, -0.092751709777083, -0.053477040972790, 0.092818290222917, -0.053477040972790},
+              // redundantJointStartPositions
+              {0.1, 1.0392, 0.0, 0.8, 1.2, 0.8},
+              // redundantJointEndPositions
+              {1.1, 1.0392, 0.0, -0.2, 1.2, -0.2}) {
     }
-         
+
     ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR(
-        const ParallelKinematicMachine3PRRR& parallelKinematicMachine3PRRR) 
-      : ParallelKinematicMachine3PRRR(parallelKinematicMachine3PRRR.linkLengths_, parallelKinematicMachine3PRRR.endEffectorJointPositions_, parallelKinematicMachine3PRRR.redundantJointStartPositions_, parallelKinematicMachine3PRRR.redundantJointEndPositions_) {
-        
+        const ParallelKinematicMachine3PRRR& parallelKinematicMachine3PRRR)
+        : ParallelKinematicMachine3PRRR(parallelKinematicMachine3PRRR.linkLengths_, parallelKinematicMachine3PRRR.endEffectorJointPositions_, parallelKinematicMachine3PRRR.redundantJointStartPositions_, parallelKinematicMachine3PRRR.redundantJointEndPositions_) {
     }
 
     ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR(
@@ -41,15 +31,15 @@ namespace mant {
         const arma::Mat<double>::fixed<2, 3>& endEffectorJointPositions,
         const arma::Mat<double>::fixed<2, 3>& redundantJointStartPositions,
         const arma::Mat<double>::fixed<2, 3>& redundantJointEndPositions)
-      : RobotModel(3, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
-        linkLengths_(linkLengths),
-        endEffectorJointPositions_(endEffectorJointPositions),
-        redundantJointStartPositions_(redundantJointStartPositions),
-        redundantJointEndPositions_(redundantJointEndPositions),
-        redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
-        redundantJointAngleSines_(redundantJointIndicies_.n_elem),
-        redundantJointAngleCosines_(redundantJointIndicies_.n_elem) {
+        : RobotModel(3, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
+          linkLengths_(linkLengths),
+          endEffectorJointPositions_(endEffectorJointPositions),
+          redundantJointStartPositions_(redundantJointStartPositions),
+          redundantJointEndPositions_(redundantJointEndPositions),
+          redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
+          redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
+          redundantJointAngleSines_(redundantJointIndicies_.n_elem),
+          redundantJointAngleCosines_(redundantJointIndicies_.n_elem) {
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const double redundantJointAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
         redundantJointAngleSines_(n) = std::sin(redundantJointAngle);
@@ -89,7 +79,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
-      
+
       const arma::Cube<double>::fixed<2, 3, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
       const arma::Mat<double>::fixed<2, 3>& baseJointPositions = model.slice(0);
@@ -110,7 +100,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
-      
+
       const arma::Cube<double>::fixed<2, 3, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
       const arma::Mat<double>::fixed<2, 3>& baseJoints = model.slice(0);
@@ -135,7 +125,7 @@ namespace mant {
 
       return -1.0 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));
     }
-    
+
     std::string ParallelKinematicMachine3PRRR::toString() const {
       return "robotics_parallel_kinematic_machine_3prrr";
     }

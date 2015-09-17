@@ -7,7 +7,7 @@ namespace mant {
   void RandomSearch::optimiseImplementation() {
     while (!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
-    
+
       const arma::Col<double>& candidateParameter = getRandomParameter();
       updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
     }

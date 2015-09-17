@@ -13,94 +13,94 @@
 
 namespace mant {
   class OptimisationProblem : public Printable {
-    public:
-      const arma::uword numberOfDimensions_;
+   public:
+    const arma::uword numberOfDimensions_;
 
-      explicit OptimisationProblem(
+    explicit OptimisationProblem(
         const arma::uword numberOfDimensions);
 
-      void setLowerBounds(
+    void setLowerBounds(
         const arma::Col<double>& lowerBounds);
 
-      void setUpperBounds(
+    void setUpperBounds(
         const arma::Col<double>& upperBounds);
 
-      arma::Col<double> getLowerBounds() const;
+    arma::Col<double> getLowerBounds() const;
 
-      arma::Col<double> getUpperBounds() const;
+    arma::Col<double> getUpperBounds() const;
 
-      arma::Col<arma::uword> isWithinLowerBounds(
+    arma::Col<arma::uword> isWithinLowerBounds(
         const arma::Col<double>& parameter);
 
-      arma::Col<arma::uword> isWithinUpperBounds(
+    arma::Col<arma::uword> isWithinUpperBounds(
         const arma::Col<double>& parameter);
 
-      void setParameterPermutation(
-          const arma::Col<arma::uword>& parameterPermutation);
+    void setParameterPermutation(
+        const arma::Col<arma::uword>& parameterPermutation);
 
-      void setParameterScaling(
+    void setParameterScaling(
         const arma::Col<double>& parameterScaling);
 
-      void setParameterTranslation(
-          const arma::Col<double>& parameterTranslation);
+    void setParameterTranslation(
+        const arma::Col<double>& parameterTranslation);
 
-      void setParameterRotation(
+    void setParameterRotation(
         const arma::Mat<double>& parameterRotation);
 
-      void setObjectiveValueScaling(
+    void setObjectiveValueScaling(
         const double objectiveValueScaling);
 
-      void setObjectiveValueTranslation(
+    void setObjectiveValueTranslation(
         const double objectiveValueTranslation);
-      
-      void setAcceptableObjectiveValue(
-          const double acceptableObjectiveValue);
-        
-      double getAcceptableObjectiveValue() const;
 
-      double getObjectiveValue(
+    void setAcceptableObjectiveValue(
+        const double acceptableObjectiveValue);
+
+    double getAcceptableObjectiveValue() const;
+
+    double getObjectiveValue(
         const arma::Col<double>& parameter);
 
-      arma::uword getNumberOfEvaluations() const;
+    arma::uword getNumberOfEvaluations() const;
 
-      arma::uword getNumberOfDistinctEvaluations() const;
-      
-      void reset();
+    arma::uword getNumberOfDistinctEvaluations() const;
 
-      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
+    void reset();
+
+    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
 
 #if defined(SUPPORT_MPI)
-      std::vector<double> serialise() const;
+    std::vector<double> serialise() const;
 
-      void deserialise(
-          std::vector<double> serialisedOptimisationProblem);
+    void deserialise(
+        std::vector<double> serialisedOptimisationProblem);
 #endif
 
-      virtual ~OptimisationProblem() = default;
+    virtual ~OptimisationProblem() = default;
 
-    protected:
-      arma::Col<double> lowerBounds_;
-      arma::Col<double> upperBounds_;
+   protected:
+    arma::Col<double> lowerBounds_;
+    arma::Col<double> upperBounds_;
 
-      arma::Col<arma::uword> parameterPermutation_;
-      arma::Col<double> parameterScaling_;
-      arma::Col<double> parameterTranslation_;
-      arma::Mat<double> parameterRotation_;
+    arma::Col<arma::uword> parameterPermutation_;
+    arma::Col<double> parameterScaling_;
+    arma::Col<double> parameterTranslation_;
+    arma::Mat<double> parameterRotation_;
 
-      double objectiveValueScaling_;
-      double objectiveValueTranslation_;
+    double objectiveValueScaling_;
+    double objectiveValueTranslation_;
 
-      double acceptableObjectiveValue_;
+    double acceptableObjectiveValue_;
 
-      arma::uword numberOfEvaluations_;
-      arma::uword numberOfDistinctEvaluations_;
+    arma::uword numberOfEvaluations_;
+    arma::uword numberOfDistinctEvaluations_;
 
-      arma::Col<double> getDiversifiedParameter(
+    arma::Col<double> getDiversifiedParameter(
         const arma::Col<double>& parameter) const;
 
-      virtual double getObjectiveValueImplementation(
+    virtual double getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const = 0;
 
-      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
+    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
   };
 }

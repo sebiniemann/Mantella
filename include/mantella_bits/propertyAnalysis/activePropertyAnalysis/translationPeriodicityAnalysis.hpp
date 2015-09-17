@@ -12,17 +12,17 @@
 
 namespace mant {
   class TranslationPeriodicityAnalysis : public ActivePropertyAnalysis {
-    public:
-      using ActivePropertyAnalysis::ActivePropertyAnalysis;
+   public:
+    using ActivePropertyAnalysis::ActivePropertyAnalysis;
 
-      void setMaximalNumberOfIterations(
-            const arma::uword maximalNumberOfIterations);
+    void setMaximalNumberOfIterations(
+        const arma::uword maximalNumberOfIterations);
 
-      std::string toString() const override;
-            
-    protected:
-      arma::uword maximalNumberOfIterations_;
+    std::string toString() const override;
 
-      void analyseImplementation() override;
+   protected:
+    arma::uword maximalNumberOfIterations_;
+
+    void analyseImplementation() override;
   };
 }

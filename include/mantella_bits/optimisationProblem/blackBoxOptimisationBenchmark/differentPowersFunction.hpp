@@ -14,20 +14,20 @@
 namespace mant {
   namespace bbob {
     class DifferentPowersFunction : public BlackBoxOptimisationBenchmark {
-      public:
-        explicit DifferentPowersFunction(
-            const arma::uword numberOfDimensions);
+     public:
+      explicit DifferentPowersFunction(
+          const arma::uword numberOfDimensions);
 
-        std::string toString() const override;
+      std::string toString() const override;
 #if defined(SUPPORT_MPI)
-        std::vector<double> serialise() const;
-        void deserialise(
-            std::vector<double> serialisedOptimisationProblem);
+      std::vector<double> serialise() const;
+      void deserialise(
+          std::vector<double> serialisedOptimisationProblem);
 #endif
 
-      protected:
-        double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const override;
+     protected:
+      double getObjectiveValueImplementation(
+          const arma::Col<double>& parameter) const override;
     };
   }
 }

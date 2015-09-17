@@ -5,12 +5,12 @@ namespace mant {
     arma::Col<double> bestParameter;
     double bestObjectiveValue = std::numeric_limits<double>::infinity();
     for (const auto& sample : samples_) {
-      if(sample.second < bestObjectiveValue) {
+      if (sample.second < bestObjectiveValue) {
         bestParameter = sample.first;
         bestObjectiveValue = sample.second;
       }
     }
-    
+
     arma::Col<double> distances(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
@@ -22,7 +22,7 @@ namespace mant {
       selectedSamples_.insert({selectedSample->first, selectedSample->second});
     }
   }
-  
+
   std::string BestNeighbourhoodSamplesSelection::toString() const {
     return "best_neighbourhood_samples_selection";
   }

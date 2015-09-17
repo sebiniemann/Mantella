@@ -10,8 +10,8 @@ namespace mant {
   namespace bbob {
     EllipsoidalFunctionRotated::EllipsoidalFunctionRotated(
         const arma::uword numberOfDimensions)
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(1000000.0)) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(1000000.0)) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }
@@ -19,14 +19,14 @@ namespace mant {
     double EllipsoidalFunctionRotated::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);
-        
+
       return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
     }
 
     std::string EllipsoidalFunctionRotated::toString() const {
       return "bbob_ellipsoidal_function_rotated";
     }
-    
+
 #if defined(SUPPORT_MPI)
     std::vector<double> EllipsoidalFunctionRotated::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();

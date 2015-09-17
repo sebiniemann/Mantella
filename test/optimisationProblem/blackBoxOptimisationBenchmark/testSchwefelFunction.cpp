@@ -14,21 +14,30 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::SchwefelFunction") {
+TEST_CASE(
+    "bbob::SchwefelFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::SchwefelFunction schwefelFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
+    REQUIRE(parameters.load(testDirectory +
+                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
+                            "x10.input"));
 
     arma::Col<double> one;
-    REQUIRE(one.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_one_" + std::to_string(numberOfDimensions) +"x1.input"));
+    REQUIRE(one.load(testDirectory +
+                     "/data/optimisationProblem/blackBoxOptimisationBenchmark/_one_" + std::to_string(numberOfDimensions) +
+                     "x1.input"));
 
     arma::Col<double> scaling;
-    REQUIRE(scaling.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_scaling_" + std::to_string(numberOfDimensions) +"x1.input"));
+    REQUIRE(scaling.load(testDirectory +
+                         "/data/optimisationProblem/blackBoxOptimisationBenchmark/_scaling_" + std::to_string(numberOfDimensions) +
+                         "x1.input"));
 
     arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_schwefelFunction_dim" + std::to_string(numberOfDimensions) +".expected"));
+    REQUIRE(expected.load(testDirectory +
+                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_schwefelFunction_dim" + std::to_string(numberOfDimensions) +
+                          ".expected"));
 
     schwefelFunction.setObjectiveValueTranslation(0);
     schwefelFunction.setParameterScaling(scaling);
@@ -38,9 +47,12 @@ TEST_CASE("bbob::SchwefelFunction") {
     }
   }
 
-  SECTION(".toString") {
-    SECTION("Returns the expected class name.") {
-      CHECK(mant::bbob::SchwefelFunction(5).toString() == "bbob_schwefel_function");
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
+      CHECK(mant::bbob::SchwefelFunction(5).toString() ==
+            "bbob_schwefel_function");
     }
   }
 }

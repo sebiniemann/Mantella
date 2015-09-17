@@ -7,15 +7,20 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("SimulatedAnnealing") {
-  SECTION(".optimise") {
+TEST_CASE(
+    "SimulatedAnnealing") {
+  SECTION(
+      ".optimise") {
     // TODO
   }
 
-  SECTION(".toString") {
-    SECTION("Returns the expected class name.") {
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-      CHECK(mant::SimulatedAnnealing(optimisationProblem).toString() == "simulated_annealing");
+      CHECK(mant::SimulatedAnnealing(optimisationProblem).toString() ==
+            "simulated_annealing");
     }
   }
 }

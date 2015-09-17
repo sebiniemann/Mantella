@@ -6,7 +6,7 @@ namespace mant {
         const arma::Col<double>& parameter) const {
       return 0.0;
     }
-    
+
     std::string EndEffectorPoseError::toString() const {
       return "robotic_end_effector_pose_error";
     }

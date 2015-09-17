@@ -16,30 +16,30 @@
 
 namespace mant {
   class KrigingModel : public SurrogateModel {
-    public:
-      const std::shared_ptr<RegressionFunction> regressionFunction_;
-      const std::shared_ptr<CorrelationFunction> correlationFunction_;
-    
-      KrigingModel(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-          const std::shared_ptr<RegressionFunction> regressionFunction,
-          const std::shared_ptr<CorrelationFunction> correlationFunction);
-          
-      std::string toString() const;
-          
-    protected:
-      arma::Col<double> meanParameter_;
-      arma::Col<double> standardDeviationParameter_;
-      
-      double meanObjectiveValue_;
-      double standardDeviationObjectiveValue_;
-      
-      arma::Col<double> beta_;
-      arma::Col<double> gamma_;
-    
-      void modelImplementation() override;
-      
-      double getObjectiveValueImplementation(
-          const arma::Col<double>& parameter) const final;
+   public:
+    const std::shared_ptr<RegressionFunction> regressionFunction_;
+    const std::shared_ptr<CorrelationFunction> correlationFunction_;
+
+    KrigingModel(
+        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+        const std::shared_ptr<RegressionFunction> regressionFunction,
+        const std::shared_ptr<CorrelationFunction> correlationFunction);
+
+    std::string toString() const;
+
+   protected:
+    arma::Col<double> meanParameter_;
+    arma::Col<double> standardDeviationParameter_;
+
+    double meanObjectiveValue_;
+    double standardDeviationObjectiveValue_;
+
+    arma::Col<double> beta_;
+    arma::Col<double> gamma_;
+
+    void modelImplementation() override;
+
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const final;
   };
 }

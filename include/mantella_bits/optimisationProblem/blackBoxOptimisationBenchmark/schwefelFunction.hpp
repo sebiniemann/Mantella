@@ -14,22 +14,22 @@
 namespace mant {
   namespace bbob {
     class SchwefelFunction : public BlackBoxOptimisationBenchmark {
-      public:
-        explicit SchwefelFunction(
-            const arma::uword numberOfDimensions);
+     public:
+      explicit SchwefelFunction(
+          const arma::uword numberOfDimensions);
 
-        std::string toString() const override;
+      std::string toString() const override;
 #if defined(SUPPORT_MPI)
-        std::vector<double> serialise() const;
-        void deserialise(
-            std::vector<double> serialisedOptimisationProblem);
+      std::vector<double> serialise() const;
+      void deserialise(
+          std::vector<double> serialisedOptimisationProblem);
 #endif
 
-      protected:
-        const arma::Col<double> parameterConditioning_;
+     protected:
+      const arma::Col<double> parameterConditioning_;
 
-        double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(
+          const arma::Col<double>& parameter) const override;
     };
   }
 }

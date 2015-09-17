@@ -4,6 +4,6 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("RoboticsOptimisationProblem") {
-
+TEST_CASE(
+    "RoboticsOptimisationProblem") {
 }

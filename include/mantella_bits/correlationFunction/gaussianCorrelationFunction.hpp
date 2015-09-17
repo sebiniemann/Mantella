@@ -11,13 +11,13 @@
 
 namespace mant {
   class GaussianCorrelationFunction : public CorrelationFunction {
-    public:
-      using CorrelationFunction::CorrelationFunction;
-      
-      std::string toString() const override;
-      
-    protected:
-      double getCorrelationCoefficientImplementation(
-          const arma::Col<double>& parameter) const override;
+   public:
+    using CorrelationFunction::CorrelationFunction;
+
+    std::string toString() const override;
+
+   protected:
+    double getCorrelationCoefficientImplementation(
+        const arma::Col<double>& parameter) const override;
   };
 }

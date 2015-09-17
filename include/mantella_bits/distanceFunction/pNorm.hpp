@@ -8,13 +8,13 @@
 
 namespace mant {
   class PNorm : public DistanceFunction {
-    public:
-      using DistanceFunction::DistanceFunction;
-    
-      std::string toString() const;
-    
-    protected:
-      double getLengthImplementation(
-          const arma::Col<double>& parameter) const override;
+   public:
+    using DistanceFunction::DistanceFunction;
+
+    std::string toString() const;
+
+   protected:
+    double getLengthImplementation(
+        const arma::Col<double>& parameter) const override;
   };
 }

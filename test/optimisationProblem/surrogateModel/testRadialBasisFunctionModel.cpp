@@ -11,18 +11,22 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("RadialBasisFunctionModel") {
-  SECTION(".model") {
-  
+TEST_CASE(
+    "RadialBasisFunctionModel") {
+  SECTION(
+      ".model") {
   }
 
-  SECTION(".toString") {
-    SECTION("Returns the expected class name.") {
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
       mant::cacheSamples = true;
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.optimise();
-      CHECK(mant::RadialBasisFunctionModel(optimisationProblem->getCachedSamples(), std::shared_ptr<mant::RadialBasisFunction>(new mant::GaussianRadialBasisFunction(optimisationProblem->numberOfDimensions_, 1))).toString() == "radial_basis_function_model");
+      CHECK(mant::RadialBasisFunctionModel(optimisationProblem->getCachedSamples(), std::shared_ptr<mant::RadialBasisFunction>(new mant::GaussianRadialBasisFunction(optimisationProblem->numberOfDimensions_, 1))).toString() ==
+            "radial_basis_function_model");
     }
   }
 }

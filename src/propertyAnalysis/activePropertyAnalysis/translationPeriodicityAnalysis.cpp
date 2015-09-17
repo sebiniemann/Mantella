@@ -2,7 +2,6 @@
 
 namespace mant {
   void TranslationPeriodicityAnalysis::analyseImplementation() {
-  
   }
 
   std::string TranslationPeriodicityAnalysis::toString() const {

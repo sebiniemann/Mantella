@@ -9,7 +9,7 @@
 namespace mant {
   void FitnessDistanceCorrelationAnalysis::analyseImplementation() {
     assert(samples_.size() > 1);
-    
+
     arma::Mat<double> parameters(numberOfDimensions_, samples_.size());
     arma::Col<double> objectiveValues(parameters.n_cols);
 
@@ -24,13 +24,13 @@ namespace mant {
     objectiveValues.min(bestParameterIndex);
 
     parameters.each_col() -= parameters.col(bestParameterIndex);
-    
+
     parameters.shed_col(bestParameterIndex);
     objectiveValues.shed_row(bestParameterIndex);
-    
+
     correlationCoefficient_ = arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
   }
-  
+
   double FitnessDistanceCorrelationAnalysis::getCorrelationCoefficient() const {
     return correlationCoefficient_;
   }

@@ -5,7 +5,7 @@
 
 namespace mant {
   class PropertyAnalysis : public Printable {
-    public:
-      virtual ~PropertyAnalysis() = default;
+   public:
+    virtual ~PropertyAnalysis() = default;
   };
 }

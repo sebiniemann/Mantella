@@ -11,10 +11,10 @@ namespace mant {
     } catch (...) {
       estimate = (arma::pinv(parameters * parameters.t()) * parameters) * objectiveValues;
     }
-    
+
     return estimate;
   }
-  
+
   arma::Col<double> getGeneralisedLeastSquaresEstimate(
       const arma::Mat<double>& parameters,
       const arma::Col<double>& objectiveValues,
@@ -23,4 +23,3 @@ namespace mant {
     return getOrdinaryLeastSquaresEstimate(cholesky * parameters, cholesky * objectiveValues);
   }
 }
-

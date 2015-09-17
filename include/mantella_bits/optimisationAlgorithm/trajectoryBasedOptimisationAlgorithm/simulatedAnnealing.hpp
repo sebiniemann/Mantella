@@ -13,21 +13,21 @@
 // TODO Add restarting
 namespace mant {
   class SimulatedAnnealing : public TrajectoryBasedOptimisationAlgorithm {
-    public:
-      explicit SimulatedAnnealing(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+   public:
+    explicit SimulatedAnnealing(
+        const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      void setMaximalStepSize(
-          const arma::Col<double>& maximalStepSize);
+    void setMaximalStepSize(
+        const arma::Col<double>& maximalStepSize);
 
-      std::string toString() const override;
+    std::string toString() const override;
 
-    protected:
-      arma::Col<double> maximalStepSize_;
+   protected:
+    arma::Col<double> maximalStepSize_;
 
-      virtual bool isAcceptableState(
-          const double candidateObjectiveValue);
+    virtual bool isAcceptableState(
+        const double candidateObjectiveValue);
 
-      void optimiseImplementation() override;
+    void optimiseImplementation() override;
   };
 }

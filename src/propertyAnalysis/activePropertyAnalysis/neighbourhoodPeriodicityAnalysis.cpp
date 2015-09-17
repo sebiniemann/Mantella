@@ -2,7 +2,6 @@
 
 namespace mant {
   void NeighbourhoodPeriodicityAnalysis::analyseImplementation() {
-  
   }
 
   std::string NeighbourhoodPeriodicityAnalysis::toString() const {

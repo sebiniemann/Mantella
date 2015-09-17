@@ -6,7 +6,7 @@
 namespace mant {
   double getMedianAbsoluteError(
       const arma::Col<double>& data);
-      
+
   double getPercentile(
       const arma::Col<double>& data,
       const double nthPercentile);
@@ -14,12 +14,11 @@ namespace mant {
   double getDecile(
       const arma::Col<double>& data,
       const double nthDecile);
-  
+
   double getQuartile(
       const arma::Col<double>& data,
       const double nthQuartile);
-  
+
   double getMedian(
       const arma::Col<double>& data);
-  
 }

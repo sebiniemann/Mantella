@@ -9,9 +9,12 @@
 #include <mantella>
 
 // This test is intently avoiding fuzzy testing, as we are challenging the random generator itself
-TEST_CASE("Rng") {
-  SECTION("::getGenerator") {
-    SECTION("Is a valid (working) generator for C++ standard library random functions") {
+TEST_CASE(
+    "Rng") {
+  SECTION(
+      "::getGenerator") {
+    SECTION(
+        "Is a valid (working) generator for C++ standard library random functions") {
       arma::Col<double>::fixed<10000> randomValues;
       for (arma::uword n = 0; n < randomValues.n_elem; ++n) {
         randomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
@@ -19,26 +22,29 @@ TEST_CASE("Rng") {
 
       const arma::Col<arma::uword>& histogram = arma::hist(randomValues, 10);
       CAPTURE(histogram);
-      
+
       CHECK(std::abs(static_cast<double>(histogram.max() - histogram.min()) < 0.05 * randomValues.n_elem));
     }
   }
-    
-  SECTION("::setSeed") {
+
+  SECTION(
+      "::setSeed") {
     const arma::arma_rng::seed_type seed = 12345;
     CAPTURE(seed);
     mant::Rng::setSeed(seed);
-    
-    SECTION("Resetting the seed generates the same random sequence") {
-      SECTION("Works with C++ standard library random functions") {
-      arma::Col<double>::fixed<10> expectedRandomValues;
+
+    SECTION(
+        "Resetting the seed generates the same random sequence") {
+      SECTION(
+          "Works with C++ standard library random functions") {
+        arma::Col<double>::fixed<10> expectedRandomValues;
         for (arma::uword n = 0; n < expectedRandomValues.n_elem; ++n) {
           expectedRandomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
         }
         CAPTURE(expectedRandomValues);
 
         mant::Rng::setSeed(seed);
-        
+
         arma::Col<double>::fixed<10> actualRandomValues;
         for (arma::uword n = 0; n < actualRandomValues.n_elem; ++n) {
           actualRandomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
@@ -47,27 +53,30 @@ TEST_CASE("Rng") {
 
         COMPARE(actualRandomValues, expectedRandomValues);
       }
-      
-      SECTION("Works with Armadillo C++") {
+
+      SECTION(
+          "Works with Armadillo C++") {
         const arma::Col<double>::fixed<10> expectedRandomValues = arma::randu<arma::Col<double>>(10);
         CAPTURE(expectedRandomValues);
-        
+
         mant::Rng::setSeed(seed);
-        
+
         const arma::Col<double>::fixed<10> actualRandomValues = arma::randu<arma::Col<double>>(10);
         CAPTURE(actualRandomValues);
-        
+
         COMPARE(actualRandomValues, expectedRandomValues);
       }
     }
   }
 
-  SECTION("::getSeed") {
-    SECTION("Returns the current seed") {
+  SECTION(
+      "::getSeed") {
+    SECTION(
+        "Returns the current seed") {
       const arma::arma_rng::seed_type seed = 12345;
       CAPTURE(seed);
       mant::Rng::setSeed(seed);
-    
+
       // Generate some random values
       arma::Col<double>::fixed<100> randomValues;
       for (arma::uword n = 0; n < randomValues.n_elem; ++n) {
@@ -78,20 +87,22 @@ TEST_CASE("Rng") {
       CHECK(mant::Rng::getSeed() == seed);
     }
   }
-  
-  SECTION("::setRandomSeed") {
-    SECTION("The values of a random sequences are uniform distributed between different random seeds.") {
+
+  SECTION(
+      "::setRandomSeed") {
+    SECTION(
+        "The values of a random sequences are uniform distributed between different random seeds.") {
       arma::Mat<double>::fixed<10000, 10> randomValues;
       for (arma::uword n = 0; n < randomValues.n_cols; ++n) {
         mant::Rng::setRandomSeed();
         CAPTURE(mant::Rng::getSeed());
-        
+
         randomValues.col(n) = arma::randu<arma::Col<double>>(randomValues.n_rows);
       }
 
       const arma::Mat<arma::uword>& histogram = arma::hist(randomValues, 10);
       CAPTURE(histogram);
-      
+
       for (arma::uword n = 0; n < randomValues.n_cols; ++n) {
         CHECK(std::abs(static_cast<double>(histogram.col(n).max() - histogram.col(n).min()) < 0.05 * randomValues.n_rows));
       }

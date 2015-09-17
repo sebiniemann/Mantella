@@ -8,12 +8,12 @@
 
 namespace mant {
   class RandomSamplesSelection : public SamplesSelection {
-    public:
-      using SamplesSelection::SamplesSelection;
-      
-      std::string toString() const override;
+   public:
+    using SamplesSelection::SamplesSelection;
 
-    protected:
-      void selectImplementation() override;
+    std::string toString() const override;
+
+   protected:
+    void selectImplementation() override;
   };
 }

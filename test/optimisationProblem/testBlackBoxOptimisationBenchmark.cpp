@@ -4,6 +4,6 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("BlackBoxOptimisationBenchmark") {
-
+TEST_CASE(
+    "BlackBoxOptimisationBenchmark") {
 }

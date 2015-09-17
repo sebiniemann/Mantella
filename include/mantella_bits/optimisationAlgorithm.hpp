@@ -14,68 +14,68 @@
 
 namespace mant {
   class OptimisationAlgorithm : public Printable {
-    public:
-      explicit OptimisationAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+   public:
+    explicit OptimisationAlgorithm(
+        const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      void optimise();
+    void optimise();
 
-      void setMaximalNumberOfIterations(
-          const arma::uword maximalNumberOfIterations);
-          
-      arma::uword getNumberOfIterations() const;
-      arma::uword getMaximalNumberOfIterations() const;
+    void setMaximalNumberOfIterations(
+        const arma::uword maximalNumberOfIterations);
 
-      double getBestObjectiveValue() const;
-      arma::Col<double> getBestParameter() const;
-      
-      bool isFinished() const;
-      virtual bool isTerminated() const;
+    arma::uword getNumberOfIterations() const;
+    arma::uword getMaximalNumberOfIterations() const;
 
-      std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
-      
-      virtual ~OptimisationAlgorithm() = default;
+    double getBestObjectiveValue() const;
+    arma::Col<double> getBestParameter() const;
 
-    private:
-      std::shared_ptr<OptimisationProblem> optimisationProblem_;
+    bool isFinished() const;
+    virtual bool isTerminated() const;
 
-    protected:
-      const arma::uword numberOfDimensions_;
+    std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
 
-      arma::uword numberOfIterations_;
-      arma::uword maximalNumberOfIterations_;
+    virtual ~OptimisationAlgorithm() = default;
 
-      double bestObjectiveValue_;
-      arma::Col<double> bestParameter_;
+   private:
+    std::shared_ptr<OptimisationProblem> optimisationProblem_;
 
-      std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
+   protected:
+    const arma::uword numberOfDimensions_;
 
-      int nodeRank_;
-      int numberOfNodes_;
+    arma::uword numberOfIterations_;
+    arma::uword maximalNumberOfIterations_;
 
-      arma::Col<double> getLowerBounds() const;
-      arma::Col<double> getUpperBounds() const;
+    double bestObjectiveValue_;
+    arma::Col<double> bestParameter_;
 
-      arma::Col<arma::uword> isWithinLowerBounds(
-          const arma::Col<double>& parameter) const;
-      arma::Col<arma::uword> isWithinUpperBounds(
-          const arma::Col<double>& parameter) const;
+    std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
 
-      double getAcceptableObjectiveValue() const;
+    int nodeRank_;
+    int numberOfNodes_;
 
-      double getObjectiveValue(
-          const arma::Col<double>& parameter);
-      
-      arma::Col<double> getRandomParameter() const;
-      virtual arma::Col<double> getRandomNeighbour(
-          const arma::Col<double>& parameter,
-          const arma::Col<double>& minimalDistance,
-          const arma::Col<double>& maximalDistance);
-          
-      bool updateBestParameter(
-          const arma::Col<double>& parameter,
-          const double objectiveValue);
+    arma::Col<double> getLowerBounds() const;
+    arma::Col<double> getUpperBounds() const;
 
-      virtual void optimiseImplementation() = 0;
+    arma::Col<arma::uword> isWithinLowerBounds(
+        const arma::Col<double>& parameter) const;
+    arma::Col<arma::uword> isWithinUpperBounds(
+        const arma::Col<double>& parameter) const;
+
+    double getAcceptableObjectiveValue() const;
+
+    double getObjectiveValue(
+        const arma::Col<double>& parameter);
+
+    arma::Col<double> getRandomParameter() const;
+    virtual arma::Col<double> getRandomNeighbour(
+        const arma::Col<double>& parameter,
+        const arma::Col<double>& minimalDistance,
+        const arma::Col<double>& maximalDistance);
+
+    bool updateBestParameter(
+        const arma::Col<double>& parameter,
+        const double objectiveValue);
+
+    virtual void optimiseImplementation() = 0;
   };
 }

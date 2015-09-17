@@ -11,15 +11,15 @@
 
 namespace mant {
   class ArtificialNeuralNetwork : public SurrogateModel {
-    public:
-      using SurrogateModel::SurrogateModel;
-    
-      std::string toString() const override;
-  
-    protected:
-      void modelImplementation() override;
-      
-      double getObjectiveValueImplementation(
-          const arma::Col<double>& parameter) const override;
+   public:
+    using SurrogateModel::SurrogateModel;
+
+    std::string toString() const override;
+
+   protected:
+    void modelImplementation() override;
+
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override;
   };
 }

@@ -14,18 +14,25 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::EllipsoidalFunction") {
+TEST_CASE(
+    "bbob::EllipsoidalFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::EllipsoidalFunction ellipsoidalFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
+    REQUIRE(parameters.load(testDirectory +
+                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
+                            "x10.input"));
 
     arma::Col<double> translation;
-    REQUIRE(translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) + "x1.input"));
+    REQUIRE(translation.load(testDirectory +
+                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +
+                             "x1.input"));
 
     arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_ellipsoidalFunction_dim" + std::to_string(numberOfDimensions) +".expected"));
+    REQUIRE(expected.load(testDirectory +
+                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_ellipsoidalFunction_dim" + std::to_string(numberOfDimensions) +
+                          ".expected"));
 
     ellipsoidalFunction.setObjectiveValueTranslation(0);
     ellipsoidalFunction.setParameterTranslation(translation);
@@ -35,9 +42,12 @@ TEST_CASE("bbob::EllipsoidalFunction") {
     }
   }
 
-  SECTION(".toString") {
-    SECTION("Returns the expected class name.") {
-      CHECK(mant::bbob::EllipsoidalFunction(5).toString() == "bbob_ellipsoidal_function");
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
+      CHECK(mant::bbob::EllipsoidalFunction(5).toString() ==
+            "bbob_ellipsoidal_function");
     }
   }
 }

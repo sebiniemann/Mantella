@@ -8,20 +8,20 @@
 
 namespace mant {
   class GridSearch : public SamplingBasedOptimisationAlgorithm {
-    public:
-      explicit GridSearch(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+   public:
+    explicit GridSearch(
+        const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      void setNumberOfSamplesPerDimension(
-          const arma::Col<arma::uword>& numberOfSamplesPerDimension);
+    void setNumberOfSamplesPerDimension(
+        const arma::Col<arma::uword>& numberOfSamplesPerDimension);
 
-      arma::Col<arma::uword> getNumberOfSamplesPerDimension() const;
+    arma::Col<arma::uword> getNumberOfSamplesPerDimension() const;
 
-      std::string toString() const override;
+    std::string toString() const override;
 
-    protected:
-      arma::Col<arma::uword> numberOfSamplesPerDimension_;
+   protected:
+    arma::Col<arma::uword> numberOfSamplesPerDimension_;
 
-      void optimiseImplementation() override;
+    void optimiseImplementation() override;
   };
 }

@@ -8,16 +8,16 @@
 
 namespace mant {
   class FitnessDistanceCorrelationAnalysis : public PassivePropertyAnalysis {
-    public:
-      using PassivePropertyAnalysis::PassivePropertyAnalysis;
+   public:
+    using PassivePropertyAnalysis::PassivePropertyAnalysis;
 
-      double getCorrelationCoefficient() const;
+    double getCorrelationCoefficient() const;
 
-      std::string toString() const override;
+    std::string toString() const override;
 
-    protected:
-      double correlationCoefficient_;
+   protected:
+    double correlationCoefficient_;
 
-      void analyseImplementation() override;
+    void analyseImplementation() override;
   };
 }

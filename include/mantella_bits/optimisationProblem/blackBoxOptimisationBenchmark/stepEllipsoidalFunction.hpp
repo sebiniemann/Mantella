@@ -14,28 +14,28 @@
 namespace mant {
   namespace bbob {
     class StepEllipsoidalFunction : public BlackBoxOptimisationBenchmark {
-      public:
-        explicit StepEllipsoidalFunction(
-            const arma::uword numberOfDimensions);
+     public:
+      explicit StepEllipsoidalFunction(
+          const arma::uword numberOfDimensions);
 
-        void setRotationQ(
-            const arma::Mat<double>& rotationQ);
+      void setRotationQ(
+          const arma::Mat<double>& rotationQ);
 
-        std::string toString() const override;
+      std::string toString() const override;
 #if defined(SUPPORT_MPI)
-        std::vector<double> serialise() const;
-        void deserialise(
-            std::vector<double> serialisedOptimisationProblem);
+      std::vector<double> serialise() const;
+      void deserialise(
+          std::vector<double> serialisedOptimisationProblem);
 #endif
 
-      protected:
-        const arma::Col<double> firstParameterConditioning_;
-        const arma::Col<double> secondParameterConditioning_;
+     protected:
+      const arma::Col<double> firstParameterConditioning_;
+      const arma::Col<double> secondParameterConditioning_;
 
-        arma::Mat<double> rotationQ_;
+      arma::Mat<double> rotationQ_;
 
-        double getObjectiveValueImplementation(
-            const arma::Col<double>& parameter) const override;
+      double getObjectiveValueImplementation(
+          const arma::Col<double>& parameter) const override;
     };
   }
 }

@@ -12,7 +12,7 @@
 namespace mant {
   SimulatedAnnealing::SimulatedAnnealing(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-    : TrajectoryBasedOptimisationAlgorithm(optimisationProblem) {
+      : TrajectoryBasedOptimisationAlgorithm(optimisationProblem) {
     setMaximalStepSize((getUpperBounds() - getLowerBounds()) * 0.1);
   }
 
@@ -23,7 +23,7 @@ namespace mant {
     bestObjectiveValue_ = getObjectiveValue(initialParameter_);
 
     arma::Col<double> state = bestParameter_;
-    while(!isFinished() && !isTerminated()) {
+    while (!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
       const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, arma::zeros<arma::Col<double>>(numberOfDimensions_), maximalStepSize_);
@@ -42,8 +42,10 @@ namespace mant {
 
   void SimulatedAnnealing::setMaximalStepSize(
       const arma::Col<double>& maximalStepSize) {
-    verify(maximalStepSize.n_elem == numberOfDimensions_, "The number of dimensions of the maximal step size must match the number of dimensions of the optimisation problem.");
-    verify(arma::all(maximalStepSize > 0), "The maximal step size must be strict greater than 0 for each dimension.");
+    verify(maximalStepSize.n_elem == numberOfDimensions_,
+        "The number of dimensions of the maximal step size must match the number of dimensions of the optimisation problem.");
+    verify(arma::all(maximalStepSize > 0),
+        "The maximal step size must be strict greater than 0 for each dimension.");
 
     maximalStepSize_ = maximalStepSize;
   }

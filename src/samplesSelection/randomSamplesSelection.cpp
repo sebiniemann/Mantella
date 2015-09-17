@@ -10,7 +10,7 @@ namespace mant {
       selectedSamples_.insert({selectedSample->first, selectedSample->second});
     }
   }
-  
+
   std::string RandomSamplesSelection::toString() const {
     return "random_samples_selection";
   }

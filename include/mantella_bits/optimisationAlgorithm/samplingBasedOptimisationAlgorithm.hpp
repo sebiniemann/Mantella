@@ -8,7 +8,7 @@
 
 namespace mant {
   class SamplingBasedOptimisationAlgorithm : public OptimisationAlgorithm {
-    public:
-      using OptimisationAlgorithm::OptimisationAlgorithm;
+   public:
+    using OptimisationAlgorithm::OptimisationAlgorithm;
   };
 }

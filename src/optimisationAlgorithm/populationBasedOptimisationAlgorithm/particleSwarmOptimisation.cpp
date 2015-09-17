@@ -13,13 +13,13 @@ namespace mant {
   ParticleSwarmOptimisation::ParticleSwarmOptimisation(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::uword populationSize)
-    : PopulationBasedOptimisationAlgorithm(optimisationProblem, populationSize),
-      localBestObjectiveValues_(populationSize_) {
+      : PopulationBasedOptimisationAlgorithm(optimisationProblem, populationSize),
+        localBestObjectiveValues_(populationSize_) {
     setNeighbourhoodProbability(std::pow(1.0 - 1.0 / static_cast<double>(populationSize_), 3.0));
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));
     setMaximalGlobalAttraction(maximalLocalAttraction_);
-    setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
+    setMaximalSwarmConvergence(0.05);  // TODO Check value within the paper
   }
 
   void ParticleSwarmOptimisation::optimiseImplementation() {
@@ -27,7 +27,7 @@ namespace mant {
 
     arma::Mat<arma::uword> topology_ = getRandomNeighbourhoodTopology();
     bool randomizeTopology_ = false;
-    while(!isFinished() && !isTerminated()) {
+    while (!isFinished() && !isTerminated()) {
       if (randomizeTopology_) {
         topology_ = getRandomNeighbourhoodTopology();
         randomizeTopology_ = false;
@@ -51,7 +51,7 @@ namespace mant {
           attractionCenter_ = (maximalLocalAttraction_ * (localBestSolutions_.col(particleIndex_) - particle_) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex_) - particle_)) / 3.0;
         }
 
-        arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() *  velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
+        arma::Col<double> velocityCandidate = maximalAcceleration_ * getAcceleration() * velocities_.col(particleIndex_) + getVelocity() * arma::norm(attractionCenter_) + attractionCenter_;
         arma::Col<double> solutionCandidate = particle_ + velocityCandidate;
 
         const arma::Col<arma::uword>& belowLowerBound = arma::find(solutionCandidate < getLowerBounds());
@@ -130,7 +130,7 @@ namespace mant {
   }
 
   arma::Mat<arma::uword> ParticleSwarmOptimisation::getRandomNeighbourhoodTopology() {
-    arma::Mat<arma::uword>topology = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
+    arma::Mat<arma::uword> topology = (arma::randu<arma::Mat<double>>(populationSize_, populationSize_) <= neighbourhoodProbability_);
     topology.diag().ones();
 
     return topology;
@@ -138,7 +138,8 @@ namespace mant {
 
   void ParticleSwarmOptimisation::setNeighbourhoodProbability(
       const double neighbourhoodProbability) {
-    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1, "NeighbourhoodProbability must be a value between 0 and 1");
+    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1,
+        "NeighbourhoodProbability must be a value between 0 and 1");
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 

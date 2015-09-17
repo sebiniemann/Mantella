@@ -6,12 +6,11 @@
 namespace mant {
   GaussianRadialBasisFunction::GaussianRadialBasisFunction(
       const arma::uword numberOfDimensions,
-      const double exponent) 
-    : RadialBasisFunction(numberOfDimensions),
-      exponent_(exponent) {
-      
+      const double exponent)
+      : RadialBasisFunction(numberOfDimensions),
+        exponent_(exponent) {
   }
-  
+
   double GaussianRadialBasisFunction::getBasisFunctionValueImplementation(
       const double distance) const {
     return std::exp(-exponent_ * std::pow(distance, 2.0));
@@ -22,7 +21,7 @@ namespace mant {
       const arma::Col<double>& polynomialCoefficients) const {
     return 0;
   }
-  
+
   std::string GaussianRadialBasisFunction::toString() const {
     return "gaussian_radial_basis_function";
   }

@@ -4,6 +4,6 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("SurrogateModel") {
-
+TEST_CASE(
+    "SurrogateModel") {
 }

@@ -2,9 +2,8 @@
 
 namespace mant {
   DistanceFunction::DistanceFunction(
-      const arma::uword numberOfDimensions) 
-    : numberOfDimensions_(numberOfDimensions){
-    
+      const arma::uword numberOfDimensions)
+      : numberOfDimensions_(numberOfDimensions) {
   }
 
   double DistanceFunction::getDistance(
@@ -12,7 +11,7 @@ namespace mant {
       const arma::Col<double>& secondParameter) const {
     return getLengthImplementation(secondParameter - firstParameter);
   }
-  
+
   double DistanceFunction::getLength(
       const arma::Col<double>& parameter) const {
     return getLengthImplementation(parameter);

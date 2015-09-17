@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     BlackBoxOptimisationBenchmark::BlackBoxOptimisationBenchmark(
         const arma::uword numberOfDimensions)
-      : OptimisationProblem(numberOfDimensions) {
+        : OptimisationProblem(numberOfDimensions) {
       // A vector with all elements set to -5.
       setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
       // A vector with all elements set to 5.
@@ -28,7 +28,7 @@ namespace mant {
       arma::Col<double> randomParameterTranslation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
       // In case the parameter space would remain unchanged, it is forcefully translated by -0.00001.
       randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0.0)).fill(-1.0e-5);
-      
+
       return randomParameterTranslation;
     }
 

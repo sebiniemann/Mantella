@@ -3,14 +3,12 @@
 namespace mant {
   PolynomialProportionalityAnalysis::PolynomialProportionalityAnalysis(
       std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const std::shared_ptr<RegressionFunction> regressionFunction) 
-    : ActivePropertyAnalysis(optimisationProblem),
-      regressionFunction_(regressionFunction) {
-      
+      const std::shared_ptr<RegressionFunction> regressionFunction)
+      : ActivePropertyAnalysis(optimisationProblem),
+        regressionFunction_(regressionFunction) {
   }
-          
+
   void PolynomialProportionalityAnalysis::analyseImplementation() {
-  
   }
 
   std::string PolynomialProportionalityAnalysis::toString() const {

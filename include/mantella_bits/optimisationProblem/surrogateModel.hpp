@@ -12,17 +12,17 @@
 
 namespace mant {
   class SurrogateModel : public OptimisationProblem {
-    public:
-      explicit SurrogateModel(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
-      
-      void model();
-      
-      virtual ~SurrogateModel() = default;
-      
-    protected:
-      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
-    
-      virtual void modelImplementation() = 0;
+   public:
+    explicit SurrogateModel(
+        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
+
+    void model();
+
+    virtual ~SurrogateModel() = default;
+
+   protected:
+    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+
+    virtual void modelImplementation() = 0;
   };
 }

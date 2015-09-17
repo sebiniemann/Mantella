@@ -13,9 +13,9 @@ namespace mant {
   namespace bbob {
     StepEllipsoidalFunction::StepEllipsoidalFunction(
         const arma::uword numberOfDimensions)
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
-        secondParameterConditioning_(getParameterConditioning(100.0)) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
+          secondParameterConditioning_(getParameterConditioning(100.0)) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
@@ -23,16 +23,18 @@ namespace mant {
 
     void StepEllipsoidalFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
+      verify(rotationQ.n_rows == numberOfDimensions_,
+          "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ),
+          "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
-    
+
     double StepEllipsoidalFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);
-        
+
       const arma::Col<double>& s = firstParameterConditioning_ % parameter;
 
       arma::Col<double> z = s;
@@ -56,22 +58,22 @@ namespace mant {
 #if defined(SUPPORT_MPI)
     std::vector<double> StepEllipsoidalFunction::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
-      
-      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
+
+      for (arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
         serialisedOptimisationProblem.push_back(rotationQ_(n));
       }
-      
+
       return serialisedOptimisationProblem;
     }
 
     void StepEllipsoidalFunction::deserialise(
         std::vector<double> serialisedOptimisationProblem) {
       rotationQ_.set_size(numberOfDimensions_, numberOfDimensions_);
-      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
+      for (arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = serialisedOptimisationProblem.back();
         serialisedOptimisationProblem.pop_back();
       }
-        
+
       BlackBoxOptimisationBenchmark::deserialise(serialisedOptimisationProblem);
     }
 #endif

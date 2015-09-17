@@ -8,16 +8,16 @@
 
 namespace mant {
   class HoelderContinuityAnalysis : public PassivePropertyAnalysis {
-    public:
-      using PassivePropertyAnalysis::PassivePropertyAnalysis;
+   public:
+    using PassivePropertyAnalysis::PassivePropertyAnalysis;
 
-      double getHoelderExponent() const;
+    double getHoelderExponent() const;
 
-      std::string toString() const override;
-      
-    protected:
-      double hoelderExponent_;
+    std::string toString() const override;
 
-      void analyseImplementation() override;
+   protected:
+    double hoelderExponent_;
+
+    void analyseImplementation() override;
   };
 }

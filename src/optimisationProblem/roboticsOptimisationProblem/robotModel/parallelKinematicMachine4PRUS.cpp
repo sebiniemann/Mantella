@@ -10,56 +10,39 @@
 namespace mant {
   namespace robotics {
     ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS()
-      : ParallelKinematicMachine4PRUS(
-          // linkLengths
-          {0.24, 0.56,
-           0.24, 0.56,
-           0.24, 0.56,
-           0.24, 0.56},
-          // endEffectorJointPositions
-          { 0.073, 0.0, 0.0,
-            0.0, 0.073, 0.0,
-           -0.073, 0.0, 0.0,
-            0.0, -0.073, 0.0},
-          // baseJointRotationAngles
-          {0.0, 0.0,
-           0.0, 1.570796326794897,
-           0.0, 3.141592653589793,
-           0.0, 4.712388980384690},
-          // redundantJointStartPositions
-          { 0.364, 0.0, -0.6,
-            0.0, 0.364, -0.6,
-           -0.364, 0.0, -0.6,
-            0.0, -0.364, -0.6},
-          // redundantJointEndPositions
-          { 0.364, 0.0, 0.2,
-            0.0, 0.364, 0.2,
-           -0.364, 0.0, 0.2,
-            0.0, -0.364, 0.2}) {
+        : ParallelKinematicMachine4PRUS(
+              // linkLengths
+              {0.24, 0.56, 0.24, 0.56, 0.24, 0.56, 0.24, 0.56},
+              // endEffectorJointPositions
+              {0.073, 0.0, 0.0, 0.0, 0.073, 0.0, -0.073, 0.0, 0.0, 0.0, -0.073, 0.0},
+              // baseJointRotationAngles
+              {0.0, 0.0, 0.0, 1.570796326794897, 0.0, 3.141592653589793, 0.0, 4.712388980384690},
+              // redundantJointStartPositions
+              {0.364, 0.0, -0.6, 0.0, 0.364, -0.6, -0.364, 0.0, -0.6, 0.0, -0.364, -0.6},
+              // redundantJointEndPositions
+              {0.364, 0.0, 0.2, 0.0, 0.364, 0.2, -0.364, 0.0, 0.2, 0.0, -0.364, 0.2}) {
+    }
 
-    }
-         
     ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS(
-        const ParallelKinematicMachine4PRUS& parallelKinematicMachine4PRUS) 
-      : ParallelKinematicMachine4PRUS(parallelKinematicMachine4PRUS.linkLengths_, parallelKinematicMachine4PRUS.endEffectorJointPositions_, parallelKinematicMachine4PRUS.baseJointRotationAngles_, parallelKinematicMachine4PRUS.redundantJointStartPositions_, parallelKinematicMachine4PRUS.redundantJointEndPositions_) {
-        
+        const ParallelKinematicMachine4PRUS& parallelKinematicMachine4PRUS)
+        : ParallelKinematicMachine4PRUS(parallelKinematicMachine4PRUS.linkLengths_, parallelKinematicMachine4PRUS.endEffectorJointPositions_, parallelKinematicMachine4PRUS.baseJointRotationAngles_, parallelKinematicMachine4PRUS.redundantJointStartPositions_, parallelKinematicMachine4PRUS.redundantJointEndPositions_) {
     }
-            
+
     ParallelKinematicMachine4PRUS::ParallelKinematicMachine4PRUS(
         const arma::Mat<double>::fixed<2, 4>& linkLengths,
         const arma::Mat<double>::fixed<3, 4>& endEffectorJointPositions,
         const arma::Mat<double>::fixed<2, 4>& baseJointRotationAngles,
         const arma::Mat<double>::fixed<3, 4>& redundantJointStartPositions,
         const arma::Mat<double>::fixed<3, 4>& redundantJointEndPositions)
-      : RobotModel(4, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
-        linkLengths_(linkLengths),
-        endEffectorJointPositions_(endEffectorJointPositions),
-        baseJointRotationAngles_(baseJointRotationAngles),
-        redundantJointStartPositions_(redundantJointStartPositions),
-        redundantJointEndPositions_(redundantJointEndPositions),
-        redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
-        redundantJointRotationAngles_(4, redundantJointIndicies_.n_elem) {
+        : RobotModel(4, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
+          linkLengths_(linkLengths),
+          endEffectorJointPositions_(endEffectorJointPositions),
+          baseJointRotationAngles_(baseJointRotationAngles),
+          redundantJointStartPositions_(redundantJointStartPositions),
+          redundantJointEndPositions_(redundantJointEndPositions),
+          redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
+          redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
+          redundantJointRotationAngles_(4, redundantJointIndicies_.n_elem) {
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const double redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
         const double redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_(2, n), redundantJointStartToEndPositions_(1, n));
@@ -109,7 +92,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
-      
+
       const arma::Cube<double>::fixed<3, 4, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
       const arma::Mat<double>::fixed<3, 4>& baseJointPositions = model.slice(0);
@@ -130,7 +113,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
-      
+
       const arma::Cube<double>::fixed<3, 4, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
       const arma::Mat<double>::fixed<3, 4>& baseJoints = model.slice(0);
@@ -163,7 +146,7 @@ namespace mant {
 
       return -1.0 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));
     }
-    
+
     std::string ParallelKinematicMachine4PRUS::toString() const {
       return "robotics_parallel_kinematic_machine_4prus";
     }

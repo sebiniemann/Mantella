@@ -8,8 +8,8 @@ namespace mant {
   namespace bbob {
     BuecheRastriginFunction::BuecheRastriginFunction(
         const arma::uword numberOfDimensions)
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       arma::Col<double> parameterTranslation = getRandomParameterTranslation();
       for (arma::uword n = 0; n < parameterTranslation.n_elem; n += 2) {
         parameterTranslation(n) = std::abs(parameterTranslation(n));
@@ -20,7 +20,7 @@ namespace mant {
     double BuecheRastriginFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);
-        
+
       arma::Col<double> z = parameterConditioning_ % getOscillatedParameter(parameter);
       for (arma::uword n = 0; n < z.n_elem; n += 2) {
         if (z(n) > 0.0) {
@@ -34,7 +34,7 @@ namespace mant {
     std::string BuecheRastriginFunction::toString() const {
       return "bbob_bueche_rastrigin_function";
     }
-    
+
 #if defined(SUPPORT_MPI)
     std::vector<double> BuecheRastriginFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();

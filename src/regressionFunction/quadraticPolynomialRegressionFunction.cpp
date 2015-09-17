@@ -3,8 +3,7 @@
 namespace mant {
   QuadraticRegressionFunction::QuadraticRegressionFunction(
       const arma::uword numberOfParameterDimensions)
-    : RegressionFunction(numberOfParameterDimensions, numberOfParameterDimensions * (numberOfParameterDimensions + 1) / 2 + numberOfParameterDimensions + 1) {
-    
+      : RegressionFunction(numberOfParameterDimensions, numberOfParameterDimensions * (numberOfParameterDimensions + 1) / 2 + numberOfParameterDimensions + 1) {
   }
 
   arma::Col<double> QuadraticRegressionFunction::getRegressionImplementation(
@@ -17,15 +16,15 @@ namespace mant {
         regression(n++) = parameter(k) * parameter(l);
       }
     }
-    
+
     regression.subvec(n, n + numberOfParameterDimensions_ - 1) = parameter;
     n += numberOfParameterDimensions_;
-    
+
     regression(n) = 1;
-    
+
     return regression;
   }
-  
+
   std::string QuadraticRegressionFunction::toString() const {
     return "quadratic_regression_function";
   }

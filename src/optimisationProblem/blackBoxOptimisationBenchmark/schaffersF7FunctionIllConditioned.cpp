@@ -12,8 +12,8 @@ namespace mant {
   namespace bbob {
     SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned(
         const arma::uword numberOfDimensions)
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
@@ -21,8 +21,10 @@ namespace mant {
 
     void SchaffersF7FunctionIllConditioned::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
+      verify(rotationQ.n_rows == numberOfDimensions_,
+          "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ),
+          "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
@@ -30,7 +32,7 @@ namespace mant {
     double SchaffersF7FunctionIllConditioned::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);
-        
+
       const arma::Col<double>& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter)));
       const arma::Col<double>& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
 
@@ -44,22 +46,22 @@ namespace mant {
 #if defined(SUPPORT_MPI)
     std::vector<double> SchaffersF7FunctionIllConditioned::serialise() const {
       std::vector<double> serialisedOptimisationProblem = BlackBoxOptimisationBenchmark::serialise();
-      
-      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
+
+      for (arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
         serialisedOptimisationProblem.push_back(rotationQ_(n));
       }
-      
+
       return serialisedOptimisationProblem;
     }
 
     void SchaffersF7FunctionIllConditioned::deserialise(
         std::vector<double> serialisedOptimisationProblem) {
       rotationQ_.set_size(numberOfDimensions_, numberOfDimensions_);
-      for(arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
+      for (arma::uword n = 0; n < rotationQ_.n_elem; ++n) {
         rotationQ_(n) = serialisedOptimisationProblem.back();
         serialisedOptimisationProblem.pop_back();
       }
-        
+
       BlackBoxOptimisationBenchmark::deserialise(serialisedOptimisationProblem);
     }
 #endif

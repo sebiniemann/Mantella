@@ -13,22 +13,22 @@
 // TODO Add restarting
 namespace mant {
   class HillClimbing : public TrajectoryBasedOptimisationAlgorithm {
-    public:
-      explicit HillClimbing(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+   public:
+    explicit HillClimbing(
+        const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      void setMinimalStepSize(
-          const arma::Col<double>& minimalStepSize);
+    void setMinimalStepSize(
+        const arma::Col<double>& minimalStepSize);
 
-      void setMaximalStepSize(
-          const arma::Col<double>& maximalStepSize);
+    void setMaximalStepSize(
+        const arma::Col<double>& maximalStepSize);
 
-      std::string toString() const override;
+    std::string toString() const override;
 
-    protected:
-      arma::Col<double> minimalStepSize_;
-      arma::Col<double> maximalStepSize_;
+   protected:
+    arma::Col<double> minimalStepSize_;
+    arma::Col<double> maximalStepSize_;
 
-      void optimiseImplementation() override;
+    void optimiseImplementation() override;
   };
 }

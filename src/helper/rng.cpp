@@ -14,11 +14,10 @@ namespace mant {
 
   void Rng::setSeed(
       const arma::arma_rng::seed_type seed) {
-   seed_() = seed;
+    seed_() = seed;
 
     getGenerator().seed(seed_());
     arma::arma_rng::set_seed(seed_());
-
   }
 
   void Rng::setRandomSeed() {
@@ -26,7 +25,7 @@ namespace mant {
 #if defined(SUPPORT_MPI)
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    
+
     setSeed(arma::randi<arma::Col<arma::arma_rng::seed_type>>(1)(0) + rank * arma::randi<arma::Col<arma::arma_rng::seed_type>>(1)(0));
 #else
     setSeed(arma::randi<arma::Col<arma::arma_rng::seed_type>>(1)(0));

@@ -11,21 +11,21 @@
 
 namespace mant {
   class PolyharmonicSplineRadialBasisFunction : public RadialBasisFunction {
-    public:
-      const arma::uword polynomialOrder_;
-      
-      explicit PolyharmonicSplineRadialBasisFunction(
-          const arma::uword numberOfDimensions,
-          const arma::uword polynomialOrder);
+   public:
+    const arma::uword polynomialOrder_;
 
-      std::string toString() const override;
-  
-    protected:
-      double getBasisFunctionValueImplementation(
-          const double distance) const override;
-      
-      double getPolynomialTailValueImplementation(
-          const arma::Col<double>& parameter,
-      const arma::Col<double>& polynomialCoefficients) const override;
+    explicit PolyharmonicSplineRadialBasisFunction(
+        const arma::uword numberOfDimensions,
+        const arma::uword polynomialOrder);
+
+    std::string toString() const override;
+
+   protected:
+    double getBasisFunctionValueImplementation(
+        const double distance) const override;
+
+    double getPolynomialTailValueImplementation(
+        const arma::Col<double>& parameter,
+        const arma::Col<double>& polynomialCoefficients) const override;
   };
 }

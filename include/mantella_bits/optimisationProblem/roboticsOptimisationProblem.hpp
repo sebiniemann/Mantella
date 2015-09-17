@@ -13,21 +13,21 @@
 namespace mant {
   namespace robotics {
     class RoboticsOptimisationProblem : public OptimisationProblem {
-      public:
-        RoboticsOptimisationProblem(
-            std::shared_ptr<RobotModel> robotModel);
+     public:
+      RoboticsOptimisationProblem(
+          std::shared_ptr<RobotModel> robotModel);
 
-        void setEndEffectorTrajectory(
-            const arma::Mat<double>& endEffectorTrajectory);
-            
-        arma::Mat<double> getEndEffectorTrajectory() const;
+      void setEndEffectorTrajectory(
+          const arma::Mat<double>& endEffectorTrajectory);
 
-        virtual ~RoboticsOptimisationProblem() = default;
-          
-      protected:
-        std::shared_ptr<RobotModel> robotModel_;
-        
-        arma::Mat<double> endEffectorTrajectory_;
+      arma::Mat<double> getEndEffectorTrajectory() const;
+
+      virtual ~RoboticsOptimisationProblem() = default;
+
+     protected:
+      std::shared_ptr<RobotModel> robotModel_;
+
+      arma::Mat<double> endEffectorTrajectory_;
     };
   }
 }

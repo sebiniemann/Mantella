@@ -4,6 +4,6 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("PropertyAnalysis") {
-
+TEST_CASE(
+    "PropertyAnalysis") {
 }

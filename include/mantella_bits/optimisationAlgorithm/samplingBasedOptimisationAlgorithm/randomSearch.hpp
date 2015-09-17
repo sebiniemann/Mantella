@@ -8,12 +8,12 @@
 
 namespace mant {
   class RandomSearch : public SamplingBasedOptimisationAlgorithm {
-    public:
-      using SamplingBasedOptimisationAlgorithm::SamplingBasedOptimisationAlgorithm;
+   public:
+    using SamplingBasedOptimisationAlgorithm::SamplingBasedOptimisationAlgorithm;
 
-      std::string toString() const override;
+    std::string toString() const override;
 
-    protected:
-      void optimiseImplementation() override;
+   protected:
+    void optimiseImplementation() override;
   };
 }

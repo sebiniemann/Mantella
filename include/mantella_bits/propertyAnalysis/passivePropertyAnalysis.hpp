@@ -12,17 +12,17 @@
 
 namespace mant {
   class PassivePropertyAnalysis : public PropertyAnalysis {
-    public:
-      explicit PassivePropertyAnalysis(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
-      
-      void analyse();
+   public:
+    explicit PassivePropertyAnalysis(
+        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
 
-    protected:
-      const arma::uword numberOfDimensions_;
-    
-      std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
-    
-      virtual void analyseImplementation() = 0;
+    void analyse();
+
+   protected:
+    const arma::uword numberOfDimensions_;
+
+    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+
+    virtual void analyseImplementation() = 0;
   };
 }

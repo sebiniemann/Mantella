@@ -12,8 +12,8 @@ namespace mant {
   namespace bbob {
     SchwefelFunction::SchwefelFunction(
         const arma::uword numberOfDimensions)
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       // A vector with all elements randomly and uniformly set to either 2 or -2.
       setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
     }
@@ -21,7 +21,7 @@ namespace mant {
     double SchwefelFunction::getObjectiveValueImplementation(
         const arma::Col<double>& parameter) const {
       assert(parameter.n_elem == numberOfDimensions_);
-        
+
       arma::Col<double> s = parameter;
       s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
 
@@ -33,7 +33,7 @@ namespace mant {
     std::string SchwefelFunction::toString() const {
       return "bbob_schwefel_function";
     }
-    
+
 #if defined(SUPPORT_MPI)
     std::vector<double> SchwefelFunction::serialise() const {
       return BlackBoxOptimisationBenchmark::serialise();

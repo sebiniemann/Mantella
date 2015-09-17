@@ -14,22 +14,22 @@
 
 namespace mant {
   class PolynomialFunctionModelAnalysis : public PassivePropertyAnalysis {
-    public:
-      const std::shared_ptr<RegressionFunction> regressionFunction_;
-    
-      explicit PolynomialFunctionModelAnalysis(
-          const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-          const std::shared_ptr<RegressionFunction> regressionFunction);
+   public:
+    const std::shared_ptr<RegressionFunction> regressionFunction_;
 
-      arma::Col<double> getCoefficients() const;
-      arma::Col<double> getResiduals() const;
+    explicit PolynomialFunctionModelAnalysis(
+        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+        const std::shared_ptr<RegressionFunction> regressionFunction);
 
-      std::string toString() const override;
+    arma::Col<double> getCoefficients() const;
+    arma::Col<double> getResiduals() const;
 
-    protected:
-      arma::Col<double> coefficients_;
-      arma::Col<double> residuals_;
+    std::string toString() const override;
 
-      void analyseImplementation() override;
+   protected:
+    arma::Col<double> coefficients_;
+    arma::Col<double> residuals_;
+
+    void analyseImplementation() override;
   };
 }

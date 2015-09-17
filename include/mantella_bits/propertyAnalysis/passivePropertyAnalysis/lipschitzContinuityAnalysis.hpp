@@ -8,16 +8,16 @@
 
 namespace mant {
   class LipschitzContinuityAnalysis : public PassivePropertyAnalysis {
-    public:
-      using PassivePropertyAnalysis::PassivePropertyAnalysis;
+   public:
+    using PassivePropertyAnalysis::PassivePropertyAnalysis;
 
-      double getLipschitzConstant() const;
+    double getLipschitzConstant() const;
 
-      std::string toString() const override;
+    std::string toString() const override;
 
-    protected:
-      double lipschitzConstant_;
+   protected:
+    double lipschitzConstant_;
 
-      void analyseImplementation() override;
+    void analyseImplementation() override;
   };
 }

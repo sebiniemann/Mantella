@@ -22,7 +22,7 @@ namespace mant {
       const arma::Col<arma::uword>& permutationCandidate,
       const arma::uword numberOfPermutations,
       const arma::uword numberOfElements);
-      
+
   bool isDimensionallyConsistent(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
 }

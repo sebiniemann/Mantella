@@ -11,14 +11,14 @@
 
 namespace mant {
   class LinearRegressionFunction : public RegressionFunction {
-    public:
-      explicit LinearRegressionFunction(
-          const arma::uword numberOfParameterDimensions);
-      
-      std::string toString() const override;
-    
-    protected:
-      arma::Col<double> getRegressionImplementation(
-          const arma::Col<double>& parameter) const override;
+   public:
+    explicit LinearRegressionFunction(
+        const arma::uword numberOfParameterDimensions);
+
+    std::string toString() const override;
+
+   protected:
+    arma::Col<double> getRegressionImplementation(
+        const arma::Col<double>& parameter) const override;
   };
 }

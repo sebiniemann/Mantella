@@ -13,7 +13,7 @@ namespace mant {
       selectedSamples_.insert({selectedSample->first, selectedSample->second});
     }
   }
-  
+
   std::string BestSamplesSelection::toString() const {
     return "best_samples_selection";
   }

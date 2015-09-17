@@ -19,7 +19,8 @@ int main(int argc, char* argv[]) {
 
   try {
     if (argc != 2) {
-      throw std::invalid_argument("The location of the test directory must be added to the command line.");
+      throw std::invalid_argument(
+          "The location of the test directory must be added to the command line.");
     }
 
     testDirectory = argv[1];
@@ -27,10 +28,10 @@ int main(int argc, char* argv[]) {
     mant::Rng::setSeed(123456789);
 
     return Catch::Session().run();
-  } catch(const std::exception& exception) {
+  } catch (const std::exception& exception) {
     std::cout << exception.what();
   }
-  
+
 #if defined(SUPPORT_MPI)
   MPI_Finalize();
 #endif

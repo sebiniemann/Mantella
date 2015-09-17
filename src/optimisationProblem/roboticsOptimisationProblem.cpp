@@ -4,9 +4,8 @@ namespace mant {
   namespace robotics {
     RoboticsOptimisationProblem::RoboticsOptimisationProblem(
         std::shared_ptr<RobotModel> robotModel)
-      : OptimisationProblem(robotModel->numberOfRedundantJoints_),
-        robotModel_(robotModel) {
-        
+        : OptimisationProblem(robotModel->numberOfRedundantJoints_),
+          robotModel_(robotModel) {
     }
 
     void RoboticsOptimisationProblem::setEndEffectorTrajectory(

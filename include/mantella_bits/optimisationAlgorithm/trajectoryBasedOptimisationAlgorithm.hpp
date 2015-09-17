@@ -11,14 +11,14 @@
 
 namespace mant {
   class TrajectoryBasedOptimisationAlgorithm : public OptimisationAlgorithm {
-    public:
-      explicit TrajectoryBasedOptimisationAlgorithm(
-          const std::shared_ptr<OptimisationProblem> optimisationProblem);
+   public:
+    explicit TrajectoryBasedOptimisationAlgorithm(
+        const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      void setInitialParameter(
-          const arma::Col<double>& initialParameter);
+    void setInitialParameter(
+        const arma::Col<double>& initialParameter);
 
-    protected:
-      arma::Col<double> initialParameter_;
+   protected:
+    arma::Col<double> initialParameter_;
   };
 }

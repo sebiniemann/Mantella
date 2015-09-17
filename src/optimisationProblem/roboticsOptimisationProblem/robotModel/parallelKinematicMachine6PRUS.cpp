@@ -10,66 +10,39 @@
 namespace mant {
   namespace robotics {
     ParallelKinematicMachine6PRUS::ParallelKinematicMachine6PRUS()
-      : ParallelKinematicMachine6PRUS(
-          // linkLengths
-          {0.24, 0.56,
-           0.24, 0.56,
-           0.24, 0.56,
-           0.24, 0.56,
-           0.24, 0.56,
-           0.24, 0.56},
-          // endEffectorJointPositions
-          {-0.027346281319362, 0.067684421383375, 0.0,
-            0.027346281319362, 0.067684421383375, 0.0,
-            0.072289569018135, -0.010159636370085, 0.0,
-            0.044943287698773, -0.057524785013291, 0.0,
-           -0.044943287698773, -0.057524785013291, 0.0,
-           -0.072289569018135, -0.010159636370085, 0.0},
-          // baseJointRotationAngles
-          {0.0, 6.143558967020040,
-           0.0, 0.139626340159546,
-           0.0, 1.954768762233649,
-           0.0, 2.234021442552742,
-           0.0, 4.049163864626845,
-           0.0, 4.328416544945937},
-          // redundantJointStartPositions
-          {-0.050659008749464, 0.360457577021932, -0.6,
-            0.050659008749464, 0.360457577021932, -0.6,
-            0.337494923062311, -0.136356800003392, -0.6,
-            0.286835914312847, -0.224100777018540, -0.6,
-           -0.286835914312847, -0.224100777018540, -0.6,
-           -0.337494923062311, -0.136356800003392, -0.6},
-          // redundantJointEndPositions
-          {-0.050659008749464, 0.360457577021932, 0.2,
-            0.050659008749464, 0.360457577021932, 0.2,
-            0.337494923062311, -0.136356800003392, 0.2,
-            0.286835914312847, -0.224100777018540, 0.2,
-           -0.286835914312847, -0.224100777018540, 0.2,
-           -0.337494923062311, -0.136356800003392, 0.2}) {
+        : ParallelKinematicMachine6PRUS(
+              // linkLengths
+              {0.24, 0.56, 0.24, 0.56, 0.24, 0.56, 0.24, 0.56, 0.24, 0.56, 0.24, 0.56},
+              // endEffectorJointPositions
+              {-0.027346281319362, 0.067684421383375, 0.0, 0.027346281319362, 0.067684421383375, 0.0, 0.072289569018135, -0.010159636370085, 0.0, 0.044943287698773, -0.057524785013291, 0.0, -0.044943287698773, -0.057524785013291, 0.0, -0.072289569018135, -0.010159636370085, 0.0},
+              // baseJointRotationAngles
+              {0.0, 6.143558967020040, 0.0, 0.139626340159546, 0.0, 1.954768762233649, 0.0, 2.234021442552742, 0.0, 4.049163864626845, 0.0, 4.328416544945937},
+              // redundantJointStartPositions
+              {-0.050659008749464, 0.360457577021932, -0.6, 0.050659008749464, 0.360457577021932, -0.6, 0.337494923062311, -0.136356800003392, -0.6, 0.286835914312847, -0.224100777018540, -0.6, -0.286835914312847, -0.224100777018540, -0.6, -0.337494923062311, -0.136356800003392, -0.6},
+              // redundantJointEndPositions
+              {-0.050659008749464, 0.360457577021932, 0.2, 0.050659008749464, 0.360457577021932, 0.2, 0.337494923062311, -0.136356800003392, 0.2, 0.286835914312847, -0.224100777018540, 0.2, -0.286835914312847, -0.224100777018540, 0.2, -0.337494923062311, -0.136356800003392, 0.2}) {
+    }
 
-    }
-         
     ParallelKinematicMachine6PRUS::ParallelKinematicMachine6PRUS(
-        const ParallelKinematicMachine6PRUS& parallelKinematicMachine6PRUS) 
-      : ParallelKinematicMachine6PRUS(parallelKinematicMachine6PRUS.linkLengths_, parallelKinematicMachine6PRUS.endEffectorJointPositions_, parallelKinematicMachine6PRUS.baseJointRotationAngles_, parallelKinematicMachine6PRUS.redundantJointStartPositions_, parallelKinematicMachine6PRUS.redundantJointEndPositions_) {
-        
+        const ParallelKinematicMachine6PRUS& parallelKinematicMachine6PRUS)
+        : ParallelKinematicMachine6PRUS(parallelKinematicMachine6PRUS.linkLengths_, parallelKinematicMachine6PRUS.endEffectorJointPositions_, parallelKinematicMachine6PRUS.baseJointRotationAngles_, parallelKinematicMachine6PRUS.redundantJointStartPositions_, parallelKinematicMachine6PRUS.redundantJointEndPositions_) {
     }
-            
+
     ParallelKinematicMachine6PRUS::ParallelKinematicMachine6PRUS(
         const arma::Mat<double>::fixed<2, 6>& linkLengths,
         const arma::Mat<double>::fixed<3, 6>& endEffectorJointPositions,
         const arma::Mat<double>::fixed<2, 6>& baseJointRotationAngles,
         const arma::Mat<double>::fixed<3, 6>& redundantJointStartPositions,
         const arma::Mat<double>::fixed<3, 6>& redundantJointEndPositions)
-      : RobotModel(6, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
-        linkLengths_(linkLengths),
-        endEffectorJointPositions_(endEffectorJointPositions),
-        baseJointRotationAngles_(baseJointRotationAngles),
-        redundantJointStartPositions_(redundantJointStartPositions),
-        redundantJointEndPositions_(redundantJointEndPositions),
-        redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
-        redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
-        redundantJointRotationAngles_(6, redundantJointIndicies_.n_elem) {
+        : RobotModel(6, static_cast<arma::Col<double>>(arma::nonzeros(redundantJointEndPositions - redundantJointStartPositions)).n_elem),
+          linkLengths_(linkLengths),
+          endEffectorJointPositions_(endEffectorJointPositions),
+          baseJointRotationAngles_(baseJointRotationAngles),
+          redundantJointStartPositions_(redundantJointStartPositions),
+          redundantJointEndPositions_(redundantJointEndPositions),
+          redundantJointStartToEndPositions_(redundantJointEndPositions_ - redundantJointStartPositions_),
+          redundantJointIndicies_(arma::find(arma::any(redundantJointStartToEndPositions_))),
+          redundantJointRotationAngles_(6, redundantJointIndicies_.n_elem) {
       for (arma::uword n = 0; n < redundantJointIndicies_.n_elem; ++n) {
         const double redundantJointXAngle = std::atan2(redundantJointStartToEndPositions_(1, n), redundantJointStartToEndPositions_(0, n));
         const double redundantJointYAngle = std::atan2(redundantJointStartToEndPositions_(2, n), redundantJointStartToEndPositions_(1, n));
@@ -119,7 +92,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
-      
+
       const arma::Cube<double>::fixed<3, 6, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
       const arma::Mat<double>::fixed<3, 6>& baseJointPositions = model.slice(0);
@@ -140,7 +113,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
       assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
-      
+
       const arma::Cube<double>::fixed<3, 6, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
       const arma::Mat<double>::fixed<3, 6>& baseJoints = model.slice(0);
@@ -173,7 +146,7 @@ namespace mant {
 
       return -1.0 / arma::cond(arma::solve(forwardKinematic.t(), inverseKinematic));
     }
-    
+
     std::string ParallelKinematicMachine6PRUS::toString() const {
       return "robotics_parallel_kinematic_machine_6prus";
     }

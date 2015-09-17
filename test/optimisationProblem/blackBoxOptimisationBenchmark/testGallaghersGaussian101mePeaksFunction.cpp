@@ -14,24 +14,36 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction") {
+TEST_CASE(
+    "bbob::GallaghersGaussian101mePeaksFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
     mant::bbob::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) + "x10.input"));
+    REQUIRE(parameters.load(testDirectory +
+                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
+                            "x10.input"));
 
     arma::Mat<double> rotationR;
-    REQUIRE(rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) + "x" + std::to_string(numberOfDimensions) + "_2.input"));
+    REQUIRE(rotationR.load(testDirectory +
+                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
+                           "x" + std::to_string(numberOfDimensions) +
+                           "_2.input"));
 
     arma::Mat<double> conditionings;
-    REQUIRE(conditionings.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_conditionings_101x1_dim" + std::to_string(numberOfDimensions) +".input"));
+    REQUIRE(conditionings.load(testDirectory +
+                               "/data/optimisationProblem/blackBoxOptimisationBenchmark/_conditionings_101x1_dim" + std::to_string(numberOfDimensions) +
+                               ".input"));
 
     arma::Mat<double> localOptima;
-    REQUIRE(localOptima.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptima_" + std::to_string(numberOfDimensions) +"x101.input"));
+    REQUIRE(localOptima.load(testDirectory +
+                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptima_" + std::to_string(numberOfDimensions) +
+                             "x101.input"));
 
     arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_gallaghersGaussian101mePeaksFunction_dim" + std::to_string(numberOfDimensions) +".expected"));
+    REQUIRE(expected.load(testDirectory +
+                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_gallaghersGaussian101mePeaksFunction_dim" + std::to_string(numberOfDimensions) +
+                          ".expected"));
 
     gallaghersGaussian101mePeaksFunction.setObjectiveValueTranslation(0);
     gallaghersGaussian101mePeaksFunction.setRotationQ(rotationR);
@@ -43,10 +55,12 @@ TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction") {
     }
   }
 
-  SECTION(".toString") {
-    SECTION("Returns the expected class name.") {
-      CHECK(mant::bbob::GallaghersGaussian101mePeaksFunction(5).toString() == "bbob_gallaghers_gaussian_101me_peaks_function");
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
+      CHECK(mant::bbob::GallaghersGaussian101mePeaksFunction(5).toString() ==
+            "bbob_gallaghers_gaussian_101me_peaks_function");
     }
   }
 }
-
