@@ -19,6 +19,7 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang 90
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++ 90
     
+    sudo apt-get install -qq clang-format-3.6
     sudo apt-get install -qq ccache
     sudo apt-get install -qq iwyu
     sudo apt-get install -qq gdb
