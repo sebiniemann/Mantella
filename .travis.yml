@@ -37,9 +37,9 @@ install:
   
   # Clang
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.4 90; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.4 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.6 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.6 90; fi
   
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
   - sudo apt-get install -qq cmake
