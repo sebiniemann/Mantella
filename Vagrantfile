@@ -60,5 +60,6 @@ Vagrant.configure(2) do |config|
     cd redis
     make
     sudo make install
+    rm -Rf redis.tar.gz
   SHELL
 end
