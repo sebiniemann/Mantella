@@ -22,7 +22,7 @@ namespace mant {
       double getCorrelationCoefficient(
           const arma::Col<double>& parameter) const;
       
-      ~CorrelationFunction() = default;
+      virtual ~CorrelationFunction() = default;
       
     protected:
       arma::Col<double> correlationWeights_;
