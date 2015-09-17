@@ -1,0 +1,13 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+
+AlignAfterOpenBracket: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+BinPackParameters: false
+ColumnLimit: 0
+DerivePointerAlignment: false
+NamespaceIndentation: All
+...
+
