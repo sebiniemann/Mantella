@@ -1,14 +1,12 @@
 #pragma once
 
 // C++ standard library
-#include <unordered_map>
 #include <string>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/unorderedContainer.hpp>
 #include <mantella_bits/radialBasisFunction.hpp>
 
 namespace mant {

@@ -2,7 +2,6 @@
 
 // C++ standard library
 #include <cmath>
-#include <cstdlib>
 
 namespace mant {
   PolyharmonicSplineRadialBasisFunction::PolyharmonicSplineRadialBasisFunction(

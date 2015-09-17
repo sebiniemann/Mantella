@@ -2,9 +2,9 @@
 
 // C++ standard library
 #include <cassert>
+#include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
 #include <mantella_bits/helper/geometry.hpp>
 
 namespace mant {

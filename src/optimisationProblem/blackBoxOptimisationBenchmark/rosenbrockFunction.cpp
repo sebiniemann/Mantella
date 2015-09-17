@@ -5,9 +5,6 @@
 #include <cmath>
 #include <algorithm>
 
-// Mantella
-#include <mantella_bits/helper/assert.hpp>
-
 namespace mant {
   namespace bbob {
     RosenbrockFunction::RosenbrockFunction(

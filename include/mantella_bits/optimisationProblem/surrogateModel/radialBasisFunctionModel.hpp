@@ -1,11 +1,12 @@
 #pragma once
 
 // C++ standard library
+#include <string>
 #include <unordered_map>
+#include <memory>
 
 // Armadillo
 #include <armadillo>
-#include <string>
 
 // Mantella
 #include <mantella_bits/helper/unorderedContainer.hpp>

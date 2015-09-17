@@ -2,11 +2,7 @@
 
 // C++ standard library
 #include <cassert>
-#include <cstdlib>
 #include <cmath>
-
-// Mantella
-#include <mantella_bits/helper/assert.hpp>
 
 namespace mant {
   namespace bbob {

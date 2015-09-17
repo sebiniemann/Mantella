@@ -3,6 +3,9 @@
 // C++ standard library
 #include <memory>
 
+// Armadillo
+#include <armadillo>
+
 // Mantella
 #include <mantella_bits/propertyAnalysis.hpp>
 #include <mantella_bits/optimisationProblem.hpp>

@@ -1,5 +1,6 @@
 #pragma once
 
+// Mantella
 #include <mantella_bits/config.hpp>
 
 #if defined(SUPPORT_MPI)

@@ -4,9 +4,6 @@
 #include <cassert>
 #include <cmath>
 
-// Mantella
-#include <mantella_bits/helper/assert.hpp>
-
 namespace mant {
   namespace bbob {
     RastriginFunction::RastriginFunction(

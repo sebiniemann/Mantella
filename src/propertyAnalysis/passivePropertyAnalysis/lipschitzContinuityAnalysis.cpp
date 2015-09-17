@@ -2,8 +2,11 @@
 
 // C++ standard library
 #include <cassert>
-#include <cstdlib>
 #include <algorithm>
+#include <cmath>
+
+// Armadillo
+#include <armadillo>
 
 namespace mant {
   void LipschitzContinuityAnalysis::analyseImplementation() {

@@ -9,7 +9,6 @@
 
 // Mantella
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
-#include <mantella_bits/optimisationProblem.hpp>
 
 namespace mant {
   class TranslationPeriodicityAnalysis : public ActivePropertyAnalysis {

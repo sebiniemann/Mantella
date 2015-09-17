@@ -1,7 +1,8 @@
 #include <mantella_bits/helper/geometry.hpp>
 
 // C++ standard library
-#include <cstdlib>
+#include <cmath>
+#include <algorithm>
 
 // Mantella
 #include <mantella_bits/helper/assert.hpp>

@@ -2,8 +2,10 @@
 
 // C++ standard library
 #include <string>
+#include <unordered_map>
+#include <memory>
 
-// Armdillo
+// Armadillo
 #include <armadillo>
 
 // Mantella

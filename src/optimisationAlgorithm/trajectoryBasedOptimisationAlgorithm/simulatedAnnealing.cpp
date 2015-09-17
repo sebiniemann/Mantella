@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <random>
+#include <cmath>
 
 // Mantella
 #include <mantella_bits/helper/assert.hpp>

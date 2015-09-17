@@ -3,9 +3,6 @@
 // C++ standard library
 #include <cassert>
 
-// Mantella
-#include <mantella_bits/helper/assert.hpp>
-
 namespace mant {
   namespace bbob {
     EllipsoidalFunction::EllipsoidalFunction(

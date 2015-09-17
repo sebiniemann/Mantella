@@ -4,7 +4,6 @@
 #include <cassert>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
 #include <mantella_bits/helper/random.hpp>
 
 namespace mant {

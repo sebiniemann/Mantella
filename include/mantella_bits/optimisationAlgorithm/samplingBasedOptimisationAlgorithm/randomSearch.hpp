@@ -1,7 +1,7 @@
 #pragma once
 
-// Armadillo
-#include <armadillo>
+// C++ standard library
+#include <string>
 
 // Mantella
 #include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>

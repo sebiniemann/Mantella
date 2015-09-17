@@ -1,5 +1,8 @@
 #include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
 
+// Armadillo
+#include <armadillo>
+
 namespace mant {
   void RandomSearch::optimiseImplementation() {
     while (!isFinished() && !isTerminated()) {

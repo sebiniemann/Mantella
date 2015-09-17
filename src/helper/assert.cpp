@@ -1,7 +1,8 @@
 #include <mantella_bits/helper/assert.hpp>
 
 // C++ standard library
-#include <cstdlib>
+#include <cmath>
+#include <stdexcept>
 
 namespace mant {
   void verify(

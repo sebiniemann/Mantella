@@ -1,7 +1,7 @@
 #include <mantella_bits/helper/unorderedContainer.hpp>
 
 // C++ standard library
-#include <utility>
+#include <functional>
 
 namespace mant {
   arma::uword Hash::operator() (

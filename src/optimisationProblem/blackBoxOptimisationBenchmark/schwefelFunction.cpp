@@ -6,7 +6,6 @@
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
 #include <mantella_bits/helper/rng.hpp>
 
 namespace mant {

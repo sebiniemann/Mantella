@@ -1,8 +1,5 @@
 #include <mantella_bits/helper/quasiRandomSequence.hpp>
 
-// C++ standard library
-#include <cmath>
-
 // Mantella
 #include <mantella_bits/helper/assert.hpp>
 

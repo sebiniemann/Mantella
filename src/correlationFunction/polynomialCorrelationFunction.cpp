@@ -1,9 +1,5 @@
 #include <mantella_bits/correlationFunction/polynomialCorrelationFunction.hpp>
 
-// C++ standard library
-#include <cmath>
-#include <stdexcept>
-
 namespace mant {
   PolynomialCorrelationFunction::PolynomialCorrelationFunction(
       const arma::uword numberOfDimensions,

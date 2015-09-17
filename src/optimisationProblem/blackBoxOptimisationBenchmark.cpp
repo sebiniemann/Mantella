@@ -4,7 +4,6 @@
 #include <random>
 #include <cmath>
 #include <algorithm>
-#include <cstdlib>
 
 // Mantella
 #include <mantella_bits/helper/rng.hpp>

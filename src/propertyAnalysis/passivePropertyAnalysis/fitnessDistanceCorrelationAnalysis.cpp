@@ -3,6 +3,9 @@
 // C++ standard library
 #include <cassert>
 
+// Armadillo
+#include <armadillo>
+
 namespace mant {
   void FitnessDistanceCorrelationAnalysis::analyseImplementation() {
     assert(samples_.size() > 1);

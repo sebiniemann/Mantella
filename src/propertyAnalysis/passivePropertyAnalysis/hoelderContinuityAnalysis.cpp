@@ -2,6 +2,11 @@
 
 // C++ standard library
 #include <cassert>
+#include <algorithm>
+#include <cmath>
+
+// Armadillo
+#include <armadillo>
 
 namespace mant {
   void HoelderContinuityAnalysis::analyseImplementation() {
