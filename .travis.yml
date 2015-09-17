@@ -98,10 +98,14 @@ addons:
     branch_pattern: coverity_scan
 
 script:
+  # Builds tests an measure code coverage (GCC only)  
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
+  # Builds MPI-based tests (Clang  only)  
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
   - make -j 4
   - sudo make install
+  - if [ "$CXX" == "clang++" ]; then git diff --name-only HEAD~1..HEAD | grep "\.[ch]pp$" | while read file; do if [[ `clang-format-3.6 -output-replacements-xml "$file" | grep "<replacement " | wc -l` -ne 0 ]]; then echo "${file} is not properly formatted. Please run 'clang-format -i ${file}'"; exit 1; fi; done; fi
+  
   
 after_success:
   - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi
