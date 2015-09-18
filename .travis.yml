@@ -46,6 +46,10 @@ install:
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set clang /usr/bin/clang-3.6; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 90; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set clang++ /usr/bin/clang++-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.6 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set gcc /usr/bin/clang-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.6 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set g++ /usr/bin/clang++-3.6; fi
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.6; fi
   
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
