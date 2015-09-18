@@ -48,7 +48,6 @@ install:
   
   # Armadillo C++
   - sudo apt-get install -qq libblas-dev
-#  - sudo apt-get install -qq libopenblas-dev
   - sudo apt-get install -qq liblapack-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
   - mkdir armadillo
