@@ -35,7 +35,7 @@ TEST_CASE(
       const arma::Col<double>& objectiveValues = arma::randu<arma::Col<double>>(numberOfParameters) * 200 - 100;
       CAPTURE(objectiveValues);
 
-      CHECK_THROWS_AS(mant::getRandomPermutation(parameters, objectiveValues), std::logic_error);
+      CHECK_THROWS_AS(mant::getOrdinaryLeastSquaresEstimate(parameters, objectiveValues), std::logic_error);
     }
   }
 }
@@ -70,7 +70,7 @@ TEST_CASE(
       const arma::Mat<double>& variance = arma::randu<arma::Mat<double>>(numberOfParameters, numberOfParameters) * 200 - 100;
       CAPTURE(variance);
 
-      CHECK_THROWS_AS(mant::getRandomPermutation(parameters, objectiveValues, variance), std::logic_error);
+      CHECK_THROWS_AS(mant::getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, variance), std::logic_error);
     }
 
     SECTION(
