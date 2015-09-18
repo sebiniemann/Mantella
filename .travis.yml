@@ -21,7 +21,9 @@ before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   
   # Clang (Needed until Travis CI updates to Ubuntu 14.04+)
-  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
+  - if [ "$CXX" == "clang++" ]; then wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -; fi
+  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise main'; fi
+  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main'; fi
 
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
   - sudo add-apt-repository -y ppa:kalakris/cmake
@@ -37,9 +39,10 @@ install:
   
   # Clang
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.6 90; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.6 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.6; fi
   
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
   - sudo apt-get install -qq cmake
