@@ -38,10 +38,9 @@ install:
   - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90; fi
   
   # Clang
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq --force-yes g++-4.8; fi
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-3.6 90; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-3.6 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 90; fi
+  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 90; fi
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.6; fi
   
   # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
