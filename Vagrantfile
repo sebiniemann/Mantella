@@ -27,16 +27,7 @@ Vagrant.configure(2) do |config|
   
     sudo apt-get install -qq cmake
     
-    # Builds OpenBLAS
     sudo apt-get install -qq libopenblas-dev
-    # wget --quiet -O openblas.tar.gz http://github.com/xianyi/OpenBLAS/archive/v0.2.14.tar.gz
-    # mkdir openblas
-    # tar -xzf openblas.tar.gz -C ./openblas --strip-components=1
-    # cd openblas
-    # make --quiet
-    # sudo make --quiet install PREFIX=/usr/local
-    # cd ..
-    # rm -Rf openblas openblas.tar.gz
     
     # Builds Armadillo C++
     wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
