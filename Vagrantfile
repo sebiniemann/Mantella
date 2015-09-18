@@ -25,6 +25,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq lcov
   
     sudo apt-get install -qq cmake
+    sudo apt-get install -qq build-essential
     
     # Builds OpenBLAS
     wget --quiet -O openblas.tar.gz http://github.com/xianyi/OpenBLAS/archive/v0.2.14.tar.gz
