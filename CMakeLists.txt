@@ -337,7 +337,11 @@ if(BUILD_TESTS)
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-padded")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
+    
+    message(STATUS "- Handling warnings as errors.")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
   endif()
+  
   
   if(CMAKE_COMPILER_IS_CLANGXX)
     message(STATUS "- Including a undefined behavior checker and memory error detector.")
