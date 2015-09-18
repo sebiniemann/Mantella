@@ -23,7 +23,7 @@ namespace mant {
   double PolyharmonicSplineRadialBasisFunction::getPolynomialTailValueImplementation(
       const arma::Col<double>& parameter,
       const arma::Col<double>& polynomialCoefficients) const {
-    if (std::abs(polynomialOrder_) > 1) {
+    if (polynomialOrder_ > 1) {
       return arma::dot(polynomialCoefficients.head(numberOfDimensions_), parameter) + polynomialCoefficients(polynomialCoefficients.n_elem - 1);
     } else {
       return polynomialCoefficients(polynomialCoefficients.n_elem - 1);
