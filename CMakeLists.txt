@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 # Mantella, C++ optimisation framework
 project(Mantella CXX C)
 
-# Retrieves the version numbers from "include/mantella"
+# Retrieve the version numbers from "include/mantella"
 file(STRINGS "${PROJECT_SOURCE_DIR}/include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
-# Adds additional cmake modules
+# Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 # Adds Clang detection
@@ -27,9 +27,9 @@ option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 option(RUN_IWYU "Run include-what-you-use" OFF)
 
 mark_as_advanced(
- BUILD_TESTS
- MEASURE_CODE_COVERAGE
- RUN_IWYU
+  BUILD_TESTS
+  MEASURE_CODE_COVERAGE
+  RUN_IWYU
 )
 
 message(STATUS "") 
@@ -48,11 +48,11 @@ set(REQUIRED_ARMADILLO_VERSION "5.100.2")
 find_package(Armadillo QUIET)
 file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
 if(ARMA_USE_WRAPPER)
-  # Using the Armadillo runtime library (this is the recommended way).
+  # Use the Armadillo runtime library (this is the recommended way).
   find_package(Armadillo ${REQUIRED_ARMADILLO_VERSION} REQUIRED)
 else()
-  # Using Armadillo's headers, but directly linking to OpenBLAS.
-  # Since this would also work if libarmadillo.lib was never build, but it is always required by find_package(...), we have to check all pieces manually. *sigh ...*
+  # Use Armadillo's headers, but link directly to OpenBLAS.
+  # Since find_package(Armadillo ...) requires to find the Armadillo library, but the library may not exist at this point, we have to check all pieces manually.
   if(NOT ARMADILLO_INCLUDE_DIR)
     message(FATAL_ERROR "Could NOT find Armadillo includes.")
   elseif(ARMADILLO_VERSION_STRING VERSION_LESS REQUIRED_ARMADILLO_VERSION)
