@@ -53,8 +53,8 @@ install:
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
   - cmake .
-  - make -j 4
-  - sudo make install
+  - make --quiet -j 4
+  - sudo make --quiet install
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
 
@@ -80,7 +80,7 @@ install:
   - if [ "$CXX" == "g++" ]; then mkdir lcov; fi
   - if [ "$CXX" == "g++" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
   - if [ "$CXX" == "g++" ]; then cd lcov; fi
-  - if [ "$CXX" == "g++" ]; then sudo make install; fi
+  - if [ "$CXX" == "g++" ]; then sudo make --quiet install; fi
   - if [ "$CXX" == "g++" ]; then cd ..; fi
   - if [ "$CXX" == "g++" ]; then rm -Rf lcov lcov.tar.gz; fi
 #  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi

@@ -31,8 +31,8 @@ Vagrant.configure(2) do |config|
     mkdir openblas
     tar -xzf openblas.tar.gz -C ./openblas --strip-components=1
     cd openblas
-    make
-    sudo make install PREFIX=/usr/local
+    make --quiet
+    sudo make --quiet install PREFIX=/usr/local
     cd ..
     rm -Rf openblas openblas.tar.gz
     
@@ -42,8 +42,8 @@ Vagrant.configure(2) do |config|
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo
     cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
-    make
-    sudo make install
+    make --quiet
+    sudo make --quiet install
     # Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
     sudo find /usr/local/include/armadillo_bits . -name "*.hpp" -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} \;
     cd ..
@@ -57,8 +57,8 @@ Vagrant.configure(2) do |config|
     mkdir redis
     tar -xzf redis.tar.gz -C ./redis --strip-components=1
     cd redis
-    make
-    sudo make install
+    make --quiet
+    sudo make --quiet install
     rm -Rf redis.tar.gz
   SHELL
 end
