@@ -30,7 +30,7 @@ TEST_CASE(
       const arma::Mat<double>& parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, numberOfParameters) * 200 - 100;
       CAPTURE(parameters);
 
-      const arma::uword numberOfObjectiveValues = numberOfParameters + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+      const arma::uword numberOfObjectiveValues = numberOfParameters + (std::bernoulli_distribution(0.5)(mant::Rng::getGenerator()) ? 1.0 : -1.0) * std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
       CAPTURE(numberOfObjectiveValues);
       const arma::Col<double>& objectiveValues = arma::randu<arma::Col<double>>(numberOfParameters) * 200 - 100;
       CAPTURE(objectiveValues);
@@ -62,7 +62,7 @@ TEST_CASE(
       const arma::Mat<double>& parameters = arma::randu<arma::Mat<double>>(numberOfDimensions, numberOfParameters) * 200 - 100;
       CAPTURE(parameters);
 
-      const arma::uword numberOfObjectiveValues = numberOfParameters + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
+      const arma::uword numberOfObjectiveValues = numberOfParameters + (std::bernoulli_distribution(0.5)(mant::Rng::getGenerator()) ? 1.0 : -1.0) * std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
       CAPTURE(numberOfObjectiveValues);
       const arma::Col<double>& objectiveValues = arma::randu<arma::Col<double>>(numberOfParameters) * 200 - 100;
       CAPTURE(objectiveValues);
