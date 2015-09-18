@@ -14,6 +14,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq htop
     sudo apt-get install -qq git
     
+    sudo apt-get install -qq gfortran
     sudo apt-get install -qq clang
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang 90
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++ 90
@@ -25,7 +26,6 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq lcov
   
     sudo apt-get install -qq cmake
-    sudo apt-get install -qq build-essential
     
     # Builds OpenBLAS
     wget --quiet -O openblas.tar.gz http://github.com/xianyi/OpenBLAS/archive/v0.2.14.tar.gz
