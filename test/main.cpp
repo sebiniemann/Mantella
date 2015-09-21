@@ -10,7 +10,7 @@
 // Mantella
 #include <mantella>
 
-std::string testDirectory;
+static std::string testDirectory;
 
 int main(int argc, char* argv[]) {
 #if defined(SUPPORT_MPI)

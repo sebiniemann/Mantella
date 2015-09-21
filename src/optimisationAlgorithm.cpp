@@ -65,17 +65,17 @@ namespace mant {
 
 #if defined(SUPPORT_MPI)
     MPI_Datatype MANT_MPI_PARAMETER;
-    MPI_Type_contiguous(3 + numberOfDimensions_, MPI_DOUBLE, &MANT_MPI_PARAMETER);
+    MPI_Type_contiguous(2 + numberOfDimensions_, MPI_DOUBLE, &MANT_MPI_PARAMETER);
     MPI_Type_commit(&MANT_MPI_PARAMETER);
 
     MPI_Op MANT_MPI_GET_BEST_PARAMETER;
     MPI_Op_create(&mpiGetBestSample, true, &MANT_MPI_GET_BEST_PARAMETER);
 
-    arma::Col<double> mpiInputParameter(3 + numberOfDimensions_);
-    arma::Col<double> mpiOutputParameter(3 + numberOfDimensions_);
+    arma::Col<double> mpiInputParameter(2 + numberOfDimensions_);
+    arma::Col<double> mpiOutputParameter(2 + numberOfDimensions_);
 
     mpiInputParameter(0) = static_cast<double>(numberOfDimensions_);
-    mpiInputParameter(2) = bestObjectiveValue_;
+    mpiInputParameter(1) = bestObjectiveValue_;
     mpiInputParameter.tail(numberOfDimensions_) = bestParameter_;
 
     MPI_Reduce(mpiInputParameter.memptr(), mpiOutputParameter.memptr(), 1, MANT_MPI_PARAMETER, MANT_MPI_GET_BEST_PARAMETER, 0, MPI_COMM_WORLD);

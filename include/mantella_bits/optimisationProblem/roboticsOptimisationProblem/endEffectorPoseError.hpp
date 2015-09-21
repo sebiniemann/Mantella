@@ -13,7 +13,7 @@ namespace mant {
   namespace robotics {
     class EndEffectorPoseError : public RoboticsOptimisationProblem {
      public:
-      std::string toString() const;
+      std::string toString() const override;
 
      protected:
       double getObjectiveValueImplementation(

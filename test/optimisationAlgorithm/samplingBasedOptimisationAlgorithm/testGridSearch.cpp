@@ -35,7 +35,7 @@ TEST_CASE(
         }
       }
 
-      COMPARE_SET(actualSamples, expectedSamples);
+      CHECK_EXT(actualSamples, expectedSamples);
     }
 
     SECTION(
@@ -67,7 +67,7 @@ TEST_CASE(
         }
       }
 
-      COMPARE_SET(actualSamples, expectedSamples);
+      CHECK_EXT(actualSamples, expectedSamples);
     }
   }
 

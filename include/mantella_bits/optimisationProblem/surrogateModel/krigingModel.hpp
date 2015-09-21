@@ -25,7 +25,7 @@ namespace mant {
         const std::shared_ptr<RegressionFunction> regressionFunction,
         const std::shared_ptr<CorrelationFunction> correlationFunction);
 
-    std::string toString() const;
+    std::string toString() const override;
 
    protected:
     arma::Col<double> meanParameter_;

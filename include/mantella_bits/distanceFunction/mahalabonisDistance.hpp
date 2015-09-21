@@ -11,7 +11,7 @@ namespace mant {
    public:
     using DistanceFunction::DistanceFunction;
 
-    std::string toString() const;
+    std::string toString() const override;
 
    protected:
     double getLengthImplementation(

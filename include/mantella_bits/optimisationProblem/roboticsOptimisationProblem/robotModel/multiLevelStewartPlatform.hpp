@@ -23,7 +23,7 @@ namespace mant {
       explicit MultiLevelStewartPlatform(
           const std::vector<ParallelKinematicMachine6PUPS>& platformLevels);
 
-      std::string toString() const;
+      std::string toString() const override;
 
      protected:
       arma::Cube<double> getModelImplementation(

@@ -1,5 +1,6 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
 // C++ standard library
 #include <stdexcept>
@@ -15,173 +16,140 @@
 
 TEST_CASE(
     "verify") {
-  SECTION(
-      "Throws std::logic_error if the expression is false.") {
-    CHECK_THROWS_AS(mant::verify(false,
-                        "Some message ..."),
-        std::logic_error);
+  SECTION("Throws std::logic_error, if the expression is false.") {
+    CHECK_THROWS_AS(mant::verify(false, "Some message ..."), std::logic_error);
   }
 
-  SECTION(
-      "Does nothing if the expression is true.") {
-    CHECK_NOTHROW(mant::verify(true,
-        "Some message ..."));
+  SECTION("Does nothing, if the expression is true.") {
+    CHECK_NOTHROW(mant::verify(true, "Some message ..."));
   }
 }
 
-TEST_CASE(
-    "isRotationMatrix") {
-  SECTION(
-      "Returns true if a rotation matrix is provided.") {
-    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(2, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfDimensions);
-
-    const arma::Mat<double>& rotationMatrix = mant::getRandomRotationMatrix(numberOfDimensions);
-    CAPTURE(rotationMatrix);
-
+TEST_CASE("isRotationMatrix") {
+  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  CAPTURE(numberOfDimensions);
+  
+  arma::Mat<double> rotationMatrix = mant::getRandomRotationMatrix(numberOfDimensions);
+  CAPTURE(rotationMatrix);
+    
+  SECTION("Returns true, if a rotation matrix is provided.") {
     CHECK(mant::isRotationMatrix(rotationMatrix) == true);
   }
 
-  SECTION(
-      "Returns false if the provided matrix is not a rotation matrix.") {
-    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(2, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfDimensions);
+  SECTION("Returns false, if the provided matrix is not a rotation matrix.") {
+    SECTION("Returns false if the provided matrix is not square.") {
+      rotationMatrix.shed_col(0);
+      CAPTURE(rotationMatrix);
 
-    arma::Mat<double> nonRotationMatrix = mant::getRandomRotationMatrix(numberOfDimensions);
-
-    SECTION(
-        "Returns false if the provided matrix is not square.") {
-      nonRotationMatrix.shed_col(0);
-      CAPTURE(nonRotationMatrix);
-
-      CHECK(mant::isRotationMatrix(nonRotationMatrix) == false);
+      CHECK(mant::isRotationMatrix(rotationMatrix) == false);
     }
 
-    SECTION(
-        "Returns false if the provided matrix has not an determinant of (nearly) -1 or 1.") {
-      // Increasing any element should change the determinant significantly
-      nonRotationMatrix(0, 0) += 1;
-      CAPTURE(nonRotationMatrix);
+    SECTION("Returns false, if the provided matrix has not an determinant of (nearly) -1 or 1.") {
+      // Assuming the the matrix is normalised, increasing a single element be 1 should change the determinant significantly.
+      rotationMatrix(0, 0) += 1;
+      CAPTURE(rotationMatrix);
 
-      CHECK(mant::isRotationMatrix(nonRotationMatrix) == false);
+      CHECK(mant::isRotationMatrix(rotationMatrix) == false);
     }
 
-    SECTION(
-        "Returns false if its transpose is not (nearly) equal to its inverse.") {
-      // Increasing any element should divert its transpose and inverse significantly
-      nonRotationMatrix(0, nonRotationMatrix.n_cols - 1) += 1;
-      CAPTURE(nonRotationMatrix);
+    SECTION("Returns false, if its transpose is not (nearly) equal to its inverse.") {
+      // Assuming the the matrix is normalised, increasing any element should divert its transpose and inverse significantly.
+      rotationMatrix(0, rotationMatrix.n_cols - 1) += 1;
+      CAPTURE(rotationMatrix);
 
-      CHECK(mant::isRotationMatrix(nonRotationMatrix) == false);
+      CHECK(mant::isRotationMatrix(rotationMatrix) == false);
     }
   }
 }
 
-TEST_CASE(
-    "isPermutation") {
-  SECTION(
-      "Returns true if a permutation is provided.") {
-    const arma::uword numberOfPermutations = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfPermutations);
+TEST_CASE("isPermutation") {
+  const arma::uword numberOfPermutations = getRandomNumberOfValues();
+  CAPTURE(numberOfPermutations);
 
-    const arma::uword numberOfElements = numberOfPermutations + std::uniform_int_distribution<arma::uword>(0, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfElements);
-
-    const arma::Col<arma::uword>& permutation = mant::getRandomPermutation(numberOfElements, numberOfPermutations);
-    CAPTURE(permutation);
-
+  const arma::uword numberOfElements = getRandomNumberOfValues(numberOfPermutations);
+  CAPTURE(numberOfElements);
+    
+  arma::Col<arma::uword> permutation = mant::getRandomPermutation(numberOfElements, numberOfPermutations);
+  CAPTURE(permutation);
+    
+  SECTION("Returns true, if a permutation is provided.") {
     CHECK(mant::isPermutation(permutation, numberOfPermutations, numberOfElements) == true);
   }
 
-  SECTION(
-      "Returns false if the provided vector is not a permutation.") {
-    const arma::uword numberOfPermutations = std::uniform_int_distribution<arma::uword>(2, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfPermutations);
+  SECTION("Returns false, if the provided vector is not a permutation.") {
+    SECTION("Returns false if the number of permutations is larger than the number of elements.") {
+      permutation.resize(numberOfElements + 1);
+      CAPTURE(permutation);
 
-    const arma::uword numberOfElements = numberOfPermutations + std::uniform_int_distribution<arma::uword>(0, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfElements);
-
-    arma::Col<arma::uword> nonPermutation = mant::getRandomPermutation(numberOfElements, numberOfPermutations);
-
-    SECTION(
-        "Returns false if the number of permutations is larger than the number of elements.") {
-      nonPermutation.resize(numberOfElements + 1);
-      CAPTURE(nonPermutation);
-
-      CHECK(mant::isPermutation(nonPermutation, numberOfPermutations, numberOfElements) == false);
+      CHECK(mant::isPermutation(permutation, numberOfPermutations, numberOfElements) == false);
     }
 
-    SECTION(
-        "Returns false if the number of permutations is not equal to the number of elements within the vector.") {
-      nonPermutation.resize(numberOfPermutations - 1);
-      CAPTURE(nonPermutation);
+    SECTION("Returns false, if the number of permutations is not equal to the number of elements within the vector.") {
+      permutation.resize(numberOfPermutations - 1);
+      CAPTURE(permutation);
 
-      CHECK(mant::isPermutation(nonPermutation, numberOfPermutations, numberOfElements) == false);
+      CHECK(mant::isPermutation(permutation, numberOfPermutations, numberOfElements) == false);
     }
 
-    SECTION(
-        "Returns false if any element of the vector is not within [0, numberOfElements - 1]") {
-      nonPermutation(0) = numberOfElements;
-      CAPTURE(nonPermutation);
+    SECTION("Returns false, if any element of the vector is not within [0, numberOfElements - 1]") {
+      permutation(0) = numberOfElements;
+      CAPTURE(permutation);
 
-      CHECK(mant::isPermutation(nonPermutation, numberOfPermutations, numberOfElements) == false);
+      CHECK(mant::isPermutation(permutation, numberOfPermutations, numberOfElements) == false);
     }
 
-    SECTION(
-        "Returns false if the vector is not unique") {
-      nonPermutation(0) = nonPermutation(1);
-      CAPTURE(nonPermutation);
+    SECTION("Returns false, if the vector is not unique") {
+      permutation(0) = permutation(1);
+      CAPTURE(permutation);
 
-      CHECK(mant::isPermutation(nonPermutation, numberOfPermutations, numberOfElements) == false);
+      CHECK(mant::isPermutation(permutation, numberOfPermutations, numberOfElements) == false);
     }
   }
 }
 
-TEST_CASE(
-    "isDimensionallyConsistent") {
-  SECTION(
-      "Returns true if the number of dimensions is consistent over all samples.") {
-    const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
-    CAPTURE(numberOfDimensions);
-
+TEST_CASE("isDimensionallyConsistent") {
+  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  CAPTURE(numberOfDimensions);
+    
+  SECTION("Returns true, if the number of dimensions is consistent over all samples.") {
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
     mant::RandomSearch optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
 
     const auto& samples = optimisationProblem->getCachedSamples();
-    // unordered maps cannot be captured by Catch
+    // We liked to log the samples, in case of an error, but Catch cannot capture unordered maps.
 
     CHECK(mant::isDimensionallyConsistent(samples) == true);
   }
 
-  SECTION(
-      "Returns false if the number of dimensions is inconsistent between any two samples.") {
+  SECTION("Returns false, if the number of dimensions is inconsistent between any two samples.") {
     std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
 
-    const arma::uword firstNumberOfDimensions = std::uniform_int_distribution<arma::uword>(2, 10)(mant::Rng::getGenerator());
+    // Generate an inconsistent set of samples by concatenating two cached sampling sets of dimensionally different optimisation problems.
+    // The first optimisation problem
+    const arma::uword firstNumberOfDimensions = getRandomNumberOfValues();
     CAPTURE(firstNumberOfDimensions);
 
     std::shared_ptr<mant::OptimisationProblem> firstOptimisationProblem(new mant::bbob::SphereFunction(firstNumberOfDimensions));
     mant::RandomSearch firstOptimisationAlgorithm(firstOptimisationProblem);
     firstOptimisationAlgorithm.optimise();
 
-    for (const auto& sample : firstOptimisationProblem->getCachedSamples()) {
-      samples.insert(sample);
-    }
-
-    const arma::uword secondNumberOfDimensions = std::uniform_int_distribution<arma::uword>(1, firstNumberOfDimensions - 1)(mant::Rng::getGenerator());
+    // The second one
+    const arma::uword secondNumberOfDimensions = getRandomNumberOfValues();
     CAPTURE(secondNumberOfDimensions);
 
     std::shared_ptr<mant::OptimisationProblem> secondOptimisationProblem(new mant::bbob::SphereFunction(secondNumberOfDimensions));
     mant::RandomSearch secondOptimisationAlgorithm(secondOptimisationProblem);
     secondOptimisationAlgorithm.optimise();
 
-    // Hopefully, we wont get a hash collision, otherwise mant::IsEqual may throw an exception when comparing vectors with an unequal number of dimensions.
+    // Hopefully, we won't get a hash collision, otherwise mant::IsEqual may throw an exception when comparing vectors with an unequal number of dimensions.
+    for (const auto& sample : firstOptimisationProblem->getCachedSamples()) {
+      samples.insert(sample);
+    }
     for (const auto& sample : secondOptimisationProblem->getCachedSamples()) {
       samples.insert(sample);
     }
-
-    // unordered maps cannot be captured by Catch
+    // We liked to log the samples, in case of an error, but Catch cannot capture unordered maps.
 
     CHECK(mant::isDimensionallyConsistent(samples) == true);
   }

@@ -45,7 +45,7 @@ TEST_CASE(
         "Checking the default value.") {
       // Each dimension of the lower bound is set to the lowest, representable value.
       arma::Col<double> expected = arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::lowest();
-      COMPARE(optimisationProblem.getLowerBounds(), expected);
+      IS_EQUAL(optimisationProblem.getLowerBounds(), expected);
     }
   }
 
@@ -55,7 +55,7 @@ TEST_CASE(
         "Checking the default value.") {
       // Each dimension of the lower bound is set to the largest, representable value.
       arma::Col<double> expected = arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::max();
-      COMPARE(optimisationProblem.getUpperBounds(), expected);
+      IS_EQUAL(optimisationProblem.getUpperBounds(), expected);
     }
   }
 
@@ -66,7 +66,7 @@ TEST_CASE(
       arma::Col<double> lowerBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 
       optimisationProblem.setLowerBounds(lowerBounds);
-      COMPARE(optimisationProblem.getLowerBounds(), lowerBounds);
+      IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
     }
 
     SECTION(
@@ -92,7 +92,7 @@ TEST_CASE(
       arma::Col<double> upperBounds = arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 
       optimisationProblem.setUpperBounds(upperBounds);
-      COMPARE(optimisationProblem.getUpperBounds(), upperBounds);
+      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
     }
 
     SECTION(
@@ -239,7 +239,7 @@ TEST_CASE(
       // All elements of the upper bound are set to 2.
       optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.0);
 
-      COMPARE(optimisationProblem.isWithinLowerBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -0.5}), {0, 1, 1, 0, 1});
+      IS_EQUAL(optimisationProblem.isWithinLowerBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -0.5}), {0, 1, 1, 0, 1});
     }
 
     SECTION(
@@ -267,7 +267,7 @@ TEST_CASE(
       // All elements of the upper bound are set to 2.
       optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 2.0);
 
-      COMPARE(optimisationProblem.isWithinUpperBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), 2.0}), {1, 0, 0, 1, 1});
+      IS_EQUAL(optimisationProblem.isWithinUpperBounds({-0.6, 10.0, std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), 2.0}), {1, 0, 0, 1, 1});
     }
 
     SECTION(
@@ -432,8 +432,8 @@ TEST_CASE(
       // Reset the problem.
       optimisationProblem.reset();
 
-      COMPARE(optimisationProblem.getLowerBounds(), lowerBounds);
-      COMPARE(optimisationProblem.getUpperBounds(), upperBounds);
+      IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
+      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
 
       CHECK(optimisationProblem.getAcceptableObjectiveValue() == acceptableObjectiveValue);
 

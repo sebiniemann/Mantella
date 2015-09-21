@@ -22,7 +22,7 @@ namespace mant {
         const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
         const std::shared_ptr<RegressionFunction> regressionFunction);
 
-    std::string toString() const;
+    std::string toString() const override;
 
    protected:
     arma::Col<double> coefficients_;

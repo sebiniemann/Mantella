@@ -31,7 +31,7 @@ namespace mant {
           const arma::Mat<double>::fixed<3, 3>& redundantJointStartPositions,
           const arma::Mat<double>::fixed<3, 3>& redundantJointEndPositions);
 
-      std::string toString() const;
+      std::string toString() const override;
 
      protected:
       const arma::Mat<double>::fixed<3, 3> redundantJointStartToEndPositions_;

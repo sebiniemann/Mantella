@@ -13,11 +13,6 @@ set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANT
 # Add additional cmake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
-# Adds Clang detection
-if (CMAKE_CXX_COMPILER MATCHES ".*clang")
-  set(CMAKE_COMPILER_IS_CLANGXX 1)
-endif ()
-
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
 option(SUPPORT_OMP "Add OpenMP support" ON)
 option(SUPPORT_MPI "Add MPI support" OFF)
@@ -76,6 +71,19 @@ endif()
 message(STATUS "") 
 message(STATUS "Configuring compiler.")
 
+# Add Clang detection
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_COMPILER_IS_CLANGXX 1)
+endif ()
+
+if(CMAKE_COMPILER_IS_CLANGXX)
+  message(STATUS "- Detected Clang compiler.")
+elseif(CMAKE_COMPILER_IS_GNUCXX)
+  message(STATUS "- Detected GCC compiler.")
+else()
+  message(STATUS "- Detected currently unsupported compiler: ${CMAKE_CXX_COMPILER_ID}.")
+endif()
+  
 if(RUN_IWYU)
   message(STATUS "- Running IWYU (instead of generating an excecutable/library).")
   message(STATUS "  - Use 'cmake ... -DRUN_IWYU=Off' to exclude this.")
@@ -89,10 +97,6 @@ else()
     message(STATUS "- Using ccache to speed up recompilations.")
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-    
-    if(CMAKE_COMPILER_IS_CLANGXX)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
-    endif()
   endif()
 endif()
 
@@ -141,6 +145,10 @@ if(SUPPORT_OMP)
 else()
   message(STATUS "- Excluding OpenMP support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=On' to add this.")
+endif()
+    
+if(CMAKE_COMPILER_IS_CLANGXX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
 endif()
 
 # ----------------
@@ -343,10 +351,10 @@ if(BUILD_TESTS)
   endif()
   
   
-  if(CMAKE_COMPILER_IS_CLANGXX)
-    message(STATUS "- Including a undefined behavior checker and memory error detector.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --fsanitize=undefined -fsanitize=address")
-  endif()
+  # if(CMAKE_COMPILER_IS_CLANGXX)
+    # message(STATUS "- Including a undefined behavior checker and memory error detector.")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
+  # endif()
     
   if(NOT EXECUTABLE_OUTPUT_PATH)
     set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -365,22 +373,22 @@ if(BUILD_TESTS)
     test/main.cpp
     test/catchExtension.cpp
     
-    # # Configuration
-    # test/testConfig.cpp
+    # Configuration
+    test/testConfig.cpp
     
-    # # Asserts
-    # test/helper/testAssert.cpp
+    # Asserts
+    test/helper/testAssert.cpp
 
-    # # Random number generator
-    # test/helper/testRng.cpp
+    # Random number generator
+    test/helper/testRng.cpp
     
-    # # MPI
-    # test/helper/testMpi.cpp
+    # MPI
+    test/helper/testMpi.cpp
     
-    # # Helper
-    # test/helper/testGeometry.cpp
-    # test/helper/testPrintable.cpp
-    # test/helper/testQuasiRandomSequence.cpp
+    # Helper
+    test/helper/testGeometry.cpp
+    test/helper/testPrintable.cpp
+    test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
     test/helper/testRegression.cpp
     # test/helper/testSetTheory.cpp

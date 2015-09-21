@@ -9,18 +9,44 @@
 // Armadillo
 #include <armadillo>
 
-void COMPARE_SET(
-    const std::vector<std::pair<arma::Col<double>, double>>& actual,
-    const std::vector<arma::Col<double>>& expected);
+arma::uword getRandomNumberOfValues();
+    
+arma::uword getRandomNumberOfValues(
+    const arma::uword minimalNumberOfDimensions);
+    
+arma::uword getDifferentRandomNumberOfValues(
+    const arma::uword numberOfDimensions);
+    
+arma::Col<double> getRandomValues(
+    const arma::uword numberOfDimensions);
+    
+arma::Mat<double> getRandomValues(
+    const arma::uword numberOfDimensions,
+    const arma::uword numberOfSamples);
 
-void COMPARE(
+void HAS_SAME_PARAMETERS(
+    const std::vector<std::pair<arma::Col<double>, double>>& samples,
+    const std::vector<arma::Col<double>>& parameters);
+
+void IS_EQUAL(
     const arma::Col<double>& actual,
     const arma::Col<double>& expected);
 
-void COMPARE(
+void IS_EQUAL(
     const arma::Col<arma::uword>& actual,
     const arma::Col<arma::uword>& expected);
 
-void COMPARE(
+void IS_EQUAL(
     const arma::Mat<double>& actual,
     const arma::Mat<double>& expected);
+
+void IS_UNIFORM(
+    const arma::Col<double>& data,
+    const double lowerBound,
+    const double upperBound);
+
+void IS_UNIFORM(
+    const arma::Col<arma::uword>& data,
+    const arma::uword lowerBound,
+    const arma::uword upperBound);
+
