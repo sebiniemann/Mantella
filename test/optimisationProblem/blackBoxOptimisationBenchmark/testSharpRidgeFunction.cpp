@@ -1,7 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <string>
 
@@ -13,36 +14,54 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::SharpRidgeFunction", "") {
+TEST_CASE(
+    "bbob::SharpRidgeFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SharpRidgeFunction<> sharpRidgeFunction(numberOfDimensions);
+    mant::bbob::SharpRidgeFunction sharpRidgeFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory +
+                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
+                            "x10.input"));
 
     arma::Col<double> translation;
-    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(translation.load(testDirectory +
+                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +
+                             "x1.input"));
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(rotationR.load(testDirectory +
+                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
+                           "x" + std::to_string(numberOfDimensions) +
+                           "_2.input"));
 
     arma::Mat<double> rotationQ;
-    rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationQ,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(rotationQ.load(testDirectory +
+                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
+                           "x" + std::to_string(numberOfDimensions) +
+                           "_1.input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedSharpRidgeFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory +
+                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_sharpRidgeFunction_dim" + std::to_string(numberOfDimensions) +
+                          ".expected"));
 
     sharpRidgeFunction.setObjectiveValueTranslation(0);
     sharpRidgeFunction.setParameterTranslation(translation);
     sharpRidgeFunction.setParameterRotation(rotationR);
     sharpRidgeFunction.setRotationQ(rotationQ);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
-      CHECK(sharpRidgeFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+      CHECK(sharpRidgeFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::SharpRidgeFunction<>(5).toString() == "bbob_sharp_ridge_function");
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
+      CHECK(mant::bbob::SharpRidgeFunction(5).toString() ==
+            "bbob_sharp_ridge_function");
+    }
   }
 }

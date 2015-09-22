@@ -1,88 +1,80 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
+// C++ standard library
 #include <cstdlib>
 #include <cmath>
 
 // Mantella
 #include <mantella>
 
-TEST_CASE("random: getRandomRotationMatrix", "") {
-  SECTION("Generates uniform distributed 2-dimensional rotation.") {
+TEST_CASE("getRandomRotationMatrix") {
+  SECTION("Generates uniform distributed 2-dimensional rotations.") {
     arma::Col<double>::fixed<10000> angles;
-    for (std::size_t n = 0; n < angles.n_elem; ++n) {
-      arma::Col<double>::fixed<2> rotatedUnitVector = mant::getRandomRotationMatrix(2) * arma::Col<double>::fixed<2>({-2.0, 1.0});
-      angles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
+    for (arma::uword n = 0; n < angles.n_elem; ++n) {
+      arma::Col<double>::fixed<2> rotatedUnitVector = mant::getRandomRotationMatrix(2) * arma::normalise(arma::ones<arma::Col<double>>(2));
+      angles(n) = std::atan2(rotatedUnitVector(1), rotatedUnitVector(0));
     }
+    CAPTURE(angles);
 
-    arma::Col<unsigned int> histogram = arma::hist(angles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
-    CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / angles.n_elem);
+    IS_UNIFORM(angles, -arma::datum::pi, arma::datum::pi);
   }
 
-  SECTION("Generates uniform distributed 3-dimensional rotation.") {
+  SECTION("Generates uniform distributed 3-dimensional rotations.") {
     arma::Col<double>::fixed<10000> rollAngles;
     arma::Col<double>::fixed<10000> pitchAngles;
     arma::Col<double>::fixed<10000> yawAngles;
-    for (std::size_t n = 0; n < rollAngles.n_elem; ++n) {
-      arma::Col<double>::fixed<3> rotatedUnitVector = mant::getRandomRotationMatrix(3) * arma::Col<double>::fixed<3>({-2.0, 1.0, 3.0});
-      rollAngles.at(n) = std::atan2(rotatedUnitVector.at(1), rotatedUnitVector.at(0));
-      pitchAngles.at(n) = std::atan2(rotatedUnitVector.at(2), rotatedUnitVector.at(1));
-      yawAngles.at(n) = std::atan2(rotatedUnitVector.at(0), rotatedUnitVector.at(2));
+    for (arma::uword n = 0; n < rollAngles.n_elem; ++n) {
+      arma::Col<double>::fixed<3> rotatedUnitVector = mant::getRandomRotationMatrix(3) * arma::normalise(arma::ones<arma::Col<double>>(3));
+      rollAngles(n) = std::atan2(rotatedUnitVector(1), rotatedUnitVector(0));
+      pitchAngles(n) = std::atan2(rotatedUnitVector(2), rotatedUnitVector(1));
+      yawAngles(n) = std::atan2(rotatedUnitVector(0), rotatedUnitVector(2));
     }
 
-    arma::Col<unsigned int> histogram;
-
-    histogram = arma::hist(rollAngles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
-    CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / rollAngles.n_elem);
-
-    histogram = arma::hist(pitchAngles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
-    CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / pitchAngles.n_elem);
-
-    histogram = arma::hist(yawAngles, arma::linspace<arma::Col<double>>(-arma::datum::pi + arma::datum::pi/10.0, arma::datum::pi - arma::datum::pi/10.0, 10));
-    CHECK(0.02 > static_cast<double>(histogram.max() - histogram.min()) / yawAngles.n_elem);
+    CAPTURE(rollAngles);
+    IS_UNIFORM(rollAngles, -arma::datum::pi, arma::datum::pi);
+    
+    CAPTURE(pitchAngles);
+    IS_UNIFORM(pitchAngles, -arma::datum::pi, arma::datum::pi);
+    
+    CAPTURE(yawAngles);
+    IS_UNIFORM(yawAngles, -arma::datum::pi, arma::datum::pi);
   }
 }
 
-TEST_CASE("random: getRandomPermutation(unsigned int, unsigned int)", "") {
-  SECTION("Generates uniform distributed partitial permutations.") {
-    arma::Mat<unsigned int>::fixed<10, 40000> permutations;
-    for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows) + 1, static_cast<unsigned int>(permutations.n_rows));
-    }
-
-    arma::Col<unsigned int> centers(permutations.n_rows);
-    for (std::size_t n = 0; n < permutations.n_rows; ++n) {
-      centers.at(n) = n;
-    }
-
-    for (std::size_t n = 0; n < permutations.n_rows; ++n) {
-      arma::Row<unsigned int> histogram = arma::hist(permutations.row(n), centers);
-      CHECK(0.1 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
-    }
-  }
-
-  SECTION("Throws an exception, if cycle size > number of elements.") {
-    CHECK_THROWS_AS(mant::getRandomPermutation(10, 11), std::logic_error);
-  }
-}
-
-TEST_CASE("random: getRandomPermutation(unsigned int)", "") {
+TEST_CASE("getRandomPermutation") {
   SECTION("Generates uniform distributed permutations.") {
-    arma::Mat<unsigned int>::fixed<10, 10000> permutations;
-    for (std::size_t n = 0; n < permutations.n_cols; ++n) {
-      permutations.col(n) = mant::getRandomPermutation(static_cast<unsigned int>(permutations.n_rows));
+    arma::Mat<arma::uword>::fixed<10000, 10> permutations;
+    for (arma::uword n = 0; n < permutations.n_rows; ++n) {
+      permutations.row(n) = mant::getRandomPermutation(permutations.n_cols).t();
     }
-
-    arma::Col<unsigned int> centers(permutations.n_rows);
-    for (std::size_t n = 0; n < permutations.n_rows; ++n) {
-      centers.at(n) = n;
-    }
-
-    for (std::size_t n = 0; n < permutations.n_rows; ++n) {
-      arma::Row<unsigned int> histogram = arma::hist(permutations.row(n), centers);
-      CHECK(0.05 > static_cast<double>(histogram.max() - histogram.min()) / permutations.n_cols);
+    
+    for (arma::uword n = 0; n < permutations.n_cols; ++n) {
+      CAPTURE(permutations.col(n));
+      IS_UNIFORM(permutations.col(n), 0, permutations.n_cols - 1);
     }
   }
-}
 
+  SECTION("Generates uniform distributed partial permutations.") {
+    arma::Mat<arma::uword>::fixed<10000, 10> permutations;
+    for (arma::uword n = 0; n < permutations.n_rows; ++n) {
+      permutations.row(n) = mant::getRandomPermutation(permutations.n_cols + 1, permutations.n_cols).t();
+    }
+    
+    for (arma::uword n = 0; n < permutations.n_cols; ++n) {
+      CAPTURE(permutations.col(n));
+      IS_UNIFORM(permutations.col(n), 0, permutations.n_cols);
+    }
+  }
+
+  SECTION("Throws an exception, if the cycle size is larger than the number of elements.") {
+    const arma::uword numberOfElements = getRandomNumberOfValues();
+    CAPTURE(numberOfElements);
+
+    const arma::uword cycleSize = getRandomNumberOfValues(numberOfElements + 1);
+    CAPTURE(cycleSize);
+
+    CHECK_THROWS_AS(mant::getRandomPermutation(numberOfElements, cycleSize), std::logic_error);
+  }
+}

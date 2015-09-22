@@ -1,8 +1,8 @@
 // Catch
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
-// C++ Standard Library
-#include <cstdlib>
+// C++ standard library
 #include <string>
 
 // Armadillo
@@ -13,32 +13,47 @@
 
 extern std::string testDirectory;
 
-TEST_CASE("bbob::DifferentPowersFunction", "") {
+TEST_CASE(
+    "bbob::DifferentPowersFunction") {
   for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::DifferentPowersFunction<> differentPowersFunction(numberOfDimensions);
+    mant::bbob::DifferentPowersFunction differentPowersFunction(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/parameters,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(parameters.load(testDirectory +
+                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
+                            "x10.input"));
 
     arma::Col<double> translation;
-    translation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/translation,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(translation.load(testDirectory +
+                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +
+                             "x1.input"));
 
     arma::Mat<double> rotationR;
-    rotationR.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/rotationR,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(rotationR.load(testDirectory +
+                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
+                           "x" + std::to_string(numberOfDimensions) +
+                           "_2.input"));
 
     arma::Col<double> expected;
-    expected.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/expectedDifferentPowersFunction,dim" + std::to_string(numberOfDimensions) +".mat");
+    REQUIRE(expected.load(testDirectory +
+                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_differentPowersFunction_dim" + std::to_string(numberOfDimensions) +
+                          ".expected"));
 
     differentPowersFunction.setObjectiveValueTranslation(0);
     differentPowersFunction.setParameterTranslation(translation);
     differentPowersFunction.setParameterRotation(rotationR);
 
-    for (std::size_t n = 0; n < parameters.n_cols; ++n) {
-      CHECK(differentPowersFunction.getObjectiveValue(parameters.col(n)) == Approx(expected.at(n)));
+    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+      CHECK(differentPowersFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
     }
   }
 
-  SECTION("Returns the specified class name.") {
-    CHECK(mant::bbob::DifferentPowersFunction<>(5).toString() == "bbob_different_powers_function");
+  SECTION(
+      ".toString") {
+    SECTION(
+        "Returns the expected class name.") {
+      CHECK(mant::bbob::DifferentPowersFunction(5).toString() ==
+            "bbob_different_powers_function");
+    }
   }
 }

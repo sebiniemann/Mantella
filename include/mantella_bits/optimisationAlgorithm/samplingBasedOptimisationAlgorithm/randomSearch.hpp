@@ -1,32 +1,19 @@
+#pragma once
+
+// C++ standard library
+#include <string>
+
+// Mantella
+#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>
+
 namespace mant {
-  template <typename T = double>
-  class RandomSearch : public SamplingBasedOptimisationAlgorithm<T> {
-    public:
-      using SamplingBasedOptimisationAlgorithm<T>::SamplingBasedOptimisationAlgorithm;
+  class RandomSearch : public SamplingBasedOptimisationAlgorithm {
+   public:
+    using SamplingBasedOptimisationAlgorithm::SamplingBasedOptimisationAlgorithm;
 
-      std::string toString() const noexcept override;
+    std::string toString() const override;
 
-    protected:
-      void optimiseImplementation() noexcept override;
+   protected:
+    void optimiseImplementation() override;
   };
-
-  //
-  // Implementation
-  //
-
-  template <typename T>
-  void RandomSearch<T>::optimiseImplementation() noexcept {
-    while(!this->isFinished() && !this->isTerminated()) {
-      ++this->numberOfIterations_;
-    
-      const arma::Col<T>& candidateParameter = this->getRandomParameter();
-      
-      updateBestParameter(candidateParameter, this->getSoftConstraintsValue(candidateParameter), this->getObjectiveValue(candidateParameter));
-    };
-  }
-
-  template <typename T>
-  std::string RandomSearch<T>::toString() const noexcept {
-    return "random_search";
-  }
 }

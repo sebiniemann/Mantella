@@ -1,22 +1,44 @@
+#pragma once
+
+// C++ standard library
+#include <memory>
+
+// Armadillo
+#include <armadillo>
+
+// Mantella
+#include <mantella_bits/propertyAnalysis.hpp>
+#include <mantella_bits/optimisationProblem.hpp>
+
 namespace mant {
-  template <typename T = double>
-  class ActivePropertyAnalysis : public PropertyAnalysis<T> {
-    static_assert(std::is_floating_point<T>::value, "The parameter type T must be a floating point type.");
-    
-    public:
-      using PropertyAnalysis<T>::PropertyAnalysis;
+  class ActivePropertyAnalysis : public PropertyAnalysis {
+   public:
+    explicit ActivePropertyAnalysis(
+        std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-      void analyse(
-          std::shared_ptr<OptimisationProblem<T>>) noexcept;
+    void setLowerBounds(
+        const arma::Col<double>& lowerBounds);
+    void setUpperBounds(
+        const arma::Col<double>& upperBounds);
 
-    protected:
-      virtual void analyseImplementation(
-          std::shared_ptr<OptimisationProblem<T>>) noexcept = 0;
+    arma::Col<double> getLowerBounds() const;
+    arma::Col<double> getUpperBounds() const;
+
+    void setMaximalNumberOfIterations(
+        const arma::uword maximalNumberOfIterations);
+
+    arma::uword getMaximalNumberOfIterations();
+
+    void analyse();
+
+   protected:
+    std::shared_ptr<OptimisationProblem> optimisationProblem_;
+
+    arma::Col<double> lowerBounds_;
+    arma::Col<double> upperBounds_;
+
+    arma::uword maximalNumberOfIterations_;
+
+    virtual void analyseImplementation() = 0;
   };
-
-  template <typename T>
-  void ActivePropertyAnalysis<T>::analyse(
-      std::shared_ptr<OptimisationProblem<T>> optimisationProblem) noexcept {
-    analyseImplementation(optimisationProblem);
-  }
 }
