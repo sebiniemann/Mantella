@@ -7,7 +7,7 @@
 namespace mant {
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
-      const arma::uword populationSize) noexcept
+      const arma::uword populationSize)
   : PopulationBasedOptimisationAlgorithm(optimisationProblem, populationSize) {
     //HCMA settings coming from xacmes.m - 
     setStartingPoint(-4 + 8 * arma::randu(this->numberOfDimensions_));
@@ -17,7 +17,7 @@ namespace mant {
   }
 
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept
+      const std::shared_ptr<OptimisationProblem> optimisationProblem)
   : PopulationBasedOptimisationAlgorithm(optimisationProblem,
       4 + std::floor(3 * log(this->numberOfDimensions_))) {
 
@@ -63,7 +63,7 @@ namespace mant {
       boundaryScale = arma::ones(this->numberOfDimensions_);
 
       //mark all dimensions which have a boundary
-      boundaryExists = arma::Col<bool>(this->numberOfDimensions_);
+      boundaryExists = arma::Col<arma::uword>(this->numberOfDimensions_);
       for (arma::uword i = 0; i < this->getLowerBounds().n_elem; i++) {
         if (this->getLowerBounds()(i) != arma::datum::inf || this->getUpperBounds()(i) != arma::datum::inf) {
           boundaryExists(i) = true;
@@ -266,12 +266,12 @@ namespace mant {
 
   //returns capped matrix/vector first, indexes of capped values second
   std::tuple<arma::Mat<double>, arma::Mat<double>> CovarianceMatrixAdaptationEvolutionStrategy::capToBoundary(arma::Mat<double> x) {
-    arma::Mat<double> arbounds = arma::repmat(getLowerBounds(), 1, x.n_cols);
-    arma::uvec lowerIndex = arma::find(x < arma::repmat(getLowerBounds(), 1, x.n_cols));
+    arma::Mat<double> arbounds = arma::repmat(this->getLowerBounds(), 1, x.n_cols);
+    arma::uvec lowerIndex = arma::find(x < arma::repmat(this->getLowerBounds(), 1, x.n_cols));
     x(lowerIndex) = arbounds(lowerIndex);
 
-    arbounds = arma::repmat(getUpperBounds(), 1, x.n_cols);
-    arma::uvec upperIndex = arma::find(x > arma::repmat(getUpperBounds(), 1, x.n_cols));
+    arbounds = arma::repmat(this->getUpperBounds(), 1, x.n_cols);
+    arma::uvec upperIndex = arma::find(x > arma::repmat(this->getUpperBounds(), 1, x.n_cols));
     x(upperIndex) = arbounds(upperIndex);
 
     arma::Mat<double> indexes = arma::zeros(x.n_rows, x.n_cols);

@@ -12,9 +12,9 @@ namespace mant {
   public:
     explicit CovarianceMatrixAdaptationEvolutionStrategy(
         const std::shared_ptr<OptimisationProblem> optimisationProblem,
-        const arma::uword populationSize) noexcept;
+        const arma::uword populationSize);
 
-    explicit CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem) noexcept;
+    explicit CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
     //used (i.e. by HCMA) to compute certain values after changing them after instantiation
     void initializeRun();
@@ -102,7 +102,7 @@ namespace mant {
     bool boundaryActive = false; //bnd.isactive
     arma::Col<double> boundaryWeights; //bnd.weights
     arma::Col<double> boundaryScale; //bnd.scale
-    arma::Col<bool> boundaryExists; //bnd.isbounded
+    arma::Col<arma::uword> boundaryExists; //bnd.isbounded
     arma::Col<double> boundaryDeltaFitHistory; //bnd.dfithist; delta fit for setting weights
     bool boundaryInitialPhase; //bnd.iniphase
     std::tuple<arma::Mat<double>, arma::Mat<double>> capToBoundary(arma::Mat<double> x); //xintobounds.m - returns capped matrix/vector first, indexes of capped values second
