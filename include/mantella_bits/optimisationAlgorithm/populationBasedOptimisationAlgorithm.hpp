@@ -22,7 +22,7 @@ namespace mant {
     arma::Mat<double> getRandomPopulation() const;
 
    protected:
-    const arma::uword populationSize_;
+    arma::uword populationSize_;
     arma::Mat<double> initialPopulation_;
   };
 }

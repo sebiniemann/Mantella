@@ -61,7 +61,7 @@ namespace mant {
 
       //mark all dimensions which have a boundary
       boundaryExists = arma::Col<bool>(this->numberOfDimensions_);
-      for (int i = 0; i < this->getLowerBounds().n_elem; i++) {
+      for (arma::uword i = 0; i < this->getLowerBounds().n_elem; i++) {
         if (this->getLowerBounds()(i) != arma::datum::inf || this->getUpperBounds()(i) != arma::datum::inf) {
           boundaryExists(i) = true;
         } else {
