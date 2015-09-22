@@ -105,7 +105,7 @@ namespace mant {
     arma::Col<bool> boundaryExists; //bnd.isbounded
     arma::Col<double> boundaryDeltaFitHistory; //bnd.dfithist; delta fit for setting weights
     bool boundaryInitialPhase; //bnd.iniphase
-    void capToBoundary(arma::Mat<double> x); //xintobounds.m - slightly modified to only take matrices
+    std::tuple<arma::Mat<double>, arma::Mat<double>> capToBoundary(arma::Mat<double> x); //xintobounds.m - returns capped matrix/vector first, indexes of capped values second
 
     arma::Mat<double> fitnessRaw; //fitness.raw
 

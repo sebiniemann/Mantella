@@ -1,7 +1,10 @@
 #include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
-namespace mant {
+// C++ standard library
+#include <cmath>
+#include <algorithm>
 
+namespace mant {
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::uword populationSize) noexcept
@@ -109,24 +112,26 @@ namespace mant {
         } else {
           //TODO: CMAES throws error here cause type not implemented
         }
-        mueff = std::pow(arma::sum(recombinationWeights), 2) / arma::sum(arma::pow(recombinationWeights, 2)); //;variance-effective size of mu
-        recombinationWeights = recombinationWeights / arma::sum(recombinationWeights); //;normalize recombination weights array
+
+        mueff = std::pow(arma::accu(recombinationWeights), 2) / arma::accu(arma::pow(recombinationWeights, 2)); //;variance-effective size of mu
+        recombinationWeights = recombinationWeights / arma::accu(recombinationWeights); //;normalize recombination weights array
         //error check omitted, shouldn't happen
 
         //TODO: these values are from HCMA, standard CMAES are different. not sure how to impl
         ccum = std::pow((this->numberOfDimensions_ + 2 * mueff / this->numberOfDimensions_) / (4 + mueff / this->numberOfDimensions_), -1); //;time constant for cumulation for covariance matrix
         cs = (mueff + 2) / (this->numberOfDimensions_ + mueff + 3);
 
-        ccov1 = std::min(2, this->populationSize_ / 3.0) / (std::pow(this->numberOfDimensions_ + 1.3, 2) + mueff);
-        ccovmu = std::min(2, this->populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(this->numberOfDimensions_ + 2, 2) + mueff);
+        ccov1 = std::min(2.0, this->populationSize_ / 3.0) / (std::pow(this->numberOfDimensions_ + 1.3, 2) + mueff);
+        ccovmu = std::min(2.0, this->populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(this->numberOfDimensions_ + 2, 2) + mueff);
 
-        damping = 1 + 2 * std::max(0, std::sqrt((mueff - 1) / (this->numberOfDimensions_ + 1)) - 1) + cs;
+        damping = 1 + 2 * std::max(0.0, std::sqrt((mueff - 1) / (this->numberOfDimensions_ + 1)) - 1) + cs;
       }
 
       countiter++;
 
       //;Generate and evaluate lambda offspring
-      fitnessRaw = arma::repmat(arma::datum::nan, 1, this->populationSize_);
+      fitnessRaw = arma::ones(1, this->populationSize_);
+      fitnessRaw.fill(arma::datum::nan);
 
       arma::Mat<double> newGenerationRaw = getRandomPopulation(); //arz
       arma::Mat<double> newGeneration = arma::repmat(xmean, 1, this->populationSize_) + sigma * (BD * newGenerationRaw); //arx
@@ -135,7 +140,7 @@ namespace mant {
       if (!boundaryActive) {
         newGenerationValid = newGeneration;
       } else {
-        newGenerationValid = capToBoundary(newGeneration);
+        newGenerationValid = std::get<0>(capToBoundary(newGeneration));
       }
 
     }
@@ -259,31 +264,20 @@ namespace mant {
     this->xmean = xmean;
   }
 
-  void CovarianceMatrixAdaptationEvolutionStrategy::capToBoundary(arma::Mat<double> x) {
-    for (int i = 0; i < x.n_cols; i++) {
-      //another workaround. subview col doesn't have eleme method...
-      arma::Col<double> curCol = x.col(i);
-      arma::Col<uint> violatingIndexes = arma::find(curCol < getLowerBounds()(i));
-      //workaround since arma doesnt allow single value assign... but single value everything else...
-      arma::Col<double> workaroundCol = arma::ones(violatingIndexes.n_elem);
-      workaroundCol *= getLowerBounds()(i);
-      if (violatingIndexes.n_elem > 0) {
-        curCol.elem(violatingIndexes) = workaroundCol;
-      }
-      x.col(i) = curCol;
-    }
-    for (int i = 0; i < x.n_cols; i++) {
-      //another workaround. subview col doesn't have eleme method...
-      arma::Col<double> curCol = x.col(i);
-      arma::Col<uint> violatingIndexes = arma::find(curCol > getUpperBounds()(i));
-      //workaround since arma doesnt allow single value assign... but single value everything else...
-      arma::Col<double> workaroundCol = arma::ones(violatingIndexes.n_elem);
-      workaroundCol *= getUpperBounds()(i);
-      if (violatingIndexes.n_elem > 0) {
-        curCol.elem(violatingIndexes) = workaroundCol;
-      }
-      x.col(i) = curCol;
-    }
-    return x;
+  //returns capped matrix/vector first, indexes of capped values second
+  std::tuple<arma::Mat<double>, arma::Mat<double>> CovarianceMatrixAdaptationEvolutionStrategy::capToBoundary(arma::Mat<double> x) {
+    arma::Mat<double> arbounds = arma::repmat(getLowerBounds(), 1, x.n_cols);
+    arma::uvec lowerIndex = arma::find(x < arma::repmat(getLowerBounds(), 1, x.n_cols));
+    x(lowerIndex) = arbounds(lowerIndex);
+
+    arbounds = arma::repmat(getUpperBounds(), 1, x.n_cols);
+    arma::uvec upperIndex = arma::find(x > arma::repmat(getUpperBounds(), 1, x.n_cols));
+    x(upperIndex) = arbounds(upperIndex);
+
+    arma::Mat<double> indexes = arma::zeros(x.n_rows, x.n_cols);
+    indexes(lowerIndex) += -1;
+    indexes(upperIndex) += 1;
+
+    return std::make_tuple(x, indexes);
   }
 }
