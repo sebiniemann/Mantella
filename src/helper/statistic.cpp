@@ -38,6 +38,6 @@ namespace mant {
 
   double getMedian(
       const arma::Col<double>& data) {
-    return getPercentile(data, 50.0);
+    return arma::median(data);
   }
 }
