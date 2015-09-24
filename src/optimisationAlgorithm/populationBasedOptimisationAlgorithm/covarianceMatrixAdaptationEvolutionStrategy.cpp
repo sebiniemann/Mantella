@@ -5,6 +5,7 @@
 #include <algorithm>
 
 namespace mant {
+
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::uword populationSize)
@@ -14,12 +15,13 @@ namespace mant {
     setStepSize(arma::Col<double>{2.0});
 
     xmean = startingPoint;
+    xold = startingPoint;
   }
 
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
   : PopulationBasedOptimisationAlgorithm(optimisationProblem,
-      4 + std::floor(3 * log(this->numberOfDimensions_))) {
+  4 + std::floor(3 * log(this->numberOfDimensions_))) {
 
     //TODO: is the variable passed to parentclass above already initialized at that point?
 
@@ -28,6 +30,7 @@ namespace mant {
     setStepSize(arma::Col<double>{2.0});
 
     xmean = startingPoint;
+    xold = startingPoint;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::initializeRun() {
@@ -52,11 +55,12 @@ namespace mant {
     C = arma::diagmat(diagC); //;covariance matrix == BD*(BD)'
 
     //TODO: cmaes_initializeRun initialized fitness history here, but we have that already in mantella
+    fitnessHist = arma::datum::nan * arma::ones(10 + std::ceil(30.0 * numberOfDimensions_ / populationSize_));
+    fitnessHistSel = arma::datum::nan * arma::ones(10 + std::ceil(30.0 * numberOfDimensions_ / populationSize_));
 
     /////BOUNDARY
     boundaryActive = arma::any(this->getLowerBounds() > -arma::datum::inf) || arma::any(this->getUpperBounds() > -arma::datum::inf);
     if (boundaryActive) {
-      //sanity check omitted, is done in mantella else where (?)
       //TODO: sanity check for initial point?
       boundaryWeights = arma::zeros(this->numberOfDimensions_);
 
@@ -103,9 +107,9 @@ namespace mant {
         if (recombinationWeightsType == 0) {//equal
           recombinationWeights = arma::ones(mu);
         } else if (recombinationWeightsType == 1) {//linear
-          recombinationWeights = mu + 0.5 - arma::linspace(1, mu, 1).t();
+          recombinationWeights = mu + 0.5 - arma::linspace(1, mu, mu).t();
         } else if (recombinationWeightsType == 2) {//superlinear
-          recombinationWeights = std::log(mu + 0.5) - arma::log(arma::linspace(1, mu, 1)).t();
+          recombinationWeights = std::log(mu + 0.5) - arma::log(arma::linspace(1, mu, mu)).t();
           //;muXone array for weighted recombination
           //;qqq mu can be non-integer and
           //;should become ceil(mu-0.5) (minor correction)
@@ -130,19 +134,196 @@ namespace mant {
       countiter++;
 
       //;Generate and evaluate lambda offspring
-      fitnessRaw = arma::ones(1, this->populationSize_);
+      fitnessRaw = arma::ones(this->populationSize_);
       fitnessRaw.fill(arma::datum::nan);
+
+      //;parallel evaluation - the if is omitted.
 
       arma::Mat<double> newGenerationRaw = getRandomPopulation(); //arz
       arma::Mat<double> newGeneration = arma::repmat(xmean, 1, this->populationSize_) + sigma * (BD * newGenerationRaw); //arx
 
-      arma::Mat<double> newGenerationValid;
-      if (!boundaryActive) {
-        newGenerationValid = newGeneration;
-      } else {
+      arma::Mat<double> newGenerationValid = newGeneration; //arxvalid
+      if (boundaryActive) {
         newGenerationValid = std::get<0>(capToBoundary(newGeneration));
       }
 
+      //TODO: cmaes passes the whole matrix into the fitnessfunction, not sure if this is the right way around it
+      for (arma::uword i = 0; i < newGenerationValid.n_cols; i++) {
+        fitnessRaw(i) = this->getObjectiveValue(newGenerationValid.col(i));
+        numberOfIterations_++;
+      }
+
+      //TODO: There is supposed to be a line of code here, but it's nonsensical due to no noise in mantella
+      //TODO: Omitted a large code block here. Very sure it's unreachable in our setting
+      //(with "parallel" evaluation always on and noise off)
+
+      fitnessSel = fitnessRaw;
+
+      //;----- handle boundaries -----
+      //yeap. 1 < 3 is what is actually written in matlab
+      if (1 < 3 && boundaryActive) {
+        //;Get delta fitness values
+        //TODO: ugly, how to initialiser list?
+        arma::Col<arma::uword> percs = arma::Col<arma::uword>(2);
+        percs << 25 << 75;
+        arma::Col<double> vals = percentiles(fitnessRaw, percs);
+        vals = (vals(1) - vals(0)) / numberOfDimensions_ / arma::mean(diagC) / std::pow(sigma, 2);
+        //;Catch non-sensible values 
+        if (!arma::is_finite(vals)) {
+          //TODO: console warning here: Non-finite fitness range
+          vals = arma::max(boundaryDeltaFitHistory);
+        } else if (arma::all(vals == 0)) { //;happens if all points are out of bounds
+          vals = arma::min(boundaryDeltaFitHistory(arma::find(boundaryDeltaFitHistory > 0))); //;seems not to make sense, given all solutions are out of bounds
+        } else if (boundaryFitnessValid == false) { //;flag that first sensible val was found
+          //TODO: boundaryDeltaFitHistory gets set to [] which we can't do. what to do instead?
+          boundaryFitnessValid = true;
+        }
+
+        //;Store delta fitness values
+        if (boundaryDeltaFitHistory.n_elem < 20 + (3 * numberOfDimensions_) / populationSize_) {
+          boundaryDeltaFitHistory.insert_rows(boundaryDeltaFitHistory.n_rows, vals);
+        } else {
+          boundaryDeltaFitHistory.shed_row(0);
+          boundaryDeltaFitHistory.insert_rows(boundaryDeltaFitHistory.n_rows, vals);
+        }
+
+        std::tuple<arma::Mat<double>, arma::Mat<double>> XmeanTemp = capToBoundary(xmean);
+        arma::Mat<double> xmeanCapped = std::get<0>(XmeanTemp);
+        arma::Mat<double> xmeanCappedIndexes = std::get<1>(XmeanTemp);
+
+        //;Set initial weights
+        if (boundaryInitialPhase) {
+          if (arma::any(arma::any(xmeanCappedIndexes))) {
+            //TODO: how to do 
+            boundaryWeights.elem(arma::find(boundaryExists)).fill(2.0002 * arma::median(boundaryDeltaFitHistory)); //unexplained magic number
+            //;scale only initial weights
+            arma::Col<double> dd = diagC;
+            arma::Col<arma::uword> idx = arma::find(boundaryExists);
+            dd = dd(idx) / arma::mean(dd); //;remove mean scaling
+            boundaryWeights(idx) = boundaryWeights(idx) / dd;
+            if (boundaryFitnessValid && countiter > 2) {
+              boundaryInitialPhase = false;
+            }
+          }
+        }
+
+        //;Increase weights
+        if (1 < 3 && arma::any(arma::any(xmeanCappedIndexes))) {//;any coordinate of xmean out of bounds
+          //;judge distance of xmean to boundary
+          xmeanCapped = xmean - xmeanCapped;
+          //replaced & with == since it's comparing between 0/1
+          arma::Mat<arma::uword> idx = ((xmeanCappedIndexes != 0) == (arma::Mat<arma::uword>)(arma::abs(xmeanCapped) > 3 * std::max(1.0, std::sqrt(numberOfDimensions_) / mueff)
+              * sigma * arma::sqrt(diagC)));
+          //;only increase if xmean is moving away
+          //TODO: xold is actually unassigned at this point, similar to the lambda problem we encountered earlier
+          idx = idx == (arma::sign(xmeanCapped) == arma::sign(xmean - xold));
+          if (!idx.is_empty()) { //;increase
+            boundaryWeights(idx) = std::pow(1.2, std::min(1.0, mueff / 10 / numberOfDimensions_)) * boundaryWeights(idx);
+          }
+        }
+
+        //;Assigned penalized fitness
+        boundaryPenalty = (boundaryWeights / boundaryScale).t() * arma::pow(newGenerationValid - newGeneration, 2);
+        fitnessSel = fitnessRaw + boundaryPenalty;
+      }
+      //;----- end handle boundaries -----
+
+      //;Sort by fitness
+      fitnessIdx = arma::sort_index(fitnessRaw);
+      fitnessRaw = arma::sort(fitnessRaw);
+      fitnessIdxSel = arma::sort_index(fitnessSel);
+      fitnessSel = arma::sort(fitnessSel); //;minimization
+      fitnessHist.rows(1, fitnessHist.n_elem - 1) = fitnessHist.rows(0, fitnessHist.n_elem - 2); //;record short history of
+      fitnessHist(0) = fitnessRaw(0); //;best fitness values
+      if (fitnessHistBest.n_elem < 120 + std::ceil(30.0 * numberOfDimensions_ / populationSize_) ||
+          ((countiter % 5) == 0 && fitnessHistBest.n_elem < 2e4)) { //;20 percent of 1e5 gen.
+        fitnessHistBest.insert_rows(0, fitnessRaw(0)); //;best fitness values
+        fitnessHistMedian.insert_rows(0, arma::median(fitnessRaw)); //;median fitness values
+      } else {
+        fitnessHistBest.rows(1, fitnessHistBest.n_elem - 1) = fitnessHistBest.rows(0, fitnessHistBest.n_elem - 2);
+        fitnessHistMedian.rows(1, fitnessHistMedian.n_elem - 1) = fitnessHistMedian.rows(0, fitnessHistMedian.n_elem - 2);
+        fitnessHistBest(0) = fitnessRaw(0); //;best fitness values
+        fitnessHistMedian(0) = arma::median(fitnessRaw); //;median fitness values
+      }
+      fitnessHistSel.rows(1, fitnessHistSel.n_elem - 1) = fitnessHistSel.rows(0, fitnessHistSel.n_elem - 2); //;record short history of
+      fitnessHistSel(0) = fitnessSel(0); //;best sel fitness values
+
+      //;Calculate new xmean, this is selection and recombination 
+      xold = xmean; //;for speed up of Eq. (2) and (3)
+      xmean = newGeneration.cols(fitnessIdxSel.rows(0, mu - 1)) * recombinationWeights;
+      arma::Mat<double> zmean = newGenerationRaw.cols(fitnessIdxSel.rows(0, mu - 1)) * recombinationWeights; //;==D^-1*B'*(xmean-xold)/sigma
+
+      //;Cumulation: update evolution paths
+      ps = (1 - cs) * ps + std::sqrt(cs * (2 - cs) * mueff) * (B * zmean); //;Eq. (4)
+      double hsig = arma::norm(ps) / std::sqrt(1 - std::pow(1 - cs, 2 * countiter)) / chiN < 1.4 + 2.0 / (numberOfDimensions_ + 1);
+
+      pc = (1 - ccum) * pc + hsig * (std::sqrt(ccum * (2 - ccum) * mueff) / sigma) * (xmean - xold); //;Eq. (2)
+
+      //;Adapt covariance matrix
+      negCcov = 0;
+      if ((ccov1 + ccovmu) > 0) {
+        arma::Mat<double> arpos = newGeneration.cols(fitnessIdxSel.rows(0, mu - 1)) - arma::repmat(xold, 0, mu - 1) / sigma;
+        //;"active" CMA update: negative update, in case controlling pos. definiteness 
+        if (activeCMA > 0) {
+          //;set parameters
+          double negMu = mu;
+          double negMueff = mueff;
+          if (activeCMA > 10) {//;flat weights with mu=lambda/2
+            negMu = std::floor(populationSize_ / 2);
+            negMueff = negMu;
+          }
+          /*
+          % neg.mu = ceil(min([N, lambda/4, mueff]));  neg.mueff = mu; % i.e. neg.mu <= N 
+          % Parameter study: in 3-D lambda=50,100, 10-D lambda=200,400, 30-D lambda=1000,2000 a 
+          % three times larger neg.ccov does not work. 
+          %   increasing all ccov rates three times does work (probably because of the factor (1-ccovmu))
+          %   in 30-D to looks fine
+           */
+
+          negCcov = (1 - ccovmu) * 0.25 * negMueff / (std::pow(numberOfDimensions_ + 2, 1.5) + 2 * negMueff);
+          double negMinResidualVariance = 0.66; //;keep at least 0.66 in all directions, small popsize are most critical
+          double negAlphaOld = 0.5; //;where to make up for the variance loss, 0.5 means no idea what to do
+          //;1 is slightly more robust and gives a better "guaranty" for pos. def., 
+          //;but does it make sense from the learning perspective for large ccovmu?
+          
+          double negCcovFinal = negCcov;
+          
+          //;prepare vectors, compute negative updating matrix Cneg and checking matrix Ccheck
+          //have to do some workaround since you cannot create negative descending sequences with arma
+          arma::Col<double> negHelper = arma::flipud(arma::linspace(populationSize_ - negMu,populationSize_-1,std::abs(-negMu+2)));
+          arma::Mat<double> newGenerationRawNeg = newGenerationRaw.cols(fitnessIdxSel.rows(negHelper));//arzneg
+          //;i-th longest becomes i-th shortest
+          
+          arma::Col<arma::uword> ngRawNegNormIndex = arma::sort_index(arma::sqrt(arma::sum(arma::pow(newGenerationRawNeg,2),1)));//idxnorms
+          arma::Col<double> ngRawNegNorm = arma::sort(arma::sqrt(arma::sum(arma::pow(newGenerationRawNeg,2),1)));//arnorms
+          ngRawNegNormIndex = arma::sort(ngRawNegNorm); //;inverse index
+          //another workaround for negative ordering
+          negHelper = arma::flipud(arma::linspace(0,ngRawNegNorm.n_elem-1,ngRawNegNorm.n_elem));
+          arma::Col<double> ngRawNegNormFacs = ngRawNegNorm(negHelper) / ngRawNegNorm; //arnormfacs
+          ngRawNegNorm = ngRawNegNorm(negHelper); //;for the record
+          if(activeCMA < 20) {
+            newGenerationRawNeg = newGenerationRawNeg % arma::repmat(ngRawNegNormFacs(ngRawNegNormIndex), numberOfDimensions_,1); //;E x*x' is N
+          }
+          arma::Mat<double> Ccheck; //intentional spelling
+          arma::Mat<double> Cneg;
+          if(activeCMA < 10 && negMu == mu) { //;weighted sum
+            if(activeCMA % 10 == 1) {
+              Ccheck = newGenerationRawNeg * arma::diagmat(recombinationWeights) * newGenerationRawNeg.t();//;in order to check the largest EV
+            }
+            Cneg = BD * newGenerationRawNeg * arma::diagmat(recombinationWeights) * (BD * newGenerationRawNeg).t();
+          } else { //; simple sum
+            if(activeCMA % 10 == 1) {
+              Ccheck = (1.0/negMu) * newGenerationRawNeg * newGenerationRawNeg.t(); //;in order to check largest EV
+            }
+            Cneg = (1.0/negMu) * BD * newGenerationRawNeg * (BD * newGenerationRawNeg).t();
+          }
+          
+           //check pos.def. and set learning rate neg.ccov accordingly, 
+           //this check makes the original choice of neg.ccov extremly failsafe 
+           //still assuming C == BD*BD', which is only approxim. correct 
+          
+        }
+      }
     }
   }
 
@@ -265,6 +446,7 @@ namespace mant {
   }
 
   //returns capped matrix/vector first, indexes of capped values second
+
   std::tuple<arma::Mat<double>, arma::Mat<double>> CovarianceMatrixAdaptationEvolutionStrategy::capToBoundary(arma::Mat<double> x) {
     arma::Mat<double> arbounds = arma::repmat(this->getLowerBounds(), 1, x.n_cols);
     arma::uvec lowerIndex = arma::find(x < arma::repmat(this->getLowerBounds(), 1, x.n_cols));
@@ -279,5 +461,30 @@ namespace mant {
     indexes(upperIndex) += 1;
 
     return std::make_tuple(x, indexes);
+  }
+
+  //TODO: not exactly sure what this does. Looks like obtaining a threshold when the lowest percent of values start,
+  //but in a weird way that doesn't look right.
+
+  arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::percentiles(arma::Col<double> vector, arma::Col<arma::uword> perc) {
+    arma::Col<double> sortedVector = arma::sort(vector);
+
+    arma::uword N = vector.n_elem;
+    arma::Col<double> res = arma::Col<double>(perc.n_elem);
+    for (arma::uword i = 0; i < perc.n_elem; i++) {
+      double p = perc(i);
+      if (p <= 100 * (0.5 / N)) {
+        res(i) = sortedVector(0);
+      } else if (p >= 100 * ((N - 0.5) / N)) {
+        res(i) = sortedVector(N - 1);
+      } else {
+        //TODO: cast to uword
+        arma::Col<arma::uword> availablepercentiles = arma::conv_to<arma::Mat < arma::uword>>::from(100 * ((arma::linspace(1, N, N)) - 0.5) / N);
+        arma::uword idx = arma::max(arma::find(p > availablepercentiles));
+        res(i) = sortedVector(idx) + sortedVector(idx + 1) - sortedVector(idx)*(p - availablepercentiles(idx))
+            / (availablepercentiles(idx + 1) - availablepercentiles(i));
+      }
+    }
+    return res;
   }
 }

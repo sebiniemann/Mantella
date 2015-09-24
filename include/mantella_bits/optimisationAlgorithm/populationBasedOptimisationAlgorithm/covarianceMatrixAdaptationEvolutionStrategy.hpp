@@ -84,9 +84,11 @@ namespace mant {
     double ccovmu; //defopts.CMA.ccovmu;
     arma::uword activeCMA; ////defopts.CMA.active; active CMA 1: neg. updates with pos. def. check, 2: neg. updates
     arma::uword irun = 0; //irun
-    //opts.EvalParallel - was left out since we always want to do that and there is afaik no option to even not do that in arma
+    //opts.EvalParallel - left out. not sure what this is supposed to do??
+    //flgDiagonalOnly - left out. Afaik we never do diagonal matrices. If needed all code for this can easily be added.
 
     arma::Col<double> xmean; //xmean
+    arma::Col<double> xold; //xold
     double lambda0; //lambda0
     double sigma; //sigma
     arma::Col<double> pc; //pc; evolution path for C
@@ -98,16 +100,29 @@ namespace mant {
     arma::Col<double> diagC; //diagC
     arma::Col<double> diagD; //diagD; diagonal matrix D defines the scaling
     double chiN; //chiN
+    double negCcov; //neg.ccov
 
     bool boundaryActive = false; //bnd.isactive
     arma::Col<double> boundaryWeights; //bnd.weights
     arma::Col<double> boundaryScale; //bnd.scale
     arma::Col<arma::uword> boundaryExists; //bnd.isbounded
     arma::Col<double> boundaryDeltaFitHistory; //bnd.dfithist; delta fit for setting weights
-    bool boundaryInitialPhase; //bnd.iniphase
+    bool boundaryFitnessValid = false;; //bnd.validfitval; 
+    bool boundaryInitialPhase = true; //bnd.iniphase
+    arma::Col<double> boundaryPenalty; //bnd.arpenalty
+    //bnd.flgscale not used, always 0 in matlab
     std::tuple<arma::Mat<double>, arma::Mat<double>> capToBoundary(arma::Mat<double> x); //xintobounds.m - returns capped matrix/vector first, indexes of capped values second
 
-    arma::Mat<double> fitnessRaw; //fitness.raw
+    arma::Col<double> fitnessRaw; //fitness.raw
+    arma::Col<double> fitnessSel; //fitness.sel
+    arma::Col<arma::uword> fitnessIdx; //fitness.idx
+    arma::Col<arma::uword> fitnessIdxSel; //fitness.idxsel
+    arma::Col<double> fitnessHist; //fitness.hist
+    arma::Col<double> fitnessHistSel; //fitness.histsel
+    arma::Col<double> fitnessHistBest; //fitness.histbest
+    arma::Col<double> fitnessHistMedian; //fitness.histmedian
+    
+    arma::Col<double> percentiles(arma::Col<double> vector, arma::Col<arma::uword> perc); //myprctile
 
     //HCMA needs to be able to do single iterations of CMAES, for that this bool can be set.
     bool singleIteration = false;
