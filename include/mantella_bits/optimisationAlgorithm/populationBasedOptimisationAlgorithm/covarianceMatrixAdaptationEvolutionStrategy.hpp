@@ -18,6 +18,7 @@ namespace mant {
 
     //used (i.e. by HCMA) to compute certain values after changing them after instantiation
     void initializeRun();
+    void finalize();
 
     arma::uword getIRun();
     void setIRun(const arma::uword irun); //irun
@@ -61,13 +62,14 @@ namespace mant {
     arma::Col<double> startingPoint; //definput.xstart
     arma::Col<double> stepSize; //definput.insigma
 
-    double toleranceX; //defopts.TolX; stop if x-change smaller TolX
-    double toleranceUpX; //defopts.TolUpX; stop if x-changes larger TolUpX
-    double toleranceFun; //defopts.TolFun; stop if fun-changes smaller TolFun
-    double toleranceHistFun; //defopts.TolHistFun; stop if back fun-changes smaller TolHistFun
+    double toleranceX; //stopTolX or defopts.TolX; stop if x-change smaller TolX
+    double toleranceUpX; //stopTolUpX or defopts.TolUpX; stop if x-changes larger TolUpX
+    double toleranceFun; //stopTolFun or defopts.TolFun; stop if fun-changes smaller TolFun
+    double toleranceHistFun; //stopTolHistFun or defopts.TolHistFun; stop if back fun-changes smaller TolHistFun
     bool stopOnStagnation = true; //defopts.StopOnStagnation; stop when fitness stagnates for a long time
     bool stopOnWarnings = true; //defopts.StopOnWarnings
     bool stopOnEqualFunctionValues = true; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
+    arma::Col<double> EqualFunctionValues;
     //seems strange since it's never used in an integer check, just a bool check
 
     bool evalParallel = true; //defopts.EvalParallel; objective function FUN accepts NxM matrix, with M>1?
@@ -129,6 +131,7 @@ namespace mant {
     //helper variable to check if run was initialized
     bool runInitialized = false;
     arma::uword countiter = 0; //countiter - counts main loop evaluations, NOT function evaluations
+    arma::uword stopMaxIter; //stopMaxIter or opts.MaxIter
 
     void optimiseImplementation() override;
   };
