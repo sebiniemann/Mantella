@@ -154,7 +154,7 @@ namespace mant {
       arma::Mat<double> newGenerationRaw = getRandomPopulation(); //arz
       arma::Mat<double> newGeneration = arma::repmat(xmean, 1, this->populationSize_) + sigma * (BD * newGenerationRaw); //arx
 
-      arma::Mat<double> newGenerationValid = newGeneration; //arxvalid
+      newGenerationValid = newGeneration; //arxvalid
       if (boundaryActive) {
         newGenerationValid = std::get<0>(capToBoundary(newGeneration));
       }
@@ -502,12 +502,14 @@ namespace mant {
       //both of these are omitted in the modified version for HCMA and should
       //likewise not interest us
     }
+    
+    //This is not done exactly as in matlab since
+      updateBestParameter(newGenerationValid.col(fitnessIdx(0)),fitnessRaw(0));
+      double xmeanObjValue = getObjectiveValue(std::get<0>(capToBoundary(xmean)));
+      numberOfIterations_++;
+      updateBestParameter(xmean,xmeanObjValue);
   }
   
-  void CovarianceMatrixAdaptationEvolutionStrategy::finalize() {
-    
-  }
-
   arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getIRun() {
     return this->irun;
   }

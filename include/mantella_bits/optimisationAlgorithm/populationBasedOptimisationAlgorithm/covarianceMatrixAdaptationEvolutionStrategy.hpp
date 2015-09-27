@@ -18,7 +18,6 @@ namespace mant {
 
     //used (i.e. by HCMA) to compute certain values after changing them after instantiation
     void initializeRun();
-    void finalize();
 
     arma::uword getIRun();
     void setIRun(const arma::uword irun); //irun
@@ -89,6 +88,8 @@ namespace mant {
     //opts.EvalParallel - left out. not sure what this is supposed to do??
     //flgDiagonalOnly - left out. Afaik we never do diagonal matrices. If needed all code for this can easily be added.
 
+    //arxvalid needs to be here so it is available after the loop
+    arma::Mat<double> newGenerationValid; //arxvalid
     arma::Col<double> xmean; //xmean
     arma::Col<double> xold; //xold
     double lambda0; //lambda0
