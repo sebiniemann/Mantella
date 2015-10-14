@@ -40,6 +40,25 @@ arma::Mat<double> getRandomValues(
 }
 
 void HAS_SAME_PARAMETERS(
+    const std::vector<arma::Col<arma::uword>>& actualParameters,
+    const std::vector<arma::Col<arma::uword>>& expectedParameters) {
+  CHECK((actualParameters.size() == expectedParameters.size()));
+
+  for (const auto& expectedParameter : expectedParameters) {
+    CAPTURE(expectedParameter);
+    
+    bool found = false;
+    for (const auto& actualParameter : actualParameters) {
+      if (arma::all(expectedParameter == actualParameter)) {
+        found = true;
+        break;
+      }
+    }
+
+    CHECK((found == true));
+  }
+}
+
     const std::vector<std::pair<arma::Col<double>, double>>& samples,
     const std::vector<arma::Col<double>>& parameters) {
   CHECK(samples.size() == parameters.size());

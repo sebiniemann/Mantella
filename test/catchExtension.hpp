@@ -25,6 +25,9 @@ arma::Mat<double> getRandomValues(
     const arma::uword numberOfSamples);
 
 void HAS_SAME_PARAMETERS(
+    const std::vector<arma::Col<arma::uword>>& actualParameters,
+    const std::vector<arma::Col<arma::uword>>& expectedParameters);
+
     const std::vector<std::pair<arma::Col<double>, double>>& samples,
     const std::vector<arma::Col<double>>& parameters);
 
