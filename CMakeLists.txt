@@ -19,12 +19,10 @@ option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
-option(RUN_IWYU "Run include-what-you-use" OFF)
 
 mark_as_advanced(
   BUILD_TESTS
   MEASURE_CODE_COVERAGE
-  RUN_IWYU
 )
 
 message(STATUS "") 
@@ -83,14 +81,6 @@ elseif(CMAKE_COMPILER_IS_GNUCXX)
 else()
   message(STATUS "- Detected currently unsupported compiler: ${CMAKE_CXX_COMPILER_ID}.")
 endif()
-  
-if(RUN_IWYU)
-  message(STATUS "- Running IWYU (instead of generating an excecutable/library).")
-  message(STATUS "  - Use 'cmake ... -DRUN_IWYU=Off' to exclude this.")
-  include(CMakeForceCompiler)
-  CMAKE_FORCE_C_COMPILER(include-what-you-use CLANG)
-  CMAKE_FORCE_CXX_COMPILER(include-what-you-use CLANG)
-else()
   # Use ccache to speed up recompilation, if possible. 
   find_program(CCACHE_FOUND ccache)
   if(CCACHE_FOUND)
