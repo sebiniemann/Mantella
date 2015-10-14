@@ -45,7 +45,7 @@ install:
   - if [ "$CXX" == "g++" ]; then sudo update-alternatives --set gcov /usr/bin/gcov-4.9; fi
   
   # Clang (update cc, c++ and clang, clang++)
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -y clang-3.6; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-3.6 1000; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set cc /usr/bin/clang-3.6; fi
   - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 1000; fi
