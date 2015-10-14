@@ -27,7 +27,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
+      assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
       arma::Cube<double> model = platformLevels_.at(0).getModel(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
@@ -41,14 +41,14 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
+      assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
       arma::Row<double> actuation = platformLevels_.at(0).getActuation(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
         const arma::Row<double>& partialActuation = platformLevels_.at(n).getActuation(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {});
 
         assert(partialActuation.n_elem == numberOfActiveJoints_);
-        assert(!arma::any(partialActuation < platformLevels_.at(n).minimalActiveJointsActuation_) && !arma::any(partialActuation > platformLevels_.at(n).maximalActiveJointsActuation_));
+        assert(arma::all(partialActuation >= platformLevels_.at(n).minimalActiveJointsActuation_) && arma::all(partialActuation <= platformLevels_.at(n).maximalActiveJointsActuation_));
 
         actuation = arma::join_rows(actuation, partialActuation);
       }
@@ -60,7 +60,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
+      assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
       double endEffectorPoseError = platformLevels_.at(0).getEndEffectorPoseError(endEffectorPose, {});
       for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
