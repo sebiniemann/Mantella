@@ -79,7 +79,7 @@ if(CMAKE_COMPILER_IS_CLANGXX)
 elseif(CMAKE_COMPILER_IS_GNUCXX)
   message(STATUS "- Detected GCC compiler.")
 else()
-  message(STATUS "- Detected currently unsupported compiler: ${CMAKE_CXX_COMPILER_ID}.")
+  message(STATUS "- Detected neither Clang, nor GCC, but '${CMAKE_CXX_COMPILER_ID}' instead. Compiler flags may not be optimal.")
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
