@@ -10,7 +10,7 @@ namespace mant {
   namespace bbob {
     DiscusFunction::DiscusFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }

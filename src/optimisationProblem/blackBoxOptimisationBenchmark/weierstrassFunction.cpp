@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     WeierstrassFunction::WeierstrassFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           f0_(-1.99951171875),
           parameterConditioning_(getParameterConditioning(std::sqrt(0.01))) {
       setParameterTranslation(getRandomParameterTranslation());

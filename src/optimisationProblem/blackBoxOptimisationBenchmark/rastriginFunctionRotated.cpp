@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     RastriginFunctionRotated::RastriginFunctionRotated(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
       setRotationR(getRandomRotationMatrix(numberOfDimensions_));

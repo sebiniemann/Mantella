@@ -14,7 +14,7 @@ namespace mant {
   namespace bbob {
     GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           weight_(arma::join_cols(arma::Col<double>({10.0}), arma::linspace<arma::Col<double>>(1.1, 9.1, 100))) {
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
       setLocalParameterConditionings(getRandomLocalParameterConditionings());

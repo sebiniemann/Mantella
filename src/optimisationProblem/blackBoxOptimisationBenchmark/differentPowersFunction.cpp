@@ -10,7 +10,7 @@ namespace mant {
   namespace bbob {
     DifferentPowersFunction::DifferentPowersFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }

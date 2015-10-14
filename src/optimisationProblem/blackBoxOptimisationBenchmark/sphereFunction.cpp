@@ -8,7 +8,7 @@ namespace mant {
   namespace bbob {
     SphereFunction::SphereFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
     }
 

@@ -8,7 +8,7 @@ namespace mant {
   namespace bbob {
     RastriginFunction::RastriginFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
     }

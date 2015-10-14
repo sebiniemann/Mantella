@@ -8,7 +8,7 @@ namespace mant {
   namespace bbob {
     BuecheRastriginFunction::BuecheRastriginFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       arma::Col<double> parameterTranslation = getRandomParameterTranslation();
       for (arma::uword n = 0; n < parameterTranslation.n_elem; n += 2) {

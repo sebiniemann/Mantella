@@ -15,7 +15,7 @@ namespace mant {
   namespace bbob {
     LunacekBiRastriginFunction::LunacekBiRastriginFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           s_(1.0 - 0.5 / (std::sqrt(static_cast<double>(numberOfDimensions_) + 20.0) - 4.1)),
           mu_(std::sqrt(5.25 / s_)),
           parameterConditinong_(getParameterConditioning(10.0)) {

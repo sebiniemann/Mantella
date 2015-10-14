@@ -11,7 +11,7 @@ namespace mant {
   namespace bbob {
     LinearSlope::LinearSlope(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(10.0)),
           f0_(5.0 * arma::accu(parameterConditioning_)) {
       setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_) * (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));

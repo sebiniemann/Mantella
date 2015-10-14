@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     AttractiveSectorFunction::AttractiveSectorFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));

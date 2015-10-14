@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     SchwefelFunction::SchwefelFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       // A vector with all elements randomly and uniformly set to either 2 or -2.
       setParameterScaling(arma::zeros<arma::Col<double>>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));

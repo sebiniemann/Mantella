@@ -13,7 +13,7 @@ namespace mant {
   namespace bbob {
     StepEllipsoidalFunction::StepEllipsoidalFunction(
         const arma::uword numberOfDimensions)
-        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
           firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
           secondParameterConditioning_(getParameterConditioning(100.0)) {
       setParameterTranslation(getRandomParameterTranslation());
