@@ -1,6 +1,7 @@
 // Catch
 #include <catch.hpp>
 #include <catchExtension.hpp>
+
 // C++ standard library
 #include <cstdlib>
 #include <string>
@@ -13,54 +14,46 @@
 
 extern std::string testDirectory;
 
-TEST_CASE(
-    "bbob::AttractiveSectorFunction") {
-  for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::AttractiveSectorFunction attractiveSectorFunction(numberOfDimensions);
+class TestAttractiveSectorFunction : public mant::bbob::AttractiveSectorFunction {
+  public:
+    using mant::bbob::AttractiveSectorFunction::AttractiveSectorFunction;
+  
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override {
+      return mant::bbob::AttractiveSectorFunction::getObjectiveValueImplementation(parameter);
+    }
+};
 
-    arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
-                            "x10.input"));
+TEST_CASE("bbob::AttractiveSectorFunction") {
+  TestAttractiveSectorFunction attractiveSectorFunction(40);
+      
+  SECTION(".getObjectiveValueImplementation") {
+    SECTION("Returns the objective value") {
+      // The attractive sector function depends internally on the parameter translation, wherefore it must be set explicitly.
+      // Otherwise, the actual objective values will almost never match the expected ones.
+      arma::Mat<double> parameterTranslation;
+      REQUIRE(parameterTranslation.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_40x1.input"));
+      attractiveSectorFunction.setParameterTranslation(parameterTranslation);
+      
+      arma::Mat<double> rotationQ;
+      REQUIRE(rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_1.input"));
+      attractiveSectorFunction.setRotationQ(rotationQ);
 
-    arma::Col<double> translation;
-    REQUIRE(translation.load(testDirectory +
-                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +
-                             "x1.input"));
+      arma::Mat<double> parameters;
+      REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+      
+      arma::Col<double> expectedObjectiveValues;
+      REQUIRE(expectedObjectiveValues.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_attractiveSectorFunction_dim40_1x100.expected"));
 
-    arma::Mat<double> rotationR;
-    REQUIRE(rotationR.load(testDirectory +
-                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
-                           "x" + std::to_string(numberOfDimensions) +
-                           "_2.input"));
-
-    arma::Mat<double> rotationQ;
-    REQUIRE(rotationQ.load(testDirectory +
-                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
-                           "x" + std::to_string(numberOfDimensions) +
-                           "_1.input"));
-
-    arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory +
-                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_attractiveSectorFunction_dim" + std::to_string(numberOfDimensions) +
-                          ".expected"));
-
-    attractiveSectorFunction.setObjectiveValueTranslation(0);
-    attractiveSectorFunction.setParameterTranslation(translation);
-    attractiveSectorFunction.setParameterRotation(rotationR);
-    attractiveSectorFunction.setRotationQ(rotationQ);
-
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(attractiveSectorFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        CHECK(attractiveSectorFunction.getObjectiveValueImplementation(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
+      }
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns the expected class name.") {
-      CHECK(mant::bbob::AttractiveSectorFunction(5).toString() ==
-            "bbob_attractive_sector_function");
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
+      CHECK(attractiveSectorFunction.toString() == "bbob_attractive_sector_function");
     }
   }
 }

@@ -14,40 +14,36 @@
 
 extern std::string testDirectory;
 
-TEST_CASE(
-    "bbob::RosenbrockFunction") {
-  for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::RosenbrockFunction rosenbrockFunction(numberOfDimensions);
+class TestRosenbrockFunction : public mant::bbob::RosenbrockFunction {
+  public:
+    using mant::bbob::RosenbrockFunction::RosenbrockFunction;
+  
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override {
+      return mant::bbob::RosenbrockFunction::getObjectiveValueImplementation(parameter);
+    }
+};
 
-    arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
-                            "x10.input"));
+TEST_CASE("bbob::RosenbrockFunction") {
+  TestRosenbrockFunction rosenbrockFunction(40);
+    
+  SECTION(".getObjectiveValueImplementation") {
+    SECTION("Returns the objective value") {
+      arma::Mat<double> parameters;
+      REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
-    arma::Col<double> translation;
-    REQUIRE(translation.load(testDirectory +
-                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +
-                             "x1.input"));
+      arma::Col<double> expectedObjectiveValues;
+      REQUIRE(expectedObjectiveValues.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_rosenbrockFunction_dim40_1x100.expected"));
 
-    arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory +
-                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_rosenbrockFunction_dim" + std::to_string(numberOfDimensions) +
-                          ".expected"));
-
-    rosenbrockFunction.setObjectiveValueTranslation(0);
-    rosenbrockFunction.setParameterTranslation(translation);
-
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(rosenbrockFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        CHECK(rosenbrockFunction.getObjectiveValueImplementation(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
+      }
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns the expected class name.") {
-      CHECK(mant::bbob::RosenbrockFunction(5).toString() ==
-            "bbob_rosenbrock_function");
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
+      CHECK(rosenbrockFunction.toString() =="bbob_rosenbrock_function");
     }
   }
 }

@@ -14,53 +14,48 @@
 
 extern std::string testDirectory;
 
-TEST_CASE(
-    "bbob::GallaghersGaussian101mePeaksFunction") {
-  for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::GallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(numberOfDimensions);
+class TestGallaghersGaussian101mePeaksFunction : public mant::bbob::GallaghersGaussian101mePeaksFunction {
+  public:
+    using mant::bbob::GallaghersGaussian101mePeaksFunction::GallaghersGaussian101mePeaksFunction;
+  
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override {
+      return mant::bbob::GallaghersGaussian101mePeaksFunction::getObjectiveValueImplementation(parameter);
+    }
+};
 
-    arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
-                            "x10.input"));
+TEST_CASE("bbob::GallaghersGaussian101mePeaksFunction") {
+  TestGallaghersGaussian101mePeaksFunction gallaghersGaussian101mePeaksFunction(40);
+    
+  SECTION(".getObjectiveValueImplementation") {
+    SECTION("Returns the objective value") {
+      arma::Mat<double> rotationQ;
+      REQUIRE(rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_1.input"));
+      gallaghersGaussian101mePeaksFunction.setRotationQ(rotationQ);
 
-    arma::Mat<double> rotationR;
-    REQUIRE(rotationR.load(testDirectory +
-                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
-                           "x" + std::to_string(numberOfDimensions) +
-                           "_2.input"));
+      arma::Mat<double> conditionings;
+      REQUIRE(conditionings.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_conditionings_101x1_dim40.input"));
+      gallaghersGaussian101mePeaksFunction.setLocalParameterConditionings(conditionings);
 
-    arma::Mat<double> conditionings;
-    REQUIRE(conditionings.load(testDirectory +
-                               "/data/optimisationProblem/blackBoxOptimisationBenchmark/_conditionings_101x1_dim" + std::to_string(numberOfDimensions) +
-                               ".input"));
+      arma::Mat<double> localOptima;
+      REQUIRE(localOptima.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptima_40x101.input"));
+      gallaghersGaussian101mePeaksFunction.setLocalParameterTranslations(localOptima);
 
-    arma::Mat<double> localOptima;
-    REQUIRE(localOptima.load(testDirectory +
-                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_localOptima_" + std::to_string(numberOfDimensions) +
-                             "x101.input"));
+      arma::Mat<double> parameters;
+      REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
-    arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory +
-                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_gallaghersGaussian101mePeaksFunction_dim" + std::to_string(numberOfDimensions) +
-                          ".expected"));
+      arma::Col<double> expectedObjectiveValues;
+      REQUIRE(expectedObjectiveValues.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_gallaghersGaussian101mePeaksFunction_dim40_1x100.expected"));
 
-    gallaghersGaussian101mePeaksFunction.setObjectiveValueTranslation(0);
-    gallaghersGaussian101mePeaksFunction.setRotationQ(rotationR);
-    gallaghersGaussian101mePeaksFunction.setLocalParameterTranslations(localOptima);
-    gallaghersGaussian101mePeaksFunction.setLocalParameterConditionings(conditionings);
-
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(gallaghersGaussian101mePeaksFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        CHECK(gallaghersGaussian101mePeaksFunction.getObjectiveValueImplementation(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
+      }
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns the expected class name.") {
-      CHECK(mant::bbob::GallaghersGaussian101mePeaksFunction(5).toString() ==
-            "bbob_gallaghers_gaussian_101me_peaks_function");
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
+      CHECK(gallaghersGaussian101mePeaksFunction.toString() =="bbob_gallaghers_gaussian_101me_peaks_function");
     }
   }
 }

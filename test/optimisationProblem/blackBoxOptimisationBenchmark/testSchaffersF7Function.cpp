@@ -14,54 +14,40 @@
 
 extern std::string testDirectory;
 
-TEST_CASE(
-    "bbob::SchaffersF7Function") {
-  for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::SchaffersF7Function schaffersF7Function(numberOfDimensions);
+class TestSchaffersF7Function : public mant::bbob::SchaffersF7Function {
+  public:
+    using mant::bbob::SchaffersF7Function::SchaffersF7Function;
+  
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override {
+      return mant::bbob::SchaffersF7Function::getObjectiveValueImplementation(parameter);
+    }
+};
 
-    arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
-                            "x10.input"));
+TEST_CASE("bbob::SchaffersF7Function") {
+  TestSchaffersF7Function schaffersF7Function(40);
+    
+  SECTION(".getObjectiveValueImplementation") {
+    SECTION("Returns the objective value") {
+      arma::Mat<double> rotationQ;
+      REQUIRE(rotationQ.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
+      schaffersF7Function.setRotationQ(rotationQ);
 
-    arma::Col<double> translation;
-    REQUIRE(translation.load(testDirectory +
-                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translation_" + std::to_string(numberOfDimensions) +
-                             "x1.input"));
+      arma::Mat<double> parameters;
+      REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
-    arma::Mat<double> rotationR;
-    REQUIRE(rotationR.load(testDirectory +
-                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
-                           "x" + std::to_string(numberOfDimensions) +
-                           "_2.input"));
+      arma::Col<double> expectedObjectiveValues;
+      REQUIRE(expectedObjectiveValues.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_schaffersF7Function_dim40_1x100.expected"));
 
-    arma::Mat<double> rotationQ;
-    REQUIRE(rotationQ.load(testDirectory +
-                           "/data/optimisationProblem/blackBoxOptimisationBenchmark/_randomRotationMatrix_" + std::to_string(numberOfDimensions) +
-                           "x" + std::to_string(numberOfDimensions) +
-                           "_1.input"));
-
-    arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory +
-                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_schaffersF7Function_dim" + std::to_string(numberOfDimensions) +
-                          ".expected"));
-
-    schaffersF7Function.setObjectiveValueTranslation(0);
-    schaffersF7Function.setParameterTranslation(translation);
-    schaffersF7Function.setParameterRotation(rotationR);
-    schaffersF7Function.setRotationQ(rotationQ);
-
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(schaffersF7Function.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        CHECK(schaffersF7Function.getObjectiveValueImplementation(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
+      }
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns the expected class name.") {
-      CHECK(mant::bbob::SchaffersF7Function(5).toString() ==
-            "bbob_schaffers_f7_function");
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
+      CHECK(schaffersF7Function.toString() =="bbob_schaffers_f7_function");
     }
   }
 }

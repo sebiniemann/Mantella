@@ -14,50 +14,36 @@
 
 extern std::string testDirectory;
 
-TEST_CASE(
-    "bbob::LinearSlope") {
-  for (const auto& degree : {0, 180}) {
-    for (const auto& numberOfDimensions : {2, 40}) {
-      mant::bbob::LinearSlope linearSlope(numberOfDimensions);
+class TestLinearSlope : public mant::bbob::LinearSlope {
+  public:
+    using mant::bbob::LinearSlope::LinearSlope;
+  
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override {
+      return mant::bbob::LinearSlope::getObjectiveValueImplementation(parameter);
+    }
+};
 
+TEST_CASE("bbob::LinearSlope") {
+  TestLinearSlope linearSlope(40);
+      
+  SECTION(".getObjectiveValueImplementation") {
+    SECTION("Returns the objective value") {
       arma::Mat<double> parameters;
-      REQUIRE(parameters.load(testDirectory +
-                              "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
-                              "x10.input"));
+      REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
-      arma::Mat<double> one;
-      REQUIRE(one.load(testDirectory +
-                       "/data/optimisationProblem/blackBoxOptimisationBenchmark/_one_" + std::to_string(numberOfDimensions) +
-                       "x1.input"));
-
-      arma::Mat<double> rotation;
-      REQUIRE(rotation.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_rotationsMatrix_" + std::to_string(numberOfDimensions) +
-                            "x" + std::to_string(numberOfDimensions) +
-                            "_deg" + std::to_string(degree) +
-                            ".input"));
-
-      arma::Col<double> expected;
-      REQUIRE(expected.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_linearSlope_dim" + std::to_string(numberOfDimensions) +
-                            "deg" + std::to_string(degree) +
-                            ".expected"));
-
-      linearSlope.setObjectiveValueTranslation(0);
-      linearSlope.setParameterRotation(rotation);
+      arma::Col<double> expectedObjectiveValues;
+      REQUIRE(expectedObjectiveValues.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_linearSlope_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        CHECK(linearSlope.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
+        CHECK(linearSlope.getObjectiveValueImplementation(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
       }
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns the expected class name.") {
-      CHECK(mant::bbob::LinearSlope(5).toString() ==
-            "bbob_linear_slope");
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
+      CHECK(linearSlope.toString() =="bbob_linear_slope");
     }
   }
 }
