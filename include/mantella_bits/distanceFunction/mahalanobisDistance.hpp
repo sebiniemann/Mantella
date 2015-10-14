@@ -7,9 +7,12 @@
 #include <mantella_bits/distanceFunction.hpp>
 
 namespace mant {
-  class MahalabonbisDistance : public DistanceFunction {
+  class MahalanobisDistance : public DistanceFunction {
    public:
-    using DistanceFunction::DistanceFunction;
+    const arma::Mat<double> covariance_;
+   
+    explicit MahalanobisDistance(
+        const arma::Mat<double>& covariance);
 
     std::string toString() const override;
 

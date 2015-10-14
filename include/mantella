@@ -50,7 +50,7 @@
 // Distance functions
 #include <mantella_bits/distanceFunction.hpp>
 #include <mantella_bits/distanceFunction/pNorm.hpp>
-#include <mantella_bits/distanceFunction/mahalabonisDistance.hpp>
+#include <mantella_bits/distanceFunction/mahalanobisDistance.hpp>
 
 // Regression functions
 #include <mantella_bits/regressionFunction.hpp>

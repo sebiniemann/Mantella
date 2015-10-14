@@ -205,7 +205,7 @@ add_library(mantella SHARED
   # Distance functions
   src/distanceFunction.cpp
   src/distanceFunction/pNorm.cpp
-  src/distanceFunction/mahalabonisDistance.cpp
+  src/distanceFunction/mahalanobisDistance.cpp
   
   # Regression functions
   src/regressionFunction.cpp
@@ -398,7 +398,7 @@ if(BUILD_TESTS)
     # # Distance functions
     # test/testDistanceFunction.cpp
     # test/distanceFunction/testPNorm.cpp
-    # test/distanceFunction/testMahalabonisDistance.cpp
+    test/distanceFunction/testMahalanobisDistance.cpp
     
     # # Regression functions
     # test/testRegressionFunction.cpp
