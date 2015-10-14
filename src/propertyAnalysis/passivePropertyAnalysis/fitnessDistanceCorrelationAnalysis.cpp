@@ -11,7 +11,7 @@ namespace mant {
     assert(samples_.size() > 1);
 
     arma::Mat<double> parameters(numberOfDimensions_, samples_.size());
-    arma::Col<double> objectiveValues(parameters.n_cols);
+    arma::Row<double> objectiveValues(parameters.n_cols);
 
     arma::uword n = 0;
     for (const auto& parameterToObjectiveValueMapping : samples_) {
@@ -26,7 +26,7 @@ namespace mant {
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
     parameters.shed_col(bestParameterIndex);
-    objectiveValues.shed_row(bestParameterIndex);
+    objectiveValues.shed_col(bestParameterIndex);
 
     correlationCoefficient_ = arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
   }

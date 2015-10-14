@@ -19,7 +19,7 @@ namespace mant {
     assert(samples_.size() > 1);
 
     arma::Mat<double> parameters(regressionFunction_->numberOfRegressionDimensions_, samples_.size());
-    arma::Col<double> objectiveValues(samples_.size());
+    arma::Row<double> objectiveValues(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
       parameters.col(n) = regressionFunction_->getRegression(sample.first);
@@ -38,7 +38,7 @@ namespace mant {
     return coefficients_;
   }
 
-  arma::Col<double> PolynomialFunctionModelAnalysis::getResiduals() const {
+  arma::Row<double> PolynomialFunctionModelAnalysis::getResiduals() const {
     return residuals_;
   }
 

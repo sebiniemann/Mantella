@@ -27,7 +27,7 @@ TEST_CASE("getOrdinaryLeastSquaresEstimate") {
     const arma::Col<double>& coefficients = getRandomValues(numberOfDimensions + 1);
     CAPTURE(coefficients);
     
-    arma::Col<double> objectiveValues(numberOfParameters);
+    arma::Row<double> objectiveValues(numberOfParameters);
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
       objectiveValues(n) = arma::dot(parameters.col(n), coefficients);
     }
@@ -48,7 +48,7 @@ TEST_CASE("getOrdinaryLeastSquaresEstimate") {
 
       const arma::uword numberOfObjectiveValues = getDifferentRandomNumberOfValues(numberOfParameters);
       CAPTURE(numberOfObjectiveValues);
-      const arma::Col<double>& objectiveValues = getRandomValues(numberOfObjectiveValues);
+      const arma::Row<double>& objectiveValues = getRandomValues(numberOfObjectiveValues);
       CAPTURE(objectiveValues);
 
       CHECK_THROWS_AS(mant::getOrdinaryLeastSquaresEstimate(parameters, objectiveValues), std::logic_error);

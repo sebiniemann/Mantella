@@ -27,10 +27,10 @@ arma::uword getDifferentRandomNumberOfValues(
   
   return numberOfDimensions + offset;   
 }
-
-arma::Col<double> getRandomValues(
+    
+arma::Row<double> getRandomValues(
     const arma::uword numberOfDimensions) {
-  return arma::randu<arma::Col<double>>(numberOfDimensions) * 200 - 100;
+  return arma::randu<arma::Row<double>>(numberOfDimensions) * 200 - 100;
 }
     
 arma::Mat<double> getRandomValues(

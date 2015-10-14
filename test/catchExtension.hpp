@@ -16,8 +16,8 @@ arma::uword getRandomNumberOfValues(
     
 arma::uword getDifferentRandomNumberOfValues(
     const arma::uword numberOfDimensions);
-    
-arma::Col<double> getRandomValues(
+
+arma::Row<double> getRandomValues(
     const arma::uword numberOfDimensions);
     
 arma::Mat<double> getRandomValues(

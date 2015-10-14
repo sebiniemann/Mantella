@@ -5,12 +5,12 @@
 
 namespace mant {
   double getMedianAbsoluteError(
-      const arma::Col<double>& data) {
+      const arma::Row<double>& data) {
     return getMedian(arma::abs(data - getMedian(data)));
   }
 
   double getPercentile(
-      const arma::Col<double>& data,
+      const arma::Row<double>& data,
       const double nthPercentile) {
     double index = nthPercentile * data.n_elem / 100;
 
@@ -25,19 +25,19 @@ namespace mant {
   }
 
   double getDecile(
-      const arma::Col<double>& data,
+      const arma::Row<double>& data,
       const double nthDecile) {
     return getPercentile(data, nthDecile * 10.0);
   }
 
   double getQuartile(
-      const arma::Col<double>& data,
+      const arma::Row<double>& data,
       const double nthQuartile) {
     return getPercentile(data, nthQuartile * 25.0);
   }
 
   double getMedian(
-      const arma::Col<double>& data) {
+      const arma::Row<double>& data) {
     return arma::median(data);
   }
 }
