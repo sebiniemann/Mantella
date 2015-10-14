@@ -15,16 +15,18 @@ namespace mant {
   double getPercentile(
       const arma::Row<double>& data,
       const double nthPercentile) {
-    double index = nthPercentile * data.n_elem / 100;
     verify(0.0 < nthPercentile && nthPercentile <= 100.0, ""); // TODO
+      
+    const arma::Row<double>& sortedData = arma::sort(data, "descend");
+    double index = nthPercentile * sortedData.n_elem / 100;
 
     arma::uword lowerIndex = static_cast<arma::uword>(std::floor(index));
     arma::uword upperIndex = static_cast<arma::uword>(std::ceil(index));
 
     if (lowerIndex != upperIndex) {
-      return (index - lowerIndex) * data(lowerIndex) + (upperIndex - index) * data(upperIndex);
+      return (index - lowerIndex) * sortedData(lowerIndex) + (upperIndex - index) * sortedData(upperIndex);
     } else {
-      return data(upperIndex);
+      return sortedData(upperIndex);
     }
   }
 
