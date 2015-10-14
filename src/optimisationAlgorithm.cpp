@@ -45,7 +45,7 @@ namespace mant {
     MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (nodeRank_ != 0) {
-      serialisedOptimisationProblem.resize(serialisedOptimisationProblemSize);
+      serialisedOptimisationProblem.resize(static_cast<unsigned int>(serialisedOptimisationProblemSize));
     }
 
     MPI_Bcast(&serialisedOptimisationProblem[0], serialisedOptimisationProblemSize, MPI_DOUBLE, 0, MPI_COMM_WORLD);
