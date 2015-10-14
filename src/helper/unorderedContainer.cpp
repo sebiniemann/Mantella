@@ -21,7 +21,9 @@ namespace mant {
   bool IsEqual::operator()(
       const arma::Col<double>& firstKey,
       const arma::Col<double>& secondKey) const {
-    // TODO Add exception
+    if (firstKey.n_elem != secondKey.n_elem) {
+      return false;
+    }
 
     return arma::all(firstKey == secondKey);
   }
