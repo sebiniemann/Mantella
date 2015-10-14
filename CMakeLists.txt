@@ -81,6 +81,8 @@ elseif(CMAKE_COMPILER_IS_GNUCXX)
 else()
   message(STATUS "- Detected currently unsupported compiler: ${CMAKE_CXX_COMPILER_ID}.")
 endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX)
   # Use ccache to speed up recompilation, if possible. 
   find_program(CCACHE_FOUND ccache)
   if(CCACHE_FOUND)
