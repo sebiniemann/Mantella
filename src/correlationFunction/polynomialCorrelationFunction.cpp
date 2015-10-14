@@ -1,11 +1,15 @@
 #include <mantella_bits/correlationFunction/polynomialCorrelationFunction.hpp>
 
+// Mantella
+#include <mantella_bits/helper/assert.hpp>
+
 namespace mant {
   PolynomialCorrelationFunction::PolynomialCorrelationFunction(
       const arma::uword numberOfDimensions,
       const arma::uword polynomialOrder)
       : CorrelationFunction(numberOfDimensions),
         polynomialOrder_(polynomialOrder) {
+    verify(polynomialOrder_ > 0 && polynomialOrder_ < 4, ""); // TODO
   }
 
   double PolynomialCorrelationFunction::getCorrelationCoefficientImplementation(
