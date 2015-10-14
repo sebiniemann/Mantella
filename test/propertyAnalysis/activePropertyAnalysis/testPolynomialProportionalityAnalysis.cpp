@@ -23,7 +23,7 @@ TEST_CASE(
   SECTION(
       ".toString") {
     SECTION(
-        "Returns the expected class name.") {
+        "Returns a (filesystem friendly) name for the class.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       CHECK(mant::PolynomialProportionalityAnalysis(optimisationProblem, std::shared_ptr<mant::RegressionFunction>(new mant::LinearRegressionFunction(optimisationProblem->numberOfDimensions_))).toString() ==
             "polynomial_proportionality_analysis");
