@@ -61,12 +61,14 @@ void HAS_SAME_PARAMETERS(
   }
 }
 
+void HAS_SAME_PARAMETERS(
     const std::vector<std::pair<arma::Col<double>, double>>& samples,
     const std::vector<arma::Col<double>>& parameters) {
   CHECK(samples.size() == parameters.size());
 
-  bool hasSameParameters = true;
   for (const auto& parameter : parameters) {
+    CAPTURE(parameter);
+    
     bool found = false;
     for (const auto& sample : samples) {
       if (arma::all(arma::abs(parameter - sample.first) < 1e-12)) {
@@ -76,15 +78,7 @@ void HAS_SAME_PARAMETERS(
     }
 
     CHECK(found == true);
-
-    if (!found) {
-      hasSameParameters = false;
-      break;
-    }
   }
-
-  CHECK(hasSameParameters == true);
-    
 }
 
 void IS_EQUAL(

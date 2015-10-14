@@ -14,8 +14,7 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "verify") {
+TEST_CASE("verify") {
   SECTION("Throws std::logic_error, if the expression is false.") {
     CHECK_THROWS_AS(mant::verify(false, "Some message ..."), std::logic_error);
   }
@@ -108,10 +107,10 @@ TEST_CASE("isPermutation") {
 }
 
 TEST_CASE("isDimensionallyConsistent") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
-  CAPTURE(numberOfDimensions);
-    
   SECTION("Returns true, if the number of dimensions is consistent over all samples.") {
+    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    CAPTURE(numberOfDimensions);
+  
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
     mant::RandomSearch optimisationAlgorithm(optimisationProblem);
     optimisationAlgorithm.optimise();
@@ -135,22 +134,19 @@ TEST_CASE("isDimensionallyConsistent") {
     firstOptimisationAlgorithm.optimise();
 
     // The second one
-    const arma::uword secondNumberOfDimensions = getRandomNumberOfValues();
+    const arma::uword secondNumberOfDimensions = getDifferentRandomNumberOfValues(firstNumberOfDimensions);
     CAPTURE(secondNumberOfDimensions);
 
     std::shared_ptr<mant::OptimisationProblem> secondOptimisationProblem(new mant::bbob::SphereFunction(secondNumberOfDimensions));
     mant::RandomSearch secondOptimisationAlgorithm(secondOptimisationProblem);
     secondOptimisationAlgorithm.optimise();
 
-    // Hopefully, we won't get a hash collision, otherwise mant::IsEqual may throw an exception when comparing vectors with an unequal number of dimensions.
-    for (const auto& sample : firstOptimisationProblem->getCachedSamples()) {
-      samples.insert(sample);
-    }
-    for (const auto& sample : secondOptimisationProblem->getCachedSamples()) {
-      samples.insert(sample);
-    }
+    const auto& firstSamples = firstOptimisationProblem->getCachedSamples();
+    samples.insert(firstSamples.begin(), firstSamples.end());
+    const auto& secondSamples = secondOptimisationProblem->getCachedSamples();
+    samples.insert(secondSamples.begin(), secondSamples.end());
     // We liked to log the samples, in case of an error, but Catch cannot capture unordered maps.
 
-    CHECK(mant::isDimensionallyConsistent(samples) == true);
+    CHECK(mant::isDimensionallyConsistent(samples) == false);
   }
 }

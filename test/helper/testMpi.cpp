@@ -45,7 +45,7 @@ TEST_CASE("mpiGetBestSample") {
     arma::Mat<double> firstMpiInput(2 + numberOfDimensions, numberOfSamples);
     firstMpiInput.row(0).fill(static_cast<double>(numberOfDimensions));
     // Ensure that the first input has a lower objective value.
-    firstMpiInput.row(1) = secondMpiInput.row(1) - arma::randu<arma::Row<double>>(numberOfSamples) * 10 - 20;
+    firstMpiInput.row(1) = secondMpiInput.row(1) - getRandomValues(numberOfSamples) - 1;
     firstMpiInput.tail_rows(numberOfDimensions) = getRandomValues(numberOfDimensions, numberOfSamples);
     CAPTURE(firstMpiInput);
 

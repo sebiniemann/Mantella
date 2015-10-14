@@ -21,7 +21,7 @@ TEST_CASE("cacheSamples") {
   }
   
   SECTION("Activates the sample caching") {
-    mant::cacheSamples = true;
+    // mant::cacheSamples is set to true by default.
     optimisationAlgorithm.optimise();
     CHECK(optimisationProblem->getCachedSamples().size() > 0);
   }
@@ -29,6 +29,8 @@ TEST_CASE("cacheSamples") {
   SECTION("Deactivates the sample caching") {
     mant::cacheSamples = false;
     optimisationAlgorithm.optimise();
+    // Reset mant::cacheSamples to avoid unexpected default behaviour with other tests.
+    mant::cacheSamples = true;
     CHECK(optimisationProblem->getCachedSamples().size() == 0);
   }
 }
@@ -47,11 +49,13 @@ TEST_CASE("recordSamples") {
   SECTION("Activates the sample recording") {
     mant::recordSamples = true;
     optimisationAlgorithm.optimise();
+    // Reset mant::recordSamples to avoid unexpected default behaviour with other tests.
+    mant::recordSamples = false;
     CHECK(optimisationAlgorithm.getSamplingHistory().size() > 0);
   }
 
   SECTION("Deactivates the sample recording") {
-    mant::recordSamples = false;
+    // mant::recordSamples is set to false by default.
     optimisationAlgorithm.optimise();
     CHECK(optimisationAlgorithm.getSamplingHistory().size() == 0);
   }
