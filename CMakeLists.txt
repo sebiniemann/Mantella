@@ -477,13 +477,6 @@ if(BUILD_TESTS)
     # test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
     # test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
     
-    # # Samples selection
-    # test/testSamplesSelection.cpp
-    # test/samplesSelection/testBestFittingSamplesSelection.cpp
-    # test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
-    # test/samplesSelection/testBestSamplesSelection.cpp
-    # test/samplesSelection/testRandomSamplesSelection.cpp
-    
     # # Property analysis
     # test/testPropertyAnalysis.cpp
     # test/propertyAnalysis/passivePropertyAnalysis/testFitnessDistanceCorrelationAnalysis.cpp
