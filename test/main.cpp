@@ -1,6 +1,7 @@
 // Catch
 #define CATCH_CONFIG_RUNNER
 #include <catch.hpp>
+#include <catchExtension.hpp>
 
 // C++ standard library
 #include <string>
@@ -9,8 +10,6 @@
 
 // Mantella
 #include <mantella>
-
-static std::string testDirectory;
 
 int main(int argc, char* argv[]) {
 #if defined(SUPPORT_MPI)

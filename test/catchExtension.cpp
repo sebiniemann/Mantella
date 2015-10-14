@@ -7,6 +7,8 @@
 // Mantella
 #include <mantella>
 
+std::string testDirectory("");
+
 arma::uword getRandomNumberOfValues() {
   return std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
 }
