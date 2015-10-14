@@ -50,10 +50,8 @@ namespace mant {
 
   void GridSearch::setNumberOfSamplesPerDimension(
       const arma::Col<arma::uword>& numberOfSamplesPerDimension) {
-    verify(numberOfSamplesPerDimension.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
-    verify(arma::all(numberOfSamplesPerDimension > 1),
-        "");  // TODO
+    verify(numberOfSamplesPerDimension.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(arma::all(numberOfSamplesPerDimension > 1), "");  // TODO
 
     numberOfSamplesPerDimension_ = numberOfSamplesPerDimension;
   }
