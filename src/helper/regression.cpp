@@ -9,15 +9,7 @@ namespace mant {
       const arma::Row<double>& objectiveValues) {
     verify(parameters.n_cols == objectiveValues.n_elem, "");
       
-    arma::Mat<double> estimate;
-    
-    try {
-      estimate = ((parameters * parameters.t()).i() * parameters) * objectiveValues;
-    } catch (...) {
-      estimate = (arma::pinv(parameters * parameters.t()) * parameters) * objectiveValues;
-    }
-
-    return estimate;
+    return arma::solve(parameters * parameters.t(), parameters) * objectiveValues.t();
   }
 
   arma::Col<double> getGeneralisedLeastSquaresEstimate(

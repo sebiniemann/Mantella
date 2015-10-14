@@ -49,11 +49,7 @@ namespace mant {
     correlations = arma::symmatu(correlations);
 
     beta_ = getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, correlations);
-    try {
-      gamma_ = correlations.i() * (objectiveValues - parameters * beta_);
-    } catch (...) {
-      gamma_ = arma::pinv(correlations) * (objectiveValues - parameters * beta_);
-    }
+    gamma_ = arma::solve(correlations, objectiveValues.t() - parameters * beta_);
   }
 
   double KrigingModel::getObjectiveValueImplementation(
