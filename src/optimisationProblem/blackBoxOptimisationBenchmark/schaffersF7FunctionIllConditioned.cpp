@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))) {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));

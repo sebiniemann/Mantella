@@ -9,7 +9,7 @@ namespace mant {
   namespace bbob {
     RosenbrockFunction::RosenbrockFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
           max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
       setParameterTranslation(0.75 * getRandomParameterTranslation());
     }

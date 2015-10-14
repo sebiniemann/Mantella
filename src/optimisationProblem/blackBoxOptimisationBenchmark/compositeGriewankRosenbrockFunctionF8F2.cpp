@@ -12,7 +12,7 @@ namespace mant {
   namespace bbob {
     CompositeGriewankRosenbrockFunctionF8F2::CompositeGriewankRosenbrockFunctionF8F2(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
           max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
       setParameterRotation(getRandomRotationMatrix(numberOfDimensions_));
     }

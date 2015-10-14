@@ -7,7 +7,7 @@ namespace mant {
   namespace bbob {
     EllipsoidalFunction::EllipsoidalFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+        : public BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(1000000.0)) {
       setParameterTranslation(getRandomParameterTranslation());
     }

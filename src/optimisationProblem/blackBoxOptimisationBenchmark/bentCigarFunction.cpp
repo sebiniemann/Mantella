@@ -11,7 +11,7 @@ namespace mant {
   namespace bbob {
     BentCigarFunction::BentCigarFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions) {
+        : public BlackBoxOptimisationBenchmark(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
       setRotationQ(getRandomRotationMatrix(numberOfDimensions_));
     }
