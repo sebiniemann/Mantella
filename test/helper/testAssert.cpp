@@ -62,7 +62,7 @@ TEST_CASE("isRotationMatrix") {
 }
 
 TEST_CASE("isPermutation") {
-  const arma::uword numberOfPermutations = getRandomNumberOfValues();
+  const arma::uword numberOfPermutations = getRandomNumberOfValues(2);
   CAPTURE(numberOfPermutations);
 
   const arma::uword numberOfElements = getRandomNumberOfValues(numberOfPermutations);
