@@ -81,13 +81,6 @@ install:
   
   # MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
   - sudo apt-get install -qq libmpich2-dev
-  
-  # Cereal
-  - wget -O cereal.tar.gz https://github.com/USCiLab/cereal/archive/v1.1.0.tar.gz
-  - mkdir cereal
-  - tar -xzf cereal.tar.gz -C ./cereal --strip-components=1
-  - sudo cp -R cereal/include/cereal /usr/local/include/
-  - rm -Rf cereal cereal.tar.gz
 
   # LCOV (Needed until Travis CI updates to Ubuntu 14.04+)
   - if [ "$CXX" == "g++" ]; then wget -O lcov.tar.gz https://github.com/linux-test-project/lcov/archive/v1.11.tar.gz; fi
