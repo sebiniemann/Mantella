@@ -19,48 +19,8 @@ env:
     # Encrypted COVERITY_SCAN_TOKEN
     - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
 
-before_install:
-  # GCC / Clang (Needed until Travis CI updates to Ubuntu 14.04+)
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  
-  # Clang (Needed until Travis CI updates to Ubuntu 14.04+)
-  - if [ "$CXX" == "clang++" ]; then wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -; fi
-  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise main'; fi
-  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main'; fi
-
-  # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
-  - sudo add-apt-repository -y ppa:kalakris/cmake
-
-  - sudo apt-get update -qq
-
 install:
-  # GCC (update cc, c++ and gcc, g++)
-  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq --force-yes g++-4.9; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-4.9 1000; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --set cc /usr/bin/gcc-4.9; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 1000; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --set gcc /usr/bin/gcc-4.9; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-4.9 1000; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --set c++ /usr/bin/g++-4.9; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 1000; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --set g++ /usr/bin/g++-4.9; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 1000; fi
-  - if [ "$CXX" == "g++" ]; then sudo update-alternatives --set gcov /usr/bin/gcov-4.9; fi
-  
-  # Clang (update cc, c++ and clang, clang++)
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -y clang-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-3.6 1000; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set cc /usr/bin/clang-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 1000; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set clang /usr/bin/clang-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.6 1000; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set c++ /usr/bin/clang++-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 1000; fi
-  - if [ "$CXX" == "clang++" ]; then sudo update-alternatives --set clang++ /usr/bin/clang++-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.6; fi
-  
-  # CMake (Needed until Travis CI updates to Ubuntu 14.04+)
-  - sudo apt-get install -qq cmake
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.4; fi
   
   # Armadillo C++
   - sudo apt-get install -qq libblas-dev
@@ -76,24 +36,13 @@ install:
   - rm -Rf armadillo armadillo.tar.gz
 
   # Catch
-  - wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/3e0c5018123e7e32b3c35f4169cbdca4bcb8f332.tar.gz
-  - mkdir catch
-  - tar -xzf catch.tar.gz -C ./catch --strip-components=1
-  - sudo cp -R catch/single_include/catch.hpp /usr/local/include/
-  - rm -Rf catch catch.tar.gz
+  - sudo apt-get install -qq catch
   
   # MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
   - sudo apt-get install -qq libmpich2-dev
 
-  # LCOV (Needed until Travis CI updates to Ubuntu 14.04+)
-  - if [ "$CXX" == "g++" ]; then wget -O lcov.tar.gz https://github.com/linux-test-project/lcov/archive/v1.11.tar.gz; fi
-  - if [ "$CXX" == "g++" ]; then mkdir lcov; fi
-  - if [ "$CXX" == "g++" ]; then tar -xzf lcov.tar.gz -C ./lcov --strip-components=1; fi
-  - if [ "$CXX" == "g++" ]; then cd lcov; fi
-  - if [ "$CXX" == "g++" ]; then sudo make --quiet install; fi
-  - if [ "$CXX" == "g++" ]; then cd ..; fi
-  - if [ "$CXX" == "g++" ]; then rm -Rf lcov lcov.tar.gz; fi
-#  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi
+  # LCOV
+  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi
 
   # LCOV to Coveralls conversion + upload
   - if [ "$CXX" == "g++" ]; then gem install coveralls-lcov; fi
@@ -103,7 +52,7 @@ addons:
     project:
       name: "SebastianNiemann/Mantella"
     notification_email: niemann@sra.uni-hannover.de
-    build_command_prepend: "cov-configure --compiler gcc-4.9 --template; cmake -DBUILD_TESTS=On"
+    build_command_prepend: "cov-configure --compiler gcc-4.8 --template; cmake -DBUILD_TESTS=On"
     build_command: "make -j 4"
     branch_pattern: coverity_scan
 
@@ -114,8 +63,6 @@ script:
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
   - make -j 4
   - sudo make install
-  - if [ "$CXX" == "clang++" ]; then git diff --name-only HEAD~1..HEAD | grep "\.[ch]pp$" | while read file; do if [[ `clang-format-3.6 -output-replacements-xml "$file" | grep "<replacement " | wc -l` -ne 0 ]]; then echo "${file} is not properly formatted. Please run 'clang-format -i ${file}'"; exit 1; fi; done; fi
-  
   
 after_success:
   - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi
