@@ -23,6 +23,8 @@ before_install:
   - sudo apt-get update -qq
   
 install:
+  - sudo apt-get install -qq cmake;
+
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.4; fi
   
   # Armadillo C++
