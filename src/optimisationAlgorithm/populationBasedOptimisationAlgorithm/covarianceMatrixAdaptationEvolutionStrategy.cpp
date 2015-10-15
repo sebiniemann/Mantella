@@ -117,7 +117,7 @@ namespace mant {
         }
 
         mueff = std::pow(arma::accu(recombinationWeights), 2) / arma::accu(arma::pow(recombinationWeights, 2)); //;variance-effective size of mu
-        recombinationWeights = recombinationWeights / arma::accu(recombinationWeights); //;normalize recombination weights array
+        recombinationWeights = arma::normalise(recombinationWeights, 1); //;normalize recombination weights array
         //error check omitted, shouldn't happen
 
         //TODO: these values are from HCMA, standard CMAES are different. not sure how to impl
