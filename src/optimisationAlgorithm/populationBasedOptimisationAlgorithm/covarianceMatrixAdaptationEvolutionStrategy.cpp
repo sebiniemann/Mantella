@@ -18,7 +18,7 @@ namespace mant {
     setStepSize(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.0);
     setToleranceFun(1e-12);
     setToleranceHistFun(1e-12);
-    setToleranceX(1e-12 * arma::max(stepSize));
+    setToleranceX(2e-12);
     setToleranceUpX(arma::datum::inf);
 
     xmean = startingPoint;
@@ -44,7 +44,7 @@ namespace mant {
     pc = arma::zeros(numberOfDimensions_);
     ps = arma::zeros(numberOfDimensions_);
 
-    diagD = stepSize / arma::max(stepSize);
+    diagD = stepSize / sigma;
     diagC = arma::pow(diagD, 2);
     B = arma::eye(numberOfDimensions_, numberOfDimensions_); //;B defines the coordinate system
     BD = B % arma::repmat(diagD.t(), numberOfDimensions_, 1); //;B*D for speed up only
