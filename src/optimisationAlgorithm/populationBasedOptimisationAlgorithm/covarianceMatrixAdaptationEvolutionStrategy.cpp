@@ -4,6 +4,9 @@
 #include <cmath>
 #include <algorithm>
 
+// Mantella
+#include <mantella_bits/helper/assert.hpp>
+
 namespace mant {
 
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
@@ -11,8 +14,8 @@ namespace mant {
       const arma::uword populationSize)
   : PopulationBasedOptimisationAlgorithm(optimisationProblem, populationSize) {
     //HCMA settings coming from xacmes.m - 
-    setStartingPoint(-4 + 8 * arma::randu(this->numberOfDimensions_));
-    setStepSize(arma::Col<double>{2.0});
+    setStartingPoint(-4 + 8 * arma::randu(numberOfDimensions_));
+    setStepSize(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.0);
     setToleranceFun(1e-12);
     setToleranceHistFun(1e-12);
     setToleranceX(1e-12 * arma::max(stepSize));
@@ -41,9 +44,6 @@ namespace mant {
     pc = arma::zeros(this->numberOfDimensions_);
     ps = arma::zeros(this->numberOfDimensions_);
 
-    if (stepSize.n_elem == 1) {
-      stepSize = arma::ones(this->numberOfDimensions_) * stepSize(0);
-    }
     diagD = stepSize / arma::max(stepSize);
     diagC = arma::pow(diagD, 2);
     B = arma::eye(this->numberOfDimensions_, this->numberOfDimensions_); //;B defines the coordinate system
@@ -510,9 +510,9 @@ namespace mant {
     this->lambda0 = lambda0;
   }
 
-  void CovarianceMatrixAdaptationEvolutionStrategy::setStepSize(const arma::Col<double> sigma) {
-    //TODO: length check
-    this->stepSize = sigma;
+  void CovarianceMatrixAdaptationEvolutionStrategy::setStepSize(const arma::Col<double> stepSize) {
+    verify(stepSize.n_elem == this->numberOfDimensions_, "");
+    this->stepSize = stepSize;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setStartingPoint(const arma::Col<double> xStart) {
