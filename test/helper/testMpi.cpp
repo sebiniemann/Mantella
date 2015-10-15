@@ -30,7 +30,7 @@ TEST_CASE("mpiGetBestSample") {
     // The first value is the number of dimensions.
     // The second value is the objective value.
     // The third to last values are the parameter.
-    MPI_Type_contiguous(2 + numberOfDimensions, MPI_DOUBLE, &MANT_MPI_PARAMETER);
+    MPI_Type_contiguous(static_cast<int>(2 + numberOfDimensions), MPI_DOUBLE, &MANT_MPI_PARAMETER);
     MPI_Type_commit(&MANT_MPI_PARAMETER);
 
     // mant::mpiGetBestSample (like any MPI_Op_Func) uses the second parameter as input/output parameter, replacing it by the *more optimal* input.
