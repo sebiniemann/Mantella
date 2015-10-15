@@ -24,21 +24,9 @@ namespace mant {
 
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
-  : PopulationBasedOptimisationAlgorithm(optimisationProblem,
-  4 + std::floor(3 * log(this->numberOfDimensions_))) {
-
-    //TODO: is the variable passed to parentclass above already initialized at that point?
-
-    //HCMA settings coming from xacmes.m - 
-    setStartingPoint(-4 + 8 * arma::randu(this->numberOfDimensions_));
-    setStepSize(arma::Col<double>{2.0});
-    setToleranceFun(1e-12);
-    setToleranceHistFun(1e-12);
-    setToleranceX(1e-12 * arma::max(stepSize));
-    setToleranceUpX(arma::datum::inf);
-
-    xmean = startingPoint;
-    xold = startingPoint;
+  : CovarianceMatrixAdaptationEvolutionStrategy(optimisationProblem,
+  4 + std::floor(3 * log(optimisationProblem->numberOfDimensions_))) {
+    
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::initializeRun() {
