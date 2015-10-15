@@ -47,7 +47,7 @@ namespace mant {
     diagD = stepSize / sigma;
     diagC = arma::pow(diagD, 2);
     B = arma::eye(numberOfDimensions_, numberOfDimensions_); //;B defines the coordinate system
-    BD = B % arma::repmat(diagD.t(), numberOfDimensions_, 1); //;B*D for speed up only
+    BD = arma::diagmat(diagD); //;B*D for speed up only
     C = arma::diagmat(diagC); //;covariance matrix == BD*(BD)'
 
     //TODO: cmaes_initializeRun initialized fitness history here, but we have that already in mantella
