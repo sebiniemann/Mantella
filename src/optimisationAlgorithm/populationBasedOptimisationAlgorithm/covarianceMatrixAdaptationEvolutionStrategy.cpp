@@ -57,7 +57,6 @@ namespace mant {
     /////BOUNDARY
     boundaryActive = arma::any(getLowerBounds() > -arma::datum::inf) || arma::any(getUpperBounds() > -arma::datum::inf);
     if (boundaryActive) {
-      //TODO: sanity check for initial point?
       boundaryWeights = arma::zeros(numberOfDimensions_);
 
       boundaryScale = arma::ones(numberOfDimensions_);
@@ -71,7 +70,7 @@ namespace mant {
           boundaryExists(i) = false;
         }
       }
-      //TODO: cmaes modifies sigma(stepsize) here if it is too small or too large, do we want that?
+      
       boundaryDeltaFitHistory = arma::ones(1); //gets elongated later
       boundaryInitialPhase = true;
     }
