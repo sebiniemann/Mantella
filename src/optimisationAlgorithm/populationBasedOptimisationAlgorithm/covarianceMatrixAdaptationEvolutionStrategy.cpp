@@ -164,7 +164,6 @@ namespace mant {
         //;Get delta fitness values
         //TODO: ugly, how to initialiser list?
         arma::Col<arma::uword> percs({25, 75});
-        percs << 25 << 75;
         arma::Col<double> vals = percentiles(fitnessRaw, percs);
         vals = (vals(1) - vals(0)) / numberOfDimensions_ / arma::mean(diagC) / std::pow(sigma, 2);
         //;Catch non-sensible values 
