@@ -23,7 +23,9 @@ before_install:
   - sudo apt-get update -qq
   
 install:
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.4; fi
+  - sudo apt-get install -qq cmake;
+
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.5; fi
   
   # Armadillo C++
   - sudo apt-get install -qq libopenblas-dev
