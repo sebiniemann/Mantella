@@ -28,6 +28,8 @@ install:
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.5; fi
   
   # Armadillo C++
+  - sudo apt-get install -qq libblas-dev
+  - sudo apt-get install -qq liblapack-dev
   - sudo apt-get install -qq libopenblas-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
   - mkdir armadillo
