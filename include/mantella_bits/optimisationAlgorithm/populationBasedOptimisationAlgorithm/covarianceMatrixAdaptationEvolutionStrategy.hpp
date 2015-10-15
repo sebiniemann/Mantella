@@ -73,7 +73,7 @@ namespace mant {
 
     bool evalParallel = true; //defopts.EvalParallel; objective function FUN accepts NxM matrix, with M>1?
     arma::uword restarts = 9; //defopts.Restarts - HCMA default is 9
-    double incPopSize; //defopts.IncPopSize; multiplier for population size before each restart
+    double incPopSize = 2; //defopts.IncPopSize; multiplier for population size before each restart
     arma::uword mu; //defopts.ParentNumber/mu
     double mueff; //mueff
     arma::uword recombinationWeightsType = 2; //defotps.RecombinationWeights - 0 = equal, 1 = linear, 2 = superlinear decrease
