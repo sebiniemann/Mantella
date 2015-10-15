@@ -19,12 +19,14 @@ env:
     # Encrypted COVERITY_SCAN_TOKEN
     - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
 
+before_install:
+  - sudo apt-get update -qq
+  
 install:
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.4; fi
   
   # Armadillo C++
-  - sudo apt-get install -qq libblas-dev
-  - sudo apt-get install -qq liblapack-dev
+  - sudo apt-get install -qq libopenblas-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
