@@ -37,17 +37,17 @@ namespace mant {
     //this overrides constructor settings on restart runs
     //it gets split into lambda and popsize, but neither variable is written to ever again in CMAES
     //xacmes also writes these variables again...
-    lambda0 = std::floor(this->populationSize_ * std::pow(incPopSize, irun - 1));
-    this->setPopulationSize(lambda0);
+    lambda0 = std::floor(populationSize_ * std::pow(incPopSize, irun - 1));
+    setPopulationSize(lambda0);
 
     sigma = arma::max(stepSize);
-    pc = arma::zeros(this->numberOfDimensions_);
-    ps = arma::zeros(this->numberOfDimensions_);
+    pc = arma::zeros(numberOfDimensions_);
+    ps = arma::zeros(numberOfDimensions_);
 
     diagD = stepSize / arma::max(stepSize);
     diagC = arma::pow(diagD, 2);
-    B = arma::eye(this->numberOfDimensions_, this->numberOfDimensions_); //;B defines the coordinate system
-    BD = B % arma::repmat(diagD.t(), this->numberOfDimensions_, 1); //;B*D for speed up only
+    B = arma::eye(numberOfDimensions_, numberOfDimensions_); //;B defines the coordinate system
+    BD = B % arma::repmat(diagD.t(), numberOfDimensions_, 1); //;B*D for speed up only
     C = arma::diagmat(diagC); //;covariance matrix == BD*(BD)'
 
     //TODO: cmaes_initializeRun initialized fitness history here, but we have that already in mantella
@@ -55,17 +55,17 @@ namespace mant {
     fitnessHistSel = arma::datum::nan * arma::ones(10 + std::ceil(30.0 * numberOfDimensions_ / populationSize_));
 
     /////BOUNDARY
-    boundaryActive = arma::any(this->getLowerBounds() > -arma::datum::inf) || arma::any(this->getUpperBounds() > -arma::datum::inf);
+    boundaryActive = arma::any(getLowerBounds() > -arma::datum::inf) || arma::any(getUpperBounds() > -arma::datum::inf);
     if (boundaryActive) {
       //TODO: sanity check for initial point?
-      boundaryWeights = arma::zeros(this->numberOfDimensions_);
+      boundaryWeights = arma::zeros(numberOfDimensions_);
 
-      boundaryScale = arma::ones(this->numberOfDimensions_);
+      boundaryScale = arma::ones(numberOfDimensions_);
 
       //mark all dimensions which have a boundary
-      boundaryExists = arma::Col<arma::uword>(this->numberOfDimensions_);
-      for (arma::uword i = 0; i < this->getLowerBounds().n_elem; i++) {
-        if (this->getLowerBounds()(i) != arma::datum::inf || this->getUpperBounds()(i) != arma::datum::inf) {
+      boundaryExists = arma::Col<arma::uword>(numberOfDimensions_);
+      for (arma::uword i = 0; i < getLowerBounds().n_elem; i++) {
+        if (getLowerBounds()(i) != arma::datum::inf || getUpperBounds()(i) != arma::datum::inf) {
           boundaryExists(i) = true;
         } else {
           boundaryExists(i) = false;
@@ -79,7 +79,7 @@ namespace mant {
     //TODO: cmaes evaluates starting point once here for output and caches that in evaluation history,
     //seems unnecessary (?)
 
-    chiN = std::pow(this->numberOfDimensions_, 0.5) * (1 - 1.0 / (4 * this->numberOfDimensions_) + 1.0 / (21 * std::pow(this->numberOfDimensions_, 2)));
+    chiN = std::pow(numberOfDimensions_, 0.5) * (1 - 1.0 / (4 * numberOfDimensions_) + 1.0 / (21 * std::pow(numberOfDimensions_, 2)));
     //;expectation of||N(0,I)|| == norm(randn(N,1))
 
     //miscellaneous inits needed
@@ -96,13 +96,13 @@ namespace mant {
 
     //TODO: this stopflag is more sophisticated in the matlab code.
     bool stopFlag = false;
-    arma::uword lambda_last = this->populationSize_;
+    arma::uword lambda_last = populationSize_;
     while (!stopFlag) {
       //TODO: lambda_last??? see studip
       //;set internal parameters
-      if (countiter == 0 || this->populationSize_ != lambda_last) {
-        lambda_last = this->populationSize_;
-        mu = std::floor(this->populationSize_ / 2.0);
+      if (countiter == 0 || populationSize_ != lambda_last) {
+        lambda_last = populationSize_;
+        mu = std::floor(populationSize_ / 2.0);
         recombinationWeights = arma::zeros(mu);
         if (recombinationWeightsType == 0) {//equal
           recombinationWeights = arma::ones(mu);
@@ -122,25 +122,25 @@ namespace mant {
         //error check omitted, shouldn't happen
 
         //TODO: these values are from HCMA, standard CMAES are different. not sure how to impl
-        ccum = std::pow((this->numberOfDimensions_ + 2 * mueff / this->numberOfDimensions_) / (4 + mueff / this->numberOfDimensions_), -1); //;time constant for cumulation for covariance matrix
-        cs = (mueff + 2) / (this->numberOfDimensions_ + mueff + 3);
+        ccum = std::pow((numberOfDimensions_ + 2 * mueff / numberOfDimensions_) / (4 + mueff / numberOfDimensions_), -1); //;time constant for cumulation for covariance matrix
+        cs = (mueff + 2) / (numberOfDimensions_ + mueff + 3);
 
-        ccov1 = std::min(2.0, this->populationSize_ / 3.0) / (std::pow(this->numberOfDimensions_ + 1.3, 2) + mueff);
-        ccovmu = std::min(2.0, this->populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(this->numberOfDimensions_ + 2, 2) + mueff);
+        ccov1 = std::min(2.0, populationSize_ / 3.0) / (std::pow(numberOfDimensions_ + 1.3, 2) + mueff);
+        ccovmu = std::min(2.0, populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(numberOfDimensions_ + 2, 2) + mueff);
 
-        damping = 1 + 2 * std::max(0.0, std::sqrt((mueff - 1) / (this->numberOfDimensions_ + 1)) - 1) + cs;
+        damping = 1 + 2 * std::max(0.0, std::sqrt((mueff - 1) / (numberOfDimensions_ + 1)) - 1) + cs;
       }
 
       countiter++;
 
       //;Generate and evaluate lambda offspring
-      fitnessRaw = arma::ones(this->populationSize_);
+      fitnessRaw = arma::ones(populationSize_);
       fitnessRaw.fill(arma::datum::nan);
 
       //;parallel evaluation - the if is omitted.
 
       arma::Mat<double> newGenerationRaw = getRandomPopulation(); //arz
-      arma::Mat<double> newGeneration = arma::repmat(xmean, 1, this->populationSize_) + sigma * (BD * newGenerationRaw); //arx
+      arma::Mat<double> newGeneration = arma::repmat(xmean, 1, populationSize_) + sigma * (BD * newGenerationRaw); //arx
 
       newGenerationValid = newGeneration; //arxvalid
       if (boundaryActive) {
@@ -149,7 +149,7 @@ namespace mant {
 
       //TODO: cmaes passes the whole matrix into the fitnessfunction, not sure if this is the right way around it
       for (arma::uword i = 0; i < newGenerationValid.n_cols; i++) {
-        fitnessRaw(i) = this->getObjectiveValue(newGenerationValid.col(i));
+        fitnessRaw(i) = getObjectiveValue(newGenerationValid.col(i));
         numberOfIterations_++;
       }
 
@@ -447,7 +447,7 @@ namespace mant {
       //TODO: some output is written here, probably not need for us
       
       //;Set stop flag
-      if(fitnessRaw(0) <= this->getAcceptableObjectiveValue()) {
+      if(fitnessRaw(0) <= getAcceptableObjectiveValue()) {
         stopFlag = true;
       }
       if(getNumberOfIterations() >= getMaximalNumberOfIterations()) {
@@ -499,29 +499,29 @@ namespace mant {
   }
   
   arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getIRun() {
-    return this->irun;
+    return irun;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setIRun(const arma::uword irun) {
-    this->irun = irun;
+    irun = irun;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setLambda0(const double lambda0) {
-    this->lambda0 = lambda0;
+    lambda0 = lambda0;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setStepSize(const arma::Col<double> stepSize) {
-    verify(stepSize.n_elem == this->numberOfDimensions_, "");
-    this->stepSize = stepSize;
+    verify(stepSize.n_elem == numberOfDimensions_, "");
+    stepSize = stepSize;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setStartingPoint(const arma::Col<double> xStart) {
     //TODO: length check
-    this->startingPoint = xStart;
+    startingPoint = xStart;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setPopulationSize(const arma::uword popSize) {
-    this->populationSize_ = popSize;
+    populationSize_ = popSize;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getIncPopSize() const {
@@ -529,7 +529,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setSingleIteration(const bool DoSingleIteration) {
-    this->singleIteration = DoSingleIteration;
+    singleIteration = DoSingleIteration;
   }
 
   std::string CovarianceMatrixAdaptationEvolutionStrategy::toString() const noexcept {
@@ -541,7 +541,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCcov1(double ccov1) {
-    this->ccov1 = ccov1;
+    ccov1 = ccov1;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getCcovmu() const {
@@ -549,7 +549,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCcovmu(double ccovmu) {
-    this->ccovmu = ccovmu;
+    ccovmu = ccovmu;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getCcum() const {
@@ -557,7 +557,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCcum(double ccum) {
-    this->ccum = ccum;
+    ccum = ccum;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getCs() const {
@@ -565,7 +565,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCs(double cs) {
-    this->cs = cs;
+    cs = cs;
   }
 
   arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getMu() const {
@@ -573,7 +573,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setMu(arma::uword numberOfParents) {
-    this->mu = numberOfParents;
+    mu = numberOfParents;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceFun() const {
@@ -581,7 +581,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceFun(double toleranceFun) {
-    this->toleranceFun = toleranceFun;
+    toleranceFun = toleranceFun;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceHistFun() const {
@@ -589,7 +589,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceHistFun(double toleranceHistFun) {
-    this->toleranceHistFun = toleranceHistFun;
+    toleranceHistFun = toleranceHistFun;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceUpX() const {
@@ -597,7 +597,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceUpX(double toleranceUpX) {
-    this->toleranceUpX = toleranceUpX;
+    toleranceUpX = toleranceUpX;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceX() const {
@@ -605,7 +605,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceX(double toleranceX) {
-    this->toleranceX = toleranceX;
+    toleranceX = toleranceX;
   }
 
   arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::getXmean() const {
@@ -613,18 +613,18 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setXmean(arma::Col<double> xmean) {
-    this->xmean = xmean;
+    xmean = xmean;
   }
 
   //returns capped matrix/vector first, indexes of capped values second
 
   std::tuple<arma::Mat<double>, arma::Mat<double>> CovarianceMatrixAdaptationEvolutionStrategy::capToBoundary(arma::Mat<double> x) {
-    arma::Mat<double> arbounds = arma::repmat(this->getLowerBounds(), 1, x.n_cols);
-    arma::uvec lowerIndex = arma::find(x < arma::repmat(this->getLowerBounds(), 1, x.n_cols));
+    arma::Mat<double> arbounds = arma::repmat(getLowerBounds(), 1, x.n_cols);
+    arma::uvec lowerIndex = arma::find(x < arma::repmat(getLowerBounds(), 1, x.n_cols));
     x(lowerIndex) = arbounds(lowerIndex);
 
-    arbounds = arma::repmat(this->getUpperBounds(), 1, x.n_cols);
-    arma::uvec upperIndex = arma::find(x > arma::repmat(this->getUpperBounds(), 1, x.n_cols));
+    arbounds = arma::repmat(getUpperBounds(), 1, x.n_cols);
+    arma::uvec upperIndex = arma::find(x > arma::repmat(getUpperBounds(), 1, x.n_cols));
     x(upperIndex) = arbounds(upperIndex);
 
     arma::Mat<double> indexes = arma::zeros(x.n_rows, x.n_cols);
