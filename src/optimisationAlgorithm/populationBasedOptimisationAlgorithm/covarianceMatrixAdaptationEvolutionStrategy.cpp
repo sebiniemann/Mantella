@@ -14,7 +14,7 @@ namespace mant {
       const arma::uword populationSize)
   : PopulationBasedOptimisationAlgorithm(optimisationProblem, populationSize) {
     //HCMA settings coming from xacmes.m - 
-    setStartingPoint(-4 + 8 * arma::randu(numberOfDimensions_));
+    setStartingPoint(getRandomParameter());
     setStepSize(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 2.0);
     setToleranceFun(1e-12);
     setToleranceHistFun(1e-12);
