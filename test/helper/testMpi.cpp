@@ -52,9 +52,12 @@ TEST_CASE("mpiGetBestSample") {
     // MPI uses singed integers, instead of unsigned ones.
     int signedNumberOfSamples = static_cast<int>(numberOfSamples);
     
+    arma::Mat<double> expectedFirstMpiInput = firstMpiInput;
+    arma::Mat<double> expectedSecondMpiInput = firstMpiInput;
+    
     mant::mpiGetBestSample(firstMpiInput.memptr(), secondMpiInput.memptr(), &signedNumberOfSamples, &MANT_MPI_PARAMETER);
-    IS_EQUAL(firstMpiInput, firstMpiInput); // The first input should remain untouched.
-    IS_EQUAL(secondMpiInput, firstMpiInput); // The second parameter should be replaced by the first one.
+    IS_EQUAL(expectedFirstMpiInput, firstMpiInput); // The first input should remain untouched.
+    IS_EQUAL(expectedSecondMpiInput, secondMpiInput); // The second parameter should be replaced by the first one.
   }
 #endif
 }
