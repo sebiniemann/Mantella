@@ -13,7 +13,7 @@ namespace mant {
       const arma::Col<double>& firstParameter,
       const arma::Col<double>& secondParameter) const {
     verify(firstParameter.n_elem == secondParameter.n_elem, ""); // TODO
-      
+
     return getLengthImplementation(secondParameter - firstParameter);
   }
 
