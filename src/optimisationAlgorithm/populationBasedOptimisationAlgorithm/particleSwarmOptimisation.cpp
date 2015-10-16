@@ -19,7 +19,7 @@ namespace mant {
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));
     setMaximalGlobalAttraction(maximalLocalAttraction_);
-    setMaximalSwarmConvergence(0.05);  // TODO Check value within the paper
+    setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
   }
 
   void ParticleSwarmOptimisation::optimiseImplementation() {

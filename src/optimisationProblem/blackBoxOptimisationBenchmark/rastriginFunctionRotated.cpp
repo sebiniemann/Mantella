@@ -81,7 +81,7 @@ namespace mant {
         serialisedOptimisationProblem.pop_back();
       }
 
-    BlackBoxOptimisationBenchmark::deserialise(serialisedOptimisationProblem);
+      BlackBoxOptimisationBenchmark::deserialise(serialisedOptimisationProblem);
     }
 #endif
   }

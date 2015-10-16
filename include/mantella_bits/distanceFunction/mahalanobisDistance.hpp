@@ -10,7 +10,7 @@ namespace mant {
   class MahalanobisDistance : public DistanceFunction {
    public:
     const arma::Mat<double> covariance_;
-   
+
     explicit MahalanobisDistance(
         const arma::Mat<double>& covariance);
 

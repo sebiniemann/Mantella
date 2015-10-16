@@ -10,7 +10,7 @@ namespace mant {
   class PNorm : public DistanceFunction {
    public:
     const arma::uword p_;
-    
+
     explicit PNorm(
         const arma::uword numberOfDimensions,
         const arma::uword p);

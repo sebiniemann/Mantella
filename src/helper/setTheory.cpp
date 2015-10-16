@@ -12,7 +12,7 @@ namespace mant {
       const arma::uword numberOfElements,
       const arma::uword combinationSize) {
     verify(combinationSize <= numberOfElements, ""); // TODO
-      
+
     std::vector<arma::Col<arma::uword>> combinations;
 
     std::vector<arma::uword> bitmask(numberOfElements);
