@@ -10,5 +10,6 @@ BinPackParameters: false
 ColumnLimit: 0
 DerivePointerAlignment: false
 NamespaceIndentation: All
+SpacesBeforeTrailingComments: 1
 ...
 
