@@ -21,7 +21,6 @@ namespace mant {
 
     arma::uword getIRun();
     void setIRun(const arma::uword irun); //irun
-    void setLambda0(const double lambda0); //lambda0
     void setStepSize(const arma::Col<double> sigma); //insigma
     void setStartingPoint(const arma::Col<double> xStart); //xstart
     void setPopulationSize(const arma::uword popSize);
@@ -37,6 +36,8 @@ namespace mant {
     void setCs(double cs);
     arma::uword getMu() const;
     void setMu(arma::uword numberOfParents);
+    arma::Col<double> getRecombinationWeights();
+    void setRecombinationWeights(arma::Col<double> weights);
     double getToleranceFun() const;
     void setToleranceFun(double toleranceFun);
     double getToleranceHistFun() const;
@@ -69,14 +70,11 @@ namespace mant {
     bool stopOnWarnings = true; //defopts.StopOnWarnings
     bool stopOnEqualFunctionValues = true; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
     arma::Col<double> EqualFunctionValues;
-    //seems strange since it's never used in an integer check, just a bool check
 
-    bool evalParallel = true; //defopts.EvalParallel; objective function FUN accepts NxM matrix, with M>1?
     arma::uword restarts = 9; //defopts.Restarts - HCMA default is 9
     double incPopSize = 2; //defopts.IncPopSize; multiplier for population size before each restart
     arma::uword mu; //defopts.ParentNumber/mu
     double mueff; //mueff
-    arma::uword recombinationWeightsType = 2; //defotps.RecombinationWeights - 0 = equal, 1 = linear, 2 = superlinear decrease
     arma::Col<double> recombinationWeights; //weights
     double cs; //defopts.CMA.cs/cs; cumulation constant for step-size
     double damping; //defopts.CMA.damps; damping for step-size
@@ -85,14 +83,14 @@ namespace mant {
     double ccovmu; //defopts.CMA.ccovmu;
     arma::uword activeCMA; ////defopts.CMA.active; active CMA 1: neg. updates with pos. def. check, 2: neg. updates
     arma::uword irun = 0; //irun
-    //opts.EvalParallel - left out. not sure what this is supposed to do??
-    //flgDiagonalOnly - left out. Afaik we never do diagonal matrices. If needed all code for this can easily be added.
+    //TODO: flgDiagonalOnly - left out. Afaik we never do diagonal matrices. If needed all code for this can easily be added.
+    void populationSizeChanged();
 
     //arxvalid needs to be here so it is available after the loop
     arma::Mat<double> newGenerationValid; //arxvalid
     arma::Col<double> xmean; //xmean
     arma::Col<double> xold; //xold
-    double lambda0; //lambda0
+    arma::uword lambda_last;
     double sigma; //sigma
     arma::Col<double> pc; //pc; evolution path for C
     arma::Col<double> ps; //ps; evolution path for sigma
@@ -118,12 +116,9 @@ namespace mant {
 
     arma::Col<double> fitnessRaw; //fitness.raw
     arma::Col<double> fitnessSel; //fitness.sel
+    arma::Col<double> fitnessRawPreviousIteration;//helper variable to replace fitnesshist
     arma::Col<arma::uword> fitnessIdx; //fitness.idx
     arma::Col<arma::uword> fitnessIdxSel; //fitness.idxsel
-    arma::Col<double> fitnessHist; //fitness.hist
-    arma::Col<double> fitnessHistSel; //fitness.histsel
-    arma::Col<double> fitnessHistBest; //fitness.histbest
-    arma::Col<double> fitnessHistMedian; //fitness.histmedian
     
     arma::Col<double> percentiles(arma::Col<double> vector, arma::Col<arma::uword> perc); //myprctile
 

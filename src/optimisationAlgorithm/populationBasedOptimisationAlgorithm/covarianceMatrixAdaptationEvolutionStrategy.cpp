@@ -29,16 +29,14 @@ namespace mant {
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
   : CovarianceMatrixAdaptationEvolutionStrategy(optimisationProblem,
   4 + std::floor(3 * log(optimisationProblem->numberOfDimensions_))) {
-    
+
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::initializeRun() {
-    //TODO: figure out what to do with lambda0 and popsize settings
-    //this overrides constructor settings on restart runs
-    //it gets split into lambda and popsize, but neither variable is written to ever again in CMAES
-    //xacmes also writes these variables again...
-    lambda0 = std::floor(populationSize_ * std::pow(incPopSize, irun - 1));
-    setPopulationSize(lambda0);
+    //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
+    //Still completely remove it?
+    lambda_last = populationSize_;
+    populationSizeChanged();
 
     sigma = arma::max(stepSize);
     pc = arma::zeros(numberOfDimensions_);
@@ -50,41 +48,31 @@ namespace mant {
     BD = arma::diagmat(diagD); //;B*D for speed up only
     C = arma::diagmat(diagC); //;covariance matrix == BD*(BD)'
 
-    //TODO: cmaes_initializeRun initialized fitness history here, but we have that already in mantella
-    fitnessHist = arma::datum::nan * arma::ones(10 + std::ceil(30.0 * numberOfDimensions_ / populationSize_));
-    fitnessHistSel = arma::datum::nan * arma::ones(10 + std::ceil(30.0 * numberOfDimensions_ / populationSize_));
-
     /////BOUNDARY
-    boundaryActive = arma::any(getLowerBounds() > -arma::datum::inf) || arma::any(getUpperBounds() > -arma::datum::inf);
-    if (boundaryActive) {
-      boundaryWeights = arma::zeros(numberOfDimensions_);
+    boundaryWeights = arma::zeros(numberOfDimensions_);
 
-      boundaryScale = arma::ones(numberOfDimensions_);
+    boundaryScale = arma::ones(numberOfDimensions_);
 
-      //mark all dimensions which have a boundary
-      boundaryExists = arma::Col<arma::uword>(numberOfDimensions_);
-      for (arma::uword i = 0; i < getLowerBounds().n_elem; i++) {
-        if (getLowerBounds()(i) != arma::datum::inf || getUpperBounds()(i) != arma::datum::inf) {
-          boundaryExists(i) = true;
-        } else {
-          boundaryExists(i) = false;
-        }
+    //mark all dimensions which have a boundary
+    boundaryExists = arma::Col<arma::uword>(numberOfDimensions_);
+    for (arma::uword i = 0; i < getLowerBounds().n_elem; i++) {
+      if (getLowerBounds()(i) != arma::datum::inf || getUpperBounds()(i) != arma::datum::inf) {
+        boundaryExists(i) = true;
+      } else {
+        boundaryExists(i) = false;
       }
-      
-      boundaryDeltaFitHistory = arma::ones(1); //gets elongated later
-      boundaryInitialPhase = true;
     }
 
-    //TODO: cmaes evaluates starting point once here for output and caches that in evaluation history,
-    //seems unnecessary (?)
+    boundaryDeltaFitHistory = arma::ones(1); //gets elongated later
+    boundaryInitialPhase = true;
 
     chiN = std::pow(numberOfDimensions_, 0.5) * (1 - 1.0 / (4 * numberOfDimensions_) + 1.0 / (21 * std::pow(numberOfDimensions_, 2)));
     //;expectation of||N(0,I)|| == norm(randn(N,1))
 
     //miscellaneous inits needed
     runInitialized = true;
-    EqualFunctionValues = arma::zeros(10+numberOfDimensions_);
-    stopMaxIter = 100 + 50*std::pow(numberOfDimensions_+3,2) / std::sqrt(populationSize_);
+    EqualFunctionValues = arma::zeros(10 + numberOfDimensions_);
+    stopMaxIter = 100 + 50 * std::pow(numberOfDimensions_ + 3, 2) / std::sqrt(populationSize_);
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::optimiseImplementation() {
@@ -95,39 +83,11 @@ namespace mant {
 
     //TODO: this stopflag is more sophisticated in the matlab code.
     bool stopFlag = false;
-    arma::uword lambda_last = populationSize_;
-    while (!stopFlag) {
-      //TODO: lambda_last??? see studip
+
+    while (!stopFlag && !singleIteration) {
       //;set internal parameters
-      if (countiter == 0 || populationSize_ != lambda_last) {
-        lambda_last = populationSize_;
-        mu = std::floor(populationSize_ / 2.0);
-        recombinationWeights = arma::zeros(mu);
-        if (recombinationWeightsType == 0) {//equal
-          recombinationWeights = arma::ones(mu);
-        } else if (recombinationWeightsType == 1) {//linear
-          recombinationWeights = mu + 0.5 - arma::linspace(1, mu, mu).t();
-        } else if (recombinationWeightsType == 2) {//superlinear
-          recombinationWeights = std::log(mu + 0.5) - arma::log(arma::linspace(1, mu, mu)).t();
-          //;muXone array for weighted recombination
-          //;qqq mu can be non-integer and
-          //;should become ceil(mu-0.5) (minor correction)
-        } else {
-          //TODO: CMAES throws error here cause type not implemented
-        }
-
-        mueff = std::pow(arma::accu(recombinationWeights), 2) / arma::accu(arma::pow(recombinationWeights, 2)); //;variance-effective size of mu
-        recombinationWeights = arma::normalise(recombinationWeights, 1); //;normalize recombination weights array
-        //error check omitted, shouldn't happen
-
-        //TODO: these values are from HCMA, standard CMAES are different. not sure how to impl
-        ccum = std::pow((numberOfDimensions_ + 2 * mueff / numberOfDimensions_) / (4 + mueff / numberOfDimensions_), -1); //;time constant for cumulation for covariance matrix
-        cs = (mueff + 2) / (numberOfDimensions_ + mueff + 3);
-
-        ccov1 = std::min(2.0, populationSize_ / 3.0) / (std::pow(numberOfDimensions_ + 1.3, 2) + mueff);
-        ccovmu = std::min(2.0, populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(numberOfDimensions_ + 2, 2) + mueff);
-
-        damping = 1 + 2 * std::max(0.0, std::sqrt((mueff - 1) / (numberOfDimensions_ + 1)) - 1) + cs;
+      if (populationSize_ != lambda_last) {
+        populationSizeChanged();
       }
 
       countiter++;
@@ -137,14 +97,10 @@ namespace mant {
       fitnessRaw.fill(arma::datum::nan);
 
       //;parallel evaluation - the if is omitted.
-
       arma::Mat<double> newGenerationRaw = getRandomPopulation(); //arz
       arma::Mat<double> newGeneration = arma::repmat(xmean, 1, populationSize_) + sigma * (BD * newGenerationRaw); //arx
 
-      newGenerationValid = newGeneration; //arxvalid
-      if (boundaryActive) {
-        newGenerationValid = std::get<0>(capToBoundary(newGeneration));
-      }
+      newGenerationValid = std::get<0>(capToBoundary(newGeneration)); //arxvalid
 
       //TODO: cmaes passes the whole matrix into the fitnessfunction, not sure if this is the right way around it
       for (arma::uword i = 0; i < newGenerationValid.n_cols; i++) {
@@ -152,78 +108,66 @@ namespace mant {
         numberOfIterations_++;
       }
 
-      //TODO: There is supposed to be a line of code here, but it's nonsensical due to no noise in mantella
-      //TODO: Omitted a large code block here. Very sure it's unreachable in our setting
-      //(with "parallel" evaluation always on and noise off)
-
       fitnessSel = fitnessRaw;
 
       //;----- handle boundaries -----
-      //yeap. 1 < 3 is what is actually written in matlab
-      if (1 < 3 && boundaryActive) {
-        //;Get delta fitness values
-        //TODO: ugly, how to initialiser list?
-        arma::Col<arma::uword> percs({25, 75});
-        arma::Col<double> vals = percentiles(fitnessRaw, percs);
-        vals = (vals(1) - vals(0)) / numberOfDimensions_ / arma::mean(diagC) / std::pow(sigma, 2);
-        //;Catch non-sensible values 
-        if (!arma::is_finite(vals)) {
-          //TODO: console warning here: Non-finite fitness range
-          vals = arma::max(boundaryDeltaFitHistory);
-        } else if (arma::all(vals == 0)) { //;happens if all points are out of bounds
-          vals = arma::min(boundaryDeltaFitHistory(arma::find(boundaryDeltaFitHistory > 0))); //;seems not to make sense, given all solutions are out of bounds
-        } else if (boundaryFitnessValid == false) { //;flag that first sensible val was found
-          //TODO: boundaryDeltaFitHistory gets set to [] which we can't do. what to do instead?
-          boundaryFitnessValid = true;
-        }
-
-        //;Store delta fitness values
-        if (boundaryDeltaFitHistory.n_elem < 20 + (3 * numberOfDimensions_) / populationSize_) {
-          boundaryDeltaFitHistory.insert_rows(boundaryDeltaFitHistory.n_rows, vals);
-        } else {
-          boundaryDeltaFitHistory.shed_row(0);
-          boundaryDeltaFitHistory.insert_rows(boundaryDeltaFitHistory.n_rows, vals);
-        }
-
-        std::tuple<arma::Mat<double>, arma::Mat<double>> XmeanTemp = capToBoundary(xmean);
-        arma::Mat<double> xmeanCapped = std::get<0>(XmeanTemp);
-        arma::Mat<double> xmeanCappedIndexes = std::get<1>(XmeanTemp);
-
-        //;Set initial weights
-        if (boundaryInitialPhase) {
-          if (arma::any(arma::any(xmeanCappedIndexes))) {
-            //TODO: how to do 
-            boundaryWeights.elem(arma::find(boundaryExists)).fill(2.0002 * arma::median(boundaryDeltaFitHistory)); //unexplained magic number
-            //;scale only initial weights
-            arma::Col<double> dd = diagC;
-            arma::Col<arma::uword> idx = arma::find(boundaryExists);
-            dd = dd(idx) / arma::mean(dd); //;remove mean scaling
-            boundaryWeights(idx) = boundaryWeights(idx) / dd;
-            if (boundaryFitnessValid && countiter > 2) {
-              boundaryInitialPhase = false;
-            }
-          }
-        }
-
-        //;Increase weights
-        if (1 < 3 && arma::any(arma::any(xmeanCappedIndexes))) {//;any coordinate of xmean out of bounds
-          //;judge distance of xmean to boundary
-          xmeanCapped = xmean - xmeanCapped;
-          //replaced & with == since it's comparing between 0/1
-          arma::Mat<arma::uword> idx = ((xmeanCappedIndexes != 0) == (arma::Mat<arma::uword>)(arma::abs(xmeanCapped) > 3 * std::max(1.0, std::sqrt(numberOfDimensions_) / mueff)
-              * sigma * arma::sqrt(diagC)));
-          //;only increase if xmean is moving away
-          //TODO: xold is actually unassigned at this point, similar to the lambda problem we encountered earlier
-          idx = idx == (arma::sign(xmeanCapped) == arma::sign(xmean - xold));
-          if (!idx.is_empty()) { //;increase
-            boundaryWeights(idx) = std::pow(1.2, std::min(1.0, mueff / 10 / numberOfDimensions_)) * boundaryWeights(idx);
-          }
-        }
-
-        //;Assigned penalized fitness
-        boundaryPenalty = (boundaryWeights / boundaryScale).t() * arma::pow(newGenerationValid - newGeneration, 2);
-        fitnessSel = fitnessRaw + boundaryPenalty;
+      //;Get delta fitness values
+      //TODO: ugly, how to initialiser list?
+      arma::Col<arma::uword> percs({25, 75});
+      arma::Col<double> vals = percentiles(fitnessRaw, percs);
+      vals = (vals(1) - vals(0)) / numberOfDimensions_ / arma::mean(diagC) / std::pow(sigma, 2);
+      //;Catch non-sensible values 
+      if (boundaryFitnessValid == false) { //;flag that first sensible val was found
+        //TODO: boundaryDeltaFitHistory gets set to [] which we can't do. what to do instead?
+        boundaryFitnessValid = true;
       }
+
+      //;Store delta fitness values
+      if (boundaryDeltaFitHistory.n_elem < 20 + (3 * numberOfDimensions_) / populationSize_) {
+        boundaryDeltaFitHistory.insert_rows(boundaryDeltaFitHistory.n_rows, vals);
+      } else {
+        boundaryDeltaFitHistory.shed_row(0);
+        boundaryDeltaFitHistory.insert_rows(boundaryDeltaFitHistory.n_rows, vals);
+      }
+
+      std::tuple<arma::Mat<double>, arma::Mat<double>> XmeanTemp = capToBoundary(xmean);
+      arma::Mat<double> xmeanCapped = std::get<0>(XmeanTemp);
+      arma::Mat<double> xmeanCappedIndexes = std::get<1>(XmeanTemp);
+
+      //;Set initial weights
+      if (boundaryInitialPhase) {
+        if (arma::any(arma::any(xmeanCappedIndexes))) {
+          //TODO: how to do 
+          boundaryWeights.elem(arma::find(boundaryExists)).fill(2.0002 * arma::median(boundaryDeltaFitHistory)); //unexplained magic number
+          //;scale only initial weights
+          arma::Col<double> dd = diagC;
+          arma::Col<arma::uword> idx = arma::find(boundaryExists);
+          dd = dd(idx) / arma::mean(dd); //;remove mean scaling
+          boundaryWeights(idx) = boundaryWeights(idx) / dd;
+          if (boundaryFitnessValid && countiter > 2) {
+            boundaryInitialPhase = false;
+          }
+        }
+      }
+
+      //;Increase weights
+      if (1 < 3 && arma::any(arma::any(xmeanCappedIndexes))) {//;any coordinate of xmean out of bounds
+        //;judge distance of xmean to boundary
+        xmeanCapped = xmean - xmeanCapped;
+        //replaced & with == since it's comparing between 0/1
+        arma::Mat<arma::uword> idx = ((xmeanCappedIndexes != 0) == (arma::Mat<arma::uword>)(arma::abs(xmeanCapped) > 3 * std::max(1.0, std::sqrt(numberOfDimensions_) / mueff)
+            * sigma * arma::sqrt(diagC)));
+        //;only increase if xmean is moving away
+        //TODO: xold is actually unassigned at this point, similar to the lambda problem we encountered earlier
+        idx = idx == (arma::sign(xmeanCapped) == arma::sign(xmean - xold));
+        if (!idx.is_empty()) { //;increase
+          boundaryWeights(idx) = std::pow(1.2, std::min(1.0, mueff / 10 / numberOfDimensions_)) * boundaryWeights(idx);
+        }
+      }
+
+      //;Assigned penalized fitness
+      boundaryPenalty = (boundaryWeights / boundaryScale).t() * arma::pow(newGenerationValid - newGeneration, 2);
+      fitnessSel = fitnessRaw + boundaryPenalty;
       //;----- end handle boundaries -----
 
       //;Sort by fitness
@@ -231,20 +175,6 @@ namespace mant {
       fitnessRaw = arma::sort(fitnessRaw);
       fitnessIdxSel = arma::sort_index(fitnessSel);
       fitnessSel = arma::sort(fitnessSel); //;minimization
-      fitnessHist.rows(1, fitnessHist.n_elem - 1) = fitnessHist.rows(0, fitnessHist.n_elem - 2); //;record short history of
-      fitnessHist(0) = fitnessRaw(0); //;best fitness values
-      if (fitnessHistBest.n_elem < 120 + std::ceil(30.0 * numberOfDimensions_ / populationSize_) ||
-          ((countiter % 5) == 0 && fitnessHistBest.n_elem < 2e4)) { //;20 percent of 1e5 gen.
-        fitnessHistBest.insert_rows(0, fitnessRaw(0)); //;best fitness values
-        fitnessHistMedian.insert_rows(0, arma::median(fitnessRaw)); //;median fitness values
-      } else {
-        fitnessHistBest.rows(1, fitnessHistBest.n_elem - 1) = fitnessHistBest.rows(0, fitnessHistBest.n_elem - 2);
-        fitnessHistMedian.rows(1, fitnessHistMedian.n_elem - 1) = fitnessHistMedian.rows(0, fitnessHistMedian.n_elem - 2);
-        fitnessHistBest(0) = fitnessRaw(0); //;best fitness values
-        fitnessHistMedian(0) = arma::median(fitnessRaw); //;median fitness values
-      }
-      fitnessHistSel.rows(1, fitnessHistSel.n_elem - 1) = fitnessHistSel.rows(0, fitnessHistSel.n_elem - 2); //;record short history of
-      fitnessHistSel(0) = fitnessSel(0); //;best sel fitness values
 
       //;Calculate new xmean, this is selection and recombination 
       xold = xmean; //;for speed up of Eq. (2) and (3)
@@ -328,7 +258,7 @@ namespace mant {
             //TODO: matlab apparently doesn't care that the eigenvalue could be complex.
             //Not sure if simply grabbing the real part here is correct.
             double maxeigenval = arma::max(arma::eig_gen(Ccheck)).real();
-            negCcovFinal = std::min(negCcov, (1 - ccovmu)*(1 - negMinResidualVariance)/maxeigenval);
+            negCcovFinal = std::min(negCcov, (1 - ccovmu)*(1 - negMinResidualVariance) / maxeigenval);
           }
           //;update C
           C = (1 - ccov1 - ccovmu + negAlphaOld * negCcovFinal + (1 - hsig) * ccov1 * ccum * (2 - ccum)) * C //;regard old matrix
@@ -338,59 +268,59 @@ namespace mant {
               - negCcovFinal * Cneg; //;minus rank mu update
         } else { //; no active (negative) update
           C = (1 - ccov1 - ccovmu + (1 - hsig) * ccov1 * ccum * (2 - ccum)) * C //;regard old matrix
-              + ccov1 * pc *pc.t() //;plus rank one update
+              + ccov1 * pc * pc.t() //;plus rank one update
               + ccovmu * arpos * (arma::repmat(recombinationWeights, 1, numberOfDimensions_) % arpos.t()); //;plus rank mu update
         }
         diagC = arma::diagmat(C);
       }
-      
+
       //;Adapt sigma
       sigma = sigma * std::exp(
           std::min(1.0,
-                   (std::sqrt(arma::accu(arma::pow(ps,2)))/chiN - 1) * cs/damping)); //; Eq. (5)
-      
+          (std::sqrt(arma::accu(arma::pow(ps, 2))) / chiN - 1) * cs / damping)); //; Eq. (5)
+
       //;Update B and D from C
-      if((ccov1+ccovmu+negCcov) > 0 && countiter % 1/((ccov1+ccovmu+negCcov)*numberOfDimensions_*10) < 1) {
+      if ((ccov1 + ccovmu + negCcov) > 0 && countiter % 1 / ((ccov1 + ccovmu + negCcov) * numberOfDimensions_ * 10) < 1) {
         C = arma::symmatu(C); //;enforce symmetry to prevent complex numbers
         arma::Col<double> tmp;
-        arma::eig_sym(tmp,B,C); //;eigen decomposition, B==normalized eigenvectors
-                              //;effort: approx. 15*N matrix-vector multiplications
+        arma::eig_sym(tmp, B, C); //;eigen decomposition, B==normalized eigenvectors
+        //;effort: approx. 15*N matrix-vector multiplications
         diagD = arma::diagmat(tmp);
-        
+
         //TODO: matlab throws errors here if diagD or B contain non-finite values
-        
+
         //;limit condition of C to 1e14 + 1
-        if(arma::min(diagD) <= 0) {
-          if(stopOnWarnings) {
+        if (arma::min(diagD) <= 0) {
+          if (stopOnWarnings) {
             stopFlag = true;
           } else {
             //TODO: warning gets thrown here
             //another workaround
-            diagD(arma::find(diagD<0)) = arma::zeros(((arma::uvec)(arma::find(diagD<0))).n_elem);
-            tmp = arma::max(diagD)/1e14;
-            C = C + tmp*arma::eye(numberOfDimensions_,numberOfDimensions_);
-            diagD = diagD + tmp*arma::ones(numberOfDimensions_,1);
+            diagD(arma::find(diagD < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD < 0))).n_elem);
+            tmp = arma::max(diagD) / 1e14;
+            C = C + tmp * arma::eye(numberOfDimensions_, numberOfDimensions_);
+            diagD = diagD + tmp * arma::ones(numberOfDimensions_, 1);
           }
         }
-        if(arma::max(diagD) > 1e14*arma::min(diagD)) {
-          if(stopOnWarnings) {
+        if (arma::max(diagD) > 1e14 * arma::min(diagD)) {
+          if (stopOnWarnings) {
             stopFlag = true;
           } else {
             //TODO: warning gets thrown here
-            tmp = arma::max(diagD)/1e14 - arma::min(diagD);
-            C = C + tmp*arma::eye(numberOfDimensions_,numberOfDimensions_);
-            diagD = diagD + tmp*arma::ones(numberOfDimensions_,1);
+            tmp = arma::max(diagD) / 1e14 - arma::min(diagD);
+            C = C + tmp * arma::eye(numberOfDimensions_, numberOfDimensions_);
+            diagD = diagD + tmp * arma::ones(numberOfDimensions_, 1);
           }
         }
-        
+
         diagC = arma::diagmat(C);
         diagD = arma::sqrt(diagD); //;D contains standard deviations now
-        BD = B % arma::repmat(diagD.t(),numberOfDimensions_,1);
+        BD = B % arma::repmat(diagD.t(), numberOfDimensions_, 1);
       }
-      
+
       //TODO: skipped a code block to "Align/rescale order of magnitude of scales of sigma and C for nicer output"
       //TODO: skipped another code block for flgDiagonalOnly
-      
+
       //;----- numerical error management -----
       //TODO: control these skips
       //;Adjust maximal coordinate axis deviations
@@ -399,127 +329,115 @@ namespace mant {
       //this also should never happen because of positive definite
       //the threshold here is 0
       //;Adjust too low coordinate axis deviations
-      if(arma::any(xmean == xmean + 0.2*sigma*arma::sqrt(diagC))) {
-        if(stopOnWarnings) {
+      if (arma::any(xmean == xmean + 0.2 * sigma * arma::sqrt(diagC))) {
+        if (stopOnWarnings) {
           stopFlag = true;
         } else {
           //TODO: warning gets thrown here
-          C = C + (ccov1+ccovmu) * arma::diagmat(diagC % (xmean == xmean + 0.2*sigma*arma::sqrt(diagC)));
-          sigma = sigma * std::exp(0.05+cs/damping);
+          C = C + (ccov1 + ccovmu) * arma::diagmat(diagC % (xmean == xmean + 0.2 * sigma * arma::sqrt(diagC)));
+          sigma = sigma * std::exp(0.05 + cs / damping);
         }
       }
       //;Adjust step size in case of (numerical) precision problem 
-      arma::Mat<double> tmp = 0.1 * sigma*BD.col(std::floor(countiter % numberOfDimensions_));
-      if(arma::all(xmean == xmean + tmp)) {
-        if(stopOnWarnings) {
+      arma::Mat<double> tmp = 0.1 * sigma * BD.col(std::floor(countiter % numberOfDimensions_));
+      if (arma::all(xmean == xmean + tmp)) {
+        if (stopOnWarnings) {
           stopFlag = true;
         } else {
-          sigma = sigma * std::exp(0.2+cs/damping);
+          sigma = sigma * std::exp(0.2 + cs / damping);
         }
       }
       //;Adjust step size in case of equal function values (flat fitness)
-      if(fitnessSel(0) == fitnessSel(std::ceil(0.1+populationSize_/4))) {
-        if(stopOnEqualFunctionValues) {
-          EqualFunctionValues.shed_row(EqualFunctionValues.n_elem-1);
-          EqualFunctionValues.insert_rows(0,countiter);
-          if(EqualFunctionValues(EqualFunctionValues.n_elem-1) > countiter - 3 *EqualFunctionValues.n_elem) {
+      if (fitnessSel(0) == fitnessSel(std::ceil(0.1 + populationSize_ / 4))) {
+        if (stopOnEqualFunctionValues) {
+          EqualFunctionValues.shed_row(EqualFunctionValues.n_elem - 1);
+          EqualFunctionValues.insert_rows(0, countiter);
+          if (EqualFunctionValues(EqualFunctionValues.n_elem - 1) > countiter - 3 * EqualFunctionValues.n_elem) {
             stopFlag = true;
           }
         } else {
-            sigma = sigma * std::exp(0.2+cs/damping);
-          }
-      }
-      //;Adjust step size in case of equal function values
-      arma::Col<double> helpVar = fitnessHist;
-      helpVar.insert_rows(fitnessHist.n_elem,fitnessSel(0));
-      if(countiter > 2 && arma::max(helpVar)-arma::min(helpVar) == 0) {
-        if(stopOnWarnings) {
-          stopFlag = true;
-        } else {
-          sigma = sigma * std::exp(0.2+cs/damping);
+          sigma = sigma * std::exp(0.2 + cs / damping);
         }
       }
-      
+      //;Adjust step size in case of equal function values
+      //replacement of fitnesshist
+      if (countiter > 2 && arma::all(fitnessRaw - fitnessRawPreviousIteration == 0)) {
+        if (stopOnWarnings) {
+          stopFlag = true;
+        } else {
+          sigma = sigma * std::exp(0.2 + cs / damping);
+        }
+      }
+
       //;----- end numerical error management -----
-      
+
       //TODO: some output is written here, probably not need for us
-      
+
       //;Set stop flag
-      if(fitnessRaw(0) <= getAcceptableObjectiveValue()) {
+      if (fitnessRaw(0) <= getAcceptableObjectiveValue()) {
         stopFlag = true;
       }
-      if(getNumberOfIterations() >= getMaximalNumberOfIterations()) {
+      if (getNumberOfIterations() >= getMaximalNumberOfIterations()) {
         stopFlag = true;
       }
-      if(countiter >= stopMaxIter) {
+      if (countiter >= stopMaxIter) {
         stopFlag = true;
       }
-      if(arma::all(arma::all(sigma*(arma::max(arma::abs(pc),arma::sqrt(diagC))) < toleranceX))) {
+      if (arma::all(arma::all(sigma * (arma::max(arma::abs(pc), arma::sqrt(diagC))) < toleranceX))) {
         stopFlag = true;
       }
-      if(arma::any(sigma*arma::sqrt(diagC) > toleranceUpX)) {
+      if (arma::any(sigma * arma::sqrt(diagC) > toleranceUpX)) {
         stopFlag = true;
       }
-      if(sigma*arma::max(diagD) == 0) {//;should never happen
+      if (sigma * arma::max(diagD) == 0) {//;should never happen
         stopFlag = true;
       }
-      arma::Col<double> helpStop = fitnessHist;
-      helpStop.insert_rows(0,fitnessSel);
-      if(countiter > 2 && arma::max(helpStop)-arma::min(helpStop) <= toleranceFun) {
+      //TODO: with removal of fitnesshist two stops were removed completely and one got changed
+      //replacement of fitnesshist
+      if (countiter > 2 && arma::all(fitnessRaw - fitnessRawPreviousIteration <= toleranceFun)) {
         stopFlag = true;
       }
-      if(countiter >= fitnessHist.n_elem && arma::max(fitnessHist)-arma::min(fitnessHist) <= toleranceHistFun) {
-        stopFlag = true;
-      }
-      arma::uword l = std::floor(fitnessHistBest.n_elem/3);
-      if(1 < 2 && stopOnStagnation &&  //;leads sometimes early stop on ftablet, fcigtab
-          countiter > numberOfDimensions_ * (5+100/populationSize_) &&
-          fitnessHistBest.n_elem > 100 &&
-          arma::median(fitnessHistMedian.rows(0,l-1)) >= arma::median(fitnessHistMedian.rows(fitnessHistMedian.n_elem-1-l,fitnessHistMedian.n_elem-1)) &&
-          arma::median(fitnessHistBest.rows(0,l-1)) >= arma::median(fitnessHistBest.rows(fitnessHistBest.n_elem-1-l,fitnessHistBest.n_elem-1))) {
-        stopFlag = true;
-      }
-      
+
       //TODO: in matlab iterations and funcevals are separated and have an individual limit.
       //there is a separate check here if the number of function evals is higher than the limit
-      
+
       //matlab does some file writing here
       //also does some output generation and formatting
       //both of these are omitted in the modified version for HCMA and should
       //likewise not interest us
+      
+      //TODO: replacement of fitnesshist for plateau detection, so we can do the same checks as cmaes does
+      //but in a less refined and data heavy way
+      fitnessRawPreviousIteration = fitnessSel;
     }
-    
+
     //This is not done exactly as in matlab since
-      updateBestParameter(newGenerationValid.col(fitnessIdx(0)),fitnessRaw(0));
-      double xmeanObjValue = getObjectiveValue(std::get<0>(capToBoundary(xmean)));
-      numberOfIterations_++;
-      updateBestParameter(xmean,xmeanObjValue);
+    updateBestParameter(newGenerationValid.col(fitnessIdx(0)), fitnessRaw(0));
+    double xmeanObjValue = getObjectiveValue(std::get<0>(capToBoundary(xmean)));
+    numberOfIterations_++;
+    updateBestParameter(xmean, xmeanObjValue);
   }
-  
+
   arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getIRun() {
     return irun;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setIRun(const arma::uword irun) {
-    irun = irun;
-  }
-
-  void CovarianceMatrixAdaptationEvolutionStrategy::setLambda0(const double lambda0) {
-    lambda0 = lambda0;
+    this->irun = irun;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setStepSize(const arma::Col<double> stepSize) {
     verify(stepSize.n_elem == numberOfDimensions_, "");
-    stepSize = stepSize;
+    this->stepSize = stepSize;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setStartingPoint(const arma::Col<double> xStart) {
-    //TODO: length check
-    startingPoint = xStart;
+    verify(xStart.n_elem == numberOfDimensions_, "");
+    this->startingPoint = xStart;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setPopulationSize(const arma::uword popSize) {
-    populationSize_ = popSize;
+    this->populationSize_ = popSize;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getIncPopSize() const {
@@ -527,7 +445,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setSingleIteration(const bool DoSingleIteration) {
-    singleIteration = DoSingleIteration;
+    this->singleIteration = DoSingleIteration;
   }
 
   std::string CovarianceMatrixAdaptationEvolutionStrategy::toString() const noexcept {
@@ -539,7 +457,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCcov1(double ccov1) {
-    ccov1 = ccov1;
+    this->ccov1 = ccov1;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getCcovmu() const {
@@ -547,7 +465,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCcovmu(double ccovmu) {
-    ccovmu = ccovmu;
+    this->ccovmu = ccovmu;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getCcum() const {
@@ -555,7 +473,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCcum(double ccum) {
-    ccum = ccum;
+    this->ccum = ccum;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getCs() const {
@@ -563,7 +481,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setCs(double cs) {
-    cs = cs;
+    this->cs = cs;
   }
 
   arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getMu() const {
@@ -571,7 +489,15 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setMu(arma::uword numberOfParents) {
-    mu = numberOfParents;
+    this->mu = numberOfParents;
+  }
+
+  arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::getRecombinationWeights() {
+    return recombinationWeights;
+  }
+
+  void CovarianceMatrixAdaptationEvolutionStrategy::setRecombinationWeights(arma::Col<double> weights) {
+    this->recombinationWeights = weights;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceFun() const {
@@ -579,7 +505,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceFun(double toleranceFun) {
-    toleranceFun = toleranceFun;
+    this->toleranceFun = toleranceFun;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceHistFun() const {
@@ -587,7 +513,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceHistFun(double toleranceHistFun) {
-    toleranceHistFun = toleranceHistFun;
+    this->toleranceHistFun = toleranceHistFun;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceUpX() const {
@@ -595,7 +521,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceUpX(double toleranceUpX) {
-    toleranceUpX = toleranceUpX;
+    this->toleranceUpX = toleranceUpX;
   }
 
   double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceX() const {
@@ -603,7 +529,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceX(double toleranceX) {
-    toleranceX = toleranceX;
+    this->toleranceX = toleranceX;
   }
 
   arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::getXmean() const {
@@ -611,7 +537,7 @@ namespace mant {
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setXmean(arma::Col<double> xmean) {
-    xmean = xmean;
+    this->xmean = xmean;
   }
 
   //returns capped matrix/vector first, indexes of capped values second
@@ -655,5 +581,23 @@ namespace mant {
       }
     }
     return res;
+  }
+
+  void CovarianceMatrixAdaptationEvolutionStrategy::populationSizeChanged() {
+    lambda_last = populationSize_;
+    mu = std::floor(populationSize_ / 2.0);
+    recombinationWeights = std::log(mu + 0.5) - arma::log(arma::linspace(1, mu, mu)).t();
+
+    mueff = std::pow(arma::accu(recombinationWeights), 2) / arma::accu(arma::pow(recombinationWeights, 2)); //;variance-effective size of mu
+    recombinationWeights = arma::normalise(recombinationWeights, 1); //;normalize recombination weights array
+    //error check omitted, shouldn't happen
+
+    ccum = std::pow((numberOfDimensions_ + 2 * mueff / numberOfDimensions_) / (4 + mueff / numberOfDimensions_), -1); //;time constant for cumulation for covariance matrix
+    cs = (mueff + 2) / (numberOfDimensions_ + mueff + 3);
+
+    ccov1 = std::min(2.0, populationSize_ / 3.0) / (std::pow(numberOfDimensions_ + 1.3, 2) + mueff);
+    ccovmu = std::min(2.0, populationSize_ / 3.0) / (mueff - 2 + 1.0 / mueff) / (std::pow(numberOfDimensions_ + 2, 2) + mueff);
+
+    damping = 1 + 2 * std::max(0.0, std::sqrt((mueff - 1) / (numberOfDimensions_ + 1)) - 1) + cs;
   }
 }
