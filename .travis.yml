@@ -25,6 +25,7 @@ before_install:
 install:
   - sudo apt-get install -qq cmake;
 
+  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq valgrind; fi
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.5; fi
   
   # Armadillo C++
@@ -63,13 +64,13 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  # Builds tests an measure code coverage (GCC only)  
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
-  # Builds MPI-based tests (Clang  only)  
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
   - make -j 4
   - if [ "$CXX" == "g++" ]; then ../bin/mantellaTest ../test; fi
+  - if [ "$CXX" == "g++" ]; then valgrind --leak-check=full --error-exitcode=1 ../bin/mantellaTest ../test; fi
   - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ../bin/mantellaTest ../test; fi
+  - if [ "$CXX" == "clang++" ]; then ../.travis-check format; fi
   - sudo make install
   
 after_success:
