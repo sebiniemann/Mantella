@@ -19,12 +19,6 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --set cc /usr/bin/clang
     sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 90
     sudo update-alternatives --set c++ /usr/bin/clang++
-    
-    sudo apt-get install -qq clang-format-3.6
-    sudo apt-get install -qq ccache
-    sudo apt-get install -qq iwyu
-    sudo apt-get install -qq gdb
-    sudo apt-get install -qq lcov
   
     sudo apt-get install -qq cmake
     
@@ -41,12 +35,18 @@ Vagrant.configure(2) do |config|
     make --quiet
     sudo make --quiet install
     # Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
-    sudo find /usr/local/include/armadillo_bits . -name "*.hpp" -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} \;
+    sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} ';'
     cd ..
     rm -Rf armadillo armadillo.tar.gz
     
+    sudo apt-get install -qq libopenmpi-dev
+    
+    sudo apt-get install -qq ccache
+    sudo apt-get install -qq iwyu
+    sudo apt-get install -qq gdb
+    sudo apt-get install -qq lcov
     sudo apt-get install -qq catch
-    sudo apt-get install -qq libmpich2-dev
+    sudo apt-get install -qq clang-format-3.6
     
     # Builds Redis
     wget --quiet -O redis.tar.gz http://download.redis.io/releases/redis-3.0.3.tar.gz
