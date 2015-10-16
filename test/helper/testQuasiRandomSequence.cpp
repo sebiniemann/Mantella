@@ -29,8 +29,7 @@ TEST_CASE("quasiRandomSequence: getHaltonSequence(...)") {
 }
 
 TEST_CASE("quasiRandomSequence: getVanDerCorputSequence(...)") {
-  SECTION(
-      "Generates a Van der Corput sequence without an offset.") {
+  SECTION("Generates a Van der Corput sequence without an offset.") {
     IS_EQUAL(mant::getVanDerCorputSequence(2, 0, 5), {0.0, 1.0 / 2.0, 1.0 / 4.0, 3.0 / 4.0, 1.0 / 8.0});
   }
 

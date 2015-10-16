@@ -4,6 +4,5 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "SamlingBasedOptimisationAlgorithm") {
+TEST_CASE("SamlingBasedOptimisationAlgorithm") {
 }

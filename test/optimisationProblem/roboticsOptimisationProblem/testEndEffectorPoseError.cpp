@@ -4,6 +4,5 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "EndEffectorPoseError") {
+TEST_CASE("EndEffectorPoseError") {
 }

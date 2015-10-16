@@ -4,6 +4,5 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "SamplesSelection") {
+TEST_CASE("SamplesSelection") {
 }

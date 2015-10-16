@@ -4,6 +4,5 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "MultiLevelStewartPlatform") {
+TEST_CASE("MultiLevelStewartPlatform") {
 }
