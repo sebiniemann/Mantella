@@ -46,7 +46,19 @@ TEST_CASE("DistanceFunction") {
       CHECK(distanceFunction.getDistance(firstParameter, secondParameter) == Approx(distanceFunction.getLength(secondParameter - firstParameter)));
     }
     
-    // TODO Add exception tests
+    SECTION("Exception tests") {
+      SECTION("Throw an exception, if the number of elements within the first parameter does not match the number of elements in the second one.") {
+        const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
+        CAPTURE(differentNumberOfDimensions);
+        
+        arma::Col<double> firstParameter = getContinuousRandomNumbers(numberOfDimensions);
+        CAPTURE(firstParameter);
+        arma::Col<double> secondParameter = getContinuousRandomNumbers(differentNumberOfDimensions);
+        CAPTURE(secondParameter);
+        
+        CHECK_THROWS_AS(distanceFunction.getDistance(firstParameter, secondParameter), std::logic_error);
+      }
+    }
   }
 
   SECTION(".getLength") {
