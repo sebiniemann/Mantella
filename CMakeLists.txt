@@ -139,10 +139,6 @@ else()
   message(STATUS "- Excluding OpenMP support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=On' to add this.")
 endif()
-    
-# if(CMAKE_COMPILER_IS_CLANGXX)
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
-# endif()
 
 # ----------------
 # BUILDING LIBRARY
