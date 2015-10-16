@@ -14,7 +14,7 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
   echo "${FILES}" | while read file; do
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
-    if [[ `clang-format-3.6 -output-replacements-xml "${file}" | grep "<replacement " | wc -l` -ne 0 ]]; then
+    if [[ `clang-format -output-replacements-xml "${file}" | grep "<replacement " | wc -l` -ne 0 ]]; then
       echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} is not properly formatted. Please run '${GREEN_TEXT_COLOR}clang-format -i ${file}${RESET_TEXT_COLOR}'.";
     else
       printf "\r";
