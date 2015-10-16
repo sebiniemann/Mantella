@@ -23,12 +23,11 @@ before_install:
   - sudo apt-get update -qq
   
 install:
+  # Prerequirements (including optional features)
+  ## CMake
   - sudo apt-get install -qq cmake;
-
-  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq valgrind; fi
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.5; fi
   
-  # Armadillo C++
+  ## Armadillo C++
   - sudo apt-get install -qq libblas-dev
   - sudo apt-get install -qq liblapack-dev
   - sudo apt-get install -qq libopenblas-dev
@@ -41,18 +40,21 @@ install:
   - sudo make --quiet install
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
-
-  # Catch
-  - sudo apt-get install -qq catch
   
-  # MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
-  - sudo apt-get install -qq libmpich2-dev
+  ## MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
+  - sudo apt-get install -qq liblibmpich2-dev
 
-  # LCOV
-  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi
-
-  # LCOV to Coveralls conversion + upload
-  - if [ "$CXX" == "g++" ]; then gem install coveralls-lcov; fi
+  
+  # Testing
+  - sudo apt-get install -qq catch
+  - sudo apt-get install -qq clang-format-3.6
+  ## Adds clang-format as an alternative to clang-format-3.6
+  - sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.5 100
+  - sudo apt-get install -qq iwyu
+  - sudo apt-get install -qq valgrind
+  - sudo apt-get install -qq lcov
+  ## Using coveralls to store and visualise the code coverage
+  - gem install coveralls-lcov
   
 addons:
   coverity_scan:
@@ -64,14 +66,26 @@ addons:
     branch_pattern: coverity_scan
 
 script:
+  # Test matrix
+  ## GCC
+  ## - Unit tests with OpenMP support
+  ## - Code coverage
+  ## - Memory leaks
+  ## - Installation
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
-  - make -j 4
+  - if [ "$CXX" == "g++" ]; then make -j 4; fi
   - if [ "$CXX" == "g++" ]; then ../bin/mantellaTest ../test; fi
   - if [ "$CXX" == "g++" ]; then valgrind --leak-check=full --error-exitcode=1 ../bin/mantellaTest ../test; fi
+  - if [ "$CXX" == "g++" ]; then sudo make install; fi
+  
+  # Clang
+  ## - Unit tests with MPI support
+  ## - Code format
+  ## - Include rules
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
+  - if [ "$CXX" == "clang++" ]; then make -j 4; fi
   - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ../bin/mantellaTest ../test; fi
   - if [ "$CXX" == "clang++" ]; then ../.travis-check format; fi
-  - sudo make install
   
 after_success:
   - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi
