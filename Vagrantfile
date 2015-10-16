@@ -20,13 +20,14 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 90
     sudo update-alternatives --set c++ /usr/bin/clang++
   
+    # Prerequirements (including requirements for additional features)
+    ## Cmake
     sudo apt-get install -qq cmake
     
+    ## Armadillo C++
     sudo apt-get install -qq libblas-dev
     sudo apt-get install -qq liblapack-dev
     sudo apt-get install -qq libopenblas-dev
-    
-    # Builds Armadillo C++
     wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.600.2.tar.gz
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
@@ -34,21 +35,15 @@ Vagrant.configure(2) do |config|
     cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
     make --quiet
     sudo make --quiet install
-    # Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
+    ### Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
     sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} ';'
     cd ..
     rm -Rf armadillo armadillo.tar.gz
     
+    ## MPI
     sudo apt-get install -qq libopenmpi-dev
     
-    sudo apt-get install -qq ccache
-    sudo apt-get install -qq iwyu
-    sudo apt-get install -qq gdb
-    sudo apt-get install -qq lcov
-    sudo apt-get install -qq catch
-    sudo apt-get install -qq clang-format-3.6
-    
-    # Builds Redis
+    ## Redis database
     wget --quiet -O redis.tar.gz http://download.redis.io/releases/redis-3.0.3.tar.gz
     mkdir redis
     tar -xzf redis.tar.gz -C ./redis --strip-components=1
@@ -57,5 +52,27 @@ Vagrant.configure(2) do |config|
     sudo make --quiet install
     cd ..
     rm -Rf redis.tar.gz
+    
+    
+    # Packages required for testing
+    ## Unit tests
+    sudo apt-get install -qq catch
+    
+    ## Code style
+    sudo apt-get install -qq clang-format-3.6
+    ### Adds clang-format as an alternative to clang-format-3.6
+    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
+    
+    ## Include rules
+    sudo apt-get install -qq iwyu
+    
+    ## Memory leaks
+    sudo apt-get install -qq valgrind
+    
+    
+    # Useful development tools
+    sudo apt-get install -qq ccache
+    sudo apt-get install -qq gdb
+    sudo apt-get install -qq lcov
   SHELL
 end
