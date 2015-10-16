@@ -19,7 +19,7 @@ class TestPolynomialCorrelationFunction : public mant::PolynomialCorrelationFunc
 };
 
 TEST_CASE("PolynomialCorrelationFunction") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
 
   const arma::uword polynomialOrder = std::uniform_int_distribution<arma::uword>(1, 3)(mant::Rng::getGenerator());
@@ -37,7 +37,7 @@ TEST_CASE("PolynomialCorrelationFunction") {
     SECTION("Returns the first order polynomial correlation coefficient.") {
       TestPolynomialCorrelationFunction firstOrderPolynomialCorrelationFunction(numberOfDimensions, 1);
     
-      arma::Col<double> parameter = arma::max(arma::zeros(numberOfDimensions), 1 - arma::abs(arma::normalise(getRandomValues(numberOfDimensions, 1))));
+      arma::Col<double> parameter = arma::max(arma::zeros(numberOfDimensions), 1 - arma::abs(arma::normalise(getContinuousRandomNumbers(numberOfDimensions))));
       CAPTURE(parameter);
       
       CHECK(firstOrderPolynomialCorrelationFunction.getCorrelationCoefficientImplementation(parameter) == Approx(arma::prod(parameter)));
@@ -46,7 +46,7 @@ TEST_CASE("PolynomialCorrelationFunction") {
     SECTION("Returns the second order polynomial correlation coefficient.") {
       TestPolynomialCorrelationFunction secondOrderPolynomialCorrelationFunction(numberOfDimensions, 2);
     
-      arma::Col<double> parameter = arma::min(arma::ones(numberOfDimensions), arma::abs(arma::normalise(getRandomValues(numberOfDimensions, 1))));
+      arma::Col<double> parameter = arma::min(arma::ones(numberOfDimensions), arma::abs(arma::normalise(getContinuousRandomNumbers(numberOfDimensions))));
       CAPTURE(parameter);
       
       CHECK(secondOrderPolynomialCorrelationFunction.getCorrelationCoefficientImplementation(parameter) == Approx(arma::prod(1 - 1.5 * parameter + 0.5 * arma::pow(parameter, 3))));
@@ -55,7 +55,7 @@ TEST_CASE("PolynomialCorrelationFunction") {
     SECTION("Returns the third order polynomial correlation coefficient.") {
       TestPolynomialCorrelationFunction thirdOrderPolynomialCorrelationFunction(numberOfDimensions, 3);
     
-      arma::Col<double> parameter = arma::min(arma::ones(numberOfDimensions), arma::abs(arma::normalise(getRandomValues(numberOfDimensions, 1))));
+      arma::Col<double> parameter = arma::min(arma::ones(numberOfDimensions), arma::abs(arma::normalise(getContinuousRandomNumbers(numberOfDimensions))));
       CAPTURE(parameter);
       
       CHECK(thirdOrderPolynomialCorrelationFunction.getCorrelationCoefficientImplementation(parameter) == Approx(arma::prod(static_cast<arma::Col<double>>(1.0 - 3.0 * arma::pow(parameter, 2) + 2.0 * arma::pow(parameter, 3)))));

@@ -25,7 +25,7 @@ TEST_CASE("verify") {
 }
 
 TEST_CASE("isRotationMatrix") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
   
   arma::Mat<double> rotationMatrix = mant::getRandomRotationMatrix(numberOfDimensions);
@@ -62,10 +62,10 @@ TEST_CASE("isRotationMatrix") {
 }
 
 TEST_CASE("isPermutation") {
-  const arma::uword numberOfPermutations = getRandomNumberOfValues(2);
+  const arma::uword numberOfPermutations = 2 + getDiscreteRandomNumber();
   CAPTURE(numberOfPermutations);
 
-  const arma::uword numberOfElements = getRandomNumberOfValues(numberOfPermutations);
+  const arma::uword numberOfElements = numberOfPermutations + getDiscreteRandomNumber();
   CAPTURE(numberOfElements);
     
   arma::Col<arma::uword> permutation = mant::getRandomPermutation(numberOfElements, numberOfPermutations);
@@ -108,7 +108,7 @@ TEST_CASE("isPermutation") {
 
 TEST_CASE("isDimensionallyConsistent") {
   SECTION("Returns true, if the number of dimensions is consistent over all samples.") {
-    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
   
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
@@ -126,7 +126,7 @@ TEST_CASE("isDimensionallyConsistent") {
 
     // Generate an inconsistent set of samples by concatenating two cached sampling sets of dimensionally different optimisation problems.
     // The first optimisation problem
-    const arma::uword firstNumberOfDimensions = getRandomNumberOfValues();
+    const arma::uword firstNumberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(firstNumberOfDimensions);
 
     std::shared_ptr<mant::OptimisationProblem> firstOptimisationProblem(new mant::bbob::SphereFunction(firstNumberOfDimensions));
@@ -134,7 +134,7 @@ TEST_CASE("isDimensionallyConsistent") {
     firstOptimisationAlgorithm.optimise();
 
     // The second one
-    const arma::uword secondNumberOfDimensions = getDifferentRandomNumberOfValues(firstNumberOfDimensions);
+    const arma::uword secondNumberOfDimensions = getDifferentDiscreteRandomNumber(firstNumberOfDimensions);
     CAPTURE(secondNumberOfDimensions);
 
     std::shared_ptr<mant::OptimisationProblem> secondOptimisationProblem(new mant::bbob::SphereFunction(secondNumberOfDimensions));

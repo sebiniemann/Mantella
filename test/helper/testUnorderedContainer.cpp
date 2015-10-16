@@ -27,10 +27,10 @@ TEST_CASE("unorderedContainer: Hash") {
 
 TEST_CASE("unorderedContainer: IsKeyEqual") {
   SECTION("Returns true, if both vectors are equal.") {
-    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
     
-    const arma::Col<double>& parameter = getRandomValues(numberOfDimensions, 1);
+    const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
     CAPTURE(parameter);
   
     mant::IsEqual isEqual;
@@ -38,12 +38,12 @@ TEST_CASE("unorderedContainer: IsKeyEqual") {
   }
 
   SECTION("Returns false, if not all elements within the two vectors are equal.") {
-    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
     
-    const arma::Col<double>& firstParameter = getRandomValues(numberOfDimensions, 1);
+    const arma::Col<double>& firstParameter = getContinuousRandomNumbers(numberOfDimensions);
     CAPTURE(firstParameter);
-    const arma::Col<double>& secondParameter = firstParameter - getRandomValues(numberOfDimensions, 1) - 1;
+    const arma::Col<double>& secondParameter = firstParameter - getContinuousRandomNumbers(numberOfDimensions) - 1;
     CAPTURE(secondParameter);
     
     mant::IsEqual isEqual;
@@ -51,14 +51,14 @@ TEST_CASE("unorderedContainer: IsKeyEqual") {
   }
 
   SECTION("Returns false, if the size of the two vectors differ.") {
-    const arma::uword firstNumberOfDimensions = getRandomNumberOfValues();
+    const arma::uword firstNumberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(firstNumberOfDimensions);
-    const arma::Col<double>& firstParameter = getRandomValues(firstNumberOfDimensions, 1);
+    const arma::Col<double>& firstParameter = getContinuousRandomNumbers(firstNumberOfDimensions);
     CAPTURE(firstParameter);
     
-    const arma::uword secondNumberOfDimensions = getDifferentRandomNumberOfValues(firstNumberOfDimensions);
+    const arma::uword secondNumberOfDimensions = getDifferentDiscreteRandomNumber(firstNumberOfDimensions);
     CAPTURE(secondNumberOfDimensions);
-    const arma::Col<double>& secondParameter = getRandomValues(secondNumberOfDimensions, 1);
+    const arma::Col<double>& secondParameter = getContinuousRandomNumbers(secondNumberOfDimensions);
     CAPTURE(secondParameter);
     
     mant::IsEqual isEqual;

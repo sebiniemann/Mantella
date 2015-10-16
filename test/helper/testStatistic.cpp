@@ -11,7 +11,7 @@
 
 TEST_CASE("getMedianAbsoluteError") {
   SECTION("Returns the median absolute error.") {
-    const arma::Row<double>& randomValues = getRandomValues(1001);
+    const arma::Row<double>& randomValues = getContinuousRandomNumbers(1001).t();
     CAPTURE(arma::sort(randomValues, "descend"));
   
     CHECK(mant::getMedianAbsoluteError(randomValues) == Approx(mant::getMedian(arma::abs(randomValues - static_cast<arma::Row<double>>(arma::sort(randomValues))(500)))));
@@ -19,7 +19,7 @@ TEST_CASE("getMedianAbsoluteError") {
 }
 
 TEST_CASE("getPercentile") {
-  const arma::Row<double>& randomValues = getRandomValues(1000);
+  const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
   CAPTURE(arma::sort(randomValues, "descend"));
     
   SECTION("Returns the percentile.") {
@@ -38,7 +38,7 @@ TEST_CASE("getPercentile") {
 }
 
 TEST_CASE("getDecile") {
-  const arma::Row<double>& randomValues = getRandomValues(1000);
+  const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
   CAPTURE(arma::sort(randomValues, "descend"));
     
   SECTION("Returns the decile.") {
@@ -57,7 +57,7 @@ TEST_CASE("getDecile") {
 }
 
 TEST_CASE("getQuartile") {
-    const arma::Row<double>& randomValues = getRandomValues(1000);
+    const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
     CAPTURE(arma::sort(randomValues, "descend"));
   SECTION("Returns the quartile.") {
   
@@ -77,7 +77,7 @@ TEST_CASE("getQuartile") {
 
 TEST_CASE("getMedian") {
   SECTION("Returns the median.") {
-    const arma::Row<double>& randomValues = getRandomValues(1001);
+    const arma::Row<double>& randomValues = getContinuousRandomNumbers(1001).t();
     CAPTURE(arma::sort(randomValues, "descend"));
   
     CHECK(mant::getMedian(randomValues) == Approx(static_cast<arma::Row<double>>(arma::sort(randomValues, "descend"))(500)));

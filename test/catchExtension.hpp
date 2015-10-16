@@ -12,20 +12,26 @@
 
 extern std::string testDirectory;
   
-arma::uword getRandomNumberOfValues();
+arma::uword getDiscreteRandomNumber();
 
-arma::uword getRandomNumberOfValues(
-    const arma::uword minimalNumberOfDimensions);
+arma::uword getDifferentDiscreteRandomNumber(
+    const arma::uword discreteRandomNumber);
 
-arma::uword getDifferentRandomNumberOfValues(
+double getContinuousRandomNumber();
+
+arma::Col<arma::uword> getDiscreteRandomNumbers(
     const arma::uword numberOfDimensions);
 
-arma::Row<double> getRandomValues(
+arma::Col<double> getContinuousRandomNumbers(
     const arma::uword numberOfDimensions);
 
-arma::Mat<double> getRandomValues(
-    const arma::uword numberOfDimensions,
-    const arma::uword numberOfSamples);
+arma::Mat<arma::uword> getDiscreteRandomNumbers(
+    const arma::uword numberOfRows,
+    const arma::uword numberOfColumns);
+
+arma::Mat<double> getContinuousRandomNumbers(
+    const arma::uword numberOfRows,
+    const arma::uword numberOfColumns);
 
 void HAS_SAME_PARAMETERS(
     const std::vector<arma::Col<arma::uword>>& actualParameters,

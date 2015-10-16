@@ -22,10 +22,10 @@ class TestPNorm : public mant::PNorm {
 };
 
 TEST_CASE("PNorm") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
       
-  const arma::uword p = getRandomNumberOfValues(1);
+  const arma::uword p = 1 + getDiscreteRandomNumber();
   CAPTURE(p);
 
   TestPNorm pNorm(numberOfDimensions, p);
@@ -38,7 +38,7 @@ TEST_CASE("PNorm") {
 
   SECTION(".getLengthImplementation") {
     SECTION("Returns the p-norm-based length of a vector.") {
-      arma::Col<double> parameter = getRandomValues(numberOfDimensions, 1);
+      arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
       CHECK(pNorm.getLengthImplementation(parameter) == Approx(arma::norm(parameter, p)));

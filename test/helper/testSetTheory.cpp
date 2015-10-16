@@ -52,10 +52,10 @@ TEST_CASE("getCombinations") {
 
   SECTION("Exception tests") {
     SECTION("Throws an exception, if the combination size is larger then the number of elements.") {
-      const arma::uword numberOfElements = getRandomNumberOfValues();
+      const arma::uword numberOfElements = getDiscreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::uword combinationSize = getRandomNumberOfValues(numberOfElements + 1);
+      const arma::uword combinationSize = 1 + numberOfElements + getDiscreteRandomNumber();
       CAPTURE(combinationSize);
     
       CHECK_THROWS_AS(mant::getCombinations(numberOfElements, combinationSize), std::logic_error);

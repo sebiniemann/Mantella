@@ -19,14 +19,14 @@ class TestGaussianCorrelationFunction : public mant::GaussianCorrelationFunction
 };
 
 TEST_CASE("GaussianCorrelationFunction") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
   
   TestGaussianCorrelationFunction gaussianCorrelationFunction(numberOfDimensions);
   
   SECTION(".getCorrelationCoefficientImplementation") {
     SECTION("Returns the exponential correlation coefficient.") {
-      arma::Col<double> parameter = arma::abs(arma::normalise(getRandomValues(numberOfDimensions, 1)));
+      arma::Col<double> parameter = arma::abs(arma::normalise(getContinuousRandomNumbers(numberOfDimensions)));
       CAPTURE(parameter);
       
       CHECK(gaussianCorrelationFunction.getCorrelationCoefficientImplementation(parameter) == Approx(arma::prod(static_cast<arma::Col<double>>(arma::exp(-arma::pow(parameter, 2))))));

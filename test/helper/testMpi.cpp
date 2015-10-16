@@ -20,10 +20,10 @@ TEST_CASE("mpiGetBestSample") {
 
 #if defined(SUPPORT_MPI)
   SECTION("Sets the second parameter to the pair with the best (lowest) objective value.") {
-    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
 
-    const arma::uword numberOfSamples = getRandomNumberOfValues();
+    const arma::uword numberOfSamples = getDiscreteRandomNumber();
     CAPTURE(numberOfSamples);
 
     MPI_Datatype MANT_MPI_PARAMETER;
@@ -38,15 +38,15 @@ TEST_CASE("mpiGetBestSample") {
     // The second input
     arma::Mat<double> secondMpiInput(2 + numberOfDimensions, numberOfSamples);
     secondMpiInput.row(0).fill(static_cast<double>(numberOfDimensions));
-    secondMpiInput.tail_rows(1 + numberOfDimensions) = getRandomValues(1 + numberOfDimensions, numberOfSamples);
+    secondMpiInput.tail_rows(1 + numberOfDimensions) = getContinuousRandomNumbers(1 + numberOfDimensions, numberOfSamples);
     CAPTURE(secondMpiInput);
 
     // The first input
     arma::Mat<double> firstMpiInput(2 + numberOfDimensions, numberOfSamples);
     firstMpiInput.row(0).fill(static_cast<double>(numberOfDimensions));
     // Ensure that the first input has a lower objective value.
-    firstMpiInput.row(1) = secondMpiInput.row(1) - getRandomValues(numberOfSamples) - 1;
-    firstMpiInput.tail_rows(numberOfDimensions) = getRandomValues(numberOfDimensions, numberOfSamples);
+    firstMpiInput.row(1) = secondMpiInput.row(1) - getContinuousRandomNumbers(numberOfSamples) - 1;
+    firstMpiInput.tail_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfSamples);
     CAPTURE(firstMpiInput);
 
     // MPI uses singed integers, instead of unsigned ones.

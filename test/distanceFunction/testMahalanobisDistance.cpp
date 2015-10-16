@@ -22,10 +22,10 @@ class TestMahalanobisDistance : public mant::MahalanobisDistance {
 };
 
 TEST_CASE("MahalanobisDistance") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
       
-  arma::Mat<double> covariance = getRandomValues(numberOfDimensions, numberOfDimensions);
+  arma::Mat<double> covariance = getContinuousRandomNumbers(numberOfDimensions, numberOfDimensions);
   covariance *= covariance.t();
   covariance= arma::symmatu(covariance);
   CAPTURE(covariance);
@@ -40,7 +40,7 @@ TEST_CASE("MahalanobisDistance") {
 
   SECTION(".getLengthImplementation") {
     SECTION("Returns the mahalanobis-distance-based length of a vector.") {
-      arma::Col<double> parameter = getRandomValues(numberOfDimensions, 1);
+      arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
       CHECK(mahalanobisDistance.getLengthImplementation(parameter) == Approx(std::sqrt(arma::dot(parameter, arma::solve(covariance, parameter)))));

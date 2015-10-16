@@ -27,17 +27,17 @@ TEST_CASE("getOrdinaryLeastSquaresEstimate") {
   }
 
   SECTION("Returns the exact coefficients for a linear function.") {
-    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
 
-    const arma::uword numberOfParameters = numberOfDimensions + getRandomNumberOfValues();
+    const arma::uword numberOfParameters = numberOfDimensions + getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
     
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
-    parameters.head_rows(numberOfDimensions) = getRandomValues(numberOfDimensions, numberOfParameters);
+    parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
-    const arma::Col<double>& coefficients = getRandomValues(numberOfDimensions + 1, 1);
+    const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
     
     arma::Row<double> objectiveValues(numberOfParameters);
@@ -51,17 +51,17 @@ TEST_CASE("getOrdinaryLeastSquaresEstimate") {
 
   SECTION("Exception tests") {
     SECTION("Throws an exception, if the number of parameters is not equal to the number of objective values.") {
-      const arma::uword numberOfDimensions = getRandomNumberOfValues();
+      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
-      const arma::uword numberOfParameters = getRandomNumberOfValues();
+      const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
-      const arma::Mat<double>& parameters = getRandomValues(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
 
-      const arma::uword numberOfObjectiveValues = getDifferentRandomNumberOfValues(numberOfParameters);
+      const arma::uword numberOfObjectiveValues = getDifferentDiscreteRandomNumber(numberOfParameters);
       CAPTURE(numberOfObjectiveValues);
-      const arma::Row<double>& objectiveValues = getRandomValues(numberOfObjectiveValues);
+      const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfObjectiveValues).t();
       CAPTURE(objectiveValues);
 
       CHECK_THROWS_AS(mant::getOrdinaryLeastSquaresEstimate(parameters, objectiveValues), std::logic_error);
@@ -75,17 +75,17 @@ TEST_CASE("getGeneralisedLeastSquaresEstimate") {
   }
 
   SECTION("Returns the exact coefficients for a linear function.") {
-    const arma::uword numberOfDimensions = getRandomNumberOfValues();
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
 
-    const arma::uword numberOfParameters = numberOfDimensions + getRandomNumberOfValues();
+    const arma::uword numberOfParameters = numberOfDimensions + getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
     
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
-    parameters.head_rows(numberOfDimensions) = getRandomValues(numberOfDimensions, numberOfParameters);
+    parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
-    const arma::Col<double>& coefficients = getRandomValues(numberOfDimensions + 1, 1);
+    const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
     
     arma::Row<double> objectiveValues(numberOfParameters);
@@ -101,58 +101,58 @@ TEST_CASE("getGeneralisedLeastSquaresEstimate") {
 
   SECTION("Exception tests") {
     SECTION("Throws an exception, if the number of parameters is not equal to the number of objective values.") {
-      const arma::uword numberOfDimensions = getRandomNumberOfValues();
+      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
-      const arma::uword numberOfParameters = getRandomNumberOfValues();
+      const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
-      const arma::Mat<double>& parameters = getRandomValues(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
 
-      const arma::uword numberOfObjectiveValues = getDifferentRandomNumberOfValues(numberOfParameters);
+      const arma::uword numberOfObjectiveValues = getDifferentDiscreteRandomNumber(numberOfParameters);
       CAPTURE(numberOfObjectiveValues);
-      const arma::Row<double>& objectiveValues = getRandomValues(numberOfObjectiveValues);
+      const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfObjectiveValues).t();
       CAPTURE(objectiveValues);
 
-      const arma::Mat<double>& variance = getRandomValues(numberOfParameters, numberOfParameters);
+      const arma::Mat<double>& variance = getContinuousRandomNumbers(numberOfParameters, numberOfParameters);
 
       CHECK_THROWS_AS(mant::getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, variance), std::logic_error);
     }
 
     SECTION("Throws an exception, if the variance matrix is not square.") {
-      const arma::uword numberOfDimensions = getRandomNumberOfValues();
+      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
-      const arma::uword numberOfParameters = getRandomNumberOfValues();
+      const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
-      const arma::Mat<double>& parameters = getRandomValues(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
 
-      const arma::Row<double>& objectiveValues = getRandomValues(numberOfParameters);
+      const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfParameters).t();
       CAPTURE(objectiveValues);
 
-      const arma::Mat<double>& variance = getRandomValues(numberOfParameters, getDifferentRandomNumberOfValues(numberOfParameters));
+      const arma::Mat<double>& variance = getContinuousRandomNumbers(numberOfParameters, getDifferentDiscreteRandomNumber(numberOfParameters));
       CAPTURE(variance);
 
       CHECK_THROWS_AS(mant::getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, variance), std::logic_error);
     }
     
     SECTION("Throws an exception, if the number of rows of the variance matrix is not equal to the number of parameters.") {
-      const arma::uword numberOfDimensions = getRandomNumberOfValues();
+      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
-      const arma::uword numberOfParameters = getRandomNumberOfValues();
+      const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
-      const arma::Mat<double>& parameters = getRandomValues(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
 
-      const arma::Row<double>& objectiveValues = getRandomValues(numberOfParameters);
+      const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfParameters).t();
       CAPTURE(objectiveValues);
 
 
-      const arma::uword numberOfVarianceDimensions = getDifferentRandomNumberOfValues(numberOfParameters);
+      const arma::uword numberOfVarianceDimensions = getDifferentDiscreteRandomNumber(numberOfParameters);
       CAPTURE(numberOfVarianceDimensions);
-      const arma::Mat<double>& variance = getRandomValues(numberOfVarianceDimensions, numberOfVarianceDimensions);
+      const arma::Mat<double>& variance = getContinuousRandomNumbers(numberOfVarianceDimensions, numberOfVarianceDimensions);
       CAPTURE(variance);
 
       CHECK_THROWS_AS(mant::getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, variance), std::logic_error);
