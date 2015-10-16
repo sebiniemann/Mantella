@@ -42,7 +42,7 @@ install:
   - rm -Rf armadillo armadillo.tar.gz
   
   ## MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
-  - sudo apt-get install -qq liblibmpich2-dev
+  - sudo apt-get install -qq libmpich2-dev
 
   
   # Testing
