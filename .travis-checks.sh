@@ -5,6 +5,11 @@ GREEN_TEXT_COLOR=$(tput setaf 2)
 MAGENTA_TEXT_COLOR=$(tput setaf 5)
 RESET_TEXT_COLOR=$(tput sgr0)
 
+if [ ! -f "./include/mantella" ]; then
+    echo "${RED_TEXT_COLOR}Could not find Mantella. Make sure to start this script within Mantella's root path.${RESET_TEXT_COLOR}";
+    exit 1;
+fi;
+
 if [ -z "${1}" ] || [ "$1" == "format" ]; then
   echo "${MAGENTA_TEXT_COLOR}Checking format rules${RESET_TEXT_COLOR}";
   FILES=$(find src include -type f);
