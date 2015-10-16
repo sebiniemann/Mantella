@@ -28,6 +28,8 @@ Vagrant.configure(2) do |config|
   
     sudo apt-get install -qq cmake
     
+    sudo apt-get install -qq libblas-dev
+    sudo apt-get install -qq liblapack-dev
     sudo apt-get install -qq libopenblas-dev
     
     # Builds Armadillo C++
