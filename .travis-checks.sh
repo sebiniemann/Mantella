@@ -36,8 +36,8 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
   echo "${FILES}" | while read file; do
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
-    OUTPUT=$(iwyu -std=c++11 -Weverything -Wno-c++98-compat -Wno-weak-vtables -Wno-exit-time-destructors -Wno-global-constructors -Wno-padded -Wno-unused-parameter -I include ${file} 2>&1);
-    if [[ ! "${OUTPUT}" =~ " has correct " ]]; then
+    OUTPUT=$(iwyu -std=c++11 -I include ${file} 2>&1);
+    if [[ "${OUTPUT}" =~ "full include-list for" ]]; then
       echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} did not pass the include rules. Please run '${GREEN_TEXT_COLOR}iwyu -std=c++11 -I include ${file}${RESET_TEXT_COLOR}'.";
     else
       printf "\r";
