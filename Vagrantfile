@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
-    sudo apt-get update
+    sudo apt-get update -qq
     
     sudo apt-get install -qq htop
     sudo apt-get install -qq git
@@ -20,8 +20,8 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 90
     sudo update-alternatives --set c++ /usr/bin/clang++
   
-    # Prerequirements (including requirements for additional features)
-    ## Cmake
+    # Prerequirements (including optional features)
+    ## CMake
     sudo apt-get install -qq cmake
     
     ## Armadillo C++
@@ -40,8 +40,8 @@ Vagrant.configure(2) do |config|
     cd ..
     rm -Rf armadillo armadillo.tar.gz
     
-    ## MPI
-    sudo apt-get install -qq libopenmpi-dev
+    ## MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
+    sudo apt-get install -qq libmpich2-dev
     
     ## Redis database
     wget --quiet -O redis.tar.gz http://download.redis.io/releases/redis-3.0.3.tar.gz
@@ -54,25 +54,18 @@ Vagrant.configure(2) do |config|
     rm -Rf redis.tar.gz
     
     
-    # Packages required for testing
-    ## Unit tests
+    # Testing
     sudo apt-get install -qq catch
-    
-    ## Code style
     sudo apt-get install -qq clang-format-3.6
-    ### Adds clang-format as an alternative to clang-format-3.6
+    ## Adds clang-format as an alternative to clang-format-3.6
     sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
-    
-    ## Include rules
     sudo apt-get install -qq iwyu
-    
-    ## Memory leaks
     sudo apt-get install -qq valgrind
+    sudo apt-get install -qq lcov
     
     
     # Useful development tools
     sudo apt-get install -qq ccache
     sudo apt-get install -qq gdb
-    sudo apt-get install -qq lcov
   SHELL
 end
