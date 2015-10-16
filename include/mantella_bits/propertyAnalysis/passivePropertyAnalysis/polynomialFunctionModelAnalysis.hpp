@@ -22,13 +22,13 @@ namespace mant {
         const std::shared_ptr<RegressionFunction> regressionFunction);
 
     arma::Col<double> getCoefficients() const;
-    arma::Col<double> getResiduals() const;
+    arma::Row<double> getResiduals() const;
 
     std::string toString() const override;
 
    protected:
     arma::Col<double> coefficients_;
-    arma::Col<double> residuals_;
+    arma::Row<double> residuals_;
 
     void analyseImplementation() override;
   };

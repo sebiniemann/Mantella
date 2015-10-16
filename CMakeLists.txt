@@ -11,7 +11,7 @@ string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELL
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
 # Add additional cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
 option(SUPPORT_OMP "Add OpenMP support" ON)
@@ -19,12 +19,10 @@ option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
-option(RUN_IWYU "Run include-what-you-use" OFF)
 
 mark_as_advanced(
   BUILD_TESTS
   MEASURE_CODE_COVERAGE
-  RUN_IWYU
 )
 
 message(STATUS "") 
@@ -81,16 +79,10 @@ if(CMAKE_COMPILER_IS_CLANGXX)
 elseif(CMAKE_COMPILER_IS_GNUCXX)
   message(STATUS "- Detected GCC compiler.")
 else()
-  message(STATUS "- Detected currently unsupported compiler: ${CMAKE_CXX_COMPILER_ID}.")
+  message(STATUS "- Detected neither Clang, nor GCC, but '${CMAKE_CXX_COMPILER_ID}' instead. Compiler flags may not be optimal.")
 endif()
-  
-if(RUN_IWYU)
-  message(STATUS "- Running IWYU (instead of generating an excecutable/library).")
-  message(STATUS "  - Use 'cmake ... -DRUN_IWYU=Off' to exclude this.")
-  include(CMakeForceCompiler)
-  CMAKE_FORCE_C_COMPILER(include-what-you-use CLANG)
-  CMAKE_FORCE_CXX_COMPILER(include-what-you-use CLANG)
-else()
+
+if(CMAKE_COMPILER_IS_GNUCXX)
   # Use ccache to speed up recompilation, if possible. 
   find_program(CCACHE_FOUND ccache)
   if(CCACHE_FOUND)
@@ -133,10 +125,11 @@ else()
 endif()
 
 if(SUPPORT_OMP)
-  message(STATUS "- Adding OpenMP support.")
+  message(STATUS "- Trying to add OpenMP support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=Off' to exclude this.")
   find_package(OpenMP)
   if (OPENMP_FOUND)
+    message(STATUS "- Added OpenMP support.")
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
   else()
@@ -147,9 +140,9 @@ else()
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=On' to add this.")
 endif()
     
-if(CMAKE_COMPILER_IS_CLANGXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
-endif()
+# if(CMAKE_COMPILER_IS_CLANGXX)
+  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
+# endif()
 
 # ----------------
 # BUILDING LIBRARY
@@ -205,7 +198,7 @@ add_library(mantella SHARED
   # Distance functions
   src/distanceFunction.cpp
   src/distanceFunction/pNorm.cpp
-  src/distanceFunction/mahalabonisDistance.cpp
+  src/distanceFunction/mahalanobisDistance.cpp
   
   # Regression functions
   src/regressionFunction.cpp
@@ -340,6 +333,13 @@ if(BUILD_TESTS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-exit-time-destructors")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-global-constructors")
+      
+      # Ignore warnings resulting from mpi.h
+      if(SUPPORT_MPI)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-old-style-cast")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-extra-semi")
+      endif()
     elseif(CMAKE_COMPILER_IS_GNUCXX)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
@@ -392,14 +392,14 @@ if(BUILD_TESTS)
     test/helper/testQuasiRandomSequence.cpp
     test/helper/testRandom.cpp
     test/helper/testRegression.cpp
-    # test/helper/testSetTheory.cpp
-    # test/helper/testStatistic.cpp
-    # test/helper/testUnorderedContainer.cpp
+    test/helper/testSetTheory.cpp
+    test/helper/testStatistic.cpp
+    test/helper/testUnorderedContainer.cpp
 
-    # # Distance functions
-    # test/testDistanceFunction.cpp
-    # test/distanceFunction/testPNorm.cpp
-    # test/distanceFunction/testMahalabonisDistance.cpp
+    # Distance functions
+    test/testDistanceFunction.cpp
+    test/distanceFunction/testPNorm.cpp
+    test/distanceFunction/testMahalanobisDistance.cpp
     
     # # Regression functions
     # test/testRegressionFunction.cpp
@@ -409,11 +409,11 @@ if(BUILD_TESTS)
     # test/regressionFunction/testCubicPolynomialRegressionFunction.cpp
 
     # # Correlation functions
-    # test/testCorrelationFunction.cpp
-    # test/correlationFunction/testPolynomialCorrelationFunction.cpp
-    # test/correlationFunction/testSplineCorrelationFunction.cpp
-    # test/correlationFunction/testExponentialCorrelationFunction.cpp
-    # test/correlationFunction/testGaussianCorrelationFunction.cpp
+    test/testCorrelationFunction.cpp
+    test/correlationFunction/testPolynomialCorrelationFunction.cpp
+    test/correlationFunction/testSplineCorrelationFunction.cpp
+    test/correlationFunction/testExponentialCorrelationFunction.cpp
+    test/correlationFunction/testGaussianCorrelationFunction.cpp
       
     # # Radial basis functions
     # test/testRadialBasisFunction.cpp
@@ -430,30 +430,31 @@ if(BUILD_TESTS)
 
     # # Optimisation problems
     # test/testOptimisationProblem.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
-    # test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    # test/optimisationProblem/testBlackBoxOptimisationBenchmark.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
     # test/optimisationProblem/testRoboticsOptimisationProblem.cpp
     # test/optimisationProblem/roboticsOptimisationProblem/testRobotModel.cpp
     # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRPR.cpp
@@ -483,13 +484,6 @@ if(BUILD_TESTS)
     # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
     # test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
     # test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
-    
-    # # Samples selection
-    # test/testSamplesSelection.cpp
-    # test/samplesSelection/testBestFittingSamplesSelection.cpp
-    # test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
-    # test/samplesSelection/testBestSamplesSelection.cpp
-    # test/samplesSelection/testRandomSamplesSelection.cpp
     
     # # Property analysis
     # test/testPropertyAnalysis.cpp

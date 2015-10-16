@@ -57,7 +57,7 @@ TEST_CASE(
   SECTION(
       ".toString") {
     SECTION(
-        "Returns the expected class name.") {
+        "Returns a (filesystem friendly) name for the class.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
       CHECK(mant::RandomSearch(optimisationProblem).toString() ==
             "random_search");

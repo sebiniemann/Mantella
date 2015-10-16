@@ -7,6 +7,8 @@
 // Mantella
 #include <mantella>
 
+std::string testDirectory("");
+
 arma::uword getRandomNumberOfValues() {
   return std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
 }
@@ -27,10 +29,10 @@ arma::uword getDifferentRandomNumberOfValues(
   
   return numberOfDimensions + offset;   
 }
-
-arma::Col<double> getRandomValues(
+    
+arma::Row<double> getRandomValues(
     const arma::uword numberOfDimensions) {
-  return arma::randu<arma::Col<double>>(numberOfDimensions) * 200 - 100;
+  return arma::randu<arma::Row<double>>(numberOfDimensions) * 200 - 100;
 }
     
 arma::Mat<double> getRandomValues(
@@ -40,12 +42,33 @@ arma::Mat<double> getRandomValues(
 }
 
 void HAS_SAME_PARAMETERS(
+    const std::vector<arma::Col<arma::uword>>& actualParameters,
+    const std::vector<arma::Col<arma::uword>>& expectedParameters) {
+  CHECK((actualParameters.size() == expectedParameters.size()));
+
+  for (const auto& expectedParameter : expectedParameters) {
+    CAPTURE(expectedParameter);
+    
+    bool found = false;
+    for (const auto& actualParameter : actualParameters) {
+      if (arma::all(expectedParameter == actualParameter)) {
+        found = true;
+        break;
+      }
+    }
+
+    CHECK((found == true));
+  }
+}
+
+void HAS_SAME_PARAMETERS(
     const std::vector<std::pair<arma::Col<double>, double>>& samples,
     const std::vector<arma::Col<double>>& parameters) {
   CHECK(samples.size() == parameters.size());
 
-  bool hasSameParameters = true;
   for (const auto& parameter : parameters) {
+    CAPTURE(parameter);
+    
     bool found = false;
     for (const auto& sample : samples) {
       if (arma::all(arma::abs(parameter - sample.first) < 1e-12)) {
@@ -55,15 +78,7 @@ void HAS_SAME_PARAMETERS(
     }
 
     CHECK(found == true);
-
-    if (!found) {
-      hasSameParameters = false;
-      break;
-    }
   }
-
-  CHECK(hasSameParameters == true);
-    
 }
 
 void IS_EQUAL(

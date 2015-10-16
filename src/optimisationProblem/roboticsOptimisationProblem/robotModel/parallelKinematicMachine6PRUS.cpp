@@ -62,7 +62,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
+      assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
       arma::Cube<double>::fixed<3, 6, 3> model;
 
@@ -91,7 +91,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
+      assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
       const arma::Cube<double>::fixed<3, 6, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 
@@ -112,7 +112,7 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      assert(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1));
+      assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
       const arma::Cube<double>::fixed<3, 6, 3>& model = getModel(endEffectorPose, redundantJointsActuation);
 

@@ -9,7 +9,11 @@
 namespace mant {
   class PNorm : public DistanceFunction {
    public:
-    using DistanceFunction::DistanceFunction;
+    const arma::uword p_;
+    
+    explicit PNorm(
+        const arma::uword numberOfDimensions,
+        const arma::uword p);
 
     std::string toString() const override;
 

@@ -20,7 +20,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_,
           "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1),
+      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1),
           "The redundant joints must be actuated within [0, 1].");
 
       return getModelImplementation(endEffectorPose, redundantJointsActuation);
@@ -31,7 +31,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_,
           "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1),
+      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1),
           "The redundant joints must be actuated within [0, 1].");
 
       const arma::Row<double>& actuation = getActuationImplementation(endEffectorPose, redundantJointsActuation);
@@ -44,7 +44,7 @@ namespace mant {
         const arma::Row<double>& redundantJointsActuation) const {
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_,
           "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(!arma::any(redundantJointsActuation < 0) && !arma::any(redundantJointsActuation > 1),
+      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1),
           "The redundant joints must be actuated within [0, 1].");
 
       const double endEffectorPoseError = getEndEffectorPoseErrorImplementation(endEffectorPose, redundantJointsActuation);

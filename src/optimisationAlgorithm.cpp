@@ -35,17 +35,17 @@ namespace mant {
 
 #if defined(SUPPORT_MPI)
     std::vector<double> serialisedOptimisationProblem;
-    unsigned int serialisedOptimisationProblemSize;
+    int serialisedOptimisationProblemSize;
 
     if (nodeRank_ == 0) {
       serialisedOptimisationProblem = optimisationProblem_->serialise();
-      serialisedOptimisationProblemSize = static_cast<unsigned int>(serialisedOptimisationProblem.size());
+      serialisedOptimisationProblemSize = static_cast<int>(serialisedOptimisationProblem.size());
     }
 
-    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (nodeRank_ != 0) {
-      serialisedOptimisationProblem.resize(serialisedOptimisationProblemSize);
+      serialisedOptimisationProblem.resize(static_cast<unsigned int>(serialisedOptimisationProblemSize));
     }
 
     MPI_Bcast(&serialisedOptimisationProblem[0], serialisedOptimisationProblemSize, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -65,7 +65,7 @@ namespace mant {
 
 #if defined(SUPPORT_MPI)
     MPI_Datatype MANT_MPI_PARAMETER;
-    MPI_Type_contiguous(2 + numberOfDimensions_, MPI_DOUBLE, &MANT_MPI_PARAMETER);
+    MPI_Type_contiguous(static_cast<int>(2 + numberOfDimensions_), MPI_DOUBLE, &MANT_MPI_PARAMETER);
     MPI_Type_commit(&MANT_MPI_PARAMETER);
 
     MPI_Op MANT_MPI_GET_BEST_PARAMETER;

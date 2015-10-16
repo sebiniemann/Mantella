@@ -5,6 +5,8 @@
 // C++ standard library
 #include <cstdlib>
 #include <string>
+#include <cmath>
+#include <algorithm>
 
 // Armadillo
 #include <armadillo>
@@ -14,40 +16,36 @@
 
 extern std::string testDirectory;
 
-TEST_CASE(
-    "bbob::BuecheRastriginFunction") {
-  for (const auto& numberOfDimensions : {2, 40}) {
-    mant::bbob::BuecheRastriginFunction buecheRastriginFunction(numberOfDimensions);
+class TestBuecheRastriginFunction : public mant::bbob::BuecheRastriginFunction {
+  public:
+    using mant::bbob::BuecheRastriginFunction::BuecheRastriginFunction;
+  
+    double getObjectiveValueImplementation(
+        const arma::Col<double>& parameter) const override {
+      return mant::bbob::BuecheRastriginFunction::getObjectiveValueImplementation(parameter);
+    }
+};
 
-    arma::Mat<double> parameters;
-    REQUIRE(parameters.load(testDirectory +
-                            "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_" + std::to_string(numberOfDimensions) +
-                            "x10.input"));
+TEST_CASE("bbob::BuecheRastriginFunction") {
+  TestBuecheRastriginFunction buecheRastriginFunction(40);
+    
+  SECTION(".getObjectiveValueImplementation") {
+    SECTION("Returns the objective value") {
+      arma::Mat<double> parameters;
+      REQUIRE(parameters.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
-    arma::Col<double> translation;
-    REQUIRE(translation.load(testDirectory +
-                             "/data/optimisationProblem/blackBoxOptimisationBenchmark/_translationEvenAbs_" + std::to_string(numberOfDimensions) +
-                             "x1.input"));
+      arma::Col<double> expectedObjectiveValues;
+      REQUIRE(expectedObjectiveValues.load(testDirectory + "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_buecheRastriginFunction_dim40_1x100.expected"));
 
-    arma::Col<double> expected;
-    REQUIRE(expected.load(testDirectory +
-                          "/data/optimisationProblem/blackBoxOptimisationBenchmark/bbob_buecheRastriginFunction_dim" + std::to_string(numberOfDimensions) +
-                          ".expected"));
-
-    buecheRastriginFunction.setObjectiveValueTranslation(0);
-    buecheRastriginFunction.setParameterTranslation(translation);
-
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      CHECK(buecheRastriginFunction.getObjectiveValue(parameters.col(n)) == Approx(expected(n)));
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        CHECK(buecheRastriginFunction.getObjectiveValueImplementation(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
+      }
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns the expected class name.") {
-      CHECK(mant::bbob::BuecheRastriginFunction(5).toString() ==
-            "bbob_bueche_rastrigin_function");
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
+      CHECK(buecheRastriginFunction.toString() =="bbob_bueche_rastrigin_function");
     }
   }
 }

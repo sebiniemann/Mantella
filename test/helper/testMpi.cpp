@@ -30,7 +30,7 @@ TEST_CASE("mpiGetBestSample") {
     // The first value is the number of dimensions.
     // The second value is the objective value.
     // The third to last values are the parameter.
-    MPI_Type_contiguous(2 + numberOfDimensions, MPI_DOUBLE, &MANT_MPI_PARAMETER);
+    MPI_Type_contiguous(static_cast<int>(2 + numberOfDimensions), MPI_DOUBLE, &MANT_MPI_PARAMETER);
     MPI_Type_commit(&MANT_MPI_PARAMETER);
 
     // mant::mpiGetBestSample (like any MPI_Op_Func) uses the second parameter as input/output parameter, replacing it by the *more optimal* input.
@@ -45,16 +45,19 @@ TEST_CASE("mpiGetBestSample") {
     arma::Mat<double> firstMpiInput(2 + numberOfDimensions, numberOfSamples);
     firstMpiInput.row(0).fill(static_cast<double>(numberOfDimensions));
     // Ensure that the first input has a lower objective value.
-    firstMpiInput.row(1) = secondMpiInput.row(1) - arma::randu<arma::Row<double>>(numberOfSamples) * 10 - 20;
+    firstMpiInput.row(1) = secondMpiInput.row(1) - getRandomValues(numberOfSamples) - 1;
     firstMpiInput.tail_rows(numberOfDimensions) = getRandomValues(numberOfDimensions, numberOfSamples);
     CAPTURE(firstMpiInput);
 
     // MPI uses singed integers, instead of unsigned ones.
     int signedNumberOfSamples = static_cast<int>(numberOfSamples);
     
+    arma::Mat<double> expectedFirstMpiInput = firstMpiInput;
+    arma::Mat<double> expectedSecondMpiInput = firstMpiInput;
+    
     mant::mpiGetBestSample(firstMpiInput.memptr(), secondMpiInput.memptr(), &signedNumberOfSamples, &MANT_MPI_PARAMETER);
-    IS_EQUAL(firstMpiInput, firstMpiInput); // The first input should remain untouched.
-    IS_EQUAL(secondMpiInput, firstMpiInput); // The second parameter should be replaced by the first one.
+    IS_EQUAL(expectedFirstMpiInput, firstMpiInput); // The first input should remain untouched.
+    IS_EQUAL(expectedSecondMpiInput, secondMpiInput); // The second parameter should be replaced by the first one.
   }
 #endif
 }

@@ -5,24 +5,31 @@
 
 // C++ standard library
 #include <vector>
+#include <string>
 
 // Armadillo
 #include <armadillo>
 
+extern std::string testDirectory;
+  
 arma::uword getRandomNumberOfValues();
-    
+
 arma::uword getRandomNumberOfValues(
     const arma::uword minimalNumberOfDimensions);
-    
+
 arma::uword getDifferentRandomNumberOfValues(
     const arma::uword numberOfDimensions);
-    
-arma::Col<double> getRandomValues(
+
+arma::Row<double> getRandomValues(
     const arma::uword numberOfDimensions);
-    
+
 arma::Mat<double> getRandomValues(
     const arma::uword numberOfDimensions,
     const arma::uword numberOfSamples);
+
+void HAS_SAME_PARAMETERS(
+    const std::vector<arma::Col<arma::uword>>& actualParameters,
+    const std::vector<arma::Col<arma::uword>>& expectedParameters);
 
 void HAS_SAME_PARAMETERS(
     const std::vector<std::pair<arma::Col<double>, double>>& samples,
@@ -49,4 +56,3 @@ void IS_UNIFORM(
     const arma::Col<arma::uword>& data,
     const arma::uword lowerBound,
     const arma::uword upperBound);
-

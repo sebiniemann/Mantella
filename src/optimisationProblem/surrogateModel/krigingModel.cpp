@@ -15,7 +15,7 @@ namespace mant {
 
   void KrigingModel::modelImplementation() {
     arma::Mat<double> parameters(numberOfDimensions_, samples_.size());
-    arma::Col<double> objectiveValues(samples_.size());
+    arma::Row<double> objectiveValues(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
       parameters.col(n) = sample.first;
@@ -49,11 +49,7 @@ namespace mant {
     correlations = arma::symmatu(correlations);
 
     beta_ = getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, correlations);
-    try {
-      gamma_ = correlations.i() * (objectiveValues - parameters * beta_);
-    } catch (...) {
-      gamma_ = arma::pinv(correlations) * (objectiveValues - parameters * beta_);
-    }
+    gamma_ = arma::solve(correlations, objectiveValues.t() - parameters * beta_);
   }
 
   double KrigingModel::getObjectiveValueImplementation(

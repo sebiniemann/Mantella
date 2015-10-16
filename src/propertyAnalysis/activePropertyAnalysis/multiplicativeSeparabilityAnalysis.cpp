@@ -25,7 +25,7 @@ namespace mant {
   void MultiplicativeSeparabilityAnalysis::analyseImplementation() {
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = getTwoSetsPartitions(optimisationProblem_->numberOfDimensions_);
 
-    arma::Col<double> deviations(partitionCandidates.size(), arma::fill::zeros);
+    arma::Row<double> deviations(partitionCandidates.size(), arma::fill::zeros);
     for (arma::uword n = 0; n < partitionCandidates.size(); ++n) {
       std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>> partitionCandidate = partitionCandidates.at(n);
       for (arma::uword k = 0; k < maximalNumberOfIterations_; ++k) {
@@ -63,7 +63,7 @@ namespace mant {
     }
 
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> bestPartitionCandidates;
-    for (const auto bestPartitionCandidateIndex : static_cast<arma::Col<arma::uword>>(arma::find(deviations <= deviation_ + arma::datum::eps))) {
+    for (const auto bestPartitionCandidateIndex : static_cast<arma::Row<arma::uword>>(arma::find(deviations <= deviation_ + arma::datum::eps))) {
       bestPartitionCandidates.push_back(partitionCandidates.at(bestPartitionCandidateIndex));
     }
 
