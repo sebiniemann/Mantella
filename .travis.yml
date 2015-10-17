@@ -47,7 +47,7 @@ install:
   
   # Testing
   - sudo apt-get install -qq catch
-  ## Using clang-format-3.7
+  - which clang-format
   ## Using clang-format-3.7
   - sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main'
   - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
