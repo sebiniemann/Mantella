@@ -19,6 +19,7 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
+  clang-format -version
   while read file; do
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
