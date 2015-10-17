@@ -55,6 +55,7 @@ install:
   - sudo apt-get install -qq lcov
   ## Using coveralls to store and visualise the code coverage
   - gem install coveralls-lcov
+  - sudo chmod a+x ./.travis-checks.sh
   
 addons:
   coverity_scan:
