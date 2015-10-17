@@ -56,10 +56,14 @@ Vagrant.configure(2) do |config|
     
     # Testing
     sudo apt-get install -qq catch
-    sudo apt-get install -qq clang-format-3.6
-    ## Adds clang-format as an alternative to clang-format-3.6
-    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
-    sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
+    ## Using clang-format-3.7
+    sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main'
+    wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+    sudo apt-get update -qq
+    sudo apt-get install -qq clang-format-3.7
+    ## Adds clang-format as an alternative to clang-format-3.7
+    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.7 100
+    sudo update-alternatives --set clang-format /usr/bin/clang-format-3.7
     sudo apt-get install -qq iwyu
     sudo apt-get install -qq valgrind
     sudo apt-get install -qq lcov
