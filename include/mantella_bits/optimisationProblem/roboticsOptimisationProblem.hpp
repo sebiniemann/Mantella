@@ -1,3 +1,4 @@
+// IWYU pragma: private, include <mantella>
 #pragma once
 
 // C++ standard library
