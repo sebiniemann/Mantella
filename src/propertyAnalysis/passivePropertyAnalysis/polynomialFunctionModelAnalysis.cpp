@@ -2,9 +2,11 @@
 
 // C++ standard library
 #include <cassert>
+#include <utility>
 
 // Mantella
 #include "mantella_bits/helper/regression.hpp"
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   PolynomialFunctionModelAnalysis::PolynomialFunctionModelAnalysis(

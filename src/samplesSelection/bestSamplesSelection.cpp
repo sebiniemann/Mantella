@@ -1,5 +1,13 @@
 #include "mantella_bits/samplesSelection/bestSamplesSelection.hpp"
 
+// C++ standard library
+#include <iterator>
+#include <unordered_map>
+#include <utility>
+
+// Armadillo
+#include <armadillo>
+
 namespace mant {
   void BestSamplesSelection::selectImplementation() {
     arma::Row<double> objectiveValues(samples_.size());

@@ -1,5 +1,8 @@
 #include "mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp"
 
+// C++ standard library
+#include <utility>
+
 // Mantella
 #include "mantella_bits/helper/assert.hpp"
 
