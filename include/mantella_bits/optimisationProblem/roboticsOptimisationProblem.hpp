@@ -8,7 +8,11 @@
 
 // Mantella
 #include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp"
+namespace mant {
+  namespace robotics {
+    class RobotModel;
+  }
+}
 
 namespace mant {
   namespace robotics {

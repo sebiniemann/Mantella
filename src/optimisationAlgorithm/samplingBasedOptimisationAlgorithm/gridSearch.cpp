@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <vector>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
 #include "mantella_bits/helper/assert.hpp"

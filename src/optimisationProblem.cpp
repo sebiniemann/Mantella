@@ -2,6 +2,10 @@
 
 // C++ standard library
 #include <cassert>
+#include <atomic>
+#include <cmath>
+#include <limits>
+#include <utility>
 
 // Mantella
 #include "mantella_bits/config.hpp"

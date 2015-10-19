@@ -2,6 +2,8 @@
 
 // C++ standard library
 #include <cassert>
+#include <unordered_map>
+#include <utility>
 
 // Armadillo
 #include <armadillo>

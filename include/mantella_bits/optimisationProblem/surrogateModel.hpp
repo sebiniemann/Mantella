@@ -4,7 +4,10 @@
 #include <unordered_map>
 
 // Armadillo
-#include <armadillo>
+namespace arma {
+  template <typename eT>
+  class Col;
+}
 
 // Mantella
 #include "mantella_bits/optimisationProblem.hpp"

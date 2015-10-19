@@ -6,8 +6,10 @@
 
 // Mantella
 #include "mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp"
-#include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/regressionFunction.hpp"
+namespace mant {
+  class OptimisationProblem;
+  class RegressionFunction;
+}
 
 namespace mant {
   class PolynomialProportionalityAnalysis : public ActivePropertyAnalysis {

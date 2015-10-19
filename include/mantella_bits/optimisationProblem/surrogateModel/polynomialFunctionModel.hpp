@@ -10,10 +10,12 @@
 
 // Mantella
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
-#include "mantella_bits/regressionFunction.hpp"
 #include "mantella_bits/helper/unorderedContainer.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
 // IWYU pragma: no_forward_declare mant::IsEqual
+namespace mant {
+  class RegressionFunction;
+}
 
 namespace mant {
   class PolynomialFunctionModel : public SurrogateModel {

@@ -1,5 +1,11 @@
 #include "mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp"
 
+// C++ standard library
+#include <utility>
+
+// Mantella
+#include "mantella_bits/radialBasisFunction.hpp"
+
 namespace mant {
   RadialBasisFunctionModel::RadialBasisFunctionModel(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,

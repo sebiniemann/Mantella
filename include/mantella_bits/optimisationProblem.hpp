@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <unordered_map>
+#include <vector>
 
 // Armadillo
 #include <armadillo>

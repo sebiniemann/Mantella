@@ -2,6 +2,7 @@
 
 // Mantella
 #include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   ActivePropertyAnalysis::ActivePropertyAnalysis(

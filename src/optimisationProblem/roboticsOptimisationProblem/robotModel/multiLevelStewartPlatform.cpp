@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <cassert>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
 #include "mantella_bits/helper/assert.hpp"

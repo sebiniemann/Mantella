@@ -2,6 +2,7 @@
 
 // Mantella
 #include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp"
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   PolynomialFunctionModel::PolynomialFunctionModel(

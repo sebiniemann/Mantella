@@ -2,8 +2,14 @@
 
 // C++ standard library
 #include <set>
+#include <algorithm>
+#include <limits>
+#include <utility>
+#include <cmath>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
+#include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/helper/setTheory.hpp"
 
 namespace mant {
