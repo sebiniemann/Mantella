@@ -52,9 +52,9 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
   while read file; do
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
-    OUTPUT=$(iwyu -std=c++11 -I include ${file} 2>&1);
+    OUTPUT=$(include-what-you-use -std=c++11 -I include ${file} 2>&1);
     if [[ "${OUTPUT}" =~ "full include-list for" ]]; then
-      echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} did not pass the include rules. Please run '${GREEN_TEXT_COLOR}iwyu -std=c++11 -I include ${file}${RESET_TEXT_COLOR}'.";
+      echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} did not pass the include rules. Please run '${GREEN_TEXT_COLOR}include-what-you-use -std=c++11 -I include ${file}${RESET_TEXT_COLOR}'.";
       INCLUDE_ERROR_OCCURED=1;
       ANY_ERROR_OCCURED=1;
     else
