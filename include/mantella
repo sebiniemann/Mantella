@@ -25,7 +25,6 @@
 // Mantella
 //
 // IWYU pragma: begin_exports
-
 // Configuration
 #include <mantella_bits/config.hpp>
 
