@@ -37,7 +37,7 @@ install:
   - make --quiet -j 4
   - sudo make --quiet install
   ### Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
-  - sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} ';'
+  - sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} \;
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
   
