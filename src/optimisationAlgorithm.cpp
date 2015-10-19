@@ -9,9 +9,7 @@
 #include "mantella_bits/config.hpp"
 #include "mantella_bits/helper/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
-#if defined(SUPPORT_MPI)
-  #include "mantella_bits/helper/mpi.hpp" // IWYU pragma: keep
-#endif
+#include "mantella_bits/helper/mpi.hpp" // IWYU pragma: keep
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm(
