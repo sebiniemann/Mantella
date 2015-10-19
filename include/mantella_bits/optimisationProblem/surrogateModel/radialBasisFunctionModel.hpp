@@ -10,8 +10,8 @@
 
 // Mantella
 #include <mantella_bits/helper/unorderedContainer.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
-#include <mantella_bits/radialBasisFunction.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel.hpp"
+#include "mantella_bits/radialBasisFunction.hpp"
 
 namespace mant {
   class RadialBasisFunctionModel : public SurrogateModel {

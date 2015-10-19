@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   TrajectoryBasedOptimisationAlgorithm::TrajectoryBasedOptimisationAlgorithm(

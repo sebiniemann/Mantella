@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp"
 
 // C++ standard library
 #include <cassert>

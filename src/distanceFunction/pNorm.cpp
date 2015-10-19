@@ -1,10 +1,10 @@
-#include <mantella_bits/distanceFunction/pNorm.hpp>
+#include "mantella_bits/distanceFunction/pNorm.hpp"
 
 // C++ standard library
 #include <string>
 
 // Mantella
-#include <mantella_bits/distanceFunction.hpp>
+#include "mantella_bits/distanceFunction.hpp"
 
 namespace mant {
   PNorm::PNorm(

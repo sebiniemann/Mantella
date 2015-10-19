@@ -1,4 +1,4 @@
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp"
 
 // C++ standard library
 #include <cassert>

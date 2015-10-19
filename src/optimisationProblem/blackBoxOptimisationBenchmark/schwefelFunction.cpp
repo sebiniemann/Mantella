@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.hpp"
 
 // C++ standard library
 #include <cassert>
@@ -6,7 +6,7 @@
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/rng.hpp"
 
 namespace mant {
   namespace bbob {

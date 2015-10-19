@@ -8,7 +8,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp"
 
 // TODO Add restarting
 namespace mant {

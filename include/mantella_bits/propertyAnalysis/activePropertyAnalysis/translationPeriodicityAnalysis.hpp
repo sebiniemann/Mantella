@@ -8,7 +8,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp"
 
 namespace mant {
   class TranslationPeriodicityAnalysis : public ActivePropertyAnalysis {

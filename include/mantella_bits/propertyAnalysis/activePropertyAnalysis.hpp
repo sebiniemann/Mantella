@@ -7,8 +7,8 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/propertyAnalysis.hpp>
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/propertyAnalysis.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   class ActivePropertyAnalysis : public PropertyAnalysis {

@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp"
 
 // Mantella
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp"
 
 namespace mant {
   PolynomialFunctionModel::PolynomialFunctionModel(

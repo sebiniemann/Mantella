@@ -1,10 +1,10 @@
-#include <mantella_bits/helper/statistic.hpp>
+#include "mantella_bits/helper/statistic.hpp"
 
 // C++ standard library
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   double getMedianAbsoluteError(

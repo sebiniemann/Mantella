@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
+#include "mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp"
 
 // Armadillo
 #include <armadillo>

@@ -1,7 +1,7 @@
-#include <mantella_bits/helper/quasiRandomSequence.hpp>
+#include "mantella_bits/helper/quasiRandomSequence.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   arma::Mat<double> getHaltonSequence(

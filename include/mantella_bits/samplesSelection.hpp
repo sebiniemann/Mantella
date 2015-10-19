@@ -7,7 +7,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/printable.hpp>
+#include "mantella_bits/helper/printable.hpp"
 #include <mantella_bits/helper/unorderedContainer.hpp>
 
 namespace mant {

@@ -7,7 +7,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/regressionFunction.hpp>
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   class QuadraticRegressionFunction : public RegressionFunction {

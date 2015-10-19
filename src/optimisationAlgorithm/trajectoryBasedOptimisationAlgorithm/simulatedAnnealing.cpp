@@ -1,12 +1,12 @@
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp>
+#include "mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp"
 
 // C++ standard library
 #include <random>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
 
 // TODO Add restarting
 namespace mant {

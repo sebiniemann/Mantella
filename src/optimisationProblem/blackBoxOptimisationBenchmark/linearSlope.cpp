@@ -1,11 +1,11 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.hpp"
 
 // C++ standard library
 #include <cassert>
 #include <random>
 
 // Mantella
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/rng.hpp"
 
 namespace mant {
   namespace bbob {

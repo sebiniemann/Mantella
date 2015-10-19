@@ -8,8 +8,8 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp>
+#include "mantella_bits/config.hpp"
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp"
 
 namespace mant {
   namespace bbob {

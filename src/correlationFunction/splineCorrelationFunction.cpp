@@ -1,4 +1,4 @@
-#include <mantella_bits/correlationFunction/splineCorrelationFunction.hpp>
+#include "mantella_bits/correlationFunction/splineCorrelationFunction.hpp"
 
 namespace mant {
   double SplineCorrelationFunction::getCorrelationCoefficientImplementation(

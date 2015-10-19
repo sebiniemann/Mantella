@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp>
+#include "mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 // TODO Add restarting
 namespace mant {

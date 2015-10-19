@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp"
 
 // Mantella
-#include <mantella_bits/helper/regression.hpp>
+#include "mantella_bits/helper/regression.hpp"
 
 namespace mant {
   KrigingModel::KrigingModel(

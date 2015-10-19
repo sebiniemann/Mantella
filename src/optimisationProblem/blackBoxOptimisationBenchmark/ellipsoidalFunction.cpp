@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.hpp"
 
 // C++ standard library
 #include <cassert>

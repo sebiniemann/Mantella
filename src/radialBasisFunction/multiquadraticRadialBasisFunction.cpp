@@ -1,4 +1,4 @@
-#include <mantella_bits/radialBasisFunction/multiquadraticRadialBasisFunction.hpp>
+#include "mantella_bits/radialBasisFunction/multiquadraticRadialBasisFunction.hpp"
 
 // C++ standard library
 #include <cmath>

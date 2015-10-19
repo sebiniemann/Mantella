@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp"
 
 // C++ standard library
 #include <random>
@@ -6,7 +6,7 @@
 #include <algorithm>
 
 // Mantella
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/rng.hpp"
 
 namespace mant {
   namespace bbob {

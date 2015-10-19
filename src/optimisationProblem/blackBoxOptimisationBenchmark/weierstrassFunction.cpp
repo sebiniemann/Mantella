@@ -1,12 +1,12 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp"
 
 // C++ standard library
 #include <cassert>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {

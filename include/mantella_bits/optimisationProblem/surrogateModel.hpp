@@ -8,7 +8,7 @@
 
 // Mantella
 #include <mantella_bits/helper/unorderedContainer.hpp>
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/optimisationProblem.hpp
 
 namespace mant {
   class SurrogateModel : public OptimisationProblem {

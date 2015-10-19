@@ -4,7 +4,7 @@
 #include <string>
 
 // Mantella
-#include <mantella_bits/samplesSelection.hpp>
+#include "mantella_bits/samplesSelection.hpp"
 
 namespace mant {
   class BestSamplesSelection : public SamplesSelection {

@@ -1,4 +1,4 @@
-#include <mantella_bits/regressionFunction.hpp>
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   RegressionFunction::RegressionFunction(

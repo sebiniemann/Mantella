@@ -1,10 +1,10 @@
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp"
 
 // C++ standard library
 #include <set>
 
 // Mantella
-#include <mantella_bits/helper/setTheory.hpp>
+#include "mantella_bits/helper/setTheory.hpp"
 
 namespace mant {
   AdditiveSeparabilityAnalysis::AdditiveSeparabilityAnalysis(

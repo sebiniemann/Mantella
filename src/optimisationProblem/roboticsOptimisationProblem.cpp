@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem.hpp>
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem.hpp"
 
 namespace mant {
   namespace robotics {

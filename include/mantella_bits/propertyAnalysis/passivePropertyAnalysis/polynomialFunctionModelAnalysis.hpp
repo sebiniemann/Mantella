@@ -9,8 +9,8 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
-#include <mantella_bits/regressionFunction.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp"
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   class PolynomialFunctionModelAnalysis : public PassivePropertyAnalysis {

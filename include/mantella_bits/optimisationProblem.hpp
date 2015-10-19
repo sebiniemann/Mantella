@@ -7,9 +7,9 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/helper/printable.hpp>
 #include <mantella_bits/helper/unorderedContainer.hpp>
+#include "mantella_bits/config.hpp"
+#include "mantella_bits/helper/printable.hpp"
 
 namespace mant {
   class OptimisationProblem : public Printable {

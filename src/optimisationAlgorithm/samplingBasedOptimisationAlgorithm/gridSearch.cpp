@@ -2,7 +2,7 @@
 #include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   GridSearch::GridSearch(

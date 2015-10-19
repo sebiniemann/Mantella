@@ -1,7 +1,7 @@
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   PassivePropertyAnalysis::PassivePropertyAnalysis(

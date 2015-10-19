@@ -1,13 +1,13 @@
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp>
+#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp"
 
 // C++ standard library
 #include <random>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   ParticleSwarmOptimisation::ParticleSwarmOptimisation(

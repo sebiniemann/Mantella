@@ -1,12 +1,12 @@
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/random.hpp"
 
 // C++ standard library
 #include <algorithm>
 #include <random>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
 
 namespace mant {
   arma::Mat<double> getRandomRotationMatrix(

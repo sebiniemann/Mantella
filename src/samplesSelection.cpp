@@ -1,7 +1,7 @@
-#include <mantella_bits/samplesSelection.hpp>
+#include "mantella_bits/samplesSelection.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   SamplesSelection::SamplesSelection(

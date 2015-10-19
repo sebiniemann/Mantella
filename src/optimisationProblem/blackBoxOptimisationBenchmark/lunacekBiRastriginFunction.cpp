@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.hpp"
 
 // C++ standard library
 #include <cassert>
@@ -7,9 +7,9 @@
 #include <algorithm>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {

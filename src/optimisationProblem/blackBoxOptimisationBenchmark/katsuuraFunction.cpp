@@ -1,12 +1,12 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.hpp"
 
 // C++ standard library
 #include <cassert>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {

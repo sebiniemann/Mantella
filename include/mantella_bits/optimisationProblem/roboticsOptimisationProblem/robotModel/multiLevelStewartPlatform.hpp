@@ -8,8 +8,8 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.hpp>
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp"
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.hpp"
 
 namespace mant {
   namespace robotics {

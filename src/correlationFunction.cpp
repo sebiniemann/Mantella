@@ -1,4 +1,4 @@
-#include <mantella_bits/correlationFunction.hpp>
+#include "mantella_bits/correlationFunction.hpp"
 
 namespace mant {
   CorrelationFunction::CorrelationFunction(

@@ -1,11 +1,11 @@
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/optimisationProblem.hpp"
 
 // C++ standard library
 #include <cassert>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/config.hpp"
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   OptimisationProblem::OptimisationProblem(

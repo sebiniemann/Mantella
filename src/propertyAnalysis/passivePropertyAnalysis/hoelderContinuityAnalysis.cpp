@@ -1,4 +1,4 @@
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp"
 
 // C++ standard library
 #include <cassert>

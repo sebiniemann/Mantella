@@ -7,7 +7,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/correlationFunction.hpp>
+#include "mantella_bits/correlationFunction.hpp"
 
 namespace mant {
   class ExponentialCorrelationFunction : public CorrelationFunction {

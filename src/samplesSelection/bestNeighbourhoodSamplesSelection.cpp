@@ -1,4 +1,4 @@
-#include <mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp>
+#include "mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp"
 
 namespace mant {
   void BestNeighbourhoodSamplesSelection::selectImplementation() {

@@ -4,7 +4,7 @@
 #include <string>
 
 // Mantella
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp"
 
 namespace mant {
   class RandomSearch : public SamplingBasedOptimisationAlgorithm {

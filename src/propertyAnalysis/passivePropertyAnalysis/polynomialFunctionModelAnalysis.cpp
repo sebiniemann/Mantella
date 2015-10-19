@@ -1,10 +1,10 @@
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp"
 
 // C++ standard library
 #include <cassert>
 
 // Mantella
-#include <mantella_bits/helper/regression.hpp>
+#include "mantella_bits/helper/regression.hpp"
 
 namespace mant {
   PolynomialFunctionModelAnalysis::PolynomialFunctionModelAnalysis(

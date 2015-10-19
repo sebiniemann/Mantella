@@ -1,4 +1,4 @@
-#include <mantella_bits/radialBasisFunction/gaussianRadialBasisFunction.hpp>
+#include "mantella_bits/radialBasisFunction/gaussianRadialBasisFunction.hpp"
 
 // C++ standard library
 #include <cmath>

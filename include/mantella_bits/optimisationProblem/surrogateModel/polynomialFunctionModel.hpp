@@ -10,8 +10,8 @@
 
 // Mantella
 #include <mantella_bits/helper/unorderedContainer.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
-#include <mantella_bits/regressionFunction.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel.hpp"
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   class PolynomialFunctionModel : public SurrogateModel {

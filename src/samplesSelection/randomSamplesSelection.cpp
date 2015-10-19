@@ -1,7 +1,7 @@
-#include <mantella_bits/samplesSelection/randomSamplesSelection.hpp>
+#include "mantella_bits/samplesSelection/randomSamplesSelection.hpp"
 
 // Mantella
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   void RandomSamplesSelection::selectImplementation() {

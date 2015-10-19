@@ -8,7 +8,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
 
 namespace mant {
   class ParticleSwarmOptimisation : public PopulationBasedOptimisationAlgorithm {

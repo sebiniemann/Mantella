@@ -1,11 +1,11 @@
-#include <mantella_bits/helper/setTheory.hpp>
+#include "mantella_bits/helper/setTheory.hpp"
 
 // C++ standard library
 #include <algorithm>
 #include <iterator>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   std::vector<arma::Col<arma::uword>> getCombinations(

@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   PopulationBasedOptimisationAlgorithm::PopulationBasedOptimisationAlgorithm(

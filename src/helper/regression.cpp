@@ -1,7 +1,7 @@
-#include <mantella_bits/helper/regression.hpp>
+#include "mantella_bits/helper/regression.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   arma::Col<double> getOrdinaryLeastSquaresEstimate(

@@ -1,4 +1,4 @@
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.hpp"
 
 namespace mant {
   PolynomialProportionalityAnalysis::PolynomialProportionalityAnalysis(

@@ -1,4 +1,4 @@
-#include <mantella_bits/distanceFunction/mahalanobisDistance.hpp>
+#include "mantella_bits/distanceFunction/mahalanobisDistance.hpp"
 
 // C++ standard library
 #include <string>
@@ -7,7 +7,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/distanceFunction.hpp>
+#include "mantella_bits/distanceFunction.hpp"
 
 namespace mant {
   MahalanobisDistance::MahalanobisDistance(

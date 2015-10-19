@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp"
 
 namespace mant {
   RadialBasisFunctionModel::RadialBasisFunctionModel(

@@ -1,4 +1,4 @@
-#include <mantella_bits/radialBasisFunction.hpp>
+#include "mantella_bits/radialBasisFunction.hpp"
 
 namespace mant {
   RadialBasisFunction::RadialBasisFunction(

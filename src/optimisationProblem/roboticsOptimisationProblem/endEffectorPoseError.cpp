@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.hpp>
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.hpp"
 
 namespace mant {
   namespace robotics {

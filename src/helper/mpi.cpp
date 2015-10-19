@@ -1,4 +1,4 @@
-#include <mantella_bits/helper/mpi.hpp>
+#include "mantella_bits/helper/mpi.hpp"
 
 // C++ standard library
 #include <algorithm>

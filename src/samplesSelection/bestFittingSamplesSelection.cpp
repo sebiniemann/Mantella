@@ -1,4 +1,4 @@
-#include <mantella_bits/samplesSelection/bestFittingSamplesSelection.hpp>
+#include "mantella_bits/samplesSelection/bestFittingSamplesSelection.hpp"
 
 namespace mant {
   void BestFittingSamplesSelection::selectImplementation() {
