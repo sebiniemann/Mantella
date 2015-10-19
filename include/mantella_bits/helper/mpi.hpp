@@ -1,4 +1,3 @@
-// IWYU pragma: private, include <mantella>
 #pragma once
 
 // Mantella
