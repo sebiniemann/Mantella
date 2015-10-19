@@ -1,6 +1,7 @@
 #include "mantella_bits/distanceFunction/mahalanobisDistance.hpp"
 
 // C++ standard library
+#include <cmath>
 #include <string>
 
 // Armadillo

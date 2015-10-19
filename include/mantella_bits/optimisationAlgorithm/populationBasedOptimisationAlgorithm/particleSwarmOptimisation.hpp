@@ -9,6 +9,9 @@
 
 // Mantella
 #include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class ParticleSwarmOptimisation : public PopulationBasedOptimisationAlgorithm {

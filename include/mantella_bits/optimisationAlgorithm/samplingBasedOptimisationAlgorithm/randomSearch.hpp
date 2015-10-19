@@ -1,6 +1,7 @@
 #pragma once
 
 // C++ standard library
+#include <memory>
 #include <string>
 
 // Mantella

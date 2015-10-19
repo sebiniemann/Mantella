@@ -9,10 +9,13 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/unorderedContainer.hpp>
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
 #include "mantella_bits/regressionFunction.hpp"
 #include "mantella_bits/correlationFunction.hpp"
+namespace mant {
+  class Hash;
+  class IsEqual;
+}
 
 namespace mant {
   class KrigingModel : public SurrogateModel {

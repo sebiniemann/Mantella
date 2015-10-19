@@ -8,7 +8,10 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/unorderedContainer.hpp>
+namespace mant {
+  class Hash;
+  class IsEqual;
+}
 
 namespace mant {
   void verify(

@@ -8,7 +8,10 @@
 
 // Mantella
 #include "mantella_bits/propertyAnalysis.hpp"
-#include <mantella_bits/helper/unorderedContainer.hpp>
+namespace mant {
+  class Hash;
+  class IsEqual;
+}
 
 namespace mant {
   class PassivePropertyAnalysis : public PropertyAnalysis {

@@ -3,6 +3,7 @@
 // C++ standard library
 #include <cmath>
 #include <stdexcept>
+#include <utility>
 
 namespace mant {
   void verify(
