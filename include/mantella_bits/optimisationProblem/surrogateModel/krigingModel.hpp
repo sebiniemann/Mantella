@@ -15,7 +15,6 @@
 #include "mantella_bits/helper/unorderedContainer.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
 // IWYU pragma: no_forward_declare mant::IsEqual
-}
 
 namespace mant {
   class KrigingModel : public SurrogateModel {
