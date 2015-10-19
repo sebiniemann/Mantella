@@ -9,10 +9,9 @@
 // Mantella
 #include "mantella_bits/config.hpp"
 #include "mantella_bits/helper/printable.hpp"
-namespace mant {
-  class Hash;
-  class IsEqual;
-}
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   class OptimisationProblem : public Printable {

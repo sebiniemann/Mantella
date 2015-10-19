@@ -8,10 +8,9 @@
 #include <armadillo>
 
 // Mantella
-namespace mant {
-  class Hash;
-  class IsEqual;
-}
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   void verify(

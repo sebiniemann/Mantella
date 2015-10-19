@@ -8,10 +8,9 @@
 
 // Mantella
 #include "mantella_bits/propertyAnalysis.hpp"
-namespace mant {
-  class Hash;
-  class IsEqual;
-}
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   class PassivePropertyAnalysis : public PropertyAnalysis {

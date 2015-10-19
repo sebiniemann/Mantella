@@ -12,9 +12,9 @@
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
 #include "mantella_bits/regressionFunction.hpp"
 #include "mantella_bits/correlationFunction.hpp"
-namespace mant {
-  class Hash;
-  class IsEqual;
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 }
 
 namespace mant {
