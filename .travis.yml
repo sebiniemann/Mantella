@@ -60,7 +60,7 @@ install:
   - sudo apt-get install -qq lcov
   ## Using coveralls to store and visualise the code coverage
   - gem install coveralls-lcov
-  - sudo chmod a+x ./.travis-checks.sh
+  - sudo chmod a+x ./.code-checks.sh
   
 addons:
   coverity_scan:
@@ -91,7 +91,8 @@ script:
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
   - if [ "$CXX" == "clang++" ]; then make -j 4; fi
   - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ./bin/mantellaTest ./test; fi
-  - if [ "$CXX" == "clang++" ]; then ./.travis-checks.sh format; fi
+  - if [ "$CXX" == "clang++" ]; then ./.code-checks.sh format; fi
+  - if [ "$CXX" == "clang++" ]; then ./.code-checks.sh include; fi
   
 after_success:
   - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi
