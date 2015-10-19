@@ -1,14 +1,17 @@
 #include "mantella_bits/optimisationAlgorithm.hpp"
 
 // C++ standard library
+#include <atomic>
 #include <cassert>
-#include <random>
+#include <limits>
 
 // Mantella
 #include "mantella_bits/config.hpp"
 #include "mantella_bits/helper/assert.hpp"
-#include "mantella_bits/helper/rng.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
+#if defined(SUPPORT_MPI)
 #include "mantella_bits/helper/mpi.hpp"
+#endif
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm(
