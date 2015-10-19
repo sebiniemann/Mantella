@@ -14,20 +14,20 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq htop
     sudo apt-get install -qq git
     
+    # Using Clang
     sudo apt-get install -qq clang
-    sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang 90
+    sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100
     sudo update-alternatives --set cc /usr/bin/clang
-    sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 90
+    sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
     sudo update-alternatives --set c++ /usr/bin/clang++
+    
   
     # Prerequirements (including optional features)
     ## CMake
     sudo apt-get install -qq cmake
     
     ## Armadillo C++
-    sudo apt-get install -qq libblas-dev
-    sudo apt-get install -qq liblapack-dev
-    sudo apt-get install -qq libopenblas-dev
+    sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
     wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.600.2.tar.gz
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
@@ -56,14 +56,14 @@ Vagrant.configure(2) do |config|
     
     # Testing
     sudo apt-get install -qq catch
-    ## Using clang-format-3.7
-    sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main'
+    ## Using clang-format-3.6
+    sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.6 main'
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
     sudo apt-get update -qq
-    sudo apt-get install -qq clang-format-3.7
-    ## Adds clang-format as an alternative to clang-format-3.7
-    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.7 100
-    sudo update-alternatives --set clang-format /usr/bin/clang-format-3.7
+    sudo apt-get install -qq clang-format-3.6
+    ## Adds clang-format as an alternative to clang-format-3.6
+    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
+    sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
     sudo apt-get install -qq iwyu
     sudo apt-get install -qq valgrind
     sudo apt-get install -qq lcov
