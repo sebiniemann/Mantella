@@ -33,7 +33,7 @@ install:
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
+  - cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
   - make --quiet -j 4
   - sudo make --quiet install
   ### Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
