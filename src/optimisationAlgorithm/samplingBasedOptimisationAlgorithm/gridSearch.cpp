@@ -1,5 +1,5 @@
 
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
+#include "mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp"
 // C++ standard library
 #include <vector>
 
