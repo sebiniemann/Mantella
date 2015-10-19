@@ -24,6 +24,7 @@
 //
 // Mantella
 //
+// IWYU pragma: begin_exports
 
 // Configuration
 #include <mantella_bits/config.hpp>
@@ -161,3 +162,4 @@
 #include <mantella_bits/clusterAnalysis.hpp>
 #include <mantella_bits/clusterAnalysis/basicSequentialAlgorithmicScheme.hpp>
 #include <mantella_bits/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.hpp>
+// IWYU pragma: end_exports
