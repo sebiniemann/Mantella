@@ -72,5 +72,10 @@ Vagrant.configure(2) do |config|
     # Useful development tools
     sudo apt-get install -qq ccache
     sudo apt-get install -qq gdb
+    
+    
+    # Fixing some paths
+    echo "LD_LIBRARY_PATH=/usr/local/lib" | sudo tee --append /etc/environment > /dev/null
+    source /etc/environment
   SHELL
 end
