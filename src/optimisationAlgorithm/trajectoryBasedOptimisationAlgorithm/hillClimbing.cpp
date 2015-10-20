@@ -21,7 +21,14 @@ namespace mant {
     while (!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
-      const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
+      arma::Col<double> candidateParameter = getRandomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
+      
+      const arma::Col<arma::uword>& belowLowerBound = arma::find(candidateParameter < getLowerBounds());
+      const arma::Col<arma::uword>& aboveUpperBound = arma::find(candidateParameter > getUpperBounds());
+
+      candidateParameter.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
+      candidateParameter.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
+      
       updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
     }
   }
