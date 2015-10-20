@@ -31,7 +31,7 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
     fi;
 
     COUNTER=$((++COUNTER));
-  done <<< "${FILES})";
+  done <<< "${FILES}";
   
   if [[ ${FORMAT_ERROR_OCCURED} == 0 ]]; then
     echo "${GREEN_TEXT_COLOR}Everything is fine.${RESET_TEXT_COLOR}";
@@ -62,7 +62,7 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
     fi;
     
     COUNTER=$((++COUNTER));
-  done <<< "${FILES})";
+  done <<< "${FILES}";
   
   if [[ ${INCLUDE_ERROR_OCCURED} == 0 ]]; then
     echo "${GREEN_TEXT_COLOR}Everything is fine.${RESET_TEXT_COLOR}";
