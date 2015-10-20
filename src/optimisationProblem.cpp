@@ -37,6 +37,7 @@ namespace mant {
   void OptimisationProblem::setLowerBounds(
       const arma::Col<double>& lowerBounds) {
     verify(lowerBounds.n_elem == numberOfDimensions_, "The number of elements within the lower bound must be equal to the number of problem dimensions.");
+    verify(lowerBounds.is_finite(), "All elements within the lower bound must be finite.");
 
     lowerBounds_ = lowerBounds;
   }
@@ -44,6 +45,7 @@ namespace mant {
   void OptimisationProblem::setUpperBounds(
       const arma::Col<double>& upperBounds) {
     verify(upperBounds.n_elem == numberOfDimensions_, "The number of elements within the upper bound must be equal to the number of problem dimensions.");
+    verify(upperBounds.is_finite(), "All elements within the upper bound must be finite.");
 
     upperBounds_ = upperBounds;
   }
@@ -158,6 +160,7 @@ namespace mant {
         ++numberOfDistinctEvaluations_;
 
         const double result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
+        assert(std::isfinite(result));
 
         cachedSamples_.insert({parameter, result});
         return result;
