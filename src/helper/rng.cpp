@@ -4,7 +4,7 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/config.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 namespace mant {
   std::mt19937_64& Rng::getGenerator() {

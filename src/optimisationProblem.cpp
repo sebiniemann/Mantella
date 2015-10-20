@@ -8,7 +8,7 @@
 #include <utility>
 
 // Mantella
-#include "mantella_bits/config.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/helper/assert.hpp"
 
 namespace mant {

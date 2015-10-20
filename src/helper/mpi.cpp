@@ -1,10 +1,14 @@
 #include "mantella_bits/helper/mpi.hpp"
 
 // C++ standard library
+#if defined(SUPPORT_MPI)
 #include <algorithm>
+#endif
 
 // Armadillo
+#if defined(SUPPORT_MPI)
 #include <armadillo>
+#endif
 
 #if defined(SUPPORT_MPI)
 namespace mant {

@@ -2,13 +2,15 @@
 
 // C++ standard library
 #include <string>
+#if defined(SUPPORT_MPI)
 #include <vector>
+#endif
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/config.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp"
 
 namespace mant {

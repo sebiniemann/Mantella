@@ -2,13 +2,15 @@
 
 // C++ standard library
 #include <unordered_map>
+#if defined(SUPPORT_MPI)
 #include <vector>
+#endif
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/config.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/helper/printable.hpp"
 #include "mantella_bits/helper/unorderedContainer.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
