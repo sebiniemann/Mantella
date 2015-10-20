@@ -11,9 +11,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update -qq
     
-    sudo apt-get install -qq htop
-    sudo apt-get install -qq git
-    
     # Using Clang
     sudo apt-get install -qq clang
     sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100
@@ -70,8 +67,11 @@ Vagrant.configure(2) do |config|
     
     
     # Useful development tools
+    sudo apt-get install -qq htop
+    sudo apt-get install -qq git
     sudo apt-get install -qq ccache
     sudo apt-get install -qq gdb
+    sudo apt-get install -qq dos2unix
     
     
     # Fixing some paths
