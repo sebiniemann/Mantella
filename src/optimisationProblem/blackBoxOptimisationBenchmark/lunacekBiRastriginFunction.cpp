@@ -27,20 +27,16 @@ namespace mant {
 
     void LunacekBiRastriginFunction::setRotationR(
         const arma::Mat<double>& rotationR) {
-      verify(rotationR.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationR),
-          "The parameter must be a rotation matrix.");
+      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
       rotationR_ = rotationR;
     }
 
     void LunacekBiRastriginFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationQ),
-          "The parameter must be a rotation matrix.");
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }

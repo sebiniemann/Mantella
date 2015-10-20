@@ -31,8 +31,7 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::optimise() {
-    verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()),
-        "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
+    verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
 
 #if defined(SUPPORT_MPI)
     std::vector<double> serialisedOptimisationProblem;

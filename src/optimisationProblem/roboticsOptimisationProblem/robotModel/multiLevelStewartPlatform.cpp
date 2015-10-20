@@ -19,8 +19,7 @@ namespace mant {
           platformLevels_(platformLevels),
           numberOfPlatformLevels_(platformLevels_.size()) {
       for (arma::uword n = 0; n < numberOfPlatformLevels_; ++n) {
-        verify(platformLevels_.at(n).numberOfRedundantJoints_ == 0,
-            ""); // TODO
+        verify(platformLevels_.at(n).numberOfRedundantJoints_ == 0, ""); // TODO
       }
     }
 

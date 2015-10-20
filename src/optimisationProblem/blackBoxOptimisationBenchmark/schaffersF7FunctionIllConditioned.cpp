@@ -21,10 +21,8 @@ namespace mant {
 
     void SchaffersF7FunctionIllConditioned::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationQ),
-          "The parameter must be a rotation matrix.");
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }

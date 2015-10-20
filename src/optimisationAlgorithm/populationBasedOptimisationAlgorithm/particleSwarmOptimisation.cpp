@@ -138,8 +138,7 @@ namespace mant {
 
   void ParticleSwarmOptimisation::setNeighbourhoodProbability(
       const double neighbourhoodProbability) {
-    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1,
-        "NeighbourhoodProbability must be a value between 0 and 1");
+    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1, "NeighbourhoodProbability must be a value between 0 and 1");
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 

@@ -9,8 +9,7 @@ namespace mant {
       arma::uword numberOfSelectedSamples)
       : samples_(samples),
         numberOfSelectedSamples_(numberOfSelectedSamples) {
-    verify(samples.size() >= numberOfSelectedSamples_,
-        ""); // TODO
+    verify(samples.size() >= numberOfSelectedSamples_, ""); // TODO
   }
 
   std::unordered_map<arma::Col<double>, double, Hash, IsEqual> SamplesSelection::getSelectedSamples() const {
