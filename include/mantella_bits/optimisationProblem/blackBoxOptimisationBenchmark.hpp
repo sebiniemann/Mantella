@@ -1,4 +1,5 @@
 #pragma once
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #if defined(SUPPORT_MPI)
@@ -9,7 +10,6 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {

@@ -1,6 +1,4 @@
 #pragma once
-
-// Mantella
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 #if defined(SUPPORT_MPI)

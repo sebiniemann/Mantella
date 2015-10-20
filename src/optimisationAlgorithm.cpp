@@ -1,4 +1,5 @@
 #include "mantella_bits/optimisationAlgorithm.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <atomic>
@@ -6,10 +7,11 @@
 #include <limits>
 
 // Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/helper/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/helper/mpi.hpp" // IWYU pragma: keep
+#if defined(SUPPORT_MPI)
+#include "mantella_bits/helper/mpi.hpp"
+#endif
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm(

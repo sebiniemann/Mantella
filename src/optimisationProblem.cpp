@@ -1,4 +1,5 @@
 #include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <cassert>
@@ -8,7 +9,6 @@
 #include <utility>
 
 // Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/helper/assert.hpp"
 
 namespace mant {

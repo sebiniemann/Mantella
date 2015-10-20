@@ -1,4 +1,5 @@
 #pragma once
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <string>
@@ -10,7 +11,6 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp"
 
 namespace mant {
