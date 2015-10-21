@@ -1,13 +1,13 @@
 #include "mantella_bits/helper/mpi.hpp"
 
 // C++ standard library
-#if defined(SUPPORT_MPI)
+#if defined(SUPPORT_MPI) // IWYU pragma: keep
 #include <algorithm>
 #endif
 
 // Armadillo
 #if defined(SUPPORT_MPI)
-#include <armadillo>
+#include <armadillo> // IWYU pragma: keep
 #endif
 
 #if defined(SUPPORT_MPI)

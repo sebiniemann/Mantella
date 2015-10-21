@@ -3,7 +3,7 @@
 
 // C++ standard library
 #include <string>
-#if defined(SUPPORT_MPI)
+#if defined(SUPPORT_MPI) // IWYU pragma: keep
 #include <vector>
 #endif
 
