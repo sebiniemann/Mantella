@@ -37,7 +37,7 @@ namespace mant {
 #endif
 
      protected:
-      const typename arma::Col<double>::fixed<101> weight_;
+      const arma::Col<double>::fixed<101> weight_;
 
       arma::Mat<double> rotationQ_;
       arma::Mat<double> localParameterConditionings_;
