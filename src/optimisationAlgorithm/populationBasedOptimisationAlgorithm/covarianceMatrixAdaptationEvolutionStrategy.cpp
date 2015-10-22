@@ -28,7 +28,7 @@ namespace mant {
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
       const std::shared_ptr<OptimisationProblem> optimisationProblem)
   : CovarianceMatrixAdaptationEvolutionStrategy(optimisationProblem,
-  4 + std::floor(3 * log(optimisationProblem->numberOfDimensions_))) {
+  4 + std::floor(3 * std::log(optimisationProblem->numberOfDimensions_))) {
 
   }
 
