@@ -108,8 +108,6 @@ namespace mant {
         numberOfIterations_++;
       }
 
-      fitnessSel = fitnessRaw;
-
       //;----- handle boundaries -----
       //;Get delta fitness values
       //TODO: ugly, how to initialiser list?
