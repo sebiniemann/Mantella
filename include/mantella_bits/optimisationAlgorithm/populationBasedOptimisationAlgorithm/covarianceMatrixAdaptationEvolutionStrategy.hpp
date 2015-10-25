@@ -59,75 +59,61 @@ namespace mant {
     //          comments after ';' are from matlab code
     //          comments after '-' are from mantella
 
-    arma::Col<double> startingPoint; //definput.xstart
-    arma::Col<double> stepSize; //definput.insigma
+    arma::Col<double> startingPoint_; //definput.xstart
+    arma::Col<double> stepSize_; //definput.insigma
 
-    double toleranceX; //stopTolX or defopts.TolX; stop if x-change smaller TolX
-    double toleranceUpX; //stopTolUpX or defopts.TolUpX; stop if x-changes larger TolUpX
-    double toleranceFun; //stopTolFun or defopts.TolFun; stop if fun-changes smaller TolFun
-    double toleranceHistFun; //stopTolHistFun or defopts.TolHistFun; stop if back fun-changes smaller TolHistFun
-    bool stopOnStagnation = true; //defopts.StopOnStagnation; stop when fitness stagnates for a long time
-    bool stopOnWarnings = true; //defopts.StopOnWarnings
-    bool stopOnEqualFunctionValues = true; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
-    arma::Col<double> EqualFunctionValues;
+    double toleranceX_; //stopTolX or defopts.TolX; stop if x-change smaller TolX
+    double toleranceUpX_; //stopTolUpX or defopts.TolUpX; stop if x-changes larger TolUpX
+    double toleranceFun_; //stopTolFun or defopts.TolFun; stop if fun-changes smaller TolFun
+    double toleranceHistFun_; //stopTolHistFun or defopts.TolHistFun; stop if back fun-changes smaller TolHistFun
+    bool stopOnStagnation_ = true; //defopts.StopOnStagnation; stop when fitness stagnates for a long time
+    bool stopOnWarnings_ = true; //defopts.StopOnWarnings
+    bool stopOnEqualFunctionValues_ = true; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
+    arma::Col<double> EqualFunctionValues_;
 
-    arma::uword restarts = 9; //defopts.Restarts - HCMA default is 9
-    double incPopSize = 2; //defopts.IncPopSize; multiplier for population size before each restart
-    arma::uword mu; //defopts.ParentNumber/mu
-    double mueff; //mueff
-    arma::Col<double> recombinationWeights; //weights
-    double cs; //defopts.CMA.cs/cs; cumulation constant for step-size
-    double damping; //defopts.CMA.damps; damping for step-size
-    double ccum; //defopts.CMA.ccum/cc; 
-    double ccov1; //defopts.CMA.ccov1;
-    double ccovmu; //defopts.CMA.ccovmu;
-    arma::uword activeCMA; ////defopts.CMA.active; active CMA 1: neg. updates with pos. def. check, 2: neg. updates
-    arma::uword irun = 0; //irun
+    arma::uword mu_; //defopts.ParentNumber/mu
+    double mueff_; //mueff
+    arma::Col<double> recombinationWeights_; //weights
+    double cs_; //defopts.CMA.cs/cs; cumulation constant for step-size
+    double damping_; //defopts.CMA.damps; damping for step-size
+    double ccum_; //defopts.CMA.ccum/cc; 
+    double ccov1_; //defopts.CMA.ccov1;
+    double ccovmu_; //defopts.CMA.ccovmu;
+    arma::uword activeCMA_; ////defopts.CMA.active; 0: active CMA 1: neg. updates with pos. def. check, 2: neg. updates
+    arma::uword irun_; //irun
     //TODO: flgDiagonalOnly - left out. Afaik we never do diagonal matrices. If needed all code for this can easily be added.
-    void populationSizeChanged();
 
     //arxvalid needs to be here so it is available after the loop
-    arma::Mat<double> newGenerationValid; //arxvalid
-    arma::Col<double> xmean; //xmean
-    arma::Col<double> xold; //xold
-    arma::uword lambda_last;
-    double sigma; //sigma
-    arma::Col<double> pc; //pc; evolution path for C
-    arma::Col<double> ps; //ps; evolution path for sigma
-    arma::Mat<double> B; //B
-    arma::Mat<double> C; //C
-    arma::Mat<double> D; //D
-    arma::Mat<double> BD; //BD
-    arma::Col<double> diagC; //diagC
-    arma::Col<double> diagD; //diagD; diagonal matrix D defines the scaling
-    double chiN; //chiN
-    double negCcov; //neg.ccov
+    arma::Mat<double> newGenerationValid_; //arxvalid
+    arma::Col<double> xmean_; //xmean
+    arma::Col<double> xold_; //xold
+    arma::uword lambda_last_;
+    double sigma_; //sigma
+    arma::Col<double> pc_; //pc; evolution path for C
+    arma::Col<double> ps_; //ps; evolution path for sigma
+    arma::Mat<double> B_; //B
+    arma::Mat<double> C_; //C
+    arma::Mat<double> D_; //D
+    arma::Mat<double> BD_; //BD
+    arma::Col<double> diagC_; //diagC
+    arma::Col<double> diagD_; //diagD; diagonal matrix D defines the scaling
+    double chiN_; //chiN
+    double negCcov_; //neg.ccov
 
-    bool boundaryActive = false; //bnd.isactive
-    arma::Col<double> boundaryWeights; //bnd.weights
-    arma::Col<double> boundaryScale; //bnd.scale
-    arma::Col<arma::uword> boundaryExists; //bnd.isbounded
-    arma::Col<double> boundaryDeltaFitHistory; //bnd.dfithist; delta fit for setting weights
-    bool boundaryFitnessValid = false;; //bnd.validfitval; 
-    bool boundaryInitialPhase = true; //bnd.iniphase
-    arma::Col<double> boundaryPenalty; //bnd.arpenalty
-    //bnd.flgscale not used, always 0 in matlab
     std::tuple<arma::Mat<double>, arma::Mat<double>> capToBoundary(arma::Mat<double> x); //xintobounds.m - returns capped matrix/vector first, indexes of capped values second
 
-    arma::Col<double> fitnessRaw; //fitness.raw
-    arma::Col<double> fitnessSel; //fitness.sel
-    arma::Col<double> fitnessRawPreviousIteration;//helper variable to replace fitnesshist
-    arma::Col<arma::uword> fitnessIdx; //fitness.idx
-    arma::Col<arma::uword> fitnessIdxSel; //fitness.idxsel
-    
-    arma::Col<double> percentiles(arma::Col<double> vector, arma::Col<arma::uword> perc); //myprctile
+    arma::Col<double> fitnessRaw_; //fitness.raw
+    arma::Col<double> fitnessSel_; //fitness.sel
+    arma::Col<double> fitnessRawPreviousIteration_;//helper variable to replace fitnesshist
+    arma::Col<arma::uword> fitnessIdx_; //fitness.idx
+    arma::Col<arma::uword> fitnessIdxSel_; //fitness.idxsel
 
     //HCMA needs to be able to do single iterations of CMAES, for that this bool can be set.
-    bool singleIteration = false;
+    bool singleIteration_ = false;
     //helper variable to check if run was initialized
-    bool runInitialized = false;
-    arma::uword countiter = 0; //countiter - counts main loop evaluations, NOT function evaluations
-    arma::uword stopMaxIter; //stopMaxIter or opts.MaxIter
+    bool runInitialized_ = false;
+    arma::uword countiter_ = 0; //countiter - counts main loop evaluations, NOT function evaluations
+    arma::uword stopMaxIter_; //stopMaxIter or opts.MaxIter
 
     void optimiseImplementation() override;
   };
