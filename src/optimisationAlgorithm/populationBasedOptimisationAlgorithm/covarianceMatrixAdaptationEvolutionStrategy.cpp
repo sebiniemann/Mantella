@@ -1,6 +1,7 @@
 #include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 
 // C++ standard library
+#include <cassert>
 #include <cmath>
 #include <algorithm>
 
@@ -46,7 +47,7 @@ namespace mant {
     ps_ = arma::zeros(numberOfDimensions_);
 
     diagD_ = stepSize_ / sigma_;
-    diagC_ = arma::pow(diagD_, 2);
+    diagC_ = arma::square(diagD_);
     B_ = arma::eye(numberOfDimensions_, numberOfDimensions_); //;B defines the coordinate system
     BD_ = arma::diagmat(diagD_); //;B*D for speed up only
     C_ = arma::diagmat(diagC_); //;covariance matrix == BD*(BD)'
@@ -94,7 +95,6 @@ namespace mant {
 
       //;----- handle boundaries -----
       //;Assigned penalized fitness
-      //TODO: check if we sum the correct dimension
       arma::Col<double> boundaryPenalty = arma::sum(arma::abs(newGenerationValid_ - newGeneration));
       fitnessSel_ = fitnessRaw_ + boundaryPenalty;
       //;----- end handle boundaries -----
@@ -147,20 +147,18 @@ namespace mant {
 
           //;prepare vectors, compute negative updating matrix Cneg and checking matrix Ccheck
           //have to do some workaround since you cannot create negative descending sequences with arma
-          //TODO: or can you?
           arma::Col<arma::uword> negHelper = arma::conv_to<arma::uvec>::from(
-              arma::flipud(arma::linspace(populationSize_ - negMu, populationSize_ - 1, std::abs(-negMu + 2))));
+                  -arma::linspace(-(populationSize_ - 1), -(populationSize_ - negMu), std::abs(-negMu + 2)));
           arma::Mat<double> newGenerationRawNeg = newGenerationRaw.cols(fitnessIdxSel_.rows(negHelper)); //arzneg
           //;i-th longest becomes i-th shortest
-
-          arma::Col<arma::uword> ngRawNegNormIndex = arma::sort_index(arma::sqrt(arma::sum(arma::pow(newGenerationRawNeg, 2), 1))); //idxnorms
-          arma::Col<double> ngRawNegNorm = arma::sort(arma::sqrt(arma::sum(arma::pow(newGenerationRawNeg, 2), 1))); //arnorms
+          arma::Col<arma::uword> ngRawNegNormIndex = arma::sort_index(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 1))); //idxnorms
+          arma::Col<double> ngRawNegNorm = arma::sort(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 1))); //arnorms
           ngRawNegNormIndex = arma::sort_index(ngRawNegNormIndex); //;inverse index
           //another workaround for negative ordering
           negHelper = arma::conv_to<arma::uvec>::from(
-              arma::flipud(arma::linspace(0, ngRawNegNorm.n_elem - 1, ngRawNegNorm.n_elem)));
+                  -arma::linspace(-(ngRawNegNorm.n_elem - 1),0,ngRawNegNorm.n_elem));
+          arma::Col<double> ngRawNegNormFacs = ngRawNegNorm(negHelper) / ngRawNegNorm; //arnormfacs
           ngRawNegNorm = ngRawNegNorm(negHelper); //;for the record
-          arma::Col<double> ngRawNegNormFacs = ngRawNegNorm / ngRawNegNorm; //arnormfacs
           if (activeCMA_ < 20) {
             newGenerationRawNeg = newGenerationRawNeg.each_row() % ngRawNegNormFacs; //;E x*x' is N
           }
@@ -182,7 +180,7 @@ namespace mant {
           //;this check makes the original choice of neg.ccov extremly failsafe 
           //;still assuming C == BD*BD', which is only approxim. correct 
           if (activeCMA_ % 10 == 1 &&
-              arma::all(1 - negCcov_ * arma::pow(ngRawNegNorm(ngRawNegNormIndex), 2) * recombinationWeights_
+              arma::all(1 - negCcov_ * arma::square(ngRawNegNorm(ngRawNegNormIndex)) * recombinationWeights_
               < negMinResidualVariance)) {
             //In matlab there is a long block of comments here about how to calculate these two values
             //TODO: matlab apparently doesn't care that the eigenvalue could be complex.
@@ -207,7 +205,7 @@ namespace mant {
       //;Adapt sigma
       sigma_ = sigma_ * std::exp(
           std::min(1.0,
-          (std::sqrt(arma::accu(arma::pow(ps_, 2))) / chiN_ - 1) * cs_ / damping_)); //; Eq. (5)
+          (std::sqrt(arma::accu(arma::square(ps_))) / chiN_ - 1) * cs_ / damping_)); //; Eq. (5)
 
       //;Update B and D from C
       if ((ccov1_ + ccovmu_ + negCcov_) > 0 && countiter_ % 1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions_ * 10) < 1) {
@@ -217,7 +215,8 @@ namespace mant {
         //;effort: approx. 15*N matrix-vector multiplications
         diagD_ = arma::diagmat(tmp);
 
-        //TODO: matlab throws errors here if diagD or B contain non-finite values
+        assert(arma::is_finite(diagD_));
+        assert(arma::is_finite(B_));
 
         //;limit condition of C to 1e14 + 1
         if (arma::min(diagD_) <= 0) {
@@ -247,9 +246,6 @@ namespace mant {
         diagD_ = arma::sqrt(diagD_); //;D contains standard deviations now
         BD_ = B_.each_row() % diagD_;
       }
-
-      //TODO: skipped a code block to "Align/rescale order of magnitude of scales of sigma and C for nicer output"
-      //TODO: skipped another code block for flgDiagonalOnly
 
       //;----- numerical error management -----
       //TODO: control these skips
@@ -301,8 +297,6 @@ namespace mant {
 
       //;----- end numerical error management -----
 
-      //TODO: some output is written here, probably not need for us
-
       //;Set stop flag
       if (fitnessRaw_(0) <= getAcceptableObjectiveValue()) {
         stopFlag = true;
@@ -320,11 +314,6 @@ namespace mant {
         stopFlag = true;
       }
       if (sigma_ * arma::max(diagD_) == 0) {//;should never happen
-        stopFlag = true;
-      }
-      //TODO: with removal of fitnesshist two stops were removed completely and one got changed
-      //replacement of fitnesshist
-      if (countiter_ > 2 && arma::all(fitnessRaw_ - fitnessRawPreviousIteration_ <= toleranceFun_)) {
         stopFlag = true;
       }
 
@@ -372,7 +361,7 @@ namespace mant {
     mu_ = std::floor(populationSize_ / 2.0);
     recombinationWeights_ = std::log(mu_ + 0.5) - arma::log(arma::linspace(1, mu_, mu_)).t();
 
-    mueff_ = std::pow(arma::accu(recombinationWeights_), 2) / arma::accu(arma::pow(recombinationWeights_, 2)); //;variance-effective size of mu
+    mueff_ = std::pow(arma::accu(recombinationWeights_), 2) / arma::accu(arma::square(recombinationWeights_)); //;variance-effective size of mu
     recombinationWeights_ = arma::normalise(recombinationWeights_, 1); //;normalize recombination weights array
     //error check omitted, shouldn't happen
 
@@ -486,7 +475,6 @@ namespace mant {
     arma::Mat<double> indexes = arma::zeros(x.n_rows, x.n_cols);
     for (arma::uword n = 0; n < x.n_cols; ++n) {
       const arma::Col<arma::uword>& lowerIndex = arma::find(x.col(n) < getLowerBounds());
-      //TODO: is this the right way? otherwise getting an error that subview doesn't have elem-method
       static_cast<arma::Col<double>>(x.col(n)).elem(lowerIndex) = getLowerBounds().elem(lowerIndex);
       indexes(lowerIndex) += -1;
       
