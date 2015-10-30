@@ -1,7 +1,12 @@
-#include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp"
+
+// C++ standard library
+#include <utility>
 
 // Mantella
-#include <mantella_bits/helper/regression.hpp>
+#include "mantella_bits/helper/regression.hpp"
+#include "mantella_bits/correlationFunction.hpp"
+#include "mantella_bits/regressionFunction.hpp"
 
 namespace mant {
   KrigingModel::KrigingModel(

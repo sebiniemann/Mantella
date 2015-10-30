@@ -1,12 +1,12 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.hpp"
 
 // C++ standard library
 #include <cassert>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {
@@ -21,20 +21,16 @@ namespace mant {
 
     void RastriginFunctionRotated::setRotationR(
         const arma::Mat<double>& rotationR) {
-      verify(rotationR.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationR),
-          "The parameter must be a rotation matrix.");
+      verify(rotationR.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationR), "The parameter must be a rotation matrix.");
 
       rotationR_ = rotationR;
     }
 
     void RastriginFunctionRotated::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationQ),
-          "The parameter must be a rotation matrix.");
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
@@ -81,7 +77,7 @@ namespace mant {
         serialisedOptimisationProblem.pop_back();
       }
 
-    BlackBoxOptimisationBenchmark::deserialise(serialisedOptimisationProblem);
+      BlackBoxOptimisationBenchmark::deserialise(serialisedOptimisationProblem);
     }
 #endif
   }

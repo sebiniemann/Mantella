@@ -1,18 +1,19 @@
-#include <mantella_bits/helper/setTheory.hpp>
+#include "mantella_bits/helper/setTheory.hpp"
 
 // C++ standard library
 #include <algorithm>
+#include <cmath>
 #include <iterator>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   std::vector<arma::Col<arma::uword>> getCombinations(
       const arma::uword numberOfElements,
       const arma::uword combinationSize) {
     verify(combinationSize <= numberOfElements, ""); // TODO
-      
+
     std::vector<arma::Col<arma::uword>> combinations;
 
     std::vector<arma::uword> bitmask(numberOfElements);

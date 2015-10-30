@@ -1,15 +1,14 @@
-#include <mantella_bits/helper/quasiRandomSequence.hpp>
+#include "mantella_bits/helper/quasiRandomSequence.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   arma::Mat<double> getHaltonSequence(
       const arma::Col<arma::uword>& base,
       const arma::Col<arma::uword>& seed,
       const arma::uword numberOfColumms) {
-    verify(base.n_elem == seed.n_elem,
-        "The number of dimensions of the base parameter must match the number of dimensions of the seed parameter.");
+    verify(base.n_elem == seed.n_elem, "The number of dimensions of the base parameter must match the number of dimensions of the seed parameter.");
 
     arma::Mat<double> sequence(seed.n_elem, numberOfColumms);
 

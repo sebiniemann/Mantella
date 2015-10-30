@@ -1,4 +1,4 @@
-#include <mantella_bits/correlationFunction/gaussianCorrelationFunction.hpp>
+#include "mantella_bits/correlationFunction/gaussianCorrelationFunction.hpp"
 
 // C++ standard library
 #include <cmath>

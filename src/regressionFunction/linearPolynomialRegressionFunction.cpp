@@ -1,4 +1,4 @@
-#include <mantella_bits/regressionFunction/linearPolynomialRegressionFunction.hpp>
+#include "mantella_bits/regressionFunction/linearPolynomialRegressionFunction.hpp"
 
 namespace mant {
   LinearRegressionFunction::LinearRegressionFunction(

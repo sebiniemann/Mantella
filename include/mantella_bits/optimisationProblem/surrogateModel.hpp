@@ -4,11 +4,16 @@
 #include <unordered_map>
 
 // Armadillo
-#include <armadillo>
+namespace arma {
+  template <typename eT>
+  class Col;
+}
 
 // Mantella
-#include <mantella_bits/helper/unorderedContainer.hpp>
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   class SurrogateModel : public OptimisationProblem {

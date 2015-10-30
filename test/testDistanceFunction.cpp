@@ -22,10 +22,10 @@ class TestDistanceFunction : public mant::PNorm {
 };
 
 TEST_CASE("DistanceFunction") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
       
-  const arma::uword p = getRandomNumberOfValues(1);
+  const arma::uword p = 1 + getDiscreteRandomNumber();
   CAPTURE(p);
 
   TestDistanceFunction distanceFunction(numberOfDimensions, p);
@@ -38,20 +38,32 @@ TEST_CASE("DistanceFunction") {
 
   SECTION(".getDistance") {
     SECTION("Returns the distance between two vectors.") {
-      arma::Col<double> firstParameter = getRandomValues(numberOfDimensions, 1);
+      arma::Col<double> firstParameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(firstParameter);
-      arma::Col<double> secondParameter = getRandomValues(numberOfDimensions, 1);
+      arma::Col<double> secondParameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(secondParameter);
       
       CHECK(distanceFunction.getDistance(firstParameter, secondParameter) == Approx(distanceFunction.getLength(secondParameter - firstParameter)));
     }
     
-    // TODO Add exception tests
+    SECTION("Exception tests") {
+      SECTION("Throw an exception, if the number of elements within the first parameter does not match the number of elements in the second one.") {
+        const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
+        CAPTURE(differentNumberOfDimensions);
+        
+        arma::Col<double> firstParameter = getContinuousRandomNumbers(numberOfDimensions);
+        CAPTURE(firstParameter);
+        arma::Col<double> secondParameter = getContinuousRandomNumbers(differentNumberOfDimensions);
+        CAPTURE(secondParameter);
+        
+        CHECK_THROWS_AS(distanceFunction.getDistance(firstParameter, secondParameter), std::logic_error);
+      }
+    }
   }
 
   SECTION(".getLength") {
     SECTION("Returns the length of a vector.") {
-      arma::Col<double> parameter = getRandomValues(numberOfDimensions, 1);
+      arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
       CHECK(distanceFunction.getLength(parameter) == Approx(distanceFunction.getLengthImplementation(parameter)));

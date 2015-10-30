@@ -1,4 +1,10 @@
-#include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp"
+
+// C++ standard library
+#include <utility>
+
+// Mantella
+#include "mantella_bits/radialBasisFunction.hpp"
 
 namespace mant {
   RadialBasisFunctionModel::RadialBasisFunctionModel(

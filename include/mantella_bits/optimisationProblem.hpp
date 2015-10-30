@@ -1,15 +1,20 @@
 #pragma once
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <unordered_map>
+#if defined(SUPPORT_MPI) // IWYU pragma: keep
+#include <vector>
+#endif
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/helper/unorderedContainer.hpp>
+#include "mantella_bits/helper/printable.hpp"
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   class OptimisationProblem : public Printable {

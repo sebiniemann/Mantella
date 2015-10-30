@@ -1,7 +1,7 @@
-#include <mantella_bits/correlationFunction/polynomialCorrelationFunction.hpp>
+#include "mantella_bits/correlationFunction/polynomialCorrelationFunction.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   PolynomialCorrelationFunction::PolynomialCorrelationFunction(

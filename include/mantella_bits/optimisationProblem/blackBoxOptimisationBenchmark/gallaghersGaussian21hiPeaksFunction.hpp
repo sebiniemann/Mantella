@@ -1,15 +1,17 @@
 #pragma once
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <string>
+#if defined(SUPPORT_MPI) // IWYU pragma: keep
 #include <vector>
+#endif
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp"
 
 namespace mant {
   namespace bbob {
@@ -35,7 +37,7 @@ namespace mant {
 #endif
 
      protected:
-      const typename arma::Col<double>::fixed<21> weight_;
+      const arma::Col<double>::fixed<21> weight_;
 
       arma::Mat<double> rotationQ_;
       arma::Mat<double> localParameterConditionings_;

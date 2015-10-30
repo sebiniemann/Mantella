@@ -1,4 +1,4 @@
-#include <mantella_bits/radialBasisFunction/polyharmonicSplineRadialBasisFunction.hpp>
+#include "mantella_bits/radialBasisFunction/polyharmonicSplineRadialBasisFunction.hpp"
 
 // C++ standard library
 #include <cmath>

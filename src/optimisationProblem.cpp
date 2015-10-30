@@ -1,11 +1,15 @@
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <cassert>
+#include <atomic>
+#include <cmath>
+#include <limits>
+#include <utility>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   OptimisationProblem::OptimisationProblem(
@@ -32,16 +36,16 @@ namespace mant {
 
   void OptimisationProblem::setLowerBounds(
       const arma::Col<double>& lowerBounds) {
-    verify(lowerBounds.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
+    verify(lowerBounds.n_elem == numberOfDimensions_, "The number of elements within the lower bound must be equal to the number of problem dimensions.");
+    verify(lowerBounds.is_finite(), "All elements within the lower bound must be finite.");
 
     lowerBounds_ = lowerBounds;
   }
 
   void OptimisationProblem::setUpperBounds(
       const arma::Col<double>& upperBounds) {
-    verify(upperBounds.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
+    verify(upperBounds.n_elem == numberOfDimensions_, "The number of elements within the upper bound must be equal to the number of problem dimensions.");
+    verify(upperBounds.is_finite(), "All elements within the upper bound must be finite.");
 
     upperBounds_ = upperBounds;
   }
@@ -56,26 +60,22 @@ namespace mant {
 
   arma::Col<arma::uword> OptimisationProblem::isWithinLowerBounds(
       const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     return parameter >= lowerBounds_;
   }
 
   arma::Col<arma::uword> OptimisationProblem::isWithinUpperBounds(
       const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     return parameter <= upperBounds_;
   }
 
   void OptimisationProblem::setParameterPermutation(
       const arma::Col<arma::uword>& parameterPermutation) {
-    verify(parameterPermutation.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions");
-    verify(isPermutation(parameterPermutation, numberOfDimensions_, numberOfDimensions_),
-        "The parameter must be a permutation.");
+    verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
+    verify(isPermutation(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "The parameter must be a permutation.");
 
     parameterPermutation_ = parameterPermutation;
 
@@ -85,10 +85,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterScaling(
       const arma::Col<double>& parameterScaling) {
-    verify(parameterScaling.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
-    verify(parameterScaling.is_finite(),
-        "All elements must be finite.");
+    verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(parameterScaling.is_finite(), "All elements must be finite.");
 
     parameterScaling_ = parameterScaling;
 
@@ -98,10 +96,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterTranslation(
       const arma::Col<double>& parameterTranslation) {
-    verify(parameterTranslation.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
-    verify(parameterTranslation.is_finite(),
-        "All elements must be finite.");
+    verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    verify(parameterTranslation.is_finite(), "All elements must be finite.");
 
     parameterTranslation_ = parameterTranslation;
 
@@ -111,10 +107,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterRotation(
       const arma::Mat<double>& parameterRotation) {
-    verify(parameterRotation.n_rows == numberOfDimensions_,
-        "The number of rows must be equal to the number of dimensions.");
-    verify(isRotationMatrix(parameterRotation),
-        "The parameter must be a rotation matrix.");
+    verify(parameterRotation.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions.");
+    verify(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
 
     parameterRotation_ = parameterRotation;
 
@@ -124,8 +118,7 @@ namespace mant {
 
   void OptimisationProblem::OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
-    verify(std::isfinite(objectiveValueScaling),
-        "The objective value scaling must be finite.");
+    verify(std::isfinite(objectiveValueScaling), "The objective value scaling must be finite.");
 
     objectiveValueScaling_ = objectiveValueScaling;
 
@@ -135,8 +128,7 @@ namespace mant {
 
   void OptimisationProblem::setObjectiveValueTranslation(
       const double objectiveValueTranslation) {
-    verify(std::isfinite(objectiveValueTranslation),
-        "The objective value translation must be finite.");
+    verify(std::isfinite(objectiveValueTranslation), "The objective value translation must be finite.");
 
     objectiveValueTranslation_ = objectiveValueTranslation;
 
@@ -155,8 +147,7 @@ namespace mant {
 
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_,
-        "The number of elements must be equal to the number of dimensions.");
+    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
@@ -169,6 +160,7 @@ namespace mant {
         ++numberOfDistinctEvaluations_;
 
         const double result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
+        assert(std::isfinite(result));
 
         cachedSamples_.insert({parameter, result});
         return result;

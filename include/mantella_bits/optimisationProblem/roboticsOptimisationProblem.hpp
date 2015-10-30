@@ -7,8 +7,12 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/optimisationProblem.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp>
+#include "mantella_bits/optimisationProblem.hpp"
+namespace mant {
+  namespace robotics {
+    class RobotModel;
+  }
+}
 
 namespace mant {
   namespace robotics {

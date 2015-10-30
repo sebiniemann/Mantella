@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   PopulationBasedOptimisationAlgorithm::PopulationBasedOptimisationAlgorithm(
@@ -14,10 +14,8 @@ namespace mant {
 
   void PopulationBasedOptimisationAlgorithm::setInitialPopulation(
       const arma::Mat<double>& initialPopulation) {
-    verify(initialPopulation.n_rows == numberOfDimensions_,
-        "The number of rows must match the number of dimensions of the optimisation problem.");
-    verify(initialPopulation.n_cols == populationSize_,
-        "The number of cols must match the population size.");
+    verify(initialPopulation.n_rows == numberOfDimensions_, "The number of rows must match the number of dimensions of the optimisation problem.");
+    verify(initialPopulation.n_cols == populationSize_, "The number of cols must match the population size.");
 
     initialPopulation_ = initialPopulation;
   }

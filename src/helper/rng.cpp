@@ -1,10 +1,8 @@
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/rng.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // Armadillo
 #include <armadillo>
-
-// Mantella
-#include <mantella_bits/config.hpp>
 
 namespace mant {
   std::mt19937_64& Rng::getGenerator() {

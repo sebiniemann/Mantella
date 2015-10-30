@@ -9,9 +9,13 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/unorderedContainer.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
-#include <mantella_bits/radialBasisFunction.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel.hpp"
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
+namespace mant {
+  class RadialBasisFunction;
+}
 
 namespace mant {
   class RadialBasisFunctionModel : public SurrogateModel {

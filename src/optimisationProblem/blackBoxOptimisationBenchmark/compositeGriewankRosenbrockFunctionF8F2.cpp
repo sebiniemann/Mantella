@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.hpp"
 
 // C++ standard library
 #include <cassert>
@@ -6,7 +6,7 @@
 #include <algorithm>
 
 // Mantella
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {

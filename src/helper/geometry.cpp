@@ -1,11 +1,11 @@
-#include <mantella_bits/helper/geometry.hpp>
+#include "mantella_bits/helper/geometry.hpp"
 
 // C++ standard library
 #include <cmath>
 #include <algorithm>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   arma::Mat<double>::fixed<2, 2> get2DRotation(
@@ -36,16 +36,12 @@ namespace mant {
       const double firstRadius,
       const arma::Col<double>::fixed<2>& secondCenter,
       const double secondRadius) {
-    verify(firstRadius > 0,
-        "The radius of the first circle must be strict greater than 0.");
-    verify(secondRadius > 0,
-        "The radius of the second circle must be strict greater than 0.");
+    verify(firstRadius > 0, "The radius of the first circle must be strict greater than 0.");
+    verify(secondRadius > 0, "The radius of the second circle must be strict greater than 0.");
 
     double distance = arma::norm(secondCenter - firstCenter);
-    verify(distance > 0,
-        "The distance between both circle centres must be strict greater than 0.");
-    verify(distance < firstRadius + secondRadius,
-        "The distance between both circles centres must be strict less than the sum of their radii.");
+    verify(distance > 0, "The distance between both circle centres must be strict greater than 0.");
+    verify(distance < firstRadius + secondRadius, "The distance between both circles centres must be strict less than the sum of their radii.");
     verify(distance > std::max(firstRadius, secondRadius) - std::min(firstRadius, secondRadius),
         "The distance between both centres must be strict greater than the difference in their radii.");
 
@@ -64,24 +60,19 @@ namespace mant {
       const arma::Col<double>::fixed<3>& circleNormal,
       const arma::Col<double>::fixed<3>& sphereCenter,
       const double sphereRadius) {
-    verify(circleRadius > 0,
-        "The radius of the circle must be strict greater than 0.");
-    verify(sphereRadius > 0,
-        "The radius of the sphere must be strict greater than 0.");
+    verify(circleRadius > 0, "The radius of the circle must be strict greater than 0.");
+    verify(sphereRadius > 0, "The radius of the sphere must be strict greater than 0.");
 
     // Distance between the spheres center and the intersection circle within the sphere
     const double innerDistance = arma::dot(circleNormal, sphereCenter - circleCenter);
-    verify(std::abs(innerDistance) < sphereRadius,
-        "Only intersections with exactly two solutions are considered valid.");
+    verify(std::abs(innerDistance) < sphereRadius, "Only intersections with exactly two solutions are considered valid.");
 
     const arma::Col<double>::fixed<3>& innerCenter = sphereCenter + innerDistance * circleNormal;
     const double innerRadius = std::sqrt(std::pow(sphereRadius, 2.0) - std::pow(innerDistance, 2.0));
 
     const double distance = arma::norm(innerCenter - circleCenter);
-    verify(distance > 0,
-        "The distance between both circle centres must be strict greater than 0. Note: The second circle is defnied by a plane/sphere intesection.");
-    verify(distance < circleRadius + innerRadius,
-        "The distance between both circles centres must be strict less than the sum of their radii. Note: The second circle is defnied by a plane/sphere intesection.");
+    verify(distance > 0, "The distance between both circle centres must be strict greater than 0. Note: The second circle is defnied by a plane/sphere intesection.");
+    verify(distance < circleRadius + innerRadius, "The distance between both circles centres must be strict less than the sum of their radii. Note: The second circle is defnied by a plane/sphere intesection.");
     verify(distance > std::max(circleRadius, innerRadius) - std::min(circleRadius, innerRadius),
         "The distance between both centres must be strict greater than the difference in their radii. Note: The second circle is defnied by a plane/sphere intesection.");
 

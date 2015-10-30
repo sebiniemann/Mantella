@@ -1,10 +1,10 @@
-#include <mantella_bits/helper/statistic.hpp>
+#include "mantella_bits/helper/statistic.hpp"
 
 // C++ standard library
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   double getMedianAbsoluteError(
@@ -16,7 +16,7 @@ namespace mant {
       const arma::Row<double>& data,
       const double nthPercentile) {
     verify(0.0 < nthPercentile && nthPercentile <= 100.0, ""); // TODO
-      
+
     const arma::Row<double>& sortedData = arma::sort(data, "descend");
     double index = nthPercentile * sortedData.n_elem / 100;
 
@@ -34,7 +34,7 @@ namespace mant {
       const arma::Row<double>& data,
       const double nthDecile) {
     verify(0.0 < nthDecile && nthDecile <= 10.0, ""); // TODO
-    
+
     return getPercentile(data, nthDecile * 10.0);
   }
 
@@ -42,7 +42,7 @@ namespace mant {
       const arma::Row<double>& data,
       const double nthQuartile) {
     verify(0.0 < nthQuartile && nthQuartile <= 4.0, ""); // TODO
-    
+
     return getPercentile(data, nthQuartile * 25.0);
   }
 

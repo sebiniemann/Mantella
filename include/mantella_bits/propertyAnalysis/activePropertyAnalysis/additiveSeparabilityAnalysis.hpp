@@ -3,13 +3,16 @@
 // C++ standard library
 #include <memory>
 #include <string>
+#include <vector>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class AdditiveSeparabilityAnalysis : public ActivePropertyAnalysis {

@@ -1,4 +1,7 @@
-#include <mantella_bits/distanceFunction.hpp>
+#include "mantella_bits/distanceFunction.hpp"
+
+// Mantella
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   DistanceFunction::DistanceFunction(
@@ -9,6 +12,8 @@ namespace mant {
   double DistanceFunction::getDistance(
       const arma::Col<double>& firstParameter,
       const arma::Col<double>& secondParameter) const {
+    verify(firstParameter.n_elem == secondParameter.n_elem, ""); // TODO
+
     return getLengthImplementation(secondParameter - firstParameter);
   }
 

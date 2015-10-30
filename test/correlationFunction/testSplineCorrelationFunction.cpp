@@ -19,14 +19,14 @@ class TestSplineCorrelationFunction : public mant::SplineCorrelationFunction {
 };
 
 TEST_CASE("SplineCorrelationFunction") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
   
   TestSplineCorrelationFunction splineCorrelationFunction(numberOfDimensions);
   
   SECTION(".getCorrelationCoefficientImplementation") {
     SECTION("Returns the exponential correlation coefficient.") {
-      arma::Col<double> parameter = arma::abs(arma::normalise(getRandomValues(numberOfDimensions, 1)));
+      arma::Col<double> parameter = arma::abs(arma::normalise(getContinuousRandomNumbers(numberOfDimensions)));
       CAPTURE(parameter);
       
       double expectedCorrelationCoefficient = 0;

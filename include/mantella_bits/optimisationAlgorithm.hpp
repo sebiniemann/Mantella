@@ -9,8 +9,10 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/optimisationProblem.hpp>
+#include "mantella_bits/helper/printable.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class OptimisationAlgorithm : public Printable {

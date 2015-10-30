@@ -3,14 +3,17 @@
 // C++ standard library
 #include <string>
 
+// Armadillo
+#include <armadillo>
+
 // Mantella
-#include <mantella_bits/distanceFunction.hpp>
+#include "mantella_bits/distanceFunction.hpp"
 
 namespace mant {
   class MahalanobisDistance : public DistanceFunction {
    public:
     const arma::Mat<double> covariance_;
-   
+
     explicit MahalanobisDistance(
         const arma::Mat<double>& covariance);
 

@@ -1,13 +1,13 @@
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp>
+#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp"
 
 // C++ standard library
 #include <random>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   ParticleSwarmOptimisation::ParticleSwarmOptimisation(
@@ -19,7 +19,7 @@ namespace mant {
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));
     setMaximalGlobalAttraction(maximalLocalAttraction_);
-    setMaximalSwarmConvergence(0.05);  // TODO Check value within the paper
+    setMaximalSwarmConvergence(0.05); // TODO Check value within the paper
   }
 
   void ParticleSwarmOptimisation::optimiseImplementation() {
@@ -138,8 +138,7 @@ namespace mant {
 
   void ParticleSwarmOptimisation::setNeighbourhoodProbability(
       const double neighbourhoodProbability) {
-    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1,
-        "NeighbourhoodProbability must be a value between 0 and 1");
+    verify(neighbourhoodProbability >= 0 && neighbourhoodProbability <= 1, "NeighbourhoodProbability must be a value between 0 and 1");
     neighbourhoodProbability_ = neighbourhoodProbability;
   }
 

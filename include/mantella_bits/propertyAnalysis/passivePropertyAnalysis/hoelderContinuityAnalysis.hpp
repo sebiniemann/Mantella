@@ -4,7 +4,7 @@
 #include <string>
 
 // Mantella
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp"
 
 namespace mant {
   class HoelderContinuityAnalysis : public PassivePropertyAnalysis {

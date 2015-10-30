@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.hpp"
 
 // C++ standard library
 #include <cassert>

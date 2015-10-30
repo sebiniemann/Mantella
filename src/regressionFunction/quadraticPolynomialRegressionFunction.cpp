@@ -1,4 +1,4 @@
-#include <mantella_bits/regressionFunction/quadraticPolynomialRegressionFunction.hpp>
+#include "mantella_bits/regressionFunction/quadraticPolynomialRegressionFunction.hpp"
 
 namespace mant {
   QuadraticRegressionFunction::QuadraticRegressionFunction(

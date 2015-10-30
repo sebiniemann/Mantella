@@ -1,4 +1,4 @@
-#include <mantella_bits/regressionFunction/cubicPolynomialRegressionFunction.hpp>
+#include "mantella_bits/regressionFunction/cubicPolynomialRegressionFunction.hpp"
 
 namespace mant {
   CubicRegressionFunction::CubicRegressionFunction(

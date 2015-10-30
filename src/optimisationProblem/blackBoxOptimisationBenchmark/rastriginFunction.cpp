@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.hpp"
 
 // C++ standard library
 #include <cassert>

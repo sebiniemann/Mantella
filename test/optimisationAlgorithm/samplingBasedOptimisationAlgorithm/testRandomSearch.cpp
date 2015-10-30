@@ -10,12 +10,9 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "RandomSearch") {
-  SECTION(
-      ".optimise") {
-    SECTION(
-        "Checks if all parameters are uniformly distributed.") {
+TEST_CASE("RandomSearch") {
+  SECTION(".optimise") {
+    SECTION("Checks if all parameters are uniformly distributed.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
       optimisationProblem->setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 200 - 100);
       optimisationProblem->setUpperBounds(optimisationProblem->getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 100 + 0.01);
@@ -54,10 +51,8 @@ TEST_CASE(
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns a (filesystem friendly) name for the class.") {
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
       CHECK(mant::RandomSearch(optimisationProblem).toString() ==
             "random_search");

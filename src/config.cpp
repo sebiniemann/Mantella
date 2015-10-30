@@ -1,4 +1,4 @@
-#include <mantella_bits/config.hpp>
+#include "mantella_bits/config.hpp"
 
 namespace mant {
   std::atomic<bool> cacheSamples(true);

@@ -19,14 +19,14 @@ class TestExponentialCorrelationFunction : public mant::ExponentialCorrelationFu
 };
 
 TEST_CASE("ExponentialCorrelationFunction") {
-  const arma::uword numberOfDimensions = getRandomNumberOfValues();
+  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
   
   TestExponentialCorrelationFunction exponentialCorrelationFunction(numberOfDimensions);
   
   SECTION(".getCorrelationCoefficientImplementation") {
     SECTION("Returns the exponential correlation coefficient.") {
-      arma::Col<double> parameter = arma::abs(arma::normalise(getRandomValues(numberOfDimensions, 1)));
+      arma::Col<double> parameter = arma::abs(arma::normalise(getContinuousRandomNumbers(numberOfDimensions)));
       CAPTURE(parameter);
       
       CHECK(exponentialCorrelationFunction.getCorrelationCoefficientImplementation(parameter) == Approx(arma::prod(arma::exp(-parameter))));

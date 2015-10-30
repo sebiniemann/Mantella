@@ -1,12 +1,12 @@
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/random.hpp"
 
 // C++ standard library
 #include <algorithm>
 #include <random>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
 
 namespace mant {
   arma::Mat<double> getRandomRotationMatrix(
@@ -39,8 +39,7 @@ namespace mant {
   arma::Col<arma::uword> getRandomPermutation(
       const arma::uword numberOfElements,
       const arma::uword cycleSize) {
-    verify(cycleSize <= numberOfElements,
-        "The cycle size must be lower than or equal to the number of elements.");
+    verify(cycleSize <= numberOfElements, "The cycle size must be lower than or equal to the number of elements.");
 
     arma::Col<arma::uword> permutation(numberOfElements);
     for (arma::uword n = 0; n < numberOfElements; ++n) {

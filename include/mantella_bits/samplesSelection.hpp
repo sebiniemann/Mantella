@@ -7,8 +7,10 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/helper/unorderedContainer.hpp>
+#include "mantella_bits/helper/printable.hpp"
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   class SamplesSelection : public Printable {

@@ -23,35 +23,48 @@ before_install:
   - sudo apt-get update -qq
   
 install:
+  # Prerequirements (including optional features)
+  ## CMake
   - sudo apt-get install -qq cmake;
-
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq clang-format-3.5; fi
   
-  # Armadillo C++
-  - sudo apt-get install -qq libblas-dev
-  - sudo apt-get install -qq liblapack-dev
-  - sudo apt-get install -qq libopenblas-dev
+  ## Armadillo C++
+  - sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
-  - cmake .
+  - cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
   - make --quiet -j 4
   - sudo make --quiet install
+  ### Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
+  ### Using the *literal style* for this line, as it collides with YAML
+  - |-
+    sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} \;
   - cd ..
   - rm -Rf armadillo armadillo.tar.gz
-
-  # Catch
-  - sudo apt-get install -qq catch
   
-  # MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
+  ## MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
   - sudo apt-get install -qq libmpich2-dev
 
-  # LCOV
-  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq lcov; fi
-
-  # LCOV to Coveralls conversion + upload
-  - if [ "$CXX" == "g++" ]; then gem install coveralls-lcov; fi
+  
+  # Testing
+  - sudo apt-get install -qq catch
+  ## Using clang-format-3.6
+  - sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.6 main'
+  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+  - sudo apt-get update -qq
+  ## Rename clang-format to clang-format-3.5
+  - sudo mv /usr/local/clang-3.5.0/bin/clang-format /usr/local/clang-3.5.0/bin/clang-format-3.5
+  - sudo apt-get install -qq clang-format-3.6
+  ## Adds clang-format as an alternative to clang-format-3.6
+  - sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
+  - sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
+  - sudo apt-get install -qq iwyu
+  - sudo apt-get install -qq valgrind
+  - sudo apt-get install -qq lcov
+  ## Using coveralls to store and visualise the code coverage
+  - gem install coveralls-lcov
+  - sudo chmod a+x ./.code-checks.sh
   
 addons:
   coverity_scan:
@@ -63,12 +76,27 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  # Builds tests an measure code coverage (GCC only)  
+  # Test matrix
+  ## GCC
+  ## - Unit tests with OpenMP support
+  ## - Code coverage
+  ## - Memory leaks
+  ## - Installation
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
-  # Builds MPI-based tests (Clang  only)  
+  - if [ "$CXX" == "g++" ]; then make -j 4; fi
+  - if [ "$CXX" == "g++" ]; then ./bin/mantellaTest ./test; fi
+  - if [ "$CXX" == "g++" ]; then valgrind --leak-check=full --error-exitcode=1 ./bin/mantellaTest ./test; fi
+  - if [ "$CXX" == "g++" ]; then sudo make install; fi
+  
+  # Clang
+  ## - Unit tests with MPI support
+  ## - Code format
+  ## - Include rules
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
-  - make -j 4
-  - sudo make install
+  - if [ "$CXX" == "clang++" ]; then make -j 4; fi
+  - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ./bin/mantellaTest ./test; fi
+  - if [ "$CXX" == "clang++" ]; then ./.code-checks.sh format; fi
+  - if [ "$CXX" == "clang++" ]; then ./.code-checks.sh include; fi
   
 after_success:
   - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi

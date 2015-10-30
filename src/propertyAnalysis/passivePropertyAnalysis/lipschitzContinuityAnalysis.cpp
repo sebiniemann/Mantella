@@ -1,9 +1,11 @@
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp"
 
 // C++ standard library
 #include <cassert>
 #include <algorithm>
 #include <cmath>
+#include <unordered_map>
+#include <utility>
 
 // Armadillo
 #include <armadillo>

@@ -11,12 +11,9 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "LipschitzContinuityAnalysis") {
-  SECTION(
-      ".analyse") {
-    SECTION(
-        "Checking the procedure.") {
+TEST_CASE("LipschitzContinuityAnalysis") {
+  SECTION(".analyse") {
+    SECTION("Checking the procedure.") {
       const arma::uword numberOfDimensions = std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
       const arma::uword numberOfParameters = numberOfDimensions + std::uniform_int_distribution<arma::uword>(1, 100)(mant::Rng::getGenerator());
 
@@ -42,10 +39,8 @@ TEST_CASE(
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns a (filesystem friendly) name for the class.") {
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
       mant::cacheSamples = true;
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);

@@ -4,7 +4,7 @@
 #include <memory>
 
 // Mantella
-#include <mantella_bits/optimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm.hpp"
 
 namespace mant {
   class SamplingBasedOptimisationAlgorithm : public OptimisationAlgorithm {

@@ -1,7 +1,11 @@
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
+#include "mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp"
+
+// C++ standard library
+#include <vector>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   GridSearch::GridSearch(
@@ -11,8 +15,7 @@ namespace mant {
   }
 
   void GridSearch::optimiseImplementation() {
-    verify(arma::prod(numberOfSamplesPerDimension_) <= maximalNumberOfIterations_ * static_cast<arma::uword>(numberOfNodes_),
-        "The product of all number of samples per dimension must be less than the maximal number of iterations.");
+    verify(arma::prod(numberOfSamplesPerDimension_) <= maximalNumberOfIterations_ * static_cast<arma::uword>(numberOfNodes_), "The product of all number of samples per dimension must be less than the maximal number of iterations.");
 
     std::vector<arma::Col<double>> samples;
     for (arma::uword n = 0; n < numberOfDimensions_; ++n) {
@@ -51,7 +54,7 @@ namespace mant {
   void GridSearch::setNumberOfSamplesPerDimension(
       const arma::Col<arma::uword>& numberOfSamplesPerDimension) {
     verify(numberOfSamplesPerDimension.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-    verify(arma::all(numberOfSamplesPerDimension > 1), "");  // TODO
+    verify(arma::all(numberOfSamplesPerDimension > 1), ""); // TODO
 
     numberOfSamplesPerDimension_ = numberOfSamplesPerDimension;
   }

@@ -3,14 +3,17 @@
 // C++ standard library
 #include <string>
 
+// Armadillo
+#include <armadillo>
+
 // Mantella
-#include <mantella_bits/distanceFunction.hpp>
+#include "mantella_bits/distanceFunction.hpp"
 
 namespace mant {
   class PNorm : public DistanceFunction {
    public:
     const arma::uword p_;
-    
+
     explicit PNorm(
         const arma::uword numberOfDimensions,
         const arma::uword p);

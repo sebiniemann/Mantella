@@ -1,10 +1,14 @@
-#include <mantella_bits/helper/mpi.hpp>
+#include "mantella_bits/helper/mpi.hpp"
 
 // C++ standard library
+#if defined(SUPPORT_MPI) // IWYU pragma: keep
 #include <algorithm>
+#endif
 
 // Armadillo
-#include <armadillo>
+#if defined(SUPPORT_MPI)
+#include <armadillo> // IWYU pragma: keep
+#endif
 
 #if defined(SUPPORT_MPI)
 namespace mant {

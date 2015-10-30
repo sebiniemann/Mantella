@@ -1,7 +1,7 @@
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp>
+#include "mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp"
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 // TODO Add restarting
 namespace mant {
@@ -21,27 +21,30 @@ namespace mant {
     while (!isFinished() && !isTerminated()) {
       ++numberOfIterations_;
 
-      const arma::Col<double>& candidateParameter = getRandomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
+      arma::Col<double> candidateParameter = getRandomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
+
+      const arma::Col<arma::uword>& belowLowerBound = arma::find(candidateParameter < getLowerBounds());
+      const arma::Col<arma::uword>& aboveUpperBound = arma::find(candidateParameter > getUpperBounds());
+
+      candidateParameter.elem(belowLowerBound) = getLowerBounds().elem(belowLowerBound);
+      candidateParameter.elem(aboveUpperBound) = getUpperBounds().elem(aboveUpperBound);
+
       updateBestParameter(candidateParameter, getObjectiveValue(candidateParameter));
     }
   }
 
   void HillClimbing::setMinimalStepSize(
       const arma::Col<double>& minimalStepSize) {
-    verify(minimalStepSize.n_elem == numberOfDimensions_,
-        "The number of dimensions of the minimal step size must match the number of dimensions of the optimisation problem.");
-    verify(arma::all(minimalStepSize >= 0),
-        "The minimal step size must be at least 0 for each dimension.");
+    verify(minimalStepSize.n_elem == numberOfDimensions_, "The number of dimensions of the minimal step size must match the number of dimensions of the optimisation problem.");
+    verify(arma::all(minimalStepSize >= 0), "The minimal step size must be at least 0 for each dimension.");
 
     minimalStepSize_ = minimalStepSize;
   }
 
   void HillClimbing::setMaximalStepSize(
       const arma::Col<double>& maximalStepSize) {
-    verify(maximalStepSize.n_elem == numberOfDimensions_,
-        "The number of dimensions of the maximal step size must match the number of dimensions of the optimisation problem.");
-    verify(arma::all(maximalStepSize > 0),
-        "The maximal step size must be strict greater than 0 for each dimension.");
+    verify(maximalStepSize.n_elem == numberOfDimensions_, "The number of dimensions of the maximal step size must match the number of dimensions of the optimisation problem.");
+    verify(arma::all(maximalStepSize > 0), "The maximal step size must be strict greater than 0 for each dimension.");
 
     maximalStepSize_ = maximalStepSize;
   }

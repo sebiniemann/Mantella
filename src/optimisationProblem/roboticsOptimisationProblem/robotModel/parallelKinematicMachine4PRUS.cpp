@@ -1,11 +1,11 @@
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.hpp>
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.hpp"
 
 // C++ standard library
 #include <cassert>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/geometry.hpp>
+#include "mantella_bits/helper/geometry.hpp"
 
 namespace mant {
   namespace robotics {

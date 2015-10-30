@@ -139,10 +139,6 @@ else()
   message(STATUS "- Excluding OpenMP support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=On' to add this.")
 endif()
-    
-# if(CMAKE_COMPILER_IS_CLANGXX)
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
-# endif()
 
 # ----------------
 # BUILDING LIBRARY
@@ -333,12 +329,17 @@ if(BUILD_TESTS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-exit-time-destructors")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-global-constructors")
+      # Ignore warning options introduced by more recent versions of Clang.
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-warning-option")
       
-      # Ignore warnings resulting from mpi.h
+      # Ignore warnings resulting from <mpi.h>
       if(SUPPORT_MPI)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-old-style-cast")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-extra-semi")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-reserved-id-macro")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-align")
       endif()
     elseif(CMAKE_COMPILER_IS_GNUCXX)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
@@ -516,15 +517,6 @@ if(BUILD_TESTS)
   if(SUPPORT_MPI)
     target_link_libraries(mantellaTest ${MPI_C_LIBRARIES})
   endif()
-
-  if(SUPPORT_MPI)
-    message(STATUS "- Performing tests with MPI")
-    add_custom_command(TARGET mantellaTest POST_BUILD COMMAND mpiexec -n 4 ${EXECUTABLE_OUTPUT_PATH}/mantellaTest ${PROJECT_SOURCE_DIR}/test)
-  else()
-    add_custom_command(TARGET mantellaTest POST_BUILD COMMAND mantellaTest ${PROJECT_SOURCE_DIR}/test)
-  endif()
-
-  message(STATUS "- All tests will automatically be started after the library is build.")
 else()
   message(STATUS "") 
   message(STATUS "Skipping unit tests.")

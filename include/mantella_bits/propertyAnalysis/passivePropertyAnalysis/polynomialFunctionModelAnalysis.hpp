@@ -9,8 +9,13 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
-#include <mantella_bits/regressionFunction.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp"
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
+namespace mant {
+  class RegressionFunction;
+}
 
 namespace mant {
   class PolynomialFunctionModelAnalysis : public PassivePropertyAnalysis {

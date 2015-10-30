@@ -1,10 +1,11 @@
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.hpp>
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.hpp"
 
 // C++ standard library
 #include <cassert>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   namespace robotics {
@@ -18,8 +19,7 @@ namespace mant {
           platformLevels_(platformLevels),
           numberOfPlatformLevels_(platformLevels_.size()) {
       for (arma::uword n = 0; n < numberOfPlatformLevels_; ++n) {
-        verify(platformLevels_.at(n).numberOfRedundantJoints_ == 0,
-            "");  // TODO
+        verify(platformLevels_.at(n).numberOfRedundantJoints_ == 0, ""); // TODO
       }
     }
 

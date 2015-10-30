@@ -1,7 +1,9 @@
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp"
 
 // C++ standard library
 #include <cassert>
+#include <unordered_map>
+#include <utility>
 
 // Armadillo
 #include <armadillo>

@@ -1,10 +1,10 @@
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp>
+#include "mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp"
 
 // C++ standard library
 #include <cassert>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
+#include "mantella_bits/helper/assert.hpp"
 
 namespace mant {
   namespace robotics {
@@ -18,10 +18,8 @@ namespace mant {
     arma::Cube<double> RobotModel::getModel(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
-      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_,
-          "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1),
-          "The redundant joints must be actuated within [0, 1].");
+      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
+      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1), "The redundant joints must be actuated within [0, 1].");
 
       return getModelImplementation(endEffectorPose, redundantJointsActuation);
     }
@@ -29,10 +27,8 @@ namespace mant {
     arma::Row<double> RobotModel::getActuation(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
-      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_,
-          "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1),
-          "The redundant joints must be actuated within [0, 1].");
+      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
+      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1), "The redundant joints must be actuated within [0, 1].");
 
       const arma::Row<double>& actuation = getActuationImplementation(endEffectorPose, redundantJointsActuation);
 
@@ -42,10 +38,8 @@ namespace mant {
     double RobotModel::getEndEffectorPoseError(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
-      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_,
-          "The number of actuated redundant joints must be equal to the number of redundant joints.");
-      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1),
-          "The redundant joints must be actuated within [0, 1].");
+      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
+      verify(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1), "The redundant joints must be actuated within [0, 1].");
 
       const double endEffectorPoseError = getEndEffectorPoseErrorImplementation(endEffectorPose, redundantJointsActuation);
       assert(endEffectorPoseError >= 0);

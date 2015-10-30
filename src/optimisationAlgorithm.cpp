@@ -1,14 +1,17 @@
-#include <mantella_bits/optimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
+#include <atomic>
 #include <cassert>
-#include <random>
+#include <limits>
 
 // Mantella
-#include <mantella_bits/config.hpp>
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
-#include <mantella_bits/helper/mpi.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
+#if defined(SUPPORT_MPI)
+#include "mantella_bits/helper/mpi.hpp" // IWYU pragma: keep
+#endif
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm(
@@ -30,8 +33,7 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::optimise() {
-    verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()),
-        "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
+    verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
 
 #if defined(SUPPORT_MPI)
     std::vector<double> serialisedOptimisationProblem;

@@ -69,10 +69,10 @@ TEST_CASE("getRandomPermutation") {
   }
 
   SECTION("Throws an exception, if the cycle size is larger than the number of elements.") {
-    const arma::uword numberOfElements = getRandomNumberOfValues();
+    const arma::uword numberOfElements = getDiscreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    const arma::uword cycleSize = getRandomNumberOfValues(numberOfElements + 1);
+    const arma::uword cycleSize = 1 + numberOfElements + getDiscreteRandomNumber();
     CAPTURE(cycleSize);
 
     CHECK_THROWS_AS(mant::getRandomPermutation(numberOfElements, cycleSize), std::logic_error);

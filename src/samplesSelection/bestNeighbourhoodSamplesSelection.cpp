@@ -1,4 +1,13 @@
-#include <mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp>
+#include "mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp"
+
+// C++ standard library
+#include <iterator>
+#include <limits>
+#include <unordered_map>
+#include <utility>
+
+// Armadillo
+#include <armadillo>
 
 namespace mant {
   void BestNeighbourhoodSamplesSelection::selectImplementation() {

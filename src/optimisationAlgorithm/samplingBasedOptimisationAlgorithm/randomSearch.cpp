@@ -1,7 +1,10 @@
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
+#include "mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp"
 
 // Armadillo
-#include <armadillo>
+namespace arma {
+  template <typename eT>
+  class Col;
+}
 
 namespace mant {
   void RandomSearch::optimiseImplementation() {

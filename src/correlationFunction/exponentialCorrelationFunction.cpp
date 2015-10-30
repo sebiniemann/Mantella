@@ -1,4 +1,4 @@
-#include <mantella_bits/correlationFunction/exponentialCorrelationFunction.hpp>
+#include "mantella_bits/correlationFunction/exponentialCorrelationFunction.hpp"
 
 // C++ standard library
 #include <cmath>

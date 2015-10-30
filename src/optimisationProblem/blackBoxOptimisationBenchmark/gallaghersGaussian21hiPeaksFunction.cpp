@@ -1,4 +1,4 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp"
 
 // C++ standard library
 #include <cassert>
@@ -7,8 +7,8 @@
 #include <limits>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {
@@ -23,30 +23,24 @@ namespace mant {
 
     void GallaghersGaussian21hiPeaksFunction::setRotationQ(
         const arma::Mat<double>& rotationQ) {
-      verify(rotationQ.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(isRotationMatrix(rotationQ),
-          "The parameter must be a rotation matrix.");
+      verify(rotationQ.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(isRotationMatrix(rotationQ), "The parameter must be a rotation matrix.");
 
       rotationQ_ = rotationQ;
     }
 
     void GallaghersGaussian21hiPeaksFunction::setLocalParameterConditionings(
         const arma::Mat<double>& localParameterConditionings) {
-      verify(localParameterConditionings.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(localParameterConditionings.n_cols == 21,
-          "The number of columns must be equal to the number of peaks (21).");
+      verify(localParameterConditionings.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(localParameterConditionings.n_cols == 21, "The number of columns must be equal to the number of peaks (21).");
 
       localParameterConditionings_ = localParameterConditionings;
     }
 
     void GallaghersGaussian21hiPeaksFunction::setLocalParameterTranslations(
         const arma::Mat<double>& localParameterTranslations) {
-      verify(localParameterTranslations.n_rows == numberOfDimensions_,
-          "The number of rows must be equal to the number of dimensions");
-      verify(localParameterTranslations.n_cols == 21,
-          "The number of columns must be equal to the number of peaks (21).");
+      verify(localParameterTranslations.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions");
+      verify(localParameterTranslations.n_cols == 21, "The number of columns must be equal to the number of peaks (21).");
 
       localParameterTranslations_ = localParameterTranslations;
     }

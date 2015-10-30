@@ -11,12 +11,9 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE(
-    "GridSearch") {
-  SECTION(
-      ".optimise") {
-    SECTION(
-        "Checking the procedure with the default number of samples per dimension.") {
+TEST_CASE("GridSearch") {
+  SECTION(".optimise") {
+    SECTION("Checking the procedure with the default number of samples per dimension.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
       optimisationProblem->setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 200 - 100);
       optimisationProblem->setUpperBounds(optimisationProblem->getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 100 + 0.01);
@@ -38,8 +35,7 @@ TEST_CASE(
       CHECK_EXT(actualSamples, expectedSamples);
     }
 
-    SECTION(
-        "Checking the procedure with a parametrised number of samples per dimension.") {
+    SECTION("Checking the procedure with a parametrised number of samples per dimension.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(5));
       optimisationProblem->setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 200 - 100);
       optimisationProblem->setUpperBounds(optimisationProblem->getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 100 + 0.01);
@@ -71,34 +67,28 @@ TEST_CASE(
     }
   }
 
-  SECTION(
-      "Exception tests") {
+  SECTION("Exception tests") {
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
     mant::GridSearch gridSearch(optimisationProblem);
 
-    SECTION(
-        "Throws an exception, if the number of iterations is lower then number of samples.") {
+    SECTION("Throws an exception, if the number of iterations is lower then number of samples.") {
       gridSearch.setNumberOfSamplesPerDimension({100, 100});
       gridSearch.setMaximalNumberOfIterations(10);
       CHECK_THROWS_AS(gridSearch.optimise(), std::logic_error);
     }
 
-    SECTION(
-        "Throws an exception, if the size of samples is not equal to the number of dimension of the problem") {
+    SECTION("Throws an exception, if the size of samples is not equal to the number of dimension of the problem") {
       CHECK_THROWS_AS(gridSearch.setNumberOfSamplesPerDimension({100, 100, 100}), std::logic_error);
       CHECK_THROWS_AS(gridSearch.setNumberOfSamplesPerDimension({100}), std::logic_error);
     }
 
-    SECTION(
-        "Throws an exception, if the any number of samples per dimensions is lower than 2") {
+    SECTION("Throws an exception, if the any number of samples per dimensions is lower than 2") {
       CHECK_THROWS_AS(gridSearch.setNumberOfSamplesPerDimension({1, 10}), std::logic_error);
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns a (filesystem friendly) name for the class.") {
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
       CHECK(mant::GridSearch(optimisationProblem).toString() ==
             "grid_search");

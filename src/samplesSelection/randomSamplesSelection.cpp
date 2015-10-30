@@ -1,7 +1,15 @@
-#include <mantella_bits/samplesSelection/randomSamplesSelection.hpp>
+#include "mantella_bits/samplesSelection/randomSamplesSelection.hpp"
+
+// C++ standard library
+#include <iterator>
+#include <unordered_map>
+#include <utility>
+
+// Armadillo
+#include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   void RandomSamplesSelection::selectImplementation() {

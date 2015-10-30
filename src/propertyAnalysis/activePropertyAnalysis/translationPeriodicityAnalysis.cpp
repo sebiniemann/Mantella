@@ -1,4 +1,4 @@
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
+#include "mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp"
 
 namespace mant {
   void TranslationPeriodicityAnalysis::analyseImplementation() {

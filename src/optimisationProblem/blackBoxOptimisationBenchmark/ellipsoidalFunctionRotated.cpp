@@ -1,10 +1,10 @@
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.hpp>
+#include "mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.hpp"
 
 // C++ standard library
 #include <cassert>
 
 // Mantella
-#include <mantella_bits/helper/random.hpp>
+#include "mantella_bits/helper/random.hpp"
 
 namespace mant {
   namespace bbob {

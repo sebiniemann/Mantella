@@ -9,10 +9,14 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/helper/unorderedContainer.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
-#include <mantella_bits/regressionFunction.hpp>
-#include <mantella_bits/correlationFunction.hpp>
+#include "mantella_bits/optimisationProblem/surrogateModel.hpp"
+#include "mantella_bits/helper/unorderedContainer.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
+namespace mant {
+  class CorrelationFunction;
+  class RegressionFunction;
+}
 
 namespace mant {
   class KrigingModel : public SurrogateModel {

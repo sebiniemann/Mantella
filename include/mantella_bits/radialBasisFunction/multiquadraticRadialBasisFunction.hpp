@@ -7,7 +7,7 @@
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/radialBasisFunction.hpp>
+#include "mantella_bits/radialBasisFunction.hpp"
 
 namespace mant {
   class MultiquadraticRadialBasisFunction : public RadialBasisFunction {

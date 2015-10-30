@@ -9,36 +9,46 @@
 
 std::string testDirectory("");
 
-arma::uword getRandomNumberOfValues() {
+arma::uword getDiscreteRandomNumber() {
   return std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
 }
 
-arma::uword getRandomNumberOfValues(
-    const arma::uword minimalNumberOfDimensions) {
-  return minimalNumberOfDimensions + std::uniform_int_distribution<arma::uword>(0, 10)(mant::Rng::getGenerator());
+arma::uword getDifferentDiscreteRandomNumber(
+    const arma::uword discreteRandomNumber) {
+  arma::uword offset = std::uniform_int_distribution<arma::uword>(1, 5)(mant::Rng::getGenerator());
+  const bool isNegativeOffset = std::bernoulli_distribution(0.5)(mant::Rng::getGenerator());
+  
+  if (isNegativeOffset && discreteRandomNumber > offset) {
+    return discreteRandomNumber - offset;
+  } else {
+    return discreteRandomNumber + offset;
+  }
 }
 
-arma::uword getDifferentRandomNumberOfValues(
-    const arma::uword numberOfDimensions) {
-  arma::uword offset = std::uniform_int_distribution<arma::uword>(1, 5)(mant::Rng::getGenerator());
-  const bool isPositiveOffset = std::bernoulli_distribution(0.5)(mant::Rng::getGenerator());
-  
-  if (numberOfDimensions > 1 && !isPositiveOffset) {
-    offset = std::min(numberOfDimensions - 1, offset);
-  }
-  
-  return numberOfDimensions + offset;   
+double getContinuousRandomNumber() {
+  return std::uniform_real_distribution<double>(-100, 100)(mant::Rng::getGenerator());
 }
-    
-arma::Row<double> getRandomValues(
-    const arma::uword numberOfDimensions) {
-  return arma::randu<arma::Row<double>>(numberOfDimensions) * 200 - 100;
+
+arma::Col<arma::uword> getDiscreteRandomNumbers(
+    const arma::uword numberOfElements) {
+  return arma::randi<arma::Col<arma::uword>>(numberOfElements, arma::distr_param(0, 10));
 }
-    
-arma::Mat<double> getRandomValues(
-    const arma::uword numberOfDimensions,
-    const arma::uword numberOfParameters) {
-  return arma::randu<arma::Mat<double>>(numberOfDimensions, numberOfParameters) * 200 - 100;   
+
+arma::Col<double> getContinuousRandomNumbers(
+    const arma::uword numberOfDimensions) {
+  return arma::randu<arma::Col<double>>(numberOfDimensions) * 200 - 100;
+}
+
+arma::Mat<arma::uword> getDiscreteRandomNumbers(
+    const arma::uword numberOfRows,
+    const arma::uword numberOfColumns) {
+  return arma::randi<arma::Mat<arma::uword>>(numberOfRows, numberOfColumns, arma::distr_param(0, 10));
+}
+
+arma::Mat<double> getContinuousRandomNumbers(
+    const arma::uword numberOfRows,
+    const arma::uword numberOfColumns) {
+  return arma::randu<arma::Mat<double>>(numberOfRows, numberOfColumns) * 200 - 100;
 }
 
 void HAS_SAME_PARAMETERS(

@@ -24,7 +24,7 @@
 //
 // Mantella
 //
-
+// IWYU pragma: begin_exports
 // Configuration
 #include <mantella_bits/config.hpp>
 
@@ -65,13 +65,13 @@
 #include <mantella_bits/correlationFunction/splineCorrelationFunction.hpp>
 #include <mantella_bits/correlationFunction/exponentialCorrelationFunction.hpp>
 #include <mantella_bits/correlationFunction/gaussianCorrelationFunction.hpp>
-  
+
 // Radial basis functions
 #include <mantella_bits/radialBasisFunction.hpp>
 #include <mantella_bits/radialBasisFunction/polyharmonicSplineRadialBasisFunction.hpp>
 #include <mantella_bits/radialBasisFunction/multiquadraticRadialBasisFunction.hpp>
 #include <mantella_bits/radialBasisFunction/gaussianRadialBasisFunction.hpp>
-  
+
 // Samples selections
 #include <mantella_bits/samplesSelection.hpp>
 #include <mantella_bits/samplesSelection/bestFittingSamplesSelection.hpp>
@@ -157,8 +157,9 @@
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
 #include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
-  
+
 // Cluster analyses
 #include <mantella_bits/clusterAnalysis.hpp>
 #include <mantella_bits/clusterAnalysis/basicSequentialAlgorithmicScheme.hpp>
 #include <mantella_bits/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.hpp>
+// IWYU pragma: end_exports

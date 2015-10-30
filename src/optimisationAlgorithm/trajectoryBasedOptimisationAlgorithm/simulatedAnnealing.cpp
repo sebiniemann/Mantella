@@ -1,12 +1,12 @@
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp>
+#include "mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp"
 
 // C++ standard library
 #include <random>
 #include <cmath>
 
 // Mantella
-#include <mantella_bits/helper/assert.hpp>
-#include <mantella_bits/helper/rng.hpp>
+#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/helper/rng.hpp"
 
 // TODO Add restarting
 namespace mant {
@@ -42,10 +42,8 @@ namespace mant {
 
   void SimulatedAnnealing::setMaximalStepSize(
       const arma::Col<double>& maximalStepSize) {
-    verify(maximalStepSize.n_elem == numberOfDimensions_,
-        "The number of dimensions of the maximal step size must match the number of dimensions of the optimisation problem.");
-    verify(arma::all(maximalStepSize > 0),
-        "The maximal step size must be strict greater than 0 for each dimension.");
+    verify(maximalStepSize.n_elem == numberOfDimensions_, "The number of dimensions of the maximal step size must match the number of dimensions of the optimisation problem.");
+    verify(arma::all(maximalStepSize > 0), "The maximal step size must be strict greater than 0 for each dimension.");
 
     maximalStepSize_ = maximalStepSize;
   }

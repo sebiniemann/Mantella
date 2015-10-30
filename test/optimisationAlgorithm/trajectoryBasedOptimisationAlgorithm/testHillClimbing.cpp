@@ -33,50 +33,40 @@ class TestHillClimbing : public mant::HillClimbing {
   arma::Mat<double> neighbours_;
 };
 
-TEST_CASE(
-    "HillClimbing") {
-  SECTION(
-      ".setMaximalStepSize") {
+TEST_CASE("HillClimbing") {
+  SECTION(".setMaximalStepSize") {
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
     mant::HillClimbing hillClimbing(optimisationProblem);
 
-    SECTION(
-        "Test default value") {
+    SECTION("Test default value") {
       //TODO
     }
 
-    SECTION(
-        "Test with parameter") {
+    SECTION("Test with parameter") {
       //TODO
     }
   }
 
-  SECTION(
-      ".optimise") {
+  SECTION(".optimise") {
     // TODO
   }
 
-  SECTION(
-      "Exception tests") {
+  SECTION("Exception tests") {
     std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
     mant::HillClimbing hillClimbing(optimisationProblem);
 
-    SECTION(
-        "Throws an exception, if the MaximalStepSize zero") {
+    SECTION("Throws an exception, if the MaximalStepSize zero") {
       CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({0, 0}), std::logic_error);
     }
 
-    SECTION(
-        "Throws an exception, if the size of MaximalStepSize is not equal to the number of dimension of the problem") {
+    SECTION("Throws an exception, if the size of MaximalStepSize is not equal to the number of dimension of the problem") {
       CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(std::uniform_int_distribution<arma::uword>(3, 10)(mant::Rng::getGenerator())) * 200 - 100), std::logic_error);
       CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(1) * 200 - 100), std::logic_error);
     }
   }
 
-  SECTION(
-      ".toString") {
-    SECTION(
-        "Returns a (filesystem friendly) name for the class.") {
+  SECTION(".toString") {
+    SECTION("Returns a (filesystem friendly) name for the class.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
       CHECK(mant::HillClimbing(optimisationProblem).toString() ==
             "hill_climbing");
