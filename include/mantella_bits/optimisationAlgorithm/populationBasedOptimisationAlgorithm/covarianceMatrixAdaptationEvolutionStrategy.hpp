@@ -53,7 +53,6 @@ namespace mant {
 
     std::string toString() const noexcept override;
 
-
   protected:
     //Notation: comments always start with matlab name of variable
     //          comments after ';' are from matlab code
@@ -66,9 +65,9 @@ namespace mant {
     double toleranceUpX_; //stopTolUpX or defopts.TolUpX; stop if x-changes larger TolUpX
     double toleranceFun_; //stopTolFun or defopts.TolFun; stop if fun-changes smaller TolFun
     double toleranceHistFun_; //stopTolHistFun or defopts.TolHistFun; stop if back fun-changes smaller TolHistFun
-    bool stopOnStagnation_ = true; //defopts.StopOnStagnation; stop when fitness stagnates for a long time
-    bool stopOnWarnings_ = true; //defopts.StopOnWarnings
-    bool stopOnEqualFunctionValues_ = true; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
+    bool stopOnStagnation_; //defopts.StopOnStagnation; stop when fitness stagnates for a long time
+    bool stopOnWarnings_; //defopts.StopOnWarnings
+    bool stopOnEqualFunctionValues_; //defops.stopOnEqualFunctionValues - originally 2 + N/3  % number of iterations
     arma::Col<double> EqualFunctionValues_;
 
     arma::uword mu_; //defopts.ParentNumber/mu
@@ -81,7 +80,6 @@ namespace mant {
     double ccovmu_; //defopts.CMA.ccovmu;
     arma::uword activeCMA_; ////defopts.CMA.active; 0: active CMA 1: neg. updates with pos. def. check, 2: neg. updates
     arma::uword irun_; //irun
-    //TODO: flgDiagonalOnly - left out. Afaik we never do diagonal matrices. If needed all code for this can easily be added.
 
     //arxvalid needs to be here so it is available after the loop
     arma::Mat<double> newGenerationValid_; //arxvalid
@@ -112,7 +110,7 @@ namespace mant {
     bool singleIteration_ = false;
     //helper variable to check if run was initialized
     bool runInitialized_ = false;
-    arma::uword countiter_ = 0; //countiter - counts main loop evaluations, NOT function evaluations
+    arma::uword countiter_; //countiter - counts main loop evaluations, NOT function evaluations
     arma::uword stopMaxIter_; //stopMaxIter or opts.MaxIter
 
     void optimiseImplementation() override;

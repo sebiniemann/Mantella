@@ -2,6 +2,7 @@
 bin/
 build/
 lib/
+examples/
 include/mantella_bits/config.hpp
 
 # Qt Designer
