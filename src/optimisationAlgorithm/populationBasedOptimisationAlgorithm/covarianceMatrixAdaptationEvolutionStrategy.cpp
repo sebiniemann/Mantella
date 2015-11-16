@@ -356,10 +356,9 @@ namespace mant {
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setStartingPoint(const arma::Col<double> xStart) {
     verify(xStart.n_elem == numberOfDimensions_, "");
-    this->startingPoint_ = xStart;
 
-    xmean_ = startingPoint_;
-    xold_ = startingPoint_;
+    xmean_ = xStart;
+    xold_ = xStart;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setPopulationSize(const arma::uword popSize) {

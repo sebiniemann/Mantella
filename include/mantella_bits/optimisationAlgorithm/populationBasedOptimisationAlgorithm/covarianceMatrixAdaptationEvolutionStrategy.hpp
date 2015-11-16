@@ -58,7 +58,7 @@ namespace mant {
     //          comments after ';' are from matlab code
     //          comments after '-' are from mantella
 
-    arma::Col<double> startingPoint_; //definput.xstart
+    //definput.xstart - not needed, resolved in the setter
     arma::Col<double> stepSize_; //definput.insigma
 
     double toleranceX_; //stopTolX or defopts.TolX; stop if x-change smaller TolX
