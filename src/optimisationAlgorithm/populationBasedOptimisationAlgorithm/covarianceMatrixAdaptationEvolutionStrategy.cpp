@@ -29,9 +29,6 @@ namespace mant {
     stopOnStagnation_ = true;
     stopOnWarnings_ = true;
     stopOnEqualFunctionValues_ = true;
-
-    xmean_ = startingPoint_;
-    xold_ = startingPoint_;
   }
 
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy(
@@ -360,6 +357,9 @@ namespace mant {
   void CovarianceMatrixAdaptationEvolutionStrategy::setStartingPoint(const arma::Col<double> xStart) {
     verify(xStart.n_elem == numberOfDimensions_, "");
     this->startingPoint_ = xStart;
+
+    xmean_ = startingPoint_;
+    xold_ = startingPoint_;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setPopulationSize(const arma::uword popSize) {
