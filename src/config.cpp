@@ -1,6 +1,11 @@
 #include "mantella_bits/config.hpp"
 
 namespace mant {
-  std::atomic<bool> cacheSamples(true);
-  std::atomic<bool> recordSamples(false);
+  bool cacheSamples(true);
+  bool recordSamples(false);
+#if defined(__CLING__)
+  bool verboseOutput(true);
+#else
+  bool verboseOutput(false);
+#endif
 }

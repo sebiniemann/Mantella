@@ -3,20 +3,21 @@ cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 # Mantella, C++ optimisation framework
 project(Mantella CXX C)
 
-# Retrieve the version numbers from "include/mantella"
+# Retrieves the version numbers from "include/mantella", avoiding possible inconsistency.
 file(STRINGS "${PROJECT_SOURCE_DIR}/include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
-# Add additional cmake modules
+# Adds additional cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
 option(SUPPORT_OMP "Add OpenMP support" ON)
 option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
+option(USE_CCACHE "Use ccache" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 
@@ -35,25 +36,28 @@ message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 message(STATUS "") 
 message(STATUS "Checking prerequirements.")
 
-set(REQUIRED_ARMADILLO_VERSION "5.100.2")
-# Whenever or not Armadillo should be used together with its runtime library, or should be linked directly with LAPACK/BLAS can by deduced by ARMA_USE_WRAPPER.
-# **Note:** The Armadillo header files are always required.
+set(REQUIRED_ARMADILLO_VERSION "6.100.0")
 find_package(Armadillo QUIET)
-file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
-if(ARMA_USE_WRAPPER)
-  # Use the Armadillo runtime library (this is the recommended way).
-  find_package(Armadillo ${REQUIRED_ARMADILLO_VERSION} REQUIRED)
-else()
-  # Use Armadillo's headers, but link directly to OpenBLAS.
-  # Since find_package(Armadillo ...) requires to find the Armadillo library, but the library may not exist at this point, we have to check all pieces manually.
+    file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
+if(NOT ARMADILLO_FOUND)
+  # Unlike `find_package(Armadillo ...)` suggests, Armadillo can be used if its runtime library is missing, as long as `ARMA_USE_WRAPPER` is undefined/outcommented inside Armadillo's configuration file. In this case, we can also directly link against BLAS/LAPACK libraries instead.
+  # However, we need to make sure that a missing runtime library was the only reason for `ARMADILLO_FOUND` to be unset.
+  # Currently, we only support OpenBLAS as a replacement for Armadillo's runtime library.
   if(NOT ARMADILLO_INCLUDE_DIR)
     message(FATAL_ERROR "Could NOT find Armadillo includes.")
   elseif(ARMADILLO_VERSION_STRING VERSION_LESS REQUIRED_ARMADILLO_VERSION)
     message(FATAL_ERROR "Found unsuitable Armadillo version ${ARMADILLO_VERSION_STRING}, but required is at least ${REQUIRED_ARMADILLO_VERSION} (found at ${ARMADILLO_INCLUDE_DIR}).")
   else()
+    file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
+    if(ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
+      message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if we should link directly againt OpenBLAS instead.")
+    endif()
+    
     message(STATUS "Found Armadillo: ${ARMADILLO_INCLUDE_DIR} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
     find_package(OpenBLAS REQUIRED)
   endif()
+else()
+  message(STATUS "Found Armadillo: ${ARMADILLO_LIBRARIES} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
 endif()
 include_directories(${ARMADILLO_INCLUDE_DIR})
   
@@ -69,7 +73,7 @@ endif()
 message(STATUS "") 
 message(STATUS "Configuring compiler.")
 
-# Add Clang detection
+# Adds Clang detection
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_COMPILER_IS_CLANGXX 1)
 endif ()
@@ -82,14 +86,20 @@ else()
   message(STATUS "- Detected neither Clang, nor GCC, but '${CMAKE_CXX_COMPILER_ID}' instead. Compiler flags may not be optimal.")
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-  # Use ccache to speed up recompilation, if possible. 
+if(USE_CCACHE)
   find_program(CCACHE_FOUND ccache)
+  message(STATUS "- Trying to use ccache to speed up recompilations.")
+  message(STATUS "  - Use 'cmake ... -DUSE_CCACHE=Off' to exclude this.")
   if(CCACHE_FOUND)
-    message(STATUS "- Using ccache to speed up recompilations.")
+    message(STATUS "  - Using ccache.")
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+  else()
+    message(STATUS "  - ccache was no found on your system.")
   endif()
+else()
+  message(STATUS "- Excluding ccache usage.")
+  message(STATUS "  - Use 'cmake ... -DUSE_CCACHE=On' to add this.")
 endif()
 
 # ----------------------
@@ -111,17 +121,13 @@ else()
   message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=On' to add this.")
 endif()
 
-if(MEASURE_CODE_COVERAGE)
-  message(STATUS "- Adding code coverage measurements, forcing debug build and deactivating code optimisation.")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
-  set(CMAKE_BUILD_TYPE "Debug")
-else()
-  message(STATUS "- Using level 3 code optimisation.")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+message(STATUS "- Using level 3 code optimisation.")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
   
-  if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
-  endif()
+if(NOT CMAKE_BUILD_TYPE)
+  message(STATUS "- Setting build to to 'Release'.")
+  message(STATUS "  - Use 'cmake ... -DCMAKE_BUILD_TYPE=[Release|Debug]' to specify this.")
+  set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 if(SUPPORT_OMP)
@@ -129,11 +135,11 @@ if(SUPPORT_OMP)
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=Off' to exclude this.")
   find_package(OpenMP)
   if (OPENMP_FOUND)
-    message(STATUS "- Added OpenMP support.")
+    message(STATUS "  - Added OpenMP support.")
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
   else()
-    message(STATUS "- OpenMP is not supported by your compiler.")
+    message(STATUS "  - OpenMP is not supported by your compiler.")
   endif()
 else()
   message(STATUS "- Excluding OpenMP support.")
@@ -172,95 +178,69 @@ add_library(mantella SHARED
   # Configuration
   src/config.cpp
   
-  # Asserts
-  src/helper/assert.cpp
+  # Assertion
+  src/assert.cpp
 
   # Random number generator
-  src/helper/rng.cpp
+  src/randomNumberGenerator.cpp
   
   # MPI
-  src/helper/mpi.cpp
+  src/mpi.cpp
   
-  # Helper
-  src/helper/geometry.cpp
-  src/helper/printable.cpp
-  src/helper/quasiRandomSequence.cpp
-  src/helper/random.cpp
-  src/helper/regression.cpp
-  src/helper/setTheory.cpp
-  src/helper/statistic.cpp
-  src/helper/unorderedContainer.cpp
-
-  # Distance functions
-  src/distanceFunction.cpp
-  src/distanceFunction/pNorm.cpp
-  src/distanceFunction/mahalanobisDistance.cpp
+  # Armadillo
+  src/armadillo.cpp
   
-  # Regression functions
-  src/regressionFunction.cpp
-  src/regressionFunction/constantPolynomialRegressionFunction.cpp
-  src/regressionFunction/linearPolynomialRegressionFunction.cpp
-  src/regressionFunction/quadraticPolynomialRegressionFunction.cpp
-  src/regressionFunction/cubicPolynomialRegressionFunction.cpp
-
-  # Correlation functions
-  src/correlationFunction.cpp
-  src/correlationFunction/polynomialCorrelationFunction.cpp
-  src/correlationFunction/splineCorrelationFunction.cpp
-  src/correlationFunction/exponentialCorrelationFunction.cpp
-  src/correlationFunction/gaussianCorrelationFunction.cpp
+  # Mathematical functions
+  src/algebra.cpp
+  src/combinatorics.cpp
+  src/geometry.cpp
+  src/numberTheory.cpp
+  src/numericalAnalysis.cpp
+  src/probability.cpp
+  src/statistics.cpp
+  src/topology.cpp
   
-  # Radial basis functions
-  src/radialBasisFunction.cpp
-  src/radialBasisFunction/polyharmonicSplineRadialBasisFunction.cpp
-  src/radialBasisFunction/multiquadraticRadialBasisFunction.cpp
-  src/radialBasisFunction/gaussianRadialBasisFunction.cpp
-  
-  # Samples selections
+  # Machine learning
   src/samplesSelection.cpp
-  src/samplesSelection/bestFittingSamplesSelection.cpp
-  src/samplesSelection/bestNeighbourhoodSamplesSelection.cpp
-  src/samplesSelection/bestSamplesSelection.cpp
-  src/samplesSelection/randomSamplesSelection.cpp
+  src/samplesAnalysis.cpp
   
   # Optimisation problems
   src/optimisationProblem.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/discusFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
-  src/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
-  src/optimisationProblem/roboticsOptimisationProblem.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRPR.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRRR.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRUS.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PUPS.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PRUS.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.cpp
-  src/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/discusFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/linearSlope.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
+  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRPR.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRRR.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/energyConsumption.cpp
+  src/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.cpp
   src/optimisationProblem/surrogateModel.cpp
   src/optimisationProblem/surrogateModel/polynomialFunctionModel.cpp
   src/optimisationProblem/surrogateModel/radialBasisFunctionModel.cpp
@@ -280,20 +260,6 @@ add_library(mantella SHARED
   src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
   src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
   
-  # Property analyses
-  src/propertyAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.cpp
-  src/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.cpp
-  src/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.cpp
-  
   # Cluster analyses
   src/clusterAnalysis.cpp
   src/clusterAnalysis/basicSequentialAlgorithmicScheme.cpp
@@ -301,7 +267,7 @@ add_library(mantella SHARED
 )
 
 # Linking against prerequirements
-if(ARMA_USE_WRAPPER)
+if(ARMADILLO_LIBRARIES)
   target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
 else()
   target_link_libraries(mantella ${OPENBLAS_LIBRARIES})
@@ -319,6 +285,19 @@ if(BUILD_TESTS)
   message(STATUS "") 
   message(STATUS "Configuring unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
+
+  if(MEASURE_CODE_COVERAGE)
+    message(STATUS "- Adding code coverage measurement.")
+    message(STATUS "  - Use 'cmake ... -DMEASURE_CODE_COVERAGE=Off' to exclude this.")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+  else()
+    message(STATUS "- Excluding code coverage measurement.")
+    message(STATUS "  - Use 'cmake ... -DMEASURE_CODE_COVERAGE=On' to add this.")
+  endif()
+  
+  message(STATUS "- Forcing debug build and deactivating code optimisation.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+  set(CMAKE_BUILD_TYPE "Debug")
   
   if(CMAKE_COMPILER_IS_CLANGXX OR CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "- Displaying compiler warnings.")
@@ -328,7 +307,7 @@ if(BUILD_TESTS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-exit-time-destructors")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-global-constructors")
-      # Ignore warning options introduced by more recent versions of Clang.
+      # Ignore warnings for unknown options, as we make use of options introduced by more recent Clang versions.
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-warning-option")
       
       # Ignore warnings resulting from <mpi.h>
@@ -351,7 +330,6 @@ if(BUILD_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
   endif()
   
-  
   # if(CMAKE_COMPILER_IS_CLANGXX)
     # message(STATUS "- Including a undefined behavior checker and memory error detector.")
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
@@ -372,145 +350,109 @@ if(BUILD_TESTS)
   # All paths must start with "test/"
   add_executable(mantellaTest
     test/main.cpp
+    
+    # Test framework extension
     test/catchExtension.cpp
+    test/testCatchExtension.cpp
     
     # Configuration
     test/testConfig.cpp
     
-    # Asserts
-    test/helper/testAssert.cpp
+    # Assertion
+    test/testAssert.cpp
 
     # Random number generator
-    test/helper/testRng.cpp
+    test/testRandomNumberGenerator.cpp
     
     # MPI
-    test/helper/testMpi.cpp
+    test/testMpi.cpp
     
-    # Helper
-    test/helper/testGeometry.cpp
-    test/helper/testPrintable.cpp
-    test/helper/testQuasiRandomSequence.cpp
-    test/helper/testRandom.cpp
-    test/helper/testRegression.cpp
-    test/helper/testSetTheory.cpp
-    test/helper/testStatistic.cpp
-    test/helper/testUnorderedContainer.cpp
-
-    # Distance functions
-    test/testDistanceFunction.cpp
-    test/distanceFunction/testPNorm.cpp
-    test/distanceFunction/testMahalanobisDistance.cpp
-    
-    # # Regression functions
-    # test/testRegressionFunction.cpp
-    # test/regressionFunction/testConstantPolynomialRegressionFunction.cpp
-    # test/regressionFunction/testLinearPolynomialRegressionFunction.cpp
-    # test/regressionFunction/testQuadraticPolynomialRegressionFunction.cpp
-    # test/regressionFunction/testCubicPolynomialRegressionFunction.cpp
-
-    # # Correlation functions
-    test/testCorrelationFunction.cpp
-    test/correlationFunction/testPolynomialCorrelationFunction.cpp
-    test/correlationFunction/testSplineCorrelationFunction.cpp
-    test/correlationFunction/testExponentialCorrelationFunction.cpp
-    test/correlationFunction/testGaussianCorrelationFunction.cpp
-      
-    # # Radial basis functions
-    # test/testRadialBasisFunction.cpp
-    # test/radialBasisFunction/testPolyharmonicSplineRadialBasisFunction.cpp
-    # test/radialBasisFunction/testMultiquadraticRadialBasisFunction.cpp
-    # test/radialBasisFunction/testGaussianRadialBasisFunction.cpp
-      
-    # # Samples selections
-    # test/testSamplesSelection.cpp
-    # test/samplesSelection/testBestFittingSamplesSelection.cpp
-    # test/samplesSelection/testBestNeighbourhoodSamplesSelection.cpp
-    # test/samplesSelection/testBestSamplesSelection.cpp
-    # test/samplesSelection/testRandomSamplesSelection.cpp
-
-    # # Optimisation problems
-    # test/testOptimisationProblem.cpp
-    # test/optimisationProblem/testBlackBoxOptimisationBenchmark.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
-    test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
-    # test/optimisationProblem/testRoboticsOptimisationProblem.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/testRobotModel.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRPR.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRRR.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PRUS.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine3PUPS.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine4PRUS.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PRUS.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testParallelKinematicMachine6PUPS.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/robotModel/testMultiLevelStewartPlatform.cpp
-    # test/optimisationProblem/roboticsOptimisationProblem/testEndEffectorPoseError.cpp
-    # test/optimisationProblem/testSurrogateModel.cpp
-    # test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
-    # test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
-    # test/optimisationProblem/surrogateModel/testKrigingModel.cpp
-    # test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
-    # test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
-    
-    # # Optimisation algorithms
-    # test/testOptimisationAlgorithm.cpp
-    # test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
-    # test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
-    # test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
-    # test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
-    # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
-    # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
-    # test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
-    # test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
-    # test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
-    
-    # # Property analysis
-    # test/testPropertyAnalysis.cpp
-    # test/propertyAnalysis/passivePropertyAnalysis/testFitnessDistanceCorrelationAnalysis.cpp
-    # test/propertyAnalysis/passivePropertyAnalysis/testLipschitzContinuityAnalysis.cpp
-    # test/propertyAnalysis/passivePropertyAnalysis/testHoelderContinuityAnalysis.cpp
-    # test/propertyAnalysis/passivePropertyAnalysis/testPolynomialFunctionModelAnalysis.cpp
-    # test/propertyAnalysis/testActivePropertyAnalysis.cpp
-    # test/propertyAnalysis/activePropertyAnalysis/testAdditiveSeparabilityAnalysis.cpp
-    # test/propertyAnalysis/activePropertyAnalysis/testMultiplicativeSeparabilityAnalysis.cpp
-    # test/propertyAnalysis/activePropertyAnalysis/testPolynomialProportionalityAnalysis.cpp
-    # test/propertyAnalysis/activePropertyAnalysis/testNeighbourhoodPeriodicityAnalysis.cpp
-    # test/propertyAnalysis/activePropertyAnalysis/testTranslationPeriodicityAnalysis.cpp
+    # Armadillo
+    test/testArmadillo.cpp
   
-    # # Cluster analyses
-    # test/testClusterAnalysis.cpp
-    # test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
-    # test/clusterAnalysis/testTwoThresholdSequentialAlgorithmicScheme.cpp
+    # Mathematical functions
+    test/testAlgebra.cpp
+    test/testCombinatorics.cpp
+    test/testGeometry.cpp
+    test/testNumberTheory.cpp
+    test/testNumericalAnalysis.cpp
+    test/testProbability.cpp
+    test/testStatistics.cpp
+    test/testTopology.cpp
+  
+    # Machine learning
+    test/testSamplesSelection.cpp
+    test/testSamplesAnalysis.cpp
+
+    # Optimisation problems
+    test/testOptimisationProblem.cpp
+    test/optimisationProblem/testBenchmarkOptimisationProblem.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/testBlackBoxOptimisationBenchmark.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
+    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationProblem/testKinematicallyRedundantMachineProblem.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/testMachineModel.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRPR.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRRR.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PRUS.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PUPS.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testMultiLevelStewartPlatform.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/testEnergyConsumption.cpp
+    test/optimisationProblem/kinematicallyRedundantMachineProblem/testPoseInaccuracy.cpp
+    test/optimisationProblem/testSurrogateModel.cpp
+    test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
+    test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
+    test/optimisationProblem/surrogateModel/testKrigingModel.cpp
+    test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
+    
+    # Optimisation algorithms
+    test/testOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
+    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
+    test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
+    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
+    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
+  
+    # Cluster analyses
+    test/testClusterAnalysis.cpp
+    test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
+    test/clusterAnalysis/testTwoThresholdSequentialAlgorithmicScheme.cpp
   )
 
   # Link against prerequirements
   target_link_libraries(mantellaTest mantella)
   
-  if(ARMA_USE_WRAPPER)
-    target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
+  if(ARMADILLO_LIBRARIES)
+    target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})
   else()
-    target_link_libraries(mantella ${OPENBLAS_LIBRARIES})
+    target_link_libraries(mantellaTest ${OPENBLAS_LIBRARIES})
   endif()
 
   if(SUPPORT_MPI)

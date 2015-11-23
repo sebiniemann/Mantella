@@ -10,7 +10,7 @@
 
 // Mantella
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
-#include "mantella_bits/helper/unorderedContainer.hpp"
+#include "mantella_bits/unorderedContainer.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
 // IWYU pragma: no_forward_declare mant::IsEqual
 namespace mant {

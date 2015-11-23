@@ -1,36 +1,45 @@
 #pragma once
 
 // C++ standard library
+#include <functional>
 #include <unordered_map>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/helper/printable.hpp"
-#include "mantella_bits/helper/unorderedContainer.hpp"
+#include "mantella_bits/armadillo.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
 // IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
-  class SamplesSelection : public Printable {
-   public:
-    explicit SamplesSelection(
-        std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples,
-        arma::uword numberOfSelectedSamples);
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> randomly(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const arma::uword numberOfSamplesToSelect);
 
-    void select();
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> bestFitting(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const arma::uword numberOfSamplesToSelect,
+      const std::function<arma::Col<double>(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>&)> propertyAnalysis);
 
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getSelectedSamples() const;
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> bestFitting(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const arma::uword numberOfSamplesToSelect,
+      const std::function<double(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>&)> propertyAnalysis);
 
-    virtual ~SamplesSelection() = default;
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> nearestNeighbours(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const arma::uword numberOfSamplesToSelect,
+      const arma::Col<double>& parameter,
+      const std::function<double(const arma::Col<double>&, const arma::Col<double>&)> distanceFunction);
 
-   protected:
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> fixedRadiusNearestNeighbours(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const double radius,
+      const arma::Col<double>& parameter,
+      const std::function<double(const arma::Col<double>&, const arma::Col<double>&)> distanceFunction);
 
-    arma::uword numberOfSelectedSamples_;
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples_;
-
-    virtual void selectImplementation() = 0;
-  };
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> elitists(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+      const arma::uword numberOfSamplesToSelect);
 }

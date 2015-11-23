@@ -4,7 +4,7 @@
 #include <utility>
 
 // Mantella
-#include "mantella_bits/helper/regression.hpp"
+#include "mantella_bits/regression.hpp"
 #include "mantella_bits/correlationFunction.hpp"
 #include "mantella_bits/regressionFunction.hpp"
 

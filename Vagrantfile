@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update -qq
+    sudo apt-get upgrade -qq
     
     # Using Clang
     sudo apt-get install -qq clang
@@ -18,14 +19,13 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
     sudo update-alternatives --set c++ /usr/bin/clang++
     
-  
     # Prerequirements (including optional features)
     ## CMake
     sudo apt-get install -qq cmake
     
     ## Armadillo C++
     sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
-    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.600.2.tar.gz
+    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.200.4.tar.gz
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo
@@ -48,8 +48,21 @@ Vagrant.configure(2) do |config|
     make --quiet
     sudo make --quiet install
     cd ..
-    rm -Rf redis.tar.gz
-    
+    ### Redis adds some privileged files, so we enforce the removal using *root*
+    sudo redis rm -Rf redis.tar.gz
+    ### Installing hiredis (C bindings to Redis)
+    git clone git://github.com/redis/hiredis.git
+    cd hiredis
+    make --quiet
+    sudo make --quiet install
+    cd ..
+    rm -Rf hiredis
+    ### Configuration
+    echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled > /dev/null
+    sudo sed -i -e '$i echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled > /dev/null\n' /etc/rc.local
+    echo "vm.overcommit_memory=1" | sudo tee --append /etc/sysctl.conf > /dev/null
+    echo "net.core.somaxconn=1024" | sudo tee --append /etc/sysctl.conf > /dev/null
+    source /etc/sysctl.conf
     
     # Testing
     sudo apt-get install -qq catch
@@ -65,7 +78,6 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq valgrind
     sudo apt-get install -qq lcov
     
-    
     # Useful development tools
     sudo apt-get install -qq htop
     sudo apt-get install -qq git
@@ -73,9 +85,10 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq gdb
     sudo apt-get install -qq dos2unix
     
-    
     # Fixing some paths
     echo "LD_LIBRARY_PATH=/usr/local/lib" | sudo tee --append /etc/environment > /dev/null
+    echo "MSAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4" | sudo tee --append /etc/environment > /dev/null
+    echo "ASAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4" | sudo tee --append /etc/environment > /dev/null
     source /etc/environment
   SHELL
 end

@@ -2,6 +2,7 @@
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
+#include <functional>
 #include <unordered_map>
 #if defined(SUPPORT_MPI) // IWYU pragma: keep
 #include <vector>
@@ -11,79 +12,68 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/helper/printable.hpp"
-#include "mantella_bits/helper/unorderedContainer.hpp"
+#include "mantella_bits/armadillo.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
 // IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
-  class OptimisationProblem : public Printable {
+  class OptimisationProblem {
    public:
     const arma::uword numberOfDimensions_;
 
     explicit OptimisationProblem(
         const arma::uword numberOfDimensions);
 
-    void setLowerBounds(
-        const arma::Col<double>& lowerBounds);
-
-    void setUpperBounds(
-        const arma::Col<double>& upperBounds);
-
-    arma::Col<double> getLowerBounds() const;
-
-    arma::Col<double> getUpperBounds() const;
-
-    arma::Col<arma::uword> isWithinLowerBounds(
-        const arma::Col<double>& parameter);
-
-    arma::Col<arma::uword> isWithinUpperBounds(
-        const arma::Col<double>& parameter);
-
-    void setParameterPermutation(
-        const arma::Col<arma::uword>& parameterPermutation);
-
-    void setParameterScaling(
-        const arma::Col<double>& parameterScaling);
-
-    void setParameterTranslation(
-        const arma::Col<double>& parameterTranslation);
-
-    void setParameterRotation(
-        const arma::Mat<double>& parameterRotation);
-
-    void setObjectiveValueScaling(
-        const double objectiveValueScaling);
-
-    void setObjectiveValueTranslation(
-        const double objectiveValueTranslation);
-
-    void setAcceptableObjectiveValue(
-        const double acceptableObjectiveValue);
-
-    double getAcceptableObjectiveValue() const;
-
+    // Objective
+    void setObjectiveFunction(
+        const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
+        const std::string& name);
+    void setObjectiveFunction(
+        const std::function<double(const arma::Col<double>& parameter)> objectiveFunction);
     double getObjectiveValue(
         const arma::Col<double>& parameter);
 
-    arma::uword getNumberOfEvaluations() const;
+    // Constraints
+    void setLowerBounds(
+        const arma::Col<double>& lowerBounds);
+    arma::Col<double> getLowerBounds() const;
+    void setUpperBounds(
+        const arma::Col<double>& upperBounds);
+    arma::Col<double> getUpperBounds() const;
 
-    arma::uword getNumberOfDistinctEvaluations() const;
+    // Parameter space modifiers
+    void setParameterPermutation(
+        const arma::Col<arma::uword>& parameterPermutation);
+    void setParameterScaling(
+        const arma::Col<double>& parameterScaling);
+    void setParameterTranslation(
+        const arma::Col<double>& parameterTranslation);
+    void setParameterRotation(
+        const arma::Mat<double>& parameterRotation);
 
-    void reset();
+    // Objective value space modifiers
+    void setObjectiveValueScaling(
+        const double objectiveValueScaling);
+    void setObjectiveValueTranslation(
+        const double objectiveValueTranslation);
 
+    // Termination criteria
+    void setAcceptableObjectiveValueThreshold(
+        const double acceptableObjectiveValueThreshold);
+    double getAcceptableObjectiveValueThreshold() const;
+
+    // Caching
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
 
-#if defined(SUPPORT_MPI)
-    std::vector<double> serialise() const;
-
-    void deserialise(
-        std::vector<double> serialisedOptimisationProblem);
-#endif
-
-    virtual ~OptimisationProblem() = default;
+    // Evaluation
+    arma::uword getNumberOfEvaluations() const;
+    arma::uword getNumberOfDistinctEvaluations() const;
+    void reset();
 
    protected:
+    std::function<double(const arma::Col<double>&)> objectiveFunction_;
+    std::string name_;
+
     arma::Col<double> lowerBounds_;
     arma::Col<double> upperBounds_;
 
@@ -95,16 +85,15 @@ namespace mant {
     double objectiveValueScaling_;
     double objectiveValueTranslation_;
 
-    double acceptableObjectiveValue_;
+    double acceptableObjectiveValueThreshold_;
 
     arma::uword numberOfEvaluations_;
     arma::uword numberOfDistinctEvaluations_;
 
-    arma::Col<double> getDiversifiedParameter(
+    arma::Col<double> getModifiedParameter(
         const arma::Col<double>& parameter) const;
-
-    virtual double getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const = 0;
+    double getModifiedObjectiveValue(
+        const double objectiveValue) const;
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
   };
