@@ -15,7 +15,7 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
   FORMAT_ERROR_OCCURED=0;
 
   echo "${MAGENTA_TEXT_COLOR}Checking format rules${RESET_TEXT_COLOR}";
-  FILES=$(find src include -type f);
+  FILES=$(find src include test -not \( -path test/data -prune \) -type f);
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
@@ -23,7 +23,12 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
     if [[ `clang-format -output-replacements-xml "${file}" | grep "<replacement " | wc -l` -ne 0 ]]; then
-      echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} is not properly formatted. Please run '${GREEN_TEXT_COLOR}clang-format -i ${file}${RESET_TEXT_COLOR}'.";
+      if [ "$2" == "auto" ]; then
+        clang-format ${file} > "/tmp/.formatted"; cat "/tmp/.formatted" > ${file};
+        echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} was automatically formatted.";
+      else
+        echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} is not properly formatted. Please run '${GREEN_TEXT_COLOR}clang-format -i ${file}${RESET_TEXT_COLOR}'.";
+      fi;
       FORMAT_ERROR_OCCURED=1;
       ANY_ERROR_OCCURED=1;
     else
@@ -45,7 +50,7 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
   INCLUDE_ERROR_OCCURED=0;
   
   echo "${MAGENTA_TEXT_COLOR}Checking include rules${RESET_TEXT_COLOR}";
-  FILES=$(find src -type f);
+  FILES=$(find src -type f -name \*.cpp);
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
