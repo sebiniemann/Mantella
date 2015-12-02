@@ -239,26 +239,22 @@ add_library(mantella SHARED
   src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.cpp
   src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.cpp
   src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/energyConsumption.cpp
   src/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.cpp
   src/optimisationProblem/surrogateModel.cpp
   src/optimisationProblem/surrogateModel/polynomialFunctionModel.cpp
-  src/optimisationProblem/surrogateModel/radialBasisFunctionModel.cpp
-  src/optimisationProblem/surrogateModel/krigingModel.cpp
-  src/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
-  src/optimisationProblem/surrogateModel/artificialNeuralNetwork.cpp
+  # src/optimisationProblem/surrogateModel/radialBasisFunctionModel.cpp
+  # src/optimisationProblem/surrogateModel/krigingModel.cpp
+  # src/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
+  # src/optimisationProblem/surrogateModel/artificialNeuralNetwork.cpp
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
-  src/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.cpp
-  src/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.cpp
-  src/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.cpp
-  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.cpp
-  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.cpp
-  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.cpp
-  src/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.cpp
-  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
-  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
+  src/optimisationAlgorithm/gridSearch.cpp
+  src/optimisationAlgorithm/randomSearch.cpp
+  src/optimisationAlgorithm/hillClimbing.cpp
+  src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
+  src/optimisationAlgorithm/simulatedAnnealing.cpp
+  src/optimisationAlgorithm/particleSwarmOptimisation.cpp
   
   # Cluster analyses
   src/clusterAnalysis.cpp
@@ -380,9 +376,9 @@ if(BUILD_TESTS)
     test/testStatistics.cpp
     test/testTopology.cpp
   
-    # Machine learning
-    test/testSamplesSelection.cpp
-    test/testSamplesAnalysis.cpp
+    # # Machine learning
+    # test/testSamplesSelection.cpp
+    # test/testSamplesAnalysis.cpp
 
     # Optimisation problems
     test/testOptimisationProblem.cpp
@@ -418,32 +414,28 @@ if(BUILD_TESTS)
     test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRRR.cpp
     test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PRUS.cpp
     test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PUPS.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testMultiLevelStewartPlatform.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/testEnergyConsumption.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/testPoseInaccuracy.cpp
-    test/optimisationProblem/testSurrogateModel.cpp
-    test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
-    test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
-    test/optimisationProblem/surrogateModel/testKrigingModel.cpp
-    test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
-    test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
+    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testMultiLevelStewartPlatform.cpp
+    # test/optimisationProblem/kinematicallyRedundantMachineProblem/testPoseInaccuracy.cpp
+    # test/optimisationProblem/testSurrogateModel.cpp
+    # test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
+    # test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
+    # test/optimisationProblem/surrogateModel/testKrigingModel.cpp
+    # test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
+    # test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
     
-    # Optimisation algorithms
-    test/testOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/testSamplingBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testRandomSearch.cpp
-    test/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/testGridSearch.cpp
-    test/optimisationAlgorithm/testTrajectoryBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHillClimbing.cpp
-    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testHookeJeevesAlgorithm.cpp
-    test/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/testSimulatedAnnealing.cpp
-    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
+    # # Optimisation algorithms
+    # test/testOptimisationAlgorithm.cpp
+    # test/optimisationAlgorithm/testRandomSearch.cpp
+    # test/optimisationAlgorithm/testGridSearch.cpp
+    # test/optimisationAlgorithm/testHillClimbing.cpp
+    # test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    # test/optimisationAlgorithm/testSimulatedAnnealing.cpp
+    # test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
   
-    # Cluster analyses
-    test/testClusterAnalysis.cpp
-    test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
-    test/clusterAnalysis/testTwoThresholdSequentialAlgorithmicScheme.cpp
+    # # Cluster analyses
+    # test/testClusterAnalysis.cpp
+    # test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
+    # test/clusterAnalysis/testTwoThresholdSequentialAlgorithmicScheme.cpp
   )
 
   # Link against prerequirements

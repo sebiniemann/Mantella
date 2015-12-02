@@ -47,4 +47,15 @@ namespace mant {
       const arma::uword numberOfElements) {
     return randomPermutationMatrix(numberOfElements, numberOfElements);
   }
+      
+  arma::Col<double> randomNeighbour(
+      const arma::Col<double> parameter,
+      const double minimalDistance,
+      const double maximalDistance) {
+    // TODO verify
+    arma::Col<double> displacement = arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (maximalDistance - minimalDistance);
+    displacement += arma::sign(displacement) * minimalDistance;
+    
+    return parameter + displacement;
+  }
 }

@@ -7,13 +7,14 @@
 #include <armadillo>
 
 namespace mant {
-  SurrogateModel::SurrogateModel(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)
-      : OptimisationProblem(samples.cbegin()->first.n_elem),
-        samples_(samples) {
+  void SurrogateModel::setModelFunction(
+      const std::function<std::function<double(const arma::Col<double>& parameter)>(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)>& modelFunction) {
+    modelFunction_ = modelFunction;
   }
 
-  void SurrogateModel::model() {
-    modelImplementation();
+  void SurrogateModel::model(
+      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
+    // TODO Check that *modelFunction_* is callable
+    setObjectiveFunction(modelFunction_(samples));
   }
 }

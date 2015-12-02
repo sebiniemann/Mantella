@@ -11,7 +11,7 @@
 
 namespace mant {
   namespace krmp {
-    class EndEffectorPoseError : public KinematicallyRedundantMachineProblem {
+    class PoseInaccuracy : public KinematicallyRedundantMachineProblem {
     };
   }
 }

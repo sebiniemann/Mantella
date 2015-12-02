@@ -21,7 +21,6 @@ TEST_CASE("OptimisationProblem") {
   SECTION("Sets the lower/upper bounds and the acceptable objective value threshold to the expected default values.") {
     IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::lowest());
     IS_EQUAL(optimisationProblem.getUpperBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::max());
-    CHECK(optimisationProblem.getAcceptableObjectiveValueThreshold() == Approx(std::numeric_limits<double>::lowest()));
   }
 
   SECTION(".numberOfDimensions_") {
@@ -151,14 +150,17 @@ TEST_CASE("OptimisationProblem") {
     }
   }
 
-  SECTION(".setLowerBounds") {
-    SECTION("Updates the lower bounds.") {
+  SECTION(".setBounds") {
+    SECTION("Updates the bounds.") {
       const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
+      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      CAPTURE(upperBounds);
       
-      optimisationProblem.setLowerBounds(lowerBounds);
+      optimisationProblem.setBounds(lowerBounds, upperBounds);
       
       IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
+      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
     }
     
     SECTION("Does not reset the cache and counters.") {
@@ -183,7 +185,9 @@ TEST_CASE("OptimisationProblem") {
       
       const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
-      optimisationProblem.setLowerBounds(lowerBounds);
+      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      CAPTURE(upperBounds);
+      optimisationProblem.setBounds(lowerBounds, upperBounds);
     
       CHECK(optimisationProblem.getCachedSamples().size() != 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() != 0);
@@ -194,11 +198,15 @@ TEST_CASE("OptimisationProblem") {
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Col<double> lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
+      arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      CAPTURE(upperBounds);
       
-      optimisationProblem.setLowerBounds(lowerBounds);
+      optimisationProblem.setBounds(lowerBounds, upperBounds);
       MPI_Bcast(lowerBounds.memptr(), static_cast<int>(lowerBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      MPI_Bcast(upperBounds.memptr(), static_cast<int>(upperBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
       IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
+      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
     }
 #endif
 
@@ -208,97 +216,30 @@ TEST_CASE("OptimisationProblem") {
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(differentNumberOfDimensions);
         CAPTURE(lowerBounds);
+        const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+        CAPTURE(upperBounds);
         
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
+        CHECK_THROWS_AS(optimisationProblem.setBounds(lowerBounds, upperBounds), std::logic_error);
       }
       
       SECTION("Throw an exception, if any bound is infinite.") {
         arma::Col<double> lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
         lowerBounds(0) = arma::datum::inf;
         CAPTURE(lowerBounds);
+        const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+        CAPTURE(upperBounds);
         
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
+        CHECK_THROWS_AS(optimisationProblem.setBounds(lowerBounds, upperBounds), std::logic_error);
       }
     }
   }
   
   SECTION(".getLowerBounds") {
-    // This is already covered by *SECTION(".setLowerBounds")*.
-  }
-
-  SECTION(".setUpperBounds") {
-    SECTION("Updates the upper bounds.") {
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(upperBounds);
-      
-      optimisationProblem.setUpperBounds(upperBounds);
-      
-      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
-    }
-  
-    SECTION("Does not reset the cache and counters.") {
-      // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
-      
-      auto objectiveFunction = [] (
-          const arma::Col<double>& parameter) {
-        return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
-      };
-      optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
-      CAPTURE(numberOfParameters);
-      arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
-      CAPTURE(parameters);
-      
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        // Populates the cache and increases the counters.
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
-      
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(upperBounds);
-      optimisationProblem.setUpperBounds(upperBounds);
-    
-      CHECK(optimisationProblem.getCachedSamples().size() != 0);
-      CHECK(optimisationProblem.getNumberOfEvaluations() != 0);
-      CHECK(optimisationProblem.getNumberOfDistinctEvaluations() != 0);
-    }
-    
-#if defined(SUPPORT_MPI)
-    SECTION("Synchronises the parametrisation over MPI.") {
-      arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(upperBounds);
-      
-      optimisationProblem.setUpperBounds(upperBounds);
-      MPI_Bcast(upperBounds.memptr(), static_cast<int>(upperBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
-      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
-    }
-#endif
-
-    SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the number of elements is unequal to the problem dimension.") {
-        const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
-        CAPTURE(numberOfDimensions);
-        const arma::Col<double>& upperBounds = getContinuousRandomNumbers(differentNumberOfDimensions);
-        CAPTURE(upperBounds);
-        
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
-      }
-      
-      SECTION("Throw an exception, if any bound is infinite.") {
-        arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
-        upperBounds(0) = arma::datum::inf;
-        CAPTURE(upperBounds);
-        
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
-      }
-    }
+    // This is already covered by *SECTION(".setBounds")*.
   }
   
-  SECTION(".getUpperBound") {
-    // This is already covered by *SECTION(".setUpperBounds")*.
+  SECTION(".getUpperBounds") {
+    // This is already covered by *SECTION(".setBounds")*.
   }
   
   SECTION(".setParameterPermutation") {
@@ -749,66 +690,6 @@ TEST_CASE("OptimisationProblem") {
     }
   }
   
-  SECTION(".setAcceptableObjectiveValueThreshold") {
-    SECTION("Updates the acceptable objective value threshold.") {
-      const double acceptableObjectiveValueThreshold = getContinuousRandomNumber();
-      CAPTURE(acceptableObjectiveValueThreshold);
-      
-      optimisationProblem.setAcceptableObjectiveValueThreshold(acceptableObjectiveValueThreshold);
-      
-      CHECK(optimisationProblem.getAcceptableObjectiveValueThreshold() == Approx(acceptableObjectiveValueThreshold));
-    }
-    
-    SECTION("Works with infinite values.") {
-      CHECK_NOTHROW(optimisationProblem.setAcceptableObjectiveValueThreshold(arma::datum::inf));
-    }
-    
-    SECTION("Does not reset the cache and counters.") {
-      // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
-      
-      auto objectiveFunction = [] (
-          const arma::Col<double>& parameter) {
-        return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
-      };
-      optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
-      CAPTURE(numberOfParameters);
-      arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
-      CAPTURE(parameters);
-      
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        // Populates the cache and increases the counters.
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
-      
-      const double acceptableObjectiveValueThreshold = getContinuousRandomNumber();
-      CAPTURE(acceptableObjectiveValueThreshold);
-      optimisationProblem.setAcceptableObjectiveValueThreshold(acceptableObjectiveValueThreshold);
-    
-      CHECK(optimisationProblem.getCachedSamples().size() != 0);
-      CHECK(optimisationProblem.getNumberOfEvaluations() != 0);
-      CHECK(optimisationProblem.getNumberOfDistinctEvaluations() != 0);
-    }
-    
-#if defined(SUPPORT_MPI)
-    SECTION("Synchronises the parametrisation over MPI.") {
-      double acceptableObjectiveValueThreshold = getContinuousRandomNumber();
-      CAPTURE(acceptableObjectiveValueThreshold);
-      
-      optimisationProblem.setAcceptableObjectiveValueThreshold(acceptableObjectiveValueThreshold);
-      MPI_Bcast(&acceptableObjectiveValueThreshold, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
-      CHECK(optimisationProblem.getAcceptableObjectiveValueThreshold() == Approx(acceptableObjectiveValueThreshold));
-    }
-#endif
-  }
-  
-  SECTION(".getAcceptableObjectiveValueThreshold") {
-    // This is already covered by *SECTION(".setAcceptableObjectiveValueThreshold")*.
-  }
-  
   SECTION(".getCachedSamples") {
     SECTION("Returns all (unique) samples.") {
       mant::cacheSamples = true;
@@ -957,10 +838,9 @@ TEST_CASE("OptimisationProblem") {
       // Constraints
       const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
-      optimisationProblem.setLowerBounds(lowerBounds);
       const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(upperBounds);
-      optimisationProblem.setUpperBounds(upperBounds);
+      optimisationProblem.setBounds(lowerBounds, upperBounds);
       // Parameter space modifiers
       const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationMatrix(numberOfDimensions);
       CAPTURE(parameterPermutation);
@@ -981,10 +861,6 @@ TEST_CASE("OptimisationProblem") {
       const double& objectiveValueTranslation = getContinuousRandomNumber();
       CAPTURE(objectiveValueTranslation);
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-      // Termination criteria
-      const double acceptableObjectiveValueThreshold = getContinuousRandomNumber();
-      CAPTURE(acceptableObjectiveValueThreshold);
-      optimisationProblem.setAcceptableObjectiveValueThreshold(acceptableObjectiveValueThreshold);
       
       optimisationProblem.reset();
       
@@ -1001,11 +877,6 @@ TEST_CASE("OptimisationProblem") {
         const arma::Col<double>& parameter = parameters.col(n);
         CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
       }
-      
-      IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
-      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
-      
-      CHECK(optimisationProblem.getAcceptableObjectiveValueThreshold() == Approx(acceptableObjectiveValueThreshold));
     }
   }
 }

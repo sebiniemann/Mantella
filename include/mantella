@@ -89,26 +89,22 @@
 #include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.hpp>
 #include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.hpp>
 #include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/energyConsumption.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/poseAccuracy.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.hpp>
 #include <mantella_bits/optimisationProblem/surrogateModel.hpp>
 #include <mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/artificialNeuralNetwork.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/artificialNeuralNetwork.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp>
+#include <mantella_bits/optimisationAlgorithm/gridSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
+#include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
+#include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
 
 // Cluster analyses
 #include <mantella_bits/clusterAnalysis.hpp>

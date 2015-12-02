@@ -69,8 +69,4 @@ namespace mant {
 
     return meanObjectiveValue_ + (arma::dot(beta_, regressionFunction_->getRegression(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
   }
-
-  std::string KrigingModel::toString() const {
-    return "kriging_model";
-  }
 }

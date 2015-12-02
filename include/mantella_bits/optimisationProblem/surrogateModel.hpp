@@ -1,33 +1,28 @@
 #pragma once
 
 // C++ standard library
+#include <functional>
 #include <unordered_map>
 
 // Armadillo
-namespace arma {
-  template <typename eT>
-  class Col;
-}
+#include <armadillo>
 
 // Mantella
+#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/unorderedContainer.hpp"
-// IWYU pragma: no_forward_declare mant::Hash
-// IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
   class SurrogateModel : public OptimisationProblem {
    public:
-    explicit SurrogateModel(
+    using OptimisationProblem::OptimisationProblem;
+    
+    void setModelFunction(
+        const std::function<std::function<double(const arma::Col<double>& parameter)>(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)>& modelFunction);
+
+    void model(
         const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
-
-    void model();
-
-    virtual ~SurrogateModel() = default;
-
+   
    protected:
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
-
-    virtual void modelImplementation() = 0;
+    std::function<std::function<double(const arma::Col<double>& parameter)>(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples)> modelFunction_;
   };
 }

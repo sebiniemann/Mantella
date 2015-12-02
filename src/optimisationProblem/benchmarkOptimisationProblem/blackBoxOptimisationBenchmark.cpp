@@ -18,12 +18,14 @@ namespace mant {
     BlackBoxOptimisationBenchmark::BlackBoxOptimisationBenchmark(
         const arma::uword numberOfDimensions)
         : BenchmarkOptimisationProblem(numberOfDimensions) {
-      setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0);
-      setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
+      setBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 5.0, arma::zeros<arma::Col<double>>(numberOfDimensions_) + 5.0);
       // The objective value translation is randomly chosen from a Cauchy distribution with an approximate 50% chance to be within [-100, 100], rounded up to 2 decimal places.
       // The translation is further bounded to be between -1000 and 1000.
       setObjectiveValueTranslation(getRandomObjectiveValueTranslation());
-      setAcceptableObjectiveValuePrecision(1.0e-8);
+    }
+    
+    double BlackBoxOptimisationBenchmark::getBestObjectiveValue() const {
+      return objectiveValueTranslation_;
     }
 
     arma::Col<double> BlackBoxOptimisationBenchmark::getRandomParameterTranslation() {

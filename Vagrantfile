@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/wily64"
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 1024
@@ -14,10 +14,6 @@ Vagrant.configure(2) do |config|
     
     # Using Clang
     sudo apt-get install -qq clang
-    sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100
-    sudo update-alternatives --set cc /usr/bin/clang
-    sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
-    sudo update-alternatives --set c++ /usr/bin/clang++
     
     # Prerequirements (including optional features)
     ## CMake
@@ -37,43 +33,17 @@ Vagrant.configure(2) do |config|
     cd ..
     rm -Rf armadillo armadillo.tar.gz
     
-    ## MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
+    ## MPI
     sudo apt-get install -qq libmpich2-dev
     
     ## Redis database
-    wget --quiet -O redis.tar.gz http://download.redis.io/releases/redis-3.0.3.tar.gz
-    mkdir redis
-    tar -xzf redis.tar.gz -C ./redis --strip-components=1
-    cd redis
-    make --quiet
-    sudo make --quiet install
-    cd ..
-    ### Redis adds some privileged files, so we enforce the removal using *root*
-    sudo redis rm -Rf redis.tar.gz
-    ### Installing hiredis (C bindings to Redis)
-    git clone git://github.com/redis/hiredis.git
-    cd hiredis
-    make --quiet
-    sudo make --quiet install
-    cd ..
-    rm -Rf hiredis
-    ### Configuration
-    echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled > /dev/null
-    sudo sed -i -e '$i echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled > /dev/null\n' /etc/rc.local
-    echo "vm.overcommit_memory=1" | sudo tee --append /etc/sysctl.conf > /dev/null
-    echo "net.core.somaxconn=1024" | sudo tee --append /etc/sysctl.conf > /dev/null
-    source /etc/sysctl.conf
+    sudo apt-get install -qq redis-server
+    sudo apt-get install -qq libhiredis-dev
     
     # Testing
     sudo apt-get install -qq catch
     ## Using clang-format-3.6
-    sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.6 main'
-    wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
-    sudo apt-get update -qq
     sudo apt-get install -qq clang-format-3.6
-    ## Adds clang-format as an alternative to clang-format-3.6
-    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
-    sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
     sudo apt-get install -qq iwyu
     sudo apt-get install -qq valgrind
     sudo apt-get install -qq lcov

@@ -8,11 +8,8 @@ namespace mant {
    public:
     using OptimisationProblem::OptimisationProblem;
 
-    void setAcceptableObjectiveValuePrecision(
-        const double acceptableObjectiveValuePrecision);
-    double getAcceptableObjectiveValuePrecision() const;
-
-   protected:
-    double acceptableObjectiveValuePrecision_;
+    virtual double getBestObjectiveValue() const = 0;
+    
+    virtual ~BenchmarkOptimisationProblem();
   };
 }

@@ -20,7 +20,8 @@ namespace mant {
       explicit ParallelKinematicMachine6PUPS();
 
       // Adds a copy constructor to provide support for *std::array* and similar containers.
-      explicit ParallelKinematicMachine6PUPS(
+      // *Note:* Don't mark this constructor with the *explicit* keyword.
+      ParallelKinematicMachine6PUPS(
           const ParallelKinematicMachine6PUPS& parallelKinematicMachine6PUPS);
 
       explicit ParallelKinematicMachine6PUPS(

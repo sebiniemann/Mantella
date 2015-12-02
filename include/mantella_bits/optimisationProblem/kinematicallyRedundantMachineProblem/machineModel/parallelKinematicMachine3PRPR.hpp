@@ -20,7 +20,8 @@ namespace mant {
       explicit ParallelKinematicMachine3PRPR();
 
       // Adds a copy constructor to provide support for *std::array* and similar containers.
-      explicit ParallelKinematicMachine3PRPR(
+      // *Note:* Don't mark this constructor with the *explicit* keyword.
+      ParallelKinematicMachine3PRPR(
           const ParallelKinematicMachine3PRPR& parallelKinematicMachine3PRPR);
 
       explicit ParallelKinematicMachine3PRPR(

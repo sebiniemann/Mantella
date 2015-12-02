@@ -32,35 +32,37 @@ namespace mant {
         const std::function<double(const arma::Col<double>& parameter)> objectiveFunction);
     double getObjectiveValue(
         const arma::Col<double>& parameter);
+    double getNormalisedObjectiveValue(
+        const arma::Col<double>& parameter);
 
     // Constraints
-    void setLowerBounds(
-        const arma::Col<double>& lowerBounds);
-    arma::Col<double> getLowerBounds() const;
-    void setUpperBounds(
+    void setBounds(
+        const arma::Col<double>& lowerBounds,
         const arma::Col<double>& upperBounds);
+    arma::Col<double> getLowerBounds() const;
     arma::Col<double> getUpperBounds() const;
-
+    
     // Parameter space modifiers
     void setParameterPermutation(
         const arma::Col<arma::uword>& parameterPermutation);
+    arma::Col<arma::uword> getParameterPermutation() const;
     void setParameterScaling(
         const arma::Col<double>& parameterScaling);
+    arma::Col<double> getParameterScaling() const;
     void setParameterTranslation(
         const arma::Col<double>& parameterTranslation);
+    arma::Col<double> getParameterTranslation() const;
     void setParameterRotation(
         const arma::Mat<double>& parameterRotation);
+    arma::Mat<double> getParameterRotation() const;
 
     // Objective value space modifiers
     void setObjectiveValueScaling(
         const double objectiveValueScaling);
+    double getObjectiveValueScaling() const;
     void setObjectiveValueTranslation(
         const double objectiveValueTranslation);
-
-    // Termination criteria
-    void setAcceptableObjectiveValueThreshold(
-        const double acceptableObjectiveValueThreshold);
-    double getAcceptableObjectiveValueThreshold() const;
+    double getObjectiveValueTranslation() const;
 
     // Caching
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
@@ -76,6 +78,7 @@ namespace mant {
 
     arma::Col<double> lowerBounds_;
     arma::Col<double> upperBounds_;
+    arma::Col<double> boundsNormalisiation_;
 
     arma::Col<arma::uword> parameterPermutation_;
     arma::Col<double> parameterScaling_;

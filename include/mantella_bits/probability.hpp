@@ -13,4 +13,9 @@ namespace mant {
 
   arma::Col<arma::uword> randomPermutationMatrix(
       const arma::uword numberOfElements);
+      
+  arma::Col<double> randomNeighbour(
+      const arma::Col<double>& parameter,
+      const double minimalDistance,
+      const double maximalDistance);
 }
