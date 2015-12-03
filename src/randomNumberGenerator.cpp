@@ -1,9 +1,6 @@
 #include "mantella_bits/randomNumberGenerator.hpp"
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
-// Armadillo
-#include <armadillo>
-
 namespace mant {
   decltype(Rng::seed_) Rng::seed_;
   decltype(Rng::generator_) Rng::generator_;

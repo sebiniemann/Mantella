@@ -94,7 +94,7 @@ namespace mant {
         const arma::uword numberOfConditionings) {
       arma::Col<double> conditions(numberOfConditionings);
       conditions(0) = 49.5;
-      conditions.tail(conditions.n_elem - 1) = arma::conv_to<arma::Col<double>>::from(randomPermutationMatrix(conditions.n_elem - 1));
+      conditions.tail(conditions.n_elem - 1) = arma::conv_to<arma::Col<double>>::from(randomPermutationVector(conditions.n_elem - 1));
 
       arma::Mat<double> localParameterConditionings(numberOfDimensions_, conditions.n_elem);
       for (arma::uword n = 0; n < conditions.n_elem; ++n) {
@@ -109,7 +109,7 @@ namespace mant {
         const arma::uword numberOfConditionings) {
       arma::Col<double> conditions(numberOfConditionings);
       conditions(0) = 19.0;
-      conditions.tail(conditions.n_elem - 1) = arma::conv_to<arma::Col<double>>::from(randomPermutationMatrix(conditions.n_elem - 1));
+      conditions.tail(conditions.n_elem - 1) = arma::conv_to<arma::Col<double>>::from(randomPermutationVector(conditions.n_elem - 1));
 
       arma::Mat<double> localParameterConditionings(numberOfDimensions_, conditions.n_elem);
       for (arma::uword n = 0; n < conditions.n_elem; ++n) {

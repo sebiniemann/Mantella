@@ -43,11 +43,11 @@ TEST_CASE("randomRotationMatrix") {
   }
 }
 
-TEST_CASE("randomPermutationMatrix") {
+TEST_CASE("randomPermutationVector") {
   SECTION("Generates uniform distributed permutations.") {
     arma::Mat<arma::uword>::fixed<10000, 10> permutations;
     for (arma::uword n = 0; n < permutations.n_rows; ++n) {
-      permutations.row(n) = mant::randomPermutationMatrix(permutations.n_cols).t();
+      permutations.row(n) = mant::randomPermutationVector(permutations.n_cols).t();
     }
     
     for (arma::uword n = 0; n < permutations.n_cols; ++n) {
@@ -59,7 +59,7 @@ TEST_CASE("randomPermutationMatrix") {
   SECTION("Generates uniform distributed partial permutations.") {
     arma::Mat<arma::uword>::fixed<10000, 10> permutations;
     for (arma::uword n = 0; n < permutations.n_rows; ++n) {
-      permutations.row(n) = mant::randomPermutationMatrix(permutations.n_cols + 1, permutations.n_cols).t();
+      permutations.row(n) = mant::randomPermutationVector(permutations.n_cols + 1, permutations.n_cols).t();
     }
     
     for (arma::uword n = 0; n < permutations.n_cols; ++n) {
@@ -76,7 +76,7 @@ TEST_CASE("randomPermutationMatrix") {
       const arma::uword cycleSize = 1 + numberOfElements + getDiscreteRandomNumber();
       CAPTURE(cycleSize);
 
-      CHECK_THROWS_AS(mant::randomPermutationMatrix(numberOfElements, cycleSize), std::logic_error);
+      CHECK_THROWS_AS(mant::randomPermutationVector(numberOfElements, cycleSize), std::logic_error);
     }
   }
 }

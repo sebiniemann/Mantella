@@ -27,10 +27,10 @@ namespace mant {
     return Q * arma::sign(arma::diagmat(R));
   }
 
-  arma::Col<arma::uword> randomPermutationMatrix(
+  arma::Col<arma::uword> randomPermutationVector(
       const arma::uword numberOfElements,
       const arma::uword cycleSize) {
-    verify(cycleSize <= numberOfElements, "randomPermutationMatrix: The cycle size must be lower than or equal to the number of elements.");
+    verify(cycleSize <= numberOfElements, "randomPermutationVector: The cycle size must be lower than or equal to the number of elements.");
 
     arma::Col<arma::uword> permutation = range<arma::uword>(0, numberOfElements - 1);
 
@@ -43,16 +43,18 @@ namespace mant {
     return permutation.head(cycleSize);
   }
 
-  arma::Col<arma::uword> randomPermutationMatrix(
+  arma::Col<arma::uword> randomPermutationVector(
       const arma::uword numberOfElements) {
-    return randomPermutationMatrix(numberOfElements, numberOfElements);
+    return randomPermutationVector(numberOfElements, numberOfElements);
   }
       
   arma::Col<double> randomNeighbour(
-      const arma::Col<double> parameter,
+      const arma::Col<double>& parameter,
       const double minimalDistance,
       const double maximalDistance) {
-    // TODO verify
+    verify(maximalDistance > 0, "randomNeighbour: ");
+    verify(minimalDistance < maximalDistance, "randomNeighbour: ");
+      
     arma::Col<double> displacement = arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (maximalDistance - minimalDistance);
     displacement += arma::sign(displacement) * minimalDistance;
     

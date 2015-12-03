@@ -13,7 +13,6 @@ namespace mant {
   class OptimisationProblem;
 }
 
-// TODO Add restarting
 namespace mant {
   class SimulatedAnnealing : public OptimisationAlgorithm {
    public:
@@ -26,7 +25,7 @@ namespace mant {
     void optimise(
         const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
-    void setIsAcceptableStateFunction_(
+    void setIsAcceptableStateFunction(
         std::function<bool(const double objectiveValue)> isAcceptableStateFunction);
         
     void setMinimalStepSize(

@@ -77,7 +77,7 @@ TEST_CASE("GridSearch") {
       CHECK_THROWS_AS(gridSearch.optimise(), std::logic_error);
     }
 
-    SECTION("Throws an exception, if the size of samples is not equal to the number of dimension of the problem") {
+    SECTION("Throws an exception, if the size of samples is unequal to the number of dimension of the problem") {
       CHECK_THROWS_AS(gridSearch.setNumberOfSamplesPerDimension({100, 100, 100}), std::logic_error);
       CHECK_THROWS_AS(gridSearch.setNumberOfSamplesPerDimension({100}), std::logic_error);
     }

@@ -35,13 +35,12 @@ namespace mant {
   void GridSearch::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::Mat<double>& initialParameters) {
-    // verify arma::Col empty
+    verify(initialParameters.is_empty(), "optimise: The grid search algorithm does not accept initial parameters.");
       
     if (numberOfSamplesPerDimension_.is_empty()) {
       setNumberOfSamplesPerDimension(arma::zeros<arma::Col<arma::uword>>(optimisationProblem->numberOfDimensions_) + 10);
     } else {
-      // verify
-      verify(arma::all(numberOfSamplesPerDimension_ > 1), ""); // TODO
+      verify(arma::prod(numberOfSamplesPerDimension_) <= maximalNumberOfIterations_, "optimise: The maximal number of iterations must be at least equal to the product over the number of samples per dimensions.");
     }
     
     samples_.reserve(optimisationProblem->numberOfDimensions_);
@@ -61,6 +60,8 @@ namespace mant {
 
   void GridSearch::setNumberOfSamplesPerDimension(
       const arma::Col<arma::uword>& numberOfSamplesPerDimension) {
+    verify(arma::all(numberOfSamplesPerDimension_ > 1), "optimise: The number of samples per dimensions must be strict greater than 1 for each dimension.");
+      
     numberOfSamplesPerDimension_ = numberOfSamplesPerDimension;
   }
 }

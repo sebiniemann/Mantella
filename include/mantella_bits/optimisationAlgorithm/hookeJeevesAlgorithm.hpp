@@ -14,7 +14,6 @@ namespace mant {
   class OptimisationProblem;
 }
 
-// TODO Add restarting
 namespace mant {
   class HookeJeevesAlgorithm : public OptimisationAlgorithm {
    public:

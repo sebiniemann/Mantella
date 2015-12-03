@@ -4,7 +4,6 @@
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/probability.hpp"
 
-// TODO Add restarting
 namespace mant {
   HillClimbing::HillClimbing()
       : OptimisationAlgorithm(),
@@ -20,6 +19,8 @@ namespace mant {
   void HillClimbing::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::Mat<double>& initialParameters) {
+    verify(initialParameters.n_cols == 1, "optimise: The hill climbing algorithm accepts only a single initial parameter.");
+    
     if (!std::isfinite(minimalStepSize_)) {
       setMinimalStepSize(0);
     } else {

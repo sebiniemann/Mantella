@@ -18,9 +18,9 @@ TEST_CASE("OptimisationProblem") {
   
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-  SECTION("Sets the lower/upper bounds and the acceptable objective value threshold to the expected default values.") {
-    IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::lowest());
-    IS_EQUAL(optimisationProblem.getUpperBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + std::numeric_limits<double>::max());
+  SECTION("Initialises the lower/upper bounds with the expected default values.") {
+    IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 10);
+    IS_EQUAL(optimisationProblem.getUpperBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + 10);
   }
 
   SECTION(".numberOfDimensions_") {
@@ -112,7 +112,7 @@ TEST_CASE("OptimisationProblem") {
     // We test the effectiveness and order of all parameter space and objective value space modifications at this point, to avoid repetitive checks for each space modification setter.
     SECTION("Is adjusted by the parameter space and objective value space modifiers (including the correct order).") {
       // Parameter space modifiers
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationMatrix(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
       CAPTURE(parameterPermutation);
       optimisationProblem.setParameterPermutation(parameterPermutation);
       const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
@@ -265,7 +265,7 @@ TEST_CASE("OptimisationProblem") {
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
       
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationMatrix(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
       CAPTURE(parameterPermutation);
       optimisationProblem.setParameterPermutation(parameterPermutation);
     
@@ -276,7 +276,7 @@ TEST_CASE("OptimisationProblem") {
     
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
-      arma::Col<arma::uword> parameterPermutation = mant::randomPermutationMatrix(numberOfDimensions);
+      arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
       CAPTURE(parameterPermutation);
       
       optimisationProblem.setParameterPermutation(parameterPermutation);
@@ -301,7 +301,7 @@ TEST_CASE("OptimisationProblem") {
 
     SECTION("Exception tests:") {
       SECTION("Throw an exception, if the provided vector is not a compatible permutation matrix.") {
-        arma::Col<arma::uword> parameterPermutation = mant::randomPermutationMatrix(numberOfDimensions);
+        arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
         CAPTURE(parameterPermutation);
         
         SECTION("Throw an exception, if the permutation matrix's size is unequal to the number of dimensions.") {
@@ -543,7 +543,7 @@ TEST_CASE("OptimisationProblem") {
         }
       
         SECTION("Throw an exception, if the provided matrix is not square.") {
-          parameterRotation.shed_col(parameterRotation.n_cols - 1);
+          parameterRotation.shed_col(0);
           CAPTURE(parameterRotation);
 
           CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
@@ -842,7 +842,7 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(upperBounds);
       optimisationProblem.setBounds(lowerBounds, upperBounds);
       // Parameter space modifiers
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationMatrix(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
       CAPTURE(parameterPermutation);
       optimisationProblem.setParameterPermutation(parameterPermutation);
       const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);

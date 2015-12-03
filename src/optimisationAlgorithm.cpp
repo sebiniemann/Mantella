@@ -1,17 +1,40 @@
 #include "mantella_bits/optimisationAlgorithm.hpp"
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
+// C++ standard library
+#include <cassert>
+
 namespace mant{
-  OptimisationAlgorithm::OptimisationAlgorithm()
-      : numberOfIterations_(0),
-        duration_(std::chrono::microseconds(0)),
-        initialTimePoint_(std::chrono::steady_clock::now()), 
-        bestObjectiveValue_(arma::datum::inf),
-        // Specifies the input type. Otherwise, the call would be ambiguous.
-        bestParameter_(static_cast<arma::uword>(1)) {
+  OptimisationAlgorithm::OptimisationAlgorithm() {
+    reset();
+        
     setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(30));
+    
+    setBoundaryHandlingFunction([this] (
+        const arma::Mat<double>& parameters) {
+      arma::Mat<double> boundedParameters = parameters;
+      
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) < 0)).fill(0);
+        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) > 1)).fill(1);
+      }
+      
+      return boundedParameters;
+    });
+    
+    setIsDegeneratedFunction([this] (
+        const arma::Mat<double>& parameters,
+        const arma::Col<double>& differences) {
+      return false;
+    });
+    
+    setDegenerationHandlingFunction([this] (
+        const arma::Mat<double>& parameters,
+        const arma::Col<double>& differences) {
+      return arma::randu<arma::Mat<double>>(arma::size(parameters));
+    });
     
   #if defined(SUPPORT_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
@@ -25,7 +48,7 @@ namespace mant{
   void OptimisationAlgorithm::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::Mat<double>& initialParameters) {
-    initialTimePoint_ = std::chrono::steady_clock::now();
+    reset();
     
     arma::Mat<double> parameters = initialParameters;
     arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
@@ -33,11 +56,10 @@ namespace mant{
     while (!isTerminated() && !isFinished()) {
       if (isDegeneratedFunction_(parameters, differences)) {
         parameters = degenerationHandlingFunction_(parameters, differences);
-        // TODO assert size
       } else {
         parameters = nextParametersFunction_(parameters, differences);
-        // TODO assert size
       }
+      assert(parameters.n_rows == optimisationProblem->numberOfDimensions_);
       
       arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
       
@@ -142,5 +164,13 @@ namespace mant{
     }
 
     return differences;
+  }
+  
+  void OptimisationAlgorithm::reset() {
+    numberOfIterations_  = 0;
+    bestObjectiveValue_ = arma::datum::inf;
+    bestParameter_.reset();
+    duration_ = std::chrono::microseconds(0);
+    initialTimePoint_ = std::chrono::steady_clock::now();
   }
 }

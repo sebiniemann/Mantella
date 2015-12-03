@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
-# Mantella, C++ optimisation framework
 project(Mantella CXX C)
 
 # Retrieves the version numbers from "include/mantella", avoiding possible inconsistency.
@@ -22,6 +21,7 @@ option(BUILD_TESTS "Build tests" OFF)
 option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 
 mark_as_advanced(
+  USE_CCACHE
   BUILD_TESTS
   MEASURE_CODE_COVERAGE
 )
@@ -125,7 +125,7 @@ message(STATUS "- Using level 3 code optimisation.")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
   
 if(NOT CMAKE_BUILD_TYPE)
-  message(STATUS "- Setting build to to 'Release'.")
+  message(STATUS "- Setting build to 'Release'.")
   message(STATUS "  - Use 'cmake ... -DCMAKE_BUILD_TYPE=[Release|Debug]' to specify this.")
   set(CMAKE_BUILD_TYPE "Release")
 endif()
@@ -238,10 +238,10 @@ add_library(mantella SHARED
   src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRRR.cpp
   src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.cpp
   src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.cpp
-  src/optimisationProblem/surrogateModel.cpp
-  src/optimisationProblem/surrogateModel/polynomialFunctionModel.cpp
+  # src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.cpp
+  # src/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.cpp
+  # src/optimisationProblem/surrogateModel.cpp
+  # src/optimisationProblem/surrogateModel/polynomialFunctionModel.cpp
   # src/optimisationProblem/surrogateModel/radialBasisFunctionModel.cpp
   # src/optimisationProblem/surrogateModel/krigingModel.cpp
   # src/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
@@ -256,10 +256,10 @@ add_library(mantella SHARED
   src/optimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/particleSwarmOptimisation.cpp
   
-  # Cluster analyses
-  src/clusterAnalysis.cpp
-  src/clusterAnalysis/basicSequentialAlgorithmicScheme.cpp
-  src/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.cpp
+  # # Cluster analyses
+  # src/clusterAnalysis.cpp
+  # src/clusterAnalysis/basicSequentialAlgorithmicScheme.cpp
+  # src/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.cpp
 )
 
 # Linking against prerequirements

@@ -15,7 +15,6 @@ namespace mant {
     setNextParametersFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& differences) {
-      // TODO Check: Always or only per population?
       if (activeParticleIndex_ == 0 && randomiseTopology_) {
         neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
         randomiseTopology_ = false;
@@ -84,20 +83,14 @@ namespace mant {
       const arma::Mat<double>& initialParameters) {
     if (!std::isfinite(maximalAcceleration_)) {
       setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
-    } else {
-      // TODO verify 
     }
     
     if (!std::isfinite(maximalLocalAttraction_)) {
       setMaximalLocalAttraction(0.5 + std::log(2.0));
-    } else {
-      // TODO verify 
     }
     
     if (!std::isfinite(maximalGlobalAttraction_)) {
       setMaximalGlobalAttraction(maximalLocalAttraction_);
-    } else {
-      // TODO verify 
     }
     
     numberOfParticles_ = initialParameters.n_cols;
@@ -114,19 +107,32 @@ namespace mant {
     
     OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
+      
+  void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
+      std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction) {
+    verify(static_cast<bool>(neighbourhoodTopologyFunction), "setNeighbourhoodTopologyFunction: The neighbourhood topology function must be callable.");
+    
+    neighbourhoodTopologyFunction_ = neighbourhoodTopologyFunction;
+  }
 
   void ParticleSwarmOptimisation::setMaximalAcceleration(
       const double maximalAcceleration) {
+    verify(maximalAcceleration > 0, "setMaximalAcceleration: The maximal acceleration must be strict greater than 0.");
+      
     maximalAcceleration_ = maximalAcceleration;
   }
 
   void ParticleSwarmOptimisation::setMaximalLocalAttraction(
       const double maximalLocalAttraction) {
+    verify(maximalLocalAttraction > 0, "setMaximalLocalAttraction: The maximal local attraction must be strict greater than 0.");
+    
     maximalLocalAttraction_ = maximalLocalAttraction;
   }
 
   void ParticleSwarmOptimisation::setMaximalGlobalAttraction(
       const double maximalGlobalAttraction) {
+    verify(maximalGlobalAttraction > 0, "setMaximalGlobalAttraction: The maximal global attraction must be strict greater than 0.");
+    
     maximalGlobalAttraction_ = maximalGlobalAttraction;
   }
 }

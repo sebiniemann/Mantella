@@ -7,11 +7,11 @@ namespace mant {
   arma::Mat<double> randomRotationMatrix(
       const arma::uword numberOfDimensions);
 
-  arma::Col<arma::uword> randomPermutationMatrix(
+  arma::Col<arma::uword> randomPermutationVector(
       const arma::uword numberOfElements,
       const arma::uword cycleSize);
 
-  arma::Col<arma::uword> randomPermutationMatrix(
+  arma::Col<arma::uword> randomPermutationVector(
       const arma::uword numberOfElements);
       
   arma::Col<double> randomNeighbour(

@@ -47,17 +47,17 @@ namespace mant {
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
     // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
-    verify(static_cast<bool>(objectiveFunction_), "getObjectiveValue: The objective function is not callable.");
+    verify(static_cast<bool>(objectiveFunction_), "getObjectiveValue: The objective function must be callable.");
     verify(parameter.n_elem == numberOfDimensions_, "getObjectiveValue: The number of elements must be equal to the number of dimensions.");
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
-
+    
     if (::mant::cacheSamples) {
       // Check if the result is already cached.
       const auto n = cachedSamples_.find(parameter);
       if (n == cachedSamples_.cend()) {
-        // Increase the number of distinct evaluations only if we actually compute the value.
+        // Increases the number of distinct evaluations only, if we actually compute the value.
         ++numberOfDistinctEvaluations_;
 
         const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(parameter)));
@@ -73,7 +73,11 @@ namespace mant {
       // Without caching, all function evaluations must be computed.
       ++numberOfDistinctEvaluations_;
 
-      return getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(parameter)));
+      const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(parameter)));
+      // All objective values must be finite.
+      assert(std::isfinite(result));
+        
+      return result;
     }
   }
   
@@ -107,7 +111,7 @@ namespace mant {
   void OptimisationProblem::setParameterPermutation(
       const arma::Col<arma::uword>& parameterPermutation) {
     verify(parameterPermutation.n_elem == numberOfDimensions_, "setParameterPermutation: The number of elements must be equal to the number of dimensions");
-    verify(isPermutationMatrix(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "setParameterPermutation: The parameter must be a permutation.");
+    verify(isPermutationVector(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "setParameterPermutation: The parameter must be a permutation.");
 
 #if defined(SUPPORT_MPI)
     // MPI needs the exact type (here: *MPI_UNSIGNED*), while Armadillo's *arma::uword* is implementation dependent.

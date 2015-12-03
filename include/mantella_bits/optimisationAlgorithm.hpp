@@ -47,6 +47,8 @@ namespace mant {
     arma::Col<double> getBestParameter() const;
 
     std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
+    
+    void reset();
 
    protected:
     int nodeRank_;

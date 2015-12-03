@@ -21,7 +21,12 @@ TEST_CASE("BlackBoxOptimisationBenchmark") {
   SECTION("Sets the lower and upper bounds as well as the acceptable objective value precision.") {
     IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
     IS_EQUAL(optimisationProblem.getUpperBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
-    CHECK(optimisationProblem.getBestObjectiveValue() == Approx(0.0));
+    
+    const double& objectiveValueTranslation = getContinuousRandomNumber();
+    CAPTURE(objectiveValueTranslation);
+    
+    optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
+    CHECK(optimisationProblem.getBestObjectiveValue() == Approx(objectiveValueTranslation));
   }
   
   SECTION("Randomises the objective value translation within [-1000, 1000], using a Cauchy distribution with location 0.0 and scale 100.0") {

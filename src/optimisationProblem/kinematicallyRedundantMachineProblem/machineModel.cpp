@@ -24,8 +24,8 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       // Using the *operator bool* to checks whether *modelFunction_* is empty (not callable) or not.
-      verify(static_cast<bool>(modelFunction_), "The objective function is not callable.");
-      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
+      verify(static_cast<bool>(modelFunction_), "getModel: The model function must be callable.");
+      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "getModel: The number of actuated redundant joints must be equal to the number of redundant joints.");
 
       return modelFunction_(endEffectorPose, redundantJointsActuation);
     }
@@ -39,8 +39,8 @@ namespace mant {
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
       // Using the *operator bool* to checks whether *poseInaccuracyFunction_* is empty (not callable) or not.
-      verify(static_cast<bool>(poseInaccuracyFunction_), "The objective function is not callable.");
-      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "The number of actuated redundant joints must be equal to the number of redundant joints.");
+      verify(static_cast<bool>(poseInaccuracyFunction_), "getPoseInaccuracy: The pose inaccuracy function must be callable.");
+      verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "getPoseInaccuracy: The number of actuated redundant joints must be equal to the number of redundant joints.");
 
       const double poseInaccuracy = poseInaccuracyFunction_(endEffectorPose, redundantJointsActuation);
       // The pose has the most accuracy, if the inaccuracy is 0. A negative inaccuracy wouldn't make any sense.

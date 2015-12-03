@@ -20,7 +20,7 @@ namespace mant {
   bool isRotationMatrix(
       const arma::Mat<double>& rotationCandidate);
 
-  bool isPermutationMatrix(
+  bool isPermutationVector(
       const arma::Col<arma::uword>& permutationCandidate,
       const arma::uword numberOfPermutations,
       const arma::uword numberOfElements);

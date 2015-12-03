@@ -5,7 +5,6 @@
 #include "mantella_bits/probability.hpp"
 #include "mantella_bits/randomNumberGenerator.hpp"
 
-// TODO Add restarting
 namespace mant {
   SimulatedAnnealing::SimulatedAnnealing()
       : OptimisationAlgorithm() {
@@ -25,10 +24,10 @@ namespace mant {
   void SimulatedAnnealing::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::Mat<double>& initialParameters) {
-    // TODO verify initialParameters
+    verify(initialParameters.n_cols == 1, "optimise: The simulated annealing algorithm accepts only a single initial parameter.");
       
     if (!static_cast<bool>(isAcceptableStateFunction_)) {
-      setIsAcceptableStateFunction_([this] (
+      setIsAcceptableStateFunction([this] (
           const double objectiveValue) {
         double progress;
         if (maximalNumberOfIterations_ < std::numeric_limits<arma::uword>::max()) {
@@ -59,6 +58,13 @@ namespace mant {
   void SimulatedAnnealing::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem) {
     optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_));
+  }
+
+  void SimulatedAnnealing::setIsAcceptableStateFunction(
+      std::function<bool(const double objectiveValue)> isAcceptableStateFunction) {
+    verify(static_cast<bool>(isAcceptableStateFunction), "setIsAcceptableStateFunction: The function deciding whether or not an non-optimal state is acceptable must be callable.");
+      
+    isAcceptableStateFunction_ = isAcceptableStateFunction;
   }
 
   void SimulatedAnnealing::setMinimalStepSize(

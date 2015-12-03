@@ -18,7 +18,7 @@ namespace mant {
 
   bool isRotationMatrix(
       const arma::Mat<double>& rotationCandidate) {
-// Expensive asserts are only to be run in debug mode.
+// Expensive asserts are only run only during debug mode.
 #if !defined(NDEBUG)
     // Rotation matrices must be square and ...
     if (!rotationCandidate.is_square()) {
@@ -35,11 +35,11 @@ namespace mant {
     return true;
   }
 
-  bool isPermutationMatrix(
+  bool isPermutationVector(
       const arma::Col<arma::uword>& permutationCandidate,
       const arma::uword numberOfPermutations,
       const arma::uword numberOfElements) {
-// Expensive asserts are only to be run in debug mode.
+// Expensive asserts are only run only during debug mode.
 #if !defined(NDEBUG)
     // The number of element to be permuted cannot be larger than the number of elements, ...
     if (numberOfPermutations > numberOfElements) {
@@ -61,7 +61,7 @@ namespace mant {
 
   bool isSymmetric(
       const arma::Mat<double>& symmetricCandidate) {
-// Expensive asserts are only to be run in debug mode.
+// Expensive asserts are only run only during debug mode.
 #if !defined(NDEBUG)
     if (!symmetricCandidate.is_square()) {
       return false;
@@ -82,7 +82,7 @@ namespace mant {
 
   bool isPositiveSemiDefinite(
       const arma::Mat<double>& positiveSemiMatrixCandidate) {
-// Expensive asserts are only to be run in debug mode.
+// Expensive asserts are only run only during debug mode.
 #if !defined(NDEBUG)
     if (!positiveSemiMatrixCandidate.is_square()) {
       return false;
@@ -101,8 +101,12 @@ namespace mant {
 
   bool isDimensionallyConsistent(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
-// Expensive asserts are only to be run in debug mode.
+// Expensive asserts are only run only during debug mode.
 #if !defined(NDEBUG)
+    if (samples.size() < 1) {
+      return true;
+    }
+
     // We need to check each parameter in *samples* to be sure, that all have the same amount of elements.
     // The number of elements within the first parameter is used as reference.
     const arma::uword numberOfDimensions = samples.cbegin()->first.n_elem;

@@ -10,6 +10,6 @@ namespace mant {
 
     virtual double getBestObjectiveValue() const = 0;
     
-    virtual ~BenchmarkOptimisationProblem();
+    virtual ~BenchmarkOptimisationProblem() = default;
   };
 }

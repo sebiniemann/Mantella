@@ -14,7 +14,7 @@ namespace mant {
     mant::verify(samples.size() >= numberOfSamplesToSelect, "randomly: The number of given samples must at least be equal to the number of samples to select.");
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
-    for (const auto& i : randomPermutationMatrix(samples.size(), numberOfSamplesToSelect)) {
+    for (const auto& i : randomPermutationVector(samples.size(), numberOfSamplesToSelect)) {
       const auto& selectedSample = std::next(std::begin(samples), static_cast<std::unordered_map<arma::Col<double>, double, Hash, IsEqual>::difference_type>(i));
       selectedSamples.insert({selectedSample->first, selectedSample->second});
     }

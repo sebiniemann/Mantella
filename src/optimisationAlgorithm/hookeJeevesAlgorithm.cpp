@@ -9,7 +9,6 @@
 #include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/probability.hpp"
 
-// TODO Add restarting
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm()
       : OptimisationAlgorithm() {
@@ -44,6 +43,8 @@ namespace mant {
   void HookeJeevesAlgorithm::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::Mat<double>& initialParameters) {
+    verify(initialParameters.n_cols == 1, "optimise: The Hooke-Jeeves algorithm accepts only a single initial parameter.");
+    
     if (!std::isfinite(initialStepSize_)) {
       setInitialStepSize(1);
     } else {

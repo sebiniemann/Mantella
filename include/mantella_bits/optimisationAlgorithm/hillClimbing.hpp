@@ -13,7 +13,6 @@ namespace mant {
   class OptimisationProblem;
 }
 
-// TODO Add restarting
 namespace mant {
   class HillClimbing : public OptimisationAlgorithm {
    public:

@@ -16,6 +16,8 @@ namespace mant {
   void RandomSearch::optimise(
       const std::shared_ptr<OptimisationProblem> optimisationProblem,
       const arma::Mat<double>& initialParameters) {
+    verify(initialParameters.is_empty(), "optimise: The random search algorithm does not accept initial parameters.");
+    
     OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
   
