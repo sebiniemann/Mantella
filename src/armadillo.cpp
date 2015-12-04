@@ -7,12 +7,12 @@ namespace mant {
   arma::uword Hash::operator()(
       const arma::Col<double>& key) const {
     // Starts with the hash of the first value ...
-    arma::uword hashedKey = std::hash<double>()(key(0));
+    arma::uword hashedKey = static_cast<arma::uword>(std::hash<double>()(key(0)));
 
     // ... and adds the hash value of all following values to it.
     // Note: This is adapted from the Boost library (boost::hash_combine), including the magic numbers.
     for (const auto& value : key) {
-      hashedKey ^= std::hash<double>()(value) + 0x9e3779b9 + (hashedKey << 6) + (hashedKey >> 2);
+      hashedKey ^= static_cast<arma::uword>(std::hash<double>()(value)) + 0x9e3779b9 + (hashedKey << 6) + (hashedKey >> 2);
     }
 
     return hashedKey;
