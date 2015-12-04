@@ -1,6 +1,7 @@
 #pragma once
 
 // C++ standard library
+#include <chrono>
 #include <deque>
 #include <memory>
 #include <utility>
