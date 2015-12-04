@@ -21,7 +21,7 @@ defopts.CMA.ccovmu = '2 * (mueff-2+1/mueff) / ((N+2)^2+mueff) % learning rate fo
 BBOB2012 CMAES (Posik&Klems):
 dims = [2,3,5,10,20,40];
 
-Starting point = '8 * rand(' num2str(DIM) ', 1) - 4']
+Starting point = '8 * rand(' num2str(DIM) ', 1) - 4'
 Stepsize = 2
 maxfunevals = '5e4*dim';
 minfunevals = 'dim+2';
