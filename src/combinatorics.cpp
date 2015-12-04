@@ -12,10 +12,12 @@
 namespace mant {
   arma::uword factorial(
       const arma::uword n) {
-    verify(n < 21, "factorial: Factorials larger as 21 cannot be stored in *unsigned long long int*, the currently largest integers type.");
-
     // Since factorials grow within a few steps larger than the currently largest integers type could hold, a good way to calculate the factorial is to simply lookup the value.
-    std::array<arma::uword, 21> factorials({{1,
+#if defined(ARMA_64BIT_WORD)
+    verify(n < 22, "factorial: Factorials larger as 21 cannot be stored in *unsigned long long int* (64-bit mode).");
+
+    std::array<arma::uword, 21> factorials = {{
+        1,
         1,
         2,
         6,
@@ -35,7 +37,25 @@ namespace mant {
         355687428096000,
         6402373705728000,
         121645100408832000,
-        2432902008176640000}});
+        2432902008176640000}};
+#else
+    verify(n < 14, "factorial: Factorials larger as 13 cannot be stored in *unsigned int* (32-bit mode).");
+
+    std::array<arma::uword, 13> factorials = {{
+        1,
+        1,
+        2,
+        6,
+        24,
+        120,
+        720,
+        5040,
+        40320,
+        362880,
+        3628800,
+        39916800,
+        479001600}};
+#endif
 
     return factorials.at(n);
   }
