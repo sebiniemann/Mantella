@@ -1,4 +1,4 @@
-if (WIN32)
+if(WIN32)
   # The precompiled OpenBLAS (import) libraries for Windows are called *libopenblas.a* (static) and *libopenblas.dll.a*.
   list(APPEND CMAKE_FIND_LIBRARY_PREFIXES "lib")
   list(APPEND CMAKE_FIND_LIBRARY_SUFFIXES ".dll.a" ".a")
