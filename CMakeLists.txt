@@ -55,7 +55,7 @@ if(NOT ARMADILLO_FOUND)
   else()
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
     if(ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
-      message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if we should link directly againt OpenBLAS instead.")
+      message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if you want to link directly againt OpenBLAS instead.")
     endif()
     
     message(STATUS "Found Armadillo: ${ARMADILLO_INCLUDE_DIR} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
@@ -179,9 +179,13 @@ if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 endif()
 
-if(NOT ARCHIVE_OUTPUT_DIRECTORY)
-  set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 endif()
+
+if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+endif() 
    
 # Include Mantella
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
@@ -195,8 +199,13 @@ else()
 endif()
 configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
 
+set(LIBRARY_TYPE SHARED)
+if(WIN32)
+  set(LIBRARY_TYPE STATIC)
+endif()
+
 # All paths must start with "src/"
-add_library(mantella SHARED
+add_library(mantella ${LIBRARY_TYPE}
   # Configuration
   src/config.cpp
   
