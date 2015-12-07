@@ -1,14 +1,14 @@
 #pragma once
 
-// C++ standard library
-#include <atomic>
-
 namespace mant {
-  extern std::atomic<bool> cacheSamples;
-  extern std::atomic<bool> recordSamples;
+  // Global variables, to be used in other files.
+  extern bool cacheSamples;
+  extern bool recordSamples;
+  extern bool verboseOutput;
 }
 
-// MPI
+// MPI support must be decided via CMake, to ensure that we also link against it.
+// Therefore, CMake can decide whether SUPPORT_MPI is to be defined or not.
 #cmakedefine SUPPORT_MPI
 #if defined(SUPPORT_MPI)
 #include <mpi.h>

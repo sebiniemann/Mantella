@@ -1,12 +1,12 @@
 // Catch
 #define CATCH_CONFIG_RUNNER
 #include <catch.hpp>
-#include <catchExtension.hpp>
+#include "catchExtension.hpp"
 
 // C++ standard library
-#include <string>
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
+#include <string>
 
 // Mantella
 #include <mantella>
@@ -14,19 +14,20 @@
 int main(int argc, char* argv[]) {
 #if defined(SUPPORT_MPI)
   MPI_Init(&argc, &argv);
+  
+  MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank);
 #endif
 
+  // The last argument is used as location for the test data directory.
+  // Reduced also the number of arguments, in order avoid conflicts with catch command line arguments handling.
+  rootTestDataDirectory = argv[--argc];
+  std::cout << "Using '" << rootTestDataDirectory << "' as location for the test data directory." << std::endl;
+  
+  // Setting the seed to a specific number makes erroneous tests better reproducible.
+  mant::Rng::setSeed(123456789);
+  
   try {
-    if (argc != 2) {
-      throw std::invalid_argument(
-          "The location of the test directory must be added to the command line.");
-    }
-
-    testDirectory = argv[1];
-
-    mant::Rng::setSeed(123456789);
-
-    return Catch::Session().run();
+    return Catch::Session().run(argc, argv);
   } catch (const std::exception& exception) {
     std::cout << exception.what();
   }

@@ -2,102 +2,125 @@
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
-#include <atomic>
 #include <cassert>
-#include <limits>
 
-// Mantella
-#include "mantella_bits/helper/assert.hpp"
-#include "mantella_bits/optimisationProblem.hpp"
-#if defined(SUPPORT_MPI)
-#include "mantella_bits/helper/mpi.hpp" // IWYU pragma: keep
-#endif
-
-namespace mant {
-  OptimisationAlgorithm::OptimisationAlgorithm(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem)
-      : optimisationProblem_(optimisationProblem),
-        numberOfDimensions_(optimisationProblem_->numberOfDimensions_),
-        numberOfIterations_(0),
-        bestObjectiveValue_(std::numeric_limits<double>::infinity()),
-        bestParameter_(numberOfDimensions_) {
-    setMaximalNumberOfIterations(1000);
-
-#if defined(SUPPORT_MPI)
+namespace mant{
+  OptimisationAlgorithm::OptimisationAlgorithm() {
+    reset();
+        
+    setAcceptableObjectiveValue(-arma::datum::inf);
+    setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
+    setMaximalDuration(std::chrono::seconds(30));
+    
+    setBoundaryHandlingFunction([this] (
+        const arma::Mat<double>& parameters) {
+      arma::Mat<double> boundedParameters = parameters;
+      
+      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) < 0)).fill(0);
+        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) > 1)).fill(1);
+      }
+      
+      return boundedParameters;
+    });
+    
+    setIsDegeneratedFunction([this] (
+        const arma::Mat<double>& parameters,
+        const arma::Col<double>& differences) {
+      return false;
+    });
+    
+    setDegenerationHandlingFunction([this] (
+        const arma::Mat<double>& parameters,
+        const arma::Col<double>& differences) {
+      return arma::randu<arma::Mat<double>>(arma::size(parameters));
+    });
+    
+  #if defined(SUPPORT_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
-#else
+  #else
     nodeRank_ = 0;
     numberOfNodes_ = 1;
-#endif
+  #endif
   }
 
-  void OptimisationAlgorithm::optimise() {
-    verify(arma::all(optimisationProblem_->getLowerBounds() <= optimisationProblem_->getUpperBounds()), "All upper bounds of the optimisation problem must be greater than or equal to its lower bound.");
-
-#if defined(SUPPORT_MPI)
-    std::vector<double> serialisedOptimisationProblem;
-    int serialisedOptimisationProblemSize;
-
-    if (nodeRank_ == 0) {
-      serialisedOptimisationProblem = optimisationProblem_->serialise();
-      serialisedOptimisationProblemSize = static_cast<int>(serialisedOptimisationProblem.size());
+  void OptimisationAlgorithm::optimise(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const arma::Mat<double>& initialParameters) {
+    reset();
+    
+    arma::Mat<double> parameters = initialParameters;
+    arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+    
+    while (!isTerminated() && !isFinished()) {
+      if (isDegeneratedFunction_(parameters, differences)) {
+        parameters = degenerationHandlingFunction_(parameters, differences);
+      } else {
+        parameters = nextParametersFunction_(parameters, differences);
+      }
+      assert(parameters.n_rows == optimisationProblem->numberOfDimensions_);
+      
+      arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+      
+      // Communication
+      
     }
+    
+    // Sync best parameter
+    
+    duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
+  }
 
-    MPI_Bcast(&serialisedOptimisationProblemSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  void OptimisationAlgorithm::setNextParametersFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction) {
+    nextParametersFunction_ = nextParametersFunction;
+  }
+  
+  void OptimisationAlgorithm::setBoundaryHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction) {
+    boundaryHandlingFunction_ = boundaryHandlingFunction;
+  }
+  
+  void OptimisationAlgorithm::setIsDegeneratedFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction) {
+    isDegeneratedFunction_ = isDegeneratedFunction;
+  }
+  
+  void OptimisationAlgorithm::setDegenerationHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction) {
+    degenerationHandlingFunction_ = degenerationHandlingFunction;
+  }
 
-    if (nodeRank_ != 0) {
-      serialisedOptimisationProblem.resize(static_cast<unsigned int>(serialisedOptimisationProblemSize));
-    }
-
-    MPI_Bcast(&serialisedOptimisationProblem[0], serialisedOptimisationProblemSize, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-    if (nodeRank_ != 0) {
-      optimisationProblem_->deserialise(serialisedOptimisationProblem);
-    }
-#endif
-
-    // Resets the results, counters and caches
-    bestObjectiveValue_ = std::numeric_limits<double>::infinity();
-    bestParameter_.fill(std::numeric_limits<double>::quiet_NaN());
-    numberOfIterations_ = 0;
-    optimisationProblem_->reset();
-
-    optimiseImplementation();
-
-#if defined(SUPPORT_MPI)
-    MPI_Datatype MANT_MPI_PARAMETER;
-    MPI_Type_contiguous(static_cast<int>(2 + numberOfDimensions_), MPI_DOUBLE, &MANT_MPI_PARAMETER);
-    MPI_Type_commit(&MANT_MPI_PARAMETER);
-
-    MPI_Op MANT_MPI_GET_BEST_PARAMETER;
-    MPI_Op_create(&mpiGetBestSample, true, &MANT_MPI_GET_BEST_PARAMETER);
-
-    arma::Col<double> mpiInputParameter(2 + numberOfDimensions_);
-    arma::Col<double> mpiOutputParameter(2 + numberOfDimensions_);
-
-    mpiInputParameter(0) = static_cast<double>(numberOfDimensions_);
-    mpiInputParameter(1) = bestObjectiveValue_;
-    mpiInputParameter.tail(numberOfDimensions_) = bestParameter_;
-
-    MPI_Reduce(mpiInputParameter.memptr(), mpiOutputParameter.memptr(), 1, MANT_MPI_PARAMETER, MANT_MPI_GET_BEST_PARAMETER, 0, MPI_COMM_WORLD);
-
-    MPI_Op_free(&MANT_MPI_GET_BEST_PARAMETER);
-    MPI_Type_free(&MANT_MPI_PARAMETER);
-#endif
+  void OptimisationAlgorithm::setAcceptableObjectiveValue(
+      const double acceptableObjectiveValue) {
+    acceptableObjectiveValue_ = acceptableObjectiveValue;
   }
 
   void OptimisationAlgorithm::setMaximalNumberOfIterations(
       const arma::uword maximalNumberOfIterations) {
-    maximalNumberOfIterations_ = maximalNumberOfIterations;
+    maximalNumberOfIterations_ = maximalNumberOfIterations;    
   }
-
+      
   arma::uword OptimisationAlgorithm::getNumberOfIterations() const {
     return numberOfIterations_;
   }
 
-  arma::uword OptimisationAlgorithm::getMaximalNumberOfIterations() const {
-    return maximalNumberOfIterations_;
+  void OptimisationAlgorithm::setMaximalDuration(
+      const std::chrono::microseconds maximalDuration) {
+    maximalDuration_ = maximalDuration; 
+  }
+      
+  std::chrono::microseconds OptimisationAlgorithm::getDuration() const {
+    return duration_;
+  }
+
+  bool OptimisationAlgorithm::isFinished() const {
+    return bestObjectiveValue_ <= acceptableObjectiveValue_;
+  }
+
+  bool OptimisationAlgorithm::isTerminated() const {
+    return numberOfIterations_ >= maximalNumberOfIterations_ || duration_ >= maximalDuration_;
   }
 
   double OptimisationAlgorithm::getBestObjectiveValue() const {
@@ -108,83 +131,46 @@ namespace mant {
     return bestParameter_;
   }
 
-  bool OptimisationAlgorithm::isFinished() const {
-    return (arma::all(optimisationProblem_->isWithinLowerBounds(bestParameter_)) && arma::all(optimisationProblem_->isWithinUpperBounds(bestParameter_)) && bestObjectiveValue_ <= optimisationProblem_->getAcceptableObjectiveValue());
-  }
-
-  bool OptimisationAlgorithm::isTerminated() const {
-    return (numberOfIterations_ >= maximalNumberOfIterations_);
-  }
-
   std::vector<std::pair<arma::Col<double>, double>> OptimisationAlgorithm::getSamplingHistory() const {
     return samplingHistory_;
   }
-
-  arma::Col<double> OptimisationAlgorithm::getLowerBounds() const {
-    return optimisationProblem_->getLowerBounds();
-  }
-
-  arma::Col<double> OptimisationAlgorithm::getUpperBounds() const {
-    return optimisationProblem_->getUpperBounds();
-  }
-
-  arma::Col<arma::uword> OptimisationAlgorithm::isWithinLowerBounds(
-      const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    return optimisationProblem_->isWithinLowerBounds(parameter);
-  }
-
-  arma::Col<arma::uword> OptimisationAlgorithm::isWithinUpperBounds(
-      const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    return optimisationProblem_->isWithinUpperBounds(parameter);
-  }
-
-  double OptimisationAlgorithm::getAcceptableObjectiveValue() const {
-    return optimisationProblem_->getAcceptableObjectiveValue();
-  }
-
-  double OptimisationAlgorithm::getObjectiveValue(
-      const arma::Col<double>& parameter) {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    if (recordSamples) {
-      const double objectiveValue = optimisationProblem_->getObjectiveValue(parameter);
-      samplingHistory_.push_back({parameter, objectiveValue});
-      return objectiveValue;
-    } else {
-      return optimisationProblem_->getObjectiveValue(parameter);
+  
+  arma::Col<double> OptimisationAlgorithm::evaluate(
+      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      const arma::Mat<double>& parameters) {
+    arma::Col<double> differences(parameters.n_cols);
+    for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
+      const arma::Col<double>& parameter = parameters.col(n);
+    
+      const double objectiveValue = optimisationProblem->getObjectiveValue(parameter);
+      const double difference = bestObjectiveValue_ - objectiveValue;
+      
+      if (::mant::recordSamples) {
+        samplingHistory_.push_back({parameter, objectiveValue});
+      }
+      
+      differences(n) = difference;
+      
+      if (difference < 0) {
+        bestParameter_ = parameter;
+        bestObjectiveValue_ = objectiveValue;
+        
+        if (isFinished()) {
+          break;
+        }
+      }
+      
+      duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
     }
+
+    return differences;
   }
-
-  arma::Col<double> OptimisationAlgorithm::getRandomParameter() const {
-    return getLowerBounds() + arma::randu<arma::Col<double>>(numberOfDimensions_) % (getUpperBounds() - getLowerBounds());
-  }
-
-  arma::Col<double> OptimisationAlgorithm::getRandomNeighbour(
-      const arma::Col<double>& parameter,
-      const arma::Col<double>& minimalDistance,
-      const arma::Col<double>& maximalDistance) {
-    assert(arma::all(maximalDistance > 0));
-    assert(arma::all(minimalDistance <= maximalDistance));
-
-    return parameter + arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) % (minimalDistance + arma::randu<arma::Col<double>>(parameter.n_elem) % (maximalDistance - minimalDistance));
-  }
-
-  bool OptimisationAlgorithm::updateBestParameter(
-      const arma::Col<double>& parameter,
-      const double objectiveValue) {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    if (objectiveValue < bestObjectiveValue_) {
-      bestParameter_ = parameter;
-      bestObjectiveValue_ = objectiveValue;
-
-      return true;
-    } else {
-      return false;
-    }
+  
+  void OptimisationAlgorithm::reset() {
+    numberOfIterations_  = 0;
+    bestObjectiveValue_ = arma::datum::inf;
+    bestParameter_.reset();
+    duration_ = std::chrono::microseconds(0);
+    initialTimePoint_ = std::chrono::steady_clock::now();
   }
 }
