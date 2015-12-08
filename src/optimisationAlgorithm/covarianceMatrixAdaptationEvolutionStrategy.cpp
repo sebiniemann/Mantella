@@ -10,14 +10,14 @@ namespace mant {
 
     CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy()
     : OptimisationAlgorithm(),
-      lambda_(arma::datum::nan),
-      sigma_(arma::datum::nan),
-      toleranceFun_(arma::datum::nan),
-      toleranceHistFun_(arma::datum::nan),
       toleranceX_(arma::datum::nan),
       toleranceUpX_(arma::datum::nan),
+      toleranceFun_(arma::datum::nan),
+      toleranceHistFun_(arma::datum::nan),
       activeCMA_(arma::datum::nan),
-      stopMaxIter_(arma::datum::nan) 
+      lambda_(arma::datum::nan),
+      sigma_(arma::datum::nan),
+      stopMaxIter_(arma::datum::nan)
       {
         setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
@@ -28,6 +28,9 @@ namespace mant {
 
             //TODO: this stopflag is more sophisticated in the matlab code.
             bool stopFlag = false;
+            if(stopFlag) {
+                std::cout << "because errors on unused warnings" << std::endl;
+            }
             //;set internal parameters
             if (this->lambda_ != this->lambda_last_) {
                 this->setPopulationSize(this->lambda_,numberOfDimensions);
@@ -321,10 +324,10 @@ namespace mant {
 
         xmean_ = initialParameters.col(0);
         xold_ = xmean_;
-
+        
         //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
         //Still completely remove it?
-        if (!std::isfinite(lambda_)) {
+        if (lambda_ == 9223372036854775808U) {
             setPopulationSize(4 + std::floor(3 * std::log(optimisationProblem->numberOfDimensions_)), optimisationProblem->numberOfDimensions_);
         }
         if (!std::isfinite(sigma_)) {
@@ -344,10 +347,10 @@ namespace mant {
         if (!std::isfinite(toleranceUpX_)) {
             setToleranceUpX(1e3 * sigma_);
         }
-        if (!std::isfinite(activeCMA_)) {
+        if (activeCMA_ == 9223372036854775808U) {
             setActiveCMA(0);
         }
-        if (!std::isfinite(stopMaxIter_)) {
+        if (stopMaxIter_ == 9223372036854775808U) {
             stopMaxIter_ = 1e3 * std::pow(optimisationProblem->numberOfDimensions_ + 5, 2) / std::sqrt(lambda_);
         }
 
