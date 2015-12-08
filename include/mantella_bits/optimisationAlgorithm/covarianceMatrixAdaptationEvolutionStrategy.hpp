@@ -1,30 +1,42 @@
 #pragma once
 
+// C++ standard library
+#include <memory>
+
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
+#include "mantella_bits/optimisationAlgorithm.hpp"
 
 namespace mant {
+  class OptimisationProblem;
+}
 
-  class CovarianceMatrixAdaptationEvolutionStrategy : public PopulationBasedOptimisationAlgorithm {
+namespace mant {
+  class CovarianceMatrixAdaptationEvolutionStrategy : public OptimisationAlgorithm {
   public:
-    explicit CovarianceMatrixAdaptationEvolutionStrategy(
+    explicit CovarianceMatrixAdaptationEvolutionStrategy();
+    
+    void optimise(
         const std::shared_ptr<OptimisationProblem> optimisationProblem,
-        const arma::uword populationSize);
-
-    explicit CovarianceMatrixAdaptationEvolutionStrategy(const std::shared_ptr<OptimisationProblem> optimisationProblem);
-
-    //used (i.e. by HCMA) to compute certain values after changing them after instantiation
-    void initializeRun();
+        const arma::Mat<double>& initialParameters) override;
+    
+    void optimise(
+        const std::shared_ptr<OptimisationProblem> optimisationProblem);
 
     arma::uword getIRun();
     void setIRun(const arma::uword irun); //irun
-    void setStepSize(const arma::Col<double> sigma); //insigma
-    void setStartingPoint(const arma::Col<double> xStart); //xstart
-    void setPopulationSize(const arma::uword popSize);
+    void setStepSize(const double sigma); //insigma
+    double getStepSize();
+    //TODO: this should be unneeded now, since it's just the first column of initialparameter
+    //void setStartingPoint(const arma::Col<double> xStart); //xstart
+    //arma::Col<double> getStartingPoint();
+    void setPopulationSize(const arma::uword popSize, const arma::uword numberOfDimensions);
+    arma::uword getPopulationSize();
     double getIncPopSize() const; //IncPopSize
+    void setActiveCMA(arma::uword activeCma); //activeCMA
+    arma::uword getActiveCMA();
 
     double getCcov1() const;
     void setCcov1(double ccov1);
@@ -48,18 +60,11 @@ namespace mant {
     void setToleranceX(double toleranceX);
     arma::Col<double> getXmean() const;
     void setXmean(arma::Col<double> xmean);
-
-    void setSingleIteration(const bool DoSingleIteration);
-
-    std::string toString() const noexcept override;
-
+    
   protected:
     //Notation: comments always start with matlab name of variable
     //          comments after ';' are from matlab code
     //          comments after '-' are from mantella
-
-    //definput.xstart - not needed, resolved in the setter
-    arma::Col<double> stepSize_; //definput.insigma
 
     double toleranceX_; //stopTolX or defopts.TolX; stop if x-change smaller TolX
     double toleranceUpX_; //stopTolUpX or defopts.TolUpX; stop if x-changes larger TolUpX
@@ -82,10 +87,13 @@ namespace mant {
     arma::uword irun_; //irun
 
     //arxvalid needs to be here so it is available after the loop
+    arma::Mat<double> newGenerationRaw_;
+    arma::Mat<double> newGeneration_;
     arma::Mat<double> newGenerationValid_; //arxvalid
     arma::Col<double> xmean_; //xmean
     arma::Col<double> xold_; //xold
     arma::uword lambda_last_;
+    arma::uword lambda_; //population size
     double sigma_; //sigma
     arma::Col<double> pc_; //pc; evolution path for C
     arma::Col<double> ps_; //ps; evolution path for sigma
@@ -106,13 +114,7 @@ namespace mant {
     arma::Col<arma::uword> fitnessIdx_; //fitness.idx
     arma::Col<arma::uword> fitnessIdxSel_; //fitness.idxsel
 
-    //HCMA needs to be able to do single iterations of CMAES, for that this bool can be set.
-    bool singleIteration_ = false;
-    //helper variable to check if run was initialized
-    bool runInitialized_ = false;
     arma::uword countiter_; //countiter - counts main loop evaluations, NOT function evaluations
     arma::uword stopMaxIter_; //stopMaxIter or opts.MaxIter
-
-    void optimiseImplementation() override;
   };
 }
