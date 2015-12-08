@@ -61,7 +61,7 @@ namespace mant{
       }
       assert(parameters.n_rows == optimisationProblem->numberOfDimensions_);
       
-      arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+      differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
       
       // Communication
       
