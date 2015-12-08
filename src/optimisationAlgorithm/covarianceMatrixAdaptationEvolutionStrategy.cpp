@@ -1,18 +1,24 @@
 #include "mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp"
 
 // C++ standard library
-//#include <cassert>
-//#include <cmath>
-//#include <algorithm>
+#include <cmath>
 
 // Mantella
-//#include "mantella_bits/assert.hpp"
-//#include "mantella_bits/probability.hpp"
+#include "mantella_bits/assert.hpp"
 
 namespace mant {
 
     CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy()
-    : OptimisationAlgorithm() {
+    : OptimisationAlgorithm(),
+      lambda_(arma::datum::nan),
+      sigma_(arma::datum::nan),
+      toleranceFun_(arma::datum::nan),
+      toleranceHistFun_(arma::datum::nan),
+      toleranceX_(arma::datum::nan),
+      toleranceUpX_(arma::datum::nan),
+      activeCMA_(arma::datum::nan),
+      stopMaxIter_(arma::datum::nan) 
+      {
         setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
 
@@ -29,45 +35,45 @@ namespace mant {
 
             this->countiter_++;
 
-                    //;Generate and evaluate lambda offspring
-                    this->fitnessRaw_ = arma::ones(this->lambda_);
+            //;Generate and evaluate lambda offspring
+            this->fitnessRaw_ = arma::ones(this->lambda_);
 
-                    //;----- handle boundaries -----
-                    //;Assigned penalized fitness
-                    arma::Col<double> boundaryPenalty = arma::sum(arma::abs(newGenerationValid_ - newGeneration_)).t();
-                    fitnessSel_ = fitnessRaw_ + boundaryPenalty;
-                    //;----- end handle boundaries -----
+            //;----- handle boundaries -----
+            //;Assigned penalized fitness
+            arma::Col<double> boundaryPenalty = arma::sum(arma::abs(newGenerationValid_ - newGeneration_)).t();
+            fitnessSel_ = fitnessRaw_ + boundaryPenalty;
+            //;----- end handle boundaries -----
 
-                    //;Sort by fitness
-                    fitnessIdx_ = arma::sort_index(fitnessRaw_);
-                    fitnessRaw_ = arma::sort(fitnessRaw_);
-                    fitnessIdxSel_ = arma::sort_index(fitnessSel_);
-                    fitnessSel_ = arma::sort(fitnessSel_); //;minimization
+            //;Sort by fitness
+            fitnessIdx_ = arma::sort_index(fitnessRaw_);
+            fitnessRaw_ = arma::sort(fitnessRaw_);
+            fitnessIdxSel_ = arma::sort_index(fitnessSel_);
+            fitnessSel_ = arma::sort(fitnessSel_); //;minimization
 
-                    //;Calculate new xmean, this is selection and recombination 
-                    xold_ = xmean_; //;for speed up of Eq. (2) and (3)
-                    xmean_ = newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1)) * recombinationWeights_;
-                    arma::Mat<double> zmean = newGenerationRaw_.cols(fitnessIdxSel_.rows(0, mu_ - 1)) * recombinationWeights_; //;==D^-1*B'*(xmean-xold)/sigma
+            //;Calculate new xmean, this is selection and recombination 
+            xold_ = xmean_; //;for speed up of Eq. (2) and (3)
+            xmean_ = newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1)) * recombinationWeights_;
+            arma::Mat<double> zmean = newGenerationRaw_.cols(fitnessIdxSel_.rows(0, mu_ - 1)) * recombinationWeights_; //;==D^-1*B'*(xmean-xold)/sigma
 
-                    //;Cumulation: update evolution paths
-                    ps_ = (1 - cs_) * ps_ + std::sqrt(cs_ * (2 - cs_) * mueff_) * (B_ * zmean); //;Eq. (4)
-                    double hsig = arma::norm(ps_) / std::sqrt(1 - std::pow(1 - cs_, 2 * countiter_)) / chiN_ < 1.4 + 2.0 / (numberOfDimensions + 1);
+            //;Cumulation: update evolution paths
+            ps_ = (1 - cs_) * ps_ + std::sqrt(cs_ * (2 - cs_) * mueff_) * (B_ * zmean); //;Eq. (4)
+            double hsig = arma::norm(ps_) / std::sqrt(1 - std::pow(1 - cs_, 2 * countiter_)) / chiN_ < 1.4 + 2.0 / (numberOfDimensions + 1);
 
-                    pc_ = (1 - ccum_) * pc_ + hsig * (std::sqrt(ccum_ * (2 - ccum_) * mueff_) / sigma_) * (xmean_ - xold_); //;Eq. (2)
+            pc_ = (1 - ccum_) * pc_ + hsig * (std::sqrt(ccum_ * (2 - ccum_) * mueff_) / sigma_) * (xmean_ - xold_); //;Eq. (2)
 
-                    //;Adapt covariance matrix
-                    negCcov_ = 0;
+            //;Adapt covariance matrix
+            negCcov_ = 0;
 
             if ((ccov1_ + ccovmu_) > 0) {
                 arma::Mat<double> arpos = static_cast<arma::Mat<double>>(newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1))).each_col() - (xold_ / sigma_);
-                        //;"active" CMA update: negative update, in case controlling pos. definiteness 
+                //;"active" CMA update: negative update, in case controlling pos. definiteness 
                 if (activeCMA_ > 0) {
                     //;set parameters
                     double negMu = mu_;
-                            double negMueff = mueff_;
+                    double negMueff = mueff_;
                     if (activeCMA_ > 10) {//;flat weights with mu=lambda/2
                         negMu = std::floor(lambda_ / 2);
-                                negMueff = negMu;
+                        negMueff = negMu;
                     }
                     /*;
                     % ;neg.mu = ceil(min([N, lambda/4, mueff]));  neg.mueff = mu; % i.e. neg.mu <= N 
@@ -78,33 +84,33 @@ namespace mant {
                      */
 
                     negCcov_ = (1 - ccovmu_) * 0.25 * negMueff / (std::pow(numberOfDimensions + 2, 1.5) + 2 * negMueff);
-                            double negMinResidualVariance = 0.66; //;keep at least 0.66 in all directions, small popsize are most critical
-                            double negAlphaOld = 0.5; //;where to make up for the variance loss, 0.5 means no idea what to do
-                            //;1 is slightly more robust and gives a better "guaranty" for pos. def., 
-                            //;but does it make sense from the learning perspective for large ccovmu?
+                    double negMinResidualVariance = 0.66; //;keep at least 0.66 in all directions, small popsize are most critical
+                    double negAlphaOld = 0.5; //;where to make up for the variance loss, 0.5 means no idea what to do
+                    //;1 is slightly more robust and gives a better "guaranty" for pos. def., 
+                    //;but does it make sense from the learning perspective for large ccovmu?
 
-                            double negCcovFinal = negCcov_;
+                    double negCcovFinal = negCcov_;
 
-                            //;prepare vectors, compute negative updating matrix Cneg and checking matrix Ccheck
-                            //have to do some workaround since you cannot create negative descending sequences with arma
-                            arma::Col<arma::uword> negHelper = arma::conv_to<arma::uvec>::from(
-                            -arma::linspace(-(lambda_ * 1.0 - 1), -(lambda_ * 1.0 - negMu), std::abs(negMu)));
-                            arma::Mat<double> newGenerationRawNeg = newGenerationRaw_.cols(fitnessIdxSel_.rows(negHelper)); //arzneg
-                            //;i-th longest becomes i-th shortest
+                    //;prepare vectors, compute negative updating matrix Cneg and checking matrix Ccheck
+                    //have to do some workaround since you cannot create negative descending sequences with arma
+                    arma::Col<arma::uword> negHelper = arma::conv_to<arma::uvec>::from(
+                    -arma::linspace(-(lambda_ * 1.0 - 1), -(lambda_ * 1.0 - negMu), std::abs(negMu)));
+                    arma::Mat<double> newGenerationRawNeg = newGenerationRaw_.cols(fitnessIdxSel_.rows(negHelper)); //arzneg
+                    //;i-th longest becomes i-th shortest
 
-                            arma::Col<arma::uword> ngRawNegNormIndex = arma::sort_index(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 0))); //idxnorms
-                            arma::Col<double> ngRawNegNorm = arma::sort(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 0))).t(); //arnorms
-                            ngRawNegNormIndex = arma::sort_index(ngRawNegNormIndex); //;inverse index
-                            //another workaround for negative ordering
-                            negHelper = arma::conv_to<arma::uvec>::from(
-                            -arma::linspace(-(ngRawNegNorm.n_elem * 1.0 - 1), 0, ngRawNegNorm.n_elem));
-                            arma::Col<double> ngRawNegNormFacs = ngRawNegNorm(negHelper) / ngRawNegNorm; //arnormfacs
-                            ngRawNegNorm = ngRawNegNormFacs; //;for the record
+                    arma::Col<arma::uword> ngRawNegNormIndex = arma::sort_index(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 0))); //idxnorms
+                    arma::Col<double> ngRawNegNorm = arma::sort(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 0))).t(); //arnorms
+                    ngRawNegNormIndex = arma::sort_index(ngRawNegNormIndex); //;inverse index
+                    //another workaround for negative ordering
+                    negHelper = arma::conv_to<arma::uvec>::from(
+                    -arma::linspace(-(ngRawNegNorm.n_elem * 1.0 - 1), 0, ngRawNegNorm.n_elem));
+                    arma::Col<double> ngRawNegNormFacs = ngRawNegNorm(negHelper) / ngRawNegNorm; //arnormfacs
+                    ngRawNegNorm = ngRawNegNormFacs; //;for the record
                     if (activeCMA_ < 20) {
                         newGenerationRawNeg = newGenerationRawNeg.each_row() % ngRawNegNormFacs.t(); //;E x*x' is N
                     }
                     arma::Mat<double> Ccheck; //intentional spelling
-                            arma::Mat<double> Cneg;
+                    arma::Mat<double> Cneg;
                     if (activeCMA_ < 10 && negMu == mu_) { //;weighted sum
                         if (activeCMA_ % 10 == 1) {
                             Ccheck = newGenerationRawNeg * arma::diagmat(recombinationWeights_) * newGenerationRawNeg.t(); //;in order to check the largest EV
@@ -127,7 +133,7 @@ namespace mant {
                         //TODO: matlab apparently doesn't care that the eigenvalue could be complex.
                         //Not sure if simply grabbing the real part here is correct.
                         double maxeigenval = arma::max(arma::eig_gen(Ccheck)).real();
-                                negCcovFinal = std::min(negCcov_, (1 - ccovmu_)*(1 - negMinResidualVariance) / maxeigenval);
+                        negCcovFinal = std::min(negCcov_, (1 - ccovmu_)*(1 - negMinResidualVariance) / maxeigenval);
                     }
                     //;update C
                     C_ = (1 - ccov1_ - ccovmu_ + negAlphaOld * negCcovFinal + (1 - hsig) * ccov1_ * ccum_ * (2 - ccum_)) * C_ //;regard old matrix
@@ -151,17 +157,17 @@ namespace mant {
                     //;Update B and D from C
             if ((ccov1_ + ccovmu_ + negCcov_) > 0 && countiter_ % 1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10) < 1) {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
-                        arma::Col<double> tmp;
-                        arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
-                        //;effort: approx. 15*N matrix-vector multiplications
-                        //Matlab returns eigenvalues as a diagonal matrix, so they do diagD = diag(tmp) here
-                        diagD_ = tmp;
+                arma::Col<double> tmp;
+                arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
+                //;effort: approx. 15*N matrix-vector multiplications
+                //Matlab returns eigenvalues as a diagonal matrix, so they do diagD = diag(tmp) here
+                diagD_ = tmp;
 
-                        verify(arma::is_finite(diagD_),"diagD is not finite");
-                        verify(arma::is_finite(B_),"B is not finite");
+                verify(arma::is_finite(diagD_),"diagD is not finite");
+                verify(arma::is_finite(B_),"B is not finite");
 
-                        //;limit condition of C to 1e14 + 1
-                        //TODO: this can actually happen when an eigenvalue gets negative (which afaik can only happen if activeCMA is turned on)
+                //;limit condition of C to 1e14 + 1
+                //TODO: this can actually happen when an eigenvalue gets negative (which afaik can only happen if activeCMA is turned on)
                 if (arma::min(diagD_) <= 0) {
                     if (stopOnWarnings_) {
                         stopFlag = true;
@@ -169,9 +175,9 @@ namespace mant {
                         //TODO: warning gets thrown here
                         //another workaround
                         diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
-                                tmp = arma::max(diagD_) / 1e14;
-                                C_ = C_ + tmp * arma::eye(numberOfDimensions, numberOfDimensions);
-                                diagD_ = diagD_ + tmp * arma::ones(numberOfDimensions, 1);
+                        tmp = arma::max(diagD_) / 1e14;
+                        C_ = C_ + tmp * arma::eye(numberOfDimensions, numberOfDimensions);
+                        diagD_ = diagD_ + tmp * arma::ones(numberOfDimensions, 1);
                     }
                 }
                 if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
@@ -180,14 +186,14 @@ namespace mant {
                     } else {
                         //TODO: warning gets thrown here
                         tmp = arma::max(diagD_) / 1e14 - arma::min(diagD_);
-                                C_ = C_ + tmp * arma::eye(numberOfDimensions, numberOfDimensions);
-                                diagD_ = diagD_ + tmp * arma::ones(numberOfDimensions, 1);
+                        C_ = C_ + tmp * arma::eye(numberOfDimensions, numberOfDimensions);
+                        diagD_ = diagD_ + tmp * arma::ones(numberOfDimensions, 1);
                     }
                 }
 
                 diagC_ = arma::diagvec(C_);
-                        diagD_ = arma::sqrt(diagD_); //;D contains standard deviations now
-                        BD_ = B_.each_col() % diagD_;
+                diagD_ = arma::sqrt(diagD_); //;D contains standard deviations now
+                BD_ = B_.each_col() % diagD_;
             }
 
             //;----- numerical error management -----
@@ -204,7 +210,7 @@ namespace mant {
                 } else {
                     //TODO: warning gets thrown here
                     C_ = C_ + (ccov1_ + ccovmu_) * arma::diagmat(diagC_ % (xmean_ == xmean_ + 0.2 * sigma_ * arma::sqrt(diagC_)));
-                            sigma_ = sigma_ * std::exp(0.05 + cs_ / damping_);
+                    sigma_ = sigma_ * std::exp(0.05 + cs_ / damping_);
                 }
             }
             //;Adjust step size in case of (numerical) precision problem 
@@ -220,7 +226,7 @@ namespace mant {
             if (fitnessSel_(0) == fitnessSel_(std::ceil(0.1 + lambda_ / 4))) {
                 if (stopOnEqualFunctionValues_) {
                     EqualFunctionValues_.shed_row(EqualFunctionValues_.n_elem - 1);
-                            EqualFunctionValues_.insert_rows(0, countiter_);
+                    EqualFunctionValues_.insert_rows(0, countiter_);
                     if (EqualFunctionValues_(EqualFunctionValues_.n_elem - 1) > countiter_ - 3 * EqualFunctionValues_.n_elem) {
                         stopFlag = true;
                     }
@@ -270,6 +276,8 @@ namespace mant {
             //If HCMA changes lambda inbetween, this might need some handling
             newGenerationRaw_ = arma::randn(numberOfDimensions, lambda_); //arz
             newGeneration_ = static_cast<arma::Mat<double>>(this->sigma_ * (this->BD_ * newGenerationRaw_)).each_col() + this->xmean_; //arx
+            
+            return newGeneration_;
 
 
             //TODO: What to do with this? (see email)
