@@ -157,7 +157,7 @@ namespace mant {
                     std::min(1.0,
                     (std::sqrt(arma::accu(arma::square(ps_))) / chiN_ - 1) * cs_ / damping_)); //; Eq. (5)
 
-                    //;Update B and D from C
+            //;Update B and D from C
             if ((ccov1_ + ccovmu_ + negCcov_) > 0 && countiter_ % 1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10) < 1) {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
                 arma::Col<double> tmp;
@@ -198,7 +198,7 @@ namespace mant {
                 diagD_ = arma::sqrt(diagD_); //;D contains standard deviations now
                 BD_ = B_.each_col() % diagD_;
             }
-
+            
             //;----- numerical error management -----
             //TODO: control these skips
             //;Adjust maximal coordinate axis deviations
@@ -279,7 +279,6 @@ namespace mant {
             //If HCMA changes lambda inbetween, this might need some handling
             newGenerationRaw_ = arma::randn(numberOfDimensions, lambda_); //arz
             newGeneration_ = static_cast<arma::Mat<double>>(this->sigma_ * (this->BD_ * newGenerationRaw_)).each_col() + this->xmean_; //arx
-            
             return newGeneration_;
 
 
@@ -324,6 +323,7 @@ namespace mant {
 
         xmean_ = initialParameters.col(0);
         xold_ = xmean_;
+        countiter_ = 0;
         
         //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
         //Still completely remove it?
