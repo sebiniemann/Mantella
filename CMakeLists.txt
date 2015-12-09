@@ -376,6 +376,8 @@ if(BUILD_TESTS)
   
   # Compile tests
   # All paths must start with "test/"
+  add_executable(localtest
+    examples/localtest.cpp)
   add_executable(mantellaTest
     test/main.cpp
     
@@ -472,6 +474,7 @@ if(BUILD_TESTS)
 
   # Link against prerequirements
   target_link_libraries(mantellaTest mantella)
+  target_link_libraries(localtest mantella)
   
   if(ARMADILLO_LIBRARIES)
     target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})
