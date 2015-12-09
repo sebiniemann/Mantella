@@ -21,7 +21,7 @@ namespace mant {
       {
         setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
-
+            
             this->newGenerationValid_ = parameters; //arxvalid
             //TODO: using the differences now, it should have no effect on CMAES as far as i can see
             this->fitnessRaw_ = differences;
@@ -383,6 +383,8 @@ namespace mant {
         //to the first round of points to get evaluated
         newGenerationRaw_ = arma::randn(optimisationProblem->numberOfDimensions_, lambda_); //arz
         this->newGeneration_ = static_cast<arma::Mat<double>>(this->sigma_ * (this->BD_ * newGenerationRaw_)).each_col() + this->xmean_; //arx
+        
+        std::cout << newGeneration_ << std::endl;
 
         //newGeneration will have turned into newGenerationValid_ when nextParameters is called
         OptimisationAlgorithm::optimise(optimisationProblem, this->newGeneration_);
@@ -416,10 +418,13 @@ namespace mant {
 
         //TODO: following code is dependent on the number of dimensions, so the user has to provide it here
         //(HCMA modifies popsize later, thats why the code cant be moved really)
+        //TODO: this is the ccum calculation from hcma, original cmaes is: 4/(N+4)
         ccum_ = std::pow((numberOfDimensions + 2 * mueff_ / numberOfDimensions) / (4 + mueff_ / numberOfDimensions), -1); //;time constant for cumulation for covariance matrix
         cs_ = (mueff_ + 2) / (numberOfDimensions + mueff_ + 3);
 
+        //TODO: this is the ccov1 calculation from hcma, original cmaes is: 2 / ((N+1.3)^2+mueff)
         ccov1_ = std::min(2.0, lambda_ / 3.0) / (std::pow(numberOfDimensions + 1.3, 2) + mueff_);
+        //TODO: this is the ccovmu calculation from hcma, original cmaes is: 2 * (mueff-2+1/mueff) / ((N+2)^2+mueff)
         ccovmu_ = std::min(2.0, lambda_ / 3.0) / (mueff_ - 2 + 1.0 / mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
 
         damping_ = 1 + 2 * std::max(0.0, std::sqrt((mueff_ - 1) / (numberOfDimensions + 1)) - 1) + cs_;
