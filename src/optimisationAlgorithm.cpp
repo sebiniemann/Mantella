@@ -8,7 +8,7 @@ namespace mant{
   OptimisationAlgorithm::OptimisationAlgorithm() {
     reset();
         
-    setAcceptableObjectiveValue(-arma::datum::inf);
+    setAcceptableObjectiveValue(std::numeric_limits<double>::max());
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(30));
     
@@ -143,7 +143,7 @@ namespace mant{
       const arma::Col<double>& parameter = parameters.col(n);
     
       const double objectiveValue = optimisationProblem.getObjectiveValue(parameter);
-      const double difference = bestObjectiveValue_ - objectiveValue;
+      const double difference = objectiveValue - bestObjectiveValue_;
       
       if (::mant::recordSamplingHistory) {
         samplingHistory_.push_back({parameter, objectiveValue});
@@ -168,7 +168,7 @@ namespace mant{
   
   void OptimisationAlgorithm::reset() {
     numberOfIterations_  = 0;
-    bestObjectiveValue_ = arma::datum::inf;
+    bestObjectiveValue_ = std::numeric_limits<double>::max();
     bestParameter_.reset();
     duration_ = std::chrono::microseconds(0);
     initialTimePoint_ = std::chrono::steady_clock::now();
