@@ -16,7 +16,7 @@ TEST_CASE("OptimisationAlgorithm") {
     arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
   
-   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
+    mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     
     optimisationAlgorithm.setMaximalNumberOfIterations(1000);
     optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
