@@ -14,8 +14,8 @@ TEST_CASE("RandomSearch") {
   SECTION(".optimise") {
     SECTION("Checks if all parameters are uniformly distributed.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-      optimisationProblem->setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 200 - 100);
-      optimisationProblem->setUpperBounds(optimisationProblem->getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 100 + 0.01);
+      optimisationProblem.setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 200 - 100);
+      optimisationProblem.setUpperBounds(optimisationProblem.getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 100 + 0.01);
 
       mant::recordSamplingHistory = true;
       mant::RandomSearch randomSearch(optimisationProblem);
@@ -25,8 +25,8 @@ TEST_CASE("RandomSearch") {
       std::vector<std::pair<arma::Col<double>, double>> actualSamples = randomSearch.getSamplingProgress();
 
       std::vector<arma::Col<double>> intervals;
-      for (arma::uword n = 0; n < optimisationProblem->numberOfDimensions_; ++n) {
-        intervals.push_back(arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(n), optimisationProblem->getUpperBounds()(n), 11));
+      for (arma::uword n = 0; n < optimisationProblem.numberOfDimensions_; ++n) {
+        intervals.push_back(arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(n), optimisationProblem.getUpperBounds()(n), 11));
       }
 
       arma::uword minimalNumberOfSamplesPerSubset = randomSearch.getMaximalNumberOfIterations();

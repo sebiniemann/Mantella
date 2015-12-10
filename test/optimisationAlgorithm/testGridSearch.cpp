@@ -15,8 +15,8 @@ TEST_CASE("GridSearch") {
   SECTION(".optimise") {
     SECTION("Checking the procedure with the default number of samples per dimension.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-      optimisationProblem->setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 200 - 100);
-      optimisationProblem->setUpperBounds(optimisationProblem->getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 100 + 0.01);
+      optimisationProblem.setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 200 - 100);
+      optimisationProblem.setUpperBounds(optimisationProblem.getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 100 + 0.01);
 
       mant::recordSamplingHistory = true;
       mant::GridSearch gridSearch(optimisationProblem);
@@ -26,8 +26,8 @@ TEST_CASE("GridSearch") {
       std::vector<std::pair<arma::Col<double>, double>> actualSamples = gridSearch.getSamplingProgress();
 
       std::vector<arma::Col<double>> expectedSamples;
-      for (const auto& firstParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(0), optimisationProblem->getUpperBounds()(0), 10)) {
-        for (const auto& secondParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(1), optimisationProblem->getUpperBounds()(1), 10)) {
+      for (const auto& firstParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(0), optimisationProblem.getUpperBounds()(0), 10)) {
+        for (const auto& secondParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(1), optimisationProblem.getUpperBounds()(1), 10)) {
           expectedSamples.push_back({firstParameter, secondParameter});
         }
       }
@@ -37,12 +37,12 @@ TEST_CASE("GridSearch") {
 
     SECTION("Checking the procedure with a parametrised number of samples per dimension.") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(5));
-      optimisationProblem->setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 200 - 100);
-      optimisationProblem->setUpperBounds(optimisationProblem->getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_) * 100 + 0.01);
+      optimisationProblem.setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 200 - 100);
+      optimisationProblem.setUpperBounds(optimisationProblem.getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 100 + 0.01);
 
       mant::recordSamplingHistory = true;
       mant::GridSearch gridSearch(optimisationProblem);
-      arma::Col<arma::uword> numberOfSamplesPerDimension = arma::randi<arma::Col<arma::uword>>(optimisationProblem->numberOfDimensions_, arma::distr_param(2, 10));
+      arma::Col<arma::uword> numberOfSamplesPerDimension = arma::randi<arma::Col<arma::uword>>(optimisationProblem.numberOfDimensions_, arma::distr_param(2, 10));
       gridSearch.setNumberOfSamplesPerDimension(numberOfSamplesPerDimension);
       gridSearch.setMaximalNumberOfIterations(arma::prod(numberOfSamplesPerDimension));
       gridSearch.optimise();
@@ -51,11 +51,11 @@ TEST_CASE("GridSearch") {
       std::vector<std::pair<arma::Col<double>, double>> actualSamples = gridSearch.getSamplingProgress();
 
       std::vector<arma::Col<double>> expectedSamples;
-      for (const auto& firstParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(0), optimisationProblem->getUpperBounds()(0), numberOfSamplesPerDimension(0))) {
-        for (const auto& secondParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(1), optimisationProblem->getUpperBounds()(1), numberOfSamplesPerDimension(1))) {
-          for (const auto& thirdParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(2), optimisationProblem->getUpperBounds()(2), numberOfSamplesPerDimension(2))) {
-            for (const auto& fourthParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(3), optimisationProblem->getUpperBounds()(3), numberOfSamplesPerDimension(3))) {
-              for (const auto& fifthParameter : arma::linspace<arma::Col<double>>(optimisationProblem->getLowerBounds()(4), optimisationProblem->getUpperBounds()(4), numberOfSamplesPerDimension(4))) {
+      for (const auto& firstParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(0), optimisationProblem.getUpperBounds()(0), numberOfSamplesPerDimension(0))) {
+        for (const auto& secondParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(1), optimisationProblem.getUpperBounds()(1), numberOfSamplesPerDimension(1))) {
+          for (const auto& thirdParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(2), optimisationProblem.getUpperBounds()(2), numberOfSamplesPerDimension(2))) {
+            for (const auto& fourthParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(3), optimisationProblem.getUpperBounds()(3), numberOfSamplesPerDimension(3))) {
+              for (const auto& fifthParameter : arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(4), optimisationProblem.getUpperBounds()(4), numberOfSamplesPerDimension(4))) {
                 expectedSamples.push_back({firstParameter, secondParameter, thirdParameter, fourthParameter, fifthParameter});
               }
             }

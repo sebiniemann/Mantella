@@ -46,7 +46,7 @@ namespace mant{
   }
 
   void OptimisationAlgorithm::optimise(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
     reset();
     
@@ -59,7 +59,7 @@ namespace mant{
       } else {
         parameters = nextParametersFunction_(parameters, differences);
       }
-      assert(parameters.n_rows == optimisationProblem->numberOfDimensions_);
+      assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
       differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
       
@@ -136,13 +136,13 @@ namespace mant{
   }
   
   arma::Col<double> OptimisationAlgorithm::evaluate(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& parameters) {
     arma::Col<double> differences(parameters.n_cols);
     for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
       const arma::Col<double>& parameter = parameters.col(n);
     
-      const double objectiveValue = optimisationProblem->getObjectiveValue(parameter);
+      const double objectiveValue = optimisationProblem.getObjectiveValue(parameter);
       const double difference = bestObjectiveValue_ - objectiveValue;
       
       if (::mant::recordSamplingHistory) {

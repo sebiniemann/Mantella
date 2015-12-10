@@ -3,7 +3,6 @@
 // C++ standard library
 #include <chrono>
 #include <deque>
-#include <memory>
 #include <utility>
 #include <vector>
 
@@ -19,7 +18,7 @@ namespace mant {
     explicit OptimisationAlgorithm();
 
     virtual void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
         
     void setNextParametersFunction(
@@ -73,8 +72,12 @@ namespace mant {
 
     std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
     
+    void initialise(
+        OptimisationProblem& optimisationProblem,
+        const arma::Mat<double>& initialParameters);
+    
     arma::Col<double> evaluate(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& parameters);
   };
 }

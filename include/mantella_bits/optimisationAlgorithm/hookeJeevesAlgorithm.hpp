@@ -20,11 +20,11 @@ namespace mant {
     explicit HookeJeevesAlgorithm();
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem);
+        OptimisationProblem& optimisationProblem);
 
     void setInitialStepSize(
         const double initialStepSize);

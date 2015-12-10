@@ -93,9 +93,9 @@ namespace mant {
   }
 
   std::vector<arma::Col<arma::uword>> separabilityAnalysis(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const std::function<double(const double firstOperand, const double secondOperand)> operatorFunction) {
-    std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = twoSetsPartitions(optimisationProblem->numberOfDimensions_);
+    std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = twoSetsPartitions(optimisationProblem.numberOfDimensions_);
 
     double deviation = 1000.0;
     arma::Row<double> deviations(partitionCandidates.size(), arma::fill::zeros);
@@ -107,25 +107,25 @@ namespace mant {
         arma::Col<double> secondSubPartA = arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem);
         arma::Col<double> secondSubPartB = arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem);
 
-        arma::Col<double> parameterAA(optimisationProblem->numberOfDimensions_);
+        arma::Col<double> parameterAA(optimisationProblem.numberOfDimensions_);
         parameterAA.elem(partitionCandidate.first) = firstSubPartA;
         parameterAA.elem(partitionCandidate.second) = secondSubPartA;
 
-        arma::Col<double> parameterBB(optimisationProblem->numberOfDimensions_);
+        arma::Col<double> parameterBB(optimisationProblem.numberOfDimensions_);
         parameterBB.elem(partitionCandidate.first) = firstSubPartB;
         parameterBB.elem(partitionCandidate.second) = secondSubPartB;
 
-        arma::Col<double> parameterAB(optimisationProblem->numberOfDimensions_);
+        arma::Col<double> parameterAB(optimisationProblem.numberOfDimensions_);
         parameterAB.elem(partitionCandidate.first) = firstSubPartA;
         parameterAB.elem(partitionCandidate.second) = secondSubPartB;
 
-        arma::Col<double> parameterBA(optimisationProblem->numberOfDimensions_);
+        arma::Col<double> parameterBA(optimisationProblem.numberOfDimensions_);
         parameterBA.elem(partitionCandidate.first) = firstSubPartB;
         parameterBA.elem(partitionCandidate.second) = secondSubPartA;
 
         deviations(n) += std::pow(
-            (operatorFunction(optimisationProblem->getObjectiveValue(parameterAA), optimisationProblem->getObjectiveValue(parameterBB))) -
-                (operatorFunction(optimisationProblem->getObjectiveValue(parameterAB), optimisationProblem->getObjectiveValue(parameterBA))),
+            (operatorFunction(optimisationProblem.getObjectiveValue(parameterAA), optimisationProblem.getObjectiveValue(parameterBB))) -
+                (operatorFunction(optimisationProblem.getObjectiveValue(parameterAB), optimisationProblem.getObjectiveValue(parameterBA))),
             2.0);
 
         if (deviation + arma::datum::eps < deviations(n)) {
@@ -143,7 +143,7 @@ namespace mant {
     std::vector<arma::Col<arma::uword>> partition;
     if (bestPartitionCandidates.size() > 1) {
       std::set<arma::uword> skipableDimensions;
-      for (arma::uword n = 0; n < optimisationProblem->numberOfDimensions_; ++n) {
+      for (arma::uword n = 0; n < optimisationProblem.numberOfDimensions_; ++n) {
         if (skipableDimensions.find(n) != skipableDimensions.cend()) {
           skipableDimensions.erase(n);
         } else {
@@ -158,7 +158,7 @@ namespace mant {
 
           std::vector<arma::uword> part;
           part.push_back(n);
-          for (arma::uword k = n + 1; k < optimisationProblem->numberOfDimensions_; ++k) {
+          for (arma::uword k = n + 1; k < optimisationProblem.numberOfDimensions_; ++k) {
             bool isWithinAllPartitions = true;
             for (const auto& contatiningPartition : contatiningPartitions) {
               if (static_cast<arma::Col<arma::uword>>(arma::find(contatiningPartition == k)).is_empty()) {
@@ -196,7 +196,7 @@ namespace mant {
   }
 
   std::vector<arma::Col<arma::uword>> proportionalityAnalysis(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const std::function<double(const double firstOperand, const double secondOperand)> proportionalityFunction) {
     std::vector<arma::Col<arma::uword>> result;
 
@@ -204,7 +204,7 @@ namespace mant {
   }
 
   std::vector<arma::Col<arma::uword>> periodicityAnalysis(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const std::function<double(const double firstOperand, const double secondOperand)> periodicityFunction) {
     std::vector<arma::Col<arma::uword>> result;
 

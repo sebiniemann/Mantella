@@ -172,12 +172,12 @@ TEST_CASE("isDimensionallyConsistent") {
     optimisationAlgorithm.setMaximalNumberOfIterations(100);
   
     CAPTURE(numberOfDimensions);
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
+    mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     CAPTURE(numberOfDimensions);
     optimisationAlgorithm.optimise(optimisationProblem);
     CAPTURE(numberOfDimensions);
 
-    const auto& samples = optimisationProblem->getCachedSamples();
+    const auto& samples = optimisationProblem.getCachedSamples();
     CAPTURE(numberOfDimensions);
     // We would like to capture the samples, but Catch cannot capture unordered maps.
 
@@ -199,19 +199,19 @@ TEST_CASE("isDimensionallyConsistent") {
     const arma::uword firstNumberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(firstNumberOfDimensions);
 
-    std::shared_ptr<mant::OptimisationProblem> firstOptimisationProblem(new mant::bbob::SphereFunction(firstNumberOfDimensions));
+    mant::bbob::SphereFunction firstOptimisationProblem(firstNumberOfDimensions);
     optimisationAlgorithm.optimise(firstOptimisationProblem);
 
     // The second one
     const arma::uword secondNumberOfDimensions = getDifferentDiscreteRandomNumber(firstNumberOfDimensions);
     CAPTURE(secondNumberOfDimensions);
 
-    std::shared_ptr<mant::OptimisationProblem> secondOptimisationProblem(new mant::bbob::SphereFunction(secondNumberOfDimensions));
+    mant::bbob::SphereFunction secondOptimisationProblem(secondNumberOfDimensions);
     optimisationAlgorithm.optimise(secondOptimisationProblem);
 
-    const auto& firstSamples = firstOptimisationProblem->getCachedSamples();
+    const auto& firstSamples = firstOptimisationProblem.getCachedSamples();
     samples.insert(firstSamples.begin(), firstSamples.end());
-    const auto& secondSamples = secondOptimisationProblem->getCachedSamples();
+    const auto& secondSamples = secondOptimisationProblem.getCachedSamples();
     samples.insert(secondSamples.begin(), secondSamples.end());
     // We would like to capture the samples, but Catch cannot capture unordered maps.
 

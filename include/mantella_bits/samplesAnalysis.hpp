@@ -41,7 +41,7 @@ namespace mant {
       const std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Row<double>& objectiveValues)> estimatorFunction);
 
   std::vector<arma::Col<arma::uword>> separabilityAnalysis(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const std::function<double(const double firstOperand, const double secondOperand)> operatorFunction);
 
   double addition(
@@ -53,10 +53,10 @@ namespace mant {
       const double secondOperand);
 
   std::vector<arma::Col<arma::uword>> proportionalityAnalysis(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const std::function<double(const double firstOperand, const double secondOperand)> proportionalityFunction);
 
   std::vector<arma::Col<arma::uword>> periodicityAnalysis(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const std::function<double(const double firstOperand, const double secondOperand)> periodicityFunction);
 }
