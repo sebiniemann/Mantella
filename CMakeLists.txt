@@ -183,9 +183,11 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 endif()
 
-if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-endif() 
+if(CMAKE_COMPILER_IS_MSCV)
+  if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+  endif()
+endif()
    
 # Include Mantella
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
@@ -363,8 +365,8 @@ if(BUILD_TESTS)
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
   # endif()
     
-  if(NOT EXECUTABLE_OUTPUT_PATH)
-    set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+  if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
   endif()
 
   # Check additional prerequirements
@@ -458,7 +460,7 @@ if(BUILD_TESTS)
     # test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
     
     # # Optimisation algorithms
-    # test/testOptimisationAlgorithm.cpp
+    test/testOptimisationAlgorithm.cpp
     # test/optimisationAlgorithm/testRandomSearch.cpp
     # test/optimisationAlgorithm/testGridSearch.cpp
     # test/optimisationAlgorithm/testHillClimbing.cpp

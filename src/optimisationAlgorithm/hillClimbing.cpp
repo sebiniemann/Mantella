@@ -17,7 +17,7 @@ namespace mant {
   }
   
   void HillClimbing::optimise(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
     verify(initialParameters.n_cols == 1, "optimise: The hill climbing algorithm accepts only a single initial parameter.");
     
@@ -39,8 +39,8 @@ namespace mant {
   }
   
   void HillClimbing::optimise(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem) {
-    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_));
+      OptimisationProblem& optimisationProblem) {
+    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
   }
 
   void HillClimbing::setMinimalStepSize(

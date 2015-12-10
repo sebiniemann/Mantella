@@ -13,10 +13,10 @@ namespace mant {
     explicit RandomSearch();
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem);
+        OptimisationProblem& optimisationProblem);
   };
 }

@@ -34,12 +34,14 @@ namespace mant {
         const arma::Col<double>& parameter);
     double getNormalisedObjectiveValue(
         const arma::Col<double>& parameter);
+    std::string getName() const;
 
     // Constraints
-    void setBounds(
-        const arma::Col<double>& lowerBounds,
-        const arma::Col<double>& upperBounds);
+    void setLowerBounds(
+        const arma::Col<double>& lowerBounds);
     arma::Col<double> getLowerBounds() const;
+    void setUpperBounds(
+        const arma::Col<double>& upperBounds);
     arma::Col<double> getUpperBounds() const;
     
     // Parameter space modifiers

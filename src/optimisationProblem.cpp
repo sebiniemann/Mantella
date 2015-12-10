@@ -18,7 +18,8 @@ namespace mant {
 
     // We avoid infinite values for any information on the problem, that could be used with an optimisation algorithm.
     // Otherwise, we would need separate implementations to handle infinite boundaries.
-    setBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 10, arma::zeros<arma::Col<double>>(numberOfDimensions_) + 10);
+    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 10);
+    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 10);
 
     setParameterPermutation(range<arma::uword>(0, numberOfDimensions_ - 1));
     setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
@@ -81,27 +82,39 @@ namespace mant {
     }
   }
   
-  void OptimisationProblem::setBounds(
-      const arma::Col<double>& lowerBounds,
-      const arma::Col<double>& upperBounds) {
+  double OptimisationProblem::getNormalisedObjectiveValue(
+      const arma::Col<double>& parameter) {
+    return getObjectiveValue(lowerBounds_ + parameter % (upperBounds_ - lowerBounds_));
+  }
+  
+  std::string OptimisationProblem::getName() const {
+    return name_;
+  }
+  
+  void OptimisationProblem::setLowerBounds(
+      const arma::Col<double>& lowerBounds) {
     verify(lowerBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the lower bound must be equal to the number of problem dimensions.");
     verify(lowerBounds.is_finite(), "setBounds: All elements within the lower bound must be finite.");
-    verify(lowerBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the upper bound must be equal to the number of problem dimensions.");
-    verify(lowerBounds.is_finite(), "setBounds: All elements within the upper bound must be finite.");
-    // verify lowerBounds < upperBounds
 
     lowerBounds_ = lowerBounds;
-    upperBounds_ = upperBounds;
-    boundsNormalisiation_ = arma::norm(upperBounds_ - lowerBounds_);
 #if defined(SUPPORT_MPI)
     MPI_Bcast(lowerBounds_.memptr(), static_cast<int>(lowerBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(upperBounds_.memptr(), static_cast<int>(upperBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(boundsNormalisiation_.memptr(), static_cast<int>(boundsNormalisiation_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
   }
   
   arma::Col<double> OptimisationProblem::getLowerBounds() const {
     return lowerBounds_;
+  }
+  
+  void OptimisationProblem::setUpperBounds(
+      const arma::Col<double>& upperBounds) {
+    verify(upperBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the upper bound must be equal to the number of problem dimensions.");
+    verify(upperBounds.is_finite(), "setBounds: All elements within the upper bound must be finite.");
+
+    upperBounds_ = upperBounds;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(upperBounds_.memptr(), static_cast<int>(upperBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
   }
   
   arma::Col<double> OptimisationProblem::getUpperBounds() const {

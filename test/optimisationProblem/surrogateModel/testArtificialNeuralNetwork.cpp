@@ -21,7 +21,7 @@ TEST_CASE("ArtificialNeuralNetwork") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.optimise();
-      CHECK(mant::ArtificialNeuralNetwork(optimisationProblem->getCachedSamples()).toString() ==
+      CHECK(mant::ArtificialNeuralNetwork(optimisationProblem.getCachedSamples()).toString() ==
             "artificial_neural_network");
     }
   }

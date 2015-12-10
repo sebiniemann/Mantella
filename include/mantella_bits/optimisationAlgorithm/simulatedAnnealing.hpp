@@ -19,11 +19,11 @@ namespace mant {
     explicit SimulatedAnnealing();
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem);
+        OptimisationProblem& optimisationProblem);
 
     void setIsAcceptableStateFunction(
         std::function<bool(const double objectiveValue)> isAcceptableStateFunction);

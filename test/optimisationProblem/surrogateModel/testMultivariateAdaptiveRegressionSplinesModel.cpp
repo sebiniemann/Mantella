@@ -21,7 +21,7 @@ TEST_CASE("MultivariateAdaptiveRegressionSplinesModel") {
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.optimise();
-      CHECK(mant::MultivariateAdaptiveRegressionSplinesModel(optimisationProblem->getCachedSamples()).toString() ==
+      CHECK(mant::MultivariateAdaptiveRegressionSplinesModel(optimisationProblem.getCachedSamples()).toString() ==
             "multivariate_adaptive_regression_splines_model");
     }
   }

@@ -19,11 +19,11 @@ namespace mant {
     explicit GridSearch();
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem);
+        OptimisationProblem& optimisationProblem);
     
     void setNumberOfSamplesPerDimension(
         const arma::Col<arma::uword>& numberOfSamplesPerDimension);

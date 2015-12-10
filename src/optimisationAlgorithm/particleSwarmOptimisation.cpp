@@ -24,7 +24,6 @@ namespace mant {
         randomiseTopology_ = true;
       }
       
-      
       if (differences(0) < localBestObjectiveValues_(activeParticleIndex_)) {
         localBestObjectiveValues_(activeParticleIndex_) = differences(0);
         localBestSolutions_.col(activeParticleIndex_) = parameters.col(0);
@@ -79,7 +78,7 @@ namespace mant {
   }
 
   void ParticleSwarmOptimisation::optimise(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
     if (!std::isfinite(maximalAcceleration_)) {
       setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
@@ -96,7 +95,7 @@ namespace mant {
     numberOfParticles_ = initialParameters.n_cols;
     activeParticleIndex_ = 0;
     
-    velocities_ = arma::randu<arma::Mat<double>>(optimisationProblem->numberOfDimensions_, numberOfParticles_) * 2 - 1;
+    velocities_ = arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles_) * 2 - 1;
     velocities_ -= initialParameters;
     
     localBestSolutions_ = initialParameters;

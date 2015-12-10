@@ -8,7 +8,7 @@ namespace mant{
   OptimisationAlgorithm::OptimisationAlgorithm() {
     reset();
         
-    setAcceptableObjectiveValue(-arma::datum::inf);
+    setAcceptableObjectiveValue(std::numeric_limits<double>::max());
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(30));
     
@@ -46,12 +46,12 @@ namespace mant{
   }
 
   void OptimisationAlgorithm::optimise(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
     reset();
     
-    arma::Mat<double> parameters = initialParameters;
-    arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+    arma::Mat<double> parameters = boundaryHandlingFunction_(initialParameters);
+    arma::Col<double> differences = evaluate(optimisationProblem, parameters));
     
     while (!isTerminated() && !isFinished()) {
       if (isDegeneratedFunction_(parameters, differences)) {
@@ -59,9 +59,12 @@ namespace mant{
       } else {
         parameters = nextParametersFunction_(parameters, differences);
       }
-      assert(parameters.n_rows == optimisationProblem->numberOfDimensions_);
+      assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
-      differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+      parameters = boundaryHandlingFunction_(parameters);
+      assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
+      
+      differences = evaluate(optimisationProblem, parameters);
       
       // Communication
       
@@ -136,16 +139,16 @@ namespace mant{
   }
   
   arma::Col<double> OptimisationAlgorithm::evaluate(
-      const std::shared_ptr<OptimisationProblem> optimisationProblem,
+      OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& parameters) {
     arma::Col<double> differences(parameters.n_cols);
     for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
       const arma::Col<double>& parameter = parameters.col(n);
     
-      const double objectiveValue = optimisationProblem->getObjectiveValue(parameter);
-      const double difference = bestObjectiveValue_ - objectiveValue;
+      const double objectiveValue = optimisationProblem.getObjectiveValue(parameter);
+      const double difference = objectiveValue - bestObjectiveValue_;
       
-      if (::mant::recordSamples) {
+      if (::mant::recordSamplingHistory) {
         samplingHistory_.push_back({parameter, objectiveValue});
       }
       
@@ -168,7 +171,7 @@ namespace mant{
   
   void OptimisationAlgorithm::reset() {
     numberOfIterations_  = 0;
-    bestObjectiveValue_ = arma::datum::inf;
+    bestObjectiveValue_ = std::numeric_limits<double>::max();
     bestParameter_.reset();
     duration_ = std::chrono::microseconds(0);
     initialTimePoint_ = std::chrono::steady_clock::now();
