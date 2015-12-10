@@ -182,6 +182,7 @@ TEST_CASE("isDimensionallyConsistent") {
     // We would like to capture the samples, but Catch cannot capture unordered maps.
 
     CAPTURE(numberOfDimensions);
+    CHECK(samples.size() > 0);
     CHECK(mant::isDimensionallyConsistent(samples) == true);
     CAPTURE(numberOfDimensions);
   }
@@ -194,13 +195,14 @@ TEST_CASE("isDimensionallyConsistent") {
     optimisationAlgorithm.setMaximalNumberOfIterations(100);
 
     // Generate an inconsistent set of samples by concatenating two cached sampling sets of different dimensions.
-    std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
     // The first optimisation problem
     const arma::uword firstNumberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(firstNumberOfDimensions);
 
     mant::bbob::SphereFunction firstOptimisationProblem(firstNumberOfDimensions);
     optimisationAlgorithm.optimise(firstOptimisationProblem);
+    const auto& firstSamples = firstOptimisationProblem.getCachedSamples();
+    CHECK(firstSamples.size() > 0);
 
     // The second one
     const arma::uword secondNumberOfDimensions = getDifferentDiscreteRandomNumber(firstNumberOfDimensions);
@@ -208,13 +210,15 @@ TEST_CASE("isDimensionallyConsistent") {
 
     mant::bbob::SphereFunction secondOptimisationProblem(secondNumberOfDimensions);
     optimisationAlgorithm.optimise(secondOptimisationProblem);
-
-    const auto& firstSamples = firstOptimisationProblem.getCachedSamples();
-    samples.insert(firstSamples.begin(), firstSamples.end());
     const auto& secondSamples = secondOptimisationProblem.getCachedSamples();
+    CHECK(secondSamples.size() > 0);
+
+    std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
+    samples.insert(firstSamples.begin(), firstSamples.end());
     samples.insert(secondSamples.begin(), secondSamples.end());
     // We would like to capture the samples, but Catch cannot capture unordered maps.
 
+    CHECK(samples() > 0);
     CHECK(mant::isDimensionallyConsistent(samples) == false);
   }
 }
