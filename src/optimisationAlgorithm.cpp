@@ -50,8 +50,8 @@ namespace mant{
       const arma::Mat<double>& initialParameters) {
     reset();
     
-    arma::Mat<double> parameters = initialParameters;
-    arma::Col<double> differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+    arma::Mat<double> parameters = boundaryHandlingFunction_(initialParameters);
+    arma::Col<double> differences = evaluate(optimisationProblem, parameters));
     
     while (!isTerminated() && !isFinished()) {
       if (isDegeneratedFunction_(parameters, differences)) {
@@ -61,7 +61,10 @@ namespace mant{
       }
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
-      differences = evaluate(optimisationProblem, boundaryHandlingFunction_(parameters));
+      parameters = boundaryHandlingFunction_(parameters);
+      assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
+      
+      differences = evaluate(optimisationProblem, parameters);
       
       // Communication
       
