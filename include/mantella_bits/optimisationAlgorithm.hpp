@@ -54,10 +54,10 @@ namespace mant {
     int nodeRank_;
     int numberOfNodes_;
    
-    std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction_;
     std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction_;
-    std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction_;
 
     double acceptableObjectiveValue_;
 
