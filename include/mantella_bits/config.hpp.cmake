@@ -3,7 +3,7 @@
 namespace mant {
   // Global variables, to be used in other files.
   extern bool cacheSamples;
-  extern bool recordSamples;
+  extern bool recordSamplingHistory;
   extern bool verboseOutput;
 }
 

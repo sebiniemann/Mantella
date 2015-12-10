@@ -145,7 +145,7 @@ namespace mant{
       const double objectiveValue = optimisationProblem->getObjectiveValue(parameter);
       const double difference = bestObjectiveValue_ - objectiveValue;
       
-      if (::mant::recordSamples) {
+      if (::mant::recordSamplingHistory) {
         samplingHistory_.push_back({parameter, objectiveValue});
       }
       

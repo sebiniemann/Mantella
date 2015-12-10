@@ -21,14 +21,14 @@ TEST_CASE("cacheSamples") {
   }
 }
 
-TEST_CASE("recordSamples") {
+TEST_CASE("recordSamplingHistory") {
   SECTION("The default value is *false*") {
-    CHECK(mant::recordSamples == false);
+    CHECK(mant::recordSamplingHistory == false);
   }
   
   SECTION("Is changeable") {
-    mant::recordSamples = true;
-    CHECK(mant::recordSamples == true);
+    mant::recordSamplingHistory = true;
+    CHECK(mant::recordSamplingHistory == true);
   }
 }
 
