@@ -178,7 +178,7 @@ namespace mant {
                     (std::sqrt(arma::accu(arma::square(ps_))) / chiN_ - 1) * cs_ / damping_)); //; Eq. (5)
 
             //;Update B and D from C
-            if ((ccov1_ + ccovmu_ + negCcov_) > 0 && (countiter_ % (1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10))) < 1) {
+            if ((ccov1_ + ccovmu_ + negCcov_) > 0 && std::fmod(countiter_, (1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10))) < 1) {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
                 std::cout << "C_" << C_ << std::endl;
                 arma::Col<double> tmp;
