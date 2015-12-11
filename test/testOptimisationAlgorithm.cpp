@@ -90,7 +90,6 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the maximal duration is infinite.") {
       SECTION("Throws an exception, if the maximal duration is less than or equal to 0.") {
       
       }
