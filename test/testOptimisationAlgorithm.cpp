@@ -25,9 +25,7 @@ TEST_CASE("OptimisationAlgorithm") {
   }
   
   SECTION(".setNextParametersFunction") {
-    SECTION("Updates the next parameter function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
@@ -37,9 +35,7 @@ TEST_CASE("OptimisationAlgorithm") {
   }
   
   SECTION(".setBoundaryHandlingFunction") {
-    SECTION("Updates the boundary handling function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
@@ -49,9 +45,7 @@ TEST_CASE("OptimisationAlgorithm") {
   }
   
   SECTION(".setIsDegeneratedFunction") {
-    SECTION("Updates the next parameter function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
@@ -61,9 +55,7 @@ TEST_CASE("OptimisationAlgorithm") {
   }
   
   SECTION(".setDegenerationHandlingFunction") {
-    SECTION("Updates the degeneration handling function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
