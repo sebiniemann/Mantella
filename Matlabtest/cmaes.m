@@ -559,7 +559,7 @@ else % flgresume
   fitness.histmedian=[]; % history of fitness values
 
   % Initialize boundary handling
-  bnd.isactive = any(lbounds > -Inf) || any(ubounds < Inf); 
+  bnd.isactive = any(lbounds > -Inf) || any(ubounds < Inf)
   if bnd.isactive
     if any(lbounds>ubounds)
       error('lower bound found to be greater than upper bound');
@@ -734,31 +734,31 @@ while isempty(stopflag)
     else
       lambda_hist = [countiter+1; lambda]; 
     end
-    lambda_last = lambda;
+    lambda_last = lambda
     % Strategy internal parameter setting: Selection  
-    mu = myeval(opts.ParentNumber); % number of parents/points for recombination
+    mu = myeval(opts.ParentNumber) % number of parents/points for recombination
     if strncmp(lower(opts.RecombinationWeights), 'equal', 3)
       weights = ones(mu,1); % (mu_I,lambda)-CMA-ES
     elseif strncmp(lower(opts.RecombinationWeights), 'linear', 3)
       weights = mu+0.5-(1:mu)'; 
     elseif strncmp(lower(opts.RecombinationWeights), 'superlinear', 3)
-      weights = log(mu+0.5)-log(1:mu)'; % muXone array for weighted recombination
+      weights = log(mu+0.5)-log(1:mu)' % muXone array for weighted recombination
                                         % qqq mu can be non-integer and
                                         % should become ceil(mu-0.5) (minor correction)
     else
       error(['Recombination weights to be "' opts.RecombinationWeights ...
              '" is not implemented']);
     end
-    mueff=sum(weights)^2/sum(weights.^2); % variance-effective size of mu
-    weights = weights/sum(weights);     % normalize recombination weights array
+    mueff=sum(weights)^2/sum(weights.^2) % variance-effective size of mu
+    weights = weights/sum(weights)     % normalize recombination weights array
     if mueff == lambda
       error(['Combination of values for PopSize, ParentNumber and ' ...
              ' and RecombinationWeights is not reasonable']);
     end
     
     % Strategy internal parameter setting: Adaptation
-    cc = myeval(opts.CMA.ccum); % time constant for cumulation for covariance matrix
-    cs = myeval(opts.CMA.cs); 
+    cc = myeval(opts.CMA.ccum) % time constant for cumulation for covariance matrix
+    cs = myeval(opts.CMA.cs) 
 
     % old way TODO: remove this at some point
     % mucov = mueff;   % size of mu used for calculating learning rate ccov
@@ -767,8 +767,8 @@ while isempty(stopflag)
 
     % new way
     if myevalbool(opts.CMA.on) 
-      ccov1 = myeval(opts.CMA.ccov1); 
-      ccovmu = min(1-ccov1, myeval(opts.CMA.ccovmu));
+      ccov1 = myeval(opts.CMA.ccov1)
+      ccovmu = min(1-ccov1, myeval(opts.CMA.ccovmu))
     else
       ccov1 = 0;
       ccovmu = 0;
@@ -793,7 +793,7 @@ while isempty(stopflag)
     %    (1 + 2*max(0,sqrt((mueff-1)/(N+1))-1)) ... % limit sigma increase
     %    * max(0.3, ... % reduce damps, if max. iteration number is small
     %          1 - N/min(stopMaxIter,stopMaxFunEvals/lambda)) + cs; 
-    damps = myeval(opts.CMA.damps); 
+    damps = myeval(opts.CMA.damps)
     if noiseHandling
       noiseReevals = min(myeval(opts.Noise.reevals), lambda); 
       noiseAlpha = myeval(opts.Noise.alphasigma); 
@@ -846,7 +846,7 @@ while isempty(stopflag)
 
   flush;
 
-  countiter = countiter + 1; 
+  countiter = countiter + 1
 
   % Generate and evaluate lambda offspring
  
@@ -904,18 +904,19 @@ while isempty(stopflag)
     % Resample, until fitness is not NaN
     while isnan(fitness.raw(k))
       if k <= lambda  % regular samples (not the re-evaluation-samples)
-        arz(:,k) = randn(N,1); % (re)sample
+        arz(:,k) = randn(N,1) % (re)sample
 
         if flgDiagonalOnly  
           arx(:,k) = xmean + sigma * diagD .* arz(:,k);              % Eq. (1)
         else
-          arx(:,k) = xmean + sigma * (BD * arz(:,k));                % Eq. (1)
+          arx(:,k) = xmean + sigma * (BD * arz(:,k))                % Eq. (1)
         end
       else % re-evaluation solution with index > lambda
         if flgDiagonalOnly  
           arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * diagD .* randn(N,1);
         else
-          arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * randn(N,1));
+          arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * randn(N,1))
+		  disp('why is this happening??');
         end
       end
       
@@ -926,14 +927,14 @@ while isempty(stopflag)
       % other way.
  
       if ~bnd.isactive
-        arxvalid(:,k) = arx(:,k);
+        arxvalid(:,k) = arx(:,k)
       else
         arxvalid(:,k) = xintobounds(arx(:,k), lbounds, ubounds);
       end
       % You may handle constraints here.  You may copy and alter
       % (columns of) arxvalid(:,k) only for the evaluation of the
       % fitness function. arx should not be changed.
-      fitness.raw(k) = feval(fitfun, arxvalid(:,k), varargin{:});
+      fitness.raw(k) = feval(fitfun, arxvalid(:,k), varargin{:})
       tries = tries + 1;
       if isnan(fitness.raw(k))
 	countevalNaN = countevalNaN + 1;
@@ -944,10 +945,10 @@ while isempty(stopflag)
                  num2str(counteval)]);
       end
     end
-    counteval = counteval + 1; % retries due to NaN are not counted
+    counteval = counteval + 1 % retries due to NaN are not counted
   end
 
-  fitness.sel = fitness.raw; 
+  fitness.sel = fitness.raw 
 
   % ----- handle boundaries -----
   if 1 < 3 && bnd.isactive
@@ -1022,36 +1023,10 @@ while isempty(stopflag)
   % ----- end handle boundaries -----
   
   % compute noise measurement and reduce fitness arrays to size lambda
-  if noiseHandling 
-    [noiseS] = local_noisemeasurement(fitness.sel(1:lambda), ...
-                                      fitness.sel(lambda+(1:noiseReevals)), ...
-                                      noiseReevals, noiseTheta, noiseCutOff); 
-    if countiter == 1 % TODO: improve this very rude way of initialization
-      noiseSS = 0;
-      noiseN = 0;  % counter for mean
-    end
-    noiseSS = noiseSS + noisecum * (noiseS - noiseSS); 
-
-    % noise-handling could be done here, but the original sigma is still needed
-    % disp([noiseS noiseSS noisecum])
-
-    fitness.rawar12 = fitness.raw; % just documentary
-    fitness.selar12 = fitness.sel; % just documentary
-    % qqq refine fitness based on both values
-    if 11 < 3  % TODO: in case of outliers this mean is counterproductive 
-               % median out of three would be ok 
-      fitness.raw(1:noiseReevals) = ... % not so raw anymore
-          (fitness.raw(1:noiseReevals) + fitness.raw(lambda+(1:noiseReevals))) / 2; 
-      fitness.sel(1:noiseReevals) = ... 
-          (fitness.sel(1:noiseReevals) + fitness.sel(lambda+(1:noiseReevals))) / 2; 
-    end      
-    fitness.raw = fitness.raw(1:lambda); 
-    fitness.sel = fitness.sel(1:lambda); 
-  end
   
   % Sort by fitness 
-  [fitness.raw, fitness.idx] = sort(fitness.raw); 
-  [fitness.sel, fitness.idxsel] = sort(fitness.sel);  % minimization
+  [fitness.raw, fitness.idx] = sort(fitness.raw) 
+  [fitness.sel, fitness.idxsel] = sort(fitness.sel)  % minimization
   fitness.hist(2:end) = fitness.hist(1:end-1);    % record short history of
   fitness.hist(1) = fitness.raw(1);               % best fitness values
   if length(fitness.histbest) < 120+ceil(30*N/lambda) || ...
@@ -1068,9 +1043,9 @@ while isempty(stopflag)
   fitness.histsel(1) = fitness.sel(1);               % best sel fitness values
 
   % Calculate new xmean, this is selection and recombination 
-  xold = xmean; % for speed up of Eq. (2) and (3)
-  xmean = arx(:,fitness.idxsel(1:mu))*weights; 
-  zmean = arz(:,fitness.idxsel(1:mu))*weights;%==D^-1*B'*(xmean-xold)/sigma
+  xold = xmean % for speed up of Eq. (2) and (3)
+  xmean = arx(:,fitness.idxsel(1:mu))*weights 
+  zmean = arz(:,fitness.idxsel(1:mu))*weights%==D^-1*B'*(xmean-xold)/sigma
   if mu == 1
     fmean = fitness.sel(1);
   else
@@ -1080,8 +1055,8 @@ while isempty(stopflag)
   end
   
   % Cumulation: update evolution paths
-  ps = (1-cs)*ps + sqrt(cs*(2-cs)*mueff) * (B*zmean);          % Eq. (4)
-  hsig = norm(ps)/sqrt(1-(1-cs)^(2*countiter))/chiN < 1.4 + 2/(N+1);
+  ps = (1-cs)*ps + sqrt(cs*(2-cs)*mueff) * (B*zmean)          % Eq. (4)
+  hsig = norm(ps)/sqrt(1-(1-cs)^(2*countiter))/chiN < 1.4 + 2/(N+1)
   if flg_future_setting
     hsig = sum(ps.^2) / (1-(1-cs)^(2*countiter)) / N < 2 + 4/(N+1); % just simplified
   end
@@ -1091,7 +1066,7 @@ while isempty(stopflag)
 %  hsig = 1;
 
   pc = (1-cc)*pc ...
-        + hsig*(sqrt(cc*(2-cc)*mueff)/sigma) * (xmean-xold);     % Eq. (2)
+        + hsig*(sqrt(cc*(2-cc)*mueff)/sigma) * (xmean-xold)     % Eq. (2)
   if hsig == 0
     % disp([num2str(countiter) ' ' num2str(counteval) ' pc update stalled']);
   end
@@ -1103,11 +1078,11 @@ while isempty(stopflag)
       diagC = (1-ccov1_sep-ccovmu_sep+(1-hsig)*ccov1_sep*cc*(2-cc)) * diagC ... % regard old matrix 
           + ccov1_sep * pc.^2 ...               % plus rank one update
           + ccovmu_sep ...                      % plus rank mu update
-            * (diagC .* (arz(:,fitness.idxsel(1:mu)).^2 * weights));
+            * (diagC .* (arz(:,fitness.idxsel(1:mu)).^2 * weights))
 %             * (repmat(diagC,1,mu) .* arz(:,fitness.idxsel(1:mu)).^2 * weights);
-      diagD = sqrt(diagC); % replaces eig(C)
+      diagD = sqrt(diagC) % replaces eig(C)
     else
-      arpos = (arx(:,fitness.idxsel(1:mu))-repmat(xold,1,mu)) / sigma;
+      arpos = (arx(:,fitness.idxsel(1:mu))-repmat(xold,1,mu)) / sigma
       % "active" CMA update: negative update, in case controlling pos. definiteness 
       if flgActiveCMA > 0
         % set parameters
@@ -1193,11 +1168,11 @@ while isempty(stopflag)
         C = (1-ccov1-ccovmu+(1-hsig)*ccov1*cc*(2-cc)) * C ... % regard old matrix 
             + ccov1 * pc*pc' ...     % plus rank one update
             + ccovmu ...             % plus rank mu update
-              * arpos * (repmat(weights,1,N) .* arpos');
+              * arpos * (repmat(weights,1,N) .* arpos')
         % is now O(mu*N^2 + mu*N), was O(mu*N^2 + mu^2*N) when using diag(weights)
         %   for mu=30*N it is now 10 times faster, overall 3 times faster
       end
-      diagC = diag(C);
+      diagC = diag(C)
     end
   end
   
@@ -1223,7 +1198,7 @@ while isempty(stopflag)
     sigma = sigma * exp(min(1, (sum(ps.^2)/N - 1)/2 * cs/damps));            % Eq. (5)
   else
     % exp(1) is still not reasonably small enough
-    sigma = sigma * exp(min(1, (sqrt(sum(ps.^2))/chiN - 1) * cs/damps));             % Eq. (5)
+    sigma = sigma * exp(min(1, (sqrt(sum(ps.^2))/chiN - 1) * cs/damps))             % Eq. (5)
   end
   % disp([countiter norm(ps)/chiN]);
   
@@ -1246,10 +1221,10 @@ while isempty(stopflag)
   % Update B and D from C
 
   if ~flgDiagonalOnly && (ccov1+ccovmu+neg.ccov) > 0 && mod(countiter, 1/(ccov1+ccovmu+neg.ccov)/N/10) < 1
-    C=triu(C)+triu(C,1)'; % enforce symmetry to prevent complex numbers
-    [B,tmp] = eig(C);     % eigen decomposition, B==normalized eigenvectors
+    C=triu(C)+triu(C,1)' % enforce symmetry to prevent complex numbers
+    [B,tmp] = eig(C)     % eigen decomposition, B==normalized eigenvectors
                           % effort: approx. 15*N matrix-vector multiplications
-    diagD = diag(tmp); 
+    diagD = diag(tmp) 
 
     if any(~isfinite(diagD))
       clear idx; % prevents error under octave 
@@ -1682,17 +1657,17 @@ fmin = fitness.raw(1);
 xmin = arxvalid(:, fitness.idx(1)); % Return best point of last generation.
 if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
   out.solutions.mean.f = ...
-      feval(fitfun, xintobounds(xmean, lbounds, ubounds), varargin{:});
+      feval(fitfun, xintobounds(xmean, lbounds, ubounds), varargin{:})
   counteval = counteval + 1;
   out.solutions.mean.evals = counteval;
   if out.solutions.mean.f < fitness.raw(1)
-    fmin = out.solutions.mean.f;
-    xmin = xintobounds(xmean, lbounds, ubounds); % Return xmean as best point
+    fmin = out.solutions.mean.f
+    xmin = xintobounds(xmean, lbounds, ubounds) % Return xmean as best point
   end
   if out.solutions.mean.f < out.solutions.bestever.f
-    out.solutions.bestever = out.solutions.mean; % Return xmean as bestever point
-    out.solutions.bestever.x = xintobounds(xmean, lbounds, ubounds); 
-    bestever = out.solutions.bestever;
+    out.solutions.bestever = out.solutions.mean % Return xmean as bestever point
+    out.solutions.bestever.x = xintobounds(xmean, lbounds, ubounds)
+    bestever = out.solutions.bestever
   end
 end
 

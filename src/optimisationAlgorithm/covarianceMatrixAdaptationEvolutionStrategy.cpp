@@ -163,7 +163,7 @@ namespace mant {
                     (std::sqrt(arma::accu(arma::square(ps_))) / chiN_ - 1) * cs_ / damping_)); //; Eq. (5)
 
             //;Update B and D from C
-            if ((ccov1_ + ccovmu_ + negCcov_) > 0 && countiter_ % 1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10) < 1) {
+            if ((ccov1_ + ccovmu_ + negCcov_) > 0 && (countiter_ % (1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10))) < 1) {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
                 arma::Col<double> tmp;
                 arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
@@ -208,6 +208,7 @@ namespace mant {
             //TODO: control these skips
             //;Adjust maximal coordinate axis deviations
             //skipped since the threshold is infinity
+            //TODO: this skip is important with boundaries!! Add it!
             //; Adjust minimal coordinate axis deviations
             //this also should never happen because of positive definite
             //the threshold here is 0

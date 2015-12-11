@@ -7,12 +7,12 @@ stepsize = 2;
 opts.MaxFunEvals = 20000;
 FHANDLES = benchmarks('handles');
 
-for i=1:24
+for i=1:1
 	disp(['function: ' num2str(fitnessFunction)]);
 	actFunc = FHANDLES{i};
     optimalObjectiveValue = feval(actFunc, 'init', dimensions, 0);
 	opts.StopFitness = optimalObjectiveValue + 10^floor(log10(abs(optimalObjectiveValue))) * 1e-3;
-	for j=1:5
+	for j=1:1
 		[xmin,fmin,counteval,stopflag,out,bestever] = cmaes('bbob',startingpoint,stepsize,opts);
 		stopflag;
 		iterations(i,j) = counteval;
