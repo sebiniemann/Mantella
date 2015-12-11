@@ -51,7 +51,7 @@ namespace mant{
     reset();
     
     arma::Mat<double> parameters = boundaryHandlingFunction_(initialParameters);
-    arma::Col<double> differences = evaluate(optimisationProblem, parameters));
+    arma::Col<double> differences = evaluate(optimisationProblem, parameters);
     
     while (!isTerminated() && !isFinished()) {
       if (isDegeneratedFunction_(parameters, differences)) {
