@@ -1262,10 +1262,10 @@ while isempty(stopflag)
 	end
     end
 
-    diagC = diag(C); 
-    diagD = sqrt(diagD); % D contains standard deviations now
+    diagC = diag(C) 
+    diagD = sqrt(diagD) % D contains standard deviations now
     % diagD = diagD / prod(diagD)^(1/N);  C = C / prod(diagD)^(2/N);
-    BD = B.*repmat(diagD',N,1); % O(n^2)
+    BD = B.*repmat(diagD',N,1) % O(n^2)
   end % if mod
 
   % Align/rescale order of magnitude of scales of sigma and C for nicer output
