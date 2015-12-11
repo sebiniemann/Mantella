@@ -21,6 +21,7 @@ TEST_CASE("OptimisationAlgorithm") {
     optimisationAlgorithm.setMaximalNumberOfIterations(1000);
     optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
     
+    
   }
   
   SECTION(".setNextParametersFunction") {
@@ -29,7 +30,7 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunction(nullptr), std::logic_error);
       }
     }
@@ -41,7 +42,7 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setBoundaryHandlingFunction(nullptr), std::logic_error);
       }
     }
@@ -53,7 +54,7 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunction(nullptr), std::logic_error);
       }
     }
@@ -65,7 +66,7 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setDegenerationHandlingFunction(nullptr), std::logic_error);
       }
     }
@@ -97,11 +98,8 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the maximal duration is less than or equal to 0.") {
-      
-      }
-      
       SECTION("Throw an exception, if the maximal duration is infinite.") {
+      SECTION("Throws an exception, if the maximal duration is less than or equal to 0.") {
       
       }
     }

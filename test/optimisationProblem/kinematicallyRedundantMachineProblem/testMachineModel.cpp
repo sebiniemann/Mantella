@@ -43,7 +43,7 @@ TEST_CASE("MachineModel") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(machineModel.getModel(endEffectorPose, redundantJointsActuation), std::logic_error);
       }
     }
@@ -72,7 +72,7 @@ TEST_CASE("MachineModel") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(machineModel.getPoseInaccuracy(endEffectorPose, redundantJointsActuation), std::logic_error);
       }
     }

@@ -32,7 +32,7 @@ TEST_CASE("hammersleySet") {
   }
 
   SECTION("Exception tests:") {
-    SECTION("Throw an exception, if the size of the base and seed are unequal.") {
+    SECTION("Throws an exception, if the size of the base and seed are unequal.") {
       CHECK_THROWS_AS(mant::hammersleySet({1}, {3, 3}, 5), std::logic_error);
       CHECK_THROWS_AS(mant::hammersleySet({4, 5}, {3}, 6), std::logic_error);
     }
@@ -63,7 +63,7 @@ TEST_CASE("haltonSequence") {
   }
 
   SECTION("Exception tests:") {
-    SECTION("Throw an exception, if the size of the base and seed are unequal.") {
+    SECTION("Throws an exception, if the size of the base and seed are unequal.") {
       CHECK_THROWS_AS(mant::haltonSequence({1}, {3, 3}, 5), std::logic_error);
       CHECK_THROWS_AS(mant::haltonSequence({4, 5}, {3}, 6), std::logic_error);
     }
