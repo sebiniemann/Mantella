@@ -218,7 +218,7 @@ TEST_CASE("isDimensionallyConsistent") {
     samples.insert(secondSamples.begin(), secondSamples.end());
     // We would like to capture the samples, but Catch cannot capture unordered maps.
 
-    CHECK(samples() > 0);
+    CHECK(samples.size() > 0);
     CHECK(mant::isDimensionallyConsistent(samples) == false);
   }
 }
