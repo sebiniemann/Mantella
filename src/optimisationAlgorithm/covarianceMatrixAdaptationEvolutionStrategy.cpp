@@ -14,17 +14,17 @@ namespace mant {
       toleranceUpX_(arma::datum::nan),
       toleranceFun_(arma::datum::nan),
       toleranceHistFun_(arma::datum::nan),
-      activeCMA_(arma::datum::nan),
-      lambda_(arma::datum::nan),
+      activeCMA_(std::numeric_limits<arma::uword>::max()),
+      lambda_(std::numeric_limits<arma::uword>::max()),
       sigma_(arma::datum::nan),
-      stopMaxIter_(arma::datum::nan)
+      stopMaxIter_(std::numeric_limits<arma::uword>::max())
       {
         setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
             
-            this->newGenerationValid_ = parameters; //arxvalid
+            newGenerationValid_ = parameters; //arxvalid
             //TODO: using the differences now, it should have no effect on CMAES as far as i can see
-            this->fitnessRaw_ = differences;
+            fitnessRaw_ = differences;
 
             //TODO: this stopflag is more sophisticated in the matlab code.
             bool stopFlag = false;
@@ -32,14 +32,14 @@ namespace mant {
                 std::cout << "because errors on unused warnings" << std::endl;
             }
             //;set internal parameters
-            if (this->lambda_ != this->lambda_last_) {
-                this->setPopulationSize(this->lambda_,numberOfDimensions);
+            if (lambda_ != lambda_last_) {
+                setPopulationSize(lambda_,numberOfDimensions);
             }
 
-            this->countiter_++;
+            countiter_++;
 
             //;Generate and evaluate lambda offspring
-            this->fitnessRaw_ = arma::ones(this->lambda_);
+            //fitnessRaw_ = arma::ones(lambda_);
 
             //;----- handle boundaries -----
             //;Assigned penalized fitness
@@ -278,7 +278,10 @@ namespace mant {
             //TODO: This code was actually at the very beginning of the while loop
             //If HCMA changes lambda inbetween, this might need some handling
             newGenerationRaw_ = arma::randn(numberOfDimensions, lambda_); //arz
-            newGeneration_ = static_cast<arma::Mat<double>>(this->sigma_ * (this->BD_ * newGenerationRaw_)).each_col() + this->xmean_; //arx
+            newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
+            
+            std::cout << newGeneration_ << std::endl;
+            
             return newGeneration_;
 
 
@@ -306,18 +309,18 @@ namespace mant {
         stopOnStagnation_ = true;
         stopOnWarnings_ = true;
         stopOnEqualFunctionValues_ = true;
-         * stopMaxIter_ = 100 + 50 * std::pow(optimisationProblem->numberOfDimensions_ + 3, 2) / std::sqrt(lambda_);
+         * stopMaxIter_ = 100 + 50 * std::pow(optimisationProblem.numberOfDimensions_ + 3, 2) / std::sqrt(lambda_);
          */
 
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
-            const std::shared_ptr<OptimisationProblem> optimisationProblem) {
-        optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem->numberOfDimensions_));
+            OptimisationProblem& optimisationProblem) {
+        optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
-            const std::shared_ptr<OptimisationProblem> optimisationProblem,
+            OptimisationProblem& optimisationProblem,
             const arma::Mat<double>& initialParameters) {
         verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
 
@@ -327,8 +330,8 @@ namespace mant {
         
         //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
         //Still completely remove it?
-        if (lambda_ == 9223372036854775808U) {
-            setPopulationSize(4 + std::floor(3 * std::log(optimisationProblem->numberOfDimensions_)), optimisationProblem->numberOfDimensions_);
+        if (lambda_ == std::numeric_limits<arma::uword>::max()) {
+            setPopulationSize(4 + std::floor(3 * std::log(optimisationProblem.numberOfDimensions_)), optimisationProblem.numberOfDimensions_);
         }
         if (!std::isfinite(sigma_)) {
             setStepSize(0.2);
@@ -347,33 +350,33 @@ namespace mant {
         if (!std::isfinite(toleranceUpX_)) {
             setToleranceUpX(1e3 * sigma_);
         }
-        if (activeCMA_ == 9223372036854775808U) {
+        if (activeCMA_ == std::numeric_limits<arma::uword>::max()) {
             setActiveCMA(0);
         }
-        if (stopMaxIter_ == 9223372036854775808U) {
-            stopMaxIter_ = 1e3 * std::pow(optimisationProblem->numberOfDimensions_ + 5, 2) / std::sqrt(lambda_);
+        if (stopMaxIter_ == std::numeric_limits<arma::uword>::max()) {
+            stopMaxIter_ = 1e3 * std::pow(optimisationProblem.numberOfDimensions_ + 5, 2) / std::sqrt(lambda_);
         }
 
-        pc_ = arma::zeros(optimisationProblem->numberOfDimensions_);
-        ps_ = arma::zeros(optimisationProblem->numberOfDimensions_);
+        pc_ = arma::zeros(optimisationProblem.numberOfDimensions_);
+        ps_ = arma::zeros(optimisationProblem.numberOfDimensions_);
 
-        diagD_ = arma::ones(optimisationProblem->numberOfDimensions_) * sigma_;
+        diagD_ = arma::ones(optimisationProblem.numberOfDimensions_) * sigma_;
         //TODO: "diagonal matrix D defines the scaling" originally this was stepsize / max(stepsize)
         //where stepsize was the vector (which never got used) of stepsizes in all dimensions
         //what actually got used was max(stepsize) - we decided to omit this vector so diagD as a whole
         //might be irrelevant
         diagC_ = arma::square(diagD_);
-        B_ = arma::eye(optimisationProblem->numberOfDimensions_, optimisationProblem->numberOfDimensions_); //;B defines the coordinate system
+        B_ = arma::eye(optimisationProblem.numberOfDimensions_, optimisationProblem.numberOfDimensions_); //;B defines the coordinate system
         BD_ = arma::diagmat(diagD_); //;B*D for speed up only
         C_ = arma::diagmat(diagC_); //;covariance matrix == BD*(BD)'
 
-        chiN_ = std::pow(optimisationProblem->numberOfDimensions_, 0.5) *
-                (1 - 1.0 / (4 * optimisationProblem->numberOfDimensions_) + 1.0
-                / (21 * std::pow(optimisationProblem->numberOfDimensions_, 2)));
+        chiN_ = std::pow(optimisationProblem.numberOfDimensions_, 0.5) *
+                (1 - 1.0 / (4 * optimisationProblem.numberOfDimensions_) + 1.0
+                / (21 * std::pow(optimisationProblem.numberOfDimensions_, 2)));
         //;expectation of||N(0,I)|| == norm(randn(N,1))
 
         //miscellaneous inits needed
-        EqualFunctionValues_ = arma::zeros(10 + optimisationProblem->numberOfDimensions_);
+        EqualFunctionValues_ = arma::zeros(10 + optimisationProblem.numberOfDimensions_);
         stopOnStagnation_ = true;
         stopOnWarnings_ = true;
         stopOnEqualFunctionValues_ = true;
@@ -381,13 +384,13 @@ namespace mant {
 
         //Need to do this here once to get from the initial starting point (given as intiailparameters)
         //to the first round of points to get evaluated
-        newGenerationRaw_ = arma::randn(optimisationProblem->numberOfDimensions_, lambda_); //arz
-        this->newGeneration_ = static_cast<arma::Mat<double>>(this->sigma_ * (this->BD_ * newGenerationRaw_)).each_col() + this->xmean_; //arx
+        newGenerationRaw_ = arma::randn(optimisationProblem.numberOfDimensions_, lambda_); //arz
+        newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
         
         std::cout << newGeneration_ << std::endl;
 
         //newGeneration will have turned into newGenerationValid_ when nextParameters is called
-        OptimisationAlgorithm::optimise(optimisationProblem, this->newGeneration_);
+        OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
     }
 
     arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getIRun() {
@@ -395,11 +398,11 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setIRun(const arma::uword irun) {
-        this->irun_ = irun;
+        irun_ = irun;
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setStepSize(const double stepSize) {
-        this->sigma_ = stepSize;
+        sigma_ = stepSize;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getStepSize() {
@@ -407,7 +410,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setPopulationSize(const arma::uword popSize, const arma::uword numberOfDimensions) {
-        this->lambda_ = popSize;
+        lambda_ = popSize;
         lambda_last_ = lambda_;
         mu_ = std::floor(lambda_ / 2.0);
         recombinationWeights_ = std::log(mu_ + 0.5) - arma::log(arma::linspace(1, mu_, mu_));
@@ -419,20 +422,23 @@ namespace mant {
         //TODO: following code is dependent on the number of dimensions, so the user has to provide it here
         //(HCMA modifies popsize later, thats why the code cant be moved really)
         //TODO: this is the ccum calculation from hcma, original cmaes is: 4/(N+4)
-        ccum_ = std::pow((numberOfDimensions + 2 * mueff_ / numberOfDimensions) / (4 + mueff_ / numberOfDimensions), -1); //;time constant for cumulation for covariance matrix
+        ccum_ = 4/(numberOfDimensions+4);
+        //ccum_ = std::pow((numberOfDimensions + 2 * mueff_ / numberOfDimensions) / (4 + mueff_ / numberOfDimensions), -1); //;time constant for cumulation for covariance matrix
         cs_ = (mueff_ + 2) / (numberOfDimensions + mueff_ + 3);
 
         //TODO: this is the ccov1 calculation from hcma, original cmaes is: 2 / ((N+1.3)^2+mueff)
-        ccov1_ = std::min(2.0, lambda_ / 3.0) / (std::pow(numberOfDimensions + 1.3, 2) + mueff_);
+        ccov1_ = 2 / (std::pow(numberOfDimensions+1.3,2) + mueff_);
+        //ccov1_ = std::min(2.0, lambda_ / 3.0) / (std::pow(numberOfDimensions + 1.3, 2) + mueff_);
         //TODO: this is the ccovmu calculation from hcma, original cmaes is: 2 * (mueff-2+1/mueff) / ((N+2)^2+mueff)
-        ccovmu_ = std::min(2.0, lambda_ / 3.0) / (mueff_ - 2 + 1.0 / mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
+        ccovmu_ = 2 * (mueff_-2+1/mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
+        //ccovmu_ = std::min(2.0, lambda_ / 3.0) / (mueff_ - 2 + 1.0 / mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
 
         damping_ = 1 + 2 * std::max(0.0, std::sqrt((mueff_ - 1) / (numberOfDimensions + 1)) - 1) + cs_;
 
     }
 
     arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getPopulationSize() {
-        return this->lambda_;
+        return lambda_;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getCcov1() const {
@@ -440,7 +446,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setCcov1(double ccov1) {
-        this->ccov1_ = ccov1;
+        ccov1_ = ccov1;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getCcovmu() const {
@@ -448,7 +454,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setCcovmu(double ccovmu) {
-        this->ccovmu_ = ccovmu;
+        ccovmu_ = ccovmu;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getCcum() const {
@@ -456,7 +462,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setCcum(double ccum) {
-        this->ccum_ = ccum;
+        ccum_ = ccum;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getCs() const {
@@ -464,7 +470,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setCs(double cs) {
-        this->cs_ = cs;
+        cs_ = cs;
     }
 
     arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getMu() const {
@@ -472,7 +478,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setMu(arma::uword numberOfParents) {
-        this->mu_ = numberOfParents;
+        mu_ = numberOfParents;
     }
 
     arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::getRecombinationWeights() {
@@ -480,7 +486,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setRecombinationWeights(arma::Col<double> weights) {
-        this->recombinationWeights_ = weights;
+        recombinationWeights_ = weights;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceFun() const {
@@ -488,7 +494,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceFun(double toleranceFun) {
-        this->toleranceFun_ = toleranceFun;
+        toleranceFun_ = toleranceFun;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceHistFun() const {
@@ -496,7 +502,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceHistFun(double toleranceHistFun) {
-        this->toleranceHistFun_ = toleranceHistFun;
+        toleranceHistFun_ = toleranceHistFun;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceUpX() const {
@@ -504,7 +510,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceUpX(double toleranceUpX) {
-        this->toleranceUpX_ = toleranceUpX;
+        toleranceUpX_ = toleranceUpX;
     }
 
     double CovarianceMatrixAdaptationEvolutionStrategy::getToleranceX() const {
@@ -512,7 +518,7 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setToleranceX(double toleranceX) {
-        this->toleranceX_ = toleranceX;
+        toleranceX_ = toleranceX;
     }
 
     arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::getXmean() const {
@@ -520,11 +526,11 @@ namespace mant {
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setXmean(arma::Col<double> xmean) {
-        this->xmean_ = xmean;
+        xmean_ = xmean;
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::setActiveCMA(arma::uword activeCma) {
-        this->activeCMA_ = activeCma;
+        activeCMA_ = activeCma;
     }
 
     arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getActiveCMA() {

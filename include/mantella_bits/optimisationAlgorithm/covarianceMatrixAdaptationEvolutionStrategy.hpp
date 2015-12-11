@@ -19,11 +19,11 @@ namespace mant {
     explicit CovarianceMatrixAdaptationEvolutionStrategy();
     
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem,
+        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters) override;
     
     void optimise(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem);
+        OptimisationProblem& optimisationProblem);
 
     arma::uword getIRun();
     void setIRun(const arma::uword irun); //irun
