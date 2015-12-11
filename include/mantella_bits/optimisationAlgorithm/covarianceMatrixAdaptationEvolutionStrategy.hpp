@@ -106,8 +106,6 @@ namespace mant {
     double chiN_; //chiN
     double negCcov_; //neg.ccov
 
-    std::tuple<arma::Mat<double>, arma::Mat<double>> capToBoundary(arma::Mat<double> x); //xintobounds.m - returns capped matrix/vector first, indexes of capped values second
-
     arma::Col<double> fitnessRaw_; //fitness.raw
     arma::Col<double> fitnessSel_; //fitness.sel
     arma::Col<double> fitnessRawPreviousIteration_;//helper variable to replace fitnesshist

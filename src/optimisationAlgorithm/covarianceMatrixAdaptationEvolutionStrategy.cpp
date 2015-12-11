@@ -19,6 +19,11 @@ namespace mant {
       sigma_(arma::datum::nan),
       stopMaxIter_(std::numeric_limits<arma::uword>::max())
       {
+        //TODO: temporary overwrite for testing
+        setBoundaryHandlingFunction([this] (const arma::Mat<double>& parameters) {
+            return parameters;
+         });
+        
         setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
             
@@ -279,9 +284,7 @@ namespace mant {
             //If HCMA changes lambda inbetween, this might need some handling
             newGenerationRaw_ = arma::randn(numberOfDimensions, lambda_); //arz
             newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
-            
-            std::cout << newGeneration_ << std::endl;
-            
+
             return newGeneration_;
 
 
@@ -386,8 +389,6 @@ namespace mant {
         //to the first round of points to get evaluated
         newGenerationRaw_ = arma::randn(optimisationProblem.numberOfDimensions_, lambda_); //arz
         newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
-        
-        std::cout << newGeneration_ << std::endl;
 
         //newGeneration will have turned into newGenerationValid_ when nextParameters is called
         OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
@@ -535,22 +536,5 @@ namespace mant {
 
     arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getActiveCMA() {
         return activeCMA_;
-    }
-
-    //returns capped matrix/vector first, indexes of capped values second
-
-    std::tuple<arma::Mat<double>, arma::Mat<double>> CovarianceMatrixAdaptationEvolutionStrategy::capToBoundary(arma::Mat<double> x) {
-        arma::Mat<double> indexes = arma::zeros(x.n_rows, x.n_cols);
-        for (arma::uword n = 0; n < x.n_cols; ++n) {
-            //const arma::Col<arma::uword>& lowerIndex = arma::find(x.col(n) < getLowerBounds());
-            //static_cast<arma::Col<double>>(x.col(n)).elem(lowerIndex) = getLowerBounds().elem(lowerIndex);
-            //indexes(lowerIndex) += -1;
-
-            //const arma::Col<arma::uword>& upperIndex = arma::find(x.col(n) > getUpperBounds());
-            //static_cast<arma::Col<double>>(x.col(n)).elem(upperIndex) = getUpperBounds().elem(upperIndex);
-            //indexes(upperIndex) += 1;
-        }
-
-        return std::make_tuple(x, indexes);
     }
 }
