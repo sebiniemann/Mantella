@@ -5,6 +5,7 @@
 
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/randomNumberGenerator.hpp"
 
 namespace mant {
 
@@ -19,6 +20,8 @@ namespace mant {
       sigma_(arma::datum::nan),
       stopMaxIter_(std::numeric_limits<arma::uword>::max())
       {
+        //TODO: shouldnt this be done somewhere else? and always?
+        mant::Rng::setRandomSeed();
         //TODO: temporary overwrite for testing
         setBoundaryHandlingFunction([this] (const arma::Mat<double>& parameters) {
             return parameters;
@@ -85,7 +88,7 @@ namespace mant {
             negCcov_ = 0;
 
             if ((ccov1_ + ccovmu_) > 0) {
-                arma::Mat<double> arpos = static_cast<arma::Mat<double>>(newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1))).each_col() - (xold_ / sigma_);
+                arma::Mat<double> arpos = (static_cast<arma::Mat<double>>(newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1))).each_col() - xold_) / sigma_;
                 std::cout << "arpos" << arpos << std::endl;
                 //;"active" CMA update: negative update, in case controlling pos. definiteness 
                 if (activeCMA_ > 0) {
@@ -176,6 +179,8 @@ namespace mant {
             sigma_ = sigma_ * std::exp(
                     std::min(1.0,
                     (std::sqrt(arma::accu(arma::square(ps_))) / chiN_ - 1) * cs_ / damping_)); //; Eq. (5)
+            std::cout << "sigma_" << sigma_ << std::endl;
+            
 
             //;Update B and D from C
             if ((ccov1_ + ccovmu_ + negCcov_) > 0 && std::fmod(countiter_, (1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10))) < 1) {
@@ -353,7 +358,6 @@ namespace mant {
         verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
 
         xmean_ = initialParameters.col(0);
-        xold_ = xmean_;
         countiter_ = 0;
         
         //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
@@ -454,9 +458,9 @@ namespace mant {
         //TODO: following code is dependent on the number of dimensions, so the user has to provide it here
         //(HCMA modifies popsize later, thats why the code cant be moved really)
         //TODO: this is the ccum calculation from hcma, original cmaes is: 4/(N+4)
-        ccum_ = 4/(numberOfDimensions+4);
+        ccum_ = 4.0/(numberOfDimensions+4.0);
         std::cout << "ccum_" << ccum_ << std::endl;
-        //ccum_ = std::pow((numberOfDimensions + 2 * mueff_ / numberOfDimensions) / (4 + mueff_ / numberOfDimensions), -1); //;time constant for cumulation for covariance matrix
+        //ccum_ = std::pow((numberOfDimensions + 2.0 * mueff_ / numberOfDimensions) / (4.0 + mueff_*1.0 / numberOfDimensions), -1); //;time constant for cumulation for covariance matrix
         cs_ = (mueff_ + 2) / (numberOfDimensions + mueff_ + 3);
         std::cout << "cs_" << cs_ << std::endl;
 
