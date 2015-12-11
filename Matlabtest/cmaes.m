@@ -904,18 +904,18 @@ while isempty(stopflag)
     % Resample, until fitness is not NaN
     while isnan(fitness.raw(k))
       if k <= lambda  % regular samples (not the re-evaluation-samples)
-        arz(:,k) = randn(N,1) % (re)sample
+        arz(:,k) = randn(N,1); % (re)sample
 
         if flgDiagonalOnly  
           arx(:,k) = xmean + sigma * diagD .* arz(:,k);              % Eq. (1)
         else
-          arx(:,k) = xmean + sigma * (BD * arz(:,k))                % Eq. (1)
+          arx(:,k) = xmean + sigma * (BD * arz(:,k));                % Eq. (1)
         end
       else % re-evaluation solution with index > lambda
         if flgDiagonalOnly  
           arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * diagD .* randn(N,1);
         else
-          arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * randn(N,1))
+          arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * randn(N,1));
 		  disp('why is this happening??');
         end
       end
@@ -927,14 +927,14 @@ while isempty(stopflag)
       % other way.
  
       if ~bnd.isactive
-        arxvalid(:,k) = arx(:,k)
+        arxvalid(:,k) = arx(:,k);
       else
         arxvalid(:,k) = xintobounds(arx(:,k), lbounds, ubounds);
       end
       % You may handle constraints here.  You may copy and alter
       % (columns of) arxvalid(:,k) only for the evaluation of the
       % fitness function. arx should not be changed.
-      fitness.raw(k) = feval(fitfun, arxvalid(:,k), varargin{:})
+      fitness.raw(k) = feval(fitfun, arxvalid(:,k), varargin{:});
       tries = tries + 1;
       if isnan(fitness.raw(k))
 	countevalNaN = countevalNaN + 1;
@@ -948,7 +948,14 @@ while isempty(stopflag)
     counteval = counteval + 1 % retries due to NaN are not counted
   end
 
-  fitness.sel = fitness.raw 
+  disp('arz');
+  disp(arz);
+  disp('arx');
+  disp(arx);
+  disp('arxvalid');
+  disp(arxvalid);
+
+  fitness.sel = fitness.raw
 
   % ----- handle boundaries -----
   if 1 < 3 && bnd.isactive
@@ -1025,7 +1032,7 @@ while isempty(stopflag)
   % compute noise measurement and reduce fitness arrays to size lambda
   
   % Sort by fitness 
-  [fitness.raw, fitness.idx] = sort(fitness.raw) 
+  [fitness.raw, fitness.idx] = sort(fitness.raw); 
   [fitness.sel, fitness.idxsel] = sort(fitness.sel)  % minimization
   fitness.hist(2:end) = fitness.hist(1:end-1);    % record short history of
   fitness.hist(1) = fitness.raw(1);               % best fitness values

@@ -1,7 +1,7 @@
 global fitnessFunction;
 fitnessFunction = 1;
 iterations = [];
-dimensions = 2;
+dimensions = 3;
 startingpoint = 8 * rand(dimensions, 1) - 4;
 stepsize = 2;
 opts.MaxFunEvals = 20000;
