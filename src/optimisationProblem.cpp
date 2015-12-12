@@ -200,7 +200,7 @@ namespace mant {
     return parameterRotation_;
   }
 
-  void OptimisationProblem::OptimisationProblem::setObjectiveValueScaling(
+  void OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
     verify(std::isfinite(objectiveValueScaling), "setObjectiveValueScaling: The objective value scaling must be finite.");
 
