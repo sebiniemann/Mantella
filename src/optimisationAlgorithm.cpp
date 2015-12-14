@@ -101,21 +101,33 @@ namespace mant{
 
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction) {
+    // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
+    verify(static_cast<bool>(nextParametersFunction), "setNextParametersFunction: The next parameters function must be callable.");
+    
     nextParametersFunction_ = nextParametersFunction;
   }
   
   void OptimisationAlgorithm::setBoundaryHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction) {
+    // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
+    verify(static_cast<bool>(boundaryHandlingFunction), "setBoundaryHandlingFunction: The boundary handling function must be callable.");
+    
     boundaryHandlingFunction_ = boundaryHandlingFunction;
   }
   
   void OptimisationAlgorithm::setIsDegeneratedFunction(
       std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction) {
+    // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
+    verify(static_cast<bool>(isDegeneratedFunction), "setIsDegeneratedFunction: The function determining whether the state is degenerated must be callable.");
+    
     isDegeneratedFunction_ = isDegeneratedFunction;
   }
   
   void OptimisationAlgorithm::setDegenerationHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction) {
+    // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
+    verify(static_cast<bool>(degenerationHandlingFunction), "setDegenerationHandlingFunction: The degenerative handling function must be callable.");
+    
     degenerationHandlingFunction_ = degenerationHandlingFunction;
   }
 
