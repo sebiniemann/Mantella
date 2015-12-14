@@ -8,7 +8,7 @@ namespace mant{
   OptimisationAlgorithm::OptimisationAlgorithm() {
     reset();
         
-    setAcceptableObjectiveValue(std::numeric_limits<double>::max());
+    setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(10));
     
@@ -214,7 +214,7 @@ namespace mant{
   
   void OptimisationAlgorithm::reset() {
     numberOfIterations_  = 0;
-    bestObjectiveValue_ = std::numeric_limits<double>::max();
+    bestObjectiveValue_ = arma::datum::inf;
     bestParameter_.reset();
     duration_ = std::chrono::microseconds(0);
     initialTimePoint_ = std::chrono::steady_clock::now();
