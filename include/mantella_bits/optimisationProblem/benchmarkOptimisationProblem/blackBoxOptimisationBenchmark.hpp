@@ -19,7 +19,7 @@ namespace mant {
       explicit BlackBoxOptimisationBenchmark(
           const arma::uword numberOfDimensions);
           
-      double getBestObjectiveValue() const override;
+      double getOptimalObjectiveValue() const override;
 
      protected:
       arma::Col<double> getRandomParameterTranslation();
