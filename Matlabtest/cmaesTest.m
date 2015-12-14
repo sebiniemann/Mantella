@@ -1,7 +1,7 @@
 global fitnessFunction;
 fitnessFunction = 1;
 iterations = [];
-dimensions = 40;
+dimensions = 5;
 startingpoint = 8 * rand(dimensions, 1) - 4;
 stepsize = 2;
 opts.MaxFunEvals = 20000;
@@ -10,7 +10,7 @@ opts.StopOnWarnings = 'off';
 opts.StopOnEqualFunctionValues = 0;
 FHANDLES = benchmarks('handles');
 
-for i=6:6
+for i=1:5
 	fitnessFunction = i;
 	disp(['function: ' num2str(fitnessFunction)]);
 	actFunc = FHANDLES{i};
