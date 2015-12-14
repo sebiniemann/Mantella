@@ -10,9 +10,9 @@
 #include <mantella>
 
 // The effectiveness of any global variable is tested within the test cases for the functions that depend on them.
-TEST_CASE("cacheSamples") {
+TEST_CASE("isCachingSamples") {
   SECTION("The default value is *true*") {
-    CHECK(mant::cacheSamples == true);
+    CHECK(mant::isCachingSamples == true);
   }
   
   SECTION("Is changeable") {

@@ -50,7 +50,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Resets the cache.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       // Populates the cache
       optimisationProblem.setObjectiveFunction(objectiveFunction);
@@ -93,7 +93,7 @@ TEST_CASE("OptimisationProblem") {
     CAPTURE(parameters);
     
     SECTION("Works with caching enabled.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
@@ -102,7 +102,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Works with caching disabled.") {
-      mant::cacheSamples = false; 
+      mant::isCachingSamples = false; 
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
@@ -175,7 +175,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Does not reset the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -249,7 +249,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Does not reset the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -316,7 +316,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -401,7 +401,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -474,7 +474,7 @@ TEST_CASE("OptimisationProblem") {
         
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -547,7 +547,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -638,7 +638,7 @@ TEST_CASE("OptimisationProblem") {
         
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -698,7 +698,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -755,7 +755,7 @@ TEST_CASE("OptimisationProblem") {
   
   SECTION(".getCachedSamples") {
     SECTION("Returns all (unique) samples.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -783,7 +783,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Is empty, if the caching is disabled.") {
-      mant::cacheSamples = false;
+      mant::isCachingSamples = false;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -807,7 +807,7 @@ TEST_CASE("OptimisationProblem") {
   
   SECTION(".getNumberOfEvaluations") {
     SECTION("Returns the number of (all) function evaluations, including the duplicated ones.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -836,7 +836,7 @@ TEST_CASE("OptimisationProblem") {
   
   SECTION(".getNumberOfDistinctEvaluations") {
     SECTION("Returns only the distinct (unique) number of function evaluations.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -863,7 +863,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Returns the number of (all) function evaluations, including the duplicated ones, if caching is deactivated.") {
-      mant::cacheSamples = false;
+      mant::isCachingSamples = false;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {

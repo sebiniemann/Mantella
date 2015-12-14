@@ -54,7 +54,7 @@ namespace mant {
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
     
-    if (::mant::cacheSamples) {
+    if (::mant::isCachingSamples) {
       // Check if the result is already cached.
       const auto n = cachedSamples_.find(parameter);
       if (n == cachedSamples_.cend()) {
