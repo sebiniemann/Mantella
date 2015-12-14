@@ -130,7 +130,7 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Is empty, if the sample history recording is disabled.") {
-      mant::recordSamplingHistory = false;
+      mant::isRecordingSampling = false;
       
       arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);

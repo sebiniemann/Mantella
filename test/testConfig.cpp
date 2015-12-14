@@ -16,19 +16,23 @@ TEST_CASE("isCachingSamples") {
   }
   
   SECTION("Is changeable") {
-    mant::cacheSamples = false;
-    CHECK(mant::cacheSamples == false);
+    mant::isCachingSamples = false;
+    CHECK(mant::isCachingSamples == false);
+    // Restores the default value, as it may affect other tests.
+    mant::isCachingSamples = true;
   }
 }
 
-TEST_CASE("recordSamplingHistory") {
+TEST_CASE("isRecordingSampling") {
   SECTION("The default value is *false*") {
-    CHECK(mant::recordSamplingHistory == false);
+    CHECK(mant::isRecordingSampling == false);
   }
   
   SECTION("Is changeable") {
-    mant::recordSamplingHistory = true;
-    CHECK(mant::recordSamplingHistory == true);
+    mant::isRecordingSampling = true;
+    CHECK(mant::isRecordingSampling == true);
+    // Restores the default value, as it may affect other tests.
+    mant::isRecordingSampling = false;
   }
 }
 
