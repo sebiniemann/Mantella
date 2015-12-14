@@ -53,7 +53,7 @@ TEST_CASE("OptimisationAlgorithm") {
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
-        CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunction(nullptr), std::logic_error);
+        CHECK_THROWS_AS(optimisationAlgorithm.setIsDegeneratedFunction(nullptr), std::logic_error);
       }
     }
   }
