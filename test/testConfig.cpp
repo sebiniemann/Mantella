@@ -36,13 +36,15 @@ TEST_CASE("isRecordingSampling") {
   }
 }
 
-TEST_CASE("verboseOutput") {
+TEST_CASE("isVerbose") {
   SECTION("The default value is *true*") {
-    CHECK(mant::verboseOutput == true);
+    CHECK(mant::isVerbose == true);
   }
     
   SECTION("Is changeable") {
-    mant::verboseOutput = false;
-    CHECK(mant::verboseOutput == false);
+    mant::isVerbose = false;
+    CHECK(mant::isVerbose == false);
+    // Restores the default value, as it may affect other tests.
+    mant::isVerbose = true;
   }
 }

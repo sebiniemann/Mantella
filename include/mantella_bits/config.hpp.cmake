@@ -4,7 +4,7 @@ namespace mant {
   // Global variables, to be used in other files.
   extern bool isCachingSamples;
   extern bool isRecordingSampling;
-  extern bool verboseOutput;
+  extern bool isVerbose;
 }
 
 // MPI support must be decided via CMake, to ensure that we also link against it.
