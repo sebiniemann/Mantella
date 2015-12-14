@@ -407,6 +407,7 @@ namespace mant {
         chiN_ = std::pow(optimisationProblem.numberOfDimensions_, 0.5) *
                 (1 - 1.0 / (4 * optimisationProblem.numberOfDimensions_) + 1.0
                 / (21 * std::pow(optimisationProblem.numberOfDimensions_, 2)));
+        //std::cout << "chiN_" << chiN_ << std::endl;
         //;expectation of||N(0,I)|| == norm(randn(N,1))
 
         //miscellaneous inits needed
@@ -468,11 +469,11 @@ namespace mant {
         //std::cout << "cs_" << cs_ << std::endl;
 
         //TODO: this is the ccov1 calculation from hcma, original cmaes is: 2 / ((N+1.3)^2+mueff)
-        ccov1_ = 2 / (std::pow(numberOfDimensions+1.3,2) + mueff_);
+        ccov1_ = 2.0 / (std::pow(numberOfDimensions+1.3,2) + mueff_);
         //std::cout << "ccov1_" << ccov1_ << std::endl;
         //ccov1_ = std::min(2.0, lambda_ / 3.0) / (std::pow(numberOfDimensions + 1.3, 2) + mueff_);
         //TODO: this is the ccovmu calculation from hcma, original cmaes is: 2 * (mueff-2+1/mueff) / ((N+2)^2+mueff)
-        ccovmu_ = 2 * (mueff_-2+1/mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
+        ccovmu_ = arma::min(1.0-ccov1_, 2 * (mueff_-2+1.0/mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_));
         //std::cout << "ccovmu_" << ccovmu_ << std::endl;
         //ccovmu_ = std::min(2.0, lambda_ / 3.0) / (mueff_ - 2 + 1.0 / mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
 
