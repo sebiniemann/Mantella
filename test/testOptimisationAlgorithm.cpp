@@ -23,7 +23,7 @@ TEST_CASE("OptimisationAlgorithm") {
         const arma::Col<double>& differences) {
       return arma::randu<arma::Col<double>>(parameters.n_rows);
     });
-    optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
+    optimisationAlgorithm.optimise(optimisationProblem, arma::randu<arma::Col<double>>(numberOfDimensions));
     
     
   }
@@ -147,7 +147,7 @@ TEST_CASE("OptimisationAlgorithm") {
         return arma::randu<arma::Col<double>>(parameters.n_rows);
       });
       optimisationAlgorithm.setAcceptableObjectiveValue(optimisationProblem.getOptimalObjectiveValue() + 1e-3);
-      optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
+      optimisationAlgorithm.optimise(optimisationProblem, arma::randu<arma::Col<double>>(numberOfDimensions));
       
       CHECK(optimisationAlgorithm.getSamplingHistory().size() == 0);
     }
