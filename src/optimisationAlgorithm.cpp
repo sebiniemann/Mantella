@@ -181,7 +181,7 @@ namespace mant{
     for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
       const arma::Col<double>& parameter = parameters.col(n);
     
-      const double objectiveValue = optimisationProblem.getObjectiveValue(parameter);
+      const double objectiveValue = optimisationProblem.getNormalisedObjectiveValue(parameter);
       const double difference = objectiveValue - bestObjectiveValue_;
       
       if (::mant::isRecordingSampling) {
