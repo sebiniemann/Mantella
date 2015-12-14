@@ -7,118 +7,42 @@
 #include <armadillo>
 #include <cassert>
 #include <mantella>
+#include <memory>
 
 using namespace std;
 
-std::vector<mant::bbob::BlackBoxOptimisationBenchmark> getBenchmarkProblems(arma::uword dim) {
-    std::vector<mant::bbob::BlackBoxOptimisationBenchmark> probs;
-    probs.push_back(mant::bbob::SphereFunction(dim));
-    probs.push_back(mant::bbob::EllipsoidalFunction(dim));
-    probs.push_back(mant::bbob::RastriginFunction(dim));
-    probs.push_back(mant::bbob::BuecheRastriginFunction(dim));
-    probs.push_back(mant::bbob::LinearSlope(dim));
-    probs.push_back(mant::bbob::AttractiveSectorFunction(dim));
-    probs.push_back(mant::bbob::StepEllipsoidalFunction(dim));
-    probs.push_back(mant::bbob::RosenbrockFunction(dim));
-    probs.push_back(mant::bbob::RosenbrockFunctionRotated(dim));
-    probs.push_back(mant::bbob::EllipsoidalFunctionRotated(dim));
-    probs.push_back(mant::bbob::DiscusFunction(dim));
-    probs.push_back(mant::bbob::BentCigarFunction(dim));
-    probs.push_back(mant::bbob::SharpRidgeFunction(dim));
-    probs.push_back(mant::bbob::DifferentPowersFunction(dim));
-    probs.push_back(mant::bbob::RastriginFunctionRotated(dim));
-    probs.push_back(mant::bbob::WeierstrassFunction(dim));
-    probs.push_back(mant::bbob::SchaffersF7Function(dim));
-    probs.push_back(mant::bbob::SchaffersF7FunctionIllConditioned(dim));
-    probs.push_back(mant::bbob::CompositeGriewankRosenbrockFunctionF8F2(dim));
-    probs.push_back(mant::bbob::SchwefelFunction(dim));
-    probs.push_back(mant::bbob::GallaghersGaussian101mePeaksFunction(dim));
-    probs.push_back(mant::bbob::GallaghersGaussian21hiPeaksFunction(dim));
-    probs.push_back(mant::bbob::KatsuuraFunction(dim));
-    probs.push_back(mant::bbob::LunacekBiRastriginFunction(dim));
+std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> getBenchmarkOptimisationProblems(arma::uword numberOfDimensions) {
+    std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems;
+    
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::SphereFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::EllipsoidalFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::RastriginFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::BuecheRastriginFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::LinearSlope(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::AttractiveSectorFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::StepEllipsoidalFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::RosenbrockFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::RosenbrockFunctionRotated(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::EllipsoidalFunctionRotated(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::DiscusFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::BentCigarFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::SharpRidgeFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::DifferentPowersFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::RastriginFunctionRotated(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::WeierstrassFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::SchaffersF7Function(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::SchaffersF7FunctionIllConditioned(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::CompositeGriewankRosenbrockFunctionF8F2(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::SchwefelFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::GallaghersGaussian101mePeaksFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::GallaghersGaussian21hiPeaksFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::KatsuuraFunction(numberOfDimensions)));
+    optimisationProblems.push_back(std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new  mant::bbob::LunacekBiRastriginFunction(numberOfDimensions)));
 
-    return probs;
+    return optimisationProblems;
 }
 
-mant::bbob::BlackBoxOptimisationBenchmark getBenchmarkProblem(arma::uword dim, int functionNumber) {
-    switch(functionNumber) {
-        case 0:
-            return mant::bbob::SphereFunction(dim);
-            break;
-        case 1:
-            return mant::bbob::EllipsoidalFunction(dim);
-            break;
-        case 2:
-            return mant::bbob::RastriginFunction(dim);
-            break;
-        case 3:
-            return mant::bbob::BuecheRastriginFunction(dim);
-            break;
-        case 4:
-            return mant::bbob::LinearSlope(dim);
-            break;
-        case 5:
-            return mant::bbob::AttractiveSectorFunction(dim);
-            break;
-        case 6:
-            return mant::bbob::StepEllipsoidalFunction(dim);
-            break;
-        case 7:
-            return mant::bbob::RosenbrockFunction(dim);
-            break;
-        case 8:
-            return mant::bbob::RosenbrockFunctionRotated(dim);
-            break;
-        case 9:
-            return mant::bbob::EllipsoidalFunctionRotated(dim);
-            break;
-        case 10:
-            return mant::bbob::DiscusFunction(dim);
-            break;
-        case 11:
-            return mant::bbob::BentCigarFunction(dim);
-            break;
-        case 12:
-            return mant::bbob::SharpRidgeFunction(dim);
-            break;
-        case 13:
-            return mant::bbob::DifferentPowersFunction(dim);
-            break;
-        case 14:
-            return mant::bbob::RastriginFunctionRotated(dim);
-            break;
-        case 15:
-            return mant::bbob::WeierstrassFunction(dim);
-            break;
-        case 16:
-            return mant::bbob::SchaffersF7Function(dim);
-            break;
-        case 17:
-            return mant::bbob::SchaffersF7FunctionIllConditioned(dim);
-            break;
-        case 18:
-            return mant::bbob::CompositeGriewankRosenbrockFunctionF8F2(dim);
-            break;
-        case 19:
-            return mant::bbob::SchwefelFunction(dim);
-            break;
-        case 20:
-            return mant::bbob::GallaghersGaussian101mePeaksFunction(dim);
-            break;
-        case 21:
-            return mant::bbob::GallaghersGaussian21hiPeaksFunction(dim);
-            break;
-        case 22:
-            return mant::bbob::KatsuuraFunction(dim);
-            break;
-        case 23:
-            return mant::bbob::LunacekBiRastriginFunction(dim);
-            break;            
-    }
-    return mant::bbob::SphereFunction(dim);
-}
-
-int main(int argc, char** argv) {
+int main() {
 //  mant::bbob::SphereFunction blub(10);
 //  std::cout << "optproblem created" << std::endl;
 //  std::cout << "constructor:" << std::endl;
@@ -138,29 +62,35 @@ int main(int argc, char** argv) {
 //  std::cout << "end sigma: " << cmaes.getStepSize() << std::endl;
   
   //benchmarking our cmaes
-  //std::vector<mant::bbob::BlackBoxOptimisationBenchmark> problems = getBenchmarkProblems(5);
-//  arma::Col<double> medians(24);
-//  for(int i = 0; i < 24; i++) {
-//      std::cout << "function " << i << std::endl;
-      mant::bbob::AttractiveSectorFunction curProb = mant::bbob::AttractiveSectorFunction(40);// = problems[i];
-      std::cout << curProb.getBestObjectiveValue() << std::endl;
-      double objValue = curProb.getBestObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(curProb.getBestObjectiveValue())))) * 1e-3;
-      arma::Col<double> curMedian(20);
-      for(int trial = 0; trial < 20; trial++) {
-          mant::CovarianceMatrixAdaptationEvolutionStrategy algo;
-          algo.setMaximalNumberOfIterations(20000);
-          algo.setAcceptableObjectiveValue(objValue);
-          algo.setStepSize(2);
-          algo.optimise(curProb,8 * arma::randu(curProb.numberOfDimensions_) - 4);
-          curMedian(trial) = algo.getNumberOfIterations();          
-          
-          std::cout << algo.getNumberOfIterations() << std::endl;
-          std::cout << algo.getBestObjectiveValue() << std::endl;
-      }
-      
-      std::cout << arma::median(curMedian) << std::endl;
-//      medians(i) = arma::median(curMedian);
-//  }
+  std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(5);
+  arma::Col<double> medians(optimisationProblems.size());
+  for(unsigned int i = 0; i < optimisationProblems.size(); i++) {
+    // std::cout << "function " << i << std::endl;
+    
+    mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem = *optimisationProblems.at(i);
+    
+    // std::cout << optimisationProblem.getBestObjectiveValue() << std::endl;
+    double acceptableObjectiveValue = optimisationProblem.getBestObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(optimisationProblem.getBestObjectiveValue())))) * 1e-3;
+    
+    arma::Col<double> curMedian(20);
+ 
+    for(int trial = 0; trial < 20; trial++) {
+      mant::CovarianceMatrixAdaptationEvolutionStrategy algo;
+      algo.setMaximalNumberOfIterations(20000);
+      algo.setAcceptableObjectiveValue(acceptableObjectiveValue);
+      algo.setStepSize(2);
+      algo.optimise(optimisationProblem,8 * arma::randu(optimisationProblem.numberOfDimensions_) - 4);
+      curMedian(trial) = algo.getNumberOfIterations();          
+
+      // std::cout << algo.getNumberOfIterations() << std::endl;
+      // std::cout << algo.getBestObjectiveValue() << std::endl;
+    }
+
+    std::cout << arma::median(curMedian) << std::endl;
+    medians(i) = arma::median(curMedian);
+  }
   
-//  std::cout << medians << std::endl;
+  std::cout << medians << std::endl;
+ 
+  return 0;
 }
