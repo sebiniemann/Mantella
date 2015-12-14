@@ -10,7 +10,7 @@ namespace mant{
         
     setAcceptableObjectiveValue(std::numeric_limits<double>::max());
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
-    setMaximalDuration(std::chrono::seconds(30));
+    setMaximalDuration(std::chrono::seconds(10));
     
     setBoundaryHandlingFunction([this] (
         const arma::Mat<double>& parameters) {
