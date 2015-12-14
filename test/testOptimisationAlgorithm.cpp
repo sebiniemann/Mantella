@@ -18,7 +18,11 @@ TEST_CASE("OptimisationAlgorithm") {
   
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     
-    optimisationAlgorithm.setMaximalNumberOfIterations(1000);
+    optimisationAlgorithm.setNextParametersFunction([] (
+        const arma::Mat<double>& parameters,
+        const arma::Col<double>& differences) {
+      return arma::randu<arma::Col<double>>(parameters.n_rows);
+    });
     optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
     
     
@@ -135,12 +139,14 @@ TEST_CASE("OptimisationAlgorithm") {
       arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
       
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-      optimisationProblem.setObjectiveFunction([] (
-          const arma::Col<double>& parameter) {
-        return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
-      });
+      mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
         
+      optimisationAlgorithm.setNextParametersFunction([] (
+          const arma::Mat<double>& parameters,
+          const arma::Col<double>& differences) {
+        return arma::randu<arma::Col<double>>(parameters.n_rows);
+      });
+      optimisationAlgorithm.setAcceptableObjectiveValue(optimisationProblem.getOptimalObjectiveValue() + 1e-3);
       optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
       
       CHECK(optimisationAlgorithm.getSamplingHistory().size() == 0);
