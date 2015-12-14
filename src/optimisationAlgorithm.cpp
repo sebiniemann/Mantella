@@ -48,6 +48,15 @@ namespace mant{
   void OptimisationAlgorithm::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
+    if (::mant::isVerbose) {
+      std::cout << "================================================================================\n";
+      std::cout << "Solving optimisation problem: " << optimisationProblem.getName() << "\n";
+      std::cout << "  Number of dimensions: " << optimisationProblem.numberOfDimensions_ << "\n";
+      std::cout << "  Lower bounds: " << optimisationProblem.getLowerBounds().t();
+      std::cout << "  Upper bounds: " << optimisationProblem.getUpperBounds().t();
+      std::cout << "  Acceptable objective value: " << acceptableObjectiveValue_ << "\n" << std::endl;
+    }
+    
     reset();
     
     arma::Mat<double> parameters = boundaryHandlingFunction_(initialParameters);
@@ -72,6 +81,21 @@ namespace mant{
     
     // Sync best parameter
     
+        
+    if (::mant::isVerbose) {
+      if (isFinished()) {
+        std::cout << "  Finished with an acceptable solution.\n";
+      } else if (isTerminated()) {
+        std::cout << "  Terminated (run out of time or iterations).\n";
+      }
+      
+      std::cout << "    Took " << duration_.count() << " / " << maximalDuration_.count() << " milliseconds" <<std::endl;
+      std::cout << "    Took " << numberOfIterations_ << " / " << maximalNumberOfIterations_ << " iterations" <<std::endl;
+      std::cout << "    Difference to the acceptable objective value: " << bestObjectiveValue_ - acceptableObjectiveValue_ << std::endl;
+      std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
+      std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
+    }
+        
     duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
   }
 
@@ -157,6 +181,13 @@ namespace mant{
       if (difference < 0) {
         bestParameter_ = parameter;
         bestObjectiveValue_ = objectiveValue;
+        
+        if (::mant::isVerbose) {
+          std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Found better solution.\n";
+          std::cout << "    Difference to the previous best objective value: " << difference << std::endl;
+          std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
+          std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
+        }
         
         if (isFinished()) {
           break;
