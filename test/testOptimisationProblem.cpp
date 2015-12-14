@@ -148,14 +148,6 @@ TEST_CASE("OptimisationProblem") {
         
         CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
       }
-    
-      SECTION("Throws an exception, if no callable objective function is set.") {
-        mant::OptimisationProblem emptyOptimisationProblem(numberOfDimensions);
-        const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-        
-        CHECK_THROWS_AS(emptyOptimisationProblem.getObjectiveValue(parameter), std::logic_error);
-      }
     }
   }
   

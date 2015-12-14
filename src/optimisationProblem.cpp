@@ -33,6 +33,9 @@ namespace mant {
   void OptimisationProblem::setObjectiveFunction(
       const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
       const std::string& name) {
+    // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
+    verify(static_cast<bool>(objectiveFunction), "setObjectiveFunction: The objective function must be callable.");
+      
     objectiveFunction_ = objectiveFunction;
     name_ = name;
 
@@ -48,7 +51,7 @@ namespace mant {
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
     // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
-    verify(static_cast<bool>(objectiveFunction_), "getObjectiveValue: The objective function must be callable.");
+    assert(static_cast<bool>(objectiveFunction_));
     verify(parameter.n_elem == numberOfDimensions_, "getObjectiveValue: The number of elements must be equal to the number of dimensions.");
 
     // Always increase the number of evaluations.
