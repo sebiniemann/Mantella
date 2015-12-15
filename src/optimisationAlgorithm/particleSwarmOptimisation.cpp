@@ -14,6 +14,7 @@ namespace mant {
       : OptimisationAlgorithm() {
     setNextParametersFunction([this] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       if (differences(0) >= 0) {
         randomiseTopology_ = true;
@@ -24,8 +25,8 @@ namespace mant {
         randomiseTopology_ = false;
       }
       
-      if (differences(0) < localBestObjectiveValues_(activeParticleIndex_)) {
-        localBestObjectiveValues_(activeParticleIndex_) = differences(0);
+      if (objectiveValues(0) < localBestObjectiveValues_(activeParticleIndex_)) {
+        localBestObjectiveValues_(activeParticleIndex_) = objectiveValues(0);
         localBestSolutions_.col(activeParticleIndex_) = parameters.col(0);
       }
       

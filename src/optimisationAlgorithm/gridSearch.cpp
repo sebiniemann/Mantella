@@ -12,6 +12,7 @@ namespace mant {
       : OptimisationAlgorithm() {
     setNextParametersFunction([this] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       arma::Col<double> nextParameter(parameters.n_rows);
       for (arma::uword k = 0; k < sampleIndicies_.n_elem; ++k) {

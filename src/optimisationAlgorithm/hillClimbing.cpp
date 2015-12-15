@@ -11,6 +11,7 @@ namespace mant {
         maximalStepSize_(arma::datum::nan)  {
     setNextParametersFunction([this] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return randomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
     });
