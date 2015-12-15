@@ -11,7 +11,10 @@
 
 namespace mant {
   ParticleSwarmOptimisation::ParticleSwarmOptimisation()
-      : OptimisationAlgorithm() {
+      : OptimisationAlgorithm(), 
+        maximalAcceleration_(arma::datum::nan),
+        maximalLocalAttraction_(arma::datum::nan),
+        maximalGlobalAttraction_(arma::datum::nan) {
     setNextParametersFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,

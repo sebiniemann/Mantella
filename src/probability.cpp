@@ -52,7 +52,7 @@ namespace mant {
       const arma::Col<double>& parameter,
       const double minimalDistance,
       const double maximalDistance) {
-    verify(maximalDistance > 0, "randomNeighbour: "); // TODO
+    verify(minimalDistance >= 0, "randomNeighbour: "); // TODO
     verify(minimalDistance <= maximalDistance, "randomNeighbour: "); // TODO
     
     arma::Col<double> displacement;
