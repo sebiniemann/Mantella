@@ -258,7 +258,7 @@ namespace mant {
                 }
             }
             //;Adjust step size in case of equal function values (flat fitness)
-            if (fitnessSel_(0) == fitnessSel_(std::ceil(0.1 + lambda_ / 4))) {
+            if (fitnessSel_(0) == fitnessSel_(std::ceil(0.1 + lambda_*1.0 / 4))) {
                 if (stopOnEqualFunctionValues_) {
                     EqualFunctionValues_.shed_row(EqualFunctionValues_.n_elem - 1);
                     EqualFunctionValues_.insert_rows(0, countiter_);
