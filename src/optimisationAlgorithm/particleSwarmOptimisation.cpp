@@ -95,6 +95,7 @@ namespace mant {
     
     numberOfParticles_ = initialParameters.n_cols;
     activeParticleIndex_ = 0;
+    particles_ = initialParameters;
     
     velocities_ = arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles_) * 2 - 1;
     velocities_ -= initialParameters;
