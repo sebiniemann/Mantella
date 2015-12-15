@@ -65,11 +65,11 @@ int main() {
   std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(5);
   arma::Col<double> medians(optimisationProblems.size());
   for(unsigned int i = 0; i < optimisationProblems.size(); i++) {
-    // std::cout << "function " << i << std::endl;
+    std::cout << "function " << i+1 << std::endl;
     
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem = *optimisationProblems.at(i);
     
-    // std::cout << optimisationProblem.getBestObjectiveValue() << std::endl;
+    //std::cout << optimisationProblem.getBestObjectiveValue() << std::endl;
     double acceptableObjectiveValue = optimisationProblem.getBestObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(optimisationProblem.getBestObjectiveValue())))) * 1e-3;
     
     arma::Col<double> curMedian(20);
@@ -83,14 +83,14 @@ int main() {
       curMedian(trial) = algo.getNumberOfIterations();          
 
       // std::cout << algo.getNumberOfIterations() << std::endl;
-      // std::cout << algo.getBestObjectiveValue() << std::endl;
+       //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
     }
 
-    std::cout << arma::median(curMedian) << std::endl;
+    //std::cout << arma::median(curMedian) << std::endl;
     medians(i) = arma::median(curMedian);
   }
   
-  std::cout << medians << std::endl;
+  std::cout << medians.t() << std::endl;
  
   return 0;
 }
