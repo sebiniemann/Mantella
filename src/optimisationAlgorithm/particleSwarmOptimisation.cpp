@@ -92,10 +92,10 @@ namespace mant {
       setMaximalGlobalAttraction(maximalLocalAttraction_);
     }
     
-    numberOfParticles_ = initialParameters.n_cols;
+    numberOfParticles_ = initialParameters.n_rows;
     activeParticleIndex_ = 0;
     
-    velocities_ = arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles_) * 2 - 1;
+    velocities_ = arma::randu<arma::Mat<double>>(numberOfParticles_, optimisationProblem.numberOfDimensions_) * 2 - 1;
     velocities_ -= initialParameters;
     
     localBestSolutions_ = initialParameters;
