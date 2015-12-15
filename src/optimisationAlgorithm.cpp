@@ -24,7 +24,7 @@ namespace mant{
       return boundedParameters;
     });
     
-    setIsDegeneratedFunction([this] (
+    setDegenerationDetectionFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& differences) {
       return false;
@@ -63,7 +63,7 @@ namespace mant{
     arma::Col<double> differences = evaluate(optimisationProblem, parameters);
     
     while (!isTerminated() && !isFinished()) {
-      if (isDegeneratedFunction_(parameters, differences)) {
+      if (degeneratedDetectionFunction_(parameters, differences)) {
         parameters = degenerationHandlingFunction_(parameters, differences);
       } else {
         parameters = nextParametersFunction_(parameters, differences);
@@ -115,12 +115,12 @@ namespace mant{
     boundaryHandlingFunction_ = boundaryHandlingFunction;
   }
   
-  void OptimisationAlgorithm::setIsDegeneratedFunction(
-      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction) {
     // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
     verify(static_cast<bool>(isDegeneratedFunction), "setIsDegeneratedFunction: The function determining whether the state is degenerated must be callable.");
+  void OptimisationAlgorithm::setDegenerationDectectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDectectionFunction) {
     
-    isDegeneratedFunction_ = isDegeneratedFunction;
+    degenerationDectectionFunction_ = degenerationDectectionFunction;
   }
   
   void OptimisationAlgorithm::setDegenerationHandlingFunction(
