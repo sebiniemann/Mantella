@@ -49,7 +49,6 @@ namespace mant {
             countiter_++;
 
             //;Generate and evaluate lambda offspring
-            //fitnessRaw_ = arma::ones(lambda_);
 
             //;----- handle boundaries -----
             //;Assigned penalized fitness
@@ -227,7 +226,7 @@ namespace mant {
                 //std::cout << "diagC_" << diagC_ << std::endl;
                 diagD_ = arma::sqrt(diagD_); //;D contains standard deviations now
                 //std::cout << "diagD_" << diagD_ << std::endl;
-                BD_ = B_.each_col() % diagD_;
+                BD_ = B_.each_row() % diagD_.t();
                 //std::cout << "BD_" << BD_ << std::endl;
             }
             
@@ -473,7 +472,7 @@ namespace mant {
         //std::cout << "ccov1_" << ccov1_ << std::endl;
         //ccov1_ = std::min(2.0, lambda_ / 3.0) / (std::pow(numberOfDimensions + 1.3, 2) + mueff_);
         //TODO: this is the ccovmu calculation from hcma, original cmaes is: 2 * (mueff-2+1/mueff) / ((N+2)^2+mueff)
-        ccovmu_ = arma::min(1.0-ccov1_, 2 * (mueff_-2+1.0/mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_));
+        ccovmu_ = std::min(1.0-ccov1_, 2 * (mueff_-2+1.0/mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_));
         //std::cout << "ccovmu_" << ccovmu_ << std::endl;
         //ccovmu_ = std::min(2.0, lambda_ / 3.0) / (mueff_ - 2 + 1.0 / mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_);
 
