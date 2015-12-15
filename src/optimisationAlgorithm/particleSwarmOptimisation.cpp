@@ -106,6 +106,12 @@ namespace mant {
     
     OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
+
+  void optimise(
+      OptimisationProblem& optimisationProblem,
+      const arma::uword numberOfParticles) {
+    optimise(optimisationProblem, arma::randu<arma::Mat<double>>(numberOfParticles, optimisationProblem.numberOfDimensions_));  
+  }
       
   void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
       std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction) {
