@@ -17,7 +17,7 @@ for i=1:5
     optimalObjectiveValue = feval(actFunc, 'init', dimensions, 0);
 	opts.StopFitness = optimalObjectiveValue + 10^floor(log10(abs(optimalObjectiveValue))) * 1e-3;
 	for j=1:20
-		[xmin,fmin,counteval,stopflag,out,bestever] = cmaes('bbob',startingpoint,stepsize,opts);
+		[xmin,fmin,counteval,stopflag] = cmaes('bbob',startingpoint,stepsize,opts);
 		stopflag;
 		iterations(i,j) = counteval;
 	end;
