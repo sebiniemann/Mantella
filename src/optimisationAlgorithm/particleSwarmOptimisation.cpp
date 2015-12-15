@@ -44,7 +44,7 @@ namespace mant {
       }
 
       const arma::Col<double>& velocity =
-      maximalAcceleration_ * arma::randu<arma::Col<double>>(parameters.n_rows) * velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
+      maximalAcceleration_ * arma::randu<arma::Col<double>>(parameters.n_rows) % velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
 
       particles_.col(activeParticleIndex_) += velocity;
       velocities_.col(activeParticleIndex_) = velocity;
