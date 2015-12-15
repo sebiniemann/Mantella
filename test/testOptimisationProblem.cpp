@@ -46,7 +46,7 @@ TEST_CASE("OptimisationProblem") {
     SECTION("Updates the objective function, and names it.") {
       optimisationProblem.setObjectiveFunction(objectiveFunction, "My Optimisation Problem");
       CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter)));
-      CHECK(optimisationProblem.getName() == "My Optimisation Problem");
+      CHECK(optimisationProblem.getObjectiveFunctionName() == "My Optimisation Problem");
     }
     
     SECTION("Resets the cache.") {
@@ -151,7 +151,7 @@ TEST_CASE("OptimisationProblem") {
     }
   }
   
-  SECTION(".getName") {
+  SECTION(".getObjectiveFunctionName") {
     // This is already covered by *SECTION(".setObjectiveFunction")*.
   }
 
