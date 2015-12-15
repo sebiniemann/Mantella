@@ -206,9 +206,9 @@ namespace mant {
                         //TODO: warning gets thrown here
                         //another workaround
                         diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
-                        tmp = arma::max(diagD_) / 1e14;
-                        C_ = C_ + tmp * arma::eye(numberOfDimensions, numberOfDimensions);
-                        diagD_ = diagD_ + tmp * arma::ones(numberOfDimensions, 1);
+                        double temp = 1.0*arma::max(diagD_) / 1e14;
+                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
+                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
                     }
                 }
                 if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
@@ -216,9 +216,9 @@ namespace mant {
                         stopFlag = true;
                     } else {
                         //TODO: warning gets thrown here
-                        tmp = arma::max(diagD_) / 1e14 - arma::min(diagD_);
-                        C_ = C_ + tmp * arma::eye(numberOfDimensions, numberOfDimensions);
-                        diagD_ = diagD_ + tmp * arma::ones(numberOfDimensions, 1);
+                        double temp = 1.0*arma::max(diagD_) / 1e14 - arma::min(diagD_);
+                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
+                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
                     }
                 }
 
