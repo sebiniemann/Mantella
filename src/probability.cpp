@@ -55,11 +55,12 @@ namespace mant {
     verify(maximalDistance > 0, "randomNeighbour: "); // TODO
     verify(minimalDistance <= maximalDistance, "randomNeighbour: "); // TODO
     
+    arma::Col<double> displacement;
     if (minimalDistance != maximalDistance) {
-      arma::Col<double> displacement = arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (maximalDistance - minimalDistance);
+      displacement = arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (maximalDistance - minimalDistance);
       displacement += arma::sign(displacement) * minimalDistance;
     } else {
-      displacement += (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * minimalDistance
+      displacement = (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * minimalDistance;
     }
     
     return parameter + displacement;
