@@ -92,10 +92,10 @@ namespace mant {
       setMaximalGlobalAttraction(maximalLocalAttraction_);
     }
     
-    numberOfParticles_ = initialParameters.n_rows;
+    numberOfParticles_ = initialParameters.n_cols;
     activeParticleIndex_ = 0;
     
-    velocities_ = arma::randu<arma::Mat<double>>(numberOfParticles_, optimisationProblem.numberOfDimensions_) * 2 - 1;
+    velocities_ = arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles_) * 2 - 1;
     velocities_ -= initialParameters;
     
     localBestSolutions_ = initialParameters;
@@ -110,7 +110,7 @@ namespace mant {
   void ParticleSwarmOptimisation::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfParticles) {
-    optimise(optimisationProblem, arma::randu<arma::Mat<double>>(numberOfParticles, optimisationProblem.numberOfDimensions_));  
+    optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));  
   }
       
   void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
