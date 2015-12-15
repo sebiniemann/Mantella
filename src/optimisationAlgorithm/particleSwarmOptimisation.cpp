@@ -51,7 +51,7 @@ namespace mant {
       return particle_.col(activeParticleIndex_);
     });
     
-    setBoundaryHandlingFunction([this] (
+    setBoundariesHandlingFunction([this] (
         const arma::Mat<double>& parameters) {
       arma::Mat<double> boundedParameters = parameters;
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
@@ -107,7 +107,7 @@ namespace mant {
     OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
 
-  void optimise(
+  void ParticleSwarmOptimisation::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfParticles) {
     optimise(optimisationProblem, arma::randu<arma::Mat<double>>(numberOfParticles, optimisationProblem.numberOfDimensions_));  

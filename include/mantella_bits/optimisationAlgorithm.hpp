@@ -27,18 +27,18 @@ namespace mant {
     void setNextParametersFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParameterFunction);
     std::string getNextParametersFunctionName() const;
-    void setBoundaryHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction,
-        const std::string& boundaryHandlingFunctionName);
-    void setBoundaryHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction);
-    std::string getBoundaryHandlingFunctionName() const;
+    void setBoundariesHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
+        const std::string& boundariesHandlingFunctionName);
+    void setBoundariesHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction);
+    std::string getBoundariesHandlingFunctionName() const;
     void setDegenerationDetectionFunction(
         std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDetectionFunction,
         const std::string& degenerationDetectionFunctionName);
     void setDegenerationDetectionFunction(
         std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDetectionFunction);
-    std::string getIsDegeneratedFunctionName() const;
+    std::string getDegenerationDetectionFunctionName() const;
     void setDegenerationHandlingFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction,
         const std::string& degenerationHandlingFunctionName);
@@ -72,8 +72,8 @@ namespace mant {
    
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction_;
     std::string nextParametersFunctionName_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction_;
-    std::string boundaryHandlingFunctionName_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
+    std::string boundariesHandlingFunctionName_;
     std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDetectionFunction_;
     std::string degenerationDetectionFunctionName_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction_;

@@ -12,7 +12,7 @@ namespace mant{
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(10));
     
-    setBoundaryHandlingFunction([this] (
+    setBoundariesHandlingFunction([this] (
         const arma::Mat<double>& parameters) {
       arma::Mat<double> boundedParameters = parameters;
       
@@ -56,27 +56,27 @@ namespace mant{
       std::cout << "  Upper bounds: " << optimisationProblem.getUpperBounds().t();
       std::cout << "  Acceptable objective value: " << acceptableObjectiveValue_ << "\n";
       std::cout << "--------------------------------------------------------------------------------\n";
-      std::cout << "  Optimisation strategy: " << nextParameterFunctionName_ << "\n";
-      std::cout << "  Boundary handling function: " << boundaryHandlingFunctionName_ << "\n";
-      std::cout << "  Degeneration detection function: " << degenerationDectectionFunctionName_ << "\n";
+      std::cout << "  Optimisation strategy: " << nextParametersFunctionName_ << "\n";
+      std::cout << "  Boundaries handling function: " << boundariesHandlingFunctionName_ << "\n";
+      std::cout << "  Degeneration detection function: " << degenerationDetectionFunctionName_ << "\n";
       std::cout << "  Degeneration handling function: " << degenerationHandlingFunctionName_ << "\n";
       std::cout << std::endl;
     }
     
     reset();
     
-    arma::Mat<double> parameters = boundaryHandlingFunction_(initialParameters);
+    arma::Mat<double> parameters = boundariesHandlingFunction_(initialParameters);
     arma::Col<double> differences = evaluate(optimisationProblem, parameters);
     
     while (!isTerminated() && !isFinished()) {
-      if (degeneratedDetectionFunction_(parameters, differences)) {
+      if (degenerationDetectionFunction_(parameters, differences)) {
         parameters = degenerationHandlingFunction_(parameters, differences);
       } else {
         parameters = nextParametersFunction_(parameters, differences);
       }
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
-      parameters = boundaryHandlingFunction_(parameters);
+      parameters = boundariesHandlingFunction_(parameters);
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
       differences = evaluate(optimisationProblem, parameters);
@@ -106,11 +106,13 @@ namespace mant{
   }
 
   void OptimisationAlgorithm::setNextParametersFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction) {
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction,
+      const std::string& nextParametersFunctionName) {
     // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
     verify(static_cast<bool>(nextParametersFunction), "setNextParametersFunction: The next parameters function must be callable.");
     
     nextParametersFunction_ = nextParametersFunction;
+    nextParametersFunctionName_ = nextParametersFunctionName;
   }
   
   void OptimisationAlgorithm::setNextParametersFunction(
@@ -119,49 +121,55 @@ namespace mant{
   }
 
   std::string OptimisationAlgorithm::getNextParametersFunctionName() const {
-    return nextParametersFunction_;
+    return nextParametersFunctionName_;
   }
   
-  void OptimisationAlgorithm::setBoundaryHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction) {
+  void OptimisationAlgorithm::setBoundariesHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
+      const std::string& boundariesHandlingFunctionName) {
     // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
-    verify(static_cast<bool>(boundaryHandlingFunction), "setBoundaryHandlingFunction: The boundary handling function must be callable.");
+    verify(static_cast<bool>(boundariesHandlingFunction), "setBoundariesHandlingFunction: The boundaries handling function must be callable.");
     
-    boundaryHandlingFunction_ = boundaryHandlingFunction;
+    boundariesHandlingFunction_ = boundariesHandlingFunction;
+    boundariesHandlingFunctionName_ = boundariesHandlingFunctionName;
   }
   
-  void OptimisationAlgorithm::setBoundaryHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction) {
-    setBoundaryHandlingFunction(boundaryHandlingFunction, "Unnamed, custom boundary handling function");
+  void OptimisationAlgorithm::setBoundariesHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction) {
+    setBoundariesHandlingFunction(boundariesHandlingFunction, "Unnamed, custom boundaries handling function");
   }
 
-  std::string OptimisationAlgorithm::getBoundaryHandlingFunctionName() const {
-    return boundaryHandlingFunctionName_;
+  std::string OptimisationAlgorithm::getBoundariesHandlingFunctionName() const {
+    return boundariesHandlingFunctionName_;
   }
   
-  void OptimisationAlgorithm::setDegenerationDectectionFunction(
-      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDectectionFunction) {
+  void OptimisationAlgorithm::setDegenerationDetectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDetectionFunction,
+      const std::string& degenerationDetectionFunctionName) {
     // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
-    verify(static_cast<bool>(degenerationDectectionFunction), "setDegenerationDectectionFunction: The degeneration detection function must be callable.");
+    verify(static_cast<bool>(degenerationDetectionFunction), "setDegenerationDetectionFunction: The degeneration detection function must be callable.");
     
-    degenerationDectectionFunction_ = degenerationDectectionFunction;
+    degenerationDetectionFunction_ = degenerationDetectionFunction;
+    degenerationDetectionFunctionName_ = degenerationDetectionFunctionName;
   }
   
-  void OptimisationAlgorithm::setDegenerationDectectionFunction(
-      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDectectionFunction) {
-    setDegenerationDectectionFunction(degenerationDectectionFunction, "Unnamed, custom degeneration detection function");
+  void OptimisationAlgorithm::setDegenerationDetectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationDetectionFunction) {
+    setDegenerationDetectionFunction(degenerationDetectionFunction, "Unnamed, custom degeneration detection function");
   }
 
-  std::string OptimisationAlgorithm::getDegenerationDectectionFunctionName() const {
-    return degenerationDectectionFunctionName_;
+  std::string OptimisationAlgorithm::getDegenerationDetectionFunctionName() const {
+    return degenerationDetectionFunctionName_;
   }
   
   void OptimisationAlgorithm::setDegenerationHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction) {
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction,
+      const std::string& degenerationHandlingFunctionName) {
     // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
     verify(static_cast<bool>(degenerationHandlingFunction), "setDegenerationHandlingFunction: The degeneration handling function must be callable.");
     
     degenerationHandlingFunction_ = degenerationHandlingFunction;
+    degenerationHandlingFunctionName_ = degenerationHandlingFunctionName;
   }
   
   void OptimisationAlgorithm::setDegenerationHandlingFunction(
