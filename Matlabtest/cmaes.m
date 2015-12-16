@@ -273,9 +273,7 @@ while isempty(stopflag)
     diagC = diag(C); 
     diagD = sqrt(diagD); % D contains standard deviations now
     % diagD = diagD / prod(diagD)^(1/N);  C = C / prod(diagD)^(2/N);
-    B
-    diagD
-    BD = B.*repmat(diagD',N,1) % O(n^2)
+    BD = B.*repmat(diagD',N,1); % O(n^2)
   end % if mod
 
   % ----- numerical error management -----
