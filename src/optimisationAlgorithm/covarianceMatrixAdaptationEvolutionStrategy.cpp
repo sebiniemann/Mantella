@@ -399,9 +399,13 @@ namespace mant {
         //what actually got used was max(stepsize) - we decided to omit this vector so diagD as a whole
         //might be irrelevant
         diagC_ = arma::square(diagD_);
+        //std::cout << "diagC_" << diagC_ << std::endl;
         B_ = arma::eye(optimisationProblem.numberOfDimensions_, optimisationProblem.numberOfDimensions_); //;B defines the coordinate system
+        //std::cout << "B_" << B_ << std::endl;
         BD_ = arma::diagmat(diagD_); //;B*D for speed up only
+        //std::cout << "BD_" << BD_ << std::endl;
         C_ = arma::diagmat(diagC_); //;covariance matrix == BD*(BD)'
+        //std::cout << "C_" << C_ << std::endl;
 
         chiN_ = std::pow(optimisationProblem.numberOfDimensions_, 0.5) *
                 (1 - 1.0 / (4 * optimisationProblem.numberOfDimensions_) + 1.0
