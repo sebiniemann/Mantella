@@ -46,7 +46,7 @@ namespace mant {
     arma::uword numberOfParticles_;
     arma::uword activeParticleIndex_;
     
-    arma::Mat<double> particle_;
+    arma::Mat<double> particles_;
     arma::Mat<double> velocities_;
     
     bool randomiseTopology_;

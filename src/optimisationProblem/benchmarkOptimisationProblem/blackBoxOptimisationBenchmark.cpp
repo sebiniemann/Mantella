@@ -25,7 +25,7 @@ namespace mant {
       setObjectiveValueTranslation(getRandomObjectiveValueTranslation());
     }
     
-    double BlackBoxOptimisationBenchmark::getBestObjectiveValue() const {
+    double BlackBoxOptimisationBenchmark::getOptimalObjectiveValue() const {
       return objectiveValueTranslation_;
     }
 

@@ -26,7 +26,7 @@ TEST_CASE("BlackBoxOptimisationBenchmark") {
     CAPTURE(objectiveValueTranslation);
     
     optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-    CHECK(optimisationProblem.getBestObjectiveValue() == Approx(objectiveValueTranslation));
+    CHECK(optimisationProblem.getOptimalObjectiveValue() == Approx(objectiveValueTranslation));
   }
   
   SECTION("Randomises the objective value translation within [-1000, 1000], using a Cauchy distribution with location 0.0 and scale 100.0") {

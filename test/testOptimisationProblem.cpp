@@ -46,11 +46,11 @@ TEST_CASE("OptimisationProblem") {
     SECTION("Updates the objective function, and names it.") {
       optimisationProblem.setObjectiveFunction(objectiveFunction, "My Optimisation Problem");
       CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter)));
-      CHECK(optimisationProblem.getName() == "My Optimisation Problem");
+      CHECK(optimisationProblem.getObjectiveFunctionName() == "My Optimisation Problem");
     }
     
     SECTION("Resets the cache.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       // Populates the cache
       optimisationProblem.setObjectiveFunction(objectiveFunction);
@@ -71,7 +71,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationProblem.setObjectiveFunction(nullptr), std::logic_error);
       }
     }
@@ -93,7 +93,7 @@ TEST_CASE("OptimisationProblem") {
     CAPTURE(parameters);
     
     SECTION("Works with caching enabled.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
@@ -102,7 +102,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Works with caching disabled.") {
-      mant::cacheSamples = false; 
+      mant::isCachingSamples = false; 
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
@@ -140,7 +140,7 @@ TEST_CASE("OptimisationProblem") {
     }
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the number of elements is unequal to than the problem dimension.") {
+      SECTION("Throws an exception, if the number of elements is unequal to than the problem dimension.") {
         const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
         CAPTURE(numberOfDimensions);
         const arma::Col<double> parameter = getContinuousRandomNumbers(differentNumberOfDimensions);
@@ -148,18 +148,10 @@ TEST_CASE("OptimisationProblem") {
         
         CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
       }
-    
-      SECTION("Throw an exception, if no callable objective function is set.") {
-        mant::OptimisationProblem emptyOptimisationProblem(numberOfDimensions);
-        const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-        
-        CHECK_THROWS_AS(emptyOptimisationProblem.getObjectiveValue(parameter), std::logic_error);
-      }
     }
   }
   
-  SECTION(".getName") {
+  SECTION(".getObjectiveFunctionName") {
     // This is already covered by *SECTION(".setObjectiveFunction")*.
   }
 
@@ -175,7 +167,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Does not reset the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -214,7 +206,7 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the number of bounds is unequal to the problem dimension.") {
+      SECTION("Throws an exception, if the number of bounds is unequal to the problem dimension.") {
         const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(differentNumberOfDimensions);
@@ -223,7 +215,7 @@ TEST_CASE("OptimisationProblem") {
         CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
       }
       
-      SECTION("Throw an exception, if any bound is infinite.") {
+      SECTION("Throws an exception, if any bound is infinite.") {
         arma::Col<double> lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
         lowerBounds(0) = arma::datum::inf;
         CAPTURE(lowerBounds);
@@ -249,7 +241,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Does not reset the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -288,7 +280,7 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the number of bounds is unequal to the problem dimension.") {
+      SECTION("Throws an exception, if the number of bounds is unequal to the problem dimension.") {
         const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& upperBounds = getContinuousRandomNumbers(differentNumberOfDimensions);
@@ -297,7 +289,7 @@ TEST_CASE("OptimisationProblem") {
         CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
       }
       
-      SECTION("Throw an exception, if any bound is infinite.") {
+      SECTION("Throws an exception, if any bound is infinite.") {
         arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
         upperBounds(0) = arma::datum::inf;
         CAPTURE(upperBounds);
@@ -316,7 +308,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -368,25 +360,25 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the provided vector is not a compatible permutation matrix.") {
+      SECTION("Throws an exception, if the provided vector is not a compatible permutation matrix.") {
         arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
         CAPTURE(parameterPermutation);
         
-        SECTION("Throw an exception, if the permutation matrix's size is unequal to the number of dimensions.") {
+        SECTION("Throws an exception, if the permutation matrix's size is unequal to the number of dimensions.") {
           parameterPermutation.resize(numberOfDimensions - 1);
           CAPTURE(parameterPermutation);
 
           CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
         }
 
-        SECTION("Throw an exception, if any element of the permutation matrix is not within [0, numberOfDimensions - 1].") {
+        SECTION("Throws an exception, if any element of the permutation matrix is not within [0, numberOfDimensions - 1].") {
           parameterPermutation(0) = numberOfDimensions;
           CAPTURE(parameterPermutation);
 
           CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
         }
 
-        SECTION("Throw an exception, if the elements in the permutation matrix are not unique.") {
+        SECTION("Throws an exception, if the elements in the permutation matrix are not unique.") {
           parameterPermutation(0) = parameterPermutation(1);
           CAPTURE(parameterPermutation);
 
@@ -401,7 +393,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -450,7 +442,7 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the number of elements is unequal to the problem dimension.") {
+      SECTION("Throws an exception, if the number of elements is unequal to the problem dimension.") {
         const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(differentNumberOfDimensions);
@@ -459,7 +451,7 @@ TEST_CASE("OptimisationProblem") {
         CHECK_THROWS_AS(optimisationProblem.setParameterScaling(parameterScaling), std::logic_error);
       }
       
-      SECTION("Throw an exception, if any parameter is infinite.") {
+      SECTION("Throws an exception, if any parameter is infinite.") {
         arma::Col<double> parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
         parameterScaling(0) = arma::datum::inf;
         CAPTURE(parameterScaling);
@@ -474,7 +466,7 @@ TEST_CASE("OptimisationProblem") {
         
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -523,7 +515,7 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the number of elements is unequal to the problem dimension.") {
+      SECTION("Throws an exception, if the number of elements is unequal to the problem dimension.") {
         const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(differentNumberOfDimensions);
@@ -532,7 +524,7 @@ TEST_CASE("OptimisationProblem") {
         CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(parameterTranslation), std::logic_error);
       }
       
-      SECTION("Throw an exception, if any parameter is infinite.") {
+      SECTION("Throws an exception, if any parameter is infinite.") {
         arma::Col<double> parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
         parameterTranslation(0) = arma::datum::inf;
         CAPTURE(parameterTranslation);
@@ -547,7 +539,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -596,25 +588,25 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the provided matrix is not a compatible rotation matrix.") {
+      SECTION("Throws an exception, if the provided matrix is not a compatible rotation matrix.") {
       arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
         CAPTURE(parameterRotation);
         
-        SECTION("Throw an exception, if the provided matrix's number of rows is unequal to the problem dimensions.") {
+        SECTION("Throws an exception, if the provided matrix's number of rows is unequal to the problem dimensions.") {
           parameterRotation.resize(parameterRotation.n_rows - 1, parameterRotation.n_cols - 1);
           CAPTURE(parameterRotation);
 
           CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
         }
       
-        SECTION("Throw an exception, if the provided matrix is not square.") {
+        SECTION("Throws an exception, if the provided matrix is not square.") {
           parameterRotation.shed_col(0);
           CAPTURE(parameterRotation);
 
           CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
         }
 
-        SECTION("Throw an exception, if the provided matrix has not an determinant of (nearly) -1 or 1.") {
+        SECTION("Throws an exception, if the provided matrix has not an determinant of (nearly) -1 or 1.") {
           // Increasing any element of a orthonormal rotation matrix by 1 should result in a determinant unequal to 1 or -1.
           parameterRotation(0, 0) += 1;
           CAPTURE(parameterRotation);
@@ -622,7 +614,7 @@ TEST_CASE("OptimisationProblem") {
           CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
         }
 
-        SECTION("Throw an exception, if its transpose is not (nearly) equal to its inverse.") {
+        SECTION("Throws an exception, if its transpose is not (nearly) equal to its inverse.") {
           // Increasing any element of a orthonormal rotation matrix by 1 should result in an inequality transpose and inverse.
           parameterRotation(0, parameterRotation.n_cols - 1) += 1;
           CAPTURE(parameterRotation);
@@ -638,7 +630,7 @@ TEST_CASE("OptimisationProblem") {
         
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -687,7 +679,7 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the parameter is infinite.") {
+      SECTION("Throws an exception, if the parameter is infinite.") {
         CHECK_THROWS_AS(optimisationProblem.setObjectiveValueScaling(arma::datum::inf), std::logic_error);
       }
     }
@@ -698,7 +690,7 @@ TEST_CASE("OptimisationProblem") {
     
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       optimisationProblem.setObjectiveFunction([] (
           const arma::Col<double>& parameter) {
@@ -747,7 +739,7 @@ TEST_CASE("OptimisationProblem") {
 #endif
 
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the parameter is infinite.") {
+      SECTION("Throws an exception, if the parameter is infinite.") {
         CHECK_THROWS_AS(optimisationProblem.setObjectiveValueTranslation(arma::datum::inf), std::logic_error);
       }
     }
@@ -755,7 +747,7 @@ TEST_CASE("OptimisationProblem") {
   
   SECTION(".getCachedSamples") {
     SECTION("Returns all (unique) samples.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -783,7 +775,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Is empty, if the caching is disabled.") {
-      mant::cacheSamples = false;
+      mant::isCachingSamples = false;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -807,7 +799,7 @@ TEST_CASE("OptimisationProblem") {
   
   SECTION(".getNumberOfEvaluations") {
     SECTION("Returns the number of (all) function evaluations, including the duplicated ones.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -836,7 +828,7 @@ TEST_CASE("OptimisationProblem") {
   
   SECTION(".getNumberOfDistinctEvaluations") {
     SECTION("Returns only the distinct (unique) number of function evaluations.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {
@@ -863,7 +855,7 @@ TEST_CASE("OptimisationProblem") {
     }
     
     SECTION("Returns the number of (all) function evaluations, including the duplicated ones, if caching is deactivated.") {
-      mant::cacheSamples = false;
+      mant::isCachingSamples = false;
       
       auto objectiveFunction = [] (
           const arma::Col<double>& parameter) {

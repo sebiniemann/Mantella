@@ -8,11 +8,11 @@ namespace mant{
   OptimisationAlgorithm::OptimisationAlgorithm() {
     reset();
         
-    setAcceptableObjectiveValue(std::numeric_limits<double>::max());
+    setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
-    setMaximalDuration(std::chrono::seconds(30));
+    setMaximalDuration(std::chrono::seconds(10));
     
-    setBoundaryHandlingFunction([this] (
+    setBoundariesHandlingFunction([this] (
         const arma::Mat<double>& parameters) {
       arma::Mat<double> boundedParameters = parameters;
       
@@ -24,14 +24,16 @@ namespace mant{
       return boundedParameters;
     });
     
-    setIsDegeneratedFunction([this] (
+    setDegenerationDetectionFunction([this] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return false;
     });
     
     setDegenerationHandlingFunction([this] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return arma::randu<arma::Mat<double>>(arma::size(parameters));
     });
@@ -48,23 +50,38 @@ namespace mant{
   void OptimisationAlgorithm::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
+    if (::mant::isVerbose) {
+      std::cout << "================================================================================\n";
+      std::cout << "Solving optimisation problem: " << optimisationProblem.getObjectiveFunctionName() << "\n";
+      std::cout << "  Number of dimensions: " << optimisationProblem.numberOfDimensions_ << "\n";
+      std::cout << "  Lower bounds: " << optimisationProblem.getLowerBounds().t();
+      std::cout << "  Upper bounds: " << optimisationProblem.getUpperBounds().t();
+      std::cout << "  Acceptable objective value: " << acceptableObjectiveValue_ << "\n";
+      std::cout << "--------------------------------------------------------------------------------\n";
+      std::cout << "  Optimisation strategy: " << nextParametersFunctionName_ << "\n";
+      std::cout << "  Boundaries handling function: " << boundariesHandlingFunctionName_ << "\n";
+      std::cout << "  Degeneration detection function: " << degenerationDetectionFunctionName_ << "\n";
+      std::cout << "  Degeneration handling function: " << degenerationHandlingFunctionName_ << "\n";
+      std::cout << std::endl;
+    }
+    
     reset();
     
-    arma::Mat<double> parameters = boundaryHandlingFunction_(initialParameters);
-    arma::Col<double> differences = evaluate(optimisationProblem, parameters);
+    arma::Mat<double> parameters = boundariesHandlingFunction_(initialParameters);
+    std::pair<arma::Col<double>, arma::Col<double>> objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
     
     while (!isTerminated() && !isFinished()) {
-      if (isDegeneratedFunction_(parameters, differences)) {
-        parameters = degenerationHandlingFunction_(parameters, differences);
+      if (degenerationDetectionFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
+        parameters = degenerationHandlingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
       } else {
-        parameters = nextParametersFunction_(parameters, differences);
+        parameters = nextParametersFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
       }
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
-      parameters = boundaryHandlingFunction_(parameters);
+      parameters = boundariesHandlingFunction_(parameters);
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
       
-      differences = evaluate(optimisationProblem, parameters);
+      objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
       
       // Communication
       
@@ -72,27 +89,98 @@ namespace mant{
     
     // Sync best parameter
     
+        
+    if (::mant::isVerbose) {
+      if (isFinished()) {
+        std::cout << "  Finished with an acceptable solution.\n";
+      } else if (isTerminated()) {
+        std::cout << "  Terminated (run out of time or iterations).\n";
+      }
+      
+      std::cout << "    Took " << duration_.count() << " / " << maximalDuration_.count() << " milliseconds" <<std::endl;
+      std::cout << "    Took " << numberOfIterations_ << " / " << maximalNumberOfIterations_ << " iterations" <<std::endl;
+      std::cout << "    Difference to the acceptable objective value: " << bestObjectiveValue_ - acceptableObjectiveValue_ << std::endl;
+      std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
+      std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
+    }
+        
     duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
   }
 
   void OptimisationAlgorithm::setNextParametersFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction) {
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction,
+      const std::string& nextParametersFunctionName) {
+    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
+    verify(static_cast<bool>(nextParametersFunction), "setNextParametersFunction: The next parameters function must be callable.");
+    
     nextParametersFunction_ = nextParametersFunction;
+    nextParametersFunctionName_ = nextParametersFunctionName;
   }
   
-  void OptimisationAlgorithm::setBoundaryHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction) {
-    boundaryHandlingFunction_ = boundaryHandlingFunction;
+  void OptimisationAlgorithm::setNextParametersFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction) {
+    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next parameter function");
+  }
+
+  std::string OptimisationAlgorithm::getNextParametersFunctionName() const {
+    return nextParametersFunctionName_;
   }
   
-  void OptimisationAlgorithm::setIsDegeneratedFunction(
-      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction) {
-    isDegeneratedFunction_ = isDegeneratedFunction;
+  void OptimisationAlgorithm::setBoundariesHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
+      const std::string& boundariesHandlingFunctionName) {
+    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
+    verify(static_cast<bool>(boundariesHandlingFunction), "setBoundariesHandlingFunction: The boundaries handling function must be callable.");
+    
+    boundariesHandlingFunction_ = boundariesHandlingFunction;
+    boundariesHandlingFunctionName_ = boundariesHandlingFunctionName;
+  }
+  
+  void OptimisationAlgorithm::setBoundariesHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction) {
+    setBoundariesHandlingFunction(boundariesHandlingFunction, "Unnamed, custom boundaries handling function");
+  }
+
+  std::string OptimisationAlgorithm::getBoundariesHandlingFunctionName() const {
+    return boundariesHandlingFunctionName_;
+  }
+  
+  void OptimisationAlgorithm::setDegenerationDetectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction,
+      const std::string& degenerationDetectionFunctionName) {
+    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
+    verify(static_cast<bool>(degenerationDetectionFunction), "setDegenerationDetectionFunction: The degeneration detection function must be callable.");
+    
+    degenerationDetectionFunction_ = degenerationDetectionFunction;
+    degenerationDetectionFunctionName_ = degenerationDetectionFunctionName;
+  }
+  
+  void OptimisationAlgorithm::setDegenerationDetectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction) {
+    setDegenerationDetectionFunction(degenerationDetectionFunction, "Unnamed, custom degeneration detection function");
+  }
+
+  std::string OptimisationAlgorithm::getDegenerationDetectionFunctionName() const {
+    return degenerationDetectionFunctionName_;
   }
   
   void OptimisationAlgorithm::setDegenerationHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction) {
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction,
+      const std::string& degenerationHandlingFunctionName) {
+    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
+    verify(static_cast<bool>(degenerationHandlingFunction), "setDegenerationHandlingFunction: The degeneration handling function must be callable.");
+    
     degenerationHandlingFunction_ = degenerationHandlingFunction;
+    degenerationHandlingFunctionName_ = degenerationHandlingFunctionName;
+  }
+  
+  void OptimisationAlgorithm::setDegenerationHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction) {
+    setDegenerationHandlingFunction(degenerationHandlingFunction, "Unnamed, custom degeneration handling function");
+  }
+
+  std::string OptimisationAlgorithm::getDegenerationHandlingFunctionName() const {
+    return degenerationHandlingFunctionName_;
   }
 
   void OptimisationAlgorithm::setAcceptableObjectiveValue(
@@ -138,23 +226,34 @@ namespace mant{
     return samplingHistory_;
   }
   
-  arma::Col<double> OptimisationAlgorithm::evaluate(
+  std::pair<arma::Col<double>, arma::Col<double>> OptimisationAlgorithm::evaluate(
       OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& parameters) {
+    const double previousBestObjectiveValue = bestObjectiveValue_;
+    
+    arma::Col<double> objectiveValues(parameters.n_cols);
     arma::Col<double> differences(parameters.n_cols);
+    
     for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
       const arma::Col<double>& parameter = parameters.col(n);
     
-      const double objectiveValue = optimisationProblem.getObjectiveValue(parameter);
-      const double difference = objectiveValue - bestObjectiveValue_;
+      const double objectiveValue = optimisationProblem.getNormalisedObjectiveValue(parameter);
       
-      if (::mant::recordSamplingHistory) {
+      if (::mant::isRecordingSampling) {
         samplingHistory_.push_back({parameter, objectiveValue});
       }
       
-      differences(n) = difference;
+      objectiveValues(n) = objectiveValue;
+      differences(n) = objectiveValue - previousBestObjectiveValue;
       
-      if (difference < 0) {
+      if (objectiveValue < bestObjectiveValue_) {
+        if (::mant::isVerbose) {
+          std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Found better solution.\n";
+          std::cout << "    Difference to the previous best objective value: " << objectiveValue - bestObjectiveValue_ << std::endl;
+          std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
+          std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
+        }
+        
         bestParameter_ = parameter;
         bestObjectiveValue_ = objectiveValue;
         
@@ -166,12 +265,12 @@ namespace mant{
       duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
     }
 
-    return differences;
+    return {objectiveValues, differences};
   }
   
   void OptimisationAlgorithm::reset() {
     numberOfIterations_  = 0;
-    bestObjectiveValue_ = std::numeric_limits<double>::max();
+    bestObjectiveValue_ = arma::datum::inf;
     bestParameter_.reset();
     duration_ = std::chrono::microseconds(0);
     initialTimePoint_ = std::chrono::steady_clock::now();

@@ -18,54 +18,51 @@ TEST_CASE("OptimisationAlgorithm") {
   
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     
-    optimisationAlgorithm.setMaximalNumberOfIterations(1000);
-    optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
+    optimisationAlgorithm.setNextParametersFunction([] (
+        const arma::Mat<double>& parameters,
+        const arma::Col<double>& differences) {
+      return arma::randu<arma::Col<double>>(parameters.n_rows);
+    });
+    optimisationAlgorithm.optimise(optimisationProblem, arma::randu<arma::Col<double>>(numberOfDimensions));
+    
     
   }
   
   SECTION(".setNextParametersFunction") {
-    SECTION("Updates the next parameter function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunction(nullptr), std::logic_error);
       }
     }
   }
   
   SECTION(".setBoundaryHandlingFunction") {
-    SECTION("Updates the boundary handling function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setBoundaryHandlingFunction(nullptr), std::logic_error);
       }
     }
   }
   
   SECTION(".setIsDegeneratedFunction") {
-    SECTION("Updates the next parameter function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
-        CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunction(nullptr), std::logic_error);
+      SECTION("Throws an exception, if no callable function is set.") {
+        CHECK_THROWS_AS(optimisationAlgorithm.setIsDegeneratedFunction(nullptr), std::logic_error);
       }
     }
   }
   
   SECTION(".setDegenerationHandlingFunction") {
-    SECTION("Updates the degeneration handling function.") {
-    
-    }
+    // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if no callable function is set.") {
+      SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationAlgorithm.setDegenerationHandlingFunction(nullptr), std::logic_error);
       }
     }
@@ -97,11 +94,7 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Exception tests:") {
-      SECTION("Throw an exception, if the maximal duration is less than or equal to 0.") {
-      
-      }
-      
-      SECTION("Throw an exception, if the maximal duration is infinite.") {
+      SECTION("Throws an exception, if the maximal duration is less than or equal to 0.") {
       
       }
     }
@@ -141,18 +134,20 @@ TEST_CASE("OptimisationAlgorithm") {
     }
     
     SECTION("Is empty, if the sample history recording is disabled.") {
-      mant::recordSamplingHistory = false;
+      mant::isRecordingSampling = false;
       
       arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
       
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-      optimisationProblem.setObjectiveFunction([] (
-          const arma::Col<double>& parameter) {
-        return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
-      });
+      mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
         
-      optimisationAlgorithm.optimise(optimisationProblem, arma::Mat<double>());
+      optimisationAlgorithm.setNextParametersFunction([] (
+          const arma::Mat<double>& parameters,
+          const arma::Col<double>& differences) {
+        return arma::randu<arma::Col<double>>(parameters.n_rows);
+      });
+      optimisationAlgorithm.setAcceptableObjectiveValue(optimisationProblem.getOptimalObjectiveValue() + 1e-3);
+      optimisationAlgorithm.optimise(optimisationProblem, arma::randu<arma::Col<double>>(numberOfDimensions));
       
       CHECK(optimisationAlgorithm.getSamplingHistory().size() == 0);
     }

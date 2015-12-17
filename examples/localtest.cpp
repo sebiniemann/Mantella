@@ -64,7 +64,9 @@ int main() {
   //benchmarking our cmaes
   std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(5);
   arma::Col<double> medians(optimisationProblems.size());
-  for(unsigned int i = 0; i < optimisationProblems.size(); i++) {
+  arma::Col<double> startingPoint = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
+  
+  for(unsigned int i = 0; i < 6; i++) {
     std::cout << "function " << i+1 << std::endl;
     
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem = *optimisationProblems.at(i);
@@ -79,7 +81,7 @@ int main() {
       algo.setMaximalNumberOfIterations(20000);
       algo.setAcceptableObjectiveValue(acceptableObjectiveValue);
       algo.setStepSize(2);
-      algo.optimise(optimisationProblem,8 * arma::randu(optimisationProblem.numberOfDimensions_) - 4);
+      algo.optimise(optimisationProblem,startingPoint);
       curMedian(trial) = algo.getNumberOfIterations();          
 
       // std::cout << algo.getNumberOfIterations() << std::endl;

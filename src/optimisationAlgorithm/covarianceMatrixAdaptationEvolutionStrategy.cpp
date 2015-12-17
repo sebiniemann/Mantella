@@ -23,17 +23,16 @@ namespace mant {
         //TODO: shouldnt this be done somewhere else? and always?
         mant::Rng::setRandomSeed();
         //TODO: temporary overwrite for testing
-        setBoundaryHandlingFunction([this] (const arma::Mat<double>& parameters) {
+        setBoundariesHandlingFunction([this] (const arma::Mat<double>& parameters) {
             return parameters;
          });
         
-        setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
+        setNextParametersFunction([this] (const arma::Mat<double>& parameters,const arma::Col<double>& objectiveValues, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
             
             newGenerationValid_ = parameters; //arxvalid
             //std::cout << "newGenerationValid_" << newGenerationValid_ << std::endl;
-            //TODO: using the differences now, it should have no effect on CMAES as far as i can see
-            fitnessRaw_ = differences;
+            fitnessRaw_ = objectiveValues;
             //std::cout << "fitnessRaw_" << fitnessRaw_ << std::endl;
 
             //TODO: this stopflag is more sophisticated in the matlab code.
@@ -205,6 +204,7 @@ namespace mant {
                     } else {
                         //TODO: warning gets thrown here
                         //another workaround
+                        std::cout << "eigenvalue smaller zero" << std::endl;
                         diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
                         double temp = 1.0*arma::max(diagD_) / 1e14;
                         C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
@@ -216,6 +216,7 @@ namespace mant {
                         stopFlag = true;
                     } else {
                         //TODO: warning gets thrown here
+                        std::cout << "condition of c at upper limit" << std::endl;
                         double temp = 1.0*arma::max(diagD_) / 1e14 - arma::min(diagD_);
                         C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
                         diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
@@ -244,8 +245,8 @@ namespace mant {
                     stopFlag = true;
                 } else {
                     //TODO: warning gets thrown here
-                    C_ = C_ + (ccov1_ + ccovmu_) * arma::diagmat(diagC_ % (xmean_ == xmean_ + 0.2 * sigma_ * arma::sqrt(diagC_)));
-                    sigma_ = sigma_ * std::exp(0.05 + cs_ / damping_);
+                    //C_ = C_ + (ccov1_ + ccovmu_) * arma::diagmat(diagC_ % (xmean_ == xmean_ + 0.2 * sigma_ * arma::sqrt(diagC_)));
+                    //sigma_ = sigma_ * std::exp(0.05 + cs_ / damping_);
                 }
             }
             //;Adjust step size in case of (numerical) precision problem 
@@ -254,7 +255,7 @@ namespace mant {
                 if (stopOnWarnings_) {
                     stopFlag = true;
                 } else {
-                    sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
+                    //sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
                 }
             }
             //;Adjust step size in case of equal function values (flat fitness)
@@ -266,7 +267,7 @@ namespace mant {
                         stopFlag = true;
                     }
                 } else {
-                    sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
+                    //sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
                 }
             }
             //;Adjust step size in case of equal function values
@@ -275,7 +276,7 @@ namespace mant {
                 if (stopOnWarnings_) {
                     stopFlag = true;
                 } else {
-                    sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
+                    //sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
                 }
             }
 

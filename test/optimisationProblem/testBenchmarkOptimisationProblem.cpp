@@ -16,7 +16,7 @@ class TestBenchmarkOptimisationProblem : public mant::BenchmarkOptimisationProbl
     using mant::BenchmarkOptimisationProblem::BenchmarkOptimisationProblem;
     
     // Increases the visibility of the internal objective function, to bypass general modification, made by the parent class.
-    double getBestObjectiveValue() const override {
+    double getOptimalObjectiveValue() const override {
       return objectiveValueTranslation_;
     }
 };
@@ -27,13 +27,13 @@ TEST_CASE("BenchmarkOptimisationProblem") {
   
   TestBenchmarkOptimisationProblem optimisationProblem(numberOfDimensions);
   
-  SECTION(".getBestObjectiveValue") {
+  SECTION(".getOptimalObjectiveValue") {
     SECTION("Returns the best (reachable) objective value.") {
       const double& objectiveValueTranslation = getContinuousRandomNumber();
       CAPTURE(objectiveValueTranslation);
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
       
-      CHECK(optimisationProblem.getBestObjectiveValue() == Approx(objectiveValueTranslation));
+      CHECK(optimisationProblem.getOptimalObjectiveValue() == Approx(objectiveValueTranslation));
     }
   }
 }
