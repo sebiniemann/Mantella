@@ -23,17 +23,16 @@ namespace mant {
         //TODO: shouldnt this be done somewhere else? and always?
         mant::Rng::setRandomSeed();
         //TODO: temporary overwrite for testing
-        setBoundaryHandlingFunction([this] (const arma::Mat<double>& parameters) {
+        setBoundariesHandlingFunction([this] (const arma::Mat<double>& parameters) {
             return parameters;
          });
         
-        setNextParametersFunction([this] (const arma::Mat<double>& parameters, const arma::Col<double>& differences) {
+        setNextParametersFunction([this] (const arma::Mat<double>& parameters,const arma::Col<double>& objectiveValues, const arma::Col<double>& differences) {
             arma::uword numberOfDimensions = parameters.n_rows;
             
             newGenerationValid_ = parameters; //arxvalid
             //std::cout << "newGenerationValid_" << newGenerationValid_ << std::endl;
-            //TODO: using the differences now, it should have no effect on CMAES as far as i can see
-            fitnessRaw_ = differences;
+            fitnessRaw_ = objectiveValues;
             //std::cout << "fitnessRaw_" << fitnessRaw_ << std::endl;
 
             //TODO: this stopflag is more sophisticated in the matlab code.
