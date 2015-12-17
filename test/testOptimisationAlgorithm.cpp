@@ -20,6 +20,7 @@ TEST_CASE("OptimisationAlgorithm") {
     
     optimisationAlgorithm.setNextParametersFunction([] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return arma::randu<arma::Col<double>>(parameters.n_rows);
     });
@@ -43,7 +44,7 @@ TEST_CASE("OptimisationAlgorithm") {
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
-        CHECK_THROWS_AS(optimisationAlgorithm.setBoundaryHandlingFunction(nullptr), std::logic_error);
+        CHECK_THROWS_AS(optimisationAlgorithm.setBoundariesHandlingFunction(nullptr), std::logic_error);
       }
     }
   }
@@ -53,7 +54,7 @@ TEST_CASE("OptimisationAlgorithm") {
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
-        CHECK_THROWS_AS(optimisationAlgorithm.setIsDegeneratedFunction(nullptr), std::logic_error);
+        CHECK_THROWS_AS(optimisationAlgorithm.setDegenerationDetectionFunction(nullptr), std::logic_error);
       }
     }
   }
@@ -143,6 +144,7 @@ TEST_CASE("OptimisationAlgorithm") {
         
       optimisationAlgorithm.setNextParametersFunction([] (
           const arma::Mat<double>& parameters,
+          const arma::Col<double>& objectiveValues,
           const arma::Col<double>& differences) {
         return arma::randu<arma::Col<double>>(parameters.n_rows);
       });
