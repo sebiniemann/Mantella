@@ -154,6 +154,7 @@ while isempty(stopflag)
     % Resample, until fitness is not NaN
     while isnan(fitness.raw(k))
         arz(:,k) = randn(N,1); % (re)sample
+        %arz(:,k) = ones(N,1);
           arx(:,k) = xmean + sigma * (BD * arz(:,k));                % Eq. (1)
       
         arxvalid(:,k) = arx(:,k);
@@ -269,40 +270,54 @@ while isempty(stopflag)
     [B,tmp] = eig(C);     % eigen decomposition, B==normalized eigenvectors
                           % effort: approx. 15*N matrix-vector multiplications
     diagD = diag(tmp);
+
+    % limit condition of C to 1e14 + 1
+    if min(diagD) <= 0
+	  warning(['Iteration ' num2str(countiter) ...
+		   ': Eigenvalue (smaller) zero']);
+	  diagD(diagD<0) = 0;
+	  tmp = max(diagD)/1e14;
+	  C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
+    end
+    if max(diagD) > 1e14*min(diagD) 
+	  warning(['Iteration ' num2str(countiter) ': condition of C ' ...
+		   'at upper limit' ]);
+	  tmp = max(diagD)/1e14 - min(diagD);
+	  C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
+    end
     
     diagC = diag(C); 
     diagD = sqrt(diagD); % D contains standard deviations now
-    % diagD = diagD / prod(diagD)^(1/N);  C = C / prod(diagD)^(2/N);
     BD = B.*repmat(diagD',N,1); % O(n^2)
   end % if mod
 
   % ----- numerical error management -----
   % Adjust maximal coordinate axis deviations
   if any(sigma*sqrt(diagC) > maxdx)
-    sigma = min(maxdx ./ sqrt(diagC));
+    %sigma = min(maxdx ./ sqrt(diagC));
   end
   % Adjust minimal coordinate axis deviations
   if any(sigma*sqrt(diagC) < mindx)
-    sigma = max(mindx ./ sqrt(diagC)) * exp(0.05+cs/damps); 
+    %sigma = max(mindx ./ sqrt(diagC)) * exp(0.05+cs/damps); 
   end
   % Adjust too low coordinate axis deviations
   if any(xmean == xmean + 0.2*sigma*sqrt(diagC)) 
-        C = C + (ccov1+ccovmu) * diag(diagC .* ...
-                                      (xmean == xmean + 0.2*sigma*sqrt(diagC)));
-      sigma = sigma * exp(0.05+cs/damps); 
+        %C = C + (ccov1+ccovmu) * diag(diagC .* ...
+        %                              (xmean == xmean + 0.2*sigma*sqrt(diagC)));
+      %sigma = sigma * exp(0.05+cs/damps); 
   end
   % Adjust step size in case of (numerical) precision problem 
     tmp = 0.1*sigma*BD(:,1+floor(mod(countiter,N)));
   if all(xmean == xmean + tmp)
-	sigma = sigma * exp(0.2+cs/damps); 
+	%sigma = sigma * exp(0.2+cs/damps); 
   end
   % Adjust step size in case of equal function values (flat fitness)
   if fitness.sel(1) == fitness.sel(1+ceil(0.1+lambda/4))
-      sigma = sigma * exp(0.2+cs/damps); 
+      %sigma = sigma * exp(0.2+cs/damps); 
   end
   % Adjust step size in case of equal function values
   if countiter > 2 && myrange([fitness.hist fitness.sel(1)]) == 0  
-	sigma = sigma * exp(0.2+cs/damps); 
+	%sigma = sigma * exp(0.2+cs/damps); 
   end
     
   % ----- end numerical error management -----
