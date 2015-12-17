@@ -27,14 +27,14 @@ namespace mant {
     // Objective
     void setObjectiveFunction(
         const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
-        const std::string& name);
+        const std::string& objectiveFunctionName);
     void setObjectiveFunction(
         const std::function<double(const arma::Col<double>& parameter)> objectiveFunction);
+    std::string getObjectiveFunctionName() const;
     double getObjectiveValue(
         const arma::Col<double>& parameter);
     double getNormalisedObjectiveValue(
         const arma::Col<double>& parameter);
-    std::string getName() const;
 
     // Constraints
     void setLowerBounds(
@@ -76,7 +76,7 @@ namespace mant {
 
    protected:
     std::function<double(const arma::Col<double>&)> objectiveFunction_;
-    std::string name_;
+    std::string objectiveFunctionName_;
 
     arma::Col<double> lowerBounds_;
     arma::Col<double> upperBounds_;

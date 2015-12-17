@@ -32,29 +32,36 @@ namespace mant {
 
   void OptimisationProblem::setObjectiveFunction(
       const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
-      const std::string& name) {
+      const std::string& objectiveFunctionName) {
+    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
+    verify(static_cast<bool>(objectiveFunction), "setObjectiveFunction: The objective function must be callable.");
+      
     objectiveFunction_ = objectiveFunction;
-    name_ = name;
+    objectiveFunctionName_ = objectiveFunctionName;
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-
+  
   void OptimisationProblem::setObjectiveFunction(
       const std::function<double(const arma::Col<double>& parameter)> objectiveFunction) {
-    setObjectiveFunction(objectiveFunction, "Unnamed custom problem");
+    setObjectiveFunction(objectiveFunction, "Unnamed, custom optimisation problem");
+  }
+  
+  std::string OptimisationProblem::getObjectiveFunctionName() const {
+    return objectiveFunctionName_;
   }
 
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
-    // Using the *operator bool* to checks whether *objectiveFunction_* is empty (not callable) or not.
-    verify(static_cast<bool>(objectiveFunction_), "getObjectiveValue: The objective function must be callable.");
+    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
+    assert(static_cast<bool>(objectiveFunction_));
     verify(parameter.n_elem == numberOfDimensions_, "getObjectiveValue: The number of elements must be equal to the number of dimensions.");
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
     
-    if (::mant::cacheSamples) {
+    if (::mant::isCachingSamples) {
       // Check if the result is already cached.
       const auto n = cachedSamples_.find(parameter);
       if (n == cachedSamples_.cend()) {
@@ -85,10 +92,6 @@ namespace mant {
   double OptimisationProblem::getNormalisedObjectiveValue(
       const arma::Col<double>& parameter) {
     return getObjectiveValue(lowerBounds_ + parameter % (upperBounds_ - lowerBounds_));
-  }
-  
-  std::string OptimisationProblem::getName() const {
-    return name_;
   }
   
   void OptimisationProblem::setLowerBounds(
@@ -200,7 +203,7 @@ namespace mant {
     return parameterRotation_;
   }
 
-  void OptimisationProblem::OptimisationProblem::setObjectiveValueScaling(
+  void OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
     verify(std::isfinite(objectiveValueScaling), "setObjectiveValueScaling: The objective value scaling must be finite.");
 

@@ -17,7 +17,7 @@ TEST_CASE("RandomSearch") {
       optimisationProblem.setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 200 - 100);
       optimisationProblem.setUpperBounds(optimisationProblem.getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 100 + 0.01);
 
-      mant::recordSamplingHistory = true;
+      mant::isRecordingSampling = true;
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.setMaximalNumberOfIterations(100000);
       randomSearch.optimise();

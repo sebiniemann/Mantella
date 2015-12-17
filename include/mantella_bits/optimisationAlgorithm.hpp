@@ -22,13 +22,29 @@ namespace mant {
         const arma::Mat<double>& initialParameters);
         
     void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParameterFunction);
-    void setBoundaryHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction);
-    void setIsDegeneratedFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction);
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
+        const std::string& nextParametersFunctionName);
+    void setNextParametersFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction);
+    std::string getNextParametersFunctionName() const;
+    void setBoundariesHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
+        const std::string& boundariesHandlingFunctionName);
+    void setBoundariesHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction);
+    std::string getBoundariesHandlingFunctionName() const;
+    void setDegenerationDetectionFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction,
+        const std::string& degenerationDetectionFunctionName);
+    void setDegenerationDetectionFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction);
+    std::string getDegenerationDetectionFunctionName() const;
     void setDegenerationHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction);
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction,
+        const std::string& degenerationHandlingFunctionName);
+    void setDegenerationHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction);
+    std::string getDegenerationHandlingFunctionName() const;
         
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
@@ -54,10 +70,14 @@ namespace mant {
     int nodeRank_;
     int numberOfNodes_;
    
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> nextParametersFunction_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundaryHandlingFunction_;
-    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> isDegeneratedFunction_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& differences)> degenerationHandlingFunction_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
+    std::string nextParametersFunctionName_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
+    std::string boundariesHandlingFunctionName_;
+    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction_;
+    std::string degenerationDetectionFunctionName_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction_;
+    std::string degenerationHandlingFunctionName_;
 
     double acceptableObjectiveValue_;
 
@@ -76,7 +96,7 @@ namespace mant {
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
     
-    arma::Col<double> evaluate(
+    std::pair<arma::Col<double>, arma::Col<double>> evaluate(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& parameters);
   };

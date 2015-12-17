@@ -8,7 +8,7 @@ namespace mant {
    public:
     using OptimisationProblem::OptimisationProblem;
 
-    virtual double getBestObjectiveValue() const = 0;
+    virtual double getOptimalObjectiveValue() const = 0;
     
     virtual ~BenchmarkOptimisationProblem() = default;
   };

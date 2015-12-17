@@ -163,7 +163,7 @@ TEST_CASE("isPositiveSemiDefinite") {
 TEST_CASE("isDimensionallyConsistent") {
   SECTION("Returns true, if the number of dimensions is consistent over all samples.") {
     // Explicitly enables the cache, just to be sure.
-    mant::cacheSamples = true;
+    mant::isCachingSamples = true;
       
     const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
@@ -189,7 +189,7 @@ TEST_CASE("isDimensionallyConsistent") {
 
   SECTION("Returns false, if the number of dimensions is inconsistent between any two samples.") {
     // Explicitly enables the cache, just to be sure.
-    mant::cacheSamples = true;
+    mant::isCachingSamples = true;
       
     mant::RandomSearch optimisationAlgorithm;
     optimisationAlgorithm.setMaximalNumberOfIterations(100);

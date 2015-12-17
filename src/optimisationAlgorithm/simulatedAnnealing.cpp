@@ -10,6 +10,7 @@ namespace mant {
       : OptimisationAlgorithm() {
     setNextParametersFunction([this] (
         const arma::Mat<double>& parameters,
+        const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       if(differences(0) < 0) {
         state_ = bestParameter_; 
