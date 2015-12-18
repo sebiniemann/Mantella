@@ -22,21 +22,21 @@ namespace mant{
       }
       
       return boundedParameters;
-    });
+    }, "Set out of bound elements on the bound.");
     
     setRestartDetectionFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return false;
-    });
+    }, "Never restart.");
     
     setRestartHandlingFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return arma::randu<arma::Mat<double>>(arma::size(parameters));
-    });
+    }, "Randomised restart.");
     
   #if defined(SUPPORT_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
@@ -152,9 +152,9 @@ namespace mant{
     restartDetectionFunctionName_ = restartDetectionFunctionName;
   }
   
-  void OptimisationAlgorithm::setDegenerationDetectionFunction(
-      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction) {
-    setDegenerationDetectionFunction(degenerationDetectionFunction, "Unnamed, custom degeneration detection function");
+  void OptimisationAlgorithm::setRestartDetectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction) {
+    setRestartDetectionFunction(restartDetectionFunction, "Unnamed, custom restart detection function");
   }
 
   std::string OptimisationAlgorithm::getRestartDetectionFunctionName() const {
