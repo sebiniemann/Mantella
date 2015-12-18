@@ -93,7 +93,6 @@ namespace mant {
     std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
     
     void initialise(
-        OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
     
     std::pair<arma::Col<double>, arma::Col<double>> evaluate(

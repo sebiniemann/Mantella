@@ -66,6 +66,7 @@ namespace mant{
     }
     
     reset();
+    initialise(initialParameters);
     
     arma::Mat<double> parameters = boundariesHandlingFunction_(initialParameters);
     std::pair<arma::Col<double>, arma::Col<double>> objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
