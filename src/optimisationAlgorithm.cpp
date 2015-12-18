@@ -110,7 +110,6 @@ namespace mant{
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction,
       const std::string& nextParametersFunctionName) {
-    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
     verify(static_cast<bool>(nextParametersFunction), "setNextParametersFunction: The next parameters function must be callable.");
     
     nextParametersFunction_ = nextParametersFunction;
@@ -129,7 +128,6 @@ namespace mant{
   void OptimisationAlgorithm::setBoundariesHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
       const std::string& boundariesHandlingFunctionName) {
-    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
     verify(static_cast<bool>(boundariesHandlingFunction), "setBoundariesHandlingFunction: The boundaries handling function must be callable.");
     
     boundariesHandlingFunction_ = boundariesHandlingFunction;
