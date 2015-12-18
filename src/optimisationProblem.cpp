@@ -59,18 +59,19 @@ namespace mant {
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
     
+    const arma::Col<double>& discretisedParameter = getDiscretisedParameter(parameter);
     if (::mant::isCachingSamples) {
       // Check if the result is already cached.
-      const auto n = cachedSamples_.find(parameter);
+      const auto n = cachedSamples_.find(discretisedParameter);
       if (n == cachedSamples_.cend()) {
         // Increases the number of distinct evaluations only, if we actually compute the value.
         ++numberOfDistinctEvaluations_;
 
-        const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(parameter)));
+        const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
         // All objective values must be finite.
         assert(std::isfinite(result));
 
-        cachedSamples_.insert({parameter, result});
+        cachedSamples_.insert({discretisedParameter, result});
         return result;
       } else {
         return n->second;
@@ -79,7 +80,7 @@ namespace mant {
       // Without caching, all function evaluations must be computed.
       ++numberOfDistinctEvaluations_;
 
-      const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(parameter)));
+      const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
       // All objective values must be finite.
       assert(std::isfinite(result));
         
@@ -238,6 +239,17 @@ namespace mant {
   std::unordered_map<arma::Col<double>, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
     return cachedSamples_;
   }
+  
+  void OptimisationProblem::setMinimalParameterDistance(
+      const arma::Col<double>& minimalParameterDistance) {
+    verify(arma::all(minimalParameterDistance >= 0), "setMinimalParameterDistance: "); // TODO
+      
+    minimalParameterDistance_ = minimalParameterDistance;
+  }
+  
+  arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {
+    return minimalParameterDistance_;
+  }
 
   arma::uword OptimisationProblem::getNumberOfEvaluations() const {
     return numberOfEvaluations_;
@@ -252,6 +264,20 @@ namespace mant {
     numberOfDistinctEvaluations_ = 0;
 
     cachedSamples_.clear();
+  }
+
+  arma::Col<double> OptimisationProblem::getDiscretisedParameter(
+      const arma::Col<double>& parameter) const {
+    assert(parameter.n_elem == numberOfDimensions_);
+    
+    arma::Col<double> discretisedParameter(arma::size(parameter));
+    for (arma::uword n = 0; n < parameter.n_elem; ++n) {
+      if (minimalParameterDistance_(n) > 0) {
+        discretisedParameter(n) = std::floor(parameter(n) / minimalParameterDistance_(n)) * minimalParameterDistance_(n);
+      }
+    }
+    
+    return discretisedParameter;
   }
 
   arma::Col<double> OptimisationProblem::getModifiedParameter(
