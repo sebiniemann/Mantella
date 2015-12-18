@@ -24,14 +24,14 @@ namespace mant{
       return boundedParameters;
     });
     
-    setDegenerationDetectionFunction([this] (
+    setRestartDetectionFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
       return false;
     });
     
-    setDegenerationHandlingFunction([this] (
+    setRestartHandlingFunction([this] (
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
@@ -60,8 +60,8 @@ namespace mant{
       std::cout << "--------------------------------------------------------------------------------\n";
       std::cout << "  Optimisation strategy: " << nextParametersFunctionName_ << "\n";
       std::cout << "  Boundaries handling function: " << boundariesHandlingFunctionName_ << "\n";
-      std::cout << "  Degeneration detection function: " << degenerationDetectionFunctionName_ << "\n";
-      std::cout << "  Degeneration handling function: " << degenerationHandlingFunctionName_ << "\n";
+      std::cout << "  Restart detection function: " << restartDetectionFunctionName_ << "\n";
+      std::cout << "  Restart handling function: " << restartHandlingFunctionName_ << "\n";
       std::cout << std::endl;
     }
     
@@ -71,8 +71,8 @@ namespace mant{
     std::pair<arma::Col<double>, arma::Col<double>> objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
     
     while (!isTerminated() && !isFinished()) {
-      if (degenerationDetectionFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
-        parameters = degenerationHandlingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
+      if (restartDetectionFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
+        parameters = restartHandlingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
       } else {
         parameters = nextParametersFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
       }
@@ -145,14 +145,13 @@ namespace mant{
     return boundariesHandlingFunctionName_;
   }
   
-  void OptimisationAlgorithm::setDegenerationDetectionFunction(
-      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction,
-      const std::string& degenerationDetectionFunctionName) {
-    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
-    verify(static_cast<bool>(degenerationDetectionFunction), "setDegenerationDetectionFunction: The degeneration detection function must be callable.");
+  void OptimisationAlgorithm::setRestartDetectionFunction(
+      std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction,
+      const std::string& restartDetectionFunctionName) {
+    verify(static_cast<bool>(restartDetectionFunction), "setRestartDetectionFunction: The restart detection function must be callable.");
     
-    degenerationDetectionFunction_ = degenerationDetectionFunction;
-    degenerationDetectionFunctionName_ = degenerationDetectionFunctionName;
+    restartDetectionFunction_ = restartDetectionFunction;
+    restartDetectionFunctionName_ = restartDetectionFunctionName;
   }
   
   void OptimisationAlgorithm::setDegenerationDetectionFunction(
@@ -160,27 +159,26 @@ namespace mant{
     setDegenerationDetectionFunction(degenerationDetectionFunction, "Unnamed, custom degeneration detection function");
   }
 
-  std::string OptimisationAlgorithm::getDegenerationDetectionFunctionName() const {
-    return degenerationDetectionFunctionName_;
+  std::string OptimisationAlgorithm::getRestartDetectionFunctionName() const {
+    return restartDetectionFunctionName_;
   }
   
-  void OptimisationAlgorithm::setDegenerationHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction,
-      const std::string& degenerationHandlingFunctionName) {
-    // Using the *operator bool*, to checks whether the function is empty (not callable) or not.
-    verify(static_cast<bool>(degenerationHandlingFunction), "setDegenerationHandlingFunction: The degeneration handling function must be callable.");
+  void OptimisationAlgorithm::setRestartHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction,
+      const std::string& restartHandlingFunctionName) {
+    verify(static_cast<bool>(restartHandlingFunction), "setRestartHandlingFunction: The restart handling function must be callable.");
     
-    degenerationHandlingFunction_ = degenerationHandlingFunction;
-    degenerationHandlingFunctionName_ = degenerationHandlingFunctionName;
+    restartHandlingFunction_ = restartHandlingFunction;
+    restartHandlingFunctionName_ = restartHandlingFunctionName;
   }
   
-  void OptimisationAlgorithm::setDegenerationHandlingFunction(
-      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction) {
-    setDegenerationHandlingFunction(degenerationHandlingFunction, "Unnamed, custom degeneration handling function");
+  void OptimisationAlgorithm::setRestartHandlingFunction(
+      std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction) {
+    setRestartHandlingFunction(restartHandlingFunction, "Unnamed, custom restart handling function");
   }
 
-  std::string OptimisationAlgorithm::getDegenerationHandlingFunctionName() const {
-    return degenerationHandlingFunctionName_;
+  std::string OptimisationAlgorithm::getRestartHandlingFunctionName() const {
+    return restartHandlingFunctionName_;
   }
 
   void OptimisationAlgorithm::setAcceptableObjectiveValue(

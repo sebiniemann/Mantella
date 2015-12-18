@@ -33,18 +33,18 @@ namespace mant {
     void setBoundariesHandlingFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction);
     std::string getBoundariesHandlingFunctionName() const;
-    void setDegenerationDetectionFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction,
-        const std::string& degenerationDetectionFunctionName);
-    void setDegenerationDetectionFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction);
-    std::string getDegenerationDetectionFunctionName() const;
-    void setDegenerationHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction,
-        const std::string& degenerationHandlingFunctionName);
-    void setDegenerationHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction);
-    std::string getDegenerationHandlingFunctionName() const;
+    void setRestartDetectionFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction,
+        const std::string& restartDetectionFunctionName);
+    void setRestartDetectionFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction);
+    std::string getRestartDetectionFunctionName() const;
+    void setRestartHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction,
+        const std::string& restartHandlingFunctionName);
+    void setRestartHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction);
+    std::string getRestartHandlingFunctionName() const;
         
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
@@ -74,10 +74,10 @@ namespace mant {
     std::string nextParametersFunctionName_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
     std::string boundariesHandlingFunctionName_;
-    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction_;
-    std::string degenerationDetectionFunctionName_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction_;
-    std::string degenerationHandlingFunctionName_;
+    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction_;
+    std::string restartDetectionFunctionName_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction_;
+    std::string restartHandlingFunctionName_;
 
     double acceptableObjectiveValue_;
 
