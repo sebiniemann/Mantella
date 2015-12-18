@@ -59,7 +59,7 @@ namespace mant {
     displacement += arma::sign(displacement) * minimalDistance;
     
     if (maximalDistance != 0 && arma::all(displacement == 0)) {
-      displacement(std::uniform_int_distribution<arma::uword>(0, parameter.n_elem - 1)(mant::Rng::getGenerator())) = (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * maximalDistance;
+      displacement(std::uniform_int_distribution<arma::uword>(0, parameter.n_elem - 1)(Rng::getGenerator())) = (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * maximalDistance;
     }
     
     return parameter + displacement;
