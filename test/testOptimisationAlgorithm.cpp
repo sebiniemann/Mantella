@@ -49,22 +49,22 @@ TEST_CASE("OptimisationAlgorithm") {
     }
   }
   
-  SECTION(".setIsDegeneratedFunction") {
+  SECTION(".isStagnatingFunction") {
     // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
-        CHECK_THROWS_AS(optimisationAlgorithm.setDegenerationDetectionFunction(nullptr), std::logic_error);
+        CHECK_THROWS_AS(optimisationAlgorithm.isStagnatingFunction(nullptr), std::logic_error);
       }
     }
   }
   
-  SECTION(".setRestartHandlingFunction") {
+  SECTION(".setRestartingFunction") {
     // The influence on *.optimise* is already tested in *SECTION(".optimise")*.
     
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
-        CHECK_THROWS_AS(optimisationAlgorithm.setRestartHandlingFunction(nullptr), std::logic_error);
+        CHECK_THROWS_AS(optimisationAlgorithm.setRestartingFunction(nullptr), std::logic_error);
       }
     }
   }

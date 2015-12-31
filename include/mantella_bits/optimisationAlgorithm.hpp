@@ -22,10 +22,10 @@ namespace mant {
         const arma::Mat<double>& initialParameters);
         
     void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
         const std::string& nextParametersFunctionName);
     void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction);
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction);
     std::string getNextParametersFunctionName() const;
     void setBoundariesHandlingFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
@@ -33,17 +33,17 @@ namespace mant {
     void setBoundariesHandlingFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction);
     std::string getBoundariesHandlingFunctionName() const;
-    void setRestartDetectionFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction,
-        const std::string& restartDetectionFunctionName);
-    void setRestartDetectionFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction);
+    void isStagnatingFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction,
+        const std::string& stagnationDetectionFunctionName);
+    void isStagnatingFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction);
     std::string getRestartDetectionFunctionName() const;
-    void setRestartHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction,
-        const std::string& restartHandlingFunctionName);
-    void setRestartHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction);
+    void setRestartingFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction,
+        const std::string& restartingFunctionName);
+    void setRestartingFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction);
     std::string getRestartHandlingFunctionName() const;
         
     void setAcceptableObjectiveValue(
@@ -70,14 +70,14 @@ namespace mant {
     int nodeRank_;
     int numberOfNodes_;
    
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
+    std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
     std::string nextParametersFunctionName_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
     std::string boundariesHandlingFunctionName_;
-    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartDetectionFunction_;
-    std::string restartDetectionFunctionName_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartHandlingFunction_;
-    std::string restartHandlingFunctionName_;
+    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> isStagnatingFunction_;
+    std::string isStagnatingFunctionName_;
+    std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction_;
+    std::string restartingFunctionName_;
 
     double acceptableObjectiveValue_;
 

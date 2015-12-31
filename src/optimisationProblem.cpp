@@ -28,6 +28,8 @@ namespace mant {
 
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
+    
+    setMinimalParameterDistance(arma::zeros<arma::Col<double>>(numberOfDimensions_));
   }
 
   void OptimisationProblem::setObjectiveFunction(
@@ -270,12 +272,9 @@ namespace mant {
       const arma::Col<double>& parameter) const {
     assert(parameter.n_elem == numberOfDimensions_);
     
-    arma::Col<double> discretisedParameter(arma::size(parameter));
-    for (arma::uword n = 0; n < parameter.n_elem; ++n) {
-      if (minimalParameterDistance_(n) > 0) {
-        discretisedParameter(n) = std::floor(parameter(n) / minimalParameterDistance_(n)) * minimalParameterDistance_(n);
-      }
-    }
+    arma::Col<double> discretisedParameter = parameter;
+    const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance_ > 0);
+    discretisedParameter.elem(elementsToDiscretise) = arma::floor(discretisedParameter.elem(elementsToDiscretise) / minimalParameterDistance_.elem(elementsToDiscretise)) % minimalParameterDistance_.elem(elementsToDiscretise);
     
     return discretisedParameter;
   }

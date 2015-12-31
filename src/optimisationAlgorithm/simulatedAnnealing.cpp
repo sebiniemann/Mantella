@@ -9,6 +9,7 @@ namespace mant {
   SimulatedAnnealing::SimulatedAnnealing()
       : OptimisationAlgorithm() {
     setNextParametersFunction([this] (
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {

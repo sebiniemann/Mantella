@@ -101,9 +101,9 @@ namespace mant {
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
     arma::Col<double> minimalParameterDistance_;
 
-    arma::Col<double> getModifiedParameter(
-        const arma::Col<double>& parameter) const;
     arma::Col<double> getDiscretisedParameter(
+        const arma::Col<double>& parameter) const;
+    arma::Col<double> getModifiedParameter(
         const arma::Col<double>& parameter) const;
     double getModifiedObjectiveValue(
         const double objectiveValue) const;
