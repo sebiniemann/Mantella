@@ -8,7 +8,7 @@
 // http://opensource.org/licenses/MIT
 //
 // Authors and contributors:
-//   Sebastian Niemann - Lead developer
+//   Sebastian Niemann - Main developer
 //   Romeo Shuka
 //   Daniel Kiechle
 //   Wolff Bock von Wülfingen
@@ -18,7 +18,7 @@
 #pragma once
 
 #define MANTELLA_VERSION_MAJOR 0
-#define MANTELLA_VERSION_MINOR 10
+#define MANTELLA_VERSION_MINOR 12
 #define MANTELLA_VERSION_PATCH 0
 
 //
@@ -28,134 +28,83 @@
 // Configuration
 #include <mantella_bits/config.hpp>
 
-// Assert
-#include <mantella_bits/helper/assert.hpp>
+// Assertion
+#include <mantella_bits/assert.hpp>
 
 // Random number generator
-#include <mantella_bits/helper/rng.hpp>
+#include <mantella_bits/randomNumberGenerator.hpp>
 
 // MPI
-#include <mantella_bits/helper/mpi.hpp>
+#include <mantella_bits/mpi.hpp>
 
-// Helper
-#include <mantella_bits/helper/geometry.hpp>
-#include <mantella_bits/helper/printable.hpp>
-#include <mantella_bits/helper/quasiRandomSequence.hpp>
-#include <mantella_bits/helper/random.hpp>
-#include <mantella_bits/helper/regression.hpp>
-#include <mantella_bits/helper/setTheory.hpp>
-#include <mantella_bits/helper/statistic.hpp>
-#include <mantella_bits/helper/unorderedContainer.hpp>
+// Armadillo
+#include <mantella_bits/armadillo.hpp>
 
-// Distance functions
-#include <mantella_bits/distanceFunction.hpp>
-#include <mantella_bits/distanceFunction/pNorm.hpp>
-#include <mantella_bits/distanceFunction/mahalanobisDistance.hpp>
+// Mathematical functions
+#include <mantella_bits/algebra.hpp>
+#include <mantella_bits/combinatorics.hpp>
+#include <mantella_bits/geometry.hpp>
+#include <mantella_bits/numberTheory.hpp>
+#include <mantella_bits/numericalAnalysis.hpp>
+#include <mantella_bits/probability.hpp>
+#include <mantella_bits/statistics.hpp>
+#include <mantella_bits/topology.hpp>
 
-// Regression functions
-#include <mantella_bits/regressionFunction.hpp>
-#include <mantella_bits/regressionFunction/constantPolynomialRegressionFunction.hpp>
-#include <mantella_bits/regressionFunction/linearPolynomialRegressionFunction.hpp>
-#include <mantella_bits/regressionFunction/quadraticPolynomialRegressionFunction.hpp>
-#include <mantella_bits/regressionFunction/cubicPolynomialRegressionFunction.hpp>
-
-// Correlation functions
-#include <mantella_bits/correlationFunction.hpp>
-#include <mantella_bits/correlationFunction/polynomialCorrelationFunction.hpp>
-#include <mantella_bits/correlationFunction/splineCorrelationFunction.hpp>
-#include <mantella_bits/correlationFunction/exponentialCorrelationFunction.hpp>
-#include <mantella_bits/correlationFunction/gaussianCorrelationFunction.hpp>
-
-// Radial basis functions
-#include <mantella_bits/radialBasisFunction.hpp>
-#include <mantella_bits/radialBasisFunction/polyharmonicSplineRadialBasisFunction.hpp>
-#include <mantella_bits/radialBasisFunction/multiquadraticRadialBasisFunction.hpp>
-#include <mantella_bits/radialBasisFunction/gaussianRadialBasisFunction.hpp>
-
-// Samples selections
+// Machine learning
 #include <mantella_bits/samplesSelection.hpp>
-#include <mantella_bits/samplesSelection/bestFittingSamplesSelection.hpp>
-#include <mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp>
-#include <mantella_bits/samplesSelection/bestSamplesSelection.hpp>
-#include <mantella_bits/samplesSelection/randomSamplesSelection.hpp>
+#include <mantella_bits/samplesAnalysis.hpp>
 
 // Optimisation problems
 #include <mantella_bits/optimisationProblem.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/discusFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp>
-#include <mantella_bits/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRPR.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRRR.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PRUS.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine3PUPS.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine4PRUS.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PRUS.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/parallelKinematicMachine6PUPS.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/robotModel/multiLevelStewartPlatform.hpp>
-#include <mantella_bits/optimisationProblem/roboticsOptimisationProblem/endEffectorPoseError.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/discusFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/linearSlope.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp>
+#include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRPR.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRRR.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.hpp>
 #include <mantella_bits/optimisationProblem/surrogateModel.hpp>
 #include <mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/artificialNeuralNetwork.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
+// #include <mantella_bits/optimisationProblem/surrogateModel/artificialNeuralNetwork.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/gridSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/samplingBasedOptimisationAlgorithm/randomSearch.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hillClimbing.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/trajectoryBasedOptimisationAlgorithm/simulatedAnnealing.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp>
-
-// Samples selection
-#include <mantella_bits/samplesSelection.hpp>
-#include <mantella_bits/samplesSelection/bestFittingSamplesSelection.hpp>
-#include <mantella_bits/samplesSelection/bestNeighbourhoodSamplesSelection.hpp>
-#include <mantella_bits/samplesSelection/bestSamplesSelection.hpp>
-#include <mantella_bits/samplesSelection/randomSamplesSelection.hpp>
-
-// Property analyses
-#include <mantella_bits/propertyAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/fitnessDistanceCorrelationAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/lipschitzContinuityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/hoelderContinuityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/additiveSeparabilityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/multiplicativeSeparabilityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/polynomialProportionalityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/neighbourhoodPeriodicityAnalysis.hpp>
-#include <mantella_bits/propertyAnalysis/activePropertyAnalysis/translationPeriodicityAnalysis.hpp>
+#include <mantella_bits/optimisationAlgorithm/gridSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
+#include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
+#include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
+#include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
 
 // Cluster analyses
 #include <mantella_bits/clusterAnalysis.hpp>

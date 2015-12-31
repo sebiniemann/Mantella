@@ -4,7 +4,7 @@
 #include <utility>
 
 // Mantella
-#include "mantella_bits/helper/regression.hpp"
+#include "mantella_bits/regression.hpp"
 #include "mantella_bits/correlationFunction.hpp"
 #include "mantella_bits/regressionFunction.hpp"
 
@@ -68,9 +68,5 @@ namespace mant {
     }
 
     return meanObjectiveValue_ + (arma::dot(beta_, regressionFunction_->getRegression(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
-  }
-
-  std::string KrigingModel::toString() const {
-    return "kriging_model";
   }
 }

@@ -1,30 +1,31 @@
 #include "mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp"
 
 // Mantella
-#include "mantella_bits/propertyAnalysis/passivePropertyAnalysis/polynomialFunctionModelAnalysis.hpp"
-#include "mantella_bits/regressionFunction.hpp"
+#include "mantella_bits/algebra.hpp"
+#include "mantella_bits/samplesAnalysis.hpp"
 
 namespace mant {
-  PolynomialFunctionModel::PolynomialFunctionModel(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-      const std::shared_ptr<RegressionFunction> regressionFunction)
-      : SurrogateModel(samples),
-        regressionFunction_(regressionFunction) {
-  }
+    PolynomialFunctionModel::PolynomialFunctionModel(
+        const arma::uword numberOfDimensions)
+      : SurrogateModel(numberOfDimensions) {
+      setModelFunction([this](
+                               const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
+        coefficients_ = polynomialFunctionModelAnalysis(samples, polynomialOrder_, estimatorFunction_);
+    
+        return [this] (
+                        const arma::Col<double>& parameter) {
+          return arma::dot(coefficients_, polynomial(parameter, polynomialOrder_));
+        };
+      }); 
+    }
 
-  void PolynomialFunctionModel::modelImplementation() {
-    PolynomialFunctionModelAnalysis polynomialFunctionAnalysis(samples_, regressionFunction_);
-    polynomialFunctionAnalysis.analyse();
+    void PolynomialFunctionModel::setPolynomialOrder(
+        const arma::uword polynomialOrder) {
+      polynomialOrder_ = polynomialOrder;
+    }
 
-    coefficients_ = polynomialFunctionAnalysis.getCoefficients();
-  }
-
-  double PolynomialFunctionModel::getObjectiveValueImplementation(
-      const arma::Col<double>& parameter) const {
-    return arma::dot(coefficients_, regressionFunction_->getRegression(parameter));
-  }
-
-  std::string PolynomialFunctionModel::toString() const {
-    return "polynomial_function_model";
-  }
+    void PolynomialFunctionModel::setEstimatorFunction(
+        const std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Row<double>& objectiveValues)> estimatorFunction) {
+      estimatorFunction_ = estimatorFunction;
+    }
 }

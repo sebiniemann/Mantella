@@ -57,8 +57,4 @@ namespace mant {
 
     return objectiveValue + radialBasisFunction_->getPolynomialTailValue(parameter, tail_);
   }
-
-  std::string RadialBasisFunctionModel::toString() const {
-    return "radial_basis_function_model";
-  }
 }

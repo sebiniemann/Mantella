@@ -1,83 +1,102 @@
 #pragma once
 
 // C++ standard library
-#include <vector>
+#include <chrono>
+#include <deque>
 #include <utility>
-#include <memory>
+#include <vector>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/helper/printable.hpp"
-namespace mant {
-  class OptimisationProblem;
-}
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
-  class OptimisationAlgorithm : public Printable {
+  class OptimisationAlgorithm {
    public:
-    explicit OptimisationAlgorithm(
-        const std::shared_ptr<OptimisationProblem> optimisationProblem);
+    explicit OptimisationAlgorithm();
 
-    void optimise();
+    virtual void optimise(
+        OptimisationProblem& optimisationProblem,
+        const arma::Mat<double>& initialParameters);
+        
+    void setNextParametersFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
+        const std::string& nextParametersFunctionName);
+    void setNextParametersFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction);
+    std::string getNextParametersFunctionName() const;
+    void setBoundariesHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
+        const std::string& boundariesHandlingFunctionName);
+    void setBoundariesHandlingFunction(
+        std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction);
+    std::string getBoundariesHandlingFunctionName() const;
+    void isStagnatingFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction,
+        const std::string& stagnationDetectionFunctionName);
+    void isStagnatingFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction);
+    std::string getRestartDetectionFunctionName() const;
+    void setRestartingFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction,
+        const std::string& restartingFunctionName);
+    void setRestartingFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction);
+    std::string getRestartHandlingFunctionName() const;
+        
+    void setAcceptableObjectiveValue(
+        const double acceptableObjectiveValue);
 
     void setMaximalNumberOfIterations(
         const arma::uword maximalNumberOfIterations);
-
     arma::uword getNumberOfIterations() const;
-    arma::uword getMaximalNumberOfIterations() const;
+    void setMaximalDuration(
+        const std::chrono::microseconds maximalDuration);
+    std::chrono::microseconds getDuration() const;
+
+    bool isFinished() const;
+    bool isTerminated() const;
 
     double getBestObjectiveValue() const;
     arma::Col<double> getBestParameter() const;
 
-    bool isFinished() const;
-    virtual bool isTerminated() const;
-
     std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
-
-    virtual ~OptimisationAlgorithm() = default;
-
-   private:
-    std::shared_ptr<OptimisationProblem> optimisationProblem_;
+    
+    void reset();
 
    protected:
-    const arma::uword numberOfDimensions_;
+    int nodeRank_;
+    int numberOfNodes_;
+   
+    std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
+    std::string nextParametersFunctionName_;
+    std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
+    std::string boundariesHandlingFunctionName_;
+    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> isStagnatingFunction_;
+    std::string isStagnatingFunctionName_;
+    std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction_;
+    std::string restartingFunctionName_;
 
-    arma::uword numberOfIterations_;
+    double acceptableObjectiveValue_;
+
     arma::uword maximalNumberOfIterations_;
+    arma::uword numberOfIterations_;
+    std::chrono::microseconds maximalDuration_;
+    std::chrono::microseconds duration_;
+    std::chrono::time_point<std::chrono::steady_clock> initialTimePoint_;
 
     double bestObjectiveValue_;
     arma::Col<double> bestParameter_;
 
     std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
-
-    int nodeRank_;
-    int numberOfNodes_;
-
-    arma::Col<double> getLowerBounds() const;
-    arma::Col<double> getUpperBounds() const;
-
-    arma::Col<arma::uword> isWithinLowerBounds(
-        const arma::Col<double>& parameter) const;
-    arma::Col<arma::uword> isWithinUpperBounds(
-        const arma::Col<double>& parameter) const;
-
-    double getAcceptableObjectiveValue() const;
-
-    double getObjectiveValue(
-        const arma::Col<double>& parameter);
-
-    arma::Col<double> getRandomParameter() const;
-    virtual arma::Col<double> getRandomNeighbour(
-        const arma::Col<double>& parameter,
-        const arma::Col<double>& minimalDistance,
-        const arma::Col<double>& maximalDistance);
-
-    bool updateBestParameter(
-        const arma::Col<double>& parameter,
-        const double objectiveValue);
-
-    virtual void optimiseImplementation() = 0;
+    
+    void initialise(
+        const arma::Mat<double>& initialParameters);
+    
+    std::pair<arma::Col<double>, arma::Col<double>> evaluate(
+        OptimisationProblem& optimisationProblem,
+        const arma::Mat<double>& parameters);
   };
 }
