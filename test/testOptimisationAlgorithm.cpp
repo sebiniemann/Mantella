@@ -19,6 +19,7 @@ TEST_CASE("OptimisationAlgorithm") {
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     
     optimisationAlgorithm.setNextParametersFunction([] (
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
         const arma::Col<double>& differences) {
@@ -143,6 +144,7 @@ TEST_CASE("OptimisationAlgorithm") {
       mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
         
       optimisationAlgorithm.setNextParametersFunction([] (
+          const arma::uword numberOfDimensions,
           const arma::Mat<double>& parameters,
           const arma::Col<double>& objectiveValues,
           const arma::Col<double>& differences) {
