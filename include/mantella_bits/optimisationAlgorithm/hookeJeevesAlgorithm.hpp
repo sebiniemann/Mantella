@@ -19,8 +19,8 @@ namespace mant {
    public:
     explicit HookeJeevesAlgorithm();
 
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(

@@ -83,8 +83,8 @@ namespace mant {
     });
   }
 
-  void ParticleSwarmOptimisation::optimise(
-      OptimisationProblem& optimisationProblem,
+  void ParticleSwarmOptimisation::initialise(
+      const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
     if (!std::isfinite(maximalAcceleration_)) {
       setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
@@ -102,7 +102,7 @@ namespace mant {
     activeParticleIndex_ = 0;
     particles_ = initialParameters;
     
-    velocities_ = arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles_) * 2 - 1;
+    velocities_ = arma::randu<arma::Mat<double>>(numberOfDimensions, numberOfParticles_) * 2 - 1;
     velocities_ -= initialParameters;
     
     localBestSolutions_ = initialParameters;
@@ -111,14 +111,12 @@ namespace mant {
     
     randomiseTopology_ = false;
     neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
-    
-    OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
 
   void ParticleSwarmOptimisation::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfParticles) {
-    optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));  
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));  
   }
       
   void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(

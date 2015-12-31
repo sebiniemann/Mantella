@@ -67,7 +67,8 @@ namespace mant{
     }
     
     reset();
-    initialise(initialParameters);
+    
+    initialise(optimisationProblem.numberOfDimensions_, initialParameters);
     
     arma::Mat<double> parameters = boundariesHandlingFunction_(initialParameters);
     std::pair<arma::Col<double>, arma::Col<double>> objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
@@ -233,6 +234,7 @@ namespace mant{
   }
   
   void OptimisationAlgorithm::initialise(
+      const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
       
   }

@@ -23,11 +23,9 @@ namespace mant {
     });
   }
   
-  void SimulatedAnnealing::optimise(
-      OptimisationProblem& optimisationProblem,
+  void SimulatedAnnealing::initialise(
+      const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(initialParameters.n_cols == 1, "optimise: The simulated annealing algorithm accepts only a single initial parameter.");
-      
     if (!static_cast<bool>(isAcceptableStateFunction_)) {
       setIsAcceptableStateFunction([this] (
           const double objectiveValue) {
@@ -53,13 +51,11 @@ namespace mant {
     } else {
       // verify
     }
-    
-    OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
   
   void SimulatedAnnealing::optimise(
       OptimisationProblem& optimisationProblem) {
-    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
   }
 
   void SimulatedAnnealing::setIsAcceptableStateFunction(

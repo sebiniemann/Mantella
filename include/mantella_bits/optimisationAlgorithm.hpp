@@ -17,7 +17,7 @@ namespace mant {
    public:
     explicit OptimisationAlgorithm();
 
-    virtual void optimise(
+    void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
         
@@ -66,6 +66,8 @@ namespace mant {
     
     void reset();
 
+    ~OptimisationAlgorithm() = default;
+    
    protected:
     int nodeRank_;
     int numberOfNodes_;
@@ -92,7 +94,8 @@ namespace mant {
 
     std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
     
-    void initialise(
+    virtual void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters);
     
     std::pair<arma::Col<double>, arma::Col<double>> evaluate(

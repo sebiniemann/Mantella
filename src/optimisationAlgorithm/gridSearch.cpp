@@ -34,30 +34,26 @@ namespace mant {
     });
   }
   
-  void GridSearch::optimise(
-      OptimisationProblem& optimisationProblem,
+  void GridSearch::initialise(
+      const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(initialParameters.is_empty(), "optimise: The grid search algorithm does not accept initial parameters.");
-      
     if (numberOfSamplesPerDimension_.is_empty()) {
-      setNumberOfSamplesPerDimension(arma::zeros<arma::Col<arma::uword>>(optimisationProblem.numberOfDimensions_) + 10);
+      setNumberOfSamplesPerDimension(arma::zeros<arma::Col<arma::uword>>(numberOfDimensions) + 10);
     } else {
       verify(arma::prod(numberOfSamplesPerDimension_) <= maximalNumberOfIterations_, "optimise: The maximal number of iterations must be at least equal to the product over the number of samples per dimensions.");
     }
     
-    samples_.reserve(optimisationProblem.numberOfDimensions_);
-    for (arma::uword n = 0; n < optimisationProblem.numberOfDimensions_; ++n) {
+    samples_.reserve(numberOfDimensions);
+    for (arma::uword n = 0; n < numberOfDimensions; ++n) {
       samples_.push_back(arma::linspace<arma::Col<double>>(0, 1, numberOfSamplesPerDimension_(n)));
     }
     
-    sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(optimisationProblem.numberOfDimensions_);
-      
-    OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
+    sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(numberOfDimensions);
   }
   
   void GridSearch::optimise(
       OptimisationProblem& optimisationProblem) {
-    optimise(optimisationProblem, arma::Mat<double>(optimisationProblem.numberOfDimensions_, 0));
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::Mat<double>(optimisationProblem.numberOfDimensions_, 0));
   }
 
   void GridSearch::setNumberOfSamplesPerDimension(

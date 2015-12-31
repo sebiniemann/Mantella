@@ -42,11 +42,9 @@ namespace mant {
     });
   }
   
-  void HookeJeevesAlgorithm::optimise(
-      OptimisationProblem& optimisationProblem,
+  void HookeJeevesAlgorithm::initialise(
+      const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(initialParameters.n_cols == 1, "optimise: The Hooke-Jeeves algorithm accepts only a single initial parameter.");
-    
     if (!std::isfinite(initialStepSize_)) {
       setInitialStepSize(1);
     } else {
@@ -60,12 +58,11 @@ namespace mant {
     }
     
     stepSize_ = initialStepSize_;
-    OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
   
   void HookeJeevesAlgorithm::optimise(
       OptimisationProblem& optimisationProblem) {
-    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
   }
 
   void HookeJeevesAlgorithm::setInitialStepSize(

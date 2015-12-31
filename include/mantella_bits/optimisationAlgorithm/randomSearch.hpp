@@ -11,11 +11,7 @@ namespace mant {
   class RandomSearch : public OptimisationAlgorithm {
    public:
     explicit RandomSearch();
-
-    void optimise(
-        OptimisationProblem& optimisationProblem,
-        const arma::Mat<double>& initialParameters) override;
-
+    
     void optimise(
         OptimisationProblem& optimisationProblem);
   };

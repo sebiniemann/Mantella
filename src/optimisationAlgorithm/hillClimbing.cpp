@@ -18,11 +18,9 @@ namespace mant {
     });
   }
   
-  void HillClimbing::optimise(
-      OptimisationProblem& optimisationProblem,
+  void HillClimbing::initialise(
+      const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(initialParameters.n_cols == 1, "optimise: The hill climbing algorithm accepts only a single initial parameter.");
-    
     if (!std::isfinite(minimalStepSize_)) {
       setMinimalStepSize(0);
     } else {
@@ -36,13 +34,11 @@ namespace mant {
     }
     
     // verify minimalStepSize_ <= maximalStepSize_
-    
-    OptimisationAlgorithm::optimise(optimisationProblem, initialParameters);
   }
   
   void HillClimbing::optimise(
       OptimisationProblem& optimisationProblem) {
-    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
   }
 
   void HillClimbing::setMinimalStepSize(

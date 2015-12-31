@@ -18,8 +18,8 @@ namespace mant {
    public:
     explicit HillClimbing();
 
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
