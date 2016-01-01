@@ -26,13 +26,14 @@ namespace mant {
       MPI_Bcast(rotationQ_.memptr(), static_cast<int>(rotationQ_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          const arma::Col<double>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.2, getOscillatedParameter(rotationR_ * parameter))));
-          return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            const arma::Col<double>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.2, getOscillatedParameter(rotationR_ * parameter))));
+            return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+          },
           "BBOB Rastrigin Function, rotated");
     }
   }

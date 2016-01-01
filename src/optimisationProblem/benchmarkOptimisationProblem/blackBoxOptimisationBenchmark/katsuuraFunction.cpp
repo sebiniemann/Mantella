@@ -25,27 +25,28 @@ namespace mant {
       MPI_Bcast(rotationQ_.memptr(), static_cast<int>(rotationQ_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter);
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter);
 
-          double product = 1.0;
-          for (arma::uword n = 0; n < z.n_elem; ++n) {
-            const double value = z(n);
+            double product = 1.0;
+            for (arma::uword n = 0; n < z.n_elem; ++n) {
+              const double value = z(n);
 
-            double sum = 0.0;
-            for (arma::uword k = 1; k < 33; ++k) {
-              const double power = std::pow(2.0, k);
-              sum += std::abs(power * value - std::round(power * value)) / power;
+              double sum = 0.0;
+              for (arma::uword k = 1; k < 33; ++k) {
+                const double power = std::pow(2.0, k);
+                sum += std::abs(power * value - std::round(power * value)) / power;
+              }
+
+              product *= std::pow(1.0 + (static_cast<double>(n) + 1.0) * sum, 10.0 / std::pow(numberOfDimensions_, 1.2));
             }
 
-            product *= std::pow(1.0 + (static_cast<double>(n) + 1.0) * sum, 10.0 / std::pow(numberOfDimensions_, 1.2));
-          }
-
-          return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0);
-      },
+            return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0);
+          },
           "BBOB Katsuura Function");
     }
   }

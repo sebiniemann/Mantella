@@ -19,15 +19,16 @@ namespace mant {
           f0_(5.0 * arma::accu(parameterConditioning_)) {
       setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_) * (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          arma::Col<double> z = parameter;
-          z.elem(arma::find(parameter >= 5.0)).fill(5.0);
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            arma::Col<double> z = parameter;
+            z.elem(arma::find(parameter >= 5.0)).fill(5.0);
 
-          return f0_ - arma::dot(parameterConditioning_, z);
-      },
+            return f0_ - arma::dot(parameterConditioning_, z);
+          },
           "BBOB Linear Slope");
     }
   }

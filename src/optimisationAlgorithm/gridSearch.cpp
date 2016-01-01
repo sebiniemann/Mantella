@@ -10,28 +10,30 @@
 namespace mant {
   GridSearch::GridSearch()
       : OptimisationAlgorithm() {
-    setNextParametersFunction([this](
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      arma::Col<double> nextParameter(parameters.n_rows);
-      for (arma::uword k = 0; k < sampleIndicies_.n_elem; ++k) {
-        nextParameter(k) = samples_.at(k)(sampleIndicies_(k));
-      }
+    setNextParametersFunction(
+        [this](
+            const arma::uword numberOfDimensions,
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
+          arma::Col<double> nextParameter(parameters.n_rows);
+          for (arma::uword k = 0; k < sampleIndicies_.n_elem; ++k) {
+            nextParameter(k) = samples_.at(k)(sampleIndicies_(k));
+          }
 
-      ++sampleIndicies_(0);
-      for (arma::uword k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
-        if (sampleIndicies_(k) >= numberOfSamplesPerDimension_(k)) {
-          sampleIndicies_(k) = 0;
-          ++sampleIndicies_(k + 1);
-        } else {
-          break;
-        }
-      }
-      
-      return nextParameter;
-    });
+          ++sampleIndicies_(0);
+          for (arma::uword k = 0; k < sampleIndicies_.n_elem - 1; ++k) {
+            if (sampleIndicies_(k) >= numberOfSamplesPerDimension_(k)) {
+              sampleIndicies_(k) = 0;
+              ++sampleIndicies_(k + 1);
+            } else {
+              break;
+            }
+          }
+          
+          return nextParameter;
+        },
+        "Grid search");
   }
 
   void GridSearch::initialise(

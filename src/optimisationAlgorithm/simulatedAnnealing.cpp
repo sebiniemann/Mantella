@@ -8,19 +8,21 @@
 namespace mant {
   SimulatedAnnealing::SimulatedAnnealing()
       : OptimisationAlgorithm() {
-    setNextParametersFunction([this](
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      if(differences(0) < 0) {
-        state_ = bestParameter_; 
-      } else if (isAcceptableStateFunction_(differences(0))) {
-        state_ = parameters.col(0);
-      }
-      
-      return randomNeighbour(state_, minimalStepSize_, maximalStepSize_);
-    });
+    setNextParametersFunction(
+        [this](
+            const arma::uword numberOfDimensions,
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
+          if(differences(0) < 0) {
+            state_ = bestParameter_; 
+          } else if (isAcceptableStateFunction_(differences(0))) {
+            state_ = parameters.col(0);
+          }
+          
+          return randomNeighbour(state_, minimalStepSize_, maximalStepSize_);
+        },
+        "Simulated annealing");
   }
 
   void SimulatedAnnealing::initialise(

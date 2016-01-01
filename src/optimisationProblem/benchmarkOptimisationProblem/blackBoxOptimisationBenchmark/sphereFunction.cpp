@@ -14,12 +14,13 @@ namespace mant {
         : BlackBoxOptimisationBenchmark(numberOfDimensions) {
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          return std::pow(arma::norm(parameter), 2.0);
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            return std::pow(arma::norm(parameter), 2.0);
+          },
           "BBOB Sphere Function");
     }
   }

@@ -17,13 +17,14 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          const arma::Col<double>& z = arma::square(getOscillatedParameter(parameter));
-          return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            const arma::Col<double>& z = arma::square(getOscillatedParameter(parameter));
+            return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
+          },
           "BBOB Discus Function");
     }
   }

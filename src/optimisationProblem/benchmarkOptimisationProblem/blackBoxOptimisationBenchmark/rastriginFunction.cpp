@@ -15,13 +15,14 @@ namespace mant {
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          const arma::Col<double>& z = parameterConditioning_ % getAsymmetricParameter(0.2, getOscillatedParameter(parameter));
-          return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            const arma::Col<double>& z = parameterConditioning_ % getAsymmetricParameter(0.2, getOscillatedParameter(parameter));
+            return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+          },
           "BBOB Rastrigin Function");
     }
   }

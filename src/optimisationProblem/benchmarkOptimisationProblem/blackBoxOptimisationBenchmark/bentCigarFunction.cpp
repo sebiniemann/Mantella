@@ -21,13 +21,14 @@ namespace mant {
       MPI_Bcast(rotationQ_.memptr(), static_cast<int>(rotationQ_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          const arma::Col<double>& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter));
-          return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            const arma::Col<double>& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter));
+            return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
+          },
           "BBOB Bent Cigar Function");
     }
   }

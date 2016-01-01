@@ -25,13 +25,14 @@ namespace mant {
       MPI_Bcast(rotationQ_.memptr(), static_cast<int>(rotationQ_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          const arma::Col<double>& z = rotationQ_ * (parameterConditioning_ % parameter);
-          return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            const arma::Col<double>& z = rotationQ_ * (parameterConditioning_ % parameter);
+            return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
+          },
           "BBOB Sharp Ridge Function");
     }
   }

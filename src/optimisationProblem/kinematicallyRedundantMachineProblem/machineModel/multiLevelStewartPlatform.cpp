@@ -24,35 +24,35 @@ namespace mant {
     }
 
     // arma::Cube<double> MultiLevelStewartPlatform::getModelImplementation(
-        // const arma::Col<double>& endEffectorPose,
-        // const arma::Row<double>& redundantJointsActuation) const {
-      // assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      // assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
+    // const arma::Col<double>& endEffectorPose,
+    // const arma::Row<double>& redundantJointsActuation) const {
+    // assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
+    // assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
-      // arma::Cube<double> model = platformLevels_.at(0).getModel(endEffectorPose, {});
-      // for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
-        // arma::join_slices(model, platformLevels_.at(n).getModel(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {}));
-      // }
+    // arma::Cube<double> model = platformLevels_.at(0).getModel(endEffectorPose, {});
+    // for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
+    // arma::join_slices(model, platformLevels_.at(n).getModel(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {}));
+    // }
 
-      // return model;
+    // return model;
     // }
 
     // double MultiLevelStewartPlatform::getEndEffectorPoseErrorImplementation(
-        // const arma::Col<double>& endEffectorPose,
-        // const arma::Row<double>& redundantJointsActuation) const {
-      // assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
-      // assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
+    // const arma::Col<double>& endEffectorPose,
+    // const arma::Row<double>& redundantJointsActuation) const {
+    // assert(redundantJointsActuation.n_elem == numberOfRedundantJoints_);
+    // assert(arma::all(redundantJointsActuation >= 0) && arma::all(redundantJointsActuation <= 1));
 
-      // double endEffectorPoseError = platformLevels_.at(0).getEndEffectorPoseError(endEffectorPose, {});
-      // for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
-        // const double partialEndEffectorPoseError = platformLevels_.at(n).getEndEffectorPoseError(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {});
+    // double endEffectorPoseError = platformLevels_.at(0).getEndEffectorPoseError(endEffectorPose, {});
+    // for (arma::uword n = 1; n < platformLevels_.size(); ++n) {
+    // const double partialEndEffectorPoseError = platformLevels_.at(n).getEndEffectorPoseError(redundantJointsActuation.subvec(6 * n - 6, 6 * n - 1), {});
 
-        // assert(partialEndEffectorPoseError >= 0);
+    // assert(partialEndEffectorPoseError >= 0);
 
-        // endEffectorPoseError += partialEndEffectorPoseError;
-      // }
+    // endEffectorPoseError += partialEndEffectorPoseError;
+    // }
 
-      // return endEffectorPoseError;
+    // return endEffectorPoseError;
     // }
   }
 }

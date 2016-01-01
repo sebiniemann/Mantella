@@ -14,12 +14,13 @@ namespace mant {
           parameterConditioning_(getParameterConditioning(1000000.0)) {
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
+          },
           "BBOB Ellipsoidal Function");
     }
   }

@@ -11,41 +11,47 @@ namespace mant {
     setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(10));
-    
-    setBoundariesHandlingFunction([this] (
-        const arma::Mat<double>& parameters) {
-      arma::Mat<double> boundedParameters = parameters;
-      
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) < 0)).fill(0);
-        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) > 1)).fill(1);
-      }
-      
-      return boundedParameters;
-    }, "Placed on the bound.");
-    
-    isStagnatingFunction([this] (
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      return false;
-    }, "Always false.");
-    
-    setRestartingFunction([this] (
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      return arma::randu<arma::Mat<double>>(arma::size(parameters));
-    }, "Randomised restart.");
-    
-  #if defined(SUPPORT_MPI)
+
+    setBoundariesHandlingFunction(
+        [this](
+            const arma::Mat<double>& parameters) {
+          arma::Mat<double> boundedParameters = parameters;
+          
+          for (arma::uword n = 0; n < parameters.n_cols; ++n) {
+            static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) < 0)).fill(0);
+            static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(arma::find(parameters.col(n) > 1)).fill(1);
+          }
+          
+          return boundedParameters;
+        },
+        "Placed on the bound.");
+
+    isStagnatingFunction(
+        [this](
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
+          return false;
+        },
+        "Always false.");
+
+    setRestartingFunction(
+        [this](
+            const arma::uword numberOfDimensions,
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
+          return arma::randu<arma::Mat<double>>(arma::size(parameters));
+        },
+        "Randomised restart.");
+
+#if defined(SUPPORT_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
     MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
-  #else
+#else
     nodeRank_ = 0;
     numberOfNodes_ = 1;
-  #endif
+#endif
   }
 
   void OptimisationAlgorithm::optimise(
@@ -97,9 +103,9 @@ namespace mant {
       } else if (isTerminated()) {
         std::cout << "  Terminated (run out of time or iterations).\n";
       }
-      
-      std::cout << "    Took " << duration_.count() << " / " << maximalDuration_.count() << " milliseconds" <<std::endl;
-      std::cout << "    Took " << numberOfIterations_ << " / " << maximalNumberOfIterations_ << " iterations" <<std::endl;
+
+      std::cout << "    Took " << duration_.count() << " / " << maximalDuration_.count() << " milliseconds" << std::endl;
+      std::cout << "    Took " << numberOfIterations_ << " / " << maximalNumberOfIterations_ << " iterations" << std::endl;
       std::cout << "    Difference to the acceptable objective value: " << bestObjectiveValue_ - acceptableObjectiveValue_ << std::endl;
       std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
       std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;

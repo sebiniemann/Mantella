@@ -12,34 +12,36 @@
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm()
       : OptimisationAlgorithm() {
-    setNextParametersFunction([this](
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      if (arma::any(differences < 0)) {
-        previousBestParameters_.insert(bestParameter_);
-      } else {
-        stepSize_ *= stepSizeDecrease_;
-      }
+    setNextParametersFunction(
+        [this](
+            const arma::uword numberOfDimensions,
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
+          if (arma::any(differences < 0)) {
+            previousBestParameters_.insert(bestParameter_);
+          } else {
+            stepSize_ *= stepSizeDecrease_;
+          }
 
-      arma::Mat<double> nextParameters;
-      for (arma::uword n = 0; n < parameters.n_rows; ++n) {
-        arma::Col<double> nextParameterCandidate = bestParameter_;
-        
-        nextParameterCandidate(n) += stepSize_;
-        if (previousBestParameters_.find(nextParameterCandidate) == previousBestParameters_.cend()) {
-          nextParameters.insert_cols(1, nextParameterCandidate);
-        }
-        
-        nextParameterCandidate -= 2 * stepSize_;
-        if (previousBestParameters_.find(nextParameterCandidate) == previousBestParameters_.cend()) {
-          nextParameters.insert_cols(1, nextParameterCandidate);
-        }
-      }
-      
-      return nextParameters;
-    });
+          arma::Mat<double> nextParameters;
+          for (arma::uword n = 0; n < parameters.n_rows; ++n) {
+            arma::Col<double> nextParameterCandidate = bestParameter_;
+            
+            nextParameterCandidate(n) += stepSize_;
+            if (previousBestParameters_.find(nextParameterCandidate) == previousBestParameters_.cend()) {
+              nextParameters.insert_cols(1, nextParameterCandidate);
+            }
+            
+            nextParameterCandidate -= 2 * stepSize_;
+            if (previousBestParameters_.find(nextParameterCandidate) == previousBestParameters_.cend()) {
+              nextParameters.insert_cols(1, nextParameterCandidate);
+            }
+          }
+          
+          return nextParameters;
+        },
+        "Hooke-Jeeves algorithm");
   }
 
   void HookeJeevesAlgorithm::initialise(

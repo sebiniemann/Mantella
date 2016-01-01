@@ -24,15 +24,16 @@ namespace mant {
       MPI_Bcast(rotationQ_.memptr(), static_cast<int>(rotationQ_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter);
-          z.elem(arma::find(z % parameterTranslation_ > 0.0)) *= 100.0;
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter);
+            z.elem(arma::find(z % parameterTranslation_ > 0.0)) *= 100.0;
 
-          return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);
-      },
+            return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);
+          },
           "BBOB Attractive Sector Function");
     }
   }

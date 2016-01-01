@@ -15,47 +15,49 @@ namespace mant {
         maximalAcceleration_(arma::datum::nan),
         maximalLocalAttraction_(arma::datum::nan),
         maximalGlobalAttraction_(arma::datum::nan) {
-    setNextParametersFunction([this](
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      if (differences(0) >= 0) {
-        randomiseTopology_ = true;
-      }
-      
-      if (activeParticleIndex_ == 0 && randomiseTopology_) {
-        neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
-        randomiseTopology_ = false;
-      }
-      
-      if (objectiveValues(0) < localBestObjectiveValues_(activeParticleIndex_)) {
-        localBestObjectiveValues_(activeParticleIndex_) = objectiveValues(0);
-        localBestSolutions_.col(activeParticleIndex_) = parameters.col(0);
-      }
-      
-      activeParticleIndex_ = (activeParticleIndex_ + 1) % numberOfParticles_;
-      const arma::Col<double>& particle = particles_.col(activeParticleIndex_);
-      
-      arma::uword neighbourhoodBestParticleIndex;
-      arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(neighbourhoodTopology_.col(activeParticleIndex_));
-      static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
+    setNextParametersFunction(
+        [this](
+            const arma::uword numberOfDimensions,
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
+          if (differences(0) >= 0) {
+            randomiseTopology_ = true;
+          }
+          
+          if (activeParticleIndex_ == 0 && randomiseTopology_) {
+            neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
+            randomiseTopology_ = false;
+          }
+          
+          if (objectiveValues(0) < localBestObjectiveValues_(activeParticleIndex_)) {
+            localBestObjectiveValues_(activeParticleIndex_) = objectiveValues(0);
+            localBestSolutions_.col(activeParticleIndex_) = parameters.col(0);
+          }
+          
+          activeParticleIndex_ = (activeParticleIndex_ + 1) % numberOfParticles_;
+          const arma::Col<double>& particle = particles_.col(activeParticleIndex_);
+          
+          arma::uword neighbourhoodBestParticleIndex;
+          arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(neighbourhoodTopology_.col(activeParticleIndex_));
+          static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
 
-      arma::Col<double> attractionCenter;
-      if (neighbourhoodParticlesIndecies(neighbourhoodBestParticleIndex) == activeParticleIndex_) {
-        attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(activeParticleIndex_) - particle)) / 2.0;
-      } else {
-        attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(activeParticleIndex_) - particle) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
-      }
+          arma::Col<double> attractionCenter;
+          if (neighbourhoodParticlesIndecies(neighbourhoodBestParticleIndex) == activeParticleIndex_) {
+            attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(activeParticleIndex_) - particle)) / 2.0;
+          } else {
+            attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(activeParticleIndex_) - particle) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+          }
 
-      const arma::Col<double>& velocity =
-      maximalAcceleration_ * arma::randu<arma::Col<double>>(parameters.n_rows) % velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
+          const arma::Col<double>& velocity =
+          maximalAcceleration_ * arma::randu<arma::Col<double>>(parameters.n_rows) % velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
 
-      particles_.col(activeParticleIndex_) += velocity;
-      velocities_.col(activeParticleIndex_) = velocity;
-        
-      return particles_.col(activeParticleIndex_);
-    });
+          particles_.col(activeParticleIndex_) += velocity;
+          velocities_.col(activeParticleIndex_) = velocity;
+            
+          return particles_.col(activeParticleIndex_);
+        },
+        "Particle swarm optimisation");
 
     setBoundariesHandlingFunction([this](
         const arma::Mat<double>& parameters) {
