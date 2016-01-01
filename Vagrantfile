@@ -44,6 +44,8 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -qq catch
     ## Using clang-format-3.6
     sudo apt-get install -qq clang-format-3.6
+    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
+    sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
     sudo apt-get install -qq iwyu
     sudo apt-get install -qq valgrind
     sudo apt-get install -qq lcov
