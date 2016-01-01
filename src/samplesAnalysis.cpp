@@ -36,7 +36,7 @@ namespace mant {
     arma::Mat<double> remainingParameters = parameters;
     remainingParameters.shed_col(bestParameterIndex);
     remainingParameters.each_col() -= parameters.col(bestParameterIndex);
-    
+
     arma::Row<double> remainingObjectiveValues = objectiveValues;
     remainingObjectiveValues.shed_col(bestParameterIndex);
 
@@ -52,7 +52,7 @@ namespace mant {
         continuity = std::max(continuity, continuityFunction({firstSample->first, firstSample->second}, {secondSample->first, secondSample->second}));
       }
     }
-    
+
     return continuity;
   }
 
@@ -179,7 +179,7 @@ namespace mant {
     } else {
       partition = {bestPartitionCandidates.at(0).first, bestPartitionCandidates.at(0).second};
     }
-    
+
     return partition;
   }
 

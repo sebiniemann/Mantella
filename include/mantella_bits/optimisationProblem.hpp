@@ -43,7 +43,7 @@ namespace mant {
     void setUpperBounds(
         const arma::Col<double>& upperBounds);
     arma::Col<double> getUpperBounds() const;
-    
+
     // Parameter space modifiers
     void setParameterPermutation(
         const arma::Col<arma::uword>& parameterPermutation);

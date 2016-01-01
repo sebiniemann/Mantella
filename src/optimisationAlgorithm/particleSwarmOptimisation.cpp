@@ -11,11 +11,11 @@
 
 namespace mant {
   ParticleSwarmOptimisation::ParticleSwarmOptimisation()
-      : OptimisationAlgorithm(), 
+      : OptimisationAlgorithm(),
         maximalAcceleration_(arma::datum::nan),
         maximalLocalAttraction_(arma::datum::nan),
         maximalGlobalAttraction_(arma::datum::nan) {
-    setNextParametersFunction([this] (
+    setNextParametersFunction([this](
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
@@ -56,8 +56,8 @@ namespace mant {
         
       return particles_.col(activeParticleIndex_);
     });
-    
-    setBoundariesHandlingFunction([this] (
+
+    setBoundariesHandlingFunction([this](
         const arma::Mat<double>& parameters) {
       arma::Mat<double> boundedParameters = parameters;
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
@@ -73,8 +73,8 @@ namespace mant {
       
       return boundedParameters;
     });
-    
-    setNeighbourhoodTopologyFunction([this] (
+
+    setNeighbourhoodTopologyFunction([this](
         const arma::uword numberOfParticles) {
        arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles, numberOfParticles) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles), 3.0));
        neighbourhoodTopology.diag().ones();
@@ -89,26 +89,26 @@ namespace mant {
     if (!std::isfinite(maximalAcceleration_)) {
       setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     }
-    
+
     if (!std::isfinite(maximalLocalAttraction_)) {
       setMaximalLocalAttraction(0.5 + std::log(2.0));
     }
-    
+
     if (!std::isfinite(maximalGlobalAttraction_)) {
       setMaximalGlobalAttraction(maximalLocalAttraction_);
     }
-    
+
     numberOfParticles_ = initialParameters.n_cols;
     activeParticleIndex_ = 0;
     particles_ = initialParameters;
-    
+
     velocities_ = arma::randu<arma::Mat<double>>(numberOfDimensions, numberOfParticles_) * 2 - 1;
     velocities_ -= initialParameters;
-    
+
     localBestSolutions_ = initialParameters;
     localBestObjectiveValues_.set_size(numberOfParticles_);
     localBestObjectiveValues_.fill(arma::datum::inf);
-    
+
     randomiseTopology_ = false;
     neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
   }
@@ -116,34 +116,34 @@ namespace mant {
   void ParticleSwarmOptimisation::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfParticles) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));  
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));
   }
-      
+
   void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
       std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction) {
     verify(static_cast<bool>(neighbourhoodTopologyFunction), "setNeighbourhoodTopologyFunction: The neighbourhood topology function must be callable.");
-    
+
     neighbourhoodTopologyFunction_ = neighbourhoodTopologyFunction;
   }
 
   void ParticleSwarmOptimisation::setMaximalAcceleration(
       const double maximalAcceleration) {
     verify(maximalAcceleration > 0, "setMaximalAcceleration: The maximal acceleration must be strict greater than 0.");
-      
+
     maximalAcceleration_ = maximalAcceleration;
   }
 
   void ParticleSwarmOptimisation::setMaximalLocalAttraction(
       const double maximalLocalAttraction) {
     verify(maximalLocalAttraction > 0, "setMaximalLocalAttraction: The maximal local attraction must be strict greater than 0.");
-    
+
     maximalLocalAttraction_ = maximalLocalAttraction;
   }
 
   void ParticleSwarmOptimisation::setMaximalGlobalAttraction(
       const double maximalGlobalAttraction) {
     verify(maximalGlobalAttraction > 0, "setMaximalGlobalAttraction: The maximal global attraction must be strict greater than 0.");
-    
+
     maximalGlobalAttraction_ = maximalGlobalAttraction;
   }
 }

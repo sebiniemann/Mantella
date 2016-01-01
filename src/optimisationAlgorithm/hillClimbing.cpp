@@ -8,8 +8,8 @@ namespace mant {
   HillClimbing::HillClimbing()
       : OptimisationAlgorithm(),
         minimalStepSize_(arma::datum::nan),
-        maximalStepSize_(arma::datum::nan)  {
-    setNextParametersFunction([this] (
+        maximalStepSize_(arma::datum::nan) {
+    setNextParametersFunction([this](
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
@@ -17,7 +17,7 @@ namespace mant {
       return randomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
     });
   }
-  
+
   void HillClimbing::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
@@ -26,16 +26,16 @@ namespace mant {
     } else {
       // verify
     }
-    
+
     if (!std::isfinite(maximalStepSize_)) {
       setMaximalStepSize(0.1);
     } else {
       // verify
     }
-    
+
     // verify minimalStepSize_ <= maximalStepSize_
   }
-  
+
   void HillClimbing::optimise(
       OptimisationProblem& optimisationProblem) {
     OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
@@ -44,14 +44,14 @@ namespace mant {
   void HillClimbing::setMinimalStepSize(
       const double minimalStepSize) {
     verify(minimalStepSize >= 0, "The minimal step size must be at least 0 for each dimension.");
-    
+
     minimalStepSize_ = minimalStepSize;
   }
 
   void HillClimbing::setMaximalStepSize(
       const double maximalStepSize) {
     verify(maximalStepSize > 0, "The maximal step size must be strict greater than 0 for each dimension.");
-    
+
     maximalStepSize_ = maximalStepSize;
   }
 }

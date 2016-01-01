@@ -10,7 +10,7 @@
 namespace mant {
   GridSearch::GridSearch()
       : OptimisationAlgorithm() {
-    setNextParametersFunction([this] (
+    setNextParametersFunction([this](
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
@@ -33,7 +33,7 @@ namespace mant {
       return nextParameter;
     });
   }
-  
+
   void GridSearch::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
@@ -42,15 +42,15 @@ namespace mant {
     } else {
       verify(arma::prod(numberOfSamplesPerDimension_) <= maximalNumberOfIterations_, "optimise: The maximal number of iterations must be at least equal to the product over the number of samples per dimensions.");
     }
-    
+
     samples_.reserve(numberOfDimensions);
     for (arma::uword n = 0; n < numberOfDimensions; ++n) {
       samples_.push_back(arma::linspace<arma::Col<double>>(0, 1, numberOfSamplesPerDimension_(n)));
     }
-    
+
     sampleIndicies_ = arma::zeros<arma::Col<arma::uword>>(numberOfDimensions);
   }
-  
+
   void GridSearch::optimise(
       OptimisationProblem& optimisationProblem) {
     OptimisationAlgorithm::optimise(optimisationProblem, arma::Mat<double>(optimisationProblem.numberOfDimensions_, 0));
@@ -59,7 +59,7 @@ namespace mant {
   void GridSearch::setNumberOfSamplesPerDimension(
       const arma::Col<arma::uword>& numberOfSamplesPerDimension) {
     verify(arma::all(numberOfSamplesPerDimension_ > 1), "optimise: The number of samples per dimensions must be strict greater than 1 for each dimension.");
-      
+
     numberOfSamplesPerDimension_ = numberOfSamplesPerDimension;
   }
 }

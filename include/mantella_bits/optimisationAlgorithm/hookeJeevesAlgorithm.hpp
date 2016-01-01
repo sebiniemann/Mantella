@@ -37,7 +37,7 @@ namespace mant {
     double stepSizeDecrease_;
 
     double stepSize_;
-    
+
     std::unordered_set<arma::Col<double>, Hash, IsEqual> previousBestParameters_;
   };
 }

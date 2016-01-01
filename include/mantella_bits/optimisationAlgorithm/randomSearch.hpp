@@ -11,7 +11,7 @@ namespace mant {
   class RandomSearch : public OptimisationAlgorithm {
    public:
     explicit RandomSearch();
-    
+
     void optimise(
         OptimisationProblem& optimisationProblem);
   };

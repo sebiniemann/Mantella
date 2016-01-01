@@ -27,7 +27,7 @@ namespace mant {
 
     void setIsAcceptableStateFunction(
         std::function<bool(const double objectiveValue)> isAcceptableStateFunction);
-        
+
     void setMinimalStepSize(
         const double minimalStepSize);
 
@@ -36,10 +36,10 @@ namespace mant {
 
    protected:
     std::function<bool(const double objectiveValue)> isAcceptableStateFunction_;
-    
+
     double minimalStepSize_;
     double maximalStepSize_;
-    
+
     arma::Col<double> state_;
   };
 }

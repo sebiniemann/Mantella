@@ -4,10 +4,10 @@
 // C++ standard library
 #include <cassert>
 
-namespace mant{
+namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm() {
     reset();
-        
+
     setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(10));
@@ -65,14 +65,14 @@ namespace mant{
       std::cout << "  Restarting function: " << restartingFunctionName_ << "\n";
       std::cout << std::endl;
     }
-    
+
     reset();
-    
+
     initialise(optimisationProblem.numberOfDimensions_, initialParameters);
-    
+
     arma::Mat<double> parameters = boundariesHandlingFunction_(initialParameters);
     std::pair<arma::Col<double>, arma::Col<double>> objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
-    
+
     while (!isTerminated() && !isFinished()) {
       if (isStagnatingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
         parameters = restartingFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
@@ -80,19 +80,17 @@ namespace mant{
         parameters = nextParametersFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
       }
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
-      
+
       parameters = boundariesHandlingFunction_(parameters);
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
-      
+
       objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
-      
+
       // Communication
-      
     }
-    
+
     // Sync best parameter
-    
-        
+
     if (::mant::isVerbose) {
       if (isFinished()) {
         std::cout << "  Finished with an acceptable solution.\n";
@@ -106,7 +104,7 @@ namespace mant{
       std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
       std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
     }
-        
+
     duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
   }
 
@@ -114,11 +112,11 @@ namespace mant{
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction,
       const std::string& nextParametersFunctionName) {
     verify(static_cast<bool>(nextParametersFunction), "setNextParametersFunction: The next parameters function must be callable.");
-    
+
     nextParametersFunction_ = nextParametersFunction;
     nextParametersFunctionName_ = nextParametersFunctionName;
   }
-  
+
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction) {
     setNextParametersFunction(nextParametersFunction, "Unnamed, custom next parameter function");
@@ -127,16 +125,16 @@ namespace mant{
   std::string OptimisationAlgorithm::getNextParametersFunctionName() const {
     return nextParametersFunctionName_;
   }
-  
+
   void OptimisationAlgorithm::setBoundariesHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
       const std::string& boundariesHandlingFunctionName) {
     verify(static_cast<bool>(boundariesHandlingFunction), "setBoundariesHandlingFunction: The boundaries handling function must be callable.");
-    
+
     boundariesHandlingFunction_ = boundariesHandlingFunction;
     boundariesHandlingFunctionName_ = boundariesHandlingFunctionName;
   }
-  
+
   void OptimisationAlgorithm::setBoundariesHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction) {
     setBoundariesHandlingFunction(boundariesHandlingFunction, "Unnamed, custom boundaries handling function");
@@ -145,16 +143,16 @@ namespace mant{
   std::string OptimisationAlgorithm::getBoundariesHandlingFunctionName() const {
     return boundariesHandlingFunctionName_;
   }
-  
+
   void OptimisationAlgorithm::isStagnatingFunction(
       std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction,
       const std::string& stagnationDetectionFunctionName) {
     verify(static_cast<bool>(stagnationDetectionFunction), "isStagnatingFunction: The restart detection function must be callable.");
-    
+
     isStagnatingFunction_ = stagnationDetectionFunction;
     isStagnatingFunctionName_ = stagnationDetectionFunctionName;
   }
-  
+
   void OptimisationAlgorithm::isStagnatingFunction(
       std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction) {
     isStagnatingFunction(stagnationDetectionFunction, "Unnamed, custom restart detection function");
@@ -163,16 +161,16 @@ namespace mant{
   std::string OptimisationAlgorithm::getRestartDetectionFunctionName() const {
     return isStagnatingFunctionName_;
   }
-  
+
   void OptimisationAlgorithm::setRestartingFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction,
       const std::string& restartingFunctionName) {
     verify(static_cast<bool>(restartingFunction), "setRestartingFunction: The restart handling function must be callable.");
-    
+
     restartingFunction_ = restartingFunction;
     restartingFunctionName_ = restartingFunctionName;
   }
-  
+
   void OptimisationAlgorithm::setRestartingFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction) {
     setRestartingFunction(restartingFunction, "Unnamed, custom restart handling function");
@@ -189,18 +187,18 @@ namespace mant{
 
   void OptimisationAlgorithm::setMaximalNumberOfIterations(
       const arma::uword maximalNumberOfIterations) {
-    maximalNumberOfIterations_ = maximalNumberOfIterations;    
+    maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
-      
+
   arma::uword OptimisationAlgorithm::getNumberOfIterations() const {
     return numberOfIterations_;
   }
 
   void OptimisationAlgorithm::setMaximalDuration(
       const std::chrono::microseconds maximalDuration) {
-    maximalDuration_ = maximalDuration; 
+    maximalDuration_ = maximalDuration;
   }
-      
+
   std::chrono::microseconds OptimisationAlgorithm::getDuration() const {
     return duration_;
   }
@@ -224,41 +222,40 @@ namespace mant{
   std::vector<std::pair<arma::Col<double>, double>> OptimisationAlgorithm::getSamplingHistory() const {
     return samplingHistory_;
   }
-  
+
   void OptimisationAlgorithm::reset() {
-    numberOfIterations_  = 0;
+    numberOfIterations_ = 0;
     bestObjectiveValue_ = arma::datum::inf;
     bestParameter_.reset();
     duration_ = std::chrono::microseconds(0);
     initialTimePoint_ = std::chrono::steady_clock::now();
   }
-  
+
   void OptimisationAlgorithm::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-      
   }
-  
+
   std::pair<arma::Col<double>, arma::Col<double>> OptimisationAlgorithm::evaluate(
       OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& parameters) {
     const double previousBestObjectiveValue = bestObjectiveValue_;
-    
+
     arma::Col<double> objectiveValues(parameters.n_cols);
     arma::Col<double> differences(parameters.n_cols);
-    
+
     for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
       const arma::Col<double>& parameter = parameters.col(n);
-    
+
       const double objectiveValue = optimisationProblem.getNormalisedObjectiveValue(parameter);
-      
+
       if (::mant::isRecordingSampling) {
         samplingHistory_.push_back({parameter, objectiveValue});
       }
-      
+
       objectiveValues(n) = objectiveValue;
       differences(n) = objectiveValue - previousBestObjectiveValue;
-      
+
       if (objectiveValue < bestObjectiveValue_) {
         if (::mant::isVerbose) {
           std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Found better solution.\n";
@@ -266,15 +263,15 @@ namespace mant{
           std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
           std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
         }
-        
+
         bestParameter_ = parameter;
         bestObjectiveValue_ = objectiveValue;
-        
+
         if (isFinished()) {
           break;
         }
       }
-      
+
       duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
     }
 

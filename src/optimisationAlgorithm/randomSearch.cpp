@@ -6,7 +6,7 @@
 namespace mant {
   RandomSearch::RandomSearch()
       : OptimisationAlgorithm() {
-    setNextParametersFunction([this] (
+    setNextParametersFunction([this](
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& parameters,
         const arma::Col<double>& objectiveValues,
@@ -14,7 +14,7 @@ namespace mant {
       return arma::randu<arma::Col<double>>(parameters.n_rows);
     });
   }
-  
+
   void RandomSearch::optimise(
       OptimisationProblem& optimisationProblem) {
     OptimisationAlgorithm::optimise(optimisationProblem, arma::Mat<double>(optimisationProblem.numberOfDimensions_, 0));

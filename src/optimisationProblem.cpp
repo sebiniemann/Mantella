@@ -28,7 +28,7 @@ namespace mant {
 
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
-    
+
     setMinimalParameterDistance(arma::zeros<arma::Col<double>>(numberOfDimensions_));
   }
 
@@ -36,19 +36,19 @@ namespace mant {
       const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
       const std::string& objectiveFunctionName) {
     verify(static_cast<bool>(objectiveFunction), "setObjectiveFunction: The objective function must be callable.");
-      
+
     objectiveFunction_ = objectiveFunction;
     objectiveFunctionName_ = objectiveFunctionName;
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   void OptimisationProblem::setObjectiveFunction(
       const std::function<double(const arma::Col<double>& parameter)> objectiveFunction) {
     setObjectiveFunction(objectiveFunction, "Unnamed, custom optimisation problem");
   }
-  
+
   std::string OptimisationProblem::getObjectiveFunctionName() const {
     return objectiveFunctionName_;
   }
@@ -60,7 +60,7 @@ namespace mant {
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
-    
+
     const arma::Col<double>& discretisedParameter = getDiscretisedParameter(parameter);
     if (::mant::isCachingSamples) {
       // Check if the result is already cached.
@@ -85,16 +85,16 @@ namespace mant {
       const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
       // All objective values must be finite.
       assert(std::isfinite(result));
-        
+
       return result;
     }
   }
-  
+
   double OptimisationProblem::getNormalisedObjectiveValue(
       const arma::Col<double>& parameter) {
     return getObjectiveValue(lowerBounds_ + parameter % (upperBounds_ - lowerBounds_));
   }
-  
+
   void OptimisationProblem::setLowerBounds(
       const arma::Col<double>& lowerBounds) {
     verify(lowerBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the lower bound must be equal to the number of problem dimensions.");
@@ -105,11 +105,11 @@ namespace mant {
     MPI_Bcast(lowerBounds_.memptr(), static_cast<int>(lowerBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
   }
-  
+
   arma::Col<double> OptimisationProblem::getLowerBounds() const {
     return lowerBounds_;
   }
-  
+
   void OptimisationProblem::setUpperBounds(
       const arma::Col<double>& upperBounds) {
     verify(upperBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the upper bound must be equal to the number of problem dimensions.");
@@ -120,11 +120,11 @@ namespace mant {
     MPI_Bcast(upperBounds_.memptr(), static_cast<int>(upperBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
   }
-  
+
   arma::Col<double> OptimisationProblem::getUpperBounds() const {
     return upperBounds_;
   }
-        
+
   void OptimisationProblem::setParameterPermutation(
       const arma::Col<arma::uword>& parameterPermutation) {
     verify(parameterPermutation.n_elem == numberOfDimensions_, "setParameterPermutation: The number of elements must be equal to the number of dimensions");
@@ -145,7 +145,7 @@ namespace mant {
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   arma::Col<arma::uword> OptimisationProblem::getParameterPermutation() const {
     return parameterPermutation_;
   }
@@ -163,7 +163,7 @@ namespace mant {
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   arma::Col<double> OptimisationProblem::getParameterScaling() const {
     return parameterScaling_;
   }
@@ -181,7 +181,7 @@ namespace mant {
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   arma::Col<double> OptimisationProblem::getParameterTranslation() const {
     return parameterTranslation_;
   }
@@ -199,7 +199,7 @@ namespace mant {
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   arma::Mat<double> OptimisationProblem::getParameterRotation() const {
     return parameterRotation_;
   }
@@ -216,7 +216,7 @@ namespace mant {
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   double OptimisationProblem::getObjectiveValueScaling() const {
     return objectiveValueScaling_;
   }
@@ -233,7 +233,7 @@ namespace mant {
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
-  
+
   double OptimisationProblem::getObjectiveValueTranslation() const {
     return objectiveValueTranslation_;
   }
@@ -241,14 +241,14 @@ namespace mant {
   std::unordered_map<arma::Col<double>, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
     return cachedSamples_;
   }
-  
+
   void OptimisationProblem::setMinimalParameterDistance(
       const arma::Col<double>& minimalParameterDistance) {
     verify(arma::all(minimalParameterDistance >= 0), "setMinimalParameterDistance: "); // TODO
-      
+
     minimalParameterDistance_ = minimalParameterDistance;
   }
-  
+
   arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {
     return minimalParameterDistance_;
   }
@@ -271,11 +271,11 @@ namespace mant {
   arma::Col<double> OptimisationProblem::getDiscretisedParameter(
       const arma::Col<double>& parameter) const {
     assert(parameter.n_elem == numberOfDimensions_);
-    
+
     arma::Col<double> discretisedParameter = parameter;
     const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance_ > 0);
     discretisedParameter.elem(elementsToDiscretise) = arma::floor(discretisedParameter.elem(elementsToDiscretise) / minimalParameterDistance_.elem(elementsToDiscretise)) % minimalParameterDistance_.elem(elementsToDiscretise);
-    
+
     return discretisedParameter;
   }
 

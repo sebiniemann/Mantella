@@ -25,7 +25,7 @@ namespace mant {
     void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::uword numberOfParticles);
-        
+
     void setNeighbourhoodTopologyFunction(
         std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction);
 
@@ -45,10 +45,10 @@ namespace mant {
 
     arma::uword numberOfParticles_;
     arma::uword activeParticleIndex_;
-    
+
     arma::Mat<double> particles_;
     arma::Mat<double> velocities_;
-    
+
     bool randomiseTopology_;
     arma::Mat<arma::uword> neighbourhoodTopology_;
 

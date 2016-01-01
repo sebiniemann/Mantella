@@ -2,6 +2,5 @@
 
 namespace mant {
   namespace krmp {
-  
   }
 }

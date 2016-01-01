@@ -24,13 +24,13 @@ namespace mant {
 
     void optimise(
         OptimisationProblem& optimisationProblem);
-    
+
     void setNumberOfSamplesPerDimension(
         const arma::Col<arma::uword>& numberOfSamplesPerDimension);
 
    protected:
     arma::Col<arma::uword> numberOfSamplesPerDimension_;
-    
+
     std::vector<arma::Col<double>> samples_;
     arma::Col<arma::uword> sampleIndicies_;
   };
