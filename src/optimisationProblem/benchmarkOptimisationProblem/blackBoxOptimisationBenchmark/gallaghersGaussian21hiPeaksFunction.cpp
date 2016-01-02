@@ -1,4 +1,5 @@
 #include "mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <cassert>
@@ -29,18 +30,19 @@ namespace mant {
       MPI_Bcast(rotationQ_.memptr(), static_cast<int>(rotationQ_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          double maximalValue = std::numeric_limits<double>::lowest();
-          for (arma::uword n = 0; n < 21; ++n) {
-            const arma::Col<double>& localParameterTranslation = parameter - localParameterTranslations_.col(n);
-            maximalValue = std::max(maximalValue, weight_(n) * std::exp(-0.5 / static_cast<double>(numberOfDimensions_) * arma::dot(localParameterTranslation, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(n)) * rotationQ_ * localParameterTranslation)));
-          }
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            double maximalValue = std::numeric_limits<double>::lowest();
+            for (arma::uword n = 0; n < 21; ++n) {
+              const arma::Col<double>& localParameterTranslation = parameter - localParameterTranslations_.col(n);
+              maximalValue = std::max(maximalValue, weight_(n) * std::exp(-0.5 / static_cast<double>(numberOfDimensions_) * arma::dot(localParameterTranslation, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(n)) * rotationQ_ * localParameterTranslation)));
+            }
 
-          return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
-      },
+            return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
+          },
           "BBOB Gallagher's Gaussian 21-hi Peaks Function");
     }
   }

@@ -13,7 +13,7 @@ namespace mant {
 
   arma::Col<arma::uword> randomPermutationVector(
       const arma::uword numberOfElements);
-      
+
   arma::Col<double> randomNeighbour(
       const arma::Col<double>& parameter,
       const double minimalDistance,

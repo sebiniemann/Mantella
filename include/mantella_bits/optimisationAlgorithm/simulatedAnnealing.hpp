@@ -1,8 +1,7 @@
 #pragma once
 
 // C++ standard library
-#include <string>
-#include <memory>
+#include <functional>
 
 // Armadillo
 #include <armadillo>
@@ -18,8 +17,8 @@ namespace mant {
    public:
     explicit SimulatedAnnealing();
 
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
@@ -27,7 +26,7 @@ namespace mant {
 
     void setIsAcceptableStateFunction(
         std::function<bool(const double objectiveValue)> isAcceptableStateFunction);
-        
+
     void setMinimalStepSize(
         const double minimalStepSize);
 
@@ -36,10 +35,10 @@ namespace mant {
 
    protected:
     std::function<bool(const double objectiveValue)> isAcceptableStateFunction_;
-    
+
     double minimalStepSize_;
     double maximalStepSize_;
-    
+
     arma::Col<double> state_;
   };
 }

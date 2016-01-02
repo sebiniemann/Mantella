@@ -2,15 +2,11 @@
 
 // C++ standard library
 #include <functional>
-#include <string>
-#include <unordered_map>
-#include <memory>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
 
 namespace mant {
@@ -18,7 +14,7 @@ namespace mant {
    public:
     explicit PolynomialFunctionModel(
         const arma::uword numberOfDimensions);
-   
+
     void setPolynomialOrder(
         const arma::uword polynomialOrder);
 
@@ -28,7 +24,7 @@ namespace mant {
    protected:
     arma::uword polynomialOrder_;
     std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Row<double>& objectiveValues)> estimatorFunction_;
-      
+
     arma::Col<double> coefficients_;
   };
 }

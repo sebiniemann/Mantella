@@ -1,14 +1,15 @@
 #pragma once
 
 // C++ standard library
-#include <memory>
 #include <unordered_set>
-#include <string>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
+#include "mantella_bits/armadillo.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 #include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;
@@ -19,8 +20,8 @@ namespace mant {
    public:
     explicit HookeJeevesAlgorithm();
 
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
@@ -37,7 +38,7 @@ namespace mant {
     double stepSizeDecrease_;
 
     double stepSize_;
-    
+
     std::unordered_set<arma::Col<double>, Hash, IsEqual> previousBestParameters_;
   };
 }

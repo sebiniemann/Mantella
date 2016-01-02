@@ -19,19 +19,20 @@ namespace mant {
       }
       setParameterTranslation(parameterTranslation);
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          arma::Col<double> z = parameterConditioning_ % getOscillatedParameter(parameter);
-          for (arma::uword n = 0; n < z.n_elem; n += 2) {
-            if (z(n) > 0.0) {
-              z(n) *= 10.0;
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            arma::Col<double> z = parameterConditioning_ % getOscillatedParameter(parameter);
+            for (arma::uword n = 0; n < z.n_elem; n += 2) {
+              if (z(n) > 0.0) {
+                z(n) *= 10.0;
+              }
             }
-          }
 
-          return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
-      },
+            return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+          },
           "BBOB Büche-Rastrigin Function");
     }
   }

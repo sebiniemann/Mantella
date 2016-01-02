@@ -1,31 +1,30 @@
 #pragma once
 
 // C++ standard library
-#include <string>
-#include <memory>
-
-// C++ standard library
-#include <deque>
+#include <functional>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
 #include "mantella_bits/optimisationAlgorithm.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class ParticleSwarmOptimisation : public OptimisationAlgorithm {
    public:
     explicit ParticleSwarmOptimisation();
 
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::uword numberOfParticles);
-        
+
     void setNeighbourhoodTopologyFunction(
         std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction);
 
@@ -45,10 +44,10 @@ namespace mant {
 
     arma::uword numberOfParticles_;
     arma::uword activeParticleIndex_;
-    
+
     arma::Mat<double> particles_;
     arma::Mat<double> velocities_;
-    
+
     bool randomiseTopology_;
     arma::Mat<arma::uword> neighbourhoodTopology_;
 

@@ -22,7 +22,7 @@ TEST_CASE("BlackBoxOptimisationBenchmark") {
     IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
     IS_EQUAL(optimisationProblem.getUpperBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     
-    const double& objectiveValueTranslation = getContinuousRandomNumber();
+    const double& objectiveValueTranslation = SYNCRONISED(getContinuousRandomNumber());
     CAPTURE(objectiveValueTranslation);
     
     optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);

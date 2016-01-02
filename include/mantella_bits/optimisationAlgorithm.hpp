@@ -2,7 +2,8 @@
 
 // C++ standard library
 #include <chrono>
-#include <deque>
+#include <functional>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -10,17 +11,19 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationProblem.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class OptimisationAlgorithm {
    public:
     explicit OptimisationAlgorithm();
 
-    virtual void optimise(
+    void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
-        
+
     void setNextParametersFunction(
         std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
         const std::string& nextParametersFunctionName);
@@ -45,7 +48,7 @@ namespace mant {
     void setRestartingFunction(
         std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction);
     std::string getRestartHandlingFunctionName() const;
-        
+
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
 
@@ -63,13 +66,15 @@ namespace mant {
     arma::Col<double> getBestParameter() const;
 
     std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
-    
+
     void reset();
+
+    virtual ~OptimisationAlgorithm() = default;
 
    protected:
     int nodeRank_;
     int numberOfNodes_;
-   
+
     std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
     std::string nextParametersFunctionName_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
@@ -91,10 +96,11 @@ namespace mant {
     arma::Col<double> bestParameter_;
 
     std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
-    
-    void initialise(
+
+    virtual void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters);
-    
+
     std::pair<arma::Col<double>, arma::Col<double>> evaluate(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& parameters);

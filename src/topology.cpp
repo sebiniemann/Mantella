@@ -1,5 +1,8 @@
 #include "mantella_bits/topology.hpp"
 
+// C++ standard library
+#include <cmath>
+
 // Mantella
 #include "mantella_bits/assert.hpp"
 

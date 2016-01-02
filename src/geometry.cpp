@@ -58,8 +58,7 @@ namespace mant {
     const arma::Col<double>::fixed<2>& unitVector = (secondCentre - firstCentre) / distance;
 
     // 6. Scale, rotate and translate the (x, y)-coordinate to be within the actual coordinate system (remove the assumption from 1.)
-    return arma::Mat<double>::fixed<2, 2>({
-        firstCentre(0) + unitVector(0) * x - unitVector(1) * y, firstCentre(1) + unitVector(1) * x + unitVector(0) * y, firstCentre(0) + unitVector(0) * x + unitVector(1) * y, firstCentre(1) + unitVector(1) * x - unitVector(0) * y});
+    return arma::Mat<double>::fixed<2, 2>({firstCentre(0) + unitVector(0) * x - unitVector(1) * y, firstCentre(1) + unitVector(1) * x + unitVector(0) * y, firstCentre(0) + unitVector(0) * x + unitVector(1) * y, firstCentre(1) + unitVector(1) * x - unitVector(0) * y});
   }
 
   arma::Mat<double>::fixed<3, 2> circleSphereIntersections(

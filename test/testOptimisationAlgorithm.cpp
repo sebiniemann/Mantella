@@ -12,18 +12,18 @@ TEST_CASE("OptimisationAlgorithm") {
   mant::OptimisationAlgorithm optimisationAlgorithm;
   optimisationAlgorithm.setMaximalNumberOfIterations(100);
   
-  SECTION(".optimise") {
-    arma::uword numberOfDimensions = getDiscreteRandomNumber();
+    arma::uword numberOfDimensions = SYNCRONISED(getDiscreteRandomNumber());
     CAPTURE(numberOfDimensions);
   
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     
+  SECTION(".optimise") {
     optimisationAlgorithm.setNextParametersFunction([] (
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& parameters,
-        const arma::Col<double>& objectiveValues,
-        const arma::Col<double>& differences) {
-      return arma::randu<arma::Col<double>>(parameters.n_rows);
+        const arma::uword numberOfDimensions_,
+        const arma::Mat<double>& parameters_,
+        const arma::Col<double>& objectiveValues_,
+        const arma::Col<double>& differences_) {
+      return arma::randu<arma::Col<double>>(parameters_.n_rows);
     });
     optimisationAlgorithm.optimise(optimisationProblem, arma::randu<arma::Col<double>>(numberOfDimensions));
     
@@ -137,18 +137,13 @@ TEST_CASE("OptimisationAlgorithm") {
     
     SECTION("Is empty, if the sample history recording is disabled.") {
       mant::isRecordingSampling = false;
-      
-      arma::uword numberOfDimensions = getDiscreteRandomNumber();
-      CAPTURE(numberOfDimensions);
-      
-      mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
-        
+
       optimisationAlgorithm.setNextParametersFunction([] (
-          const arma::uword numberOfDimensions,
-          const arma::Mat<double>& parameters,
-          const arma::Col<double>& objectiveValues,
-          const arma::Col<double>& differences) {
-        return arma::randu<arma::Col<double>>(parameters.n_rows);
+          const arma::uword numberOfDimensions_,
+          const arma::Mat<double>& parameters_,
+          const arma::Col<double>& objectiveValues_,
+          const arma::Col<double>& differences_) {
+        return arma::randu<arma::Col<double>>(parameters_.n_rows);
       });
       optimisationAlgorithm.setAcceptableObjectiveValue(optimisationProblem.getOptimalObjectiveValue() + 1e-3);
       optimisationAlgorithm.optimise(optimisationProblem, arma::randu<arma::Col<double>>(numberOfDimensions));

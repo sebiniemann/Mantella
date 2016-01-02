@@ -7,8 +7,6 @@
 // Mantella
 #include "mantella_bits/geometry.hpp"
 
-#include <iostream>
-
 // The following robot configurations and calculations are based on the work of our research colleagues from the Institute of Mechatronic Systems, Leibniz Universität Hannover, Germany.
 // To understand the following equations, we advise to carefully read the following paper:
 // @see J. Kotlarski et al. (2012). Influence of kinematic redundancy on the singularity-free workspace of parallel kinematic machines. Frontiers of Mechanical Engineering, 7(2), pp. 120-134.

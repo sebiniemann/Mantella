@@ -41,7 +41,7 @@ message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 message(STATUS "") 
 message(STATUS "Checking prerequirements.")
 
-set(REQUIRED_ARMADILLO_VERSION "6.100.0")
+set(REQUIRED_ARMADILLO_VERSION "6.400.0")
 find_package(Armadillo QUIET)
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
 if(NOT ARMADILLO_FOUND)

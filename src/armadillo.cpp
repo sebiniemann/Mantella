@@ -3,7 +3,7 @@
 // C++ standard library
 #include <functional>
 
-namespace mant {   
+namespace mant {
   arma::uword Hash::operator()(
       const arma::Col<double>& key) const {
     // Starts with the hash of the first value ...
