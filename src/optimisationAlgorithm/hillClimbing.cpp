@@ -1,7 +1,11 @@
 #include "mantella_bits/optimisationAlgorithm/hillClimbing.hpp"
 
+// C++ standard library
+#include <cmath>
+
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/probability.hpp"
 
 namespace mant {

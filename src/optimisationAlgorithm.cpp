@@ -3,6 +3,12 @@
 
 // C++ standard library
 #include <cassert>
+#include <iostream>
+#include <limits>
+
+// Mantella
+#include "mantella_bits/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm() {

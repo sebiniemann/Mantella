@@ -2,7 +2,8 @@
 
 // C++ standard library
 #include <chrono>
-#include <deque>
+#include <functional>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -10,7 +11,9 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationProblem.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class OptimisationAlgorithm {

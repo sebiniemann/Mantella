@@ -5,10 +5,15 @@
 #include <unordered_map>
 
 // Armadillo
-#include <armadillo>
+namespace arma {
+  template <typename T>
+  class Col;
+}
 
 // Mantella
 #include "mantella_bits/armadillo.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 #include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {

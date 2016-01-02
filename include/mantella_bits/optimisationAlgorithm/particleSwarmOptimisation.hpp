@@ -1,17 +1,16 @@
 #pragma once
 
 // C++ standard library
-#include <string>
-#include <memory>
-
-// C++ standard library
-#include <deque>
+#include <functional>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
 #include "mantella_bits/optimisationAlgorithm.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class ParticleSwarmOptimisation : public OptimisationAlgorithm {

@@ -1,7 +1,10 @@
 #include "mantella_bits/optimisationAlgorithm/randomSearch.hpp"
 
+// Armadillo
+#include <armadillo>
+
 // Mantella
-#include "mantella_bits/probability.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   RandomSearch::RandomSearch()

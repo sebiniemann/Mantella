@@ -1,8 +1,7 @@
 #pragma once
 
 // C++ standard library
-#include <memory>
-#include <string>
+#include <vector>
 
 // Armadillo
 #include <armadillo>

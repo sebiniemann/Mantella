@@ -2,15 +2,11 @@
 
 // C++ standard library
 #include <functional>
-#include <string>
-#include <unordered_map>
-#include <memory>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
 
 namespace mant {

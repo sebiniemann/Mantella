@@ -1,12 +1,16 @@
 #include "mantella_bits/samplesAnalysis.hpp"
 
 // C++ standard library
+#include <algorithm>
 #include <cmath>
 #include <set>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
 #include "mantella_bits/algebra.hpp"
+#include "mantella_bits/assert.hpp"
 #include "mantella_bits/numberTheory.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   double correlationAnalysis(

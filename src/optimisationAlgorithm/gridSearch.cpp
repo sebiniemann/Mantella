@@ -1,11 +1,11 @@
 #include "mantella_bits/optimisationAlgorithm/gridSearch.hpp"
 
 // C++ standard library
-#include <vector>
 // IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   GridSearch::GridSearch()

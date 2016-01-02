@@ -3,7 +3,6 @@
 // C++ standard library
 #include <algorithm>
 #include <cmath>
-#include <cassert>
 #include <random>
 
 // Mantella

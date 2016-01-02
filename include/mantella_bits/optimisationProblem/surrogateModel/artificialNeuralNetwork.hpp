@@ -1,11 +1,5 @@
 #pragma once
 
-// C++ standard library
-#include <string>
-
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
 

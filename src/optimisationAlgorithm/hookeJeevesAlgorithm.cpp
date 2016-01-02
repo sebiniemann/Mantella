@@ -1,13 +1,11 @@
 #include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 
 // C++ standard library
-#include <algorithm>
 #include <cmath>
 
 // Mantella
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/probability.hpp"
 
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm()

@@ -5,10 +5,7 @@
 #include <cmath>
 
 // Mantella
-#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/geometry.hpp"
-
-#include <iostream>
 
 // The following robot configurations and calculations are based on the work of our research colleagues from the Institute of Mechatronic Systems, Leibniz Universität Hannover, Germany.
 // To understand the following equations, we advise to carefully read the following paper:

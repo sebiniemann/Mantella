@@ -1,12 +1,9 @@
 #pragma once
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <functional>
+#include <string>
 #include <unordered_map>
-#if defined(SUPPORT_MPI) // IWYU pragma: keep
-#include <vector>
-#endif
 
 // Armadillo
 #include <armadillo>

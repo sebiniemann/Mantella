@@ -1,14 +1,13 @@
 #pragma once
 
 // C++ standard library
-#include <memory>
 #include <unordered_set>
-#include <string>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
+#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;

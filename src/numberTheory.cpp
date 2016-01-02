@@ -3,11 +3,10 @@
 // C++ standard library
 #include <algorithm>
 #include <cmath>
-#include <iterator>
 
 // Mantella
+#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/assert.hpp"
-#include "mantella_bits/combinatorics.hpp"
 
 namespace mant {
   arma::Mat<double> hammersleySet(

@@ -1,7 +1,6 @@
 #include "mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.hpp"
 
 // C++ standard library
-#include <cassert>
 // IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella

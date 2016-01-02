@@ -1,4 +1,5 @@
 #include "mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <cassert>

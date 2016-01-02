@@ -12,8 +12,6 @@
 // Mantella
 #include <mantella>
 
-#include <iostream>
-
 class TestParallelKinematicMachine6PUPS : public mant::krmp::ParallelKinematicMachine6PUPS {
   public:
     using mant::krmp::ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS;

@@ -1,7 +1,14 @@
 #include "mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp"
 
+// C++ standard library
+#include <chrono>
+#include <cmath>
+#include <limits>
+#include <random>
+
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/probability.hpp"
 #include "mantella_bits/randomNumberGenerator.hpp"
 

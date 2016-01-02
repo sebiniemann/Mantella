@@ -4,7 +4,6 @@
 // C++ standard library
 #include <cassert>
 #include <cmath>
-#include <limits>
 #include <utility>
 
 // Mantella

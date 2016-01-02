@@ -2,16 +2,20 @@
 
 // C++ standard library
 #include <functional>
-#include <memory>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
 #include "mantella_bits/armadillo.hpp"
-#include "mantella_bits/optimisationProblem.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   double correlationAnalysis(

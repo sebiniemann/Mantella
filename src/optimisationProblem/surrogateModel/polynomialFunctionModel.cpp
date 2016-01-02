@@ -1,7 +1,13 @@
 #include "mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp"
 
+// C++ standard library
+#include <unordered_map>
+
 // Mantella
 #include "mantella_bits/algebra.hpp"
+#include "mantella_bits/armadillo.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 #include "mantella_bits/samplesAnalysis.hpp"
 
 namespace mant {
