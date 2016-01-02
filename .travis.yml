@@ -28,7 +28,8 @@ install:
   - sudo apt-get install -qq cmake;
   
   ## Armadillo C++
-  - sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
+  - sudo apt-get install -qq libblas-dev liblapack-dev
+  - if [ "$CXX" == "clang++" ]; then apt-get install -qq libopenblas-dev; fi
   - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.400.3.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
