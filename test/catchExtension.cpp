@@ -51,6 +51,62 @@ arma::Mat<double> getContinuousRandomNumbers(
   return arma::randu<arma::Mat<double>>(numberOfRows, numberOfColumns) * 200.0 - 100.0;
 }
 
+arma::Mat<double> SYNCRONISED(
+    const arma::Mat<double>& data) {
+  arma::Mat<double> syncronisedData = data;
+  MPI_Bcast(syncronisedData.memptr(), static_cast<int>(syncronisedData.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  return syncronisedData;
+}
+
+arma::Mat<arma::uword> SYNCRONISED(
+    const arma::Mat<arma::uword>& data) {
+  arma::Mat<unsigned int> syncronisedData = arma::conv_to<arma::Mat<unsigned int>>::from(data);
+  MPI_Bcast(syncronisedData.memptr(), static_cast<int>(syncronisedData.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+  return arma::conv_to<arma::Mat<arma::uword>>::from(syncronisedData);
+}
+
+arma::Col<double> SYNCRONISED(
+    const arma::Col<double>& data) {
+  arma::Col<double> syncronisedData = data;
+  MPI_Bcast(syncronisedData.memptr(), static_cast<int>(syncronisedData.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  return syncronisedData;
+}
+
+arma::Col<arma::uword> SYNCRONISED(
+    const arma::Col<arma::uword>& data) {
+  arma::Col<unsigned int> syncronisedData = arma::conv_to<arma::Col<unsigned int>>::from(data);
+  MPI_Bcast(syncronisedData.memptr(), static_cast<int>(syncronisedData.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+  return arma::conv_to<arma::Col<arma::uword>>::from(syncronisedData);
+}
+
+arma::Row<double> SYNCRONISED(
+    const arma::Row<double>& data) {
+  arma::Row<double> syncronisedData = data;
+  MPI_Bcast(syncronisedData.memptr(), static_cast<int>(syncronisedData.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  return syncronisedData;
+}
+
+arma::Row<arma::uword> SYNCRONISED(
+    const arma::Row<arma::uword>& data) {
+  arma::Row<unsigned int> syncronisedData = arma::conv_to<arma::Row<unsigned int>>::from(data);
+  MPI_Bcast(syncronisedData.memptr(), static_cast<int>(syncronisedData.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+  return arma::conv_to<arma::Row<arma::uword>>::from(syncronisedData);
+}
+
+double SYNCRONISED(
+    const double data) {
+  double syncronisedData = data;
+  MPI_Bcast(&syncronisedData, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  return syncronisedData;
+}
+
+arma::uword SYNCRONISED(
+    const arma::uword data) {
+  unsigned int syncronisedData = static_cast<unsigned int>(data);
+  MPI_Bcast(&syncronisedData, 1, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+  return static_cast<arma::uword>(syncronisedData);
+}
+
 void HAS_SAME_SAMPLES(
     const std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual>& actualSamples,
     const std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual>& expectedSamples) {

@@ -13,7 +13,7 @@
 
 TEST_CASE("OptimisationProblem") {
   // Some tests require at least a second dimensions, to differentiate between both. 
-  arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
+  arma::uword numberOfDimensions = SYNCRONISED(1 + getDiscreteRandomNumber());
   CAPTURE(numberOfDimensions);
   
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -113,25 +113,30 @@ TEST_CASE("OptimisationProblem") {
     // We test the effectiveness and order of all parameter space and objective value space modifications at this point, to avoid repetitive checks for each space modification setter.
     SECTION("Is adjusted by the parameter space and objective value space modifiers (including the correct order).") {
       // Parameter space modifiers
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
-      CAPTURE(parameterPermutation);
+      arma::Col<arma::uword> parameterPermutation = SYNCRONISED(mant::randomPermutationVector(numberOfDimensions));
       optimisationProblem.setParameterPermutation(parameterPermutation);
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameterScaling);
+      CAPTURE(parameterPermutation);
+      
+      arma::Col<double> parameterScaling = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       optimisationProblem.setParameterScaling(parameterScaling);
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameterTranslation);
+      CAPTURE(parameterScaling);
+      
+      arma::Col<double> parameterTranslation = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       optimisationProblem.setParameterTranslation(parameterTranslation);
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-      CAPTURE(parameterRotation);
+      CAPTURE(parameterTranslation);
+      
+      arma::Mat<double> parameterRotation = SYNCRONISED(mant::randomRotationMatrix(numberOfDimensions));
       optimisationProblem.setParameterRotation(parameterRotation);
+      CAPTURE(parameterRotation);
+      
       // Objective value space modifiers
-      const double& objectiveValueScaling = getContinuousRandomNumber();
-      CAPTURE(objectiveValueScaling);
+      double objectiveValueScaling = SYNCRONISED(getContinuousRandomNumber());
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      const double& objectiveValueTranslation = getContinuousRandomNumber();
-      CAPTURE(objectiveValueTranslation);
+      CAPTURE(objectiveValueScaling);
+      
+      double objectiveValueTranslation = SYNCRONISED(getContinuousRandomNumber());
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
+      CAPTURE(objectiveValueTranslation);
       
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
@@ -157,7 +162,7 @@ TEST_CASE("OptimisationProblem") {
 
   SECTION(".setLowerBounds") {
     SECTION("Updates the lower bounds.") {
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& lowerBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(lowerBounds);
       
       optimisationProblem.setLowerBounds(lowerBounds);
@@ -199,9 +204,8 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(lowerBounds);
       
       optimisationProblem.setLowerBounds(lowerBounds);
-      MPI_Bcast(lowerBounds.memptr(), static_cast<int>(lowerBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
-      IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
+      IS_EQUAL(optimisationProblem.getLowerBounds(), SYNCRONISED(lowerBounds));
     }
 #endif
 
@@ -231,7 +235,7 @@ TEST_CASE("OptimisationProblem") {
 
   SECTION(".setUpperBounds") {
     SECTION("Updates the upper bounds.") {
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& upperBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(upperBounds);
       
       optimisationProblem.setUpperBounds(upperBounds);
@@ -273,9 +277,8 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(upperBounds);
       
       optimisationProblem.setUpperBounds(upperBounds);
-      MPI_Bcast(upperBounds.memptr(), static_cast<int>(upperBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
-      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
+      IS_EQUAL(optimisationProblem.getUpperBounds(), SYNCRONISED(upperBounds));
     }
 #endif
 
@@ -340,10 +343,6 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(parameterPermutation);
       
       optimisationProblem.setParameterPermutation(parameterPermutation);
-      
-      arma::Col<unsigned int> covertedParameterPermutation = arma::conv_to<arma::Col<unsigned int>>::from(parameterPermutation);
-      MPI_Bcast(covertedParameterPermutation.memptr(), static_cast<int>(covertedParameterPermutation.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
-      parameterPermutation = arma::conv_to<arma::Col<arma::uword>>::from(covertedParameterPermutation);
     
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
       auto objectiveFunction = [] (
@@ -355,7 +354,7 @@ TEST_CASE("OptimisationProblem") {
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter.elem(parameterPermutation))));
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter.elem(SYNCRONISED(parameterPermutation)))));
     }
 #endif
 
@@ -425,7 +424,6 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(parameterScaling);
       
       optimisationProblem.setParameterScaling(parameterScaling);
-      MPI_Bcast(parameterScaling.memptr(), static_cast<int>(parameterScaling.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
       auto objectiveFunction = [] (
@@ -437,7 +435,7 @@ TEST_CASE("OptimisationProblem") {
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameterScaling % parameter)));
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(SYNCRONISED(parameterScaling) % parameter)));
     }
 #endif
 
@@ -498,7 +496,6 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(parameterTranslation);
       
       optimisationProblem.setParameterTranslation(parameterTranslation);
-      MPI_Bcast(parameterTranslation.memptr(), static_cast<int>(parameterTranslation.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
       auto objectiveFunction = [] (
@@ -510,7 +507,7 @@ TEST_CASE("OptimisationProblem") {
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter - parameterTranslation)));
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter - SYNCRONISED(parameterTranslation))));
     }
 #endif
 
@@ -571,7 +568,6 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(parameterRotation);
       
       optimisationProblem.setParameterRotation(parameterRotation);
-      MPI_Bcast(parameterRotation.memptr(), static_cast<int>(parameterRotation.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
       auto objectiveFunction = [] (
@@ -583,7 +579,7 @@ TEST_CASE("OptimisationProblem") {
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameterRotation * parameter)));
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(SYNCRONISED(parameterRotation) * parameter)));
     }
 #endif
 
@@ -662,7 +658,6 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(objectiveValueScaling);
       
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      MPI_Bcast(&objectiveValueScaling, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
       auto objectiveFunction = [] (
@@ -674,7 +669,7 @@ TEST_CASE("OptimisationProblem") {
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameter)));
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(SYNCRONISED(objectiveValueScaling) * objectiveFunction(parameter)));
     }
 #endif
 
@@ -722,7 +717,6 @@ TEST_CASE("OptimisationProblem") {
       CAPTURE(objectiveValueTranslation);
       
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-      MPI_Bcast(&objectiveValueTranslation, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
       
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
       auto objectiveFunction = [] (
@@ -734,7 +728,7 @@ TEST_CASE("OptimisationProblem") {
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
       
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter) + objectiveValueTranslation));
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter) + SYNCRONISED(objectiveValueTranslation)));
     }
 #endif
 
@@ -891,30 +885,30 @@ TEST_CASE("OptimisationProblem") {
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
       // Constraints
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& lowerBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(lowerBounds);
       optimisationProblem.setLowerBounds(lowerBounds);
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& upperBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(upperBounds);
       optimisationProblem.setUpperBounds(upperBounds);
       // Parameter space modifiers
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = SYNCRONISED(mant::randomPermutationVector(numberOfDimensions));
       CAPTURE(parameterPermutation);
       optimisationProblem.setParameterPermutation(parameterPermutation);
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameterScaling = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(parameterScaling);
       optimisationProblem.setParameterScaling(parameterScaling);
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameterTranslation = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(parameterTranslation);
       optimisationProblem.setParameterTranslation(parameterTranslation);
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
+      const arma::Mat<double>& parameterRotation = SYNCRONISED(mant::randomRotationMatrix(numberOfDimensions));
       CAPTURE(parameterRotation);
       optimisationProblem.setParameterRotation(parameterRotation);
       // Objective value space modifiers
-      const double& objectiveValueScaling = getContinuousRandomNumber();
+      const double& objectiveValueScaling = SYNCRONISED(getContinuousRandomNumber());
       CAPTURE(objectiveValueScaling);
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      const double& objectiveValueTranslation = getContinuousRandomNumber();
+      const double& objectiveValueTranslation = SYNCRONISED(getContinuousRandomNumber());
       CAPTURE(objectiveValueTranslation);
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
       

@@ -22,14 +22,14 @@ class TestBenchmarkOptimisationProblem : public mant::BenchmarkOptimisationProbl
 };
 
 TEST_CASE("BenchmarkOptimisationProblem") {
-  arma::uword numberOfDimensions = getDiscreteRandomNumber();
+  arma::uword numberOfDimensions = SYNCRONISED(getDiscreteRandomNumber());
   CAPTURE(numberOfDimensions);
   
   TestBenchmarkOptimisationProblem optimisationProblem(numberOfDimensions);
   
   SECTION(".getOptimalObjectiveValue") {
     SECTION("Returns the best (reachable) objective value.") {
-      const double& objectiveValueTranslation = getContinuousRandomNumber();
+      const double& objectiveValueTranslation = SYNCRONISED(getContinuousRandomNumber());
       CAPTURE(objectiveValueTranslation);
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
       
