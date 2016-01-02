@@ -69,7 +69,7 @@ namespace mant {
 
     void reset();
 
-    ~OptimisationAlgorithm() = default;
+    virtual ~OptimisationAlgorithm() = default;
 
    protected:
     int nodeRank_;
