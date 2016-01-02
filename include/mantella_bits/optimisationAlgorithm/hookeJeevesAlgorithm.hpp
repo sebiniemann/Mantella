@@ -8,6 +8,8 @@
 
 // Mantella
 #include "mantella_bits/armadillo.hpp"
+// IWYU pragma: no_forward_declare mant::Hash
+// IWYU pragma: no_forward_declare mant::IsEqual
 #include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;
