@@ -1,8 +1,5 @@
 #include "mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp"
 
-// C++ standard library
-#include <utility>
-
 // Mantella
 #include "mantella_bits/radialBasisFunction.hpp"
 
@@ -11,9 +8,7 @@ namespace mant {
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
       const std::shared_ptr<RadialBasisFunction> radialBasisFunction)
       : SurrogateModel(samples),
-        radialBasisFunction_(radialBasisFunction),
-        coefficients_(samples_.size()),
-        tail_(numberOfDimensions_ + 1) {
+        coefficients_(samples_.size()) {
   }
 
   void RadialBasisFunctionModel::modelImplementation() {
@@ -29,7 +24,7 @@ namespace mant {
 
       arma::uword j = 0;
       for (auto k = ++n; k != samples_.cend(); ++k) {
-        Phi(i, j) = radialBasisFunction_->getBasisFunctionValue(arma::norm(k->first - parameter));
+        Phi(i, j) = radialBasisFunction_(arma::norm(k->first - parameter));
         ++j;
       }
 
@@ -40,9 +35,7 @@ namespace mant {
     }
 
     const arma::Col<double>& solution = arma::solve(Phi, F);
-
     coefficients_ = solution.head(samples_.size());
-    tail_ = solution.tail(numberOfDimensions_ + 1);
   }
 
   double RadialBasisFunctionModel::getObjectiveValueImplementation(
@@ -51,14 +44,10 @@ namespace mant {
 
     arma::uword n = 0;
     for (const auto& sample : samples_) {
-      objectiveValue += coefficients_(n) * radialBasisFunction_->getBasisFunctionValue(arma::norm(parameter - sample.first));
+      objectiveValue += coefficients_(n) * radialBasisFunction_(arma::norm(parameter - sample.first));
       ++n;
     }
 
-    return objectiveValue + radialBasisFunction_->getPolynomialTailValue(parameter, tail_);
-  }
-
-  std::string RadialBasisFunctionModel::toString() const {
-    return "radial_basis_function_model";
+    return objectiveValue;
   }
 }

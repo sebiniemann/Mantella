@@ -1,6 +1,6 @@
 // Catch
 #include <catch.hpp>
-#include <catchExtension.hpp>
+#include "catchExtension.hpp"
 
 // C++ standard library
 #include <memory>
@@ -9,54 +9,42 @@
 // Mantella
 #include <mantella>
 
-TEST_CASE("cacheSamples") {
-  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
-  CAPTURE(numberOfDimensions);
-  
-  std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
-  mant::RandomSearch optimisationAlgorithm(optimisationProblem);
-  
-  SECTION("Is set to true per default") {
-    CHECK(mant::cacheSamples == true);
+// The effectiveness of any global variable is tested within the test cases for the functions that depend on them.
+TEST_CASE("isCachingSamples") {
+  SECTION("The default value is *true*") {
+    CHECK(::mant::isCachingSamples == false);
   }
   
-  SECTION("Activates the sample caching") {
-    // mant::cacheSamples is set to true by default.
-    optimisationAlgorithm.optimise();
-    CHECK(optimisationProblem->getCachedSamples().size() > 0);
-  }
-
-  SECTION("Deactivates the sample caching") {
-    mant::cacheSamples = false;
-    optimisationAlgorithm.optimise();
-    // Reset mant::cacheSamples to avoid unexpected default behaviour with other tests.
-    mant::cacheSamples = true;
-    CHECK(optimisationProblem->getCachedSamples().size() == 0);
+  SECTION("Is changeable") {
+    ::mant::isCachingSamples = true;
+    CHECK(::mant::isCachingSamples == true);
+    // Restores the default value, as it may affect other tests.
+    ::mant::isCachingSamples = false;
   }
 }
 
-TEST_CASE("recordSamples") {
-  const arma::uword numberOfDimensions = getDiscreteRandomNumber();
-  CAPTURE(numberOfDimensions);
-
-  std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(numberOfDimensions));
-  mant::RandomSearch optimisationAlgorithm(optimisationProblem);
+TEST_CASE("isRecordingSampling") {
+  SECTION("The default value is *false*") {
+    CHECK(::mant::isRecordingSampling == false);
+  }
   
-  SECTION("Is set to false per default") {
-    CHECK(mant::recordSamples == false);
+  SECTION("Is changeable") {
+    ::mant::isRecordingSampling = true;
+    CHECK(::mant::isRecordingSampling == true);
+    // Restores the default value, as it may affect other tests.
+    ::mant::isRecordingSampling = false;
   }
+}
 
-  SECTION("Activates the sample recording") {
-    mant::recordSamples = true;
-    optimisationAlgorithm.optimise();
-    // Reset mant::recordSamples to avoid unexpected default behaviour with other tests.
-    mant::recordSamples = false;
-    CHECK(optimisationAlgorithm.getSamplingHistory().size() > 0);
+TEST_CASE("isVerbose") {
+  SECTION("The default value is *true*") {
+    CHECK(::mant::isVerbose == false);
   }
-
-  SECTION("Deactivates the sample recording") {
-    // mant::recordSamples is set to false by default.
-    optimisationAlgorithm.optimise();
-    CHECK(optimisationAlgorithm.getSamplingHistory().size() == 0);
+    
+  SECTION("Is changeable") {
+    ::mant::isVerbose = true;
+    CHECK(::mant::isVerbose == true);
+    // Restores the default value, as it may affect other tests.
+    ::mant::isVerbose = false;
   }
 }

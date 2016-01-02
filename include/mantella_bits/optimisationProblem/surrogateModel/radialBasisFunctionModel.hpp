@@ -1,36 +1,28 @@
 #pragma once
 
 // C++ standard library
-#include <string>
+#include <functional>
 #include <unordered_map>
-#include <memory>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationProblem/surrogateModel.hpp"
-#include "mantella_bits/helper/unorderedContainer.hpp"
+#include "mantella_bits/armadillo.hpp"
 // IWYU pragma: no_forward_declare mant::Hash
 // IWYU pragma: no_forward_declare mant::IsEqual
-namespace mant {
-  class RadialBasisFunction;
-}
+#include "mantella_bits/optimisationProblem/surrogateModel.hpp"
 
 namespace mant {
   class RadialBasisFunctionModel : public SurrogateModel {
    public:
-    const std::shared_ptr<RadialBasisFunction> radialBasisFunction_;
-
     explicit RadialBasisFunctionModel(
-        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-        const std::shared_ptr<RadialBasisFunction> radialBasisFunction);
-
-    std::string toString() const override;
+        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
 
    protected:
+    std::function<double(const double value)> radialBasisFunction_;
+
     arma::Col<double> coefficients_;
-    arma::Col<double> tail_;
 
     void modelImplementation() override;
 

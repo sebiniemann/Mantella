@@ -1,39 +1,30 @@
 #pragma once
 
 // C++ standard library
-#include <string>
-#include <unordered_map>
-#include <memory>
+#include <functional>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
-#include "mantella_bits/helper/unorderedContainer.hpp"
-// IWYU pragma: no_forward_declare mant::Hash
-// IWYU pragma: no_forward_declare mant::IsEqual
-namespace mant {
-  class RegressionFunction;
-}
 
 namespace mant {
   class PolynomialFunctionModel : public SurrogateModel {
    public:
-    const std::shared_ptr<RegressionFunction> regressionFunction_;
-
     explicit PolynomialFunctionModel(
-        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-        const std::shared_ptr<RegressionFunction> regressionFunction);
+        const arma::uword numberOfDimensions);
 
-    std::string toString() const override;
+    void setPolynomialOrder(
+        const arma::uword polynomialOrder);
+
+    void setEstimatorFunction(
+        const std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Row<double>& objectiveValues)> estimatorFunction);
 
    protected:
+    arma::uword polynomialOrder_;
+    std::function<arma::Col<double>(const arma::Mat<double>& parameters, const arma::Row<double>& objectiveValues)> estimatorFunction_;
+
     arma::Col<double> coefficients_;
-
-    void modelImplementation() override;
-
-    double getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const override;
   };
 }

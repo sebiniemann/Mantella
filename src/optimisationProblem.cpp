@@ -3,13 +3,11 @@
 
 // C++ standard library
 #include <cassert>
-#include <atomic>
 #include <cmath>
-#include <limits>
 #include <utility>
 
 // Mantella
-#include "mantella_bits/helper/assert.hpp"
+#include "mantella_bits/assert.hpp"
 
 namespace mant {
   OptimisationProblem::OptimisationProblem(
@@ -17,152 +15,64 @@ namespace mant {
       : numberOfDimensions_(numberOfDimensions) {
     reset();
 
-    // A vector with all elements set to the lowest representable value.
-    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - std::numeric_limits<double>::max());
-    // A vector with all elements set to the largest representable value.
-    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + std::numeric_limits<double>::max());
+    // We avoid infinite values for any information on the problem, that could be used with an optimisation algorithm.
+    // Otherwise, we would need separate implementations to handle infinite boundaries.
+    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 10);
+    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 10);
 
-    // (0, ..., numberOfDimensions - 1)
-    setParameterPermutation(arma::linspace<arma::Col<arma::uword>>(0, numberOfDimensions_ - 1, numberOfDimensions));
-
+    setParameterPermutation(range<arma::uword>(0, numberOfDimensions_ - 1));
     setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
 
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
-    setAcceptableObjectiveValue(std::numeric_limits<double>::lowest());
+
+    setMinimalParameterDistance(arma::zeros<arma::Col<double>>(numberOfDimensions_));
   }
 
-  void OptimisationProblem::setLowerBounds(
-      const arma::Col<double>& lowerBounds) {
-    verify(lowerBounds.n_elem == numberOfDimensions_, "The number of elements within the lower bound must be equal to the number of problem dimensions.");
-    verify(lowerBounds.is_finite(), "All elements within the lower bound must be finite.");
+  void OptimisationProblem::setObjectiveFunction(
+      const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
+      const std::string& objectiveFunctionName) {
+    verify(static_cast<bool>(objectiveFunction), "setObjectiveFunction: The objective function must be callable.");
 
-    lowerBounds_ = lowerBounds;
-  }
+    objectiveFunction_ = objectiveFunction;
+    objectiveFunctionName_ = objectiveFunctionName;
 
-  void OptimisationProblem::setUpperBounds(
-      const arma::Col<double>& upperBounds) {
-    verify(upperBounds.n_elem == numberOfDimensions_, "The number of elements within the upper bound must be equal to the number of problem dimensions.");
-    verify(upperBounds.is_finite(), "All elements within the upper bound must be finite.");
-
-    upperBounds_ = upperBounds;
-  }
-
-  arma::Col<double> OptimisationProblem::getLowerBounds() const {
-    return lowerBounds_;
-  }
-
-  arma::Col<double> OptimisationProblem::getUpperBounds() const {
-    return upperBounds_;
-  }
-
-  arma::Col<arma::uword> OptimisationProblem::isWithinLowerBounds(
-      const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-
-    return parameter >= lowerBounds_;
-  }
-
-  arma::Col<arma::uword> OptimisationProblem::isWithinUpperBounds(
-      const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-
-    return parameter <= upperBounds_;
-  }
-
-  void OptimisationProblem::setParameterPermutation(
-      const arma::Col<arma::uword>& parameterPermutation) {
-    verify(parameterPermutation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions");
-    verify(isPermutation(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "The parameter must be a permutation.");
-
-    parameterPermutation_ = parameterPermutation;
-
-    // Resets all counters and caches, as the problem could be changed.
+    // Resets all counters and caches, as the problem could have changed.
     reset();
   }
 
-  void OptimisationProblem::setParameterScaling(
-      const arma::Col<double>& parameterScaling) {
-    verify(parameterScaling.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-    verify(parameterScaling.is_finite(), "All elements must be finite.");
-
-    parameterScaling_ = parameterScaling;
-
-    // Resets all counters and caches, as the problem could be changed.
-    reset();
+  void OptimisationProblem::setObjectiveFunction(
+      const std::function<double(const arma::Col<double>& parameter)> objectiveFunction) {
+    setObjectiveFunction(objectiveFunction, "Unnamed, custom optimisation problem");
   }
 
-  void OptimisationProblem::setParameterTranslation(
-      const arma::Col<double>& parameterTranslation) {
-    verify(parameterTranslation.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
-    verify(parameterTranslation.is_finite(), "All elements must be finite.");
-
-    parameterTranslation_ = parameterTranslation;
-
-    // Resets all counters and caches, as the problem could be changed.
-    reset();
-  }
-
-  void OptimisationProblem::setParameterRotation(
-      const arma::Mat<double>& parameterRotation) {
-    verify(parameterRotation.n_rows == numberOfDimensions_, "The number of rows must be equal to the number of dimensions.");
-    verify(isRotationMatrix(parameterRotation), "The parameter must be a rotation matrix.");
-
-    parameterRotation_ = parameterRotation;
-
-    // Resets all counters and caches, as the problem could be changed.
-    reset();
-  }
-
-  void OptimisationProblem::OptimisationProblem::setObjectiveValueScaling(
-      const double objectiveValueScaling) {
-    verify(std::isfinite(objectiveValueScaling), "The objective value scaling must be finite.");
-
-    objectiveValueScaling_ = objectiveValueScaling;
-
-    // Resets all counters and caches, as the problem could be changed.
-    reset();
-  }
-
-  void OptimisationProblem::setObjectiveValueTranslation(
-      const double objectiveValueTranslation) {
-    verify(std::isfinite(objectiveValueTranslation), "The objective value translation must be finite.");
-
-    objectiveValueTranslation_ = objectiveValueTranslation;
-
-    // Resets all counters and caches, as the problem could be changed.
-    reset();
-  }
-
-  void OptimisationProblem::setAcceptableObjectiveValue(
-      const double acceptableObjectiveValue) {
-    acceptableObjectiveValue_ = acceptableObjectiveValue;
-  }
-
-  double OptimisationProblem::getAcceptableObjectiveValue() const {
-    return acceptableObjectiveValue_;
+  std::string OptimisationProblem::getObjectiveFunctionName() const {
+    return objectiveFunctionName_;
   }
 
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
-    verify(parameter.n_elem == numberOfDimensions_, "The number of elements must be equal to the number of dimensions.");
+    assert(static_cast<bool>(objectiveFunction_));
+    verify(parameter.n_elem == numberOfDimensions_, "getObjectiveValue: The number of elements must be equal to the number of dimensions.");
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
 
-    if (mant::cacheSamples) {
+    const arma::Col<double>& discretisedParameter = getDiscretisedParameter(parameter);
+    if (::mant::isCachingSamples) {
       // Check if the result is already cached.
-      const auto n = cachedSamples_.find(parameter);
+      const auto n = cachedSamples_.find(discretisedParameter);
       if (n == cachedSamples_.cend()) {
-        // Increase the number of distinct evaluations only if we actually compute the value.
+        // Increases the number of distinct evaluations only, if we actually compute the value.
         ++numberOfDistinctEvaluations_;
 
-        const double result = objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
+        const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
+        // All objective values must be finite.
         assert(std::isfinite(result));
 
-        cachedSamples_.insert({parameter, result});
+        cachedSamples_.insert({discretisedParameter, result});
         return result;
       } else {
         return n->second;
@@ -171,8 +81,175 @@ namespace mant {
       // Without caching, all function evaluations must be computed.
       ++numberOfDistinctEvaluations_;
 
-      return objectiveValueScaling_ * getObjectiveValueImplementation(getDiversifiedParameter(parameter)) + objectiveValueTranslation_;
+      const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
+      // All objective values must be finite.
+      assert(std::isfinite(result));
+
+      return result;
     }
+  }
+
+  double OptimisationProblem::getNormalisedObjectiveValue(
+      const arma::Col<double>& parameter) {
+    return getObjectiveValue(lowerBounds_ + parameter % (upperBounds_ - lowerBounds_));
+  }
+
+  void OptimisationProblem::setLowerBounds(
+      const arma::Col<double>& lowerBounds) {
+    verify(lowerBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the lower bound must be equal to the number of problem dimensions.");
+    verify(lowerBounds.is_finite(), "setBounds: All elements within the lower bound must be finite.");
+
+    lowerBounds_ = lowerBounds;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(lowerBounds_.memptr(), static_cast<int>(lowerBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+  }
+
+  arma::Col<double> OptimisationProblem::getLowerBounds() const {
+    return lowerBounds_;
+  }
+
+  void OptimisationProblem::setUpperBounds(
+      const arma::Col<double>& upperBounds) {
+    verify(upperBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the upper bound must be equal to the number of problem dimensions.");
+    verify(upperBounds.is_finite(), "setBounds: All elements within the upper bound must be finite.");
+
+    upperBounds_ = upperBounds;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(upperBounds_.memptr(), static_cast<int>(upperBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+  }
+
+  arma::Col<double> OptimisationProblem::getUpperBounds() const {
+    return upperBounds_;
+  }
+
+  void OptimisationProblem::setParameterPermutation(
+      const arma::Col<arma::uword>& parameterPermutation) {
+    verify(parameterPermutation.n_elem == numberOfDimensions_, "setParameterPermutation: The number of elements must be equal to the number of dimensions");
+    verify(isPermutationVector(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "setParameterPermutation: The parameter must be a permutation.");
+
+#if defined(SUPPORT_MPI)
+    // MPI needs the exact type (here: *MPI_UNSIGNED*), while Armadillo's *arma::uword* is implementation dependent.
+    // Therefore, we convert the permutation matrix to a specific type first, ...
+    arma::Col<unsigned int> covertedParameterPermutation = arma::conv_to<arma::Col<unsigned int>>::from(parameterPermutation);
+    // ... synchronise it over MPI ...
+    MPI_Bcast(covertedParameterPermutation.memptr(), static_cast<int>(covertedParameterPermutation.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+    // ... and reconvert/store is afterwards.
+    parameterPermutation_ = arma::conv_to<arma::Col<arma::uword>>::from(covertedParameterPermutation);
+#else
+    parameterPermutation_ = parameterPermutation;
+#endif
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  arma::Col<arma::uword> OptimisationProblem::getParameterPermutation() const {
+    return parameterPermutation_;
+  }
+
+  void OptimisationProblem::setParameterScaling(
+      const arma::Col<double>& parameterScaling) {
+    verify(parameterScaling.n_elem == numberOfDimensions_, "setParameterScaling: The number of elements must be equal to the number of dimensions.");
+    verify(parameterScaling.is_finite(), "setParameterScaling: All elements must be finite.");
+
+    parameterScaling_ = parameterScaling;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(parameterScaling_.memptr(), static_cast<int>(parameterScaling_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  arma::Col<double> OptimisationProblem::getParameterScaling() const {
+    return parameterScaling_;
+  }
+
+  void OptimisationProblem::setParameterTranslation(
+      const arma::Col<double>& parameterTranslation) {
+    verify(parameterTranslation.n_elem == numberOfDimensions_, "setParameterTranslation: The number of elements must be equal to the number of dimensions.");
+    verify(parameterTranslation.is_finite(), "setParameterTranslation: All elements must be finite.");
+
+    parameterTranslation_ = parameterTranslation;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(parameterTranslation_.memptr(), static_cast<int>(parameterTranslation_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  arma::Col<double> OptimisationProblem::getParameterTranslation() const {
+    return parameterTranslation_;
+  }
+
+  void OptimisationProblem::setParameterRotation(
+      const arma::Mat<double>& parameterRotation) {
+    verify(parameterRotation.n_rows == numberOfDimensions_, "setParameterRotation: The number of rows must be equal to the number of dimensions.");
+    verify(isRotationMatrix(parameterRotation), "setParameterRotation: The parameter must be a rotation matrix.");
+
+    parameterRotation_ = parameterRotation;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(parameterRotation_.memptr(), static_cast<int>(parameterRotation_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  arma::Mat<double> OptimisationProblem::getParameterRotation() const {
+    return parameterRotation_;
+  }
+
+  void OptimisationProblem::setObjectiveValueScaling(
+      const double objectiveValueScaling) {
+    verify(std::isfinite(objectiveValueScaling), "setObjectiveValueScaling: The objective value scaling must be finite.");
+
+    objectiveValueScaling_ = objectiveValueScaling;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(&objectiveValueScaling_, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  double OptimisationProblem::getObjectiveValueScaling() const {
+    return objectiveValueScaling_;
+  }
+
+  void OptimisationProblem::setObjectiveValueTranslation(
+      const double objectiveValueTranslation) {
+    verify(std::isfinite(objectiveValueTranslation), "setObjectiveValueTranslation: The objective value translation must be finite.");
+
+    objectiveValueTranslation_ = objectiveValueTranslation;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(&objectiveValueTranslation_, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  double OptimisationProblem::getObjectiveValueTranslation() const {
+    return objectiveValueTranslation_;
+  }
+
+  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
+    return cachedSamples_;
+  }
+
+  void OptimisationProblem::setMinimalParameterDistance(
+      const arma::Col<double>& minimalParameterDistance) {
+    verify(arma::all(minimalParameterDistance >= 0), "setMinimalParameterDistance: "); // TODO
+
+    minimalParameterDistance_ = minimalParameterDistance;
+  }
+
+  arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {
+    return minimalParameterDistance_;
   }
 
   arma::uword OptimisationProblem::getNumberOfEvaluations() const {
@@ -190,98 +267,26 @@ namespace mant {
     cachedSamples_.clear();
   }
 
-  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
-    return cachedSamples_;
+  arma::Col<double> OptimisationProblem::getDiscretisedParameter(
+      const arma::Col<double>& parameter) const {
+    assert(parameter.n_elem == numberOfDimensions_);
+
+    arma::Col<double> discretisedParameter = parameter;
+    const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance_ > 0);
+    discretisedParameter.elem(elementsToDiscretise) = arma::floor(discretisedParameter.elem(elementsToDiscretise) / minimalParameterDistance_.elem(elementsToDiscretise)) % minimalParameterDistance_.elem(elementsToDiscretise);
+
+    return discretisedParameter;
   }
 
-  arma::Col<double> OptimisationProblem::getDiversifiedParameter(
+  arma::Col<double> OptimisationProblem::getModifiedParameter(
       const arma::Col<double>& parameter) const {
     assert(parameter.n_elem == numberOfDimensions_);
 
     return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
   }
 
-#if defined(SUPPORT_MPI)
-  std::vector<double> OptimisationProblem::serialise() const {
-    std::vector<double> serialisedOptimisationProblem;
-
-    for (arma::uword n = 0; n < lowerBounds_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(lowerBounds_(n));
-    }
-
-    for (arma::uword n = 0; n < upperBounds_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(upperBounds_(n));
-    }
-
-    for (arma::uword n = 0; n < parameterPermutation_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(static_cast<double>(parameterPermutation_(n)));
-    }
-
-    for (arma::uword n = 0; n < parameterScaling_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(parameterScaling_(n));
-    }
-
-    for (arma::uword n = 0; n < parameterTranslation_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(parameterTranslation_(n));
-    }
-
-    for (arma::uword n = 0; n < parameterRotation_.n_elem; ++n) {
-      serialisedOptimisationProblem.push_back(parameterRotation_(n));
-    }
-
-    serialisedOptimisationProblem.push_back(objectiveValueScaling_);
-    serialisedOptimisationProblem.push_back(objectiveValueTranslation_);
-
-    serialisedOptimisationProblem.push_back(acceptableObjectiveValue_);
-
-    return serialisedOptimisationProblem;
+  double OptimisationProblem::getModifiedObjectiveValue(
+      const double objectiveValue) const {
+    return objectiveValueScaling_ * objectiveValue + objectiveValueTranslation_;
   }
-
-  void OptimisationProblem::deserialise(
-      std::vector<double> serialisedOptimisationProblem) {
-    acceptableObjectiveValue_ = serialisedOptimisationProblem.back();
-    serialisedOptimisationProblem.pop_back();
-
-    objectiveValueScaling_ = serialisedOptimisationProblem.back();
-    serialisedOptimisationProblem.pop_back();
-    objectiveValueTranslation_ = serialisedOptimisationProblem.back();
-    serialisedOptimisationProblem.pop_back();
-
-    parameterRotation_.set_size(numberOfDimensions_, numberOfDimensions_);
-    for (arma::uword n = 0; n < parameterRotation_.n_elem; ++n) {
-      parameterRotation_(n) = serialisedOptimisationProblem.back();
-      serialisedOptimisationProblem.pop_back();
-    }
-
-    parameterTranslation_.set_size(numberOfDimensions_);
-    for (arma::uword n = 0; n < parameterTranslation_.n_elem; ++n) {
-      parameterTranslation_(n) = serialisedOptimisationProblem.back();
-      serialisedOptimisationProblem.pop_back();
-    }
-
-    parameterScaling_.set_size(numberOfDimensions_);
-    for (arma::uword n = 0; n < parameterScaling_.n_elem; ++n) {
-      parameterScaling_(n) = serialisedOptimisationProblem.back();
-      serialisedOptimisationProblem.pop_back();
-    }
-
-    parameterPermutation_.set_size(numberOfDimensions_);
-    for (arma::uword n = 0; n < parameterPermutation_.n_elem; ++n) {
-      parameterPermutation_(n) = static_cast<arma::uword>(serialisedOptimisationProblem.back());
-      serialisedOptimisationProblem.pop_back();
-    }
-
-    upperBounds_.set_size(numberOfDimensions_);
-    for (arma::uword n = 0; n < upperBounds_.n_elem; ++n) {
-      upperBounds_(n) = serialisedOptimisationProblem.back();
-      serialisedOptimisationProblem.pop_back();
-    }
-
-    lowerBounds_.set_size(numberOfDimensions_);
-    for (arma::uword n = 0; n < lowerBounds_.n_elem; ++n) {
-      lowerBounds_(n) = serialisedOptimisationProblem.back();
-      serialisedOptimisationProblem.pop_back();
-    }
-  }
-#endif
 }

@@ -17,11 +17,11 @@ TEST_CASE("KrigingModel") {
 
   SECTION(".toString") {
     SECTION("Returns a (filesystem friendly) name for the class.") {
-      mant::cacheSamples = true;
+      mant::isCachingSamples = true;
       std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator())));
       mant::RandomSearch randomSearch(optimisationProblem);
       randomSearch.optimise();
-      CHECK(mant::KrigingModel(optimisationProblem->getCachedSamples(), std::shared_ptr<mant::RegressionFunction>(new mant::LinearRegressionFunction(optimisationProblem->numberOfDimensions_)), std::shared_ptr<mant::CorrelationFunction>(new mant::GaussianCorrelationFunction(optimisationProblem->numberOfDimensions_))).toString() ==
+      CHECK(mant::KrigingModel(optimisationProblem.getCachedSamples(), std::shared_ptr<mant::RegressionFunction>(new mant::LinearRegressionFunction(optimisationProblem.numberOfDimensions_)), std::shared_ptr<mant::CorrelationFunction>(new mant::GaussianCorrelationFunction(optimisationProblem.numberOfDimensions_))).toString() ==
             "kriging_model");
     }
   }
