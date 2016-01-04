@@ -21,7 +21,7 @@ arma::uword getDifferentDiscreteRandomNumber(
   if (randomNumber >= discreteRandomNumber) {
     ++randomNumber;
   }
-  
+
   return randomNumber;
 }
 
@@ -143,9 +143,9 @@ void HAS_SAME_SAMPLES(
     const std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual>& actualSamples,
     const std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual>& expectedSamples) {
   CHECK(actualSamples.size() == expectedSamples.size());
-  for (const auto& expectedSample  : expectedSamples) {
+  for (const auto& expectedSample : expectedSamples) {
     const auto actualSample = actualSamples.find(expectedSample.first);
-    
+
     // Found *expectedSample* within *actualSamples*.
     CHECK(actualSample != actualSamples.cend());
     CHECK(actualSample->second == Approx(expectedSample.second));
@@ -159,13 +159,13 @@ void HAS_SAME_PARAMETERS(
 
   for (const auto& expectedParameter : expectedParameters) {
     CAPTURE(expectedParameter);
-    
+
     bool found = false;
     for (const auto& actualParameter : actualParameters) {
       if (expectedParameter.n_elem != actualParameter.n_elem) {
         continue;
       }
-      
+
       if (arma::all(expectedParameter == actualParameter)) {
         found = true;
         break;
@@ -183,13 +183,13 @@ void HAS_SAME_PARAMETERS(
 
   for (const auto& expectedParameter : expectedParameters) {
     CAPTURE(expectedParameter);
-    
+
     bool found = false;
     for (const auto& actualSample : actualSamples) {
       if (expectedParameter.n_elem != actualSample.first.n_elem) {
         continue;
       }
-    
+
       // Both parameters are considered to be equal, if there relative error is within 1e-12.
       if (arma::all(arma::abs(expectedParameter - actualSample.first) < 1e-12 * arma::max(arma::ones(arma::size(expectedParameter)), arma::abs(expectedParameter)))) {
         found = true;
@@ -208,7 +208,7 @@ void HAS_SAME_ELEMENTS(
 
   CAPTURE(actualElements);
   CAPTURE(expectedElements);
-    
+
   for (const auto& expectedElement : expectedElements) {
     bool found = false;
     for (const auto& actualElement : actualElements) {
@@ -220,6 +220,36 @@ void HAS_SAME_ELEMENTS(
     }
 
     CHECK(found == true);
+  }
+}
+
+void IS_EQUAL(
+    const std::vector<arma::Col<double>>& actual,
+    const std::vector<arma::Col<double>>& expected) {
+  CHECK(actual.size() == expected.size());
+
+  for (arma::uword n = 0; n < actual.size(); ++n) {
+    IS_EQUAL(actual.at(n), expected.at(n));
+  }
+}
+
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<3>>& actual,
+    const std::vector<arma::Col<double>>& expected) {
+  CHECK(actual.size() == expected.size());
+
+  for (arma::uword n = 0; n < actual.size(); ++n) {
+    IS_EQUAL(actual.at(n), expected.at(n));
+  }
+}
+
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<2>>& actual,
+    const std::vector<arma::Col<double>>& expected) {
+  CHECK(actual.size() == expected.size());
+
+  for (arma::uword n = 0; n < actual.size(); ++n) {
+    IS_EQUAL(actual.at(n), expected.at(n));
   }
 }
 
@@ -275,17 +305,17 @@ void IS_UNIFORM(
     const double expectedUpperBound) {
   CHECK(arma::all(expectedLowerBound <= actualData));
   CHECK(arma::all(actualData <= expectedUpperBound));
-    
+
   const arma::uword numberOfBins = 10;
   CAPTURE(numberOfBins);
   const double binDistance = (expectedUpperBound - expectedLowerBound) / numberOfBins;
   CAPTURE(binDistance);
   const arma::Col<double>& bins = arma::linspace<arma::Col<double>>(expectedLowerBound, expectedUpperBound - binDistance, numberOfBins) + binDistance / 2;
   CAPTURE(bins);
-  
+
   const arma::Col<arma::uword>& histogram = arma::hist(actualData, bins);
   CAPTURE(histogram);
-  
+
   // The histogram is considered to be uniform, if there absolute error is lower than 5%.
   CHECK((histogram.max() - histogram.min()) < static_cast<arma::uword>(0.05 * static_cast<double>(actualData.n_elem)));
 }
@@ -296,13 +326,13 @@ void IS_UNIFORM(
     const arma::uword expectedUpperBound) {
   CHECK(arma::all(expectedLowerBound <= actualData));
   CHECK(arma::all(actualData <= expectedUpperBound));
-  
+
   const arma::Col<arma::uword>& bins = arma::linspace<arma::Col<arma::uword>>(expectedLowerBound, expectedUpperBound, expectedUpperBound - expectedLowerBound + 1);
   CAPTURE(bins);
-  
+
   const arma::Col<arma::uword>& histogram = arma::hist(actualData, bins);
   CAPTURE(histogram);
-  
+
   // The histogram is considered to be uniform, if there absolute error is lower than 5%.
   CHECK((histogram.max() - histogram.min()) < static_cast<arma::uword>(0.05 * static_cast<double>(actualData.n_elem)));
 }

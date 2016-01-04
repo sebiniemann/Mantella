@@ -54,7 +54,7 @@ arma::Col<arma::uword> getDiscreteRandomNumbers(
  */
 arma::Col<double> getContinuousRandomNumbers(
     const arma::uword numberOfDimensions);
-    
+
 /** Randomly generates a (`numberOfRows`, `numberOfColumns`)-matrix of integers, each within [0, 10].
  *
  * @return The randomly generated matrix.
@@ -94,7 +94,7 @@ double SYNCRONISED(
 
 arma::uword SYNCRONISED(
     const arma::uword data);
-    
+
 /** Checks whether `actualSamples` contains the same samples (but maybe in different order) as `expectedSamples` and fails the test if any sample is missing.
  */
 void HAS_SAME_SAMPLES(
@@ -121,6 +121,24 @@ void HAS_SAME_PARAMETERS(
 void HAS_SAME_ELEMENTS(
     const arma::Col<double>& actualElements,
     const arma::Col<double>& expectedElements);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<3>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<2>>& actual,
+    const std::vector<arma::Col<double>>& expected);
 
 /** Checks whether `actual` contains the same elements, in the same order, as `expected`.
  */

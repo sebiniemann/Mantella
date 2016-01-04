@@ -29,10 +29,10 @@ TEST_CASE("IsKeyEqual") {
   SECTION("Returns true, if both vectors are equal.") {
     const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
-    
+
     const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
     CAPTURE(parameter);
-  
+
     mant::IsEqual isEqual;
     CHECK(isEqual(parameter, parameter) == true);
   }
@@ -40,12 +40,12 @@ TEST_CASE("IsKeyEqual") {
   SECTION("Returns false, if not all elements within the two vectors are equal.") {
     const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
-    
+
     const arma::Col<double>& firstParameter = getContinuousRandomNumbers(numberOfDimensions);
     CAPTURE(firstParameter);
     const arma::Col<double>& secondParameter = firstParameter - getContinuousRandomNumbers(numberOfDimensions) - 1;
     CAPTURE(secondParameter);
-    
+
     mant::IsEqual isEqual;
     CHECK(isEqual(firstParameter, secondParameter) == false);
   }
@@ -55,12 +55,12 @@ TEST_CASE("IsKeyEqual") {
     CAPTURE(firstNumberOfDimensions);
     const arma::Col<double>& firstParameter = getContinuousRandomNumbers(firstNumberOfDimensions);
     CAPTURE(firstParameter);
-    
+
     const arma::uword secondNumberOfDimensions = getDifferentDiscreteRandomNumber(firstNumberOfDimensions);
     CAPTURE(secondNumberOfDimensions);
     const arma::Col<double>& secondParameter = getContinuousRandomNumbers(secondNumberOfDimensions);
     CAPTURE(secondParameter);
-    
+
     mant::IsEqual isEqual;
     CHECK(isEqual(firstParameter, secondParameter) == false);
   }
@@ -73,20 +73,20 @@ TEST_CASE("range") {
       CAPTURE(start);
       const arma::uword end = start + getDiscreteRandomNumber();
       CAPTURE(end);
-    
+
       IS_EQUAL(mant::range<arma::uword>(start, end), arma::linspace<arma::Col<arma::uword>>(start, end, end - start + 1));
     }
-    
+
     SECTION("Works for continuous numbers (*a* < *b*)") {
       const double start = getContinuousRandomNumber();
       CAPTURE(start);
       const double end = start + std::abs(getContinuousRandomNumber());
       CAPTURE(end);
-    
+
       IS_EQUAL(mant::range<double>(start, end), arma::linspace<arma::Col<double>>(start, end, static_cast<arma::uword>(end - start + 1)));
     }
   }
-    
+
   SECTION("Returns all numbers from *a* to *b* with step size *s*.") {
     SECTION("Works for discrete numbers (*a* > *b*).") {
       const arma::uword end = getDiscreteRandomNumber();
@@ -95,16 +95,16 @@ TEST_CASE("range") {
       CAPTURE(start);
       const arma::uword stepSize = getDiscreteRandomNumber();
       CAPTURE(stepSize);
-      
+
       std::vector<arma::uword> expected;
       arma::uword n = 0;
       do {
         expected.push_back(start - n++ * stepSize);
       } while (expected.back() >= end + stepSize);
-    
+
       IS_EQUAL(mant::range<arma::uword>(start, end, stepSize), arma::Col<arma::uword>(expected));
     }
-      
+
     SECTION("Works for continuous numbers (*a* > *b*).") {
       const double end = getContinuousRandomNumber();
       CAPTURE(end);
@@ -113,13 +113,13 @@ TEST_CASE("range") {
       // Sets the step size to be at leasts on tenth of the distance, to avoid having to many steps, ultimately running out of memory to store them all.
       const double stepSize = (start - end) / 10.0 + std::abs(getContinuousRandomNumber());
       CAPTURE(stepSize);
-      
+
       std::vector<double> expected;
       arma::uword n = 0;
       do {
         expected.push_back(start - n++ * stepSize);
       } while (expected.back() >= end + stepSize);
-    
+
       IS_EQUAL(mant::range<double>(start, end, stepSize), arma::Col<double>(expected));
     }
   }
