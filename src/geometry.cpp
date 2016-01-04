@@ -1,7 +1,6 @@
 #include "mantella_bits/geometry.hpp"
 
 // C++ standard library
-#include <algorithm>
 #include <cmath>
 
 // Mantella

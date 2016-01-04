@@ -3,6 +3,8 @@
 // C++ standard library
 #include <cassert>
 #include <cmath>
+#include <vector>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
 #include "mantella_bits/geometry.hpp"
