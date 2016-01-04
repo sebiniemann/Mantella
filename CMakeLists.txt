@@ -443,10 +443,10 @@ if(BUILD_TESTS)
     test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
     test/optimisationProblem/testKinematicallyRedundantMachineProblem.cpp
     test/optimisationProblem/kinematicallyRedundantMachineProblem/testMachineModel.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRPR.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRRR.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PRUS.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PUPS.cpp
+    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRPR.cpp
+    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRRR.cpp
+    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PRUS.cpp
+    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PUPS.cpp
     # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testMultiLevelStewartPlatform.cpp
     # test/optimisationProblem/kinematicallyRedundantMachineProblem/testPoseInaccuracy.cpp
     # test/optimisationProblem/testSurrogateModel.cpp
