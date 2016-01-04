@@ -15,7 +15,7 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
   FORMAT_ERROR_OCCURED=0;
 
   echo "${MAGENTA_TEXT_COLOR}Checking format rules${RESET_TEXT_COLOR}";
-  FILES=$(find src include -type f);
+  FILES=$(find src include test -not \( -path test/data -prune \) -type f);
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
@@ -50,7 +50,7 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
   INCLUDE_ERROR_OCCURED=0;
   
   echo "${MAGENTA_TEXT_COLOR}Checking include rules${RESET_TEXT_COLOR}";
-  FILES=$(find src -type f -name \*.cpp);
+  FILES=$(find src test -type f -name \*.cpp);
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   

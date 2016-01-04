@@ -85,7 +85,7 @@ TEST_CASE("Rng") {
 
         randomValues.row(n) = arma::randu<arma::Row<double>>(randomValues.n_cols);
       }
-      
+
       for (arma::uword n = 0; n < randomValues.n_cols; ++n) {
         CAPTURE(randomValues.col(n));
         IS_UNIFORM(randomValues.col(n), 0, 1);

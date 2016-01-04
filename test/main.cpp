@@ -14,7 +14,7 @@
 int main(int argc, char* argv[]) {
 #if defined(SUPPORT_MPI)
   MPI_Init(&argc, &argv);
-  
+
   MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank);
 #endif
 
@@ -24,10 +24,10 @@ int main(int argc, char* argv[]) {
   // Reduced also the number of arguments, in order avoid conflicts with catch command line arguments handling.
   rootTestDataDirectory = argv[--argc];
   std::cout << "Using '" << rootTestDataDirectory << "' as location for the test data directory." << std::endl;
-  
+
   // Setting the seed to a specific number makes erroneous tests better reproducible.
   mant::Rng::setSeed(123456789);
-  
+
   try {
     return Catch::Session().run(argc, argv);
   } catch (const std::exception& exception) {

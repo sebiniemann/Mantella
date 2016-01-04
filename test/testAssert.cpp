@@ -28,10 +28,10 @@ TEST_CASE("isRotationMatrix") {
   // Some tests expect that the matrix has at least 2 columns/rows.
   const arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
-  
+
   arma::Mat<double> rotationMatrix = mant::randomRotationMatrix(numberOfDimensions);
   CAPTURE(rotationMatrix);
-    
+
   SECTION("Returns true, if the matrix is a rotation matrix.") {
     CHECK(mant::isRotationMatrix(rotationMatrix) == true);
   }
@@ -68,10 +68,10 @@ TEST_CASE("isPermutationVector") {
 
   const arma::uword numberOfElements = numberOfPermutations + getDiscreteRandomNumber();
   CAPTURE(numberOfElements);
-    
+
   arma::Col<arma::uword> permutation = mant::randomPermutationVector(numberOfElements, numberOfPermutations);
   CAPTURE(permutation);
-    
+
   SECTION("Returns true, if the vector is a permutation vector.") {
     CHECK(mant::isPermutationVector(permutation, numberOfPermutations, numberOfElements) == true);
   }
@@ -108,26 +108,26 @@ TEST_CASE("isSymmetric") {
   // Some tests expect that the matrix has at least 2 columns/rows.
   const arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
-  
+
   arma::Mat<double> symmetricMatrix = arma::symmatu(getContinuousRandomNumbers(numberOfDimensions, numberOfDimensions));
   CAPTURE(symmetricMatrix);
-  
+
   SECTION("Return true, if the matrix is symmetric.") {
     CHECK(mant::isSymmetric(symmetricMatrix) == true);
   }
-  
+
   SECTION("Returns false, if the matrix is not symmetric.") {
     SECTION("Return false, if the matrix is not square.") {
       symmetricMatrix.shed_col(0);
       CAPTURE(symmetricMatrix);
-      
+
       CHECK(mant::isSymmetric(symmetricMatrix) == false);
     }
-    
+
     SECTION("Return false, if any (i,j)-te element is unequal to the (j,i)-te element.") {
       symmetricMatrix(0, 1)++;
       CAPTURE(symmetricMatrix);
-      
+
       CHECK(mant::isSymmetric(symmetricMatrix) == false);
     }
   }
@@ -137,23 +137,23 @@ TEST_CASE("isPositiveSemiDefinite") {
   // Some tests expect that the matrix has at least 2 columns/rows.
   const arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
   CAPTURE(numberOfDimensions);
-  
+
   arma::Mat<double> positiveSemiDefinite = getContinuousRandomNumbers(numberOfDimensions, numberOfDimensions);
   positiveSemiDefinite *= positiveSemiDefinite.t();
   CAPTURE(positiveSemiDefinite);
-  
+
   SECTION("Return true, if the matrix is positive semi-definite.") {
     CHECK(mant::isPositiveSemiDefinite(positiveSemiDefinite) == true);
   }
-  
+
   SECTION("Returns false, if the matrix is not positive semi-definite.") {
     SECTION("Return false, if the matrix is not square.") {
       positiveSemiDefinite.shed_col(0);
       CAPTURE(positiveSemiDefinite);
-      
+
       CHECK(mant::isPositiveSemiDefinite(positiveSemiDefinite) == false);
     }
-    
+
     SECTION("Return false, if any eigenvalue is negative or has an imaginary part.") {
       CHECK(mant::isPositiveSemiDefinite(-positiveSemiDefinite) == false);
     }
@@ -164,13 +164,13 @@ TEST_CASE("isDimensionallyConsistent") {
   SECTION("Returns true, if the number of dimensions is consistent over all samples.") {
     // Explicitly enables the cache, just to be sure.
     mant::isCachingSamples = true;
-      
+
     const arma::uword numberOfDimensions = getDiscreteRandomNumber();
     CAPTURE(numberOfDimensions);
-    
+
     mant::RandomSearch optimisationAlgorithm;
     optimisationAlgorithm.setMaximalNumberOfIterations(100);
-  
+
     CAPTURE(numberOfDimensions);
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
     CAPTURE(numberOfDimensions);
@@ -190,7 +190,7 @@ TEST_CASE("isDimensionallyConsistent") {
   SECTION("Returns false, if the number of dimensions is inconsistent between any two samples.") {
     // Explicitly enables the cache, just to be sure.
     mant::isCachingSamples = true;
-      
+
     mant::RandomSearch optimisationAlgorithm;
     optimisationAlgorithm.setMaximalNumberOfIterations(100);
 

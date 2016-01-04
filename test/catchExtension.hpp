@@ -54,7 +54,7 @@ arma::Col<arma::uword> getDiscreteRandomNumbers(
  */
 arma::Col<double> getContinuousRandomNumbers(
     const arma::uword numberOfDimensions);
-    
+
 /** Randomly generates a (`numberOfRows`, `numberOfColumns`)-matrix of integers, each within [0, 10].
  *
  * @return The randomly generated matrix.
@@ -94,7 +94,7 @@ double SYNCRONISED(
 
 arma::uword SYNCRONISED(
     const arma::uword data);
-    
+
 /** Checks whether `actualSamples` contains the same samples (but maybe in different order) as `expectedSamples` and fails the test if any sample is missing.
  */
 void HAS_SAME_SAMPLES(

@@ -15,21 +15,21 @@
 extern std::string testDirectory;
 
 class TestRastriginFunction : public mant::bbob::RastriginFunction {
-  public:
-    using mant::bbob::RastriginFunction::RastriginFunction;
-    
-    // Increases the visibility of the internal objective function, to bypass general modification, made by the parent class.
-    using mant::bbob::RastriginFunction::objectiveFunction_;
+ public:
+  using mant::bbob::RastriginFunction::RastriginFunction;
+
+  // Increases the visibility of the internal objective function, to bypass general modification, made by the parent class.
+  using mant::bbob::RastriginFunction::objectiveFunction_;
 };
 
 TEST_CASE("bbob::RastriginFunction") {
   // All expected objective values where generated for a 40-dimensional problem instance.
   TestRastriginFunction optimisationProblem(40);
-    
+
   SECTION(".objectiveFunction_") {
     SECTION("Returns the expected objective value") {
       // *Note:* There is no need to *CAPTURE* anything below, as everything is stored on the hard disk, and easily accessible.
-      
+
       arma::Mat<double> parameters;
       REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 

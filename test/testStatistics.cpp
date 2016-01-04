@@ -13,7 +13,7 @@ TEST_CASE("medianAbsoluteError") {
   SECTION("Returns the median absolute error.") {
     const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
     CAPTURE(arma::sort(randomValues, "descend"));
-  
+
     CHECK(mant::medianAbsoluteError(randomValues) == Approx(arma::median(arma::abs(randomValues - arma::median(randomValues)))));
   }
 }
@@ -21,11 +21,11 @@ TEST_CASE("medianAbsoluteError") {
 TEST_CASE("percentile") {
   const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
   CAPTURE(arma::sort(randomValues, "descend"));
-    
+
   SECTION("Returns the percentile.") {
     const arma::Row<double>& sortedValues = arma::sort(randomValues, "descend");
     CAPTURE(sortedValues);
-    
+
     CHECK(mant::percentile(randomValues, 1.0) == Approx(0.01 * sortedValues(9) + 0.99 * sortedValues(10)));
   }
 
@@ -33,7 +33,7 @@ TEST_CASE("percentile") {
     SECTION("Throws an exception, if the percentile is lesser than or equal to 0.") {
       CHECK_THROWS_AS(mant::percentile(randomValues, 0), std::logic_error);
     }
-    
+
     SECTION("Throws an exception, if the percentile is greater than 100.") {
       CHECK_THROWS_AS(mant::percentile(randomValues, 100.1), std::logic_error);
     }
@@ -43,7 +43,7 @@ TEST_CASE("percentile") {
 TEST_CASE("decile") {
   const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
   CAPTURE(arma::sort(randomValues, "descend"));
-    
+
   SECTION("Returns the decile.") {
     CHECK(mant::decile(randomValues, 9.0) == Approx(mant::percentile(randomValues, 90.0)));
   }
@@ -52,7 +52,7 @@ TEST_CASE("decile") {
     SECTION("Throws an exception, if the percentile is lesser than or equal to 0.") {
       CHECK_THROWS_AS(mant::decile(randomValues, 0), std::logic_error);
     }
-    
+
     SECTION("Throws an exception, if the percentile is greater than 10.") {
       CHECK_THROWS_AS(mant::decile(randomValues, 10.1), std::logic_error);
     }
@@ -60,17 +60,17 @@ TEST_CASE("decile") {
 }
 
 TEST_CASE("quartile") {
-    const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
-    CAPTURE(arma::sort(randomValues, "descend"));
+  const arma::Row<double>& randomValues = getContinuousRandomNumbers(1000).t();
+  CAPTURE(arma::sort(randomValues, "descend"));
   SECTION("Returns the quartile.") {
     CHECK(mant::quartile(randomValues, 3.0) == Approx(mant::percentile(randomValues, 75.0)));
   }
-  
+
   SECTION("Exception tests:") {
     SECTION("Throws an exception, if the percentile is lesser than or equal to 0.") {
       CHECK_THROWS_AS(mant::quartile(randomValues, 0), std::logic_error);
     }
-    
+
     SECTION("Throws an exception, if the percentile is greater than 4.") {
       CHECK_THROWS_AS(mant::quartile(randomValues, 4.1), std::logic_error);
     }
@@ -84,21 +84,21 @@ TEST_CASE("ordinaryLeastSquaresEstimate") {
 
     const arma::uword numberOfParameters = 10000;
     CAPTURE(numberOfParameters);
-    
+
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
     parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
     const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
-    
+
     arma::Row<double> objectiveValues(numberOfParameters);
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
       objectiveValues(n) = arma::dot(parameters.col(n), coefficients);
     }
     objectiveValues += arma::randn<arma::Row<double>>(numberOfParameters);
     CAPTURE(objectiveValues);
-    
+
     IS_EQUAL(static_cast<arma::Col<double>>(arma::floor(mant::ordinaryLeastSquaresEstimate(parameters, objectiveValues))), static_cast<arma::Col<double>>(arma::floor(coefficients)));
   }
 
@@ -108,20 +108,20 @@ TEST_CASE("ordinaryLeastSquaresEstimate") {
 
     const arma::uword numberOfParameters = numberOfDimensions + getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
-    
+
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
     parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
     const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
-    
+
     arma::Row<double> objectiveValues(numberOfParameters);
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
       objectiveValues(n) = arma::dot(parameters.col(n), coefficients);
     }
     CAPTURE(objectiveValues);
-    
+
     IS_EQUAL(mant::ordinaryLeastSquaresEstimate(parameters, objectiveValues), coefficients);
   }
 
@@ -152,22 +152,22 @@ TEST_CASE("generalisedLeastSquaresEstimate") {
 
     const arma::uword numberOfParameters = numberOfDimensions + getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
-    
+
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
     parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
     const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
-    
+
     arma::Row<double> objectiveValues(numberOfParameters);
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
       objectiveValues(n) = arma::dot(parameters.col(n), coefficients);
     }
     CAPTURE(objectiveValues);
-    
+
     const arma::Mat<double>& covariance = arma::eye<arma::Mat<double>>(numberOfParameters, numberOfParameters);
-    
+
     IS_EQUAL(static_cast<arma::Col<double>>(arma::floor(mant::generalisedLeastSquaresEstimate(parameters, objectiveValues, covariance))), static_cast<arma::Col<double>>(arma::floor(coefficients)));
   }
 
@@ -177,22 +177,22 @@ TEST_CASE("generalisedLeastSquaresEstimate") {
 
     const arma::uword numberOfParameters = numberOfDimensions + getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
-    
+
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
     parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
     const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
-    
+
     arma::Row<double> objectiveValues(numberOfParameters);
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
       objectiveValues(n) = arma::dot(parameters.col(n), coefficients);
     }
     CAPTURE(objectiveValues);
-    
+
     const arma::Mat<double>& covariance = arma::eye<arma::Mat<double>>(numberOfParameters, numberOfParameters);
-    
+
     IS_EQUAL(mant::generalisedLeastSquaresEstimate(parameters, objectiveValues, covariance), mant::ordinaryLeastSquaresEstimate(parameters, objectiveValues));
   }
 
@@ -202,22 +202,22 @@ TEST_CASE("generalisedLeastSquaresEstimate") {
 
     const arma::uword numberOfParameters = numberOfDimensions + getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
-    
+
     arma::Mat<double> parameters(numberOfDimensions + 1, numberOfParameters);
     parameters.head_rows(numberOfDimensions) = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     parameters.row(numberOfDimensions).ones();
 
     const arma::Col<double>& coefficients = getContinuousRandomNumbers(numberOfDimensions + 1);
     CAPTURE(coefficients);
-    
+
     arma::Row<double> objectiveValues(numberOfParameters);
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
       objectiveValues(n) = arma::dot(parameters.col(n), coefficients);
     }
     CAPTURE(objectiveValues);
-    
+
     const arma::Mat<double>& covariance = arma::eye<arma::Mat<double>>(numberOfParameters, numberOfParameters);
-    
+
     IS_EQUAL(mant::generalisedLeastSquaresEstimate(parameters, objectiveValues, covariance), coefficients);
   }
 
@@ -240,7 +240,7 @@ TEST_CASE("generalisedLeastSquaresEstimate") {
 
       CHECK_THROWS_AS(mant::generalisedLeastSquaresEstimate(parameters, objectiveValues, covariance), std::logic_error);
     }
-    
+
     SECTION("Throws an exception, if the number of rows of the covariance matrix is unequal to the number of parameters.") {
       const arma::uword numberOfDimensions = getDiscreteRandomNumber();
       CAPTURE(numberOfDimensions);
@@ -252,7 +252,6 @@ TEST_CASE("generalisedLeastSquaresEstimate") {
 
       const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfParameters).t();
       CAPTURE(objectiveValues);
-
 
       const arma::uword numberOfcovarianceDimensions = getDifferentDiscreteRandomNumber(numberOfParameters);
       CAPTURE(numberOfcovarianceDimensions);

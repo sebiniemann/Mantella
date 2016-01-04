@@ -34,10 +34,10 @@ TEST_CASE("randomRotationMatrix") {
 
     CAPTURE(rollAngles);
     IS_UNIFORM(rollAngles, -arma::datum::pi, arma::datum::pi);
-    
+
     CAPTURE(pitchAngles);
     IS_UNIFORM(pitchAngles, -arma::datum::pi, arma::datum::pi);
-    
+
     CAPTURE(yawAngles);
     IS_UNIFORM(yawAngles, -arma::datum::pi, arma::datum::pi);
   }
@@ -49,7 +49,7 @@ TEST_CASE("randomPermutationVector") {
     for (arma::uword n = 0; n < permutations.n_rows; ++n) {
       permutations.row(n) = mant::randomPermutationVector(permutations.n_cols).t();
     }
-    
+
     for (arma::uword n = 0; n < permutations.n_cols; ++n) {
       CAPTURE(permutations.col(n));
       IS_UNIFORM(permutations.col(n), 0, permutations.n_cols - 1);
@@ -61,7 +61,7 @@ TEST_CASE("randomPermutationVector") {
     for (arma::uword n = 0; n < permutations.n_rows; ++n) {
       permutations.row(n) = mant::randomPermutationVector(permutations.n_cols + 1, permutations.n_cols).t();
     }
-    
+
     for (arma::uword n = 0; n < permutations.n_cols; ++n) {
       CAPTURE(permutations.col(n));
       IS_UNIFORM(permutations.col(n), 0, permutations.n_cols);
