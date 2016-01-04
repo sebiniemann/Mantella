@@ -50,7 +50,7 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
   INCLUDE_ERROR_OCCURED=0;
   
   echo "${MAGENTA_TEXT_COLOR}Checking include rules${RESET_TEXT_COLOR}";
-  FILES=$(find src -type f);
+  FILES=$(find src -type f -name \*.cpp);
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
