@@ -125,6 +125,24 @@ void HAS_SAME_ELEMENTS(
 /** Checks whether `actual` contains the same elements, in the same order, as `expected`.
  */
 void IS_EQUAL(
+    const std::vector<arma::Col<double>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<3>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<2>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
     const arma::Cube<double>& actual,
     const arma::Cube<double>& expected);
 

@@ -224,6 +224,36 @@ void HAS_SAME_ELEMENTS(
 }
 
 void IS_EQUAL(
+    const std::vector<arma::Col<double>>& actual,
+    const std::vector<arma::Col<double>>& expected) {
+  CHECK(actual.size() == expected.size());
+
+  for (arma::uword n = 0; n < actual.size(); ++n) {
+    IS_EQUAL(actual.at(n), expected.at(n));
+  }
+}
+
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<3>>& actual,
+    const std::vector<arma::Col<double>>& expected) {
+  CHECK(actual.size() == expected.size());
+
+  for (arma::uword n = 0; n < actual.size(); ++n) {
+    IS_EQUAL(actual.at(n), expected.at(n));
+  }
+}
+
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<2>>& actual,
+    const std::vector<arma::Col<double>>& expected) {
+  CHECK(actual.size() == expected.size());
+
+  for (arma::uword n = 0; n < actual.size(); ++n) {
+    IS_EQUAL(actual.at(n), expected.at(n));
+  }
+}
+
+void IS_EQUAL(
     const arma::Cube<double>& actual,
     const arma::Cube<double>& expected) {
   CHECK(actual.n_rows == expected.n_rows);
