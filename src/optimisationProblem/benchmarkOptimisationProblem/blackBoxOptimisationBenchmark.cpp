@@ -30,9 +30,9 @@ namespace mant {
 
     arma::Col<double> BlackBoxOptimisationBenchmark::getRandomParameterTranslation() {
       // The parameter space is randomly translated by [-4, 4]^N, rounded up to 4 decimal places.
-      arma::Col<double> randomParameterTranslation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1.0e4) / 1.0e4 * 8.0 - 4.0;
+      arma::Col<double> randomParameterTranslation = arma::floor(arma::randu<arma::Col<double>>(numberOfDimensions_) * 1e4) / 1e4 * 8.0 - 4.0;
       // In case the parameter space would remain unchanged, it is forcefully translated by -0.00001.
-      randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0.0)).fill(-1.0e-5);
+      randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0.0)).fill(-1e-5);
 
       return randomParameterTranslation;
     }
@@ -148,8 +148,8 @@ namespace mant {
         const arma::Col<double>& parameter) {
       double boundConstraintsValue = 0.0;
 
-      for (arma::uword n = 0; n < parameter.n_elem; ++n) {
-        boundConstraintsValue += std::pow(std::max(0.0, std::abs(parameter(n)) - 5.0), 2.0);
+      for (const auto& element : parameter) {
+        boundConstraintsValue += std::pow(std::max(0.0, std::abs(element) - 5.0), 2.0);
       }
 
       return boundConstraintsValue;

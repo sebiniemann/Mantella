@@ -2,42 +2,35 @@
 #include <catch.hpp>
 #include "catchExtension.hpp"
 
-// C++ standard library
-#include <cstdlib>
-#include <string>
-
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include <mantella>
 
 extern std::string testDirectory;
 
 class TestStepEllipsoidalFunction : public mant::bbob::StepEllipsoidalFunction {
-  public:
-    using mant::bbob::StepEllipsoidalFunction::StepEllipsoidalFunction;
-  
-    // Increases the visibility of internal parameters, to make them accessible.
-    using mant::bbob::StepEllipsoidalFunction::rotationQ_;
-    
-    // Increases the visibility of the internal objective function, to bypass general modification, made by the parent class.
-    using mant::bbob::StepEllipsoidalFunction::objectiveFunction_;
+ public:
+  using mant::bbob::StepEllipsoidalFunction::StepEllipsoidalFunction;
+
+  // Increases the visibility of internal parameters, to make them accessible.
+  using mant::bbob::StepEllipsoidalFunction::rotationQ_;
+
+  // Increases the visibility of the internal objective function, to bypass general modification, made by the parent class.
+  using mant::bbob::StepEllipsoidalFunction::objectiveFunction_;
 };
 
-TEST_CASE("bbob::StepEllipsoidalFunction") {
-  // All expected objective values where generated for a 40-dimensional problem instance.
-  TestStepEllipsoidalFunction optimisationProblem(40);
-    
-  SECTION(".objectiveFunction_") {
-    SECTION("Returns the expected objective value") {
-      // *Note:* There is no need to *CAPTURE* anything below, as everything is stored on the hard disk, and easily accessible.
-      
-      REQUIRE(optimisationProblem.rotationQ_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
+SCENARIO("bbob::StepEllipsoidalFunction.objectiveFunction_", "[bbob::StepEllipsoidalFunction][bbob::StepEllipsoidalFunction.objectiveFunction_]") {
+  GIVEN("Some parameters") {
+    // All expected objective values where generated for a 40-dimensional problem instance.
+    const arma::uword numberOfDimensions = 40;
+    CAPTURE(numberOfDimensions);
+    TestStepEllipsoidalFunction optimisationProblem(numberOfDimensions);
 
-      arma::Mat<double> parameters;
-      REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(optimisationProblem.rotationQ_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
 
+    arma::Mat<double> parameters;
+    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+
+    THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
       REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction_dim40_1x100.expected"));
 
@@ -45,5 +38,61 @@ TEST_CASE("bbob::StepEllipsoidalFunction") {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
       }
     }
+  }
+}
+
+SCENARIO("bbob::StepEllipsoidalFunction.getNormalisedObjectiveValue", "[bbob::StepEllipsoidalFunction][bbob::StepEllipsoidalFunction.getNormalisedObjectiveValue]") {
+  GIVEN("A parameter") {
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    CAPTURE(numberOfDimensions);
+
+    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    CAPTURE(parameter);
+
+    WHEN("Instantiated multiple times") {
+      THEN("Return a different objective value (due to randomised initialisation)") {
+        arma::uword numberOfCollisions = 0;
+
+        double previousObjectiveValue = arma::datum::inf;
+        for (arma::uword n = 0; n < 100; ++n) {
+          mant::bbob::StepEllipsoidalFunction optimisationProblem(numberOfDimensions);
+
+          const double objectiveValue = optimisationProblem.getNormalisedObjectiveValue(parameter);
+          if (std::abs(previousObjectiveValue - objectiveValue) <= 0) {
+            ++numberOfCollisions;
+          }
+          previousObjectiveValue = objectiveValue;
+        }
+
+        // Since some random values are truncated, collisions are unavoidably. However, there shouldn't be more then 10 collisions out of 100.
+        CHECK(numberOfCollisions <= 10);
+      }
+    }
+
+#if defined(SUPPORT_MPI)
+    WHEN("MPI is supported") {
+      mant::bbob::StepEllipsoidalFunction optimisationProblem(numberOfDimensions);
+
+      THEN("Return the same objective value for each node") {
+        double objectiveValue = optimisationProblem.getNormalisedObjectiveValue(SYNCHRONISED(parameter));
+
+        arma::Col<double> objectiveValues(static_cast<arma::uword>(numberOfNodes));
+        MPI_Allgather(&objectiveValue, 1, MPI_DOUBLE, objectiveValues.memptr(), 1, MPI_DOUBLE, MPI_COMM_WORLD);
+        CAPTURE(objectiveValues);
+
+        CHECK(arma::all(objectiveValues == objectiveValue));
+      }
+    }
+#endif
+  }
+}
+
+SCENARIO("bbob::StepEllipsoidalFunction.getObjectiveFunctionName", "[bbob::StepEllipsoidalFunction][bbob::StepEllipsoidalFunction.getObjectiveFunctionName]") {
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  CAPTURE(numberOfDimensions);
+  mant::bbob::StepEllipsoidalFunction optimisationProblem(numberOfDimensions);
+
+  THEN("Return the objective function name") {
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Step Ellipsoidal Function");
   }
 }

@@ -21,11 +21,11 @@ namespace mant {
 
       setObjectiveFunction(
           [this](
-              const arma::Col<double>& parameter) {
-            assert(parameter.n_elem == numberOfDimensions_);
+              const arma::Col<double>& parameter_) {
+            assert(parameter_.n_elem == numberOfDimensions_);
               
-            arma::Col<double> z = parameter;
-            z.elem(arma::find(parameter >= 5.0)).fill(5.0);
+            arma::Col<double> z = parameter_;
+            z.elem(arma::find(parameter_ >= 5.0)).fill(5.0);
 
             return f0_ - arma::dot(parameterConditioning_, z);
           },

@@ -81,7 +81,7 @@ namespace mant {
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitions;
 
     // There is no differentiation on the order of both sets within a partition. For example {{0, 1, 2}, {3}} and {{3}, {0, 1, 2}} are the same partition, which is why the first set can be limited to *numberOfElements*/2 elements, without excluding any partition.
-    arma::Col<arma::uword> elements = range<arma::uword>(0, numberOfElements - 1);
+    arma::Col<arma::uword> elements = range(0, numberOfElements - 1);
     for (arma::uword n = 1; n <= std::floor(static_cast<double>(numberOfElements) / 2.0); ++n) {
       arma::Col<arma::uword> firstSet = elements.head(n);
       arma::Col<arma::uword> secondSet = elements.tail(elements.n_elem - n);

@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <functional>
+#include <string>
 
 // Armadillo
 #include <armadillo>
@@ -21,20 +22,29 @@ namespace mant {
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
+    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
+    using OptimisationAlgorithm::optimise;
+
     void optimise(
         OptimisationProblem& optimisationProblem);
 
     void setIsAcceptableStateFunction(
-        std::function<bool(const double objectiveValue)> isAcceptableStateFunction);
+        std::function<bool(const double objectiveValue_)> isAcceptableStateFunction,
+        const std::string& isAcceptableStateFunctionName);
+    void setIsAcceptableStateFunction(
+        std::function<bool(const double objectiveValue_)> isAcceptableStateFunction);
+    std::string getIsAcceptableStateFunctionName() const;
 
     void setMinimalStepSize(
         const double minimalStepSize);
-
+    double getMinimalStepSize() const;
     void setMaximalStepSize(
         const double maximalStepSize);
+    double getMaximalStepSize() const;
 
    protected:
-    std::function<bool(const double objectiveValue)> isAcceptableStateFunction_;
+    std::function<bool(const double objectiveValue_)> isAcceptableStateFunction_;
+    std::string isAcceptableStateFunctionName_;
 
     double minimalStepSize_;
     double maximalStepSize_;

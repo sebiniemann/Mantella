@@ -21,10 +21,10 @@ namespace mant {
 
       setObjectiveFunction(
           [this](
-              const arma::Col<double>& parameter) {
-            assert(parameter.n_elem == numberOfDimensions_);
+              const arma::Col<double>& parameter_) {
+            assert(parameter_.n_elem == numberOfDimensions_);
               
-            const arma::Col<double>& s = max_ * parameter + 0.5;
+            const arma::Col<double>& s = max_ * parameter_ + 0.5;
             const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
 
             return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1.0);

@@ -2,155 +2,457 @@
 #include <catch.hpp>
 #include "catchExtension.hpp"
 
-// C++ standard library
-#include <cmath>
-#include <random>
-
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include <mantella>
 
-TEST_CASE("rotationMatrix2D") {
-  SECTION("Generates 2D rotation matrix.") {
+SCENARIO("rotationMatrix2D", "[geometry][rotationMatrix2D]") {
+  GIVEN("An angle") {
     const double angle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
     CAPTURE(angle);
 
-    arma::Mat<double>::fixed<2, 2> expected({std::cos(angle), -std::sin(angle), std::sin(angle), std::cos(angle)});
-    CAPTURE(expected);
-
-    IS_EQUAL(mant::rotationMatrix2D(angle), expected);
+    THEN("Return a 2-dimensional rotation matrix") {
+      IS_EQUAL(mant::rotationMatrix2D(angle), arma::Mat<double>::fixed<2, 2>({std::cos(angle), -std::sin(angle), std::sin(angle), std::cos(angle)}));
+    }
   }
 }
 
-TEST_CASE("rotationMatrix3D") {
-  SECTION("Generates 3D rotation matrix.") {
+SCENARIO("rotationMatrix3D", "[geometry][rotationMatrix3D]") {
+  GIVEN("A roll, pitch and yaw angle") {
     const double rollAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
-    const double pitchAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
-    const double yawAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
     CAPTURE(rollAngle);
+
+    const double pitchAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
     CAPTURE(pitchAngle);
+
+    const double yawAngle = std::uniform_real_distribution<double>(-720.0, 720.0)(mant::Rng::getGenerator());
     CAPTURE(yawAngle);
 
-    arma::Mat<double>::fixed<3, 3> rollRotationMatrix({
-        1.0, 0.0, 0.0, 0.0, std::cos(rollAngle), -std::sin(rollAngle), 0.0, std::sin(rollAngle), std::cos(rollAngle)
-    });
-    CAPTURE(rollRotationMatrix);
-
-    arma::Mat<double>::fixed<3, 3> pitchRotationMatrix({
-      std::cos(pitchAngle), 0.0, std::sin(pitchAngle), 0.0, 1.0, 0.0, -std::sin(pitchAngle), 0.0, std::cos(pitchAngle)
-    });
-    CAPTURE(pitchRotationMatrix);
-
-    arma::Mat<double>::fixed<3, 3> yawRotationMatrix({
-      std::cos(yawAngle), -std::sin(yawAngle), 0.0, std::sin(yawAngle), std::cos(yawAngle), 0.0, 0.0, 0.0, 1.0
-    });
-    CAPTURE(yawRotationMatrix);
-
-    const arma::Mat<double>& expected = rollRotationMatrix * pitchRotationMatrix * yawRotationMatrix;
-    CAPTURE(expected);
-
-    IS_EQUAL(mant::rotationMatrix3D(rollAngle, pitchAngle, yawAngle), expected);
-  }
-}
-
-TEST_CASE("circleCircleIntersections") {
-  SECTION("Finds the intersection between two circles.") {
-    arma::Mat<double>::fixed<2, 2> expected;
-
-    expected = {
-      -0.74283680360129, 3.3309693303323, // First intersection.
-      -2.5522451636118, 1.8231290303235 // Second intersection
-    };
-    IS_EQUAL(mant::circleCircleIntersections({-2.0, 3.0}, 1.3, {-1.5, 2.4}, 1.2), expected);
-
-    expected = {
-      -1.7957464402521, -0.7476850918245, // First intersection.
-      -0.18041433590865, 0.97533581947522 // Second intersection
-    };
-    IS_EQUAL(mant::circleCircleIntersections({1.8, -2.5}, 4.0, {-3.0, 2.0}, 3.0), expected);
-
-    expected = {
-      -3.2, 4.1, // First intersection
-      -3.2, 4.1 // Second intersection.
-    };
-    IS_EQUAL(mant::circleCircleIntersections({-2.0, 5.0}, 1.5, {-6.0, 2.0}, 3.5), expected);
-  }
-
-  SECTION("Exception tests:") {
-    SECTION("Throws an exception, if both centres are on the same spot.") {
-      CHECK_THROWS_AS(mant::circleCircleIntersections({-2.0, 3.0}, 1.3, {-2.0, 3.0}, 1.3), std::logic_error);
-    }
-
-    SECTION("Throws an exception, if the circles are to far apart.") {
-      CHECK_THROWS_AS(mant::circleCircleIntersections({-8.0, 3.0}, 1.3, {-2.0, 3.0}, 1.3), std::logic_error);
-    }
-
-    SECTION("Throws an exception, if the first circle is enclosed by second one.") {
-      CHECK_THROWS_AS(mant::circleCircleIntersections({-4.0, 2.8}, 0.3, {-4.0, 3.0}, 1.3), std::logic_error);
-    }
-
-    SECTION("Throws an exception, if the second circle is enclosed by first one.") {
-      CHECK_THROWS_AS(mant::circleCircleIntersections({6.8, 1.4}, 2.0, {6.5, 1.2}, 0.1), std::logic_error);
-    }
-
-    SECTION("Throws an exception, if any radius is 0 or negative.") {
-      CHECK_THROWS_AS(mant::circleCircleIntersections({1.8, -2.5}, 0.0, {1.8, 0.5}, 3.0), std::logic_error);
-      CHECK_THROWS_AS(mant::circleCircleIntersections({1.8, -2.5}, 4.0, {-3.0, 2.0}, -3.0), std::logic_error);
+    THEN("Return a 3-dimensional rotation matrix") {
+      IS_EQUAL(mant::rotationMatrix3D(rollAngle, pitchAngle, yawAngle), arma::Mat<double>::fixed<3, 3>({1.0, 0.0, 0.0, 0.0, std::cos(rollAngle), -std::sin(rollAngle), 0.0, std::sin(rollAngle), std::cos(rollAngle)}) * arma::Mat<double>::fixed<3, 3>({std::cos(pitchAngle), 0.0, std::sin(pitchAngle), 0.0, 1.0, 0.0, -std::sin(pitchAngle), 0.0, std::cos(pitchAngle)}) * arma::Mat<double>::fixed<3, 3>({std::cos(yawAngle), -std::sin(yawAngle), 0.0, std::sin(yawAngle), std::cos(yawAngle), 0.0, 0.0, 0.0, 1.0}));
     }
   }
 }
 
-TEST_CASE("circleSphereIntersections") {
-  SECTION("Finds the intersection between a circle and a sphere.") {
-    arma::Mat<double>::fixed<3, 2> expected;
+SCENARIO("circleCircleIntersections", "[geometry][circleCircleIntersections]") {
+  GIVEN("Two circles") {
+    WHEN("The centers distance is within (*max(firstRadius, secondRadius)*, *firstRadius + secondRadius*)") {
+      const arma::Col<double>::fixed<2>& firstCenter = {-1.2, -2.4};
+      CAPTURE(firstCenter);
 
-    expected = {
-      0.0, -2.095, 1.1962336728, // First intersection
-      0.0, -2.095, -1.1962336728 // Second intersection
-    };
-    IS_EQUAL(mant::circleSphereIntersections({0.0, -2.0, 0.0}, 1.2, {1.0, 0.0, 0.0}, {0.0, -3.0, 0.0}, 1.5), expected);
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
 
-    expected = {
-      -2.5522451636, 1.8231290303, 0.0, // First intersection
-      -0.7428368036, 3.3309693303, 0.0 // Second intersection
-    };
-    IS_EQUAL(mant::circleSphereIntersections({-2.0, 3.0, 0.0}, 1.3, {0.0, 0.0, 1.0}, {-1.5, 2.4, 0.0}, 1.2), expected);
+      const arma::Col<double>::fixed<2>& secondCenter = {2.2, 1.4};
+      CAPTURE(secondCenter);
 
-    expected = {
-      -0.1804143359, 0.9753358195, 0.0, // First intersection
-      -1.7957464403, -0.7476850918, 0.0 // Second intersection
-    };
-    IS_EQUAL(mant::circleSphereIntersections({1.8, -2.5, 0.0}, 4.0, {0.0, 0.0, 1.0}, {-3.0, 2.0, 0.0}, 3.0), expected);
+      const double secondRadius = 4.1;
+      CAPTURE(secondRadius);
 
-    expected = {
-      -3.2, 4.1, 0.0, // First intersection
-      -3.2, 4.1, 0.0 // Second intersection.
-    };
-    IS_EQUAL(mant::circleSphereIntersections({-2.0, 5.0, 0.0}, 1.5, {0.0, 0.0, 1.0}, {-6.0, 2.0, 0.0}, 3.5), expected);
+      THEN("Return two intersections") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {{-1.8455795693519, 0.73420277257798}, {1.986425723198, -2.6944335418087}});
+      }
+    }
+
+    WHEN("The centers distance is within (*abs(firstRadius - secondRadius), *max(firstRadius, secondRadius)*)") {
+      const arma::Col<double>::fixed<2>& firstCenter = {-1.2, -2.4};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {-0.1, 0.2};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 1.1;
+      CAPTURE(secondRadius);
+
+      THEN("Return two intersections") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {{-1.0250514584014, 0.79521407855444}, {0.97135007822576, -0.049417340787819}});
+      }
+    }
+
+    WHEN("The centers distance is exactly *firstRadius + secondRadius*") {
+      const arma::Col<double>::fixed<2>& firstCenter = {2.5, 1.2};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {-1.3, 1.2};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 0.6;
+      CAPTURE(secondRadius);
+
+      THEN("Return 1 intersection") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {{-0.7, 1.2}});
+      }
+    }
+
+    WHEN("The centers distance is exactly *abs(firstRadius - secondRadius)*") {
+      const arma::Col<double>::fixed<2>& firstCenter = {2.5, 1.2};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {5.2, 1.2};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 0.5;
+      CAPTURE(secondRadius);
+
+      THEN("Return 1 intersection") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {{5.7, 1.2}});
+      }
+    }
+
+    WHEN("One circle is a dot (the radius is 0 and The distance is equal to *firstRadius*) on the other circle (which is not a dot)") {
+      const arma::Col<double>::fixed<2>& firstCenter = {2.5, 1.2};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {5.7, 1.2};
+      CAPTURE(secondCenter);
+      const double secondRadius = 0.0;
+      CAPTURE(secondRadius);
+
+      THEN("Return 1 intersection") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {{5.7, 1.2}});
+        IS_EQUAL(mant::circleCircleIntersections(secondCenter, secondRadius, firstCenter, firstRadius), {{5.7, 1.2}});
+      }
+    }
+
+    WHEN("Both circles are dots (both radii are 0) with an identical center") {
+      const arma::Col<double>::fixed<2>& firstCenter = {0.1, 6.36};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 0.0;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {0.1, 6.36};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 0.0;
+      CAPTURE(secondRadius);
+
+      THEN("Return 1 intersection") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {{0.1, 6.36}});
+      }
+    }
+
+    WHEN("The centers distance is greater than *firstRadius + secondRadius*") {
+      const arma::Col<double>::fixed<2>& firstCenter = {2.5, 1.2};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {20.5, 10.2};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 1.2;
+      CAPTURE(secondRadius);
+
+      THEN("Return zero intersections") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {});
+      }
+    }
+
+    WHEN("The centers distance is less than *abs(firstRadius - secondRadius)*") {
+      const arma::Col<double>::fixed<2>& firstCenter = {2.5, 1.2};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {2.8, 1.6};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 0.6;
+      CAPTURE(secondRadius);
+
+      THEN("Return zero intersections") {
+        IS_EQUAL(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), {});
+      }
+    }
+
+    WHEN("Both circles are identical (same radius and center)") {
+      const arma::Col<double>::fixed<2>& firstCenter = {2.5, 1.2};
+      CAPTURE(firstCenter);
+
+      const double firstRadius = 3.2;
+      CAPTURE(firstRadius);
+
+      const arma::Col<double>::fixed<2>& secondCenter = {2.5, 1.2};
+      CAPTURE(secondCenter);
+
+      const double secondRadius = 3.2;
+      CAPTURE(secondRadius);
+
+      THEN("Throw a std::logic_error") {
+        CHECK_THROWS_AS(mant::circleCircleIntersections(firstCenter, firstRadius, secondCenter, secondRadius), std::logic_error);
+      }
+    }
   }
+}
 
-  SECTION("Exception tests:") {
-    SECTION("Throws an exception, if both centres are on the same spot.") {
-      CHECK_THROWS_AS(mant::circleSphereIntersections({-2.0, 0.0, 0.0}, 1.2, {0.0, 0.0, 1.0}, {-2.0, 0.0, 0.0}, 1.5), std::logic_error);
+SCENARIO("circleSphereIntersections", "[geometry][circleSphereIntersections]") {
+  GIVEN("A sphere and a circle") {
+    WHEN("The sphere intersects with the circle's plane") {
+      AND_WHEN("The sphere's intersection circle's center distance to the circle's center is within (*max(circleRadius, intersectionCircleRadius)*, *circleRadius + intersectionCircleRadius*)") {
+        const arma::Col<double>::fixed<3>& circleCenter = {1.71037554404510, 3.64627141711538, 7.78840646877250};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 8.08132872957838;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.285511339171737, 0.263199560882686, -0.921525510420370};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-3.44040300957287, -4.17124887185550, 0.875266289505627};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 6.46975191235126;
+        CAPTURE(sphereRadius);
+
+        THEN("Return two intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{1.16469480073837, -4.06037146073060, 5.41822459489890}, {-5.18238295082404, 0.666644704628342, 4.80184004206240}});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle's center distance to the circle's center is within (*abs(circleRadius - intersectionCircleRadius), max(circleRadius, intersectionCircleRadius)*)") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-3.50130736516486, 1.00721993762508, 4.45910241904761};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 5.99010703040300;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 7.78421349144159;
+        CAPTURE(sphereRadius);
+
+        THEN("Return two intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{-4.91060527034701, -4.68576560570548, 5.67778090559027}, {2.39261228050498, 1.42557676033646, 5.44300841809502}});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle's center distance to the circle's center is exactly *circleRadius + intersectionCircleRadius*") {
+        const arma::Col<double>::fixed<3>& circleCenter = {2.63021058406213, -6.59774155884104, 7.57279366864463};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 4.868193677507644;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 7.78421349144159;
+        CAPTURE(sphereRadius);
+
+        THEN("Return one intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{-0.296249423553824, -2.99905684451752, 6.09475110077178}});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle's center distance to the circle's center is exactly *abs(circleRadius - intersectionCircleRadius)*") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-2.17603910288870, -1.50364082820138, 5.35751318672055};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 2.58770224454292;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.090410660062076, -0.126777939782578, -0.987802240598605};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 7.78421349144159;
+        CAPTURE(sphereRadius);
+
+        THEN("Return one intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{-0.797087405472182, -3.65601747058010, 5.75996804375059}});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle is a dot (the radius is 0) on the circle (which is not a dot)") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-3.89883315146586, 4.61891105015065, 7.97098605210794};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 12.7117514791544;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.586302739220448, -0.563800193419407, 0.581703051292357};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-2.28880000000000, 1.88432000000000, -5.43603734569035};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 5.31317660930921;
+        CAPTURE(sphereRadius);
+
+        THEN("Return one intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{0.826330000000000, -1.11125000000000, -2.34534630000000}});
+        }
+      }
+
+      AND_WHEN("The circle is a dot (the radius is 0) on the sphere (which is not a dot)") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-4.91060527034701, -4.68576560570548, 5.67778090559027};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 0.0;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 7.78421349144159;
+        CAPTURE(sphereRadius);
+
+        THEN("Return one intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{-4.91060527034701, -4.68576560570548, 5.67778090559027}});
+        }
+      }
+
+      AND_WHEN("The sphere is a dot (the radius is 0) on the circle (which is not a dot)") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-3.50130736516486, 1.00721993762508, 4.45910241904761};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 5.99010703040300;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.91060527034701, -4.68576560570548, 5.67778090559027};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 0.0;
+        CAPTURE(sphereRadius);
+
+        THEN("Return one intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{-4.91060527034701, -4.68576560570548, 5.67778090559027}});
+        }
+      }
+
+      AND_WHEN("Both the sphere and the circle are dots (both radii are 0), with an identical center") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-4.91060527034701, -4.68576560570548, 5.67778090559027};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 0.0;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.91060527034701, -4.68576560570548, 5.67778090559027};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 0.0;
+        CAPTURE(sphereRadius);
+
+        THEN("Return one intersection") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {{-4.91060527034701, -4.68576560570548, 5.67778090559027}});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle's center distance to the circle's center is greater than *circleRadius + intersectionCircleRadius*") {
+        const arma::Col<double>::fixed<3>& circleCenter = {2.63021058406213, -6.59774155884104, 7.57279366864463};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 3.86819367750765;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 7.78421349144159;
+        CAPTURE(sphereRadius);
+
+        THEN("Return zero intersections") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle's center distance to the circle's center is less than *abs(circleRadius - intersectionCircleRadius)*") {
+        const arma::Col<double>::fixed<3>& circleCenter = {-2.17603910288870, -1.50364082820138, 5.35751318672055};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 1.43225689874261;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 7.78421349144159;
+        CAPTURE(sphereRadius);
+
+        THEN("Return zero intersections") {
+          IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {});
+        }
+      }
+
+      AND_WHEN("The sphere's intersection circle is identical (same radius and center) to the circle") {
+        const arma::Col<double>::fixed<3>& circleCenter = {4.18240810714397, -4.140718315562911, 3.165517912607086};
+        CAPTURE(circleCenter);
+
+        const double circleRadius = 3.616619200562912;
+        CAPTURE(circleRadius);
+
+        const arma::Col<double>::fixed<3>& circleNormal = {0.057471463902417, -0.044336228909495, 0.997362185789595};
+        CAPTURE(circleNormal);
+
+        const arma::Col<double>::fixed<3>& sphereCenter = {4.0, -4.0, 0.0};
+        CAPTURE(sphereCenter);
+
+        const double sphereRadius = 4.81180968646967;
+        CAPTURE(sphereRadius);
+
+        THEN("Throw a std::logic_error") {
+          CHECK_THROWS_AS(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), std::logic_error);
+        }
+      }
     }
 
-    SECTION("Throws an exception, if the circle and sphere are to far apart.") {
-      CHECK_THROWS_AS(mant::circleSphereIntersections({-7.0, 3.0, 0.0}, 1.3, {0.0, 0.0, 1.0}, {-1.5, 2.4, 0.0}, 1.2), std::logic_error);
-    }
+    WHEN("The sphere does not intersect with the circle's plane") {
+      const arma::Col<double>::fixed<3>& circleCenter = {-2.17603910288870, -1.50364082820138, 15.35751318672055};
+      CAPTURE(circleCenter);
 
-    SECTION("Throws an exception, if the circle is enclosed by the sphere.") {
-      CHECK_THROWS_AS(mant::circleSphereIntersections({-2.0, 3.0, 0.0}, 1.3, {0.0, 1.0, 1.0}, {-1.5, 2.4, 0.0}, 5.0), std::logic_error);
-    }
+      const double circleRadius = 1.43225689874261;
+      CAPTURE(circleRadius);
 
-    SECTION("Throws an exception, if the sphere is enclosed by the circle.") {
-      CHECK_THROWS_AS(mant::circleSphereIntersections({-2.0, 3.0, 0.0}, 6.3, {0.0, 1.0, 1.0}, {-1.5, 2.4, 0.0}, 0.2), std::logic_error);
-    }
+      const arma::Col<double>::fixed<3>& circleNormal = {0.176604220410152, -0.247642470535383, -0.952619628246476};
+      CAPTURE(circleNormal);
 
-    SECTION("Throws an exception, if any radius is 0 or negative.") {
-      CHECK_THROWS_AS(mant::circleSphereIntersections({-1.5, 3.4, 0.0}, 1.0, {0.0, 0.0, 1.0}, {-1.5, 2.4, 0.0}, 0.0), std::logic_error);
-      CHECK_THROWS_AS(mant::circleSphereIntersections({1.8, -2.5, 0.0}, -4.0, {0.0, 0.0, 1.0}, {-3.0, 2.0, 0.0}, 3.0), std::logic_error);
+      const arma::Col<double>::fixed<3>& sphereCenter = {-4.26292172088363, 1.80075110090070, 1.42342000000000};
+      CAPTURE(sphereCenter);
+
+      const double sphereRadius = 7.78421349144159;
+      CAPTURE(sphereRadius);
+
+      THEN("Return zero intersections") {
+        IS_EQUAL(mant::circleSphereIntersections(circleCenter, circleRadius, circleNormal, sphereCenter, sphereRadius), {});
+      }
     }
   }
 }

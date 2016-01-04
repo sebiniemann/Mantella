@@ -1,5 +1,6 @@
 // Catch
 #include <catch.hpp>
+#include "catchExtension.hpp"
 
 // C++ Standard Library
 #include <memory>
@@ -8,68 +9,123 @@
 // Mantella
 #include <mantella>
 
-class TestHillClimbing : public mant::HillClimbing {
- public:
-  TestHillClimbing(
-      const std::shared_ptr<mant::OptimisationProblem> optimisationProblem)
-      : mant::HillClimbing(optimisationProblem),
-        neighboursIndex_(0) {
-  }
+SCENARIO("HillClimbing.optimise", "[HillClimbing][HillClimbing.optimise]") {
+  GIVEN("An optimisation problem") {
+    WHEN("Called multiple times") {
+      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      CAPTURE(numberOfDimensions);
+      mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
-  void setVelocitys(
-      const arma::Mat<double>& neighbours) {
-    neighbours_ = neighbours;
-  }
+      mant::HillClimbing optimisationAlgorithm;
+      optimisationAlgorithm.setMaximalNumberOfIterations(1);
 
- protected:
-  arma::Col<double> getRandomNeighbour(
-      const arma::Col<double>& parameter,
-      const arma::Col<double>& minimalDistance,
-      const arma::Col<double>& maximalDistance) override {
-    return neighbours_.col(neighboursIndex_++);
-  }
+      THEN("Start with a different parameter") {
+        ::mant::isCachingSamples = true;
+        for (arma::uword n = 0; n < 100; ++n) {
+          optimisationAlgorithm.optimise(optimisationProblem);
+        }
+        ::mant::isCachingSamples = false;
 
-  arma::uword neighboursIndex_;
-  arma::Mat<double> neighbours_;
-};
-
-TEST_CASE("HillClimbing") {
-  SECTION(".setMaximalStepSize") {
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-    mant::HillClimbing hillClimbing(optimisationProblem);
-
-    SECTION("Test default value") {
-      //TODO
-    }
-
-    SECTION("Test with parameter") {
-      //TODO
+        CHECK(optimisationProblem.getNumberOfEvaluations() == optimisationProblem.getNumberOfDistinctEvaluations());
+      }
     }
   }
+}
 
-  SECTION(".optimise") {
-    // TODO
+SCENARIO("HillClimbing.setMinimalStepSize", "[HillClimbing][HillClimbing.setMinimalStepSize]") {
+  mant::HillClimbing optimisationAlgorithm;
+
+  GIVEN("A minimal step size") {
+    WHEN("The minimal step size is not negative (but may be 0)") {
+      const double minimalStepSize = std::abs(getContinuousRandomNumber());
+      CAPTURE(minimalStepSize);
+
+      THEN("Throw no exception") {
+        CHECK_NOTHROW(optimisationAlgorithm.setMinimalStepSize(minimalStepSize));
+      }
+    }
+
+    WHEN("The minimal step size is negative") {
+      const double minimalStepSize = -std::abs(getContinuousRandomNumber()) - 1.0;
+      CAPTURE(minimalStepSize);
+
+      THEN("Throw a std::logic_error") {
+        CHECK_THROWS_AS(optimisationAlgorithm.setMinimalStepSize(minimalStepSize), std::logic_error);
+      }
+    }
+  }
+}
+
+SCENARIO("HillClimbing.getMinimalStepSize", "[HillClimbing][HillClimbing.getMinimalStepSize]") {
+  mant::HillClimbing optimisationAlgorithm;
+
+  WHEN("The default minimal step size is unchanged") {
+    THEN("Return 0.0") {
+      CHECK(optimisationAlgorithm.getMinimalStepSize() == Approx(0.0));
+    }
   }
 
-  SECTION("Exception tests") {
-    std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-    mant::HillClimbing hillClimbing(optimisationProblem);
+  WHEN("The default minimal step size was changed") {
+    const double minimalStepSize = std::abs(getContinuousRandomNumber());
+    CAPTURE(minimalStepSize);
 
-    SECTION("Throws an exception, if the MaximalStepSize zero") {
-      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize({0, 0}), std::logic_error);
+    optimisationAlgorithm.setMinimalStepSize(minimalStepSize);
+
+    THEN("Return the updated minimal step size") {
+      CHECK(optimisationAlgorithm.getMinimalStepSize() == Approx(minimalStepSize));
+    }
+  }
+}
+
+SCENARIO("HillClimbing.setMaximalStepSize", "[HillClimbing][HillClimbing.setMaximalStepSize]") {
+  mant::HillClimbing optimisationAlgorithm;
+
+  GIVEN("A maximal step size") {
+    WHEN("The maximal step size is not negative (may not be 0)") {
+      const double maximalStepSize = std::abs(getContinuousRandomNumber()) + 1.0;
+      CAPTURE(maximalStepSize);
+
+      THEN("Throw no exception") {
+        CHECK_NOTHROW(optimisationAlgorithm.setMaximalStepSize(maximalStepSize));
+      }
     }
 
-    SECTION("Throws an exception, if the size of MaximalStepSize is unequal to the number of dimension of the problem") {
-      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(std::uniform_int_distribution<arma::uword>(3, 10)(mant::Rng::getGenerator())) * 200 - 100), std::logic_error);
-      CHECK_THROWS_AS(hillClimbing.setMaximalStepSize(arma::randu<arma::Mat<double>>(1) * 200 - 100), std::logic_error);
+    WHEN("The maximal step size is negative or 0") {
+      const double maximalStepSize = -std::abs(getContinuousRandomNumber());
+      CAPTURE(maximalStepSize);
+
+      THEN("Throw a std::logic_error") {
+        CHECK_THROWS_AS(optimisationAlgorithm.setMaximalStepSize(maximalStepSize), std::logic_error);
+      }
+    }
+  }
+}
+
+SCENARIO("HillClimbing.getMaximalStepSize", "[HillClimbing][HillClimbing.getMaximalStepSize]") {
+  mant::HillClimbing optimisationAlgorithm;
+
+  WHEN("The default maximal step size is unchanged") {
+    THEN("Return 0.1") {
+      CHECK(optimisationAlgorithm.getMaximalStepSize() == Approx(0.1));
     }
   }
 
-  SECTION(".toString") {
-    SECTION("Returns a (filesystem friendly) name for the class.") {
-      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-      CHECK(mant::HillClimbing(optimisationProblem).toString() ==
-            "hill_climbing");
+  WHEN("The default maximal step size was changed") {
+    const double maximalStepSize = std::abs(getContinuousRandomNumber()) + 1.0;
+    CAPTURE(maximalStepSize);
+
+    optimisationAlgorithm.setMaximalStepSize(maximalStepSize);
+
+    THEN("Return the updated maximal step size") {
+      CHECK(optimisationAlgorithm.getMaximalStepSize() == Approx(maximalStepSize));
     }
+  }
+}
+
+SCENARIO("HillClimbing.getNextParametersFunctionName", "[HillClimbing][HillClimbing.getNextParametersFunctionName]") {
+  mant::HillClimbing optimisationAlgorithm;
+
+  THEN("Return the next parameter function name") {
+    CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "Hill climbing");
   }
 }

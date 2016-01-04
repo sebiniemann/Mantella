@@ -16,10 +16,10 @@ namespace mant {
 
       setObjectiveFunction(
           [this](
-              const arma::Col<double>& parameter) {
-            assert(parameter.n_elem == numberOfDimensions_);
+              const arma::Col<double>& parameter_) {
+            assert(parameter_.n_elem == numberOfDimensions_);
               
-            return std::pow(arma::norm(parameter), 2.0);
+            return std::pow(arma::norm(parameter_), 2.0);
           },
           "BBOB Sphere Function");
     }

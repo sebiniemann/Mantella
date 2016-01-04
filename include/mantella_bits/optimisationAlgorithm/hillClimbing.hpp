@@ -18,14 +18,18 @@ namespace mant {
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
+    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
+    using OptimisationAlgorithm::optimise;
+
     void optimise(
         OptimisationProblem& optimisationProblem);
 
     void setMinimalStepSize(
         const double minimalStepSize);
-
+    double getMinimalStepSize() const;
     void setMaximalStepSize(
         const double maximalStepSize);
+    double getMaximalStepSize() const;
 
    protected:
     double minimalStepSize_;

@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <functional>
+#include <string>
 
 // Armadillo
 #include <armadillo>
@@ -21,22 +22,36 @@ namespace mant {
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
+    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
+    using OptimisationAlgorithm::optimise;
+
     void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::uword numberOfParticles);
 
+    void optimise(
+        OptimisationProblem& optimisationProblem);
+
     void setNeighbourhoodTopologyFunction(
-        std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction);
+        std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction,
+        const std::string& neighbourhoodTopologyFunctionName);
+    void setNeighbourhoodTopologyFunction(
+        std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction);
+    std::string getNeighbourhoodTopologyFunctionName() const;
 
     void setMaximalAcceleration(
         const double maximalAcceleration);
+    double getMaximalAcceleration() const;
     void setMaximalLocalAttraction(
         const double maximalLocalAttraction);
+    double getMaximalLocalAttraction() const;
     void setMaximalGlobalAttraction(
         const double maximalGlobalAttraction);
+    double getMaximalGlobalAttraction() const;
 
    protected:
-    std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction_;
+    std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction_;
+    std::string neighbourhoodTopologyFunctionName_;
 
     double maximalAcceleration_;
     double maximalLocalAttraction_;

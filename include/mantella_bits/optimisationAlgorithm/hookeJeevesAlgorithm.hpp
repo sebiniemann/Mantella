@@ -1,15 +1,9 @@
 #pragma once
 
-// C++ standard library
-#include <unordered_set>
-
 // Armadillo
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/armadillo.hpp"
-// IWYU pragma: no_forward_declare mant::Hash
-// IWYU pragma: no_forward_declare mant::IsEqual
 #include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;
@@ -24,21 +18,23 @@ namespace mant {
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
+    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
+    using OptimisationAlgorithm::optimise;
+
     void optimise(
         OptimisationProblem& optimisationProblem);
 
     void setInitialStepSize(
         const double initialStepSize);
-
+    double getInitialStepSize() const;
     void setStepSizeDecrease(
         const double stepSizeDecrease);
+    double getStepSizeDecrease() const;
 
    protected:
     double initialStepSize_;
     double stepSizeDecrease_;
 
     double stepSize_;
-
-    std::unordered_set<arma::Col<double>, Hash, IsEqual> previousBestParameters_;
   };
 }

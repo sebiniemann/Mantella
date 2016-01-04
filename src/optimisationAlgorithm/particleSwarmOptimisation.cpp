@@ -16,22 +16,22 @@ namespace mant {
         maximalGlobalAttraction_(arma::datum::nan) {
     setNextParametersFunction(
         [this](
-            const arma::uword numberOfDimensions,
-            const arma::Mat<double>& parameters,
-            const arma::Col<double>& objectiveValues,
-            const arma::Col<double>& differences) {
-          if (differences(0) >= 0) {
+            const arma::uword numberOfDimensions_,
+            const arma::Mat<double>& parameters_,
+            const arma::Row<double>& objectiveValues_,
+            const arma::Row<double>& differences_) {
+          if (differences_(0) >= 0) {
             randomiseTopology_ = true;
           }
           
           if (activeParticleIndex_ == 0 && randomiseTopology_) {
-            neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
+            neighbourhoodTopology_ = neighbourhoodTopologyFunction_();
             randomiseTopology_ = false;
           }
           
-          if (objectiveValues(0) < localBestObjectiveValues_(activeParticleIndex_)) {
-            localBestObjectiveValues_(activeParticleIndex_) = objectiveValues(0);
-            localBestSolutions_.col(activeParticleIndex_) = parameters.col(0);
+          if (objectiveValues_(0) < localBestObjectiveValues_(activeParticleIndex_)) {
+            localBestObjectiveValues_(activeParticleIndex_) = objectiveValues_(0);
+            localBestSolutions_.col(activeParticleIndex_) = parameters_.col(0);
           }
           
           activeParticleIndex_ = (activeParticleIndex_ + 1) % numberOfParticles_;
@@ -49,7 +49,7 @@ namespace mant {
           }
 
           const arma::Col<double>& velocity =
-          maximalAcceleration_ * arma::randu<arma::Col<double>>(parameters.n_rows) % velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
+          maximalAcceleration_ * arma::randu<arma::Col<double>>(numberOfDimensions_) % velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
 
           particles_.col(activeParticleIndex_) += velocity;
           velocities_.col(activeParticleIndex_) = velocity;
@@ -58,47 +58,39 @@ namespace mant {
         },
         "Particle swarm optimisation");
 
-    setBoundariesHandlingFunction([this](
-        const arma::Mat<double>& parameters) {
-      arma::Mat<double> boundedParameters = parameters;
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        const arma::Col<arma::uword>& belowLowerBound = arma::find(parameters.col(n) < 0);
-        const arma::Col<arma::uword>& aboveUpperBound = arma::find(parameters.col(n) > 1);
+    setBoundariesHandlingFunction(
+        [this](
+            const arma::Mat<double>& parameters_,
+            const arma::Mat<arma::uword>& isBelowLowerBound_,
+            const arma::Mat<arma::uword>& isAboveUpperBound_) {
+          arma::Mat<double> boundedParameters = parameters_;
+          
+          velocities_.elem(arma::find(isBelowLowerBound_)) *= -0.5;
+          velocities_.elem(arma::find(isAboveUpperBound_)) *= -0.5;
+          
+          boundedParameters.elem(arma::find(isBelowLowerBound_)).fill(0);
+          boundedParameters.elem(arma::find(isAboveUpperBound_)).fill(1);
+          
+          return boundedParameters;
+        });
 
-        static_cast<arma::Col<double>>(velocities_.col(n)).elem(belowLowerBound) *= -0.5;
-        static_cast<arma::Col<double>>(velocities_.col(n)).elem(aboveUpperBound) *= -0.5;
+    setNeighbourhoodTopologyFunction(
+        [this]() {
+           arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles_, numberOfParticles_) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles_), 3.0));
+           neighbourhoodTopology.diag().ones();
+           
+           return neighbourhoodTopology;
+        },
+        "Random");
 
-        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(belowLowerBound).fill(0);
-        static_cast<arma::Col<double>>(boundedParameters.col(n)).elem(aboveUpperBound).fill(1);
-      }
-      
-      return boundedParameters;
-    });
-
-    setNeighbourhoodTopologyFunction([this](
-        const arma::uword numberOfParticles) {
-       arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles, numberOfParticles) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles), 3.0));
-       neighbourhoodTopology.diag().ones();
-       
-       return neighbourhoodTopology;
-    });
+    setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
+    setMaximalLocalAttraction(0.5 + std::log(2.0));
+    setMaximalGlobalAttraction(maximalLocalAttraction_);
   }
 
   void ParticleSwarmOptimisation::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    if (!std::isfinite(maximalAcceleration_)) {
-      setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
-    }
-
-    if (!std::isfinite(maximalLocalAttraction_)) {
-      setMaximalLocalAttraction(0.5 + std::log(2.0));
-    }
-
-    if (!std::isfinite(maximalGlobalAttraction_)) {
-      setMaximalGlobalAttraction(maximalLocalAttraction_);
-    }
-
     numberOfParticles_ = initialParameters.n_cols;
     activeParticleIndex_ = 0;
     particles_ = initialParameters;
@@ -111,40 +103,62 @@ namespace mant {
     localBestObjectiveValues_.fill(arma::datum::inf);
 
     randomiseTopology_ = false;
-    neighbourhoodTopology_ = neighbourhoodTopologyFunction_(numberOfParticles_);
+    neighbourhoodTopology_ = neighbourhoodTopologyFunction_();
   }
 
   void ParticleSwarmOptimisation::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfParticles) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));
+    optimise(optimisationProblem, arma::randu<arma::Mat<double>>(optimisationProblem.numberOfDimensions_, numberOfParticles));
+  }
+
+  void ParticleSwarmOptimisation::optimise(
+      OptimisationProblem& optimisationProblem) {
+    optimise(optimisationProblem, 40);
   }
 
   void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
-      std::function<arma::Mat<arma::uword>(const arma::uword numberOfParticles)> neighbourhoodTopologyFunction) {
+      std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction,
+      const std::string& neighbourhoodTopologyFunctionName) {
     verify(static_cast<bool>(neighbourhoodTopologyFunction), "setNeighbourhoodTopologyFunction: The neighbourhood topology function must be callable.");
 
     neighbourhoodTopologyFunction_ = neighbourhoodTopologyFunction;
+    neighbourhoodTopologyFunctionName_ = neighbourhoodTopologyFunctionName;
+  }
+
+  void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
+      std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction) {
+    setNeighbourhoodTopologyFunction(neighbourhoodTopologyFunction, "Unnamed, custom neighbourhood topology function");
+  }
+
+  std::string ParticleSwarmOptimisation::getNeighbourhoodTopologyFunctionName() const {
+    return neighbourhoodTopologyFunctionName_;
   }
 
   void ParticleSwarmOptimisation::setMaximalAcceleration(
       const double maximalAcceleration) {
-    verify(maximalAcceleration > 0, "setMaximalAcceleration: The maximal acceleration must be strict greater than 0.");
-
     maximalAcceleration_ = maximalAcceleration;
+  }
+
+  double ParticleSwarmOptimisation::getMaximalAcceleration() const {
+    return maximalAcceleration_;
   }
 
   void ParticleSwarmOptimisation::setMaximalLocalAttraction(
       const double maximalLocalAttraction) {
-    verify(maximalLocalAttraction > 0, "setMaximalLocalAttraction: The maximal local attraction must be strict greater than 0.");
-
     maximalLocalAttraction_ = maximalLocalAttraction;
+  }
+
+  double ParticleSwarmOptimisation::getMaximalLocalAttraction() const {
+    return maximalLocalAttraction_;
   }
 
   void ParticleSwarmOptimisation::setMaximalGlobalAttraction(
       const double maximalGlobalAttraction) {
-    verify(maximalGlobalAttraction > 0, "setMaximalGlobalAttraction: The maximal global attraction must be strict greater than 0.");
-
     maximalGlobalAttraction_ = maximalGlobalAttraction;
+  }
+
+  double ParticleSwarmOptimisation::getMaximalGlobalAttraction() const {
+    return maximalGlobalAttraction_;
   }
 }
