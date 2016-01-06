@@ -3,6 +3,8 @@
 Version 0.10.0
 ==============
 
+[![Join the chat at https://gitter.im/SebastianNiemann/Mantella](https://badges.gitter.im/SebastianNiemann/Mantella.svg)](https://gitter.im/SebastianNiemann/Mantella?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master)
 
 [Mantella](http://mantella.info/) is a modern C++ optimisation library, supporting Linux, Windows and Mac OS X. It provides a wide range of tools to describe and analysis real-world online optimisation problems as well as competitive, parallalised solvers, focusing on recent multi-cores architectures and high performance clusters. 
