@@ -10,7 +10,7 @@ opts.StopOnWarnings = 'off';
 opts.StopOnEqualFunctionValues = 0;
 FHANDLES = benchmarks('handles');
 
-for i=1:5
+for i=1:24
 	fitnessFunction = i;
 	disp(['function: ' num2str(fitnessFunction)]);
 	actFunc = FHANDLES{i};

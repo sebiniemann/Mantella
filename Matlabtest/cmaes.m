@@ -273,17 +273,17 @@ while isempty(stopflag)
 
     % limit condition of C to 1e14 + 1
     if min(diagD) <= 0
-	  warning(['Iteration ' num2str(countiter) ...
-		   ': Eigenvalue (smaller) zero']);
-	  diagD(diagD<0) = 0;
-	  tmp = max(diagD)/1e14;
-	  C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
+	  %warning(['Iteration ' num2str(countiter) ...
+	%	   ': Eigenvalue (smaller) zero']);
+	  %diagD(diagD<0) = 0;
+	  %tmp = max(diagD)/1e14;
+	  %C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
     end
     if max(diagD) > 1e14*min(diagD) 
-	  warning(['Iteration ' num2str(countiter) ': condition of C ' ...
-		   'at upper limit' ]);
-	  tmp = max(diagD)/1e14 - min(diagD);
-	  C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
+	  %warning(['Iteration ' num2str(countiter) ': condition of C ' ...
+	%	   'at upper limit' ]);
+	  %tmp = max(diagD)/1e14 - min(diagD);
+	  %C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
     end
     
     diagC = diag(C); 

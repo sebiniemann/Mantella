@@ -204,11 +204,11 @@ namespace mant {
                     } else {
                         //TODO: warning gets thrown here
                         //another workaround
-                        std::cout << "eigenvalue smaller zero" << std::endl;
-                        diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
-                        double temp = 1.0*arma::max(diagD_) / 1e14;
-                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
-                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
+//                        std::cout << "eigenvalue smaller zero" << std::endl;
+//                        diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
+//                        double temp = 1.0*arma::max(diagD_) / 1e14;
+//                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
+//                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
                     }
                 }
                 if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
@@ -216,10 +216,10 @@ namespace mant {
                         stopFlag = true;
                     } else {
                         //TODO: warning gets thrown here
-                        std::cout << "condition of c at upper limit" << std::endl;
-                        double temp = 1.0*arma::max(diagD_) / 1e14 - arma::min(diagD_);
-                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
-                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
+//                        std::cout << "condition of c at upper limit" << std::endl;
+//                        double temp = 1.0*arma::max(diagD_) / 1e14 - arma::min(diagD_);
+//                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
+//                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
                     }
                 }
 
