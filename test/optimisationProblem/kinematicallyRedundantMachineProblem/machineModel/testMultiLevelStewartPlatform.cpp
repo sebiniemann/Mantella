@@ -5,5 +5,4 @@
 #include <mantella>
 
 TEST_CASE("MultiLevelStewartPlatform") {
-
 }

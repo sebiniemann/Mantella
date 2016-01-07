@@ -11,7 +11,7 @@ namespace mant {
   std::unordered_map<arma::Col<double>, double, Hash, IsEqual> randomly(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect) {
-    mant::verify(samples.size() >= numberOfSamplesToSelect, "randomly: The number of given samples must at least be equal to the number of samples to select.");
+    verify(samples.size() >= numberOfSamplesToSelect, "randomly: The number of given samples must at least be equal to the number of samples to select.");
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
     for (const auto& i : randomPermutationVector(samples.size(), numberOfSamplesToSelect)) {
@@ -26,8 +26,8 @@ namespace mant {
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect,
       const std::function<arma::Col<double>(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>&)> propertyAnalysis) {
-    // TODO distanceFunction must be callable.
-    mant::verify(samples.size() >= numberOfSamplesToSelect, "bestFitting: The number of given samples must at least be equal to the number of samples to select.");
+    verify(static_cast<bool>(propertyAnalysis), ""); // TODO
+    verify(samples.size() >= numberOfSamplesToSelect, "bestFitting: The number of given samples must at least be equal to the number of samples to select.");
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
 
@@ -40,8 +40,8 @@ namespace mant {
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect,
       const std::function<double(const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>&)> propertyAnalysis) {
-    // TODO distanceFunction must be callable.
-    mant::verify(samples.size() >= numberOfSamplesToSelect, "bestFitting: The number of given samples must at least be equal to the number of samples to select.");
+    verify(static_cast<bool>(propertyAnalysis), ""); // TODO
+    verify(samples.size() >= numberOfSamplesToSelect, "bestFitting: The number of given samples must at least be equal to the number of samples to select.");
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
 
@@ -55,8 +55,8 @@ namespace mant {
       const arma::uword numberOfSamplesToSelect,
       const arma::Col<double>& parameter,
       const std::function<double(const arma::Col<double>&, const arma::Col<double>&)> distanceFunction) {
-    // TODO distanceFunction must be callable.
-    mant::verify(samples.size() >= numberOfSamplesToSelect, "nearestNeighbours: The number of given samples must at least be equal to the number of samples to select.");
+    verify(static_cast<bool>(distanceFunction), ""); // TODO
+    verify(samples.size() >= numberOfSamplesToSelect, "nearestNeighbours: The number of given samples must at least be equal to the number of samples to select.");
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
 
@@ -81,7 +81,7 @@ namespace mant {
       const double radius,
       const arma::Col<double>& parameter,
       const std::function<double(const arma::Col<double>&, const arma::Col<double>&)> distanceFunction) {
-    // TODO distanceFunction must be callable.
+    verify(static_cast<bool>(distanceFunction), ""); // TODO
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
     for (const auto& sample : samples) {
@@ -96,7 +96,7 @@ namespace mant {
   std::unordered_map<arma::Col<double>, double, Hash, IsEqual> elitists(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect) {
-    mant::verify(samples.size() >= numberOfSamplesToSelect, "elitists: The number of given samples must at least be equal to the number of samples to select.");
+    verify(samples.size() >= numberOfSamplesToSelect, "elitists: The number of given samples must at least be equal to the number of samples to select.");
 
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> selectedSamples;
 

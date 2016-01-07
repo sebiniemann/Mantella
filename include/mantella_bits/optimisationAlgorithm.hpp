@@ -2,7 +2,8 @@
 
 // C++ standard library
 #include <chrono>
-#include <deque>
+#include <functional>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -10,22 +11,24 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationProblem.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class OptimisationAlgorithm {
    public:
     explicit OptimisationAlgorithm();
 
-    virtual void optimise(
+    void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
-        
+
     void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction,
         const std::string& nextParametersFunctionName);
     void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction);
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParameterFunction);
     std::string getNextParametersFunctionName() const;
     void setBoundariesHandlingFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction,
@@ -33,19 +36,19 @@ namespace mant {
     void setBoundariesHandlingFunction(
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction);
     std::string getBoundariesHandlingFunctionName() const;
-    void setDegenerationDetectionFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction,
-        const std::string& degenerationDetectionFunctionName);
-    void setDegenerationDetectionFunction(
-        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction);
-    std::string getDegenerationDetectionFunctionName() const;
-    void setDegenerationHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction,
-        const std::string& degenerationHandlingFunctionName);
-    void setDegenerationHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction);
-    std::string getDegenerationHandlingFunctionName() const;
-        
+    void isStagnatingFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction,
+        const std::string& stagnationDetectionFunctionName);
+    void isStagnatingFunction(
+        std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> stagnationDetectionFunction);
+    std::string getRestartDetectionFunctionName() const;
+    void setRestartingFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction,
+        const std::string& restartingFunctionName);
+    void setRestartingFunction(
+        std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction);
+    std::string getRestartHandlingFunctionName() const;
+
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
 
@@ -63,21 +66,23 @@ namespace mant {
     arma::Col<double> getBestParameter() const;
 
     std::vector<std::pair<arma::Col<double>, double>> getSamplingHistory() const;
-    
+
     void reset();
+
+    virtual ~OptimisationAlgorithm() = default;
 
    protected:
     int nodeRank_;
     int numberOfNodes_;
-   
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
+
+    std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> nextParametersFunction_;
     std::string nextParametersFunctionName_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters)> boundariesHandlingFunction_;
     std::string boundariesHandlingFunctionName_;
-    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationDetectionFunction_;
-    std::string degenerationDetectionFunctionName_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> degenerationHandlingFunction_;
-    std::string degenerationHandlingFunctionName_;
+    std::function<bool(const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> isStagnatingFunction_;
+    std::string isStagnatingFunctionName_;
+    std::function<arma::Mat<double>(const arma::uword numberOfDimensions, const arma::Mat<double>& parameters, const arma::Col<double>& objectiveValues, const arma::Col<double>& differences)> restartingFunction_;
+    std::string restartingFunctionName_;
 
     double acceptableObjectiveValue_;
 
@@ -91,11 +96,11 @@ namespace mant {
     arma::Col<double> bestParameter_;
 
     std::vector<std::pair<arma::Col<double>, double>> samplingHistory_;
-    
-    void initialise(
-        OptimisationProblem& optimisationProblem,
+
+    virtual void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters);
-    
+
     std::pair<arma::Col<double>, arma::Col<double>> evaluate(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& parameters);

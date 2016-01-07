@@ -12,10 +12,10 @@
 #include <mantella>
 
 TEST_CASE("OptimisationProblem") {
-  // Some tests require at least a second dimensions, to differentiate between both. 
-  arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
+  // Some tests require at least a second dimensions, to differentiate between both.
+  arma::uword numberOfDimensions = SYNCRONISED(1 + getDiscreteRandomNumber());
   CAPTURE(numberOfDimensions);
-  
+
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
   SECTION("Initialises the lower/upper bounds with the expected default values.") {
@@ -30,14 +30,14 @@ TEST_CASE("OptimisationProblem") {
   }
 
   SECTION(".setObjectiveFunction") {
-    auto objectiveFunction = [] (
+    auto objectiveFunction = [](
         const arma::Col<double>& parameter) {
       return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
     };
-    
+
     const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
     CAPTURE(parameter);
-      
+
     SECTION("Updates the objective function, without specifying a name.") {
       optimisationProblem.setObjectiveFunction(objectiveFunction);
       CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter)));
@@ -48,16 +48,16 @@ TEST_CASE("OptimisationProblem") {
       CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter)));
       CHECK(optimisationProblem.getObjectiveFunctionName() == "My Optimisation Problem");
     }
-    
+
     SECTION("Resets the cache.") {
       mant::isCachingSamples = true;
-      
+
       // Populates the cache
       optimisationProblem.setObjectiveFunction(objectiveFunction);
       optimisationProblem.getObjectiveValue(parameter);
-      
+
       // Uses *parameter* to *anotherParameter* to avoid shadowing.
-      auto differentObjectiveFunction = [] (
+      auto differentObjectiveFunction = [](
           const arma::Col<double>& anotherParameter) {
         // Return an objective value different from *objectiveFunction*.
         return arma::accu(anotherParameter % mant::range<double>(1, anotherParameter.n_elem)) + 1;
@@ -66,10 +66,10 @@ TEST_CASE("OptimisationProblem") {
       // The evaluation counters should also be reset.
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-      
+
       CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(differentObjectiveFunction(parameter)));
     }
-    
+
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if no callable function is set.") {
         CHECK_THROWS_AS(optimisationProblem.setObjectiveFunction(nullptr), std::logic_error);
@@ -78,20 +78,20 @@ TEST_CASE("OptimisationProblem") {
   }
 
   SECTION(".getObjectiveValue") {
-    auto objectiveFunction = [] (
+    auto objectiveFunction = [](
         const arma::Col<double>& parameter) {
       return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
     };
     optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
     const arma::uword numberOfParameters = getDiscreteRandomNumber();
     CAPTURE(numberOfParameters);
-    
+
     arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
     // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
     parameters = arma::shuffle(arma::join_rows(parameters, parameters));
     CAPTURE(parameters);
-    
+
     SECTION("Works with caching enabled.") {
       mant::isCachingSamples = true;
 
@@ -100,39 +100,44 @@ TEST_CASE("OptimisationProblem") {
         CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter)));
       }
     }
-    
+
     SECTION("Works with caching disabled.") {
-      mant::isCachingSamples = false; 
+      mant::isCachingSamples = false;
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter)));
       }
     }
-    
+
     // We test the effectiveness and order of all parameter space and objective value space modifications at this point, to avoid repetitive checks for each space modification setter.
     SECTION("Is adjusted by the parameter space and objective value space modifiers (including the correct order).") {
       // Parameter space modifiers
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
-      CAPTURE(parameterPermutation);
+      arma::Col<arma::uword> parameterPermutation = SYNCRONISED(mant::randomPermutationVector(numberOfDimensions));
       optimisationProblem.setParameterPermutation(parameterPermutation);
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameterScaling);
+      CAPTURE(parameterPermutation);
+
+      arma::Col<double> parameterScaling = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       optimisationProblem.setParameterScaling(parameterScaling);
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameterTranslation);
+      CAPTURE(parameterScaling);
+
+      arma::Col<double> parameterTranslation = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       optimisationProblem.setParameterTranslation(parameterTranslation);
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-      CAPTURE(parameterRotation);
+      CAPTURE(parameterTranslation);
+
+      arma::Mat<double> parameterRotation = SYNCRONISED(mant::randomRotationMatrix(numberOfDimensions));
       optimisationProblem.setParameterRotation(parameterRotation);
+      CAPTURE(parameterRotation);
+
       // Objective value space modifiers
-      const double& objectiveValueScaling = getContinuousRandomNumber();
-      CAPTURE(objectiveValueScaling);
+      double objectiveValueScaling = SYNCRONISED(getContinuousRandomNumber());
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      const double& objectiveValueTranslation = getContinuousRandomNumber();
-      CAPTURE(objectiveValueTranslation);
+      CAPTURE(objectiveValueScaling);
+
+      double objectiveValueTranslation = SYNCRONISED(getContinuousRandomNumber());
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-      
+      CAPTURE(objectiveValueTranslation);
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
         CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
@@ -145,63 +150,62 @@ TEST_CASE("OptimisationProblem") {
         CAPTURE(numberOfDimensions);
         const arma::Col<double> parameter = getContinuousRandomNumbers(differentNumberOfDimensions);
         CAPTURE(parameter);
-        
+
         CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
       }
     }
   }
-  
+
   SECTION(".getObjectiveFunctionName") {
     // This is already covered by *SECTION(".setObjectiveFunction")*.
   }
 
   SECTION(".setLowerBounds") {
     SECTION("Updates the lower bounds.") {
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& lowerBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(lowerBounds);
-      
+
       optimisationProblem.setLowerBounds(lowerBounds);
-      
+
       IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
     }
-    
+
     SECTION("Does not reset the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
       optimisationProblem.setLowerBounds(lowerBounds);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() != 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() != 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() != 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Col<double> lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
-      
+
       optimisationProblem.setLowerBounds(lowerBounds);
-      MPI_Bcast(lowerBounds.memptr(), static_cast<int>(lowerBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
-      IS_EQUAL(optimisationProblem.getLowerBounds(), lowerBounds);
+
+      IS_EQUAL(optimisationProblem.getLowerBounds(), SYNCRONISED(lowerBounds));
     }
 #endif
 
@@ -211,71 +215,70 @@ TEST_CASE("OptimisationProblem") {
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(differentNumberOfDimensions);
         CAPTURE(lowerBounds);
-        
+
         CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
       }
-      
+
       SECTION("Throws an exception, if any bound is infinite.") {
         arma::Col<double> lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
         lowerBounds(0) = arma::datum::inf;
         CAPTURE(lowerBounds);
-        
+
         CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
       }
     }
   }
-  
+
   SECTION(".getLowerBounds") {
     // This is already covered by *SECTION(".setLowerBounds")*.
   }
 
   SECTION(".setUpperBounds") {
     SECTION("Updates the upper bounds.") {
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& upperBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(upperBounds);
-      
+
       optimisationProblem.setUpperBounds(upperBounds);
-      
+
       IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
     }
-    
+
     SECTION("Does not reset the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(upperBounds);
       optimisationProblem.setUpperBounds(upperBounds);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() != 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() != 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() != 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(upperBounds);
-      
+
       optimisationProblem.setUpperBounds(upperBounds);
-      MPI_Bcast(upperBounds.memptr(), static_cast<int>(upperBounds.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
-      IS_EQUAL(optimisationProblem.getUpperBounds(), upperBounds);
+
+      IS_EQUAL(optimisationProblem.getUpperBounds(), SYNCRONISED(upperBounds));
     }
 #endif
 
@@ -285,77 +288,73 @@ TEST_CASE("OptimisationProblem") {
         CAPTURE(numberOfDimensions);
         const arma::Col<double>& upperBounds = getContinuousRandomNumbers(differentNumberOfDimensions);
         CAPTURE(upperBounds);
-        
+
         CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
       }
-      
+
       SECTION("Throws an exception, if any bound is infinite.") {
         arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
         upperBounds(0) = arma::datum::inf;
         CAPTURE(upperBounds);
-        
+
         CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
       }
     }
   }
-  
+
   SECTION(".getUpperBounds") {
     // This is already covered by *SECTION(".setUpperBounds")*.
   }
-  
+
   SECTION(".setParameterPermutation") {
     // The influence on *.getObjectiveValue* is already tested in *SECTION(".getObjectiveValue")*.
-    
+
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
       CAPTURE(parameterPermutation);
       optimisationProblem.setParameterPermutation(parameterPermutation);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
       CAPTURE(parameterPermutation);
-      
+
       optimisationProblem.setParameterPermutation(parameterPermutation);
-      
-      arma::Col<unsigned int> covertedParameterPermutation = arma::conv_to<arma::Col<unsigned int>>::from(parameterPermutation);
-      MPI_Bcast(covertedParameterPermutation.memptr(), static_cast<int>(covertedParameterPermutation.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
-      parameterPermutation = arma::conv_to<arma::Col<arma::uword>>::from(covertedParameterPermutation);
-    
+
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
-      
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter.elem(parameterPermutation))));
+
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter.elem(SYNCRONISED(parameterPermutation)))));
     }
 #endif
 
@@ -363,7 +362,7 @@ TEST_CASE("OptimisationProblem") {
       SECTION("Throws an exception, if the provided vector is not a compatible permutation matrix.") {
         arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
         CAPTURE(parameterPermutation);
-        
+
         SECTION("Throws an exception, if the permutation matrix's size is unequal to the number of dimensions.") {
           parameterPermutation.resize(numberOfDimensions - 1);
           CAPTURE(parameterPermutation);
@@ -387,57 +386,56 @@ TEST_CASE("OptimisationProblem") {
       }
     }
   }
-  
+
   SECTION(".setParameterScaling") {
     // The influence on *.getObjectiveValue* is already tested in *SECTION(".getObjectiveValue")*.
-    
+
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameterScaling);
       optimisationProblem.setParameterScaling(parameterScaling);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Col<double> parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameterScaling);
-      
+
       optimisationProblem.setParameterScaling(parameterScaling);
-      MPI_Bcast(parameterScaling.memptr(), static_cast<int>(parameterScaling.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
+
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
-      
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameterScaling % parameter)));
+
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(SYNCRONISED(parameterScaling) % parameter)));
     }
 #endif
 
@@ -450,7 +448,7 @@ TEST_CASE("OptimisationProblem") {
 
         CHECK_THROWS_AS(optimisationProblem.setParameterScaling(parameterScaling), std::logic_error);
       }
-      
+
       SECTION("Throws an exception, if any parameter is infinite.") {
         arma::Col<double> parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
         parameterScaling(0) = arma::datum::inf;
@@ -460,57 +458,56 @@ TEST_CASE("OptimisationProblem") {
       }
     }
   }
-  
+
   SECTION(".setParameterTranslation") {
     // The influence on *.getObjectiveValue* is already tested in *SECTION(".getObjectiveValue")*.
-        
+
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameterTranslation);
       optimisationProblem.setParameterTranslation(parameterTranslation);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Col<double> parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameterTranslation);
-      
+
       optimisationProblem.setParameterTranslation(parameterTranslation);
-      MPI_Bcast(parameterTranslation.memptr(), static_cast<int>(parameterTranslation.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
+
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
-      
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter - parameterTranslation)));
+
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter - SYNCRONISED(parameterTranslation))));
     }
 #endif
 
@@ -523,7 +520,7 @@ TEST_CASE("OptimisationProblem") {
 
         CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(parameterTranslation), std::logic_error);
       }
-      
+
       SECTION("Throws an exception, if any parameter is infinite.") {
         arma::Col<double> parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
         parameterTranslation(0) = arma::datum::inf;
@@ -533,72 +530,71 @@ TEST_CASE("OptimisationProblem") {
       }
     }
   }
-  
+
   SECTION(".setParameterRotation") {
     // The influence on *.getObjectiveValue* is already tested in *SECTION(".getObjectiveValue")*.
-    
+
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
       CAPTURE(parameterRotation);
       optimisationProblem.setParameterRotation(parameterRotation);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
       CAPTURE(parameterRotation);
-      
+
       optimisationProblem.setParameterRotation(parameterRotation);
-      MPI_Bcast(parameterRotation.memptr(), static_cast<int>(parameterRotation.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
+
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
-      
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameterRotation * parameter)));
+
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(SYNCRONISED(parameterRotation) * parameter)));
     }
 #endif
 
     SECTION("Exception tests:") {
       SECTION("Throws an exception, if the provided matrix is not a compatible rotation matrix.") {
-      arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
+        arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
         CAPTURE(parameterRotation);
-        
+
         SECTION("Throws an exception, if the provided matrix's number of rows is unequal to the problem dimensions.") {
           parameterRotation.resize(parameterRotation.n_rows - 1, parameterRotation.n_cols - 1);
           CAPTURE(parameterRotation);
 
           CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
         }
-      
+
         SECTION("Throws an exception, if the provided matrix is not square.") {
           parameterRotation.shed_col(0);
           CAPTURE(parameterRotation);
@@ -624,57 +620,56 @@ TEST_CASE("OptimisationProblem") {
       }
     }
   }
-  
+
   SECTION(".setObjectiveValueScaling") {
     // The influence on *.getObjectiveValue* is already tested in *SECTION(".getObjectiveValue")*.
-        
+
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const double objectiveValueScaling = getContinuousRandomNumber();
       CAPTURE(objectiveValueScaling);
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       double objectiveValueScaling = getContinuousRandomNumber();
       CAPTURE(objectiveValueScaling);
-      
+
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      MPI_Bcast(&objectiveValueScaling, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
+
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
-      
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameter)));
+
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(SYNCRONISED(objectiveValueScaling) * objectiveFunction(parameter)));
     }
 #endif
 
@@ -684,57 +679,56 @@ TEST_CASE("OptimisationProblem") {
       }
     }
   }
-  
+
   SECTION(".setObjectiveValueTranslation") {
     // The influence on *.getObjectiveValue* is already tested in *SECTION(".getObjectiveValue")*.
-    
+
     SECTION("Resets the cache and counters.") {
       // Explicitly enables the cache, just to be sure.
       mant::isCachingSamples = true;
-      
-      optimisationProblem.setObjectiveFunction([] (
+
+      optimisationProblem.setObjectiveFunction([](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       });
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache and increases the counters.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       const double objectiveValueTranslation = getContinuousRandomNumber();
       CAPTURE(objectiveValueTranslation);
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-    
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
     }
-    
+
 #if defined(SUPPORT_MPI)
     SECTION("Synchronises the parametrisation over MPI.") {
       double objectiveValueTranslation = getContinuousRandomNumber();
       CAPTURE(objectiveValueTranslation);
-      
+
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-      MPI_Bcast(&objectiveValueTranslation, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      
+
       // Instead of checking the internal class field, we want to observe the expected modification on the parameter space.
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-      
+
       const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
-      
-      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter) + objectiveValueTranslation));
+
+      CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveFunction(parameter) + SYNCRONISED(objectiveValueTranslation)));
     }
 #endif
 
@@ -744,74 +738,74 @@ TEST_CASE("OptimisationProblem") {
       }
     }
   }
-  
+
   SECTION(".getCachedSamples") {
     SECTION("Returns all (unique) samples.") {
       mant::isCachingSamples = true;
-      
-      auto objectiveFunction = [] (
+
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> expectedSamples;
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double> parameter = parameters.col(n);
         expectedSamples.insert({parameter, objectiveFunction(parameter)});
       }
-      
+
       HAS_SAME_SAMPLES(optimisationProblem.getCachedSamples(), expectedSamples);
     }
-    
+
     SECTION("Is empty, if the caching is disabled.") {
       mant::isCachingSamples = false;
-      
-      auto objectiveFunction = [] (
+
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Populates the cache.
         optimisationProblem.getObjectiveValue(parameters.col(n));
       }
-      
+
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
     }
   }
-  
+
   SECTION(".getNumberOfEvaluations") {
     SECTION("Returns the number of (all) function evaluations, including the duplicated ones.") {
       mant::isCachingSamples = true;
-      
-      auto objectiveFunction = [] (
+
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Initialises the cache.
         optimisationProblem.getObjectiveValue(parameters.col(n));
@@ -825,22 +819,22 @@ TEST_CASE("OptimisationProblem") {
       CHECK(optimisationProblem.getNumberOfEvaluations() == 3 * parameters.n_cols);
     }
   }
-  
+
   SECTION(".getNumberOfDistinctEvaluations") {
     SECTION("Returns only the distinct (unique) number of function evaluations.") {
       mant::isCachingSamples = true;
-      
-      auto objectiveFunction = [] (
+
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Initialises the cache.
         optimisationProblem.getObjectiveValue(parameters.col(n));
@@ -853,21 +847,21 @@ TEST_CASE("OptimisationProblem") {
 
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == parameters.n_cols);
     }
-    
+
     SECTION("Returns the number of (all) function evaluations, including the duplicated ones, if caching is deactivated.") {
       mant::isCachingSamples = false;
-      
-      auto objectiveFunction = [] (
+
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
-        
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
-      
+
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         // Initialises the cache.
         optimisationProblem.getObjectiveValue(parameters.col(n));
@@ -881,50 +875,50 @@ TEST_CASE("OptimisationProblem") {
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 3 * parameters.n_cols);
     }
   }
-  
+
   SECTION(".reset") {
     SECTION("Resets only the cache and counters.") {
       // Objective
-      auto objectiveFunction = [] (
+      auto objectiveFunction = [](
           const arma::Col<double>& parameter) {
         return arma::accu(parameter % mant::range<double>(1, parameter.n_elem));
       };
       optimisationProblem.setObjectiveFunction(objectiveFunction);
       // Constraints
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& lowerBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(lowerBounds);
       optimisationProblem.setLowerBounds(lowerBounds);
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& upperBounds = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(upperBounds);
       optimisationProblem.setUpperBounds(upperBounds);
       // Parameter space modifiers
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
+      const arma::Col<arma::uword>& parameterPermutation = SYNCRONISED(mant::randomPermutationVector(numberOfDimensions));
       CAPTURE(parameterPermutation);
       optimisationProblem.setParameterPermutation(parameterPermutation);
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameterScaling = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(parameterScaling);
       optimisationProblem.setParameterScaling(parameterScaling);
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameterTranslation = SYNCRONISED(getContinuousRandomNumbers(numberOfDimensions));
       CAPTURE(parameterTranslation);
       optimisationProblem.setParameterTranslation(parameterTranslation);
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
+      const arma::Mat<double>& parameterRotation = SYNCRONISED(mant::randomRotationMatrix(numberOfDimensions));
       CAPTURE(parameterRotation);
       optimisationProblem.setParameterRotation(parameterRotation);
       // Objective value space modifiers
-      const double& objectiveValueScaling = getContinuousRandomNumber();
+      const double& objectiveValueScaling = SYNCRONISED(getContinuousRandomNumber());
       CAPTURE(objectiveValueScaling);
       optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-      const double& objectiveValueTranslation = getContinuousRandomNumber();
+      const double& objectiveValueTranslation = SYNCRONISED(getContinuousRandomNumber());
       CAPTURE(objectiveValueTranslation);
       optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-      
+
       optimisationProblem.reset();
-      
+
       // We check the cache and counters first, as the code below populates the cache and increases the counters again.
       CHECK(optimisationProblem.getCachedSamples().size() == 0);
       CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
       CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-      
+
       const arma::uword numberOfParameters = getDiscreteRandomNumber();
       CAPTURE(numberOfParameters);
       arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);

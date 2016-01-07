@@ -1,8 +1,7 @@
 #pragma once
 
 // C++ standard library
-#include <memory>
-#include <string>
+#include <vector>
 
 // Armadillo
 #include <armadillo>
@@ -18,19 +17,19 @@ namespace mant {
    public:
     explicit GridSearch();
 
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
     void optimise(
         OptimisationProblem& optimisationProblem);
-    
+
     void setNumberOfSamplesPerDimension(
         const arma::Col<arma::uword>& numberOfSamplesPerDimension);
 
    protected:
     arma::Col<arma::uword> numberOfSamplesPerDimension_;
-    
+
     std::vector<arma::Col<double>> samples_;
     arma::Col<arma::uword> sampleIndicies_;
   };

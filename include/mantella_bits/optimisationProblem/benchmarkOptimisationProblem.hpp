@@ -9,7 +9,7 @@ namespace mant {
     using OptimisationProblem::OptimisationProblem;
 
     virtual double getOptimalObjectiveValue() const = 0;
-    
+
     virtual ~BenchmarkOptimisationProblem() = default;
   };
 }

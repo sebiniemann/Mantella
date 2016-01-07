@@ -18,7 +18,7 @@
  */
 extern std::string rootTestDataDirectory;
 
-/** The MPI node rank (is supported)
+/** The MPI node rank (if supported)
  */
 extern int nodeRank;
 
@@ -54,7 +54,7 @@ arma::Col<arma::uword> getDiscreteRandomNumbers(
  */
 arma::Col<double> getContinuousRandomNumbers(
     const arma::uword numberOfDimensions);
-    
+
 /** Randomly generates a (`numberOfRows`, `numberOfColumns`)-matrix of integers, each within [0, 10].
  *
  * @return The randomly generated matrix.
@@ -70,6 +70,30 @@ arma::Mat<arma::uword> getDiscreteRandomNumbers(
 arma::Mat<double> getContinuousRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns);
+
+arma::Mat<double> SYNCRONISED(
+    const arma::Mat<double>& data);
+
+arma::Mat<arma::uword> SYNCRONISED(
+    const arma::Mat<arma::uword>& data);
+
+arma::Col<double> SYNCRONISED(
+    const arma::Col<double>& data);
+
+arma::Col<arma::uword> SYNCRONISED(
+    const arma::Col<arma::uword>& data);
+
+arma::Row<double> SYNCRONISED(
+    const arma::Row<double>& data);
+
+arma::Row<arma::uword> SYNCRONISED(
+    const arma::Row<arma::uword>& data);
+
+double SYNCRONISED(
+    const double data);
+
+arma::uword SYNCRONISED(
+    const arma::uword data);
 
 /** Checks whether `actualSamples` contains the same samples (but maybe in different order) as `expectedSamples` and fails the test if any sample is missing.
  */
@@ -97,6 +121,24 @@ void HAS_SAME_PARAMETERS(
 void HAS_SAME_ELEMENTS(
     const arma::Col<double>& actualElements,
     const arma::Col<double>& expectedElements);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<3>>& actual,
+    const std::vector<arma::Col<double>>& expected);
+
+/** Checks whether `actual` contains the same elements, in the same order, as `expected`.
+ */
+void IS_EQUAL(
+    const std::vector<arma::Col<double>::fixed<2>>& actual,
+    const std::vector<arma::Col<double>>& expected);
 
 /** Checks whether `actual` contains the same elements, in the same order, as `expected`.
  */

@@ -1,12 +1,9 @@
 #pragma once
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <functional>
+#include <string>
 #include <unordered_map>
-#if defined(SUPPORT_MPI) // IWYU pragma: keep
-#include <vector>
-#endif
 
 // Armadillo
 #include <armadillo>
@@ -43,7 +40,7 @@ namespace mant {
     void setUpperBounds(
         const arma::Col<double>& upperBounds);
     arma::Col<double> getUpperBounds() const;
-    
+
     // Parameter space modifiers
     void setParameterPermutation(
         const arma::Col<arma::uword>& parameterPermutation);
@@ -68,6 +65,9 @@ namespace mant {
 
     // Caching
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
+    void setMinimalParameterDistance(
+        const arma::Col<double>& minimalParameterDistance);
+    arma::Col<double> getMinimalParameterDistance() const;
 
     // Evaluation
     arma::uword getNumberOfEvaluations() const;
@@ -95,11 +95,14 @@ namespace mant {
     arma::uword numberOfEvaluations_;
     arma::uword numberOfDistinctEvaluations_;
 
+    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
+    arma::Col<double> minimalParameterDistance_;
+
+    arma::Col<double> getDiscretisedParameter(
+        const arma::Col<double>& parameter) const;
     arma::Col<double> getModifiedParameter(
         const arma::Col<double>& parameter) const;
     double getModifiedObjectiveValue(
         const double objectiveValue) const;
-
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
   };
 }

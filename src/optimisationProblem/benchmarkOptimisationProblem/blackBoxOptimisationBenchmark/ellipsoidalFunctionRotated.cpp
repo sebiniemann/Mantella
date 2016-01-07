@@ -18,12 +18,13 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter)));
+          },
           "BBOB Ellipsoidal Function, rotated");
     }
   }

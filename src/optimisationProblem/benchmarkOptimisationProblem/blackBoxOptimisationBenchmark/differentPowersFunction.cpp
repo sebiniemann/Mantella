@@ -17,13 +17,14 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunction([this](
-                               const arma::Col<double>& parameter) {
-          assert(parameter.n_elem == numberOfDimensions_);
-            
-          const arma::Col<double>& z = arma::abs(parameter);
-          return arma::norm(z % getConditionedParameter(arma::square(z)));
-      },
+      setObjectiveFunction(
+          [this](
+              const arma::Col<double>& parameter) {
+            assert(parameter.n_elem == numberOfDimensions_);
+              
+            const arma::Col<double>& z = arma::abs(parameter);
+            return arma::norm(z % getConditionedParameter(arma::square(z)));
+          },
           "BBOB Different Powers Function");
     }
   }

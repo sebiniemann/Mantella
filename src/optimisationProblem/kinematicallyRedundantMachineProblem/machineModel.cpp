@@ -23,7 +23,6 @@ namespace mant {
     arma::Cube<double> MachineModel::getModel(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
-      // Using the *operator bool* to checks whether *modelFunction_* is empty (not callable) or not.
       verify(static_cast<bool>(modelFunction_), "getModel: The model function must be callable.");
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "getModel: The number of actuated redundant joints must be equal to the number of redundant joints.");
 
@@ -38,7 +37,6 @@ namespace mant {
     double MachineModel::getPoseInaccuracy(
         const arma::Col<double>& endEffectorPose,
         const arma::Row<double>& redundantJointsActuation) const {
-      // Using the *operator bool* to checks whether *poseInaccuracyFunction_* is empty (not callable) or not.
       verify(static_cast<bool>(poseInaccuracyFunction_), "getPoseInaccuracy: The pose inaccuracy function must be callable.");
       verify(redundantJointsActuation.n_elem == numberOfRedundantJoints_, "getPoseInaccuracy: The number of actuated redundant joints must be equal to the number of redundant joints.");
 

@@ -3,7 +3,6 @@
 // C++ standard library
 #include <algorithm>
 #include <cmath>
-#include <cassert>
 #include <random>
 
 // Mantella
@@ -24,7 +23,7 @@ namespace mant {
       // The translation is further bounded to be between -1000 and 1000.
       setObjectiveValueTranslation(getRandomObjectiveValueTranslation());
     }
-    
+
     double BlackBoxOptimisationBenchmark::getOptimalObjectiveValue() const {
       return objectiveValueTranslation_;
     }

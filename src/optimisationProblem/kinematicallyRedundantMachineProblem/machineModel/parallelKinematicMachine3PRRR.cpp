@@ -3,9 +3,10 @@
 // C++ standard library
 #include <cassert>
 #include <cmath>
+#include <vector>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
-#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/geometry.hpp"
 
 // The following robot configurations and calculations are based on the work of our research colleagues from the Institute of Mechatronic Systems, Leibniz Universität Hannover, Germany.
@@ -66,10 +67,12 @@ namespace mant {
         // At this point, the model might be invalid, since the distance between the base and end-effector could make it impossible for both links to intersect.
         // In this case, the middle joint is set to *arma::datum::nan*.
         for (arma::uword n = 0; n < model.slice(0).n_cols; ++n) {
-          try {
+          const std::vector<arma::Col<double>::fixed<2>>& intersections = circleCircleIntersections(model.slice(0).col(n), linkLengths_(0, n), model.slice(2).col(n), linkLengths_(1, n));
+          
+          if (intersections.size() > 1) {
             // Selects the first intersection point (the other one would also be fine).
-            model.slice(1).col(n) = circleCircleIntersections(model.slice(0).col(n), linkLengths_(0, n), model.slice(2).col(n), linkLengths_(1, n)).col(0);
-          } catch (...) {
+            model.slice(1).col(n) = intersections.at(0);
+          } else {
             model.slice(1).col(n).fill(arma::datum::nan);
           }
         }

@@ -12,39 +12,39 @@
 // The effectiveness of any global variable is tested within the test cases for the functions that depend on them.
 TEST_CASE("isCachingSamples") {
   SECTION("The default value is *true*") {
-    CHECK(mant::isCachingSamples == true);
+    CHECK(::mant::isCachingSamples == false);
   }
-  
+
   SECTION("Is changeable") {
-    mant::isCachingSamples = false;
-    CHECK(mant::isCachingSamples == false);
+    ::mant::isCachingSamples = true;
+    CHECK(::mant::isCachingSamples == true);
     // Restores the default value, as it may affect other tests.
-    mant::isCachingSamples = true;
+    ::mant::isCachingSamples = false;
   }
 }
 
 TEST_CASE("isRecordingSampling") {
   SECTION("The default value is *false*") {
-    CHECK(mant::isRecordingSampling == false);
+    CHECK(::mant::isRecordingSampling == false);
   }
-  
+
   SECTION("Is changeable") {
-    mant::isRecordingSampling = true;
-    CHECK(mant::isRecordingSampling == true);
+    ::mant::isRecordingSampling = true;
+    CHECK(::mant::isRecordingSampling == true);
     // Restores the default value, as it may affect other tests.
-    mant::isRecordingSampling = false;
+    ::mant::isRecordingSampling = false;
   }
 }
 
 TEST_CASE("isVerbose") {
   SECTION("The default value is *true*") {
-    CHECK(mant::isVerbose == true);
+    CHECK(::mant::isVerbose == false);
   }
-    
+
   SECTION("Is changeable") {
-    mant::isVerbose = false;
-    CHECK(mant::isVerbose == false);
+    ::mant::isVerbose = true;
+    CHECK(::mant::isVerbose == true);
     // Restores the default value, as it may affect other tests.
-    mant::isVerbose = true;
+    ::mant::isVerbose = false;
   }
 }

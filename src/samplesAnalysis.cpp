@@ -1,12 +1,16 @@
 #include "mantella_bits/samplesAnalysis.hpp"
 
 // C++ standard library
+#include <algorithm>
 #include <cmath>
 #include <set>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Mantella
 #include "mantella_bits/algebra.hpp"
+#include "mantella_bits/assert.hpp"
 #include "mantella_bits/numberTheory.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   double correlationAnalysis(
@@ -36,7 +40,7 @@ namespace mant {
     arma::Mat<double> remainingParameters = parameters;
     remainingParameters.shed_col(bestParameterIndex);
     remainingParameters.each_col() -= parameters.col(bestParameterIndex);
-    
+
     arma::Row<double> remainingObjectiveValues = objectiveValues;
     remainingObjectiveValues.shed_col(bestParameterIndex);
 
@@ -52,7 +56,7 @@ namespace mant {
         continuity = std::max(continuity, continuityFunction({firstSample->first, firstSample->second}, {secondSample->first, secondSample->second}));
       }
     }
-    
+
     return continuity;
   }
 
@@ -179,7 +183,7 @@ namespace mant {
     } else {
       partition = {bestPartitionCandidates.at(0).first, bestPartitionCandidates.at(0).second};
     }
-    
+
     return partition;
   }
 

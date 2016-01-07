@@ -1,35 +1,24 @@
 #pragma once
 
 // C++ standard library
-#include <string>
-#include <memory>
-#include <unordered_map>
+#include <functional>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
 #include "mantella_bits/optimisationProblem/surrogateModel.hpp"
-#include "mantella_bits/unorderedContainer.hpp"
-// IWYU pragma: no_forward_declare mant::Hash
-// IWYU pragma: no_forward_declare mant::IsEqual
-namespace mant {
-  class CorrelationFunction;
-  class RegressionFunction;
-}
 
 namespace mant {
   class KrigingModel : public SurrogateModel {
    public:
-    const std::shared_ptr<RegressionFunction> regressionFunction_;
-    const std::shared_ptr<CorrelationFunction> correlationFunction_;
-
     KrigingModel(
-        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-        const std::shared_ptr<RegressionFunction> regressionFunction,
-        const std::shared_ptr<CorrelationFunction> correlationFunction);
+        const arma::uword numberOfDimensions);
 
    protected:
+    std::function<arma::Col<double>(const arma::Col<double>& parameter)> regressionFunction_;
+    std::function<double(const arma::Col<double>& parameter)> correlationFunction_;
+
     arma::Col<double> meanParameter_;
     arma::Col<double> standardDeviationParameter_;
 
@@ -38,10 +27,5 @@ namespace mant {
 
     arma::Col<double> beta_;
     arma::Col<double> gamma_;
-
-    void modelImplementation() override;
-
-    double getObjectiveValueImplementation(
-        const arma::Col<double>& parameter) const final;
   };
 }

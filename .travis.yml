@@ -28,8 +28,9 @@ install:
   - sudo apt-get install -qq cmake;
   
   ## Armadillo C++
-  - sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
-  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-5.100.2.tar.gz
+  - sudo apt-get install -qq libblas-dev liblapack-dev
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq libopenblas-dev; fi
+  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.400.3.tar.gz
   - mkdir armadillo
   - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
   - cd armadillo
@@ -84,8 +85,8 @@ script:
   ## - Installation
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
   - if [ "$CXX" == "g++" ]; then make -j 4; fi
-  - if [ "$CXX" == "g++" ]; then ./bin/mantellaTest ./test; fi
-  - if [ "$CXX" == "g++" ]; then valgrind --leak-check=full --error-exitcode=1 ./bin/mantellaTest ./test; fi
+  - if [ "$CXX" == "g++" ]; then ./bin/mantellaTest ./test/data; fi
+  - if [ "$CXX" == "g++" ]; then valgrind --leak-check=full --error-exitcode=1 ./bin/mantellaTest ./test/data; fi
   - if [ "$CXX" == "g++" ]; then sudo make install; fi
   
   # Clang
@@ -94,7 +95,7 @@ script:
   ## - Include rules
   - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=On -DSUPPORT_MPI=On .; fi
   - if [ "$CXX" == "clang++" ]; then make -j 4; fi
-  - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ./bin/mantellaTest ./test; fi
+  - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ./bin/mantellaTest ./test/data; fi
   - if [ "$CXX" == "clang++" ]; then ./.code-checks.sh format; fi
   - if [ "$CXX" == "clang++" ]; then ./.code-checks.sh include; fi
   
