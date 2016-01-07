@@ -43,36 +43,20 @@ std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> getBench
 }
 
 int main() {
-//  mant::bbob::SphereFunction blub(10);
-//  std::cout << "optproblem created" << std::endl;
-//  std::cout << "constructor:" << std::endl;
-//  mant::CovarianceMatrixAdaptationEvolutionStrategy cmaes;
-//  std::cout << "specifying settings:" << std::endl;
-//  cmaes.setMaximalNumberOfIterations(20000);
-//  const double acceptableObjectiveValue = blub.getBestObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(blub.getBestObjectiveValue())))) * 1e-3;
-//  cmaes.setAcceptableObjectiveValue(acceptableObjectiveValue);
-//  cmaes.setStepSize(2);
-//  std::cout << "optimizing:" << std::endl;
-//  cmaes.optimise(blub,8 * arma::randu(blub.numberOfDimensions_) - 4);
-//  std::cout << "acceptable: " << acceptableObjectiveValue << std::endl;
-//  std::cout << "finished: " << cmaes.isFinished() << std::endl;
-//  std::cout << "iters: " << cmaes.getNumberOfIterations() << std::endl;
-//  std::cout << "best obj: " << cmaes.getBestObjectiveValue() << std::endl;
-//  std::cout << "best para: " << cmaes.getBestParameter() << std::endl;
-//  std::cout << "end sigma: " << cmaes.getStepSize() << std::endl;
+  mant::isVerbose = false;
   
   //benchmarking our cmaes
   std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(5);
   arma::Col<double> medians(optimisationProblems.size());
   arma::Col<double> startingPoint = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
   
-  for(unsigned int i = 0; i < 6; i++) {
+  for(unsigned int i = 0; i < 24; i++) {
     std::cout << "function " << i+1 << std::endl;
     
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem = *optimisationProblems.at(i);
     
-    //std::cout << optimisationProblem.getBestObjectiveValue() << std::endl;
-    double acceptableObjectiveValue = optimisationProblem.getBestObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(optimisationProblem.getBestObjectiveValue())))) * 1e-3;
+    //std::cout << optimisationProblem.getOptimalObjectiveValue() << std::endl;
+    double acceptableObjectiveValue = optimisationProblem.getOptimalObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(optimisationProblem.getOptimalObjectiveValue())))) * 1e-3;
     
     arma::Col<double> curMedian(20);
  
@@ -88,7 +72,7 @@ int main() {
        //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
     }
 
-    //std::cout << arma::median(curMedian) << std::endl;
+    std::cout << arma::median(curMedian) << std::endl;
     medians(i) = arma::median(curMedian);
   }
   
