@@ -18,9 +18,11 @@ namespace mant {
   public:
     explicit CovarianceMatrixAdaptationEvolutionStrategy();
     
-    void optimise(
-        OptimisationProblem& optimisationProblem,
+    void initialise(
+        const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
+    
+    using OptimisationAlgorithm::optimise;
     
     void optimise(
         OptimisationProblem& optimisationProblem);

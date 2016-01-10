@@ -5,6 +5,7 @@
 
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/randomNumberGenerator.hpp"
 
 namespace mant {
@@ -27,8 +28,10 @@ namespace mant {
             return parameters;
          });
         
-        setNextParametersFunction([this] (const arma::Mat<double>& parameters,const arma::Col<double>& objectiveValues, const arma::Col<double>& differences) {
-            arma::uword numberOfDimensions = parameters.n_rows;
+        setNextParametersFunction([this] (const arma::uword numberOfDimensions,
+            const arma::Mat<double>& parameters,
+            const arma::Col<double>& objectiveValues,
+            const arma::Col<double>& differences) {
             
             newGenerationValid_ = parameters; //arxvalid
             //std::cout << "newGenerationValid_" << newGenerationValid_ << std::endl;
@@ -342,18 +345,18 @@ namespace mant {
         stopOnStagnation_ = true;
         stopOnWarnings_ = true;
         stopOnEqualFunctionValues_ = true;
-         * stopMaxIter_ = 100 + 50 * std::pow(optimisationProblem.numberOfDimensions_ + 3, 2) / std::sqrt(lambda_);
+         * stopMaxIter_ = 100 + 50 * std::pow(numberOfDimensions + 3, 2) / std::sqrt(lambda_);
          */
 
     }
 
     void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
-            OptimisationProblem& optimisationProblem) {
-        optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
-    }
+      OptimisationProblem& optimisationProblem) {
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+  }
 
-    void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
-            OptimisationProblem& optimisationProblem,
+    void CovarianceMatrixAdaptationEvolutionStrategy::initialise(
+            const arma::uword numberOfDimensions,
             const arma::Mat<double>& initialParameters) {
         verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
 
@@ -363,7 +366,7 @@ namespace mant {
         //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
         //Still completely remove it?
         if (lambda_ == std::numeric_limits<arma::uword>::max()) {
-            setPopulationSize(4 + std::floor(3 * std::log(optimisationProblem.numberOfDimensions_)), optimisationProblem.numberOfDimensions_);
+            setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
         }
         if (!std::isfinite(sigma_)) {
             setStepSize(0.2);
@@ -387,13 +390,13 @@ namespace mant {
             setActiveCMA(0);
         }
         if (stopMaxIter_ == std::numeric_limits<arma::uword>::max()) {
-            stopMaxIter_ = 1e3 * std::pow(optimisationProblem.numberOfDimensions_ + 5, 2) / std::sqrt(lambda_);
+            stopMaxIter_ = 1e3 * std::pow(numberOfDimensions + 5, 2) / std::sqrt(lambda_);
         }
 
-        pc_ = arma::zeros(optimisationProblem.numberOfDimensions_);
-        ps_ = arma::zeros(optimisationProblem.numberOfDimensions_);
+        pc_ = arma::zeros(numberOfDimensions);
+        ps_ = arma::zeros(numberOfDimensions);
 
-        diagD_ = arma::ones(optimisationProblem.numberOfDimensions_);
+        diagD_ = arma::ones(numberOfDimensions);
         //std::cout << "diagD_" << diagD_ << std::endl;
         //TODO: "diagonal matrix D defines the scaling" originally this was stepsize / max(stepsize)
         //where stepsize was the vector (which never got used) of stepsizes in all dimensions
@@ -401,21 +404,21 @@ namespace mant {
         //might be irrelevant
         diagC_ = arma::square(diagD_);
         //std::cout << "diagC_" << diagC_ << std::endl;
-        B_ = arma::eye(optimisationProblem.numberOfDimensions_, optimisationProblem.numberOfDimensions_); //;B defines the coordinate system
+        B_ = arma::eye(numberOfDimensions, numberOfDimensions); //;B defines the coordinate system
         //std::cout << "B_" << B_ << std::endl;
         BD_ = arma::diagmat(diagD_); //;B*D for speed up only
         //std::cout << "BD_" << BD_ << std::endl;
         C_ = arma::diagmat(diagC_); //;covariance matrix == BD*(BD)'
         //std::cout << "C_" << C_ << std::endl;
 
-        chiN_ = std::pow(optimisationProblem.numberOfDimensions_, 0.5) *
-                (1 - 1.0 / (4 * optimisationProblem.numberOfDimensions_) + 1.0
-                / (21 * std::pow(optimisationProblem.numberOfDimensions_, 2)));
+        chiN_ = std::pow(numberOfDimensions, 0.5) *
+                (1 - 1.0 / (4 * numberOfDimensions) + 1.0
+                / (21 * std::pow(numberOfDimensions, 2)));
         //std::cout << "chiN_" << chiN_ << std::endl;
         //;expectation of||N(0,I)|| == norm(randn(N,1))
 
         //miscellaneous inits needed
-        EqualFunctionValues_ = arma::zeros(10 + optimisationProblem.numberOfDimensions_);
+        EqualFunctionValues_ = arma::zeros(10 + numberOfDimensions);
         //TODO: set to false for testing, all 3 are true usually
         stopOnStagnation_ = false;
         stopOnWarnings_ = false;
@@ -424,13 +427,13 @@ namespace mant {
 
         //Need to do this here once to get from the initial starting point (given as intiailparameters)
         //to the first round of points to get evaluated
-        newGenerationRaw_ = arma::randn(optimisationProblem.numberOfDimensions_, lambda_); //arz
+        newGenerationRaw_ = arma::randn(numberOfDimensions, lambda_); //arz
         //std::cout << "newGenerationRaw_" << newGenerationRaw_ << std::endl;
         newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
         //std::cout << "newGeneration_" << newGeneration_ << std::endl;
 
         //newGeneration will have turned into newGenerationValid_ when nextParameters is called
-        OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
+        //TODO: assign newGeneration to initialparameter somehow
     }
 
     arma::uword CovarianceMatrixAdaptationEvolutionStrategy::getIRun() {
