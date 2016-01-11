@@ -9,6 +9,7 @@ opts.StopOnStagnation = 'off';
 opts.StopOnWarnings = 'off';
 opts.StopOnEqualFunctionValues = 0;
 FHANDLES = benchmarks('handles');
+trials = 1;
 
 for i=1:24
 	fitnessFunction = i;
@@ -16,7 +17,7 @@ for i=1:24
 	actFunc = FHANDLES{i};
     optimalObjectiveValue = feval(actFunc, 'init', dimensions, 0);
 	opts.StopFitness = optimalObjectiveValue + 10^floor(log10(abs(optimalObjectiveValue))) * 1e-3;
-	for j=1:20
+	for j=1:trials
 		[xmin,fmin,counteval,stopflag] = cmaes('bbob',startingpoint,stepsize,opts);
 		stopflag;
 		iterations(i,j) = counteval;
