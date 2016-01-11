@@ -3,10 +3,84 @@
 // C++ standard library
 #include <cmath>
 
+#include <cstdlib>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <armadillo>
+#include <cassert>
+#include <sstream>
+#include <iterator>
+#include <numeric>
+
 // Mantella
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/randomNumberGenerator.hpp"
+
+
+std::string callEigen(const arma::Mat<double>& eigenMatrix) {
+  std::ostringstream oss;
+  oss << "octave --silent --eval \"[A,tmp] = eig([";
+  for(arma::uword i = 0; i < eigenMatrix.n_rows; i++) {
+    for(arma::uword  j = 0; j < eigenMatrix.n_cols; j++) {
+      oss << eigenMatrix.at(i,j) << " ";
+    }
+    oss << ";";
+  }
+
+  oss << "])\"";
+  std::shared_ptr<FILE> pipe(popen(oss.str().c_str(), "r"), pclose);
+  if (!pipe) return 0;
+  char buffer[128];
+  std::string result = "";
+  while (!feof(pipe.get())) {
+    if (fgets(buffer, 128, pipe.get()) != NULL)
+      result += buffer;
+  }
+  return result;
+}
+
+std::vector<std::string> makeLines(std::string input) {
+  std::stringstream ss(input);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> vstrings(begin, end);
+  return vstrings;
+}
+
+arma::Mat<double> getEigenVectors(std::vector<std::string> input, arma::uword numberofDimensions) {
+  arma::Mat<double> retMat(numberofDimensions, numberofDimensions);
+  arma::uword col = 0;
+  arma::uword row = 0;
+  for (arma::uword  i = 2; i < std::pow(numberofDimensions, 2) + 2; i++) {
+    retMat(row, col) = ::atof(input.at(i).c_str());
+    col++;
+    if (col == numberofDimensions) {
+      col = 0;
+      row++;
+    }
+  }
+  return retMat;
+}
+
+arma::Col<double> getEigenValues(std::vector<std::string> input, arma::uword numberofDimensions) {
+  arma::Col<double> retCol(numberofDimensions);
+  arma::uword row = 0;
+  for (arma::uword  i = std::pow(numberofDimensions, 2) + 6; i < 2 * std::pow(numberofDimensions, 2) + 6; i += numberofDimensions + 1) {
+    retCol(row) = ::atof(input.at(i).c_str());
+    row++;
+  }
+  return retCol;
+}
+
+std::pair<arma::Mat<double>, arma::Col<double>> getOctaveEig(const arma::Mat<double>& eigenMatrix) {
+  std::string result = callEigen(eigenMatrix);
+  std::vector<std::string> lines = makeLines(result);
+  arma::Mat<double> eigenVectors = getEigenVectors(lines, 5);
+  arma::Col<double> eigenValues = getEigenValues(lines, 5);
+  return {eigenVectors,eigenValues};
+}
 
 namespace mant {
 
@@ -188,6 +262,9 @@ namespace mant {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
                 //std::cout << "C_" << C_ << std::endl;
                 arma::Col<double> tmp;
+//                std::pair<arma::Mat<double>, arma::Col<double>> octaveEig = getOctaveEig(C_);
+//                tmp = octaveEig.second;
+//                B_ = octaveEig.first;
                 arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
                 //std::cout << "tmp" << tmp << std::endl;
                 //std::cout << "B_" << B_ << std::endl;
