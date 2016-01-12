@@ -21,16 +21,18 @@
 
 std::string callEigen(const arma::Mat<double>& eigenMatrix) {
   std::ostringstream oss;
-  oss << "octave --silent --eval \"[A,tmp] = eig([";
+  oss.precision(16);
+  oss << "octave --silent --eval \"format long; [A,tmp] = eig([";
   for(arma::uword i = 0; i < eigenMatrix.n_rows; i++) {
-    for(arma::uword  j = 0; j < eigenMatrix.n_cols; j++) {
+    for(arma::uword j = 0; j < eigenMatrix.n_cols; j++) {
       oss << eigenMatrix.at(i,j) << " ";
     }
     oss << ";";
   }
-
   oss << "])\"";
+  
   std::shared_ptr<FILE> pipe(popen(oss.str().c_str(), "r"), pclose);
+  //std::cout << oss.str().c_str() << std::endl;
   if (!pipe) return 0;
   char buffer[128];
   std::string result = "";
@@ -38,6 +40,7 @@ std::string callEigen(const arma::Mat<double>& eigenMatrix) {
     if (fgets(buffer, 128, pipe.get()) != NULL)
       result += buffer;
   }
+  //std::cout << "result" << result << std::endl;
   return result;
 }
 
@@ -53,7 +56,7 @@ arma::Mat<double> getEigenVectors(std::vector<std::string> input, arma::uword nu
   arma::Mat<double> retMat(numberofDimensions, numberofDimensions);
   arma::uword col = 0;
   arma::uword row = 0;
-  for (arma::uword  i = 2; i < std::pow(numberofDimensions, 2) + 2; i++) {
+  for (arma::uword i = 2; i < std::pow(numberofDimensions, 2) + 2; i++) {
     retMat(row, col) = ::atof(input.at(i).c_str());
     col++;
     if (col == numberofDimensions) {
@@ -67,7 +70,7 @@ arma::Mat<double> getEigenVectors(std::vector<std::string> input, arma::uword nu
 arma::Col<double> getEigenValues(std::vector<std::string> input, arma::uword numberofDimensions) {
   arma::Col<double> retCol(numberofDimensions);
   arma::uword row = 0;
-  for (arma::uword  i = std::pow(numberofDimensions, 2) + 6; i < 2 * std::pow(numberofDimensions, 2) + 6; i += numberofDimensions + 1) {
+  for (arma::uword i = std::pow(numberofDimensions, 2) + 6; i < 2 * std::pow(numberofDimensions, 2) + 6; i += numberofDimensions + 1) {
     retCol(row) = ::atof(input.at(i).c_str());
     row++;
   }
@@ -77,8 +80,8 @@ arma::Col<double> getEigenValues(std::vector<std::string> input, arma::uword num
 std::pair<arma::Mat<double>, arma::Col<double>> getOctaveEig(const arma::Mat<double>& eigenMatrix) {
   std::string result = callEigen(eigenMatrix);
   std::vector<std::string> lines = makeLines(result);
-  arma::Mat<double> eigenVectors = getEigenVectors(lines, 5);
-  arma::Col<double> eigenValues = getEigenValues(lines, 5);
+  arma::Mat<double> eigenVectors = getEigenVectors(lines, eigenMatrix.n_cols);
+  arma::Col<double> eigenValues = getEigenValues(lines, eigenMatrix.n_cols);
   return {eigenVectors,eigenValues};
 }
 
@@ -260,12 +263,12 @@ namespace mant {
             //;Update B and D from C
             if ((ccov1_ + ccovmu_ + negCcov_) > 0 && std::fmod(countiter_, (1 / ((ccov1_ + ccovmu_ + negCcov_) * numberOfDimensions * 10))) < 1) {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
-                //std::cout << "C_" << C_ << std::endl;
+                ////std::cout << "C_" << C_ << std::endl;
                 arma::Col<double> tmp;
-//                std::pair<arma::Mat<double>, arma::Col<double>> octaveEig = getOctaveEig(C_);
-//                tmp = octaveEig.second;
-//                B_ = octaveEig.first;
-                arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
+                std::pair<arma::Mat<double>, arma::Col<double>> octaveEig = getOctaveEig(C_);
+                tmp = octaveEig.second;
+                B_ = octaveEig.first;
+                //arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
                 //std::cout << "tmp" << tmp << std::endl;
                 //std::cout << "B_" << B_ << std::endl;
                 //;effort: approx. 15*N matrix-vector multiplications
@@ -284,7 +287,7 @@ namespace mant {
                     } else {
                         //TODO: warning gets thrown here
                         //another workaround
-//                        std::cout << "eigenvalue smaller zero" << std::endl;
+//                        //std::cout << "eigenvalue smaller zero" << std::endl;
 //                        diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
 //                        double temp = 1.0*arma::max(diagD_) / 1e14;
 //                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
@@ -296,7 +299,7 @@ namespace mant {
                         stopFlag = true;
                     } else {
                         //TODO: warning gets thrown here
-//                        std::cout << "condition of c at upper limit" << std::endl;
+//                        //std::cout << "condition of c at upper limit" << std::endl;
 //                        double temp = 1.0*arma::max(diagD_) / 1e14 - arma::min(diagD_);
 //                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
 //                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
@@ -438,7 +441,9 @@ namespace mant {
         verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
 
         xmean_ = initialParameters.col(0);
+        //std::cout << "xmean_" << xmean_ << std::endl;
         countiter_ = 0;
+        //std::cout << "countiter_" << countiter_ << std::endl;
         
         //TODO: opts.IncPopSize is actually (somewhat) used in HCMA when Bipop is activated. (see xacmes.m)
         //Still completely remove it?

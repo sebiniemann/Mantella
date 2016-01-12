@@ -67,10 +67,10 @@ end
 counteval = 0;
 % ------------------------ Initialization -------------------------------
 % Handle resuming of old run
-xmean = myeval(xstart); 
+xmean = myeval(xstart)
   % Assign settings from input parameters and options for myeval...
   N = size(xmean, 1);
-  lambda = myeval(opts.PopSize);
+  lambda = myeval(opts.PopSize)
   insigma = myeval(insigma);
   if all(size(insigma) == [N 2]) 
     insigma = 0.5 * (insigma(:,2) - insigma(:,1));
@@ -102,14 +102,15 @@ flgActiveCMA = myeval(opts.CMA.active);
     ubounds = repmat(ubounds, N, 1);
   end
 
-  sigma = max(insigma);              % overall standard deviation
-  pc = zeros(N,1); ps = zeros(N,1);  % evolution paths for C and sigma
+  sigma = max(insigma)              % overall standard deviation
+  pc = zeros(N,1)
+  ps = zeros(N,1)  % evolution paths for C and sigma
 
-  diagD = ones(N,1);      % diagonal matrix D defines the scaling
-  diagC = diagD.^2; 
-    B = eye(N,N);                      % B defines the coordinate system
-    BD = B.*repmat(diagD',N,1);        % B*D for speed up only
-    C = diag(diagC);                   % covariance matrix == BD*(BD)'
+  diagD = ones(N,1)      % diagonal matrix D defines the scaling
+  diagC = diagD.^2
+    B = eye(N,N)                      % B defines the coordinate system
+    BD = B.*repmat(diagD',N,1)        % B*D for speed up only
+    C = diag(diagC)                   % covariance matrix == BD*(BD)'
 
   fitness.hist=NaN*ones(1,10+ceil(3*10*N/lambda)); % history of fitness values
   fitness.histsel=NaN*ones(1,10+ceil(3*10*N/lambda)); % history of fitness values
@@ -121,30 +122,30 @@ flgActiveCMA = myeval(opts.CMA.active);
     counteval = counteval + 1;
     
   % Initialize further constants
-  chiN=N^0.5*(1-1/(4*N)+1/(21*N^2));
-  countiter = 0;
+  chiN=N^0.5*(1-1/(4*N)+1/(21*N^2))
+  countiter = 0
   
 % -------------------- Generation Loop --------------------------------
 stopflag = {};
 while isempty(stopflag)
   % set internal parameters
   if countiter == 0 || lambda ~= lambda_last
-    lambda_last = lambda;
+    lambda_last = lambda
     % Strategy internal parameter setting: Selection  
-    mu = myeval(opts.ParentNumber); % number of parents/points for recombination
-      weights = log(mu+0.5)-log(1:mu)';
-    mueff=sum(weights)^2/sum(weights.^2); % variance-effective size of mu
-    weights = weights/sum(weights);     % normalize recombination weights array
+    mu = myeval(opts.ParentNumber) % number of parents/points for recombination
+      weights = log(mu+0.5)-log(1:mu)'
+    mueff=sum(weights)^2/sum(weights.^2) % variance-effective size of mu
+    weights = weights/sum(weights)     % normalize recombination weights array
     
     % Strategy internal parameter setting: Adaptation
-    cc = myeval(opts.CMA.ccum); % time constant for cumulation for covariance matrix
-    cs = myeval(opts.CMA.cs); 
-      ccov1 = myeval(opts.CMA.ccov1);
-      ccovmu = min(1-ccov1, myeval(opts.CMA.ccovmu));
-    damps = myeval(opts.CMA.damps);
+    cc = myeval(opts.CMA.ccum) % time constant for cumulation for covariance matrix
+    cs = myeval(opts.CMA.cs) 
+      ccov1 = myeval(opts.CMA.ccov1)
+      ccovmu = min(1-ccov1, myeval(opts.CMA.ccovmu))
+    damps = myeval(opts.CMA.damps)
   end    
   
-  countiter = countiter + 1;
+  countiter = countiter + 1
 
   % Generate and evaluate lambda offspring
   fitness.raw = repmat(NaN, 1, lambda);
@@ -153,7 +154,7 @@ while isempty(stopflag)
     % fitness.raw(k) = NaN; 
     % Resample, until fitness is not NaN
     while isnan(fitness.raw(k))
-        arz(:,k) = randn(N,1); % (re)sample
+        arz(:,k) = rand(N,1); % (re)sample
         %arz(:,k) = ones(N,1);
           arx(:,k) = xmean + sigma * (BD * arz(:,k));                % Eq. (1)
       
@@ -165,6 +166,10 @@ while isempty(stopflag)
     end
     counteval = counteval + 1; % retries due to NaN are not counted
   end
+  disp('arz');
+  disp(arz);
+  disp('arx');
+  disp(arx);
 
   fitness.sel = fitness.raw;
   
@@ -187,21 +192,21 @@ while isempty(stopflag)
   fitness.histsel(1) = fitness.sel(1);               % best sel fitness values
 
   % Calculate new xmean, this is selection and recombination 
-  xold = xmean; % for speed up of Eq. (2) and (3)
-  xmean = arx(:,fitness.idxsel(1:mu))*weights; 
-  zmean = arz(:,fitness.idxsel(1:mu))*weights;%==D^-1*B'*(xmean-xold)/sigma
+  xold = xmean % for speed up of Eq. (2) and (3)
+  xmean = arx(:,fitness.idxsel(1:mu))*weights 
+  zmean = arz(:,fitness.idxsel(1:mu))*weights%==D^-1*B'*(xmean-xold)/sigma
 
   % Cumulation: update evolution paths
-  ps = (1-cs)*ps + sqrt(cs*(2-cs)*mueff) * (B*zmean);          % Eq. (4)
-  hsig = norm(ps)/sqrt(1-(1-cs)^(2*countiter))/chiN < 1.4 + 2/(N+1);
+  ps = (1-cs)*ps + sqrt(cs*(2-cs)*mueff) * (B*zmean)          % Eq. (4)
+  hsig = norm(ps)/sqrt(1-(1-cs)^(2*countiter))/chiN < 1.4 + 2/(N+1)
 
   pc = (1-cc)*pc ...
-        + hsig*(sqrt(cc*(2-cc)*mueff)/sigma) * (xmean-xold);     % Eq. (2)
+        + hsig*(sqrt(cc*(2-cc)*mueff)/sigma) * (xmean-xold)     % Eq. (2)
 
   % Adapt covariance matrix
   neg.ccov = 0;  % TODO: move parameter setting upwards at some point
   if ccov1 + ccovmu > 0                                                    % Eq. (3)
-      arpos = (arx(:,fitness.idxsel(1:mu))-repmat(xold,1,mu)) / sigma;
+      arpos = (arx(:,fitness.idxsel(1:mu))-repmat(xold,1,mu)) / sigma
       % "active" CMA update: negative update, in case controlling pos. definiteness 
       if flgActiveCMA > 0
         % set parameters
@@ -255,21 +260,25 @@ while isempty(stopflag)
         C = (1-ccov1-ccovmu+(1-hsig)*ccov1*cc*(2-cc)) * C ... % regard old matrix 
             + ccov1 * pc*pc' ...     % plus rank one update
             + ccovmu ...             % plus rank mu update
-              * arpos * (repmat(weights,1,N) .* arpos');
+              * arpos * (repmat(weights,1,N) .* arpos')
       end
-      diagC = diag(C);
+      diagC = diag(C)
   end
   
   % Adapt sigma
-    sigma = sigma * exp(min(1, (sqrt(sum(ps.^2))/chiN - 1) * cs/damps));             % Eq. (5)
+    sigma = sigma * exp(min(1, (sqrt(sum(ps.^2))/chiN - 1) * cs/damps))            % Eq. (5)
   
   % Update B and D from C
 
   if (ccov1+ccovmu+neg.ccov) > 0 && mod(countiter, 1/(ccov1+ccovmu+neg.ccov)/N/10) < 1
-    C=triu(C)+triu(C,1)'; % enforce symmetry to prevent complex numbers
-    [B,tmp] = eig(C);     % eigen decomposition, B==normalized eigenvectors
+    C=triu(C)+triu(C,1)' % enforce symmetry to prevent complex numbers
+    C = C*10e16;
+    C = round(C);
+    C = C/10e16;
+    printf('%.30f\n',C);
+    [B,tmp] = eig(C)     % eigen decomposition, B==normalized eigenvectors
                           % effort: approx. 15*N matrix-vector multiplications
-    diagD = diag(tmp);
+    diagD = diag(tmp)
 
     % limit condition of C to 1e14 + 1
     if min(diagD) <= 0
@@ -286,9 +295,9 @@ while isempty(stopflag)
 	  %C = C + tmp*eye(N,N); diagD = diagD + tmp*ones(N,1); 
     end
     
-    diagC = diag(C); 
-    diagD = sqrt(diagD); % D contains standard deviations now
-    BD = B.*repmat(diagD',N,1); % O(n^2)
+    diagC = diag(C) 
+    diagD = sqrt(diagD) % D contains standard deviations now
+    BD = B.*repmat(diagD',N,1) % O(n^2)
   end % if mod
 
   % ----- numerical error management -----
