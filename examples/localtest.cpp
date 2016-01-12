@@ -44,11 +44,12 @@ std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> getBench
 
 int main() {
   mant::isVerbose = false;
+  std::cout.precision(16);
   
   //benchmarking our cmaes
-  std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(5);
+  std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(3);
   arma::Col<double> medians(optimisationProblems.size());
-  arma::Col<double> startingPoint = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
+  arma::Col<double> startingPoint = 8 * arma::ones(optimisationProblems.at(0)->numberOfDimensions_) - 4;
   
   for(unsigned int i = 0; i < 24; i++) {
     std::cout << "function " << i+1 << std::endl;
@@ -58,22 +59,24 @@ int main() {
     //std::cout << optimisationProblem.getOptimalObjectiveValue() << std::endl;
     double acceptableObjectiveValue = optimisationProblem.getOptimalObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(optimisationProblem.getOptimalObjectiveValue())))) * 1e-3;
     
-    arma::Col<double> curMedian(20);
+    int trials = 1;
+    arma::Col<double> curMedian(trials);
  
-    for(int trial = 0; trial < 20; trial++) {
+    for(int trial = 0; trial < trials; trial++) {
       mant::CovarianceMatrixAdaptationEvolutionStrategy algo;
+      algo.setMaximalDuration(std::chrono::minutes(20));
       algo.setMaximalNumberOfIterations(20000);
       algo.setAcceptableObjectiveValue(acceptableObjectiveValue);
       algo.setStepSize(2);
       algo.optimise(optimisationProblem,startingPoint);
       curMedian(trial) = algo.getNumberOfIterations();          
 
-      // std::cout << algo.getNumberOfIterations() << std::endl;
+       //std::cout << algo.getNumberOfIterations() << std::endl;
        //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
     }
 
-    std::cout << arma::median(curMedian) << std::endl;
     medians(i) = arma::median(curMedian);
+    std::cout << arma::median(curMedian) << std::endl;
   }
   
   std::cout << medians.t() << std::endl;
