@@ -22,14 +22,14 @@
 std::string callEigen(const arma::Mat<double>& eigenMatrix) {
   std::ostringstream oss;
   oss.precision(16);
-  oss << "octave --silent --eval \"format long; [A,tmp] = eig([";
+  oss << "octave --silent --eval \"format long; [A,tmp] = eig(floor([";
   for(arma::uword i = 0; i < eigenMatrix.n_rows; i++) {
     for(arma::uword j = 0; j < eigenMatrix.n_cols; j++) {
       oss << eigenMatrix.at(i,j) << " ";
     }
     oss << ";";
   }
-  oss << "])\"";
+  oss << "]*10e12) /10e12)\"";
   
   std::shared_ptr<FILE> pipe(popen(oss.str().c_str(), "r"), pclose);
   //std::cout << oss.str().c_str() << std::endl;

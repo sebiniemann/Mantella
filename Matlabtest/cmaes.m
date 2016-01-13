@@ -272,9 +272,9 @@ while isempty(stopflag)
 
   if (ccov1+ccovmu+neg.ccov) > 0 && mod(countiter, 1/(ccov1+ccovmu+neg.ccov)/N/10) < 1
     C=triu(C)+triu(C,1)' % enforce symmetry to prevent complex numbers
-    C = C*10e16;
+    C = C*10e12;
     C = round(C);
-    C = C/10e16;
+    C = C/10e12;
     printf('%.30f\n',C);
     [B,tmp] = eig(C)     % eigen decomposition, B==normalized eigenvectors
                           % effort: approx. 15*N matrix-vector multiplications
