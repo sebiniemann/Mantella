@@ -22,7 +22,7 @@ opts.CMA.ccovmu = "2 * (mueff-2+1/mueff) / ((N+2)^2+mueff)";
 FHANDLES = benchmarks('handles');
 trials = 3;
 
-stopflags = zeros(0);
+stopflags = {};
 targetFvalue = zeros(0);
 bestFvalue = zeros(0);
 bestX = {};
