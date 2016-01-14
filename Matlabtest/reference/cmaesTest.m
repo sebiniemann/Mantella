@@ -1,7 +1,7 @@
 global fitnessFunction;
 fitnessFunction = 1;
 iterations = [];
-dimensions = 5;
+dimensions = 3;
 startingpoint = 8 * rand(dimensions, 1) - 4;
 stepsize = 2;
 opts.DispFinal = "off";
@@ -46,5 +46,5 @@ end;
 iterations;
 stopflags
 disp('target vs best function value');
-[targetFvalue bestFvalue]
+[targetFvalue' bestFvalue]
 median(iterations,2)

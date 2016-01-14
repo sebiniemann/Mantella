@@ -69,6 +69,8 @@ namespace mant {
     //Notation: comments always start with matlab name of variable
     //          comments after ';' are from matlab code
     //          comments after '-' are from mantella
+    
+    bool stopFlag;
 
     double toleranceX_; //stopTolX or defopts.TolX; stop if x-change smaller TolX
     double toleranceUpX_; //stopTolUpX or defopts.TolUpX; stop if x-changes larger TolUpX

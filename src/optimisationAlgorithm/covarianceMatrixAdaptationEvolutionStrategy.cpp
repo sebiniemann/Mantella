@@ -116,9 +116,9 @@ namespace mant {
             //std::cout << "fitnessRaw_" << fitnessRaw_ << std::endl;
 
             //TODO: this stopflag is more sophisticated in the matlab code.
-            bool stopFlag = false;
             if(stopFlag) {
-                //std::cout << "because errors on unused warnings" << std::endl;
+                std::cout << "because errors on unused warnings" << std::endl;
+              bestObjectiveValue_ = acceptableObjectiveValue_;
             }
             //;set internal parameters
             if (lambda_ != lambda_last_) {
@@ -265,10 +265,10 @@ namespace mant {
                 C_ = arma::symmatu(C_); //;enforce symmetry to prevent complex numbers
                 ////std::cout << "C_" << C_ << std::endl;
                 arma::Col<double> tmp;
-                std::pair<arma::Mat<double>, arma::Col<double>> octaveEig = getOctaveEig(C_);
-                tmp = octaveEig.second;
-                B_ = octaveEig.first;
-                //arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
+                //std::pair<arma::Mat<double>, arma::Col<double>> octaveEig = getOctaveEig(C_);
+                //tmp = octaveEig.second;
+                //B_ = octaveEig.first;
+                arma::eig_sym(tmp, B_, C_); //;eigen decomposition, B==normalized eigenvectors
                 //std::cout << "tmp" << tmp << std::endl;
                 //std::cout << "B_" << B_ << std::endl;
                 //;effort: approx. 15*N matrix-vector multiplications
@@ -357,6 +357,7 @@ namespace mant {
             //replacement of fitnesshist
             if (countiter_ > 2 && arma::all(fitnessRaw_ - fitnessRawPreviousIteration_ == 0)) {
                 if (stopOnWarnings_) {
+                  std::cout << "fithist" << std::endl;
                     stopFlag = true;
                 } else {
                     //sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
@@ -367,12 +368,15 @@ namespace mant {
             //;Set stop flag
             //TODO: how to handle these now?
             if (countiter_ >= stopMaxIter_) {
+              std::cout << "maxiter" << std::endl;
                 stopFlag = true;
             }
             if (arma::all(sigma_ * (arma::abs(pc_), arma::sqrt(diagC_)) < toleranceX_)) {
+              std::cout << "tolx" << std::endl;
                 stopFlag = true;
             }
             if (arma::any(sigma_ * arma::sqrt(diagC_) > toleranceUpX_)) {
+              std::cout << "tolupx" << std::endl;
                 stopFlag = true;
             }
             if (sigma_ * arma::max(diagD_) == 0) {//;should never happen
@@ -397,7 +401,7 @@ namespace mant {
             //std::cout << "newGenerationRaw_" << newGenerationRaw_ << std::endl;
             newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
             //std::cout << "newGeneration_" << newGeneration_ << std::endl;
-
+            
             return newGeneration_;
 
 
@@ -439,6 +443,8 @@ namespace mant {
             const arma::uword numberOfDimensions,
             const arma::Mat<double>& initialParameters) {
         verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
+        
+        stopFlag = false;
 
         xmean_ = initialParameters.col(0);
         //std::cout << "xmean_" << xmean_ << std::endl;
@@ -502,9 +508,9 @@ namespace mant {
         //miscellaneous inits needed
         EqualFunctionValues_ = arma::zeros(10 + numberOfDimensions);
         //TODO: set to false for testing, all 3 are true usually
-        stopOnStagnation_ = false;
-        stopOnWarnings_ = false;
-        stopOnEqualFunctionValues_ = false;
+        stopOnStagnation_ = true;
+        stopOnWarnings_ = true;
+        stopOnEqualFunctionValues_ = true;
         //more complicated in matlab, defines a number of iterations of equal funcvalues to stop
 
         //Need to do this here once to get from the initial starting point (given as intiailparameters)
