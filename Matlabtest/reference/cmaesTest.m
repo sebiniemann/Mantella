@@ -1,15 +1,15 @@
 global fitnessFunction;
 fitnessFunction = 1;
 iterations = [];
-dimensions = 3;
+dimensions = 10;
 startingpoint = 8 * rand(dimensions, 1) - 4;
 stepsize = 2;
 opts.DispFinal = "off";
 opts.DispModulo = "Inf";
 opts.SaveVariables = "off";
 opts.MaxFunEvals = 20000;
-opts.StopOnStagnation = 'off';
-opts.StopOnWarnings = 'off';
+opts.StopOnStagnation = 'on';
+opts.StopOnWarnings = 'on';
 opts.StopOnEqualFunctionValues = 0;
 opts.MaxIter      = "100 + 50 * (N+3)^2 / sqrt(popsize)";
 opts.TolX         = "1e-12*max(insigma)";
@@ -20,7 +20,7 @@ opts.CMA.ccum = "((N+4 + 2*mueff/N) / (4 + mueff/N))^-1 ";
 opts.CMA.ccov1 = "2 / ((N+1.3)^2+mueff)";
 opts.CMA.ccovmu = "2 * (mueff-2+1/mueff) / ((N+2)^2+mueff)";
 FHANDLES = benchmarks('handles');
-trials = 3;
+trials = 20;
 
 stopflags = {};
 targetFvalue = zeros(0);

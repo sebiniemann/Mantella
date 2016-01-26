@@ -47,9 +47,10 @@ int main() {
   std::cout.precision(16);
   
   //benchmarking our cmaes
-  std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(3);
+  arma::uword dimensions = 10;
+  std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(dimensions);
   arma::Col<double> medians(optimisationProblems.size());
-  arma::Col<double> startingPoint = 8 * arma::ones(optimisationProblems.at(0)->numberOfDimensions_) - 4;
+  arma::Col<double> startingPoint = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
   
   for(unsigned int i = 0; i < 24; i++) {
     std::cout << "function " << i+1 << std::endl;
@@ -59,7 +60,7 @@ int main() {
     //std::cout << optimisationProblem.getOptimalObjectiveValue() << std::endl;
     double acceptableObjectiveValue = optimisationProblem.getOptimalObjectiveValue() + std::pow(10.0, std::floor(std::log10(std::abs(optimisationProblem.getOptimalObjectiveValue())))) * 1e-3;
     
-    int trials = 1;
+    int trials = 20;
     arma::Col<double> curMedian(trials);
  
     for(int trial = 0; trial < trials; trial++) {
@@ -69,14 +70,14 @@ int main() {
       algo.setAcceptableObjectiveValue(acceptableObjectiveValue);
       algo.setStepSize(2);
       algo.optimise(optimisationProblem,startingPoint);
-      curMedian(trial) = algo.getNumberOfIterations();          
-
+      curMedian(trial) = algo.getNumberOfIterations();     
+      
        //std::cout << algo.getNumberOfIterations() << std::endl;
        //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
     }
 
     medians(i) = arma::median(curMedian);
-    std::cout << arma::median(curMedian) << std::endl;
+    std::cout << "median iterations for function: " << arma::median(curMedian) << std::endl;
   }
   
   std::cout << medians.t() << std::endl;
