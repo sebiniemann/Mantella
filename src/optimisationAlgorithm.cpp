@@ -83,7 +83,7 @@ namespace mant {
 
     initialise(optimisationProblem.numberOfDimensions_, initialParameters);
     arma::Mat<double> parameters;
-    if(CovarianceMatrixAdaptationEvolutionStrategy* derived = dynamic_cast<CovarianceMatrixAdaptationEvolutionStrategy*>(this)) {
+    if (CovarianceMatrixAdaptationEvolutionStrategy* derived = dynamic_cast<CovarianceMatrixAdaptationEvolutionStrategy*>(this)) {
       parameters = boundariesHandlingFunction_(derived->newGeneration_);
     } else {
       parameters = boundariesHandlingFunction_(initialParameters);
@@ -263,7 +263,7 @@ namespace mant {
 
     for (arma::uword n = 0; n < parameters.n_cols && !isTerminated(); ++n, ++numberOfIterations_) {
       const arma::Col<double>& parameter = parameters.col(n);
-      
+
       const double objectiveValue = optimisationProblem.getNormalisedObjectiveValue(parameter);
 
       if (::mant::isRecordingSampling) {

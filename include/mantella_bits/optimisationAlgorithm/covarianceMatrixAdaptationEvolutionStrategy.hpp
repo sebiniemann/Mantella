@@ -1,8 +1,5 @@
 #pragma once
 
-// C++ standard library
-#include <memory>
-
 // Armadillo
 #include <armadillo>
 
@@ -15,15 +12,15 @@ namespace mant {
 
 namespace mant {
   class CovarianceMatrixAdaptationEvolutionStrategy : public OptimisationAlgorithm {
-  public:
+   public:
     explicit CovarianceMatrixAdaptationEvolutionStrategy();
-    
+
     void initialise(
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
-    
+
     using OptimisationAlgorithm::optimise;
-    
+
     void optimise(
         OptimisationProblem& optimisationProblem);
 
@@ -62,14 +59,14 @@ namespace mant {
     void setToleranceX(double toleranceX);
     arma::Col<double> getXmean() const;
     void setXmean(arma::Col<double> xmean);
-    
+
     arma::Mat<double> newGeneration_;
-    
-  protected:
+
+   protected:
     //Notation: comments always start with matlab name of variable
     //          comments after ';' are from matlab code
     //          comments after '-' are from mantella
-    
+
     bool stopFlag;
 
     double toleranceX_; //stopTolX or defopts.TolX; stop if x-change smaller TolX
@@ -86,7 +83,7 @@ namespace mant {
     arma::Col<double> recombinationWeights_; //weights
     double cs_; //defopts.CMA.cs/cs; cumulation constant for step-size
     double damping_; //defopts.CMA.damps; damping for step-size
-    double ccum_; //defopts.CMA.ccum/cc; 
+    double ccum_; //defopts.CMA.ccum/cc;
     double ccov1_; //defopts.CMA.ccov1;
     double ccovmu_; //defopts.CMA.ccovmu;
     arma::uword activeCMA_; ////defopts.CMA.active; 0: active CMA 1: neg. updates with pos. def. check, 2: neg. updates
@@ -94,7 +91,7 @@ namespace mant {
 
     //arxvalid needs to be here so it is available after the loop
     arma::Mat<double> newGenerationRaw_;
-    
+
     arma::Mat<double> newGenerationValid_; //arxvalid
     arma::Col<double> xmean_; //xmean
     arma::Col<double> xold_; //xold
@@ -114,7 +111,7 @@ namespace mant {
 
     arma::Col<double> fitnessRaw_; //fitness.raw
     arma::Col<double> fitnessSel_; //fitness.sel
-    arma::Col<double> fitnessRawPreviousIteration_;//helper variable to replace fitnesshist
+    arma::Col<double> fitnessRawPreviousIteration_; //helper variable to replace fitnesshist
     arma::Col<arma::uword> fitnessIdx_; //fitness.idx
     arma::Col<arma::uword> fitnessIdxSel_; //fitness.idxsel
 
