@@ -83,6 +83,7 @@
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 #include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
