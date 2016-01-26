@@ -29,11 +29,11 @@ namespace mant {
         [this](
             const arma::uword numberOfDimensions,
             const arma::Mat<double>& parameters,
-            const arma::Col<double>& objectiveValues,
-            const arma::Col<double>& differences) {
+            const arma::Row<double>& objectiveValues,
+            const arma::Row<double>& differences) {
           newGenerationValid_ = parameters; //arxvalid
           //std::cout << "newGenerationValid_" << newGenerationValid_ << std::endl;
-          fitnessRaw_ = objectiveValues;
+          fitnessRaw_ = objectiveValues.t();
           //std::cout << "fitnessRaw_" << fitnessRaw_ << std::endl;
 
           //TODO: this stopflag is more sophisticated in the matlab code.
@@ -278,7 +278,7 @@ namespace mant {
           //replacement of fitnesshist
           if (countiter_ > 2 && arma::all(fitnessRaw_ - fitnessRawPreviousIteration_ == 0)) {
               if (stopOnWarnings_) {
-                std::cout << "fithist" << std::endl;
+                //std::cout << "fithist" << std::endl;
                   stopFlag = true;
               } else {
                   // sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
@@ -289,15 +289,15 @@ namespace mant {
           //;Set stop flag
           //TODO: how to handle these now?
           if (countiter_ >= stopMaxIter_) {
-            std::cout << "maxiter" << std::endl;
+            //std::cout << "maxiter" << std::endl;
               stopFlag = true;
           }
           if (arma::all(sigma_ * (arma::abs(pc_), arma::sqrt(diagC_)) < toleranceX_)) {
-            std::cout << "tolx" << std::endl;
+            //std::cout << "tolx" << std::endl;
               stopFlag = true;
           }
           if (arma::any(sigma_ * arma::sqrt(diagC_) > toleranceUpX_)) {
-            std::cout << "tolupx" << std::endl;
+            //std::cout << "tolupx" << std::endl;
               stopFlag = true;
           }
           if (sigma_ * arma::max(diagD_) == 0) {//;should never happen
@@ -359,7 +359,7 @@ namespace mant {
   void CovarianceMatrixAdaptationEvolutionStrategy::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
+    //verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
 
     stopFlag = false;
 
