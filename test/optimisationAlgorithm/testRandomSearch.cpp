@@ -1,61 +1,64 @@
 // Catch
 #include <catch.hpp>
-
-// C++ standard library
-#include <cstdlib>
-
-// Armadillo
-#include <armadillo>
+#include "catchExtension.hpp"
 
 // Mantella
 #include <mantella>
 
-TEST_CASE("RandomSearch") {
-  SECTION(".optimise") {
-    SECTION("Checks if all parameters are uniformly distributed.") {
-      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-      optimisationProblem.setLowerBounds(arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 200 - 100);
-      optimisationProblem.setUpperBounds(optimisationProblem.getLowerBounds() + arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_) * 100 + 0.01);
+class TestRandomSearch : public mant::RandomSearch {
+ public:
+  using mant::RandomSearch::RandomSearch;
 
-      mant::isRecordingSampling = true;
-      mant::RandomSearch randomSearch(optimisationProblem);
-      randomSearch.setMaximalNumberOfIterations(100000);
-      randomSearch.optimise();
+  // Increases the visibility of the internal next parameter function, to bypass general modification, made by the parent class.
+  using mant::RandomSearch::nextParametersFunction_;
+};
 
-      std::vector<std::pair<arma::Col<double>, double>> actualSamples = randomSearch.getSamplingProgress();
+SCENARIO("RandomSearch.nextParametersFunction_", "[RandomSearch][RandomSearch.nextParametersFunction_]") {
+  GIVEN("A number of dimension") {
+    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
+    CAPTURE(numberOfDimensions);
 
-      std::vector<arma::Col<double>> intervals;
-      for (arma::uword n = 0; n < optimisationProblem.numberOfDimensions_; ++n) {
-        intervals.push_back(arma::linspace<arma::Col<double>>(optimisationProblem.getLowerBounds()(n), optimisationProblem.getUpperBounds()(n), 11));
+    TestRandomSearch optimisationAlgorithm;
+
+    THEN("Return a randomly and uniformly distributed parameter") {
+      arma::Mat<double> paramters(numberOfDimensions, 10000);
+
+      for (arma::uword n = 0; n < paramters.n_cols; ++n) {
+        paramters.col(n) = optimisationAlgorithm.nextParametersFunction_(numberOfDimensions, {}, {}, {});
       }
 
-      arma::uword minimalNumberOfSamplesPerSubset = randomSearch.getMaximalNumberOfIterations();
-      arma::uword maximalNumberOfSamplesPerSubset = 0;
-      for (arma::uword n = 1; n < intervals.at(0).n_elem; ++n) {
-        for (arma::uword k = 1; k < intervals.at(1).n_elem; ++k) {
-          arma::uword numberOfSamples = 0;
-          for (const auto& sample : actualSamples) {
-            const arma::Col<double>& parameter = sample.first;
-
-            if (parameter(0) >= intervals.at(0)(n - 1) && parameter(0) < intervals.at(0)(n) && parameter(1) >= intervals.at(1)(k - 1) && parameter(1) < intervals.at(1)(k)) {
-              ++numberOfSamples;
-            }
-
-            minimalNumberOfSamplesPerSubset = std::min(minimalNumberOfSamplesPerSubset, numberOfSamples);
-            maximalNumberOfSamplesPerSubset = std::max(maximalNumberOfSamplesPerSubset, numberOfSamples);
-          }
-        }
-      }
-
-      CHECK(0.25 > static_cast<double>(maximalNumberOfSamplesPerSubset - minimalNumberOfSamplesPerSubset) / static_cast<double>(actualSamples.size()));
+      IS_UNIFORM(arma::vectorise(paramters), 0.0, 1.0);
     }
   }
+}
 
-  SECTION(".toString") {
-    SECTION("Returns a (filesystem friendly) name for the class.") {
-      std::shared_ptr<mant::OptimisationProblem> optimisationProblem(new mant::bbob::SphereFunction(2));
-      CHECK(mant::RandomSearch(optimisationProblem).toString() ==
-            "random_search");
+SCENARIO("RandomSearch.optimise", "[RandomSearch][RandomSearch.optimise]") {
+  GIVEN("An optimisation problem") {
+    WHEN("Called multiple times") {
+      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      CAPTURE(numberOfDimensions);
+      mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
+
+      mant::RandomSearch optimisationAlgorithm;
+      optimisationAlgorithm.setMaximalNumberOfIterations(1);
+
+      THEN("Start with a different parameter") {
+        ::mant::isCachingSamples = true;
+        for (arma::uword n = 0; n < 100; ++n) {
+          optimisationAlgorithm.optimise(optimisationProblem);
+        }
+        ::mant::isCachingSamples = false;
+
+        CHECK(optimisationProblem.getNumberOfEvaluations() == optimisationProblem.getNumberOfDistinctEvaluations());
+      }
     }
+  }
+}
+
+SCENARIO("RandomSearch.getNextParametersFunctionName", "[RandomSearch][RandomSearch.getNextParametersFunctionName]") {
+  mant::RandomSearch optimisationAlgorithm;
+
+  THEN("Return the next parameter function name") {
+    CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "Random search");
   }
 }

@@ -1,8 +1,5 @@
 #include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 
-// C++ standard library
-#include <cmath>
-
 // Mantella
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
@@ -12,57 +9,42 @@ namespace mant {
       : OptimisationAlgorithm() {
     setNextParametersFunction(
         [this](
-            const arma::uword numberOfDimensions,
-            const arma::Mat<double>& parameters,
-            const arma::Col<double>& objectiveValues,
-            const arma::Col<double>& differences) {
-          if (arma::any(differences < 0)) {
-            previousBestParameters_.insert(bestParameter_);
-          } else {
-            stepSize_ *= stepSizeDecrease_;
+            const arma::uword numberOfDimensions_,
+            const arma::Mat<double>& parameters_,
+            const arma::Row<double>& objectiveValues_,
+            const arma::Row<double>& differences_) {
+          if (arma::all(differences_ >= 0)) {
+            stepSize_ /= stepSizeDecrease_;
           }
 
-          arma::Mat<double> nextParameters;
-          for (arma::uword n = 0; n < parameters.n_rows; ++n) {
+          arma::Mat<double> nextParameters(numberOfDimensions_, 2 * numberOfDimensions_);
+          for (arma::uword n = 0; n < numberOfDimensions_; ++n) {
             arma::Col<double> nextParameterCandidate = bestParameter_;
             
             nextParameterCandidate(n) += stepSize_;
-            if (previousBestParameters_.find(nextParameterCandidate) == previousBestParameters_.cend()) {
-              nextParameters.insert_cols(1, nextParameterCandidate);
-            }
+            nextParameters.col(2 * n) = nextParameterCandidate;
             
-            nextParameterCandidate -= 2 * stepSize_;
-            if (previousBestParameters_.find(nextParameterCandidate) == previousBestParameters_.cend()) {
-              nextParameters.insert_cols(1, nextParameterCandidate);
-            }
+            nextParameterCandidate(n) -= 2 * stepSize_;
+            nextParameters.col(2 * n + 1) = nextParameterCandidate;
           }
           
           return nextParameters;
         },
         "Hooke-Jeeves algorithm");
+
+    setInitialStepSize(1.0);
+    setStepSizeDecrease(0.5);
   }
 
   void HookeJeevesAlgorithm::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    if (!std::isfinite(initialStepSize_)) {
-      setInitialStepSize(1);
-    } else {
-      // verify
-    }
-
-    if (!std::isfinite(stepSizeDecrease_)) {
-      setStepSizeDecrease(0.5);
-    } else {
-      // verify
-    }
-
     stepSize_ = initialStepSize_;
   }
 
   void HookeJeevesAlgorithm::optimise(
       OptimisationProblem& optimisationProblem) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
   }
 
   void HookeJeevesAlgorithm::setInitialStepSize(
@@ -72,10 +54,18 @@ namespace mant {
     initialStepSize_ = initialStepSize;
   }
 
+  double HookeJeevesAlgorithm::getInitialStepSize() const {
+    return initialStepSize_;
+  }
+
   void HookeJeevesAlgorithm::setStepSizeDecrease(
       const double stepSizeDecrease) {
     verify(stepSizeDecrease > 0 && stepSizeDecrease < 1, "The step size decrease must be within (0, 1)");
 
     stepSizeDecrease_ = stepSizeDecrease;
+  }
+
+  double HookeJeevesAlgorithm::getStepSizeDecrease() const {
+    return stepSizeDecrease_;
   }
 }

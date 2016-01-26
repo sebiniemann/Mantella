@@ -11,17 +11,17 @@ namespace mant {
       : OptimisationAlgorithm() {
     setNextParametersFunction(
         [this](
-            const arma::uword numberOfDimensions,
-            const arma::Mat<double>& parameters,
-            const arma::Col<double>& objectiveValues,
-            const arma::Col<double>& differences) {
-          return arma::randu<arma::Col<double>>(parameters.n_rows);
+            const arma::uword numberOfDimensions_,
+            const arma::Mat<double>& parameters_,
+            const arma::Row<double>& objectiveValues_,
+            const arma::Row<double>& differences_) {
+          return arma::randu<arma::Col<double>>(numberOfDimensions_);
         },
         "Random search");
   }
 
   void RandomSearch::optimise(
       OptimisationProblem& optimisationProblem) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::Mat<double>(optimisationProblem.numberOfDimensions_, 0));
+    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
   }
 }

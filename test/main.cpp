@@ -16,9 +16,12 @@ int main(int argc, char* argv[]) {
   MPI_Init(&argc, &argv);
 
   MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank);
+  MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes);
 #endif
 
   std::ios_base::sync_with_stdio(false);
+  // Uncomment the following line to get insights about the optimisation process.
+  // ::mant::isVerbose = true;
 
   // The last argument is used as location for the test data directory.
   // Reduced also the number of arguments, in order avoid conflicts with catch command line arguments handling.

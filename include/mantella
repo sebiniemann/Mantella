@@ -45,14 +45,7 @@
 #include <mantella_bits/combinatorics.hpp>
 #include <mantella_bits/geometry.hpp>
 #include <mantella_bits/numberTheory.hpp>
-#include <mantella_bits/numericalAnalysis.hpp>
 #include <mantella_bits/probability.hpp>
-#include <mantella_bits/statistics.hpp>
-#include <mantella_bits/topology.hpp>
-
-// Machine learning
-#include <mantella_bits/samplesSelection.hpp>
-#include <mantella_bits/samplesAnalysis.hpp>
 
 // Optimisation problems
 #include <mantella_bits/optimisationProblem.hpp>
@@ -82,33 +75,17 @@
 #include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.hpp>
 #include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.hpp>
 #include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRPR.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRRR.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.hpp>
-#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel.hpp>
-#include <mantella_bits/optimisationProblem/surrogateModel/polynomialFunctionModel.hpp>
-// #include <mantella_bits/optimisationProblem/surrogateModel/radialBasisFunctionModel.hpp>
-// #include <mantella_bits/optimisationProblem/surrogateModel/krigingModel.hpp>
-// #include <mantella_bits/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.hpp>
-// #include <mantella_bits/optimisationProblem/surrogateModel/artificialNeuralNetwork.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachines.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRPR.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRRR.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6PRUS.hpp>
+#include <mantella_bits/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6PUPS.hpp>
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
-#include <mantella_bits/optimisationAlgorithm/gridSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 #include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
-
-// Cluster analyses
-#include <mantella_bits/clusterAnalysis.hpp>
-#include <mantella_bits/clusterAnalysis/basicSequentialAlgorithmicScheme.hpp>
-#include <mantella_bits/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.hpp>
 // IWYU pragma: end_exports

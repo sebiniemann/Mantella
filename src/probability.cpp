@@ -1,7 +1,6 @@
 #include "mantella_bits/probability.hpp"
 
 // C++ standard library
-#include <algorithm>
 #include <cassert>
 #include <random>
 
@@ -20,7 +19,7 @@ namespace mant {
     arma::qr(Q, R, arma::randn<arma::Mat<double>>(numberOfDimensions, numberOfDimensions));
 
     // Asserts that *Q* is an orthogonal matrix.
-    assert(arma::any(arma::vectorise(arma::abs(arma::pinv(Q).t() - Q)) <= 1.0e-12));
+    assert(arma::any(arma::vectorise(arma::abs(arma::pinv(Q).t() - Q)) <= 1e-12));
     // Asserts that *R* is an upper triangular matrix.
     assert(arma::all(arma::vectorise(R == arma::trimatu(R))));
 
@@ -32,12 +31,11 @@ namespace mant {
       const arma::uword cycleSize) {
     verify(cycleSize <= numberOfElements, "randomPermutationVector: The cycle size must be lower than or equal to the number of elements.");
 
-    arma::Col<arma::uword> permutation = range<arma::uword>(0, numberOfElements - 1);
+    arma::Col<arma::uword> permutation = range(0, numberOfElements - 1);
 
     // Generates a random permutation, based on the in-place Fisher-Yates-shuffle.
-    arma::uword length = std::min(cycleSize, numberOfElements - 1);
     for (arma::uword n = 0; n < cycleSize; ++n) {
-      permutation.swap_rows(n, std::uniform_int_distribution<arma::uword>(n, length)(Rng::getGenerator()));
+      permutation.swap_rows(n, std::uniform_int_distribution<arma::uword>(n, permutation.n_elem - 1)(Rng::getGenerator()));
     }
 
     return permutation.head(cycleSize);
@@ -55,13 +53,6 @@ namespace mant {
     verify(minimalDistance >= 0, "randomNeighbour: "); // TODO
     verify(minimalDistance <= maximalDistance, "randomNeighbour: "); // TODO
 
-    arma::Col<double> displacement = arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (maximalDistance - minimalDistance);
-    displacement += arma::sign(displacement) * minimalDistance;
-
-    if (maximalDistance > 0 && arma::all(displacement == 0)) {
-      displacement(std::uniform_int_distribution<arma::uword>(0, parameter.n_elem - 1)(Rng::getGenerator())) = (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0) * maximalDistance;
-    }
-
-    return parameter + displacement;
+    return parameter + arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (minimalDistance + std::uniform_real_distribution<double>(0, 1)(Rng::getGenerator()) * (maximalDistance - minimalDistance));
   }
 }

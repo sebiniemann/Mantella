@@ -13,14 +13,12 @@ namespace mant {
   OptimisationProblem::OptimisationProblem(
       const arma::uword numberOfDimensions)
       : numberOfDimensions_(numberOfDimensions) {
-    reset();
-
-    // We avoid infinite values for any information on the problem, that could be used with an optimisation algorithm.
+    // We avoid infinite values for any information on the problem, that could be used within an optimisation algorithm.
     // Otherwise, we would need separate implementations to handle infinite boundaries.
     setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 10);
     setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 10);
 
-    setParameterPermutation(range<arma::uword>(0, numberOfDimensions_ - 1));
+    setParameterPermutation(range(0, numberOfDimensions_ - 1));
     setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
     setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
     setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
@@ -29,10 +27,12 @@ namespace mant {
     setObjectiveValueTranslation(0.0);
 
     setMinimalParameterDistance(arma::zeros<arma::Col<double>>(numberOfDimensions_));
+
+    reset();
   }
 
   void OptimisationProblem::setObjectiveFunction(
-      const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
+      const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction,
       const std::string& objectiveFunctionName) {
     verify(static_cast<bool>(objectiveFunction), "setObjectiveFunction: The objective function must be callable.");
 
@@ -44,7 +44,7 @@ namespace mant {
   }
 
   void OptimisationProblem::setObjectiveFunction(
-      const std::function<double(const arma::Col<double>& parameter)> objectiveFunction) {
+      const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction) {
     setObjectiveFunction(objectiveFunction, "Unnamed, custom optimisation problem");
   }
 
@@ -54,8 +54,9 @@ namespace mant {
 
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
-    assert(static_cast<bool>(objectiveFunction_));
+    verify(static_cast<bool>(objectiveFunction_), ""); // TODO
     verify(parameter.n_elem == numberOfDimensions_, "getObjectiveValue: The number of elements must be equal to the number of dimensions.");
+    verify(parameter.is_finite(), ""); // TODO
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
@@ -243,9 +244,14 @@ namespace mant {
 
   void OptimisationProblem::setMinimalParameterDistance(
       const arma::Col<double>& minimalParameterDistance) {
+    verify(minimalParameterDistance.n_elem == numberOfDimensions_, "setMinimalParameterDistance: The number of elements must be equal to the number of dimensions.");
     verify(arma::all(minimalParameterDistance >= 0), "setMinimalParameterDistance: "); // TODO
+    verify(minimalParameterDistance.is_finite(), "setMinimalParameterDistance: All elements within the minimal parameter distance must be finite.");
 
     minimalParameterDistance_ = minimalParameterDistance;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(minimalParameterDistance_.memptr(), static_cast<int>(minimalParameterDistance_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
   }
 
   arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {

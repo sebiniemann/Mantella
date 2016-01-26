@@ -10,8 +10,8 @@ namespace mant {
     // The number of parameter combinations for the constant term.
     arma::uword polynomialSize = 1;
     // Sums up the number of parameter combinations for each degree > 0.
-    for (arma::uword d = 1; d <= polynomialOrder; ++d) {
-      polynomialSize += nchoosek(numberOfElements + d - 1, d);
+    for (arma::uword n = 1; n <= polynomialOrder; ++n) {
+      polynomialSize += nchoosek(numberOfElements + n - 1, n);
     }
 
     return polynomialSize;
@@ -22,7 +22,7 @@ namespace mant {
       const arma::uword polynomialOrder) {
     arma::Col<double> polynomial(polynomialSize(parameter.n_elem, polynomialOrder));
 
-    // For any polynomial, all coefficients are 1.
+    // For any polynomial, all constant terms are 1.
     switch (polynomialOrder) {
       case 0: { // Constant polynomials
         // Constant term

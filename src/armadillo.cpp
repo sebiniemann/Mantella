@@ -3,7 +3,40 @@
 // C++ standard library
 #include <functional>
 
+// Mantella
+#include "mantella_bits/assert.hpp"
+
 namespace mant {
+  arma::Col<arma::uword> range(
+      const arma::uword start,
+      const arma::uword end,
+      const arma::uword stepSize) {
+    verify(stepSize > 0, "range: The step size must be strict greater than 0.");
+
+    if (start == end) {
+      return {start};
+    } else if (start < end) {
+      // Adds one to the number of elements, to include the starting point.
+      return arma::linspace<arma::Col<arma::uword>>(start, end, (end - start) / stepSize + 1);
+    } else {
+      // Adds one to the number of elements, to include the starting point.
+      arma::Col<arma::uword> range((start - end) / stepSize + 1);
+
+      for (arma::uword n = 0; n < range.n_elem; ++n) {
+        // Calculates the next element from scratch (instead of increasing it step by step), to reduce rounding errors.
+        range(n) = start - stepSize * n;
+      }
+
+      return range;
+    }
+  }
+
+  arma::Col<arma::uword> range(
+      const arma::uword start,
+      const arma::uword end) {
+    return range(start, end, 1);
+  }
+
   arma::uword Hash::operator()(
       const arma::Col<double>& key) const {
     // Starts with the hash of the first value ...

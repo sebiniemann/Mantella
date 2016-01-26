@@ -228,14 +228,7 @@ add_library(mantella ${LIBRARY_TYPE}
   src/combinatorics.cpp
   src/geometry.cpp
   src/numberTheory.cpp
-  src/numericalAnalysis.cpp
   src/probability.cpp
-  src/statistics.cpp
-  src/topology.cpp
-  
-  # Machine learning
-  src/samplesSelection.cpp
-  src/samplesAnalysis.cpp
   
   # Optimisation problems
   src/optimisationProblem.cpp
@@ -265,35 +258,19 @@ add_library(mantella ${LIBRARY_TYPE}
   src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
   src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
   src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRPR.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine3PRRR.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PRUS.cpp
-  src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/parallelKinematicMachine6PUPS.cpp
-  # src/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/multiLevelStewartPlatform.cpp
-  # src/optimisationProblem/kinematicallyRedundantMachineProblem/poseInaccuracy.cpp
-  # src/optimisationProblem/surrogateModel.cpp
-  # src/optimisationProblem/surrogateModel/polynomialFunctionModel.cpp
-  # src/optimisationProblem/surrogateModel/radialBasisFunctionModel.cpp
-  # src/optimisationProblem/surrogateModel/krigingModel.cpp
-  # src/optimisationProblem/surrogateModel/multivariateAdaptiveRegressionSplinesModel.cpp
-  # src/optimisationProblem/surrogateModel/artificialNeuralNetwork.cpp
+  src/optimisationProblem/kinematicallyRedundantMachines.cpp
+  src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRPR.cpp
+  src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRRR.cpp
+  src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6PRUS.cpp
+  src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6PUPS.cpp
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
-  src/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
-  src/optimisationAlgorithm/gridSearch.cpp
   src/optimisationAlgorithm/randomSearch.cpp
   src/optimisationAlgorithm/hillClimbing.cpp
   src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
   src/optimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/particleSwarmOptimisation.cpp
-  
-  # # Cluster analyses
-  # src/clusterAnalysis.cpp
-  # src/clusterAnalysis/basicSequentialAlgorithmicScheme.cpp
-  # src/clusterAnalysis/twoThresholdSequentialAlgorithmicScheme.cpp
 )
 
 # Linking against prerequirements
@@ -378,19 +355,17 @@ if(BUILD_TESTS)
   
   # Compile tests
   # All paths must start with "test/"
-  add_executable(localtest
-    examples/localtest.cpp)
   add_executable(mantellaTest
     test/main.cpp
     
-    # Test framework extension
+    # Test framework extensions
     test/catchExtension.cpp
     test/testCatchExtension.cpp
     
-    # Configuration
+    # Configurations
     test/testConfig.cpp
     
-    # Assertion
+    # Assertions
     test/testAssert.cpp
 
     # Random number generator
@@ -407,14 +382,7 @@ if(BUILD_TESTS)
     test/testCombinatorics.cpp
     test/testGeometry.cpp
     test/testNumberTheory.cpp
-    test/testNumericalAnalysis.cpp
     test/testProbability.cpp
-    test/testStatistics.cpp
-    test/testTopology.cpp
-  
-    # # Machine learning
-    # test/testSamplesSelection.cpp
-    # test/testSamplesAnalysis.cpp
 
     # Optimisation problems
     test/testOptimisationProblem.cpp
@@ -444,39 +412,23 @@ if(BUILD_TESTS)
     test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
     test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
     test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
-    test/optimisationProblem/testKinematicallyRedundantMachineProblem.cpp
-    test/optimisationProblem/kinematicallyRedundantMachineProblem/testMachineModel.cpp
-    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRPR.cpp
-    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine3PRRR.cpp
-    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PRUS.cpp
-    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testParallelKinematicMachine6PUPS.cpp
-    # test/optimisationProblem/kinematicallyRedundantMachineProblem/machineModel/testMultiLevelStewartPlatform.cpp
-    # test/optimisationProblem/kinematicallyRedundantMachineProblem/testPoseInaccuracy.cpp
-    # test/optimisationProblem/testSurrogateModel.cpp
-    # test/optimisationProblem/surrogateModel/testPolynomialFunctionModel.cpp
-    # test/optimisationProblem/surrogateModel/testRadialBasisFunctionModel.cpp
-    # test/optimisationProblem/surrogateModel/testKrigingModel.cpp
-    # test/optimisationProblem/surrogateModel/testMultivariateAdaptiveRegressionSplinesModel.cpp
-    # test/optimisationProblem/surrogateModel/testArtificialNeuralNetwork.cpp
+    test/optimisationProblem/testKinematicallyRedundantMachines.cpp
+    test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRPR.cpp
+    test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRRR.cpp
+    test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PRUS.cpp
+    test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PUPS.cpp
     
-    # # Optimisation algorithms
+    # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
-    # test/optimisationAlgorithm/testRandomSearch.cpp
-    # test/optimisationAlgorithm/testGridSearch.cpp
-    # test/optimisationAlgorithm/testHillClimbing.cpp
-    # test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
-    # test/optimisationAlgorithm/testSimulatedAnnealing.cpp
-    # test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
-  
-    # # Cluster analyses
-    # test/testClusterAnalysis.cpp
-    # test/clusterAnalysis/testBasicSequentialAlgorithmicScheme.cpp
-    # test/clusterAnalysis/testTwoThresholdSequentialAlgorithmicScheme.cpp
+    test/optimisationAlgorithm/testRandomSearch.cpp
+    test/optimisationAlgorithm/testHillClimbing.cpp
+    test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    test/optimisationAlgorithm/testSimulatedAnnealing.cpp
+    test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
   )
 
   # Link against prerequirements
   target_link_libraries(mantellaTest mantella)
-  target_link_libraries(localtest mantella)
   
   if(ARMADILLO_LIBRARIES)
     target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})

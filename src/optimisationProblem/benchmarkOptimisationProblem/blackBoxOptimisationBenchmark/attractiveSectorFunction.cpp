@@ -27,10 +27,10 @@ namespace mant {
 
       setObjectiveFunction(
           [this](
-              const arma::Col<double>& parameter) {
-            assert(parameter.n_elem == numberOfDimensions_);
+              const arma::Col<double>& parameter_) {
+            assert(parameter_.n_elem == numberOfDimensions_);
               
-            arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter);
+            arma::Col<double> z = rotationQ_ * (parameterConditioning_ % parameter_);
             z.elem(arma::find(z % parameterTranslation_ > 0.0)) *= 100.0;
 
             return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);

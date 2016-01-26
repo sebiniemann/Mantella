@@ -11,6 +11,9 @@ namespace mant {
    public:
     explicit RandomSearch();
 
+    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
+    using OptimisationAlgorithm::optimise;
+
     void optimise(
         OptimisationProblem& optimisationProblem);
   };

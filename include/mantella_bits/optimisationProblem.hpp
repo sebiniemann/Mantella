@@ -23,10 +23,10 @@ namespace mant {
 
     // Objective
     void setObjectiveFunction(
-        const std::function<double(const arma::Col<double>& parameter)> objectiveFunction,
+        const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction,
         const std::string& objectiveFunctionName);
     void setObjectiveFunction(
-        const std::function<double(const arma::Col<double>& parameter)> objectiveFunction);
+        const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction);
     std::string getObjectiveFunctionName() const;
     double getObjectiveValue(
         const arma::Col<double>& parameter);
@@ -72,10 +72,11 @@ namespace mant {
     // Evaluation
     arma::uword getNumberOfEvaluations() const;
     arma::uword getNumberOfDistinctEvaluations() const;
+
     void reset();
 
    protected:
-    std::function<double(const arma::Col<double>&)> objectiveFunction_;
+    std::function<double(const arma::Col<double>& parameter_)> objectiveFunction_;
     std::string objectiveFunctionName_;
 
     arma::Col<double> lowerBounds_;

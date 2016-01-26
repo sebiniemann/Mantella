@@ -84,7 +84,7 @@ namespace mant {
 
     std::vector<arma::Col<arma::uword>> combinations;
     if (numberOfElements == combinationsize) {
-      return {range<arma::uword>(0, numberOfElements - 1)};
+      return {range(0, numberOfElements - 1)};
     } else {
       // Otherwise, we generate a bitmask of the same length as *numberOfElements* (1, 1, ..., 1, 0, 0, ..., 0), containing *combinationsize* ones. The bitmask is then permuted by C++'s *std::prev_permutation* function and indicates which index is to be added to the combination.
       // For example: Given 7 elements with a combination size of 5, (1, 0, 0, 1, 1, 1, 1) represents the combination (0, 3, 4, 5, 6).

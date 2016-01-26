@@ -1,8 +1,5 @@
 #include "mantella_bits/optimisationAlgorithm/hillClimbing.hpp"
 
-// C++ standard library
-#include <cmath>
-
 // Mantella
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
@@ -15,31 +12,22 @@ namespace mant {
         maximalStepSize_(arma::datum::nan) {
     setNextParametersFunction(
         [this](
-            const arma::uword numberOfDimensions,
-            const arma::Mat<double>& parameters,
-            const arma::Col<double>& objectiveValues,
-            const arma::Col<double>& differences) {
+            const arma::uword numberOfDimensions_,
+            const arma::Mat<double>& parameters_,
+            const arma::Row<double>& objectiveValues_,
+            const arma::Row<double>& differences_) {
           return randomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
         },
         "Hill climbing");
+
+    setMinimalStepSize(0);
+    setMaximalStepSize(0.1);
   }
 
   void HillClimbing::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    if (!std::isfinite(minimalStepSize_)) {
-      setMinimalStepSize(0);
-    } else {
-      // verify
-    }
-
-    if (!std::isfinite(maximalStepSize_)) {
-      setMaximalStepSize(0.1);
-    } else {
-      // verify
-    }
-
-    // verify minimalStepSize_ <= maximalStepSize_
+    verify(minimalStepSize_ <= maximalStepSize_, ""); // TODO
   }
 
   void HillClimbing::optimise(
@@ -54,10 +42,18 @@ namespace mant {
     minimalStepSize_ = minimalStepSize;
   }
 
+  double HillClimbing::getMinimalStepSize() const {
+    return minimalStepSize_;
+  }
+
   void HillClimbing::setMaximalStepSize(
       const double maximalStepSize) {
     verify(maximalStepSize > 0, "The maximal step size must be strict greater than 0 for each dimension.");
 
     maximalStepSize_ = maximalStepSize;
+  }
+
+  double HillClimbing::getMaximalStepSize() const {
+    return maximalStepSize_;
   }
 }

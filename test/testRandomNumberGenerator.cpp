@@ -2,33 +2,32 @@
 #include <catch.hpp>
 #include "catchExtension.hpp"
 
-// C++ standard library
-#include <random>
-
 // Mantella
 #include <mantella>
 
-// This test is intently avoiding fuzzy testing, as we are challenging the random generator itself.
-TEST_CASE("Rng") {
-  SECTION("::getGenerator") {
-    SECTION("Is a valid (working) generator for C++ standard library random functions.") {
-      arma::Col<double>::fixed<10000> randomValues;
-      for (arma::uword n = 0; n < randomValues.n_elem; ++n) {
-        randomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
-      }
-      CAPTURE(randomValues);
-
-      IS_UNIFORM(randomValues, 0, 1);
+// The following tests are intently avoiding fuzzy testing, as we are challenging the random generator itself.
+SCENARIO("Rng::getGenerator", "[randomNumberGenerator][Rng::getGenerator]") {
+  THEN("Return a random number generator for the C++ standard library random functions") {
+    arma::Col<double>::fixed<10000> randomValues;
+    for (arma::uword n = 0; n < randomValues.n_elem; ++n) {
+      randomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
     }
+    CAPTURE(randomValues);
+
+    IS_UNIFORM(randomValues, 0, 1);
   }
+}
 
-  SECTION("::setSeed") {
-    const arma::arma_rng::seed_type seed = 12345;
-    CAPTURE(seed);
-    mant::Rng::setSeed(seed);
+// This needs to be tested for the C++ standard library as well as Armadillo, as Armadillo might use another generator.
+SCENARIO("Rng::setSeed", "[randomNumberGenerator][Rng::setSeed]") {
+  GIVEN("A seed") {
+    WHEN("Resetting the seed to a previous value") {
+      const arma::arma_rng::seed_type seed = 12345;
+      CAPTURE(seed);
 
-    SECTION("Resetting the seed generates the same random sequence.") {
-      SECTION("Works with C++ standard library random functions.") {
+      mant::Rng::setSeed(seed);
+
+      THEN("Return the same random (C++ standard library) sequence") {
         arma::Col<double>::fixed<10> expectedRandomValues;
         for (arma::uword n = 0; n < expectedRandomValues.n_elem; ++n) {
           expectedRandomValues(n) = std::uniform_real_distribution<double>(0, 1)(mant::Rng::getGenerator());
@@ -47,7 +46,7 @@ TEST_CASE("Rng") {
         IS_EQUAL(actualRandomValues, expectedRandomValues);
       }
 
-      SECTION("Works with Armadillo C++.") {
+      THEN("Return the same random (Armadillo) sequence") {
         const arma::Col<double>::fixed<10> expectedRandomValues = arma::randu<arma::Col<double>>(10);
         CAPTURE(expectedRandomValues);
 
@@ -61,35 +60,57 @@ TEST_CASE("Rng") {
       }
     }
   }
+}
 
-  SECTION("::getSeed") {
-    SECTION("Returns the current seed.") {
-      const arma::arma_rng::seed_type seed = 12345;
-      CAPTURE(seed);
-      mant::Rng::setSeed(seed);
+SCENARIO("Rng::getSeed", "[randomNumberGenerator][Rng::getSeed]") {
+  GIVEN("Default random seed") {
+    THEN("Return the default random seed") {
+      CHECK(mant::Rng::getSeed() == 12345);
+    }
+  }
 
-      // Generate some random values
-      arma::Col<double>::fixed<100> randomValues(arma::fill::randu);
-      CAPTURE(randomValues);
+  GIVEN("An updated random seed") {
+    const arma::arma_rng::seed_type seed = 12345;
+    CAPTURE(seed);
 
+    mant::Rng::setSeed(seed);
+
+    THEN("Return the updated random seed") {
       CHECK(mant::Rng::getSeed() == seed);
     }
   }
+}
 
-  SECTION("::setRandomSeed") {
-    SECTION("The values of a random sequences are uniformly distributed between different random seeds.") {
-      arma::Mat<double>::fixed<10000, 10> randomValues;
-      for (arma::uword n = 0; n < randomValues.n_rows; ++n) {
-        mant::Rng::setRandomSeed();
-        CAPTURE(mant::Rng::getSeed());
+SCENARIO("Rng::setRandomSeed", "[randomNumberGenerator][Rng::setRandomSeed]") {
+  THEN("Set the seed to a uniformly and randomly distributed value") {
+    arma::Col<arma::uword>::fixed<10000> seeds;
+    for (arma::uword n = 0; n < seeds.n_elem; ++n) {
+      mant::Rng::setRandomSeed();
+      seeds(n) = mant::Rng::getSeed();
+    }
+    CAPTURE(seeds);
 
-        randomValues.row(n) = arma::randu<arma::Row<double>>(randomValues.n_cols);
-      }
+    IS_UNIFORM(seeds, 0, std::numeric_limits<arma::uword>::max());
+  }
 
-      for (arma::uword n = 0; n < randomValues.n_cols; ++n) {
-        CAPTURE(randomValues.col(n));
-        IS_UNIFORM(randomValues.col(n), 0, 1);
+#if defined(SUPPORT_MPI)
+  WHEN("MPI is supported") {
+    THEN("Return a different seed for each node") {
+      mant::Rng::setRandomSeed();
+      unsigned int seed = static_cast<unsigned int>(mant::Rng::getSeed());
+      arma::Col<unsigned int> gatheredSeeds(static_cast<arma::uword>(numberOfNodes));
+
+      MPI_Allgather(&seed, 1, MPI_UNSIGNED, gatheredSeeds.memptr(), 1, MPI_UNSIGNED, MPI_COMM_WORLD);
+
+      arma::Col<arma::uword> seeds = arma::conv_to<arma::Col<arma::uword>>::from(gatheredSeeds);
+      CAPTURE(seeds);
+
+      for (arma::uword n = 0; n < seeds.n_elem; ++n) {
+        for (arma::uword k = n + 1; k < seeds.n_elem; ++k) {
+          CHECK(seeds(n) != seeds(k));
+        }
       }
     }
   }
+#endif
 }

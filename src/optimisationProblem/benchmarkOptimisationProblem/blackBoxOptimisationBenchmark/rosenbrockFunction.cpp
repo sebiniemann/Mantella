@@ -18,10 +18,10 @@ namespace mant {
 
       setObjectiveFunction(
           [this](
-              const arma::Col<double>& parameter) {
-            assert(parameter.n_elem == numberOfDimensions_);
+              const arma::Col<double>& parameter_) {
+            assert(parameter_.n_elem == numberOfDimensions_);
               
-            const arma::Col<double>& z = max_ * parameter + 1.0;
+            const arma::Col<double>& z = max_ * parameter_ + 1.0;
             return 100.0 * std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), 2.0) + std::pow(arma::norm(z.head(z.n_elem - 1) - 1.0), 2.0);
           },
           "BBOB Rosenbrock Function");

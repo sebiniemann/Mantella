@@ -17,7 +17,7 @@ namespace mant {
       const double s_;
       const double mu_;
       const arma::Col<double> parameterConditinong_;
-      // We avoid to set this to *const*, as its randomly filled and potentially shared/reset over MPI, to synchronise all problems.
+      // Cannot be *const*, as it is shared/set over MPI, to synchronise all problems.
       arma::Mat<double> rotationR_;
       arma::Mat<double> rotationQ_;
     };
