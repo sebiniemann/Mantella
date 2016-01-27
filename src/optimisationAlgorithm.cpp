@@ -144,6 +144,8 @@ namespace mant {
       std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
       std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
     }
+
+    bestParameter_ = optimisationProblem.getLowerBounds() + bestParameter_ % (optimisationProblem.getUpperBounds() - optimisationProblem.getLowerBounds());
   }
 
   void OptimisationAlgorithm::setNextParametersFunction(
