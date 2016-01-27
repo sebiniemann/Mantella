@@ -20,12 +20,9 @@ namespace mant {
       const arma::Mat<double>& rotationCandidate) {
     if (!rotationCandidate.is_square()) {
       return false;
-      // ... be square and ...
-    } else if (std::abs(std::abs(arma::det(rotationCandidate)) - 1.0) > 1e-12) {
-      // ... orthogonal ...
-      return false;
+      // A rotation matrix must be square and ...
     } else if (arma::any(arma::vectorise(arma::abs(arma::pinv(rotationCandidate).t() - rotationCandidate)) > 1e-12 * std::max(1.0, arma::abs(rotationCandidate).max()))) {
-      // ... with determinant 1 or -1 (including improper rotations).
+      // ... its transpose must be equal to its inverse.
       return false;
     }
 
