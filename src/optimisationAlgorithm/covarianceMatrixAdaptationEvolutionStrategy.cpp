@@ -205,73 +205,104 @@ namespace mant {
     
     setInitialStepSize(0.4);
     setActiveCMA(false);
-    
-    //HCMA settings for later use:
-    /*
-         * setStepSize(0.2);
-              //originally (getUpperBounds() - getLowerBounds()) / 5.0
-              //but since all problems are within 0 to 1 now, we can just put in 0.2
-        setActiveCMA(0);
-        countiter_ = 0;
-        stopOnStagnation_ = true;
-        stopOnWarnings_ = true;
-        stopOnEqualFunctionValues_ = true;
-         */
   }
 
+  //nothing provided
   void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
       OptimisationProblem& optimisationProblem) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    arma::uword numberOfDimensions = optimisationProblem.numberOfDimensions_;
+    sigma_ = initialSigma_;
+    if (lambda_ == std::numeric_limits<arma::uword>::max()) {
+      setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
+    }
+    xmean_ = arma::randu(numberOfDimensions);
+    newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+    
+    OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
+  }
+  
+  //popSize provided
+  void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
+      OptimisationProblem& optimisationProblem,
+      const arma::uword popSize) {
+    arma::uword numberOfDimensions = optimisationProblem.numberOfDimensions_;
+    sigma_ = initialSigma_;
+    setPopulationSize(popSize, numberOfDimensions);
+    xmean_ = arma::randu(numberOfDimensions);
+    newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+    
+    OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
+  }
+  
+  //mean provided
+  void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
+      OptimisationProblem& optimisationProblem,
+      const arma::Col<double>& xMean) {
+    arma::uword numberOfDimensions = optimisationProblem.numberOfDimensions_;
+    sigma_ = initialSigma_;
+    if (lambda_ == std::numeric_limits<arma::uword>::max()) {
+      setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
+    }
+    xmean_ = xMean;
+    newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+    
+    OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
+  }
+  
+  //initialParameters provided
+  void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
+      OptimisationProblem& optimisationProblem,
+      const arma::Mat<double>& initialParameters) {
+    
+    sigma_ = initialSigma_;
+    lambda_ = initialParameters.n_cols;
+    xmean_ = arma::mean(initialParameters).t();
+    newGeneration_ = initialParameters;
+    
+    OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
+  }
+  
+  //mean and popsize provided
+  void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
+      OptimisationProblem& optimisationProblem,
+      const arma::Col<double>& xMean,
+      const arma::uword popSize) {
+    arma::uword numberOfDimensions = optimisationProblem.numberOfDimensions_;
+    sigma_ = initialSigma_;
+    setPopulationSize(popSize, numberOfDimensions);
+    xmean_ = xMean;
+    newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+    
+    OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    //verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
-
-    xmean_ = initialParameters.col(0);
-    //std::cout << "xmean_" << xmean_ << std::endl;
     countiter_ = 0;
-    //std::cout << "countiter_" << countiter_ << std::endl;
-    sigma_ = initialSigma_;
-    //std::cout << "sigma_" << sigma_ << std::endl;
 
     if (lambda_ == std::numeric_limits<arma::uword>::max()) {
       setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
     }
-
+    
     pc_ = arma::zeros(numberOfDimensions);
     ps_ = arma::zeros(numberOfDimensions);
 
     diagD_ = arma::ones(numberOfDimensions);
-    //std::cout << "diagD_" << diagD_ << std::endl;
-    //TODO: "diagonal matrix D defines the scaling" originally this was stepsize / max(stepsize)
-    //where stepsize was the vector (which never got used) of stepsizes in all dimensions
-    //what actually got used was max(stepsize) - we decided to omit this vector so diagD as a whole
-    //might be irrelevant
     diagC_ = arma::square(diagD_);
-    //std::cout << "diagC_" << diagC_ << std::endl;
     B_ = arma::eye(numberOfDimensions, numberOfDimensions); //;B defines the coordinate system
-    //std::cout << "B_" << B_ << std::endl;
     BD_ = arma::diagmat(diagD_); //;B*D for speed up only
-    //std::cout << "BD_" << BD_ << std::endl;
     C_ = arma::diagmat(diagC_); //;covariance matrix == BD*(BD)'
-    //std::cout << "C_" << C_ << std::endl;
 
     chiN_ = std::pow(numberOfDimensions, 0.5) *
             (1 - 1.0 / (4 * numberOfDimensions) + 1.0 / (21 * std::pow(numberOfDimensions, 2)));
-    //std::cout << "chiN_" << chiN_ << std::endl;
     //;expectation of||N(0,I)|| == norm(randn(N,1))
 
-    //Need to do this here once to get from the initial starting point (given as intiailparameters)
-    //to the first round of points to get evaluated
-    newGenerationRaw_ = arma::randn(numberOfDimensions, lambda_); //arz
-    //std::cout << "newGenerationRaw_" << newGenerationRaw_ << std::endl;
-    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (BD_ * newGenerationRaw_)).each_col() + xmean_; //arx
-    //std::cout << "newGeneration_" << newGeneration_ << std::endl;
-
-    //newGeneration will have turned into newGenerationValid_ when nextParameters is called
-    //TODO: assign newGeneration to initialparameter somehow
+    newGenerationRaw_ = (initialParameters.each_col() - xmean_) / sigma_;
   }
 
   void CovarianceMatrixAdaptationEvolutionStrategy::setInitialStepSize(const double stepSize) {

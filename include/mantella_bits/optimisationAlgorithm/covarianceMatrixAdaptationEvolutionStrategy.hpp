@@ -19,10 +19,23 @@ namespace mant {
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
-    using OptimisationAlgorithm::optimise;
+    //using OptimisationAlgorithm::optimise;
 
     void optimise(
         OptimisationProblem& optimisationProblem);
+    void optimise(
+        OptimisationProblem& optimisationProblem,
+        const arma::uword popSize);
+    void optimise(
+        OptimisationProblem& optimisationProblem,
+        const arma::Col<double>& xMean);
+    void optimise(
+        OptimisationProblem& optimisationProblem,
+        const arma::Mat<double>& initialParameters);
+    void optimise(
+        OptimisationProblem& optimisationProblem,
+        const arma::Col<double>& xMean,
+        const arma::uword popSize);
 
     void setInitialStepSize(const double sigma); //insigma
     double getInitialStepSize();
