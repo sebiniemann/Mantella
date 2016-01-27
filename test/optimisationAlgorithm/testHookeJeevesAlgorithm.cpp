@@ -81,7 +81,7 @@ SCENARIO("HookeJeevesAlgorithm.setStepSizeDecrease", "[HookeJeevesAlgorithm][Hoo
 
   GIVEN("A step size decrease") {
     WHEN("The step size decrease is not negative and less than 1") {
-      const double stepSizeDecrease = 1.0 / std::abs(getContinuousRandomNumber());
+      const double stepSizeDecrease = 1.0 / std::max(2.0, std::abs(getContinuousRandomNumber()));
       CAPTURE(stepSizeDecrease);
 
       THEN("Throw no exception") {
@@ -119,7 +119,7 @@ SCENARIO("HookeJeevesAlgorithm.getStepSizeDecrease", "[HookeJeevesAlgorithm][Hoo
   }
 
   WHEN("The default step size decrease was changed") {
-    const double stepSizeDecrease = 1.0 / std::abs(getContinuousRandomNumber());
+    const double stepSizeDecrease = 1.0 / std::max(2.0, std::abs(getContinuousRandomNumber()));
     CAPTURE(stepSizeDecrease);
 
     optimisationAlgorithm.setStepSizeDecrease(stepSizeDecrease);

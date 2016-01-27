@@ -129,6 +129,8 @@ namespace mant {
 
     // Sync best parameter
 
+    duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
+
     if (::mant::isVerbose) {
       if (isFinished()) {
         std::cout << "  Finished with an acceptable solution.\n";
@@ -142,8 +144,6 @@ namespace mant {
       std::cout << "    Best objective value: " << bestObjectiveValue_ << "\n";
       std::cout << "    Best parameter: " << bestParameter_.t() << std::endl;
     }
-
-    duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
   }
 
   void OptimisationAlgorithm::setNextParametersFunction(
@@ -320,6 +320,8 @@ namespace mant {
       objectiveValues(n) = objectiveValue;
       differences(n) = objectiveValue - previousBestObjectiveValue;
 
+      duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
+
       if (objectiveValue < bestObjectiveValue_) {
         if (::mant::isVerbose) {
           std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Found better solution.\n";
@@ -335,8 +337,6 @@ namespace mant {
           break;
         }
       }
-
-      duration_ = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - initialTimePoint_);
     }
     ++numberOfIterations_;
 
