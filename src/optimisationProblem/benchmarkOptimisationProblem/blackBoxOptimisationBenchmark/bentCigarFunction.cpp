@@ -30,7 +30,7 @@ namespace mant {
             const arma::Col<double>& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter_));
             return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
           },
-          "BBOB Bent Cigar Function");
+          "BBOB Bent Cigar Function (f12)");
     }
   }
 }

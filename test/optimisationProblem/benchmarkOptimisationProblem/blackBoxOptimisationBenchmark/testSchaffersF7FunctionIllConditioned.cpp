@@ -93,6 +93,6 @@ SCENARIO("bbob::SchaffersF7FunctionIllConditioned.getObjectiveFunctionName", "[b
   mant::bbob::SchaffersF7FunctionIllConditioned optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schaffers F7 Function, ill-conditioned");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schaffers F7 Function, ill-conditioned (f18)");
   }
 }

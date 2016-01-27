@@ -25,7 +25,7 @@ namespace mant {
             const arma::Col<double>& z = arma::square(getOscillatedParameter(parameter_));
             return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
           },
-          "BBOB Discus Function");
+          "BBOB Discus Function (f11)");
     }
   }
 }

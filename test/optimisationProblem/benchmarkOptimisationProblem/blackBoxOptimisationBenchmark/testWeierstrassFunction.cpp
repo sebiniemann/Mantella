@@ -95,6 +95,6 @@ SCENARIO("bbob::WeierstrassFunction.getObjectiveFunctionName", "[bbob::Weierstra
   mant::bbob::WeierstrassFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Weierstrass Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Weierstrass Function (f16)");
   }
 }

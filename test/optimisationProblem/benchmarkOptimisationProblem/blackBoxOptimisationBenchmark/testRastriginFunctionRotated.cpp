@@ -95,6 +95,6 @@ SCENARIO("bbob::RastriginFunctionRotated.getObjectiveFunctionName", "[bbob::Rast
   mant::bbob::RastriginFunctionRotated optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rastrigin Function, rotated");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rastrigin Function, rotated (f15)");
   }
 }

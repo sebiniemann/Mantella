@@ -88,6 +88,6 @@ SCENARIO("bbob::DiscusFunction.getObjectiveFunctionName", "[bbob::DiscusFunction
   mant::bbob::DiscusFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Discus Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Discus Function (f11)");
   }
 }

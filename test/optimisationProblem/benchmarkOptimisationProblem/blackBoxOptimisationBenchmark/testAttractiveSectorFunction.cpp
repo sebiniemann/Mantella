@@ -97,6 +97,6 @@ SCENARIO("bbob::AttractiveSectorFunction.getObjectiveFunctionName", "[bbob::Attr
   mant::bbob::AttractiveSectorFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Attractive Sector Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Attractive Sector Function (f6)");
   }
 }

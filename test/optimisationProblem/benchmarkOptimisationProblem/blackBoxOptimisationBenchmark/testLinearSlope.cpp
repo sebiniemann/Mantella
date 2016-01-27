@@ -88,6 +88,6 @@ SCENARIO("bbob::LinearSlope.getObjectiveFunctionName", "[bbob::LinearSlope][bbob
   mant::bbob::LinearSlope optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Linear Slope");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Linear Slope (f5)");
   }
 }

@@ -47,7 +47,7 @@ namespace mant {
 
             return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
           },
-          "BBOB Step Ellipsoidal Function");
+          "BBOB Step Ellipsoidal Function (f7)");
     }
   }
 }

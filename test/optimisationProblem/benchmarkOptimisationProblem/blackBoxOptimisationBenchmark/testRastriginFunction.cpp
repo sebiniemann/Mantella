@@ -88,6 +88,6 @@ SCENARIO("bbob::RastriginFunction.getObjectiveFunctionName", "[bbob::RastriginFu
   mant::bbob::RastriginFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rastrigin Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rastrigin Function (f3)");
   }
 }

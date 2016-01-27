@@ -88,6 +88,6 @@ SCENARIO("bbob::SchwefelFunction.getObjectiveFunctionName", "[bbob::SchwefelFunc
   mant::bbob::SchwefelFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schwefel Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schwefel Function (f20)");
   }
 }

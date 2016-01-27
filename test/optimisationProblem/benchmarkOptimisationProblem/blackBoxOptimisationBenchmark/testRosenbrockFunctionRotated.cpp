@@ -88,6 +88,6 @@ SCENARIO("bbob::RosenbrockFunctionRotated.getObjectiveFunctionName", "[bbob::Ros
   mant::bbob::RosenbrockFunctionRotated optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rosenbrock Function, rotated");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rosenbrock Function, rotated (f9)");
   }
 }

@@ -97,6 +97,6 @@ SCENARIO("bbob::GallaghersGaussian101mePeaksFunction.getObjectiveFunctionName", 
   mant::bbob::GallaghersGaussian101mePeaksFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Gallagher's Gaussian 101-me Peaks Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Gallagher's Gaussian 101-me Peaks Function (f21)");
   }
 }

@@ -93,6 +93,6 @@ SCENARIO("bbob::SchaffersF7Function.getObjectiveFunctionName", "[bbob::Schaffers
   mant::bbob::SchaffersF7Function optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schaffers F7 Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schaffers F7 Function (f17)");
   }
 }
