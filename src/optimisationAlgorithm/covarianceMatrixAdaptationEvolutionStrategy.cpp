@@ -35,7 +35,7 @@ namespace mant {
           if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
             return true;
           }
-          arma::Mat<double> tmp = 0.1 * sigma_ * BD_.col(std::floor(countiter_ % numberOfDimensions));
+          arma::Mat<double> tmp = 0.1 * sigma_ * BD_.col(std::floor(countiter_ % objectiveValues_.n_elem));
           if (arma::all(xmean_ == xmean_ + tmp)) {
             return true;
           }
