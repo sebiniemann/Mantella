@@ -91,8 +91,6 @@ namespace mant {
     double objectiveValueScaling_;
     double objectiveValueTranslation_;
 
-    double acceptableObjectiveValueThreshold_;
-
     arma::uword numberOfEvaluations_;
     arma::uword numberOfDistinctEvaluations_;
 
