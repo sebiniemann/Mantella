@@ -33,7 +33,7 @@ namespace mant {
 
             return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
           },
-          "BBOB Büche-Rastrigin Function");
+          "BBOB Büche-Rastrigin Function (f4)");
     }
   }
 }

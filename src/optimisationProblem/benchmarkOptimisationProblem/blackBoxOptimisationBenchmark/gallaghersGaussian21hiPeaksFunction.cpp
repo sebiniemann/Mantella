@@ -43,7 +43,7 @@ namespace mant {
 
             return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
           },
-          "BBOB Gallagher's Gaussian 21-hi Peaks Function");
+          "BBOB Gallagher's Gaussian 21-hi Peaks Function (f22)");
     }
   }
 }

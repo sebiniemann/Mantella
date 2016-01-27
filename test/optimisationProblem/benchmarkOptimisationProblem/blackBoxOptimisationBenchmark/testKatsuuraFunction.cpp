@@ -93,6 +93,6 @@ SCENARIO("bbob::KatsuuraFunction.getObjectiveFunctionName", "[bbob::KatsuuraFunc
   mant::bbob::KatsuuraFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Katsuura Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Katsuura Function (f23)");
   }
 }

@@ -93,6 +93,6 @@ SCENARIO("bbob::SharpRidgeFunction.getObjectiveFunctionName", "[bbob::SharpRidge
   mant::bbob::SharpRidgeFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sharp Ridge Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sharp Ridge Function (f13)");
   }
 }

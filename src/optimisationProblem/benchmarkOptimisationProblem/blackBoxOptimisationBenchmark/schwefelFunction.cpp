@@ -32,7 +32,7 @@ namespace mant {
 
             return 0.01 * (418.9828872724339 - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<double>(numberOfDimensions_)) + 100.0 * getBoundaryPenalty(z / 100.0);
           },
-          "BBOB Schwefel Function");
+          "BBOB Schwefel Function (f20)");
     }
   }
 }

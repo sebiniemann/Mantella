@@ -93,6 +93,6 @@ SCENARIO("bbob::BentCigarFunction.getObjectiveFunctionName", "[bbob::BentCigarFu
   mant::bbob::BentCigarFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Bent Cigar Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Bent Cigar Function (f12)");
   }
 }

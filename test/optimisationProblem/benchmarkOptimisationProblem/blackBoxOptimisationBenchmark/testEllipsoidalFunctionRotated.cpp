@@ -88,6 +88,6 @@ SCENARIO("bbob::EllipsoidalFunctionRotated.getObjectiveFunctionName", "[bbob::El
   mant::bbob::EllipsoidalFunctionRotated optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Ellipsoidal Function, rotated");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Ellipsoidal Function, rotated (f10)");
   }
 }

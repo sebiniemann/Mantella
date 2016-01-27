@@ -88,6 +88,6 @@ SCENARIO("bbob::BuecheRastriginFunction.getObjectiveFunctionName", "[bbob::Buech
   mant::bbob::BuecheRastriginFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Büche-Rastrigin Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Büche-Rastrigin Function (f4)");
   }
 }

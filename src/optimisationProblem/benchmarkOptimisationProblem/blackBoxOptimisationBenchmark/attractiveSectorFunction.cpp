@@ -35,7 +35,7 @@ namespace mant {
 
             return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);
           },
-          "BBOB Attractive Sector Function");
+          "BBOB Attractive Sector Function (f6)");
     }
   }
 }

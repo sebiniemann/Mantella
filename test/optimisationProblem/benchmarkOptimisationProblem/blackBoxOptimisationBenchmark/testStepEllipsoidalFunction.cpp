@@ -93,6 +93,6 @@ SCENARIO("bbob::StepEllipsoidalFunction.getObjectiveFunctionName", "[bbob::StepE
   mant::bbob::StepEllipsoidalFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Step Ellipsoidal Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Step Ellipsoidal Function (f7)");
   }
 }

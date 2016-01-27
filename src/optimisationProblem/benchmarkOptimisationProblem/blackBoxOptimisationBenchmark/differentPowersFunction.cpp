@@ -25,7 +25,7 @@ namespace mant {
             const arma::Col<double>& z = arma::abs(parameter_);
             return arma::norm(z % getConditionedParameter(arma::square(z)));
           },
-          "BBOB Different Powers Function");
+          "BBOB Different Powers Function (f14)");
     }
   }
 }

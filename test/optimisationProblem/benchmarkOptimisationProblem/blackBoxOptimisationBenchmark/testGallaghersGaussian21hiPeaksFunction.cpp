@@ -97,6 +97,6 @@ SCENARIO("bbob::GallaghersGaussian21hiPeaksFunction.getObjectiveFunctionName", "
   mant::bbob::GallaghersGaussian21hiPeaksFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Gallagher's Gaussian 21-hi Peaks Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Gallagher's Gaussian 21-hi Peaks Function (f22)");
   }
 }

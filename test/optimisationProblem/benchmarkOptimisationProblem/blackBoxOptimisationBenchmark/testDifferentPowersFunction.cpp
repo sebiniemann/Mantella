@@ -88,6 +88,6 @@ SCENARIO("bbob::DifferentPowersFunction.getObjectiveFunctionName", "[bbob::Diffe
   mant::bbob::DifferentPowersFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Different Powers Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Different Powers Function (f14)");
   }
 }

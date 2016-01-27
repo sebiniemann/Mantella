@@ -95,6 +95,6 @@ SCENARIO("bbob::LunacekBiRastriginFunction.getObjectiveFunctionName", "[bbob::Lu
   mant::bbob::LunacekBiRastriginFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Lunacek bi-Rastrigin Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Lunacek bi-Rastrigin Function (f24)");
   }
 }

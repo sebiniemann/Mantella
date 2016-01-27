@@ -88,6 +88,6 @@ SCENARIO("bbob::SphereFunction.getObjectiveFunctionName", "[bbob::SphereFunction
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sphere Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sphere Function (f1)");
   }
 }

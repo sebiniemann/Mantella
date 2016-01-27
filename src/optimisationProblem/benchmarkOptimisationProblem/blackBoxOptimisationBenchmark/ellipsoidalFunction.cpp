@@ -21,7 +21,7 @@ namespace mant {
               
             return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter_)));
           },
-          "BBOB Ellipsoidal Function");
+          "BBOB Ellipsoidal Function (f2)");
     }
   }
 }

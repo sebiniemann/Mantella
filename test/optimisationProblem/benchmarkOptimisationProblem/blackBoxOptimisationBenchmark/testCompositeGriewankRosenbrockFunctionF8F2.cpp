@@ -88,6 +88,6 @@ SCENARIO("bbob::CompositeGriewankRosenbrockFunctionF8F2.getObjectiveFunctionName
   mant::bbob::CompositeGriewankRosenbrockFunctionF8F2 optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Composite Griewank Rosenbrock Function F8F2");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Composite Griewank Rosenbrock Function F8F2 (f19)");
   }
 }

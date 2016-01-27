@@ -21,7 +21,7 @@ namespace mant {
               
             return std::pow(arma::norm(parameter_), 2.0);
           },
-          "BBOB Sphere Function");
+          "BBOB Sphere Function (f1)");
     }
   }
 }

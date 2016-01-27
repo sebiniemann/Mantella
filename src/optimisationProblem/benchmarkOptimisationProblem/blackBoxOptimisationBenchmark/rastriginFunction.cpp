@@ -23,7 +23,7 @@ namespace mant {
             const arma::Col<double>& z = parameterConditioning_ % getAsymmetricParameter(0.2, getOscillatedParameter(parameter_));
             return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
           },
-          "BBOB Rastrigin Function");
+          "BBOB Rastrigin Function (f3)");
     }
   }
 }
