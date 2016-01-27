@@ -232,7 +232,6 @@ SCENARIO("isDimensionallyConsistent", "[assert][isDimensionallyConsistent]") {
     optimisationAlgorithm.setMaximalNumberOfIterations(100);
 
     ::mant::isCachingSamples = true;
-
     optimisationAlgorithm.optimise(optimisationProblem);
     ::mant::isCachingSamples = false;
 

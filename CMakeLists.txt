@@ -230,6 +230,9 @@ add_library(mantella ${LIBRARY_TYPE}
   src/numberTheory.cpp
   src/probability.cpp
   
+  # Machine learning functions
+  src/samplesAnalysis.cpp
+  
   # Optimisation problems
   src/optimisationProblem.cpp
   src/optimisationProblem/benchmarkOptimisationProblem.cpp
@@ -383,6 +386,9 @@ if(BUILD_TESTS)
     test/testGeometry.cpp
     test/testNumberTheory.cpp
     test/testProbability.cpp
+  
+    # Machine learning functions
+    test/testSamplesAnalysis.cpp
 
     # Optimisation problems
     test/testOptimisationProblem.cpp
