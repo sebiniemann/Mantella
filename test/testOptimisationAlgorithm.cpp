@@ -1025,8 +1025,8 @@ SCENARIO("OptimisationAlgorithm.isFinished", "[OptimisationAlgorithm][Optimisati
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
@@ -1040,7 +1040,7 @@ SCENARIO("OptimisationAlgorithm.isFinished", "[OptimisationAlgorithm][Optimisati
     CAPTURE(initialParameters);
 
     WHEN("Found an acceptable parameter in time (its objective value is lower than or equal to the acceptable objective value)") {
-      optimisationAlgorithm.setAcceptableObjectiveValue(0.2);
+      optimisationAlgorithm.setAcceptableObjectiveValue(-1.2);
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return true") {
@@ -1082,8 +1082,8 @@ SCENARIO("OptimisationAlgorithm.isTerminated", "[OptimisationAlgorithm][Optimisa
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
@@ -1097,7 +1097,7 @@ SCENARIO("OptimisationAlgorithm.isTerminated", "[OptimisationAlgorithm][Optimisa
     CAPTURE(initialParameters);
 
     WHEN("Found an acceptable parameter in time (its objective value is lower than or equal to the acceptable objective value)") {
-      optimisationAlgorithm.setAcceptableObjectiveValue(0.2);
+      optimisationAlgorithm.setAcceptableObjectiveValue(-1.2);
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return false") {
@@ -1139,8 +1139,8 @@ SCENARIO("OptimisationAlgorithm.getNumberOfIterations", "[OptimisationAlgorithm]
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
@@ -1154,11 +1154,11 @@ SCENARIO("OptimisationAlgorithm.getNumberOfIterations", "[OptimisationAlgorithm]
     CAPTURE(initialParameters);
 
     WHEN("Found an acceptable parameter in time (its objective value is lower than or equal to the acceptable objective value)") {
-      optimisationAlgorithm.setAcceptableObjectiveValue(0.2);
+      optimisationAlgorithm.setAcceptableObjectiveValue(-1.2);
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return the number of iterations") {
-        CHECK(optimisationAlgorithm.getNumberOfIterations() == 10);
+        CHECK(optimisationAlgorithm.getNumberOfIterations() == 7);
       }
     }
 
@@ -1196,8 +1196,8 @@ SCENARIO("OptimisationAlgorithm.getDuration", "[OptimisationAlgorithm][Optimisat
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
@@ -1211,7 +1211,7 @@ SCENARIO("OptimisationAlgorithm.getDuration", "[OptimisationAlgorithm][Optimisat
     CAPTURE(initialParameters);
 
     WHEN("Found an acceptable parameter in time (its objective value is lower than or equal to the acceptable objective value)") {
-      optimisationAlgorithm.setAcceptableObjectiveValue(0.2);
+      optimisationAlgorithm.setAcceptableObjectiveValue(-1.2);
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return the duration") {
@@ -1255,8 +1255,8 @@ SCENARIO("OptimisationAlgorithm.getBestObjectiveValue", "[OptimisationAlgorithm]
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
@@ -1270,12 +1270,12 @@ SCENARIO("OptimisationAlgorithm.getBestObjectiveValue", "[OptimisationAlgorithm]
     CAPTURE(initialParameters);
 
     WHEN("Found an acceptable parameter in time (its objective value is lower than or equal to the acceptable objective value)") {
-      optimisationAlgorithm.setAcceptableObjectiveValue(0.2);
+      optimisationAlgorithm.setAcceptableObjectiveValue(-1.2);
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return the best objective value") {
         // Due to rounding errors, the 11th parameter will slightly differ from (0.1, ..., 0.1), needing one addition step to reach the optimal solution.
-        CHECK(optimisationAlgorithm.getBestObjectiveValue() == Approx(0.2));
+        CHECK(optimisationAlgorithm.getBestObjectiveValue() == Approx(-2.0));
       }
     }
 
@@ -1283,7 +1283,7 @@ SCENARIO("OptimisationAlgorithm.getBestObjectiveValue", "[OptimisationAlgorithm]
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return the best objective value") {
-        CHECK(optimisationAlgorithm.getBestObjectiveValue() == Approx(0.0));
+        CHECK(optimisationAlgorithm.getBestObjectiveValue() == Approx(-10.0));
       }
     }
   }
@@ -1313,8 +1313,8 @@ SCENARIO("OptimisationAlgorithm.getBestParameter", "[OptimisationAlgorithm][Opti
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
@@ -1328,11 +1328,11 @@ SCENARIO("OptimisationAlgorithm.getBestParameter", "[OptimisationAlgorithm][Opti
     CAPTURE(initialParameters);
 
     WHEN("Found an acceptable parameter in time (its objective value is lower than or equal to the acceptable objective value)") {
-      optimisationAlgorithm.setAcceptableObjectiveValue(0.2);
+      optimisationAlgorithm.setAcceptableObjectiveValue(-1.2);
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return the best parameter") {
-        IS_EQUAL(optimisationAlgorithm.getBestParameter(), arma::zeros<arma::Col<double>>(numberOfDimensions) + 0.1);
+        IS_EQUAL(optimisationAlgorithm.getBestParameter(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 1.0);
       }
     }
 
@@ -1340,7 +1340,7 @@ SCENARIO("OptimisationAlgorithm.getBestParameter", "[OptimisationAlgorithm][Opti
       optimisationAlgorithm.optimise(optimisationProblem, initialParameters);
 
       THEN("Return the best parameter") {
-        IS_EQUAL(optimisationAlgorithm.getBestParameter(), arma::zeros<arma::Col<double>>(numberOfDimensions));
+        IS_EQUAL(optimisationAlgorithm.getBestParameter(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 5.0);
       }
     }
   }
@@ -1370,8 +1370,8 @@ SCENARIO("OptimisationAlgorithm.getRecordedSampling", "[OptimisationAlgorithm][O
     CAPTURE(numberOfDimensions);
 
     mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions));
-    optimisationProblem.setUpperBounds(arma::ones<arma::Col<double>>(numberOfDimensions));
+    optimisationProblem.setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) - 5);
+    optimisationProblem.setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions) + 5);
     optimisationProblem.setObjectiveFunction(
         [optimisationProblem](
             const arma::Col<double>& parameter) {
