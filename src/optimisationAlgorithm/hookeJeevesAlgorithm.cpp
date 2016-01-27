@@ -6,7 +6,8 @@
 
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm()
-      : OptimisationAlgorithm() {
+      : OptimisationAlgorithm(),
+        stepSize_(0) {
     setNextParametersFunction(
         [this](
             const arma::uword numberOfDimensions_,

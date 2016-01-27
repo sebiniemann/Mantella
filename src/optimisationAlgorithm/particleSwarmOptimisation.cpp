@@ -13,7 +13,10 @@ namespace mant {
       : OptimisationAlgorithm(),
         maximalAcceleration_(arma::datum::nan),
         maximalLocalAttraction_(arma::datum::nan),
-        maximalGlobalAttraction_(arma::datum::nan) {
+        maximalGlobalAttraction_(arma::datum::nan),
+        numberOfParticles_(0),
+        activeParticleIndex_(0),
+        randomiseTopology_(false) {
     setNextParametersFunction(
         [this](
             const arma::uword numberOfDimensions_,
