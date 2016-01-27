@@ -42,7 +42,7 @@ std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> getBench
     return optimisationProblems;
 }
 
-int main() {
+int main() {  
   mant::isVerbose = false;
   std::cout.precision(16);
   
@@ -50,7 +50,9 @@ int main() {
   arma::uword dimensions = 10;
   std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(dimensions);
   arma::Col<double> medians(optimisationProblems.size());
-  arma::Col<double> startingPoint = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
+  arma::Mat<double> startingPoint = arma::ones(dimensions,dimensions);
+  startingPoint = startingPoint.each_col() % (8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4);
+  std::cout << "startingPoint" << startingPoint << std::endl;
   
   for(unsigned int i = 0; i < 24; i++) {
     std::cout << "function " << i+1 << std::endl;
@@ -68,12 +70,24 @@ int main() {
       algo.setMaximalDuration(std::chrono::minutes(20));
       algo.setMaximalNumberOfIterations(20000);
       algo.setAcceptableObjectiveValue(acceptableObjectiveValue);
-      algo.setStepSize(2);
+      algo.setInitialStepSize(2);
+      algo.setActiveCMA(false);
+      std::cout << "nothing" << std::endl;
+      algo.optimise(optimisationProblem);
+      std::cout << "Mat" << std::endl;
       algo.optimise(optimisationProblem,startingPoint);
+      std::cout << "Col" << std::endl;
+      arma::Col<double> testcol = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
+      algo.optimise(optimisationProblem,testcol);
+      std::cout << "double" << std::endl;
+      algo.optimise(optimisationProblem,10.0);
+      std::cout << "Col&double" << std::endl;
+      algo.optimise(optimisationProblem,testcol,10.0);
       curMedian(trial) = algo.getNumberOfIterations();     
       
        //std::cout << algo.getNumberOfIterations() << std::endl;
-       //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
+      std::cout << "isFinished" << algo.isFinished() << std::endl;
+      //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
     }
 
     medians(i) = arma::median(curMedian);
