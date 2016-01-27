@@ -46,14 +46,13 @@ namespace mant {
     void setRecombinationWeights(arma::Col<double> weights);
     arma::Col<double> getXmean() const;
     void setXmean(arma::Col<double> xmean);
+    
+    arma::Mat<double> newGeneration_;
 
    protected:
     //Notation: comments always start with matlab name of variable
     //          comments after ';' are from matlab code
     //          comments after '-' are from mantella
-
-    bool stopFlag;
-    bool stopOnWarnings_; //defopts.StopOnWarnings
 
     arma::uword mu_; //defopts.ParentNumber/mu
     double mueff_; //mueff
@@ -67,7 +66,7 @@ namespace mant {
 
     //arxvalid needs to be here so it is available after the loop
     arma::Mat<double> newGenerationRaw_;
-    arma::Mat<double> newGeneration_;
+    
     arma::Mat<double> newGenerationValid_; //arxvalid
     arma::Col<double> xmean_; //xmean
     arma::Col<double> xold_; //xold

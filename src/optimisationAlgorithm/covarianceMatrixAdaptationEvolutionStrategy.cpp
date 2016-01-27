@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -18,6 +19,30 @@ namespace mant {
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy()
       : OptimisationAlgorithm(),
         lambda_(std::numeric_limits<arma::uword>::max()) {
+    setIsStagnatingFunction(
+        [this](
+            const arma::Mat<double>& parameters_,
+            const arma::Row<double>& objectiveValues_,
+            const arma::Row<double>& differences_) {
+          assert(objectiveValues_.n_elem == parameters_.n_cols);
+          assert(differences_.n_elem == parameters_.n_cols);
+          assert(differences_.has_inf() || arma::all(objectiveValues_ - differences_ - arma::min(objectiveValues_) + arma::min(differences_) < 1e-12 * arma::max(arma::ones<arma::Row<double>>(arma::size(objectiveValues_)), arma::abs(objectiveValues_))));
+          
+          //encountered a hard error, like eigenwert < 0
+          if(sigma_ == 0) {
+            return true;
+          }
+          if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
+            return true;
+          }
+          arma::Mat<double> tmp = 0.1 * sigma_ * BD_.col(std::floor(countiter_ % numberOfDimensions));
+          if (arma::all(xmean_ == xmean_ + tmp)) {
+            return true;
+          }
+          
+          return false;
+        });
+    
     setNextParametersFunction(
         [this](
             const arma::uword numberOfDimensions,
@@ -29,11 +54,6 @@ namespace mant {
           fitnessRaw_ = objectiveValues.t();
           //std::cout << "fitnessRaw_" << fitnessRaw_ << std::endl;
 
-          //TODO: this stopflag is more sophisticated in the matlab code.
-          if(stopFlag) {
-              std::cout << "because errors on unused warnings" << std::endl;
-            bestObjectiveValue_ = acceptableObjectiveValue_;
-          }
           //;set internal parameters
           if (lambda_ != lambda_last_) {
               setPopulationSize(lambda_,numberOfDimensions);
@@ -151,30 +171,10 @@ namespace mant {
               //;limit condition of C to 1e14 + 1
               //TODO: this can actually happen when an eigenvalue gets negative (which afaik can only happen if activeCMA is turned on)
               if (arma::min(diagD_) <= 0) {
-                  if (stopOnWarnings_) {
-                      stopFlag = true;
-                  } else {
-                      //TODO: warning gets thrown here
-                      //another workaround
-//                        //std::cout << "eigenvalue smaller zero" << std::endl;
-//                        diagD_(arma::find(diagD_ < 0)) = arma::zeros(((arma::uvec)(arma::find(diagD_ < 0))).n_elem);
-//                        double temp = 1.0*arma::max(diagD_) / 1e14;
-//                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
-//                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
-                  }
+                sigma_ = 0;
+                return static_cast<arma::Mat<double>>(arma::randu(numberOfDimensions, lambda_));
               }
-              if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
-                  if (stopOnWarnings_) {
-                      stopFlag = true;
-                  } else {
-                      //TODO: warning gets thrown here
-//                        //std::cout << "condition of c at upper limit" << std::endl;
-//                        double temp = 1.0*arma::max(diagD_) / 1e14 - arma::min(diagD_);
-//                        C_ = C_ + temp * arma::eye(numberOfDimensions, numberOfDimensions);
-//                        diagD_ = diagD_ + temp * arma::ones(numberOfDimensions, 1);
-                  }
-              }
-
+              
               diagC_ = arma::diagvec(C_);
               //std::cout << "diagC_" << diagC_ << std::endl;
               diagD_ = arma::sqrt(diagD_); //;D contains standard deviations now
@@ -185,19 +185,12 @@ namespace mant {
           
           //;----- numerical error management -----
           //;Adjust step size in case of (numerical) precision problem 
-          arma::Mat<double> tmp = 0.1 * sigma_ * BD_.col(std::floor(countiter_ % numberOfDimensions));
-          if (arma::all(xmean_ == xmean_ + tmp)) {
-              if (stopOnWarnings_) {
-                  stopFlag = true;
-              } else {
-                  //sigma_ = sigma_ * std::exp(0.2 + cs_ / damping_);
-              }
-          }
 
           //;----- end numerical error management -----
           //;Set stop flag
           if (sigma_ * arma::max(diagD_) == 0) {//;should never happen
-              stopFlag = true;
+            sigma_ = 0;
+            return static_cast<arma::Mat<double>>(arma::randu(numberOfDimensions, lambda_));
           }
           
           //TODO: This code was actually at the very beginning of the while loop
@@ -236,8 +229,6 @@ namespace mant {
       const arma::Mat<double>& initialParameters) {
     //verify(initialParameters.n_cols == 1, "optimise: The cmaes algorithm accepts only a single initial parameter.");
 
-    stopFlag = false;
-
     xmean_ = initialParameters.col(0);
     //std::cout << "xmean_" << xmean_ << std::endl;
     countiter_ = 0;
@@ -271,10 +262,6 @@ namespace mant {
             (1 - 1.0 / (4 * numberOfDimensions) + 1.0 / (21 * std::pow(numberOfDimensions, 2)));
     //std::cout << "chiN_" << chiN_ << std::endl;
     //;expectation of||N(0,I)|| == norm(randn(N,1))
-
-    //miscellaneous inits needed
-    stopOnWarnings_ = true;
-    //more complicated in matlab, defines a number of iterations of equal funcvalues to stop
 
     //Need to do this here once to get from the initial starting point (given as intiailparameters)
     //to the first round of points to get evaluated
