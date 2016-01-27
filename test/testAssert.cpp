@@ -59,20 +59,6 @@ SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
       }
     }
 
-    WHEN("The matrix's determinant is neither 1 or -1") {
-      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
-      CAPTURE(numberOfDimensions);
-
-      arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
-      // Increasing an element of an orthonormal rotation matrix by 1 should result in a determinant unequal to 1 or -1.
-      matrix(0, 0)++;
-      CAPTURE(matrix);
-
-      THEN("Return false") {
-        CHECK(mant::isRotationMatrix(matrix) == false);
-      }
-    }
-
     WHEN("The matrix's inverse is not equal to its transpose") {
       // We need at least 2 rows and columns for this to work.
       const arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
@@ -220,7 +206,7 @@ SCENARIO("isPositiveSemiDefinite", "[assert][isPositiveSemiDefinite]") {
       CAPTURE(matrix);
 
       THEN("Return false") {
-        CHECK(mant::isSymmetric(matrix) == false);
+        CHECK(mant::isPositiveSemiDefinite(matrix) == false);
       }
     }
 
@@ -251,10 +237,12 @@ SCENARIO("isDimensionallyConsistent", "[assert][isDimensionallyConsistent]") {
     ::mant::isCachingSamples = false;
 
     WHEN("All samples are dimensionally consistent") {
-      const auto& samples = optimisationProblem.getCachedSamples();
+      auto samples = optimisationProblem.getCachedSamples();
 
       THEN("Return true") {
         CHECK(samples.size() > 0);
+        CHECK(mant::isDimensionallyConsistent(samples) == true);
+        samples.clear();
         CHECK(mant::isDimensionallyConsistent(samples) == true);
       }
     }

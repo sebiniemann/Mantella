@@ -1001,7 +1001,7 @@ SCENARIO("OptimisationProblem.getParameterTranslation", "[OptimisationProblem][O
 
 SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][OptimisationProblem.setParameterRotation]") {
   GIVEN("A parameter rotation") {
-    WHEN("The parameter rotation is orthogonal with determinant either 1 or -1") {
+    WHEN("The parameter rotation is orthogonal") {
       const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
@@ -1078,22 +1078,6 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
       const arma::Mat<double>& parameterRotation = getContinuousRandomNumbers(numberOfDimensions, 1 + numberOfDimensions);
-      CAPTURE(parameterRotation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter rotation's determinant is neither 1 or -1") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-      // Increasing an element of an orthonormal rotation matrix by 1 should result in a determinant unequal to 1 or -1.
-      parameterRotation(0, 0)++;
       CAPTURE(parameterRotation);
 
       THEN("Throw a std::logic_error") {
