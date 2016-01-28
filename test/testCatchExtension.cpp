@@ -357,7 +357,7 @@ SCENARIO("HAS_SAME_SAMPLES failure test", "[catchExtension][HAS_SAME_SAMPLES][!s
     }
 
     WHEN("Both sets have the same number of samples, but differ by at least one") {
-      secondSamples.begin()->second += 1.0;
+      firstSamples.begin()->second += 1.0;
 
       THEN("Fails") {
         HAS_SAME_SAMPLES(firstSamples, secondSamples);
@@ -365,7 +365,7 @@ SCENARIO("HAS_SAME_SAMPLES failure test", "[catchExtension][HAS_SAME_SAMPLES][!s
     }
 
     WHEN("One set has less samples than the other one") {
-      secondSamples.erase(secondSamples.cbegin());
+      firstSamples.erase(firstSamples.cbegin());
 
       THEN("Fails") {
         HAS_SAME_SAMPLES(firstSamples, secondSamples);

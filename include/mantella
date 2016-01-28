@@ -49,6 +49,7 @@
 
 // Machine learning functions
 #include <mantella_bits/samplesAnalysis.hpp>
+#include <mantella_bits/samplesSelection.hpp>
 
 // Optimisation problems
 #include <mantella_bits/optimisationProblem.hpp>
