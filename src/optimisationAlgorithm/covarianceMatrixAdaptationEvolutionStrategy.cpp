@@ -42,7 +42,7 @@ namespace mant {
           
           return false;
         });
-    
+
     setNextParametersFunction(
         [this](
             const arma::uword numberOfDimensions,
@@ -161,7 +161,7 @@ namespace mant {
           
           return newGeneration_;
         });
-    
+
     setInitialStepSize(0.4);
     setActiveCMA(false);
   }
@@ -176,11 +176,11 @@ namespace mant {
     }
     xmean_ = arma::randu(numberOfDimensions);
     newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
-    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
-    
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions, numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+
     OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
   }
-  
+
   //popSize provided
   void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
       OptimisationProblem& optimisationProblem,
@@ -190,11 +190,11 @@ namespace mant {
     setPopulationSize(popSize, numberOfDimensions);
     xmean_ = arma::randu(numberOfDimensions);
     newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
-    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
-    
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions, numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+
     OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
   }
-  
+
   //mean provided
   void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
       OptimisationProblem& optimisationProblem,
@@ -206,11 +206,11 @@ namespace mant {
     }
     xmean_ = xMean;
     newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
-    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
-    
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions, numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+
     OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
   }
-  
+
   //initialParameters provided
   void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
       OptimisationProblem& optimisationProblem,
@@ -219,10 +219,10 @@ namespace mant {
     lambda_ = initialParameters.n_cols;
     xmean_ = arma::mean(initialParameters).t();
     newGeneration_ = initialParameters;
-    
+
     OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
   }
-  
+
   //mean and popsize provided
   void CovarianceMatrixAdaptationEvolutionStrategy::optimise(
       OptimisationProblem& optimisationProblem,
@@ -233,8 +233,8 @@ namespace mant {
     setPopulationSize(popSize, numberOfDimensions);
     xmean_ = xMean;
     newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
-    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions,numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
-    
+    newGeneration_ = static_cast<arma::Mat<double>>(sigma_ * (arma::eye(numberOfDimensions, numberOfDimensions) * newGenerationRaw_)).each_col() + xmean_;
+
     OptimisationAlgorithm::optimise(optimisationProblem, newGeneration_);
   }
 
@@ -245,7 +245,7 @@ namespace mant {
     if (lambda_ == std::numeric_limits<arma::uword>::max()) {
       setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
     }
-    
+
     pc_ = arma::zeros(numberOfDimensions);
     ps_ = arma::zeros(numberOfDimensions);
 
@@ -265,7 +265,7 @@ namespace mant {
   void CovarianceMatrixAdaptationEvolutionStrategy::setInitialStepSize(const double stepSize) {
     initialSigma_ = stepSize;
   }
-  
+
   double CovarianceMatrixAdaptationEvolutionStrategy::getInitialStepSize() {
     return initialSigma_;
   }
@@ -286,7 +286,7 @@ namespace mant {
 
     ccov1_ = 2.0 / (std::pow(numberOfDimensions + 1.3, 2) + mueff_);
     ccovmu_ = std::min(1.0 - ccov1_, 2 * (mueff_ - 2 + 1.0 / mueff_) / (std::pow(numberOfDimensions + 2, 2) + mueff_));
-    
+
     damping_ = 1 + 2 * std::max(0.0, std::sqrt((mueff_ - 1) / (numberOfDimensions + 1)) - 1) + cs_;
   }
 
@@ -341,7 +341,7 @@ namespace mant {
   void CovarianceMatrixAdaptationEvolutionStrategy::setRecombinationWeights(arma::Col<double> weights) {
     recombinationWeights_ = weights;
   }
-  
+
   arma::Col<double> CovarianceMatrixAdaptationEvolutionStrategy::getXmean() const {
     return xmean_;
   }
