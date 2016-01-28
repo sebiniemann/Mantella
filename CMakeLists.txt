@@ -232,6 +232,7 @@ add_library(mantella ${LIBRARY_TYPE}
   
   # Machine learning functions
   src/samplesAnalysis.cpp
+  src/samplesSelection.cpp
   
   # Optimisation problems
   src/optimisationProblem.cpp
@@ -389,6 +390,7 @@ if(BUILD_TESTS)
   
     # Machine learning functions
     test/testSamplesAnalysis.cpp
+    test/testSamplesSelection.cpp
 
     # Optimisation problems
     test/testOptimisationProblem.cpp

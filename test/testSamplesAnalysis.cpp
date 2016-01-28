@@ -12,7 +12,7 @@ SCENARIO("fitnessDistanceCorrelation", "[samplesAnalysis][fitnessDistanceCorrela
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(::rootTestDataDirectory + "/_parameters_3x100.input"));
 
-    arma::Mat<double> objectiveValues;
+    arma::Row<double> objectiveValues;
     REQUIRE(objectiveValues.load(::rootTestDataDirectory + "/_objectiveValues_1x100.input"));
 
     std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
@@ -50,7 +50,7 @@ SCENARIO("lipschitzContinuity", "[samplesAnalysis][lipschitzContinuity]") {
     arma::Mat<double> parameters;
     REQUIRE(parameters.load(::rootTestDataDirectory + "/_parameters_3x100.input"));
 
-    arma::Mat<double> objectiveValues;
+    arma::Row<double> objectiveValues;
     REQUIRE(objectiveValues.load(::rootTestDataDirectory + "/_objectiveValues_1x100.input"));
 
     std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
