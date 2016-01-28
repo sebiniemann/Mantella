@@ -26,7 +26,7 @@ SCENARIO("krm::ParallelKinematicMachine6PUPS.objectiveFunction_", "[krm::Paralle
     TestParallelKinematicMachine6PUPS optimisationProblem;
 
     arma::Mat<double> endEffectorPoses;
-    REQUIRE(endEffectorPoses.load(rootTestDataDirectory + "/optimisationProblem/kinematicallyRedundantMachines/_endEffectorPoses_6x100.input"));
+    REQUIRE(endEffectorPoses.load(::rootTestDataDirectory + "/optimisationProblem/kinematicallyRedundantMachines/_endEffectorPoses_6x100.input"));
     CAPTURE(endEffectorPoses);
 
     const arma::Mat<double>::fixed<6, 1>& redundantJointsActuations = {0.009376303840997, 0.091501367086860, 0.092977707039855, -0.068477383664490, 0.094118556352123, 0.091433389648589};
@@ -34,7 +34,7 @@ SCENARIO("krm::ParallelKinematicMachine6PUPS.objectiveFunction_", "[krm::Paralle
 
     THEN("Return its objective value") {
       arma::Col<double> expectedPoseInaccuracies;
-      REQUIRE(expectedPoseInaccuracies.load(rootTestDataDirectory + "/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6pups_100x1.expected"));
+      REQUIRE(expectedPoseInaccuracies.load(::rootTestDataDirectory + "/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6pups_100x1.expected"));
       CAPTURE(expectedPoseInaccuracies);
 
       for (arma::uword n = 0; n < endEffectorPoses.n_cols; ++n) {

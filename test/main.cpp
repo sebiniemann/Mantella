@@ -25,8 +25,8 @@ int main(int argc, char* argv[]) {
 
   // The last argument is used as location for the test data directory.
   // Reduced also the number of arguments, in order avoid conflicts with catch command line arguments handling.
-  rootTestDataDirectory = argv[--argc];
-  std::cout << "Using '" << rootTestDataDirectory << "' as location for the test data directory." << std::endl;
+  ::rootTestDataDirectory = argv[--argc];
+  std::cout << "Using '" << ::rootTestDataDirectory << "' as location for the root test data directory." << std::endl;
 
   // Setting the seed to a specific number makes erroneous tests better reproducible.
   mant::Rng::setSeed(123456789);
