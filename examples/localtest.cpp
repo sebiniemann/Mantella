@@ -50,6 +50,7 @@ int main() {
   arma::uword dimensions = 10;
   std::vector<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>> optimisationProblems = getBenchmarkOptimisationProblems(dimensions);
   arma::Col<double> medians(optimisationProblems.size());
+  arma::Col<arma::uword> sucessfulRuns(optimisationProblems.size());
   arma::Mat<double> startingPoint = arma::ones(dimensions,dimensions);
   startingPoint = startingPoint.each_col() % (8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4);
   std::cout << "startingPoint" << startingPoint << std::endl;
@@ -64,6 +65,7 @@ int main() {
     
     int trials = 20;
     arma::Col<double> curMedian(trials);
+    
  
     for(int trial = 0; trial < trials; trial++) {
       mant::CovarianceMatrixAdaptationEvolutionStrategy algo;
@@ -72,21 +74,22 @@ int main() {
       algo.setAcceptableObjectiveValue(acceptableObjectiveValue);
       algo.setInitialStepSize(2);
       algo.setActiveCMA(false);
-      std::cout << "nothing" << std::endl;
+//      std::cout << "nothing" << std::endl;
       algo.optimise(optimisationProblem);
-      std::cout << "Mat" << std::endl;
-      algo.optimise(optimisationProblem,startingPoint);
-      std::cout << "Col" << std::endl;
-      arma::Col<double> testcol = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
-      algo.optimise(optimisationProblem,testcol);
-      std::cout << "double" << std::endl;
-      algo.optimise(optimisationProblem,10.0);
-      std::cout << "Col&double" << std::endl;
-      algo.optimise(optimisationProblem,testcol,10.0);
-      curMedian(trial) = algo.getNumberOfIterations();     
+//      std::cout << "Mat" << std::endl;
+//      algo.optimise(optimisationProblem,startingPoint);
+//      std::cout << "Col" << std::endl;
+//      arma::Col<double> testcol = 8 * arma::randu(optimisationProblems.at(0)->numberOfDimensions_) - 4;
+//      algo.optimise(optimisationProblem,testcol);
+//      std::cout << "double" << std::endl;
+//      algo.optimise(optimisationProblem,10.0);
+//      std::cout << "Col&double" << std::endl;
+//      algo.optimise(optimisationProblem,testcol,10.0);
+      curMedian(trial) = algo.getNumberOfIterations();
+      sucessfulRuns(i) += algo.isFinished();
       
        //std::cout << algo.getNumberOfIterations() << std::endl;
-      std::cout << "isFinished" << algo.isFinished() << std::endl;
+      //std::cout << "isFinished" << algo.isFinished() << std::endl;
       //std::cout << "distance to acceptable objValue " << acceptableObjectiveValue - algo.getBestObjectiveValue() << std::endl;
     }
 
