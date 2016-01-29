@@ -12,7 +12,7 @@
 SCENARIO("HillClimbing.optimise", "[HillClimbing][HillClimbing.optimise]") {
   GIVEN("An optimisation problem") {
     WHEN("Called multiple times") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
       mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
@@ -37,7 +37,7 @@ SCENARIO("HillClimbing.setMinimalStepSize", "[HillClimbing][HillClimbing.setMini
 
   GIVEN("A minimal step size") {
     WHEN("The minimal step size is not negative (but may be 0)") {
-      const double minimalStepSize = std::abs(getContinuousRandomNumber());
+      const double minimalStepSize = std::abs(continuousRandomNumber());
       CAPTURE(minimalStepSize);
 
       THEN("Throw no exception") {
@@ -46,7 +46,7 @@ SCENARIO("HillClimbing.setMinimalStepSize", "[HillClimbing][HillClimbing.setMini
     }
 
     WHEN("The minimal step size is negative") {
-      const double minimalStepSize = -std::abs(getContinuousRandomNumber()) - 1.0;
+      const double minimalStepSize = -std::abs(continuousRandomNumber()) - 1.0;
       CAPTURE(minimalStepSize);
 
       THEN("Throw a std::logic_error") {
@@ -66,7 +66,7 @@ SCENARIO("HillClimbing.getMinimalStepSize", "[HillClimbing][HillClimbing.getMini
   }
 
   WHEN("The default minimal step size was changed") {
-    const double minimalStepSize = std::abs(getContinuousRandomNumber());
+    const double minimalStepSize = std::abs(continuousRandomNumber());
     CAPTURE(minimalStepSize);
 
     optimisationAlgorithm.setMinimalStepSize(minimalStepSize);
@@ -82,7 +82,7 @@ SCENARIO("HillClimbing.setMaximalStepSize", "[HillClimbing][HillClimbing.setMaxi
 
   GIVEN("A maximal step size") {
     WHEN("The maximal step size is not negative (may not be 0)") {
-      const double maximalStepSize = std::abs(getContinuousRandomNumber()) + 1.0;
+      const double maximalStepSize = std::abs(continuousRandomNumber()) + 1.0;
       CAPTURE(maximalStepSize);
 
       THEN("Throw no exception") {
@@ -91,7 +91,7 @@ SCENARIO("HillClimbing.setMaximalStepSize", "[HillClimbing][HillClimbing.setMaxi
     }
 
     WHEN("The maximal step size is negative or 0") {
-      const double maximalStepSize = -std::abs(getContinuousRandomNumber());
+      const double maximalStepSize = -std::abs(continuousRandomNumber());
       CAPTURE(maximalStepSize);
 
       THEN("Throw a std::logic_error") {
@@ -111,7 +111,7 @@ SCENARIO("HillClimbing.getMaximalStepSize", "[HillClimbing][HillClimbing.getMaxi
   }
 
   WHEN("The default maximal step size was changed") {
-    const double maximalStepSize = std::abs(getContinuousRandomNumber()) + 1.0;
+    const double maximalStepSize = std::abs(continuousRandomNumber()) + 1.0;
     CAPTURE(maximalStepSize);
 
     optimisationAlgorithm.setMaximalStepSize(maximalStepSize);

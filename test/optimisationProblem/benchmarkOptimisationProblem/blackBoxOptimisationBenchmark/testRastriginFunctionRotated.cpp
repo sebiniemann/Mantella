@@ -43,10 +43,10 @@ SCENARIO("bbob::RastriginFunctionRotated.objectiveFunction_", "[bbob::RastriginF
 
 SCENARIO("bbob::RastriginFunctionRotated.getNormalisedObjectiveValue", "[bbob::RastriginFunctionRotated][bbob::RastriginFunctionRotated.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -88,7 +88,7 @@ SCENARIO("bbob::RastriginFunctionRotated.getNormalisedObjectiveValue", "[bbob::R
 }
 
 SCENARIO("bbob::RastriginFunctionRotated.getObjectiveFunctionName", "[bbob::RastriginFunctionRotated][bbob::RastriginFunctionRotated.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::RastriginFunctionRotated optimisationProblem(numberOfDimensions);
 

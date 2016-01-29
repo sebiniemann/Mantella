@@ -41,10 +41,10 @@ SCENARIO("bbob::SharpRidgeFunction.objectiveFunction_", "[bbob::SharpRidgeFuncti
 
 SCENARIO("bbob::SharpRidgeFunction.getNormalisedObjectiveValue", "[bbob::SharpRidgeFunction][bbob::SharpRidgeFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -86,7 +86,7 @@ SCENARIO("bbob::SharpRidgeFunction.getNormalisedObjectiveValue", "[bbob::SharpRi
 }
 
 SCENARIO("bbob::SharpRidgeFunction.getObjectiveFunctionName", "[bbob::SharpRidgeFunction][bbob::SharpRidgeFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::SharpRidgeFunction optimisationProblem(numberOfDimensions);
 

@@ -36,10 +36,10 @@ SCENARIO("bbob::BuecheRastriginFunction.objectiveFunction_", "[bbob::BuecheRastr
 
 SCENARIO("bbob::BuecheRastriginFunction.getNormalisedObjectiveValue", "[bbob::BuecheRastriginFunction][bbob::BuecheRastriginFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::BuecheRastriginFunction.getNormalisedObjectiveValue", "[bbob::Bu
 }
 
 SCENARIO("bbob::BuecheRastriginFunction.getObjectiveFunctionName", "[bbob::BuecheRastriginFunction][bbob::BuecheRastriginFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::BuecheRastriginFunction optimisationProblem(numberOfDimensions);
 

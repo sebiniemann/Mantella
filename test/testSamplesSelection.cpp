@@ -39,7 +39,7 @@ SCENARIO("elitists", "[samplesSelection][elitists]") {
       const arma::uword numberOfSamplesToSelect = 10;
       CAPTURE(numberOfSamplesToSelect);
 
-      samples.insert({getContinuousRandomNumbers(parameters.n_rows + 1), getContinuousRandomNumber()});
+      samples.insert({continuousRandomNumbers(parameters.n_rows + 1), continuousRandomNumber()});
 
       THEN("Throw a std::logic_error") {
         CHECK_THROWS_AS(mant::elitists(samples, numberOfSamplesToSelect), std::logic_error);

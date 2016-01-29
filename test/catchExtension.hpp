@@ -30,7 +30,7 @@ extern int numberOfNodes;
  *
  * @return The randomly generated matrix.
  */
-arma::Mat<double> getContinuousRandomNumbers(
+arma::Mat<double> continuousRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns);
 
@@ -38,7 +38,7 @@ arma::Mat<double> getContinuousRandomNumbers(
  *
  * @return The randomly generated matrix.
  */
-arma::Mat<arma::uword> getDiscreteRandomNumbers(
+arma::Mat<arma::uword> discreteRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns);
 
@@ -46,34 +46,34 @@ arma::Mat<arma::uword> getDiscreteRandomNumbers(
  *
  * @return The randomly generated column vector.
  */
-arma::Col<double> getContinuousRandomNumbers(
+arma::Col<double> continuousRandomNumbers(
     const arma::uword numberOfDimensions);
 
 /** Randomly generates a column vector of `numberOfDimensions` integers, each within [1, 10].
  *
  * @return The randomly generated column vector.
  */
-arma::Col<arma::uword> getDiscreteRandomNumbers(
+arma::Col<arma::uword> discreteRandomNumbers(
     const arma::uword numberOfDimensions);
 
 /** Randomly generates a continuous number from [-100, 100].
  *
  * @return The randomly generated number.
  */
-double getContinuousRandomNumber();
+double continuousRandomNumber();
 
 /** Randomly generates an integer from [1, 10].
 
  *
  * @return The randomly generated number.
  */
-arma::uword getDiscreteRandomNumber();
+arma::uword discreteRandomNumber();
 
 /** Randomly generates an integer from [1, 10], excluding `discreteRandomNumber`.
  *
  * @return The randomly generated number.
  */
-arma::uword getDifferentDiscreteRandomNumber(
+arma::uword differentDiscreteRandomNumber(
     const arma::uword discreteRandomNumber);
 
 /** Synchronises the content of a continuous matrix over MPI

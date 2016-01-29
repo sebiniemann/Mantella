@@ -8,7 +8,7 @@
 SCENARIO("bbob::BlackBoxOptimisationBenchmark::BlackBoxOptimisationBenchmark", "[bbob::BlackBoxOptimisationBenchmark][bbob::BlackBoxOptimisationBenchmark::BlackBoxOptimisationBenchmark]") {
   GIVEN("A number of dimensions") {
     WHEN("The number of dimensions is greater than 0") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       THEN("Throw no exception") {
@@ -26,7 +26,7 @@ SCENARIO("bbob::BlackBoxOptimisationBenchmark::BlackBoxOptimisationBenchmark", "
 
 SCENARIO("bbob::BlackBoxOptimisationBenchmark.getLowerBounds", "[bbob::BlackBoxOptimisationBenchmark][bbob::BlackBoxOptimisationBenchmark.getLowerBounds]") {
   GIVEN("Default lower bounds") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem(numberOfDimensions);
@@ -39,7 +39,7 @@ SCENARIO("bbob::BlackBoxOptimisationBenchmark.getLowerBounds", "[bbob::BlackBoxO
 
 SCENARIO("bbob::BlackBoxOptimisationBenchmark.getUpperBounds", "[bbob::BlackBoxOptimisationBenchmark][bbob::BlackBoxOptimisationBenchmark.getUpperBounds]") {
   GIVEN("Default upper bounds") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem(numberOfDimensions);
@@ -52,7 +52,7 @@ SCENARIO("bbob::BlackBoxOptimisationBenchmark.getUpperBounds", "[bbob::BlackBoxO
 
 SCENARIO("bbob::BlackBoxOptimisationBenchmark.getObjectiveValueTranslation", "[bbob::BlackBoxOptimisationBenchmark][bbob::BlackBoxOptimisationBenchmark.getObjectiveValueTranslation]") {
   GIVEN("Default objective value translation") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem(numberOfDimensions);
@@ -67,7 +67,7 @@ SCENARIO("bbob::BlackBoxOptimisationBenchmark.getObjectiveValueTranslation", "[b
 
 SCENARIO("bbob::BlackBoxOptimisationBenchmark.getOptimalObjectiveValue", "[bbob::BlackBoxOptimisationBenchmark][bbob::BlackBoxOptimisationBenchmark.getOptimalObjectiveValue]") {
   GIVEN("Default optimal objective value") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
     mant::bbob::BlackBoxOptimisationBenchmark optimisationProblem(numberOfDimensions);
