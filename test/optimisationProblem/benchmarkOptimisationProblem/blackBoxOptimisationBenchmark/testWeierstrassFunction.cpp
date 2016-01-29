@@ -43,10 +43,10 @@ SCENARIO("bbob::WeierstrassFunction.objectiveFunction_", "[bbob::WeierstrassFunc
 
 SCENARIO("bbob::WeierstrassFunction.getNormalisedObjectiveValue", "[bbob::WeierstrassFunction][bbob::WeierstrassFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -88,7 +88,7 @@ SCENARIO("bbob::WeierstrassFunction.getNormalisedObjectiveValue", "[bbob::Weiers
 }
 
 SCENARIO("bbob::WeierstrassFunction.getObjectiveFunctionName", "[bbob::WeierstrassFunction][bbob::WeierstrassFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::WeierstrassFunction optimisationProblem(numberOfDimensions);
 

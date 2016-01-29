@@ -36,10 +36,10 @@ SCENARIO("bbob::RosenbrockFunction.objectiveFunction_", "[bbob::RosenbrockFuncti
 
 SCENARIO("bbob::RosenbrockFunction.getNormalisedObjectiveValue", "[bbob::RosenbrockFunction][bbob::RosenbrockFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::RosenbrockFunction.getNormalisedObjectiveValue", "[bbob::Rosenbr
 }
 
 SCENARIO("bbob::RosenbrockFunction.getObjectiveFunctionName", "[bbob::RosenbrockFunction][bbob::RosenbrockFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::RosenbrockFunction optimisationProblem(numberOfDimensions);
 

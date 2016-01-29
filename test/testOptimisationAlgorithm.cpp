@@ -29,16 +29,16 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
   optimisationAlgorithm.setMaximalNumberOfIterations(100);
 
   GIVEN("An optimisation problem and initial parameters") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     WHEN("The next parameters function is not callable") {
-      const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(initialParameters);
 
       THEN("Throw a std::logic_error") {
@@ -59,7 +59,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       AND_WHEN("The default boundaries handling function is unchanged") {
         TestOptimisationAlgorithm defaultOptimisationAlgorithm;
 
-        const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(parameters);
 
         THEN("Use the default function") {
@@ -73,10 +73,10 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       AND_WHEN("The default is stagnating function is unchanged") {
         TestOptimisationAlgorithm defaultOptimisationAlgorithm;
 
-        const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(parameters);
 
-        const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfParameters).t();
+        const arma::Row<double>& objectiveValues = continuousRandomNumbers(numberOfParameters).t();
         CAPTURE(objectiveValues);
 
         // Skip .optimise()-internal assertion
@@ -93,10 +93,10 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       AND_WHEN("The default restarting function is unchanged") {
         TestOptimisationAlgorithm defaultOptimisationAlgorithm;
 
-        const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(parameters);
 
-        const arma::Row<double>& objectiveValues = getContinuousRandomNumbers(numberOfParameters).t();
+        const arma::Row<double>& objectiveValues = continuousRandomNumbers(numberOfParameters).t();
         CAPTURE(objectiveValues);
 
         // Skip .optimise()-internal assertion
@@ -116,7 +116,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       }
 
       THEN("Reset all counters (number of iterations and duration), the best objective value and parameter as well as the recorded sampling at the start") {
-        const arma::Col<double>& initialParameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& initialParameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(initialParameter);
 
         ::mant::isRecordingSampling = true;
@@ -129,7 +129,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
 
         const double bestObjectiveValue = optimisationAlgorithm.getBestObjectiveValue();
 
-        const arma::uword differentNumberOfDimensions = SYNCHRONISED(getDifferentDiscreteRandomNumber(numberOfDimensions));
+        const arma::uword differentNumberOfDimensions = SYNCHRONISED(differentDiscreteRandomNumber(numberOfDimensions));
         CAPTURE(differentNumberOfDimensions);
 
         mant::OptimisationProblem secondOptimisationProblem(differentNumberOfDimensions);
@@ -139,7 +139,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
               return 100 * arma::norm(parameter_);
             });
 
-        const arma::Mat<double>& secondInitialParameters = getContinuousRandomNumbers(differentNumberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& secondInitialParameters = continuousRandomNumbers(differentNumberOfDimensions, numberOfParameters);
         CAPTURE(secondInitialParameters);
 
         ::mant::isRecordingSampling = true;
@@ -153,7 +153,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       }
 
       AND_WHEN("The optimisation problem has no specific objective function and the next parameter function is not changed") {
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         THEN("Throw no exception") {
@@ -162,7 +162,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       }
 
       AND_WHEN("At least one initial parameter has an infinite value") {
-        arma::Mat<double> initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        arma::Mat<double> initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         initialParameters(0) = arma::datum::inf;
         CAPTURE(initialParameters);
 
@@ -172,7 +172,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       }
 
       AND_WHEN("At least one initial parameter has more or less elements than there are dimensions to optimise") {
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions - 1, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions - 1, numberOfParameters);
         CAPTURE(initialParameters);
 
         THEN("Throw a std::logic_error") {
@@ -189,7 +189,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
       }
 
       AND_WHEN("At least one lower bound is greater than its upper bound") {
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
 
         optimisationProblem.setLowerBounds(optimisationProblem.getUpperBounds() + 1.0);
 
@@ -205,7 +205,7 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunction", "[OptimisationAlgori
   mant::OptimisationAlgorithm optimisationAlgorithm;
   optimisationAlgorithm.setMaximalNumberOfIterations(100);
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
 
   CAPTURE(numberOfDimensions);
 
@@ -221,7 +221,7 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunction", "[OptimisationAlgori
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       };
 
       THEN("Throw no exception") {
@@ -229,10 +229,10 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunction", "[OptimisationAlgori
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         optimisationAlgorithm.setNextParametersFunction(nextParametersFunction);
@@ -267,7 +267,7 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunction", "[OptimisationAlgori
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       };
 
       THEN("Throw no exception") {
@@ -275,10 +275,10 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunction", "[OptimisationAlgori
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         optimisationAlgorithm.setNextParametersFunction(nextParametersFunction);
@@ -322,7 +322,7 @@ SCENARIO("OptimisationAlgorithm.getNextParametersFunctionName", "[OptimisationAl
         const arma::Mat<double>& parameters_,
         const arma::Row<double>& objectiveValues_,
         const arma::Row<double>& differences_) {
-      return getContinuousRandomNumbers(numberOfDimensions_);
+      return continuousRandomNumbers(numberOfDimensions_);
     };
 
     AND_WHEN("A new next parameter function name was set") {
@@ -355,10 +355,10 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       });
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
@@ -380,10 +380,10 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         // Records and increments the counter
@@ -424,10 +424,10 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         // Records and increments the counter
@@ -502,10 +502,10 @@ SCENARIO("OptimisationAlgorithm.setIsStagnatingFunction", "[OptimisationAlgorith
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       });
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
@@ -527,10 +527,10 @@ SCENARIO("OptimisationAlgorithm.setIsStagnatingFunction", "[OptimisationAlgorith
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         // Records and increments the counter
@@ -571,10 +571,10 @@ SCENARIO("OptimisationAlgorithm.setIsStagnatingFunction", "[OptimisationAlgorith
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         // Records and increments the counter
@@ -649,10 +649,10 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunction", "[OptimisationAlgorithm]
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       });
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
@@ -667,7 +667,7 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunction", "[OptimisationAlgorithm]
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       };
 
       THEN("Throw no exception") {
@@ -675,10 +675,10 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunction", "[OptimisationAlgorithm]
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         // Records and increments the counter
@@ -712,7 +712,7 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunction", "[OptimisationAlgorithm]
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       };
 
       THEN("Throw no exception") {
@@ -720,10 +720,10 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunction", "[OptimisationAlgorithm]
       }
 
       THEN("Reset all counters (number of (distinct) evaluations), the recorded sampling, the best parameter and objective value as well as why it finished") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
         // Records and increments the counter
@@ -766,7 +766,7 @@ SCENARIO("OptimisationAlgorithm.getRestartingFunctionName", "[OptimisationAlgori
         const arma::Mat<double>& parameters_,
         const arma::Row<double>& objectiveValues_,
         const arma::Row<double>& differences_) {
-      return getContinuousRandomNumbers(numberOfDimensions_);
+      return continuousRandomNumbers(numberOfDimensions_);
     };
 
     AND_WHEN("A new restarting function name was set") {
@@ -799,16 +799,16 @@ SCENARIO("OptimisationAlgorithm.setAcceptableObjectiveValue", "[OptimisationAlgo
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       });
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
   GIVEN("An acceptable objective value") {
-    const double acceptableObjectiveValue = getContinuousRandomNumber();
+    const double acceptableObjectiveValue = continuousRandomNumber();
     CAPTURE(acceptableObjectiveValue);
 
     THEN("Throw no exception") {
@@ -816,10 +816,10 @@ SCENARIO("OptimisationAlgorithm.setAcceptableObjectiveValue", "[OptimisationAlgo
     }
 
     THEN("Do not reset the counters (number of (distinct) evaluations), the recorded sampling, the best parameter or objective value as well as why it finished") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
-      const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(initialParameters);
 
       // Records and increments the counter
@@ -849,7 +849,7 @@ SCENARIO("OptimisationAlgorithm.getAcceptableObjectiveValue", "[OptimisationAlgo
   }
 
   WHEN("The default acceptable objective value was changed") {
-    const double acceptableObjectiveValue = getContinuousRandomNumber();
+    const double acceptableObjectiveValue = continuousRandomNumber();
     CAPTURE(acceptableObjectiveValue);
 
     optimisationAlgorithm.setAcceptableObjectiveValue(acceptableObjectiveValue);
@@ -869,16 +869,16 @@ SCENARIO("OptimisationAlgorithm.setMaximalNumberOfIterations", "[OptimisationAlg
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       });
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
   GIVEN("A maximal number of iterations") {
-    const arma::uword maximalNumberOfIterations = getDiscreteRandomNumber();
+    const arma::uword maximalNumberOfIterations = discreteRandomNumber();
     CAPTURE(maximalNumberOfIterations);
 
     THEN("Throw no exception") {
@@ -886,10 +886,10 @@ SCENARIO("OptimisationAlgorithm.setMaximalNumberOfIterations", "[OptimisationAlg
     }
 
     THEN("Do not reset the counters (number of (distinct) evaluations), the recorded sampling, the best parameter or objective value as well as why it finished") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
-      const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(initialParameters);
 
       // Records and increments the counter
@@ -919,7 +919,7 @@ SCENARIO("OptimisationAlgorithm.getMaximalNumberOfIterations", "[OptimisationAlg
   }
 
   WHEN("The default maximal number of iterations was changed") {
-    const arma::uword maximalNumberOfIterations = getDiscreteRandomNumber();
+    const arma::uword maximalNumberOfIterations = discreteRandomNumber();
     CAPTURE(maximalNumberOfIterations);
 
     optimisationAlgorithm.setMaximalNumberOfIterations(maximalNumberOfIterations);
@@ -940,16 +940,16 @@ SCENARIO("OptimisationAlgorithm.setMaximalDuration", "[OptimisationAlgorithm][Op
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
           const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
       });
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
   GIVEN("A maximal duration") {
-    const std::chrono::microseconds maximalDuration = std::chrono::seconds(getDiscreteRandomNumber());
+    const std::chrono::microseconds maximalDuration = std::chrono::seconds(discreteRandomNumber());
     CAPTURE(maximalDuration.count());
 
     THEN("Throw no exception") {
@@ -957,10 +957,10 @@ SCENARIO("OptimisationAlgorithm.setMaximalDuration", "[OptimisationAlgorithm][Op
     }
 
     THEN("Do not reset the counters (number of (distinct) evaluations), the recorded sampling, the best parameter or objective value as well as why it finished") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
-      const arma::Mat<double>& initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(initialParameters);
 
       // Records and increments the counter
@@ -990,7 +990,7 @@ SCENARIO("OptimisationAlgorithm.getMaximalDuration", "[OptimisationAlgorithm][Op
   }
 
   WHEN("The default maximal duration was changed") {
-    const std::chrono::microseconds maximalDuration = std::chrono::seconds(getDiscreteRandomNumber());
+    const std::chrono::microseconds maximalDuration = std::chrono::seconds(discreteRandomNumber());
     CAPTURE(maximalDuration.count());
 
     optimisationAlgorithm.setMaximalDuration(maximalDuration);
@@ -1018,7 +1018,7 @@ SCENARIO("OptimisationAlgorithm.isFinished", "[OptimisationAlgorithm][Optimisati
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1033,7 +1033,7 @@ SCENARIO("OptimisationAlgorithm.isFinished", "[OptimisationAlgorithm][Optimisati
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1075,7 +1075,7 @@ SCENARIO("OptimisationAlgorithm.isTerminated", "[OptimisationAlgorithm][Optimisa
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1090,7 +1090,7 @@ SCENARIO("OptimisationAlgorithm.isTerminated", "[OptimisationAlgorithm][Optimisa
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1132,7 +1132,7 @@ SCENARIO("OptimisationAlgorithm.getNumberOfIterations", "[OptimisationAlgorithm]
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1147,7 +1147,7 @@ SCENARIO("OptimisationAlgorithm.getNumberOfIterations", "[OptimisationAlgorithm]
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1189,7 +1189,7 @@ SCENARIO("OptimisationAlgorithm.getDuration", "[OptimisationAlgorithm][Optimisat
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1204,7 +1204,7 @@ SCENARIO("OptimisationAlgorithm.getDuration", "[OptimisationAlgorithm][Optimisat
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1248,7 +1248,7 @@ SCENARIO("OptimisationAlgorithm.getBestObjectiveValue", "[OptimisationAlgorithm]
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1263,7 +1263,7 @@ SCENARIO("OptimisationAlgorithm.getBestObjectiveValue", "[OptimisationAlgorithm]
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1306,7 +1306,7 @@ SCENARIO("OptimisationAlgorithm.getBestParameter", "[OptimisationAlgorithm][Opti
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1321,7 +1321,7 @@ SCENARIO("OptimisationAlgorithm.getBestParameter", "[OptimisationAlgorithm][Opti
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1363,7 +1363,7 @@ SCENARIO("OptimisationAlgorithm.getRecordedSampling", "[OptimisationAlgorithm][O
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          return static_cast<arma::Mat<double>>(arma::floor(parameters_ * 10 - 1) / 10);
+          return arma::Mat<double>(arma::floor(parameters_ * 10 - 1) / 10);
         });
 
     const arma::uword numberOfDimensions = 2;
@@ -1378,7 +1378,7 @@ SCENARIO("OptimisationAlgorithm.getRecordedSampling", "[OptimisationAlgorithm][O
           return arma::accu(parameter);
         });
 
-    const arma::uword numberOfParameters = 1 + getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = 1 + discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     const arma::Mat<double>& initialParameters = arma::ones<arma::Mat<double>>(numberOfDimensions, numberOfParameters);
@@ -1417,7 +1417,7 @@ SCENARIO("OptimisationAlgorithm.getRecordedSampling", "[OptimisationAlgorithm][O
 SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlgorithm.reset]") {
   mant::OptimisationAlgorithm optimisationAlgorithm;
 
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
@@ -1429,7 +1429,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
         },
         "My custom next parameters function name");
     optimisationAlgorithm.setBoundariesHandlingFunction(
@@ -1454,26 +1454,26 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-        return getContinuousRandomNumbers(numberOfDimensions_);
+        return continuousRandomNumbers(numberOfDimensions_);
         },
         "My custom restarting function name");
 
-    const double acceptableObjectiveValue = getContinuousRandomNumber();
+    const double acceptableObjectiveValue = continuousRandomNumber();
     optimisationAlgorithm.setAcceptableObjectiveValue(acceptableObjectiveValue);
     CAPTURE(acceptableObjectiveValue);
 
-    const arma::uword maximalNumberOfIterations = getDiscreteRandomNumber();
+    const arma::uword maximalNumberOfIterations = discreteRandomNumber();
     optimisationAlgorithm.setMaximalNumberOfIterations(maximalNumberOfIterations);
     CAPTURE(maximalNumberOfIterations);
 
-    const std::chrono::microseconds maximalDuration = std::chrono::milliseconds(getDiscreteRandomNumber());
+    const std::chrono::microseconds maximalDuration = std::chrono::milliseconds(discreteRandomNumber());
     optimisationAlgorithm.setMaximalDuration(maximalDuration);
     CAPTURE(maximalDuration.count());
 
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
-    arma::Mat<double> initialParameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+    arma::Mat<double> initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
     CAPTURE(initialParameters);
 
     ::mant::isRecordingSampling = true;

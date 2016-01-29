@@ -36,10 +36,10 @@ SCENARIO("bbob::CompositeGriewankRosenbrockFunctionF8F2.objectiveFunction_", "[b
 
 SCENARIO("bbob::CompositeGriewankRosenbrockFunctionF8F2.getNormalisedObjectiveValue", "[bbob::CompositeGriewankRosenbrockFunctionF8F2][bbob::CompositeGriewankRosenbrockFunctionF8F2.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::CompositeGriewankRosenbrockFunctionF8F2.getNormalisedObjectiveVa
 }
 
 SCENARIO("bbob::CompositeGriewankRosenbrockFunctionF8F2.getObjectiveFunctionName", "[bbob::CompositeGriewankRosenbrockFunctionF8F2][bbob::CompositeGriewankRosenbrockFunctionF8F2.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::CompositeGriewankRosenbrockFunctionF8F2 optimisationProblem(numberOfDimensions);
 

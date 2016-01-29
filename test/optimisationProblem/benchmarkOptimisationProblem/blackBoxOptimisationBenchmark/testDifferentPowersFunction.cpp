@@ -36,10 +36,10 @@ SCENARIO("bbob::DifferentPowersFunction.objectiveFunction_", "[bbob::DifferentPo
 
 SCENARIO("bbob::DifferentPowersFunction.getNormalisedObjectiveValue", "[bbob::DifferentPowersFunction][bbob::DifferentPowersFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::DifferentPowersFunction.getNormalisedObjectiveValue", "[bbob::Di
 }
 
 SCENARIO("bbob::DifferentPowersFunction.getObjectiveFunctionName", "[bbob::DifferentPowersFunction][bbob::DifferentPowersFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::DifferentPowersFunction optimisationProblem(numberOfDimensions);
 

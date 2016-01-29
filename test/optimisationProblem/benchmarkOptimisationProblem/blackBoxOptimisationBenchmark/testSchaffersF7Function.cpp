@@ -41,10 +41,10 @@ SCENARIO("bbob::SchaffersF7Function.objectiveFunction_", "[bbob::SchaffersF7Func
 
 SCENARIO("bbob::SchaffersF7Function.getNormalisedObjectiveValue", "[bbob::SchaffersF7Function][bbob::SchaffersF7Function.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -86,7 +86,7 @@ SCENARIO("bbob::SchaffersF7Function.getNormalisedObjectiveValue", "[bbob::Schaff
 }
 
 SCENARIO("bbob::SchaffersF7Function.getObjectiveFunctionName", "[bbob::SchaffersF7Function][bbob::SchaffersF7Function.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::SchaffersF7Function optimisationProblem(numberOfDimensions);
 

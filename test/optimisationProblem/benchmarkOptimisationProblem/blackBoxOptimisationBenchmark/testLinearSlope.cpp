@@ -36,10 +36,10 @@ SCENARIO("bbob::LinearSlope.objectiveFunction_", "[bbob::LinearSlope][bbob::Line
 
 SCENARIO("bbob::LinearSlope.getNormalisedObjectiveValue", "[bbob::LinearSlope][bbob::LinearSlope.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::LinearSlope.getNormalisedObjectiveValue", "[bbob::LinearSlope][b
 }
 
 SCENARIO("bbob::LinearSlope.getObjectiveFunctionName", "[bbob::LinearSlope][bbob::LinearSlope.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::LinearSlope optimisationProblem(numberOfDimensions);
 

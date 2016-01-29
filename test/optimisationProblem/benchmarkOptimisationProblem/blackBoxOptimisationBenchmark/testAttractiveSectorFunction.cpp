@@ -45,10 +45,10 @@ SCENARIO("bbob::AttractiveSectorFunction.objectiveFunction_", "[bbob::Attractive
 
 SCENARIO("bbob::AttractiveSectorFunction.getNormalisedObjectiveValue", "[bbob::AttractiveSectorFunction][bbob::AttractiveSectorFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -90,7 +90,7 @@ SCENARIO("bbob::AttractiveSectorFunction.getNormalisedObjectiveValue", "[bbob::A
 }
 
 SCENARIO("bbob::AttractiveSectorFunction.getObjectiveFunctionName", "[bbob::AttractiveSectorFunction][bbob::AttractiveSectorFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::AttractiveSectorFunction optimisationProblem(numberOfDimensions);
 

@@ -36,10 +36,10 @@ SCENARIO("bbob::EllipsoidalFunctionRotated.objectiveFunction_", "[bbob::Ellipsoi
 
 SCENARIO("bbob::EllipsoidalFunctionRotated.getNormalisedObjectiveValue", "[bbob::EllipsoidalFunctionRotated][bbob::EllipsoidalFunctionRotated.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::EllipsoidalFunctionRotated.getNormalisedObjectiveValue", "[bbob:
 }
 
 SCENARIO("bbob::EllipsoidalFunctionRotated.getObjectiveFunctionName", "[bbob::EllipsoidalFunctionRotated][bbob::EllipsoidalFunctionRotated.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::EllipsoidalFunctionRotated optimisationProblem(numberOfDimensions);
 

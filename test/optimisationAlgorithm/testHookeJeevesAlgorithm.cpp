@@ -11,7 +11,7 @@
 SCENARIO("HookeJeevesAlgorithm.optimise", "[HookeJeevesAlgorithm][HookeJeevesAlgorithm.optimise]") {
   GIVEN("An optimisation problem") {
     WHEN("Called multiple times") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
       mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
@@ -36,7 +36,7 @@ SCENARIO("HookeJeevesAlgorithm.setInitialStepSize", "[HookeJeevesAlgorithm][Hook
 
   GIVEN("An initial step size") {
     WHEN("The initial step size is not negative") {
-      const double initialStepSize = std::abs(getContinuousRandomNumber()) + 1.0;
+      const double initialStepSize = std::abs(continuousRandomNumber()) + 1.0;
       CAPTURE(initialStepSize);
 
       THEN("Throw no exception") {
@@ -45,7 +45,7 @@ SCENARIO("HookeJeevesAlgorithm.setInitialStepSize", "[HookeJeevesAlgorithm][Hook
     }
 
     WHEN("The initial step size is negative (including 0)") {
-      const double initialStepSize = -std::abs(getContinuousRandomNumber());
+      const double initialStepSize = -std::abs(continuousRandomNumber());
       CAPTURE(initialStepSize);
 
       THEN("Throw a std::logic_error") {
@@ -65,7 +65,7 @@ SCENARIO("HookeJeevesAlgorithm.getInitialStepSize", "[HookeJeevesAlgorithm][Hook
   }
 
   WHEN("The default initial step size was changed") {
-    const double initialStepSize = std::abs(getContinuousRandomNumber()) + 1.0;
+    const double initialStepSize = std::abs(continuousRandomNumber()) + 1.0;
     CAPTURE(initialStepSize);
 
     optimisationAlgorithm.setInitialStepSize(initialStepSize);
@@ -81,7 +81,7 @@ SCENARIO("HookeJeevesAlgorithm.setStepSizeDecrease", "[HookeJeevesAlgorithm][Hoo
 
   GIVEN("A step size decrease") {
     WHEN("The step size decrease is not negative and less than 1") {
-      const double stepSizeDecrease = 1.0 / std::max(2.0, std::abs(getContinuousRandomNumber()));
+      const double stepSizeDecrease = 1.0 / std::max(2.0, std::abs(continuousRandomNumber()));
       CAPTURE(stepSizeDecrease);
 
       THEN("Throw no exception") {
@@ -90,7 +90,7 @@ SCENARIO("HookeJeevesAlgorithm.setStepSizeDecrease", "[HookeJeevesAlgorithm][Hoo
     }
 
     WHEN("The step size decrease is negative (including 0)") {
-      const double stepSizeDecrease = -std::abs(getContinuousRandomNumber());
+      const double stepSizeDecrease = -std::abs(continuousRandomNumber());
       CAPTURE(stepSizeDecrease);
 
       THEN("Throw a std::logic_error") {
@@ -99,7 +99,7 @@ SCENARIO("HookeJeevesAlgorithm.setStepSizeDecrease", "[HookeJeevesAlgorithm][Hoo
     }
 
     WHEN("The step size decrease is at least 1") {
-      const double stepSizeDecrease = std::abs(getContinuousRandomNumber()) + 1.0;
+      const double stepSizeDecrease = std::abs(continuousRandomNumber()) + 1.0;
       CAPTURE(stepSizeDecrease);
 
       THEN("Throw a std::logic_error") {
@@ -119,7 +119,7 @@ SCENARIO("HookeJeevesAlgorithm.getStepSizeDecrease", "[HookeJeevesAlgorithm][Hoo
   }
 
   WHEN("The default step size decrease was changed") {
-    const double stepSizeDecrease = 1.0 / std::max(2.0, std::abs(getContinuousRandomNumber()));
+    const double stepSizeDecrease = 1.0 / std::max(2.0, std::abs(continuousRandomNumber()));
     CAPTURE(stepSizeDecrease);
 
     optimisationAlgorithm.setStepSizeDecrease(stepSizeDecrease);

@@ -43,10 +43,10 @@ SCENARIO("bbob::LunacekBiRastriginFunction.objectiveFunction_", "[bbob::LunacekB
 
 SCENARIO("bbob::LunacekBiRastriginFunction.getNormalisedObjectiveValue", "[bbob::LunacekBiRastriginFunction][bbob::LunacekBiRastriginFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -88,7 +88,7 @@ SCENARIO("bbob::LunacekBiRastriginFunction.getNormalisedObjectiveValue", "[bbob:
 }
 
 SCENARIO("bbob::LunacekBiRastriginFunction.getObjectiveFunctionName", "[bbob::LunacekBiRastriginFunction][bbob::LunacekBiRastriginFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::LunacekBiRastriginFunction optimisationProblem(numberOfDimensions);
 

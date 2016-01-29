@@ -11,7 +11,7 @@
 SCENARIO("ParticleSwarmOptimisation.optimise", "[ParticleSwarmOptimisation][ParticleSwarmOptimisation.optimise]") {
   GIVEN("An optimisation problem and a swarm size") {
     WHEN("Called multiple times") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
@@ -33,7 +33,7 @@ SCENARIO("ParticleSwarmOptimisation.optimise", "[ParticleSwarmOptimisation][Part
 
   GIVEN("An optimisation problem") {
     WHEN("Called multiple times") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
@@ -136,7 +136,7 @@ SCENARIO("ParticleSwarmOptimisation.setMaximalAcceleration", "[ParticleSwarmOpti
   mant::ParticleSwarmOptimisation optimisationAlgorithm;
 
   GIVEN("A maximal acceleration") {
-    const double maximalAcceleration = getContinuousRandomNumber();
+    const double maximalAcceleration = continuousRandomNumber();
     CAPTURE(maximalAcceleration);
 
     THEN("Throw no exception") {
@@ -155,7 +155,7 @@ SCENARIO("ParticleSwarmOptimisation.getMaximalAcceleration", "[ParticleSwarmOpti
   }
 
   WHEN("The default maximal acceleration was changed") {
-    const double maximalAcceleration = getContinuousRandomNumber();
+    const double maximalAcceleration = continuousRandomNumber();
     CAPTURE(maximalAcceleration);
 
     optimisationAlgorithm.setMaximalAcceleration(maximalAcceleration);
@@ -170,7 +170,7 @@ SCENARIO("ParticleSwarmOptimisation.setMaximalLocalAttraction", "[ParticleSwarmO
   mant::ParticleSwarmOptimisation optimisationAlgorithm;
 
   GIVEN("A maximal local attraction") {
-    const double maximalLocalAttraction = getContinuousRandomNumber();
+    const double maximalLocalAttraction = continuousRandomNumber();
     CAPTURE(maximalLocalAttraction);
 
     THEN("Throw no exception") {
@@ -189,7 +189,7 @@ SCENARIO("ParticleSwarmOptimisation.getMaximalLocalAttraction", "[ParticleSwarmO
   }
 
   WHEN("The default maximal local attraction was changed") {
-    const double maximalLocalAttraction = getContinuousRandomNumber();
+    const double maximalLocalAttraction = continuousRandomNumber();
     CAPTURE(maximalLocalAttraction);
 
     optimisationAlgorithm.setMaximalLocalAttraction(maximalLocalAttraction);
@@ -204,7 +204,7 @@ SCENARIO("ParticleSwarmOptimisation.setMaximalGlobalAttraction", "[ParticleSwarm
   mant::ParticleSwarmOptimisation optimisationAlgorithm;
 
   GIVEN("A maximal global attraction") {
-    const double maximalGlobalAttraction = getContinuousRandomNumber();
+    const double maximalGlobalAttraction = continuousRandomNumber();
     CAPTURE(maximalGlobalAttraction);
 
     THEN("Throw no exception") {
@@ -223,7 +223,7 @@ SCENARIO("ParticleSwarmOptimisation.getMaximalGlobalAttraction", "[ParticleSwarm
   }
 
   WHEN("The default maximal global attraction was changed") {
-    const double maximalGlobalAttraction = getContinuousRandomNumber();
+    const double maximalGlobalAttraction = continuousRandomNumber();
     CAPTURE(maximalGlobalAttraction);
 
     optimisationAlgorithm.setMaximalGlobalAttraction(maximalGlobalAttraction);

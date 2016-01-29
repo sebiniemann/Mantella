@@ -36,10 +36,10 @@ SCENARIO("bbob::SphereFunction.objectiveFunction_", "[bbob::SphereFunction][bbob
 
 SCENARIO("bbob::SphereFunction.getNormalisedObjectiveValue", "[bbob::SphereFunction][bbob::SphereFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -81,7 +81,7 @@ SCENARIO("bbob::SphereFunction.getNormalisedObjectiveValue", "[bbob::SphereFunct
 }
 
 SCENARIO("bbob::SphereFunction.getObjectiveFunctionName", "[bbob::SphereFunction][bbob::SphereFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 

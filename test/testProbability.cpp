@@ -59,7 +59,7 @@ SCENARIO("randomRotationMatrix", "[probability][randomRotationMatrix]") {
 
     WHEN("The number of dimensions is greater than 3") {
       // Limits the number of dimensions to 10, calculating 55 different angles should be enough.
-      const arma::uword numberOfDimensions = std::min(static_cast<arma::uword>(10), 3 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = std::min(static_cast<arma::uword>(10), 3 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       THEN("Return a uniformly and randomly distributed n-dimensional rotation matrix") {
@@ -92,10 +92,10 @@ SCENARIO("randomRotationMatrix", "[probability][randomRotationMatrix]") {
 SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
   GIVEN("A number of elements and a cycle size") {
     WHEN("The cycle size is less than the number of elements") {
-      const arma::uword cycleSize = getDiscreteRandomNumber();
+      const arma::uword cycleSize = discreteRandomNumber();
       CAPTURE(cycleSize);
 
-      const arma::uword numberOfElements = cycleSize + getDiscreteRandomNumber();
+      const arma::uword numberOfElements = cycleSize + discreteRandomNumber();
       CAPTURE(numberOfElements);
 
       THEN("Return a uniformly and randomly distributed permutation vector") {
@@ -116,7 +116,7 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
     }
 
     WHEN("The cycle size is equal to the number of elements") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
       const arma::uword cycleSize = numberOfElements;
@@ -140,10 +140,10 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
     }
 
     WHEN("The cycle size is greater than the number of elements") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::uword cycleSize = numberOfElements + getDiscreteRandomNumber();
+      const arma::uword cycleSize = numberOfElements + discreteRandomNumber();
       CAPTURE(cycleSize);
 
       THEN("Throw a std::logic_error") {
@@ -153,7 +153,7 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
   }
 
   GIVEN("A number of elements") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
     THEN("Return a uniformly and randomly distributed permutation vector") {
@@ -176,18 +176,18 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
 
 SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
   GIVEN("A parameter, a minimal and a maximal distance") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfElements);
+    const arma::Col<double>& parameter = continuousRandomNumbers(numberOfElements);
     CAPTURE(parameter);
 
     WHEN("The maximal distance greater than 0") {
       AND_WHEN("The maximal distance is greater than the minimal distance") {
-        const double minimalDistance = std::abs(getContinuousRandomNumber());
+        const double minimalDistance = std::abs(continuousRandomNumber());
         CAPTURE(minimalDistance);
 
-        const double maximalDistance = minimalDistance + std::abs(getContinuousRandomNumber()) + 1.0;
+        const double maximalDistance = minimalDistance + std::abs(continuousRandomNumber()) + 1.0;
         CAPTURE(maximalDistance);
 
         THEN("Return a uniformly and randomly distributed parameter") {
@@ -218,7 +218,7 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
       }
 
       AND_WHEN("The maximal distance is equal to the minimal distance") {
-        const double minimalDistance = std::abs(getContinuousRandomNumber()) + 1.0;
+        const double minimalDistance = std::abs(continuousRandomNumber()) + 1.0;
         CAPTURE(minimalDistance);
 
         const double maximalDistance = minimalDistance;
@@ -265,10 +265,10 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
     }
 
     WHEN("The minimal distance is negative") {
-      const double maximalDistance = -std::abs(getContinuousRandomNumber());
+      const double maximalDistance = -std::abs(continuousRandomNumber());
       CAPTURE(maximalDistance);
 
-      const double minimalDistance = std::abs(getContinuousRandomNumber());
+      const double minimalDistance = std::abs(continuousRandomNumber());
       CAPTURE(minimalDistance);
 
       THEN("Throw a std::logic_error") {
@@ -277,10 +277,10 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
     }
 
     WHEN("The maximal distance is less than the minimal distance") {
-      const double maximalDistance = std::abs(getContinuousRandomNumber());
+      const double maximalDistance = std::abs(continuousRandomNumber());
       CAPTURE(maximalDistance);
 
-      const double minimalDistance = maximalDistance + std::abs(getContinuousRandomNumber()) + 1.0;
+      const double minimalDistance = maximalDistance + std::abs(continuousRandomNumber()) + 1.0;
       CAPTURE(minimalDistance);
 
       THEN("Throw a std::logic_error") {

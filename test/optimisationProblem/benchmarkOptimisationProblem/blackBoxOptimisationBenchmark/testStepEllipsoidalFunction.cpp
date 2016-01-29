@@ -41,10 +41,10 @@ SCENARIO("bbob::StepEllipsoidalFunction.objectiveFunction_", "[bbob::StepEllipso
 
 SCENARIO("bbob::StepEllipsoidalFunction.getNormalisedObjectiveValue", "[bbob::StepEllipsoidalFunction][bbob::StepEllipsoidalFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -86,7 +86,7 @@ SCENARIO("bbob::StepEllipsoidalFunction.getNormalisedObjectiveValue", "[bbob::St
 }
 
 SCENARIO("bbob::StepEllipsoidalFunction.getObjectiveFunctionName", "[bbob::StepEllipsoidalFunction][bbob::StepEllipsoidalFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::StepEllipsoidalFunction optimisationProblem(numberOfDimensions);
 

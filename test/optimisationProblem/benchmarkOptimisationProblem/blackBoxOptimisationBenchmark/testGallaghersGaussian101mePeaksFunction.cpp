@@ -45,10 +45,10 @@ SCENARIO("bbob::GallaghersGaussian101mePeaksFunction.objectiveFunction_", "[bbob
 
 SCENARIO("bbob::GallaghersGaussian101mePeaksFunction.getNormalisedObjectiveValue", "[bbob::GallaghersGaussian101mePeaksFunction][bbob::GallaghersGaussian101mePeaksFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -90,7 +90,7 @@ SCENARIO("bbob::GallaghersGaussian101mePeaksFunction.getNormalisedObjectiveValue
 }
 
 SCENARIO("bbob::GallaghersGaussian101mePeaksFunction.getObjectiveFunctionName", "[bbob::GallaghersGaussian101mePeaksFunction][bbob::GallaghersGaussian101mePeaksFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::GallaghersGaussian101mePeaksFunction optimisationProblem(numberOfDimensions);
 

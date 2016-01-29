@@ -34,7 +34,7 @@ SCENARIO("numberOfNodes", "[catchExtension][numberOfNodes]") {
   }
 }
 
-SCENARIO("getContinuousRandomNumbers", "[catchExtension][getContinuousRandomNumbers]") {
+SCENARIO("continuousRandomNumbers", "[catchExtension][continuousRandomNumbers]") {
   GIVEN("A number of rows and a number columns") {
     const arma::uword numberOfRows = 40;
     CAPTURE(numberOfRows);
@@ -43,9 +43,9 @@ SCENARIO("getContinuousRandomNumbers", "[catchExtension][getContinuousRandomNumb
     CAPTURE(numberOfColumns);
 
     THEN("Return a continuous matrix of uniformly distributed random values within [-100, 100]^n.") {
-      CHECK(getContinuousRandomNumbers(numberOfRows, numberOfColumns).n_rows == numberOfRows);
-      CHECK(getContinuousRandomNumbers(numberOfRows, numberOfColumns).n_cols == numberOfColumns);
-      IS_UNIFORM(arma::vectorise(getContinuousRandomNumbers(numberOfRows, numberOfColumns)), -100.0, 100.0);
+      CHECK(continuousRandomNumbers(numberOfRows, numberOfColumns).n_rows == numberOfRows);
+      CHECK(continuousRandomNumbers(numberOfRows, numberOfColumns).n_cols == numberOfColumns);
+      IS_UNIFORM(arma::vectorise(continuousRandomNumbers(numberOfRows, numberOfColumns)), -100.0, 100.0);
     }
   }
 
@@ -54,13 +54,13 @@ SCENARIO("getContinuousRandomNumbers", "[catchExtension][getContinuousRandomNumb
     CAPTURE(numberOfElements);
 
     THEN("Return a continuous vector of uniformly distributed random values within [-100, 100]^n.") {
-      CHECK(getContinuousRandomNumbers(numberOfElements).is_colvec());
-      IS_UNIFORM(getContinuousRandomNumbers(numberOfElements), -100.0, 100.0);
+      CHECK(continuousRandomNumbers(numberOfElements).is_colvec());
+      IS_UNIFORM(continuousRandomNumbers(numberOfElements), -100.0, 100.0);
     }
   }
 }
 
-SCENARIO("getDiscreteRandomNumbers", "[catchExtension][getDiscreteRandomNumbers]") {
+SCENARIO("discreteRandomNumbers", "[catchExtension][discreteRandomNumbers]") {
   GIVEN("A number of rows and a number columns") {
     const arma::uword numberOfRows = 500;
     CAPTURE(numberOfRows);
@@ -69,9 +69,9 @@ SCENARIO("getDiscreteRandomNumbers", "[catchExtension][getDiscreteRandomNumbers]
     CAPTURE(numberOfColumns);
 
     THEN("Return a discrete matrix of uniformly distributed random values within [1, 10]^n.") {
-      CHECK(getDiscreteRandomNumbers(numberOfRows, numberOfColumns).n_rows == numberOfRows);
-      CHECK(getDiscreteRandomNumbers(numberOfRows, numberOfColumns).n_cols == numberOfColumns);
-      IS_UNIFORM(arma::vectorise(getDiscreteRandomNumbers(numberOfRows, numberOfColumns)), 1, 10);
+      CHECK(discreteRandomNumbers(numberOfRows, numberOfColumns).n_rows == numberOfRows);
+      CHECK(discreteRandomNumbers(numberOfRows, numberOfColumns).n_cols == numberOfColumns);
+      IS_UNIFORM(arma::vectorise(discreteRandomNumbers(numberOfRows, numberOfColumns)), 1, 10);
     }
   }
 
@@ -80,41 +80,41 @@ SCENARIO("getDiscreteRandomNumbers", "[catchExtension][getDiscreteRandomNumbers]
     CAPTURE(numberOfElements);
 
     THEN("Return a discrete vector of uniformly distributed random values within [1, 10]^n.") {
-      CHECK(getDiscreteRandomNumbers(numberOfElements).is_colvec());
-      IS_UNIFORM(getDiscreteRandomNumbers(numberOfElements), 1, 10);
+      CHECK(discreteRandomNumbers(numberOfElements).is_colvec());
+      IS_UNIFORM(discreteRandomNumbers(numberOfElements), 1, 10);
     }
   }
 }
 
-SCENARIO("getContinuousRandomNumber", "[catchExtension][getContinuousRandomNumber]") {
+SCENARIO("continuousRandomNumber", "[catchExtension][continuousRandomNumber]") {
   THEN("Return a continuous number, uniformly and randomly distributed within [-100, 100]^n.") {
     arma::Col<double>::fixed<10000> randomNumbers;
     for (arma::uword n = 0; n < randomNumbers.n_elem; ++n) {
-      randomNumbers(n) = getContinuousRandomNumber();
+      randomNumbers(n) = continuousRandomNumber();
     }
 
     IS_UNIFORM(randomNumbers, -100.0, 100.0);
   }
 }
 
-SCENARIO("getDiscreteRandomNumber", "[catchExtension][getDiscreteRandomNumber]") {
+SCENARIO("discreteRandomNumber", "[catchExtension][discreteRandomNumber]") {
   THEN("Return a discrete number, uniformly and randomly distributed within [1, 10]^n.") {
     arma::Col<arma::uword>::fixed<10000> randomNumbers;
     for (arma::uword n = 0; n < randomNumbers.n_elem; ++n) {
-      randomNumbers(n) = getDiscreteRandomNumber();
+      randomNumbers(n) = discreteRandomNumber();
     }
 
     IS_UNIFORM(randomNumbers, 1, 10);
   }
 }
 
-SCENARIO("getDifferentDiscreteRandomNumber", "[catchExtension][getDifferentDiscreteRandomNumber]") {
+SCENARIO("differentDiscreteRandomNumber", "[catchExtension][differentDiscreteRandomNumber]") {
   GIVEN("A number [a]") {
     THEN("Return a discrete number, uniformly and randomly distributed within [1, 10]^n, excluding [a].") {
       arma::Col<arma::uword>::fixed<10000> randomNumbers;
       for (arma::uword n = 0; n < randomNumbers.n_elem; ++n) {
-        arma::uword randomNumberToExclude = getDiscreteRandomNumber();
-        arma::uword differentRandomNumber = getDifferentDiscreteRandomNumber(randomNumberToExclude);
+        arma::uword randomNumberToExclude = discreteRandomNumber();
+        arma::uword differentRandomNumber = differentDiscreteRandomNumber(randomNumberToExclude);
 
         CHECK(differentRandomNumber != randomNumberToExclude);
         randomNumbers(n) = differentRandomNumber;
@@ -130,10 +130,10 @@ SCENARIO("getDifferentDiscreteRandomNumber", "[catchExtension][getDifferentDiscr
 
 SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
   GIVEN("A continuous matrices for each node") {
-    const arma::uword numberOfRows = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfRows = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfRows);
 
-    const arma::uword numberOfColumns = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfColumns = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfColumns);
 
     arma::Mat<double> matrix = arma::eye<arma::Mat<double>>(numberOfRows, numberOfColumns) * 1.0 / (static_cast<double>(nodeRank) + 1);
@@ -153,10 +153,10 @@ SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
   }
 
   GIVEN("A discrete matrices for each node") {
-    const arma::uword numberOfRows = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfRows = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfRows);
 
-    const arma::uword numberOfColumns = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfColumns = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfColumns);
 
     arma::Mat<arma::uword> matrix = arma::eye<arma::Mat<arma::uword>>(numberOfRows, numberOfColumns) * static_cast<arma::uword>(nodeRank);
@@ -178,7 +178,7 @@ SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
   }
 
   GIVEN("A continuous column vectors for each node") {
-    const arma::uword numberOfElements = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfElements = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfElements);
 
     arma::Col<double> vector = arma::ones<arma::Col<double>>(numberOfElements) * 1.0 / (static_cast<double>(nodeRank) + 1);
@@ -198,7 +198,7 @@ SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
   }
 
   GIVEN("A discrete column vectors for each node") {
-    const arma::uword numberOfElements = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfElements = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfElements);
 
     arma::Col<arma::uword> vector = arma::ones<arma::Col<arma::uword>>(numberOfElements) * static_cast<arma::uword>(nodeRank);
@@ -220,7 +220,7 @@ SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
   }
 
   GIVEN("A continuous row vectors for each node") {
-    const arma::uword numberOfElements = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfElements = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfElements);
 
     arma::Row<double> vector = arma::ones<arma::Row<double>>(numberOfElements) * 1.0 / (static_cast<double>(nodeRank) + 1);
@@ -240,7 +240,7 @@ SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
   }
 
   GIVEN("A discrete row vectors for each node") {
-    const arma::uword numberOfElements = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfElements = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfElements);
 
     arma::Row<arma::uword> vector = arma::ones<arma::Row<arma::uword>>(numberOfElements) * static_cast<arma::uword>(nodeRank);
@@ -320,12 +320,12 @@ SCENARIO("SYNCHRONISED", "[catchExtension][SYNCHRONISED]") {
 SCENARIO("HAS_SAME_SAMPLES", "[catchExtension][HAS_SAME_SAMPLES]") {
   GIVEN("Two sets of samples (which may not be dimensionally consistent)") {
     WHEN("Both sets contain the same samples, in any order") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
       std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> firstSamples;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        firstSamples.insert({getContinuousRandomNumbers(getDiscreteRandomNumber()), getContinuousRandomNumber()});
+        firstSamples.insert({continuousRandomNumbers(discreteRandomNumber()), continuousRandomNumber()});
       }
 
       std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> secondSamples;
@@ -342,13 +342,13 @@ SCENARIO("HAS_SAME_SAMPLES", "[catchExtension][HAS_SAME_SAMPLES]") {
 
 SCENARIO("HAS_SAME_SAMPLES failure test", "[catchExtension][HAS_SAME_SAMPLES][!shouldfail]") {
   GIVEN("Two sets of samples (which may not be dimensionally consistent)") {
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> firstSamples;
 
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      firstSamples.insert({getContinuousRandomNumbers(getDiscreteRandomNumber()), getContinuousRandomNumber()});
+      firstSamples.insert({continuousRandomNumbers(discreteRandomNumber()), continuousRandomNumber()});
     }
 
     std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> secondSamples;
@@ -376,14 +376,14 @@ SCENARIO("HAS_SAME_SAMPLES failure test", "[catchExtension][HAS_SAME_SAMPLES][!s
 }
 
 SCENARIO("HAS_SAME_PARAMETERS", "[catchExtension][HAS_SAME_PARAMETERS]") {
-  const arma::uword numberOfParameters = getDiscreteRandomNumber();
+  const arma::uword numberOfParameters = discreteRandomNumber();
   CAPTURE(numberOfParameters);
 
   GIVEN("Two sets of continuous parameters (which may not be dimensionally consistent)") {
     WHEN("Both sets contain the same parameters, in any order") {
       std::vector<arma::Col<double>> parameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        parameters.push_back(getContinuousRandomNumbers(getDiscreteRandomNumber()));
+        parameters.push_back(continuousRandomNumbers(discreteRandomNumber()));
       }
 
       std::vector<arma::Col<double>> shuffeldParameters = parameters;
@@ -399,7 +399,7 @@ SCENARIO("HAS_SAME_PARAMETERS", "[catchExtension][HAS_SAME_PARAMETERS]") {
     WHEN("Both sets contain the same parameters, in any order") {
       std::vector<arma::Col<arma::uword>> parameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        parameters.push_back(getDiscreteRandomNumbers(getDiscreteRandomNumber()));
+        parameters.push_back(discreteRandomNumbers(discreteRandomNumber()));
       }
 
       std::vector<arma::Col<arma::uword>> shuffeldParameters = parameters;
@@ -415,12 +415,12 @@ SCENARIO("HAS_SAME_PARAMETERS", "[catchExtension][HAS_SAME_PARAMETERS]") {
     WHEN("Both sets contain the same parameters, in any order") {
       std::vector<arma::Col<double>> parameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        parameters.push_back(getContinuousRandomNumbers(getDiscreteRandomNumber()));
+        parameters.push_back(continuousRandomNumbers(discreteRandomNumber()));
       }
 
       std::vector<std::pair<arma::Col<double>, double>> samples;
       for (const auto& parameter : parameters) {
-        samples.push_back({parameter, getContinuousRandomNumber()});
+        samples.push_back({parameter, continuousRandomNumber()});
       }
       std::random_shuffle(samples.begin(), samples.end());
 
@@ -432,13 +432,13 @@ SCENARIO("HAS_SAME_PARAMETERS", "[catchExtension][HAS_SAME_PARAMETERS]") {
 }
 
 SCENARIO("HAS_SAME_PARAMETERS failure test", "[catchExtension][HAS_SAME_PARAMETERS][!shouldfail]") {
-  const arma::uword numberOfParameters = getDiscreteRandomNumber();
+  const arma::uword numberOfParameters = discreteRandomNumber();
   CAPTURE(numberOfParameters);
 
   GIVEN("Two sets of continuous parameters (which may not be dimensionally consistent)") {
     std::vector<arma::Col<double>> parameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      parameters.push_back(getContinuousRandomNumbers(getDiscreteRandomNumber()));
+      parameters.push_back(continuousRandomNumbers(discreteRandomNumber()));
     }
 
     std::vector<arma::Col<double>> shuffeldParameters = parameters;
@@ -465,7 +465,7 @@ SCENARIO("HAS_SAME_PARAMETERS failure test", "[catchExtension][HAS_SAME_PARAMETE
   GIVEN("Two sets of discrete parameters (which may not be dimensionally consistent)") {
     std::vector<arma::Col<arma::uword>> parameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      parameters.push_back(getDiscreteRandomNumbers(getDiscreteRandomNumber()));
+      parameters.push_back(discreteRandomNumbers(discreteRandomNumber()));
     }
 
     std::vector<arma::Col<arma::uword>> shuffeldParameters = parameters;
@@ -492,12 +492,12 @@ SCENARIO("HAS_SAME_PARAMETERS failure test", "[catchExtension][HAS_SAME_PARAMETE
   GIVEN("A set of samples and a set of parameters (which may not be dimensionally consistent)") {
     std::vector<arma::Col<double>> parameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      parameters.push_back(getContinuousRandomNumbers(getDiscreteRandomNumber()));
+      parameters.push_back(continuousRandomNumbers(discreteRandomNumber()));
     }
 
     std::vector<std::pair<arma::Col<double>, double>> samples;
     for (const auto& parameter : parameters) {
-      samples.push_back({parameter, getContinuousRandomNumber()});
+      samples.push_back({parameter, continuousRandomNumber()});
     }
     std::random_shuffle(samples.begin(), samples.end());
 
@@ -530,10 +530,10 @@ SCENARIO("HAS_SAME_PARAMETERS failure test", "[catchExtension][HAS_SAME_PARAMETE
 SCENARIO("HAS_SAME_ELEMENTS", "[catchExtension][HAS_SAME_ELEMENTS]") {
   GIVEN("Two parameters") {
     WHEN("Both parameters contain the same elements (including duplicates), in any order") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfElements);
+      const arma::Col<double>& parameter = continuousRandomNumbers(numberOfElements);
       CAPTURE(parameter);
       const arma::Col<double>& shuffeldParameter = arma::shuffle(parameter);
       CAPTURE(shuffeldParameter);
@@ -547,10 +547,10 @@ SCENARIO("HAS_SAME_ELEMENTS", "[catchExtension][HAS_SAME_ELEMENTS]") {
 
 SCENARIO("HAS_SAME_ELEMENTS failure test", "[catchExtension][HAS_SAME_ELEMENTS][!shouldfail]") {
   GIVEN("Two parameters") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    const arma::Col<double> parameter = getContinuousRandomNumbers(numberOfElements);
+    const arma::Col<double> parameter = continuousRandomNumbers(numberOfElements);
     CAPTURE(parameter);
 
     arma::Col<double> shuffeldParameter = arma::shuffle(parameter);
@@ -579,12 +579,12 @@ SCENARIO("HAS_SAME_ELEMENTS failure test", "[catchExtension][HAS_SAME_ELEMENTS][
 SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
   GIVEN("Two sets of samples") {
     WHEN("Both sets are identical (have the same samples in the same order)") {
-      const arma::uword numberOfSamples = getDiscreteRandomNumber();
+      const arma::uword numberOfSamples = discreteRandomNumber();
       CAPTURE(numberOfSamples);
 
       std::vector<std::pair<arma::Col<double>, double>> firstSamples;
       for (arma::uword n = 0; n < numberOfSamples; ++n) {
-        firstSamples.push_back({getContinuousRandomNumbers(getDiscreteRandomNumber()), getContinuousRandomNumber()});
+        firstSamples.push_back({continuousRandomNumbers(discreteRandomNumber()), continuousRandomNumber()});
       }
 
       std::vector<std::pair<arma::Col<double>, double>> secondSamples;
@@ -600,12 +600,12 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two sets of continuous parameters") {
     WHEN("Both sets are identical (have the same elements in the same order)") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
       std::vector<arma::Col<double>> firstParameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        firstParameters.push_back(getContinuousRandomNumbers(getDiscreteRandomNumber()));
+        firstParameters.push_back(continuousRandomNumbers(discreteRandomNumber()));
       }
 
       std::vector<arma::Col<double>> secondParameters;
@@ -621,12 +621,12 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two sets of 3-dimensional continuous parameters ") {
     WHEN("Both sets are identical (have the same elements in the same order)") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
       std::vector<arma::Col<double>::fixed<3>> firstParameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        firstParameters.push_back(getContinuousRandomNumbers(3));
+        firstParameters.push_back(continuousRandomNumbers(3));
       }
 
       std::vector<arma::Col<double>> secondParameters;
@@ -642,12 +642,12 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two sets of 2-dimensional continuous parameters") {
     WHEN("Both sets are identical (have the same elements in the same order)") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
       std::vector<arma::Col<double>::fixed<2>> firstParameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        firstParameters.push_back(getContinuousRandomNumbers(2));
+        firstParameters.push_back(continuousRandomNumbers(2));
       }
 
       std::vector<arma::Col<double>> secondParameters;
@@ -663,12 +663,12 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two sets of discrete parameters") {
     WHEN("Both sets are identical (have the same elements in the same order)") {
-      const arma::uword numberOfParameters = getDiscreteRandomNumber();
+      const arma::uword numberOfParameters = discreteRandomNumber();
       CAPTURE(numberOfParameters);
 
       std::vector<arma::Col<arma::uword>> firstParameters;
       for (arma::uword n = 0; n < numberOfParameters; ++n) {
-        firstParameters.push_back(getDiscreteRandomNumbers(getDiscreteRandomNumber()));
+        firstParameters.push_back(discreteRandomNumbers(discreteRandomNumber()));
       }
 
       std::vector<arma::Col<arma::uword>> secondParameters;
@@ -684,13 +684,13 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two continuous cubes") {
     WHEN("Both cubes are identical (have the same elements in the same order)") {
-      const arma::uword numberOfRows = getDiscreteRandomNumber();
+      const arma::uword numberOfRows = discreteRandomNumber();
       CAPTURE(numberOfRows);
 
-      const arma::uword numberOfColumns = getDiscreteRandomNumber();
+      const arma::uword numberOfColumns = discreteRandomNumber();
       CAPTURE(numberOfColumns);
 
-      const arma::uword numberOfSlices = getDiscreteRandomNumber();
+      const arma::uword numberOfSlices = discreteRandomNumber();
       CAPTURE(numberOfSlices);
 
       const arma::Cube<double>& firstCube = arma::randu<arma::Cube<double>>(numberOfRows, numberOfColumns, numberOfSlices);
@@ -707,13 +707,13 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two discrete cubes") {
     WHEN("Both cubes are identical (have the same elements in the same order)") {
-      const arma::uword numberOfRows = getDiscreteRandomNumber();
+      const arma::uword numberOfRows = discreteRandomNumber();
       CAPTURE(numberOfRows);
 
-      const arma::uword numberOfColumns = getDiscreteRandomNumber();
+      const arma::uword numberOfColumns = discreteRandomNumber();
       CAPTURE(numberOfColumns);
 
-      const arma::uword numberOfSlices = getDiscreteRandomNumber();
+      const arma::uword numberOfSlices = discreteRandomNumber();
       CAPTURE(numberOfSlices);
 
       const arma::Cube<arma::uword>& firstCube = arma::randi<arma::Cube<arma::uword>>(numberOfRows, numberOfColumns, numberOfSlices);
@@ -730,13 +730,13 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two continuous matrices") {
     WHEN("Both sets are identical (have the same elements in the same order)") {
-      const arma::uword numberOfRows = getDiscreteRandomNumber();
+      const arma::uword numberOfRows = discreteRandomNumber();
       CAPTURE(numberOfRows);
 
-      const arma::uword numberOfColumns = getDiscreteRandomNumber();
+      const arma::uword numberOfColumns = discreteRandomNumber();
       CAPTURE(numberOfColumns);
 
-      const arma::Mat<double>& firstMatrix = getContinuousRandomNumbers(numberOfRows, numberOfColumns);
+      const arma::Mat<double>& firstMatrix = continuousRandomNumbers(numberOfRows, numberOfColumns);
       CAPTURE(firstMatrix);
 
       const arma::Mat<double>& secondMatrix = firstMatrix;
@@ -750,13 +750,13 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two discrete matrices") {
     WHEN("Both sets are identical (have the same elements in the same order)") {
-      const arma::uword numberOfRows = getDiscreteRandomNumber();
+      const arma::uword numberOfRows = discreteRandomNumber();
       CAPTURE(numberOfRows);
 
-      const arma::uword numberOfColumns = getDiscreteRandomNumber();
+      const arma::uword numberOfColumns = discreteRandomNumber();
       CAPTURE(numberOfColumns);
 
-      const arma::Mat<arma::uword>& firstMatrix = getDiscreteRandomNumbers(numberOfRows, numberOfColumns);
+      const arma::Mat<arma::uword>& firstMatrix = discreteRandomNumbers(numberOfRows, numberOfColumns);
       CAPTURE(firstMatrix);
 
       const arma::Mat<arma::uword>& secondMatrix = firstMatrix;
@@ -770,10 +770,10 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two continuous column vectors") {
     WHEN("Both vectors are identical (have the same elements in the same order)") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::Col<double>& firstVector = getContinuousRandomNumbers(numberOfElements);
+      const arma::Col<double>& firstVector = continuousRandomNumbers(numberOfElements);
       CAPTURE(firstVector);
 
       const arma::Col<double>& secondVector = firstVector;
@@ -787,10 +787,10 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two discrete column vectors") {
     WHEN("Both vectors are identical (have the same elements in the same order)") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::Col<arma::uword>& firstVector = getDiscreteRandomNumbers(numberOfElements);
+      const arma::Col<arma::uword>& firstVector = discreteRandomNumbers(numberOfElements);
       CAPTURE(firstVector);
 
       const arma::Col<arma::uword>& secondVector = firstVector;
@@ -804,10 +804,10 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two continuous row vectors") {
     WHEN("Both vectors are identical (have the same elements in the same order)") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::Row<double>& firstVector = getContinuousRandomNumbers(numberOfElements).t();
+      const arma::Row<double>& firstVector = continuousRandomNumbers(numberOfElements).t();
       CAPTURE(firstVector);
 
       const arma::Row<double>& secondVector = firstVector;
@@ -821,10 +821,10 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
   GIVEN("Two discrete row vectors") {
     WHEN("Both vectors are identical (have the same elements in the same order)") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::Row<arma::uword>& firstVector = getDiscreteRandomNumbers(numberOfElements).t();
+      const arma::Row<arma::uword>& firstVector = discreteRandomNumbers(numberOfElements).t();
       CAPTURE(firstVector);
 
       const arma::Row<arma::uword>& secondVector = firstVector;
@@ -839,12 +839,12 @@ SCENARIO("IS_EQUAL", "[catchExtension][IS_EQUAL]") {
 
 SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   GIVEN("Two sets of samples") {
-    const arma::uword numberOfSamples = getDiscreteRandomNumber();
+    const arma::uword numberOfSamples = discreteRandomNumber();
     CAPTURE(numberOfSamples);
 
     std::vector<std::pair<arma::Col<double>, double>> firstSamples;
     for (arma::uword n = 0; n < numberOfSamples; ++n) {
-      firstSamples.push_back({getContinuousRandomNumbers(getDiscreteRandomNumber()), getContinuousRandomNumber()});
+      firstSamples.push_back({continuousRandomNumbers(discreteRandomNumber()), continuousRandomNumber()});
     }
 
     std::vector<std::pair<arma::Col<double>, double>> secondSamples;
@@ -881,12 +881,12 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two sets of continuous parameters") {
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     std::vector<arma::Col<double>> firstParameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      firstParameters.push_back(getContinuousRandomNumbers(getDiscreteRandomNumber()));
+      firstParameters.push_back(continuousRandomNumbers(discreteRandomNumber()));
     }
 
     std::vector<arma::Col<double>> secondParameters;
@@ -923,12 +923,12 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two sets of 3-dimensional continuous parameters ") {
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     std::vector<arma::Col<double>::fixed<3>> firstParameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      firstParameters.push_back(getContinuousRandomNumbers(3));
+      firstParameters.push_back(continuousRandomNumbers(3));
     }
 
     std::vector<arma::Col<double>> secondParameters;
@@ -972,12 +972,12 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two sets of 2-dimensional continuous parameters") {
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     std::vector<arma::Col<double>::fixed<2>> firstParameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      firstParameters.push_back(getContinuousRandomNumbers(2));
+      firstParameters.push_back(continuousRandomNumbers(2));
     }
 
     std::vector<arma::Col<double>> secondParameters;
@@ -1021,12 +1021,12 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two sets of discrete parameters") {
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
     std::vector<arma::Col<arma::uword>> firstParameters;
     for (arma::uword n = 0; n < numberOfParameters; ++n) {
-      firstParameters.push_back(getDiscreteRandomNumbers(getDiscreteRandomNumber()));
+      firstParameters.push_back(discreteRandomNumbers(discreteRandomNumber()));
     }
 
     std::vector<arma::Col<arma::uword>> secondParameters;
@@ -1063,13 +1063,13 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two continuous cubes") {
-    const arma::uword numberOfRows = getDiscreteRandomNumber();
+    const arma::uword numberOfRows = discreteRandomNumber();
     CAPTURE(numberOfRows);
 
-    const arma::uword numberOfColumns = getDiscreteRandomNumber();
+    const arma::uword numberOfColumns = discreteRandomNumber();
     CAPTURE(numberOfColumns);
 
-    const arma::uword numberOfSlices = getDiscreteRandomNumber();
+    const arma::uword numberOfSlices = discreteRandomNumber();
     CAPTURE(numberOfSlices);
 
     arma::Cube<double> firstCube = arma::randu<arma::Cube<double>>(numberOfRows, numberOfColumns, numberOfSlices);
@@ -1132,13 +1132,13 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two discrete cubes") {
-    const arma::uword numberOfRows = getDiscreteRandomNumber();
+    const arma::uword numberOfRows = discreteRandomNumber();
     CAPTURE(numberOfRows);
 
-    const arma::uword numberOfColumns = getDiscreteRandomNumber();
+    const arma::uword numberOfColumns = discreteRandomNumber();
     CAPTURE(numberOfColumns);
 
-    const arma::uword numberOfSlices = getDiscreteRandomNumber();
+    const arma::uword numberOfSlices = discreteRandomNumber();
     CAPTURE(numberOfSlices);
 
     arma::Cube<arma::uword> firstCube = arma::randi<arma::Cube<arma::uword>>(numberOfRows, numberOfColumns, numberOfSlices);
@@ -1201,13 +1201,13 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two continuous matrices") {
-    const arma::uword numberOfRows = getDiscreteRandomNumber();
+    const arma::uword numberOfRows = discreteRandomNumber();
     CAPTURE(numberOfRows);
 
-    const arma::uword numberOfColumns = getDiscreteRandomNumber();
+    const arma::uword numberOfColumns = discreteRandomNumber();
     CAPTURE(numberOfColumns);
 
-    arma::Mat<double> firstMatrix = getContinuousRandomNumbers(numberOfRows, numberOfColumns);
+    arma::Mat<double> firstMatrix = continuousRandomNumbers(numberOfRows, numberOfColumns);
     arma::Mat<double> secondMatrix = firstMatrix;
 
     WHEN("Both matrices have a different number of rows") {
@@ -1256,13 +1256,13 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two discrete matrices") {
-    const arma::uword numberOfRows = getDiscreteRandomNumber();
+    const arma::uword numberOfRows = discreteRandomNumber();
     CAPTURE(numberOfRows);
 
-    const arma::uword numberOfColumns = getDiscreteRandomNumber();
+    const arma::uword numberOfColumns = discreteRandomNumber();
     CAPTURE(numberOfColumns);
 
-    arma::Mat<arma::uword> firstMatrix = getDiscreteRandomNumbers(numberOfRows, numberOfColumns);
+    arma::Mat<arma::uword> firstMatrix = discreteRandomNumbers(numberOfRows, numberOfColumns);
     arma::Mat<arma::uword> secondMatrix = firstMatrix;
 
     WHEN("Both matrices have a different number of rows") {
@@ -1311,10 +1311,10 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two continuous column vectors") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    arma::Col<double> firstVector = getContinuousRandomNumbers(numberOfElements);
+    arma::Col<double> firstVector = continuousRandomNumbers(numberOfElements);
     arma::Col<double> secondVector = firstVector;
 
     WHEN("Both vectors have a different number of elements") {
@@ -1352,10 +1352,10 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two discrete column vectors") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    arma::Col<arma::uword> firstVector = getDiscreteRandomNumbers(numberOfElements);
+    arma::Col<arma::uword> firstVector = discreteRandomNumbers(numberOfElements);
     arma::Col<arma::uword> secondVector = firstVector;
 
     WHEN("Both vectors have a different number of elements") {
@@ -1393,10 +1393,10 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two continuous row vectors") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    arma::Row<double> firstVector = getContinuousRandomNumbers(numberOfElements).t();
+    arma::Row<double> firstVector = continuousRandomNumbers(numberOfElements).t();
     arma::Row<double> secondVector = firstVector;
 
     WHEN("Both vectors have a different number of elements") {
@@ -1434,10 +1434,10 @@ SCENARIO("IS_EQUAL failure test", "[catchExtension][IS_EQUAL][!shouldfail]") {
   }
 
   GIVEN("Two discrete row vectors") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    arma::Row<arma::uword> firstVector = getDiscreteRandomNumbers(numberOfElements).t();
+    arma::Row<arma::uword> firstVector = discreteRandomNumbers(numberOfElements).t();
     arma::Row<arma::uword> secondVector = firstVector;
 
     WHEN("Both vectors have a different number of elements") {

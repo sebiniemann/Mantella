@@ -41,10 +41,10 @@ SCENARIO("bbob::KatsuuraFunction.objectiveFunction_", "[bbob::KatsuuraFunction][
 
 SCENARIO("bbob::KatsuuraFunction.getNormalisedObjectiveValue", "[bbob::KatsuuraFunction][bbob::KatsuuraFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -86,7 +86,7 @@ SCENARIO("bbob::KatsuuraFunction.getNormalisedObjectiveValue", "[bbob::KatsuuraF
 }
 
 SCENARIO("bbob::KatsuuraFunction.getObjectiveFunctionName", "[bbob::KatsuuraFunction][bbob::KatsuuraFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::KatsuuraFunction optimisationProblem(numberOfDimensions);
 

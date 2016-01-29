@@ -12,37 +12,37 @@ std::string rootTestDataDirectory("");
 int nodeRank(0);
 int numberOfNodes(1);
 
-arma::Mat<double> getContinuousRandomNumbers(
+arma::Mat<double> continuousRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns) {
   return arma::randu<arma::Mat<double>>(numberOfRows, numberOfColumns) * 200.0 - 100.0;
 }
 
-arma::Mat<arma::uword> getDiscreteRandomNumbers(
+arma::Mat<arma::uword> discreteRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns) {
   return arma::randi<arma::Mat<arma::uword>>(numberOfRows, numberOfColumns, arma::distr_param(1, 10));
 }
 
-arma::Col<double> getContinuousRandomNumbers(
+arma::Col<double> continuousRandomNumbers(
     const arma::uword numberOfDimensions) {
   return arma::randu<arma::Col<double>>(numberOfDimensions) * 200.0 - 100.0;
 }
 
-arma::Col<arma::uword> getDiscreteRandomNumbers(
+arma::Col<arma::uword> discreteRandomNumbers(
     const arma::uword numberOfElements) {
   return arma::randi<arma::Col<arma::uword>>(numberOfElements, arma::distr_param(1, 10));
 }
 
-double getContinuousRandomNumber() {
+double continuousRandomNumber() {
   return std::uniform_real_distribution<double>(-100.0, 100.0)(mant::Rng::getGenerator());
 }
 
-arma::uword getDiscreteRandomNumber() {
+arma::uword discreteRandomNumber() {
   return std::uniform_int_distribution<arma::uword>(1, 10)(mant::Rng::getGenerator());
 }
 
-arma::uword getDifferentDiscreteRandomNumber(
+arma::uword differentDiscreteRandomNumber(
     const arma::uword discreteRandomNumber) {
   arma::uword randomNumber = std::uniform_int_distribution<arma::uword>(1, 9)(mant::Rng::getGenerator());
   if (randomNumber >= discreteRandomNumber) {

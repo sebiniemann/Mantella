@@ -12,13 +12,13 @@ SCENARIO("range", "[armadillo][range]") {
   GIVEN("Two discrete numbers [a] and [b] and a step size") {
     WHEN("[a] < [b]") {
       // Including zero
-      const arma::uword a = getDiscreteRandomNumber() - 1;
+      const arma::uword a = discreteRandomNumber() - 1;
       CAPTURE(a);
 
-      const arma::uword b = a + getDiscreteRandomNumber();
+      const arma::uword b = a + discreteRandomNumber();
       CAPTURE(b);
 
-      const arma::uword stepSize = getDiscreteRandomNumber();
+      const arma::uword stepSize = discreteRandomNumber();
       CAPTURE(stepSize);
 
       THEN("Return the range") {
@@ -28,13 +28,13 @@ SCENARIO("range", "[armadillo][range]") {
 
     WHEN("[a] = [b]") {
       // Including zero
-      const arma::uword a = getDiscreteRandomNumber() - 1;
+      const arma::uword a = discreteRandomNumber() - 1;
       CAPTURE(a);
 
       const arma::uword b = a;
       CAPTURE(b);
 
-      const arma::uword stepSize = getDiscreteRandomNumber();
+      const arma::uword stepSize = discreteRandomNumber();
       CAPTURE(stepSize);
 
       THEN("Return only a (or b)") {
@@ -61,10 +61,10 @@ SCENARIO("range", "[armadillo][range]") {
   GIVEN("Two discrete numbers [a] and [b]") {
     WHEN("[a] < [b]") {
       // Including zero
-      const arma::uword a = getDiscreteRandomNumber() - 1;
+      const arma::uword a = discreteRandomNumber() - 1;
       CAPTURE(a);
 
-      const arma::uword b = a + getDiscreteRandomNumber();
+      const arma::uword b = a + discreteRandomNumber();
       CAPTURE(b);
 
       THEN("Return the range") {
@@ -74,7 +74,7 @@ SCENARIO("range", "[armadillo][range]") {
 
     WHEN("[a] = [b]") {
       // Including zero
-      const arma::uword a = getDiscreteRandomNumber() - 1;
+      const arma::uword a = discreteRandomNumber() - 1;
       CAPTURE(a);
 
       const arma::uword b = a;
@@ -119,7 +119,7 @@ SCENARIO("Hash", "[armadillo][Hash]") {
     CAPTURE(numberOfParameters);
 
     WHEN("All parameters are randomly and uniformly distributed") {
-      const arma::Mat<double>& parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+      const arma::Mat<double>& parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
       CAPTURE(parameters);
 
       THEN("There is at most one hash collision") {
@@ -143,10 +143,10 @@ SCENARIO("IsEqual", "[armadillo][IsEqual]") {
   GIVEN("Two vectors") {
     mant::IsEqual isEqual;
 
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    const arma::Col<double>& firstParameter = getContinuousRandomNumbers(numberOfElements);
+    const arma::Col<double>& firstParameter = continuousRandomNumbers(numberOfElements);
     CAPTURE(firstParameter);
 
     WHEN("Both are identical (having the same elements in the same order)") {
@@ -169,10 +169,10 @@ SCENARIO("IsEqual", "[armadillo][IsEqual]") {
     }
 
     WHEN("Both have a different number of elements") {
-      const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfElements);
+      const arma::uword differentNumberOfDimensions = differentDiscreteRandomNumber(numberOfElements);
       CAPTURE(differentNumberOfDimensions);
 
-      const arma::Col<double>& secondParameter = getContinuousRandomNumbers(differentNumberOfDimensions);
+      const arma::Col<double>& secondParameter = continuousRandomNumbers(differentNumberOfDimensions);
       CAPTURE(secondParameter);
 
       THEN("Return false") {
