@@ -589,48 +589,6 @@ SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][Optimisati
         CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
       }
     }
-  }
-
-  GIVEN("An updated lower bounds") {
-    const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
-    CAPTURE(lowerBounds);
-
-    optimisationProblem.setLowerBounds(lowerBounds);
-
-    THEN("Return the updated lower bounds") {
-      IS_EQUAL(optimisationProblem.getLowerBounds(), SYNCHRONISED(lowerBounds));
-    }
-  }
-}
-
-SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][OptimisationProblem.setUpperBounds]") {
-  GIVEN("Some upper bounds") {
-    WHEN("The upper bounds are finite and have exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(upperBounds);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setUpperBounds(upperBounds));
-      }
-
-      THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
-        ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
-        ::mant::isCachingSamples = false;
 
     WHEN("The upper bounds have more then [numberOfDimensions] elements") {
       const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
@@ -1373,7 +1331,6 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
         const arma::Col<double> parameter = parameters.col(n);
         expectedSamples.insert({parameter, objectiveFunction(parameter)});
       }
-    }
 
       ::mant::isCachingSamples = true;
 
