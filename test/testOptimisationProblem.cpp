@@ -6,7 +6,7 @@
 #include <mantella>
 
 SCENARIO("OptimisationProblem.numberOfDimensions_", "[OptimisationProblem][OptimisationProblem.numberOfDimensions_]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
 
   CAPTURE(numberOfDimensions);
 
@@ -20,7 +20,7 @@ SCENARIO("OptimisationProblem.numberOfDimensions_", "[OptimisationProblem][Optim
 SCENARIO("OptimisationProblem::OptimisationProblem", "[OptimisationProblem][OptimisationProblem::OptimisationProblem]") {
   GIVEN("A number of dimensions") {
     WHEN("The number of dimensions is greater than 0") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       THEN("Throw no exception") {
@@ -37,7 +37,7 @@ SCENARIO("OptimisationProblem::OptimisationProblem", "[OptimisationProblem][Opti
 }
 
 SCENARIO("OptimisationProblem.setObjectiveFunction", "[OptimisationProblem][OptimisationProblem.setObjectiveFunction]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -57,7 +57,7 @@ SCENARIO("OptimisationProblem.setObjectiveFunction", "[OptimisationProblem][Opti
       }
 
       THEN("Reset all counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(objectiveFunction);
@@ -93,7 +93,7 @@ SCENARIO("OptimisationProblem.setObjectiveFunction", "[OptimisationProblem][Opti
       }
 
       THEN("Reset all counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(objectiveFunction);
@@ -119,7 +119,7 @@ SCENARIO("OptimisationProblem.setObjectiveFunction", "[OptimisationProblem][Opti
 }
 
 SCENARIO("OptimisationProblem.getObjectiveFunctionName", "[OptimisationProblem][OptimisationProblem.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -158,14 +158,14 @@ SCENARIO("OptimisationProblem.getObjectiveFunctionName", "[OptimisationProblem][
 }
 
 SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][OptimisationProblem.getObjectiveValue]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
   GIVEN("A parameter") {
     WHEN("The default objective function is unchanged") {
-      const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameter);
 
       THEN("Throw a std::logic_error") {
@@ -181,10 +181,10 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
       optimisationProblem.setObjectiveFunction(objectiveFunction);
 
       AND_WHEN("All parameters are finite and have exactly [numberOfDimensions] rows") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
         parameters = arma::shuffle(arma::join_rows(parameters, parameters));
         CAPTURE(parameters);
@@ -194,11 +194,11 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
           optimisationProblem.setParameterPermutation(parameterPermutation);
           CAPTURE(parameterPermutation);
 
-          const arma::Col<double>& parameterScaling = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+          const arma::Col<double>& parameterScaling = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
           optimisationProblem.setParameterScaling(parameterScaling);
           CAPTURE(parameterScaling);
 
-          const arma::Col<double>& parameterTranslation = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+          const arma::Col<double>& parameterTranslation = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
           optimisationProblem.setParameterTranslation(parameterTranslation);
           CAPTURE(parameterTranslation);
 
@@ -207,11 +207,11 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
           CAPTURE(parameterRotation);
 
           // Objective value space modifiers
-          const double objectiveValueScaling = SYNCHRONISED(getContinuousRandomNumber());
+          const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
           optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
           CAPTURE(objectiveValueScaling);
 
-          const double objectiveValueTranslation = SYNCHRONISED(getContinuousRandomNumber());
+          const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
           optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
           CAPTURE(objectiveValueTranslation);
 
@@ -238,7 +238,7 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
       }
 
       AND_WHEN("The parameter has less then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions - 1);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions - 1);
         CAPTURE(parameter);
 
         THEN("Throw a std::logic_error") {
@@ -247,7 +247,7 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
       }
 
       AND_WHEN("The parameter has more then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber());
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
         CAPTURE(parameter);
 
         THEN("Throw a std::logic_error") {
@@ -256,7 +256,7 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
       }
 
       AND_WHEN("The parameter is infinite") {
-        arma::Col<double> parameter = getContinuousRandomNumbers(numberOfDimensions);
+        arma::Col<double> parameter = continuousRandomNumbers(numberOfDimensions);
         parameter(0) = arma::datum::inf;
         CAPTURE(parameter);
 
@@ -269,14 +269,14 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
 }
 
 SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProblem][OptimisationProblem.getNormalisedObjectiveValue]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
   GIVEN("A normalised parameter") {
     WHEN("The default objective function is unchanged") {
-      const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+      const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
       CAPTURE(parameter);
 
       THEN("Throw a std::logic_error") {
@@ -292,10 +292,10 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
       optimisationProblem.setObjectiveFunction(objectiveFunction);
 
       AND_WHEN("All parameters are finite and have exactly [numberOfDimensions] rows") {
-        const arma::uword numberOfParameters = getDiscreteRandomNumber();
+        const arma::uword numberOfParameters = discreteRandomNumber();
         CAPTURE(numberOfParameters);
 
-        arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+        arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
         parameters = arma::shuffle(arma::join_rows(parameters, parameters));
         CAPTURE(parameters);
@@ -306,11 +306,11 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
           optimisationProblem.setParameterPermutation(parameterPermutation);
           CAPTURE(parameterPermutation);
 
-          const arma::Col<double>& parameterScaling = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+          const arma::Col<double>& parameterScaling = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
           optimisationProblem.setParameterScaling(parameterScaling);
           CAPTURE(parameterScaling);
 
-          const arma::Col<double>& parameterTranslation = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+          const arma::Col<double>& parameterTranslation = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
           optimisationProblem.setParameterTranslation(parameterTranslation);
           CAPTURE(parameterTranslation);
 
@@ -320,11 +320,11 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
           CAPTURE(parameterRotation);
 
           // Objective value space modifiers
-          const double objectiveValueScaling = SYNCHRONISED(getContinuousRandomNumber());
+          const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
           optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
           CAPTURE(objectiveValueScaling);
 
-          const double objectiveValueTranslation = SYNCHRONISED(getContinuousRandomNumber());
+          const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
           optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
           CAPTURE(objectiveValueTranslation);
 
@@ -351,7 +351,7 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
       }
 
       AND_WHEN("The parameter has less then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions - 1));
+        const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions - 1));
         CAPTURE(parameter);
 
         THEN("Throw a std::logic_error") {
@@ -360,7 +360,7 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
       }
 
       AND_WHEN("The parameter has more then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber()));
+        const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions + discreteRandomNumber()));
         CAPTURE(parameter);
 
         THEN("Throw a std::logic_error") {
@@ -369,7 +369,7 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
       }
 
       AND_WHEN("The parameter is infinite") {
-        arma::Col<double> parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+        arma::Col<double> parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
         parameter(0) = arma::datum::inf;
         CAPTURE(parameter);
 
@@ -384,12 +384,12 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
 SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][OptimisationProblem.setLowerBounds]") {
   GIVEN("Some lower bounds") {
     WHEN("The lower bounds are finite and have exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions);
       CAPTURE(lowerBounds);
 
       THEN("Throw no exception") {
@@ -397,7 +397,7 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
       }
 
       THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -426,12 +426,12 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
     }
 
     WHEN("The lower bound is greater than the upper bound") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions);
       CAPTURE(upperBounds);
 
       optimisationProblem.setUpperBounds(upperBounds);
@@ -445,12 +445,12 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
     }
 
     WHEN("The lower bounds have less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions - 1);
+      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions - 1);
       CAPTURE(lowerBounds);
 
       THEN("Throw a std::logic_error") {
@@ -459,12 +459,12 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
     }
 
     WHEN("The lower bounds have more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber());
+      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
       CAPTURE(lowerBounds);
 
       THEN("Throw a std::logic_error") {
@@ -473,12 +473,12 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
     }
 
     WHEN("At least one lower bound is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      arma::Col<double> lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
+      arma::Col<double> lowerBounds = continuousRandomNumbers(numberOfDimensions);
       lowerBounds(0) = arma::datum::inf;
       CAPTURE(lowerBounds);
 
@@ -490,7 +490,7 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
 }
 
 SCENARIO("OptimisationProblem.getLowerBounds", "[OptimisationProblem][OptimisationProblem.getLowerBounds]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -498,6 +498,96 @@ SCENARIO("OptimisationProblem.getLowerBounds", "[OptimisationProblem][Optimisati
   GIVEN("Default lower bounds") {
     THEN("Return the default lower bounds (-10, ..., -10)^n") {
       IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 10);
+    }
+  }
+
+  GIVEN("An updated lower bounds") {
+    const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions);
+    CAPTURE(lowerBounds);
+
+    optimisationProblem.setLowerBounds(lowerBounds);
+
+    THEN("Return the updated lower bounds") {
+      IS_EQUAL(optimisationProblem.getLowerBounds(), SYNCHRONISED(lowerBounds));
+    }
+  }
+}
+
+SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][OptimisationProblem.setUpperBounds]") {
+  GIVEN("Some upper bounds") {
+    WHEN("The upper bounds are finite and have exactly [numberOfDimensions] elements") {
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
+      CAPTURE(numberOfDimensions);
+
+      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
+
+      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions);
+      CAPTURE(upperBounds);
+
+      THEN("Throw no exception") {
+        CHECK_NOTHROW(optimisationProblem.setUpperBounds(upperBounds));
+      }
+
+      THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
+        CAPTURE(parameter);
+
+        optimisationProblem.setObjectiveFunction(
+            [&optimisationProblem](
+                const arma::Col<double>& parameter_) {
+            return arma::accu(parameter_);
+            });
+        // Populates the cache and increments the counter
+        ::mant::isCachingSamples = true;
+        optimisationProblem.getObjectiveValue(parameter);
+        ::mant::isCachingSamples = false;
+
+        optimisationProblem.setUpperBounds(upperBounds);
+
+        CHECK(optimisationProblem.getNumberOfEvaluations() == 1);
+        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 1);
+        CHECK(optimisationProblem.getCachedSamples().size() == 1);
+      }
+
+#if defined(SUPPORT_MPI)
+      THEN("The upper bounds are synchronised over MPI") {
+        optimisationProblem.setUpperBounds(upperBounds);
+        IS_EQUAL(optimisationProblem.getUpperBounds(), SYNCHRONISED(upperBounds));
+      }
+#endif
+    }
+
+    WHEN("The upper bounds are greater than the lower bounds") {
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
+      CAPTURE(numberOfDimensions);
+
+      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
+
+      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions);
+      CAPTURE(lowerBounds);
+
+      optimisationProblem.setLowerBounds(lowerBounds);
+
+      const arma::Col<double>& upperBounds = lowerBounds - arma::ones<arma::Col<double>>(numberOfDimensions);
+      CAPTURE(upperBounds);
+
+      THEN("Throw no exception") {
+        CHECK_NOTHROW(optimisationProblem.setUpperBounds(upperBounds));
+      }
+    }
+
+    WHEN("The upper bounds have less then [numberOfDimensions] elements") {
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
+      CAPTURE(numberOfDimensions);
+
+      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
+
+      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions - 1);
+      CAPTURE(upperBounds);
+
+      THEN("Throw a std::logic_error") {
+        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
+      }
     }
   }
 
@@ -542,61 +632,13 @@ SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][Optimisati
         optimisationProblem.getObjectiveValue(parameter);
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setUpperBounds(upperBounds);
-
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 1);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 1);
-        CHECK(optimisationProblem.getCachedSamples().size() == 1);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The upper bounds are synchronised over MPI") {
-        optimisationProblem.setUpperBounds(upperBounds);
-        IS_EQUAL(optimisationProblem.getUpperBounds(), SYNCHRONISED(upperBounds));
-      }
-#endif
-    }
-
-    WHEN("The upper bounds are greater than the lower bounds") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& lowerBounds = getContinuousRandomNumbers(numberOfDimensions);
-      CAPTURE(lowerBounds);
-
-      optimisationProblem.setLowerBounds(lowerBounds);
-
-      const arma::Col<double>& upperBounds = lowerBounds - arma::ones<arma::Col<double>>(numberOfDimensions);
-      CAPTURE(upperBounds);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setUpperBounds(upperBounds));
-      }
-    }
-
-    WHEN("The upper bounds have less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions - 1);
-      CAPTURE(upperBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
-      }
-    }
-
     WHEN("The upper bounds have more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber());
+      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
       CAPTURE(upperBounds);
 
       THEN("Throw a std::logic_error") {
@@ -605,12 +647,12 @@ SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][Optimisati
     }
 
     WHEN("At least one upper bound is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      arma::Col<double> upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+      arma::Col<double> upperBounds = continuousRandomNumbers(numberOfDimensions);
       upperBounds(0) = arma::datum::inf;
       CAPTURE(upperBounds);
 
@@ -622,7 +664,7 @@ SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][Optimisati
 }
 
 SCENARIO("OptimisationProblem.getUpperBounds", "[OptimisationProblem][OptimisationProblem.getUpperBounds]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -634,7 +676,7 @@ SCENARIO("OptimisationProblem.getUpperBounds", "[OptimisationProblem][Optimisati
   }
 
   GIVEN("An updated upper bounds") {
-    const arma::Col<double>& upperBounds = getContinuousRandomNumbers(numberOfDimensions);
+    const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions);
     CAPTURE(upperBounds);
 
     optimisationProblem.setUpperBounds(upperBounds);
@@ -648,7 +690,7 @@ SCENARIO("OptimisationProblem.getUpperBounds", "[OptimisationProblem][Optimisati
 SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][OptimisationProblem.setParameterPermutation]") {
   GIVEN("A parameter permutation") {
     WHEN("The parameter permutation has [numberOfDimensions] unique elements, all within [0, [numberOfDimensions] - 1]") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -661,7 +703,7 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -690,7 +732,7 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
     }
 
     WHEN("The parameter permutation has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -704,12 +746,12 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
     }
 
     WHEN("The parameter permutation has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions + getDiscreteRandomNumber());
+      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions + discreteRandomNumber());
       CAPTURE(parameterPermutation);
 
       THEN("Throw a std::logic_error") {
@@ -718,7 +760,7 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
     }
 
     WHEN("The parameter permutation has at least one element not in [0, [numberOfElements] - 1]") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -733,7 +775,7 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
     }
 
     WHEN("The parameter permutation has non-unique elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -750,7 +792,7 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
 }
 
 SCENARIO("OptimisationProblem.getParameterPermutation", "[OptimisationProblem][OptimisationProblem.getParameterPermutation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -776,12 +818,12 @@ SCENARIO("OptimisationProblem.getParameterPermutation", "[OptimisationProblem][O
 SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][OptimisationProblem.setParameterScaling]") {
   GIVEN("A parameter scaling") {
     WHEN("The parameter scaling is finite and has exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameterScaling);
 
       THEN("Throw no exception") {
@@ -789,7 +831,7 @@ SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][Optim
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -818,12 +860,12 @@ SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][Optim
     }
 
     WHEN("The parameter scaling has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions - 1);
+      const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions - 1);
       CAPTURE(parameterScaling);
 
       THEN("Throw a std::logic_error") {
@@ -832,12 +874,12 @@ SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][Optim
     }
 
     WHEN("The parameter scaling has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber());
+      const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
       CAPTURE(parameterScaling);
 
       THEN("Throw a std::logic_error") {
@@ -846,12 +888,12 @@ SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][Optim
     }
 
     WHEN("At least one element in the parameter scaling is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      arma::Col<double> parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
+      arma::Col<double> parameterScaling = continuousRandomNumbers(numberOfDimensions);
       parameterScaling(0) = arma::datum::inf;
       CAPTURE(parameterScaling);
 
@@ -863,7 +905,7 @@ SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][Optim
 }
 
 SCENARIO("OptimisationProblem.getParameterScaling", "[OptimisationProblem][OptimisationProblem.getParameterScaling]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -875,7 +917,7 @@ SCENARIO("OptimisationProblem.getParameterScaling", "[OptimisationProblem][Optim
   }
 
   WHEN("The default parameter scaling was changed") {
-    const arma::Col<double>& parameterScaling = getContinuousRandomNumbers(numberOfDimensions);
+    const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions);
     CAPTURE(parameterScaling);
 
     optimisationProblem.setParameterScaling(parameterScaling);
@@ -889,12 +931,12 @@ SCENARIO("OptimisationProblem.getParameterScaling", "[OptimisationProblem][Optim
 SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][OptimisationProblem.setParameterTranslation]") {
   GIVEN("A parameter translation") {
     WHEN("The parameter translation is finite and has exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
+      const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions);
       CAPTURE(parameterTranslation);
 
       THEN("Throw no exception") {
@@ -902,7 +944,7 @@ SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][O
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -931,12 +973,12 @@ SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][O
     }
 
     WHEN("The parameter translation has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions - 1);
+      const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions - 1);
       CAPTURE(parameterTranslation);
 
       THEN("Throw a std::logic_error") {
@@ -945,12 +987,12 @@ SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][O
     }
 
     WHEN("The parameter translation has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber());
+      const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
       CAPTURE(parameterTranslation);
 
       THEN("Throw a std::logic_error") {
@@ -959,12 +1001,12 @@ SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][O
     }
 
     WHEN("At least one element in the parameter translation is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      arma::Col<double> parameterTranslation = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber());
+      arma::Col<double> parameterTranslation = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
       parameterTranslation(0) = arma::datum::inf;
       CAPTURE(parameterTranslation);
 
@@ -976,7 +1018,7 @@ SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][O
 }
 
 SCENARIO("OptimisationProblem.getParameterTranslation", "[OptimisationProblem][OptimisationProblem.getParameterTranslation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -988,7 +1030,7 @@ SCENARIO("OptimisationProblem.getParameterTranslation", "[OptimisationProblem][O
   }
 
   WHEN("The default parameter translation was changed") {
-    const arma::Col<double>& parameterTranslation = getContinuousRandomNumbers(numberOfDimensions);
+    const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions);
     CAPTURE(parameterTranslation);
 
     optimisationProblem.setParameterTranslation(parameterTranslation);
@@ -1001,8 +1043,8 @@ SCENARIO("OptimisationProblem.getParameterTranslation", "[OptimisationProblem][O
 
 SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][OptimisationProblem.setParameterRotation]") {
   GIVEN("A parameter rotation") {
-    WHEN("The parameter rotation is orthogonal with determinant either 1 or -1") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    WHEN("The parameter rotation is orthogonal") {
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1015,7 +1057,7 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -1044,7 +1086,7 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
     }
 
     WHEN("The parameter rotation has less than [numberOfDimensions] rows or columns") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1058,12 +1100,12 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
     }
 
     WHEN("The parameter rotation has more than [numberOfDimensions] rows or columns") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions + getDiscreteRandomNumber());
+      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions + discreteRandomNumber());
       CAPTURE(parameterRotation);
 
       THEN("Throw a std::logic_error") {
@@ -1072,28 +1114,12 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
     }
 
     WHEN("The parameter rotation is not square") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Mat<double>& parameterRotation = getContinuousRandomNumbers(numberOfDimensions, 1 + numberOfDimensions);
-      CAPTURE(parameterRotation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter rotation's determinant is neither 1 or -1") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-      // Increasing an element of an orthonormal rotation matrix by 1 should result in a determinant unequal to 1 or -1.
-      parameterRotation(0, 0)++;
+      const arma::Mat<double>& parameterRotation = continuousRandomNumbers(numberOfDimensions, 1 + numberOfDimensions);
       CAPTURE(parameterRotation);
 
       THEN("Throw a std::logic_error") {
@@ -1102,7 +1128,7 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
     }
 
     WHEN("The parameter rotation's inverse is not equal to its transpose") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1120,7 +1146,7 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
 }
 
 SCENARIO("OptimisationProblem.getParameterRotation", "[OptimisationProblem][OptimisationProblem.getParameterRotation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1144,14 +1170,14 @@ SCENARIO("OptimisationProblem.getParameterRotation", "[OptimisationProblem][Opti
 }
 
 SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][OptimisationProblem.setObjectiveValueScaling]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
   GIVEN("An objective value scaling") {
     WHEN("The objective value scaling is finite") {
-      const double objectiveValueScaling = getContinuousRandomNumber();
+      const double objectiveValueScaling = continuousRandomNumber();
       CAPTURE(objectiveValueScaling);
 
       THEN("Throw no exception") {
@@ -1159,7 +1185,7 @@ SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -1199,7 +1225,7 @@ SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][
 }
 
 SCENARIO("OptimisationProblem.getObjectiveValueScaling", "[OptimisationProblem][OptimisationProblem.getObjectiveValueScaling]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1211,7 +1237,7 @@ SCENARIO("OptimisationProblem.getObjectiveValueScaling", "[OptimisationProblem][
   }
 
   WHEN("The default objective value scaling was changed") {
-    const double objectiveValueScaling = getContinuousRandomNumber();
+    const double objectiveValueScaling = continuousRandomNumber();
     CAPTURE(objectiveValueScaling);
 
     optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
@@ -1223,14 +1249,14 @@ SCENARIO("OptimisationProblem.getObjectiveValueScaling", "[OptimisationProblem][
 }
 
 SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProblem][OptimisationProblem.setObjectiveValueTranslation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
   GIVEN("An objective value translation") {
     WHEN("The objective value translation is finite") {
-      const double objectiveValueTranslation = getContinuousRandomNumber();
+      const double objectiveValueTranslation = continuousRandomNumber();
       CAPTURE(objectiveValueTranslation);
 
       THEN("Throw no exception") {
@@ -1238,7 +1264,7 @@ SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProbl
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -1278,7 +1304,7 @@ SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProbl
 }
 
 SCENARIO("OptimisationProblem.getObjectiveValueTranslation", "[OptimisationProblem][OptimisationProblem.getObjectiveValueTranslation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1290,7 +1316,7 @@ SCENARIO("OptimisationProblem.getObjectiveValueTranslation", "[OptimisationProbl
   }
 
   WHEN("The default objective value translation was changed") {
-    const double objectiveValueTranslation = getContinuousRandomNumber();
+    const double objectiveValueTranslation = continuousRandomNumber();
     CAPTURE(objectiveValueTranslation);
 
     optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
@@ -1302,7 +1328,7 @@ SCENARIO("OptimisationProblem.getObjectiveValueTranslation", "[OptimisationProbl
 }
 
 SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][OptimisationProblem.getCachedSamples]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1320,10 +1346,10 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
     };
     optimisationProblem.setObjectiveFunction(objectiveFunction);
 
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
-    arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
     // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
     parameters = arma::shuffle(arma::join_rows(parameters, parameters));
     CAPTURE(parameters);
@@ -1347,6 +1373,7 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
         const arma::Col<double> parameter = parameters.col(n);
         expectedSamples.insert({parameter, objectiveFunction(parameter)});
       }
+    }
 
       ::mant::isCachingSamples = true;
 
@@ -1365,12 +1392,12 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
 SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProblem][OptimisationProblem.setMinimalParameterDistance]") {
   GIVEN("A minimal parameter distance") {
     WHEN("The minimal parameter distance is finite, positive (including 0) and has exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& minimalParameterDistance = arma::abs(getContinuousRandomNumbers(numberOfDimensions));
+      const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions));
       CAPTURE(minimalParameterDistance);
 
       THEN("Throw no exception") {
@@ -1378,7 +1405,7 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
       }
 
       THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -1407,12 +1434,12 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
     }
 
     WHEN("The minimal parameter distance has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& minimalParameterDistance = arma::abs(getContinuousRandomNumbers(numberOfDimensions - 1));
+      const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions - 1));
       CAPTURE(minimalParameterDistance);
 
       THEN("Throw a std::logic_error") {
@@ -1421,12 +1448,12 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
     }
 
     WHEN("The minimal parameter distance has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& minimalParameterDistance = arma::abs(getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber()));
+      const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions + discreteRandomNumber()));
       CAPTURE(minimalParameterDistance);
 
       THEN("Throw a std::logic_error") {
@@ -1435,12 +1462,12 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
     }
 
     WHEN("At least one element in the minimal parameter distance is negative") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      const arma::Col<double>& minimalParameterDistance = -arma::abs(getContinuousRandomNumbers(numberOfDimensions));
+      const arma::Col<double>& minimalParameterDistance = -arma::abs(continuousRandomNumbers(numberOfDimensions));
       CAPTURE(minimalParameterDistance);
 
       THEN("Throw a std::logic_error") {
@@ -1449,12 +1476,12 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
     }
 
     WHEN("At least one element in the minimal parameter distance is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
 
       mant::OptimisationProblem optimisationProblem(numberOfDimensions);
 
-      arma::Col<double> minimalParameterDistance = arma::abs(getContinuousRandomNumbers(numberOfDimensions));
+      arma::Col<double> minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions));
       minimalParameterDistance(0) = arma::datum::inf;
       CAPTURE(minimalParameterDistance);
 
@@ -1466,7 +1493,7 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
 }
 
 SCENARIO("OptimisationProblem.getMinimalParameterDistance", "[OptimisationProblem][OptimisationProblem.getMinimalParameterDistance]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1478,7 +1505,7 @@ SCENARIO("OptimisationProblem.getMinimalParameterDistance", "[OptimisationProble
   }
 
   WHEN("The default minimal parameter distance was changed") {
-    const arma::Col<double>& minimalParameterDistance = arma::abs(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(minimalParameterDistance);
 
     optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
@@ -1490,7 +1517,7 @@ SCENARIO("OptimisationProblem.getMinimalParameterDistance", "[OptimisationProble
 }
 
 SCENARIO("OptimisationProblem.getNumberOfEvaluations", "[OptimisationProblem][OptimisationProblem.getNumberOfEvaluations]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1508,10 +1535,10 @@ SCENARIO("OptimisationProblem.getNumberOfEvaluations", "[OptimisationProblem][Op
     };
     optimisationProblem.setObjectiveFunction(objectiveFunction);
 
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
-    arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
     // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
     parameters = arma::shuffle(arma::join_rows(parameters, parameters));
     CAPTURE(parameters);
@@ -1530,7 +1557,7 @@ SCENARIO("OptimisationProblem.getNumberOfEvaluations", "[OptimisationProblem][Op
 }
 
 SCENARIO("OptimisationProblem.getNumberOfDistinctEvaluations", "[OptimisationProblem][OptimisationProblem.getNumberOfDistinctEvaluations]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1548,10 +1575,10 @@ SCENARIO("OptimisationProblem.getNumberOfDistinctEvaluations", "[OptimisationPro
     };
     optimisationProblem.setObjectiveFunction(objectiveFunction);
 
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
-    arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
     // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
     parameters = arma::shuffle(arma::join_rows(parameters, parameters));
     CAPTURE(parameters);
@@ -1584,7 +1611,7 @@ SCENARIO("OptimisationProblem.getNumberOfDistinctEvaluations", "[OptimisationPro
 }
 
 SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem.reset]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::OptimisationProblem optimisationProblem(numberOfDimensions);
@@ -1597,11 +1624,11 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
     optimisationProblem.setObjectiveFunction(objectiveFunction);
 
     // Constraints
-    const arma::Col<double>& lowerBounds = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& lowerBounds = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
     optimisationProblem.setLowerBounds(lowerBounds);
     CAPTURE(lowerBounds);
 
-    const arma::Col<double>& upperBounds = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& upperBounds = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
     optimisationProblem.setUpperBounds(upperBounds);
     CAPTURE(upperBounds);
 
@@ -1610,11 +1637,11 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
     optimisationProblem.setParameterPermutation(parameterPermutation);
     CAPTURE(parameterPermutation);
 
-    const arma::Col<double>& parameterScaling = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameterScaling = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
     optimisationProblem.setParameterScaling(parameterScaling);
     CAPTURE(parameterScaling);
 
-    const arma::Col<double>& parameterTranslation = SYNCHRONISED(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameterTranslation = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
     optimisationProblem.setParameterTranslation(parameterTranslation);
     CAPTURE(parameterTranslation);
 
@@ -1623,22 +1650,22 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
     CAPTURE(parameterRotation);
 
     // Objective value space modifiers
-    const double objectiveValueScaling = SYNCHRONISED(getContinuousRandomNumber());
+    const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
     optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
     CAPTURE(objectiveValueScaling);
 
-    const double objectiveValueTranslation = SYNCHRONISED(getContinuousRandomNumber());
+    const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
     optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
     CAPTURE(objectiveValueTranslation);
 
     // Minimal parameter distance
-    const arma::Col<double>& minimalParameterDistance = arma::abs(getContinuousRandomNumbers(numberOfDimensions - 1));
+    const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions - 1));
     CAPTURE(minimalParameterDistance);
 
-    const arma::uword numberOfParameters = getDiscreteRandomNumber();
+    const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
 
-    arma::Mat<double> parameters = getContinuousRandomNumbers(numberOfDimensions, numberOfParameters);
+    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
     // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
     parameters = arma::shuffle(arma::join_rows(parameters, parameters));
     CAPTURE(parameters);

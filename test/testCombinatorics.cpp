@@ -54,10 +54,10 @@ SCENARIO("factorial", "[combinatorics][factorial]") {
 SCENARIO("nchoosek", "[combinatorics][nchoosek]") {
   GIVEN("Two discrete numbers [n] and [k]") {
     WHEN("[n] > [k]") {
-      const arma::uword k = getDiscreteRandomNumber();
+      const arma::uword k = discreteRandomNumber();
       CAPTURE(k);
 
-      const arma::uword n = k + getDiscreteRandomNumber();
+      const arma::uword n = k + discreteRandomNumber();
       CAPTURE(n);
 
       THEN("Return [n]! / ([n] - [k])! * [k]!") {
@@ -66,7 +66,7 @@ SCENARIO("nchoosek", "[combinatorics][nchoosek]") {
     }
 
     WHEN("[n] = [k]") {
-      const arma::uword n = getDiscreteRandomNumber();
+      const arma::uword n = discreteRandomNumber();
       CAPTURE(n);
 
       const arma::uword k = n;
@@ -78,10 +78,10 @@ SCENARIO("nchoosek", "[combinatorics][nchoosek]") {
     }
 
     WHEN("[n] < [k]") {
-      const arma::uword n = getDiscreteRandomNumber();
+      const arma::uword n = discreteRandomNumber();
       CAPTURE(n);
 
-      const arma::uword k = n + getDiscreteRandomNumber();
+      const arma::uword k = n + discreteRandomNumber();
       CAPTURE(k);
 
       THEN("Return 0") {
@@ -106,7 +106,7 @@ SCENARIO("combinations", "[combinatorics][combinations]") {
     }
 
     WHEN("[n] = [k]") {
-      const arma::uword n = getDiscreteRandomNumber();
+      const arma::uword n = discreteRandomNumber();
       CAPTURE(n);
 
       const arma::uword k = n;
@@ -118,10 +118,10 @@ SCENARIO("combinations", "[combinatorics][combinations]") {
     }
 
     WHEN("[n] < [k]") {
-      const arma::uword n = getDiscreteRandomNumber();
+      const arma::uword n = discreteRandomNumber();
       CAPTURE(n);
 
-      const arma::uword k = n + getDiscreteRandomNumber();
+      const arma::uword k = n + discreteRandomNumber();
       CAPTURE(k);
 
       THEN("Return {0, ..., [n] - 1}.") {

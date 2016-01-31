@@ -15,7 +15,7 @@ class TestRandomSearch : public mant::RandomSearch {
 
 SCENARIO("RandomSearch.nextParametersFunction_", "[RandomSearch][RandomSearch.nextParametersFunction_]") {
   GIVEN("A number of dimension") {
-    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
+    const arma::uword numberOfDimensions = discreteRandomNumber();
     CAPTURE(numberOfDimensions);
 
     TestRandomSearch optimisationAlgorithm;
@@ -35,7 +35,7 @@ SCENARIO("RandomSearch.nextParametersFunction_", "[RandomSearch][RandomSearch.ne
 SCENARIO("RandomSearch.optimise", "[RandomSearch][RandomSearch.optimise]") {
   GIVEN("An optimisation problem") {
     WHEN("Called multiple times") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
       CAPTURE(numberOfDimensions);
       mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 

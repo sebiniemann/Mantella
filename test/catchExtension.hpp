@@ -26,11 +26,11 @@ extern int nodeRank;
  */
 extern int numberOfNodes;
 
-/** Randomly generates a (`numberOfRows`, `numberOfColumns`)-matrix of floating point numbers, each within [-100, 100].
+/** Randomly generates a (`numberOfRows`, `numberOfColumns`)-matrix of continuous numbers, each within [-100, 100].
  *
  * @return The randomly generated matrix.
  */
-arma::Mat<double> getContinuousRandomNumbers(
+arma::Mat<double> continuousRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns);
 
@@ -38,68 +38,104 @@ arma::Mat<double> getContinuousRandomNumbers(
  *
  * @return The randomly generated matrix.
  */
-arma::Mat<arma::uword> getDiscreteRandomNumbers(
+arma::Mat<arma::uword> discreteRandomNumbers(
     const arma::uword numberOfRows,
     const arma::uword numberOfColumns);
 
-/** Randomly generates a column vector of `numberOfDimensions` floating point numbers, each within [-100, 100].
+/** Randomly generates a column vector of `numberOfDimensions` continuous numbers, each within [-100, 100].
  *
  * @return The randomly generated column vector.
  */
-arma::Col<double> getContinuousRandomNumbers(
+arma::Col<double> continuousRandomNumbers(
     const arma::uword numberOfDimensions);
 
 /** Randomly generates a column vector of `numberOfDimensions` integers, each within [1, 10].
  *
  * @return The randomly generated column vector.
  */
-arma::Col<arma::uword> getDiscreteRandomNumbers(
+arma::Col<arma::uword> discreteRandomNumbers(
     const arma::uword numberOfDimensions);
 
-/** Randomly generates a floating point number from [-100, 100].
+/** Randomly generates a continuous number from [-100, 100].
  *
  * @return The randomly generated number.
  */
-double getContinuousRandomNumber();
+double continuousRandomNumber();
 
 /** Randomly generates an integer from [1, 10].
 
  *
  * @return The randomly generated number.
  */
-arma::uword getDiscreteRandomNumber();
+arma::uword discreteRandomNumber();
 
 /** Randomly generates an integer from [1, 10], excluding `discreteRandomNumber`.
  *
  * @return The randomly generated number.
  */
-arma::uword getDifferentDiscreteRandomNumber(
+arma::uword differentDiscreteRandomNumber(
     const arma::uword discreteRandomNumber);
 
+/** Synchronises the content of a continuous matrix over MPI
+ *
+ * @return The synchronised matrix
+ */
 arma::Mat<double> SYNCHRONISED(
     const arma::Mat<double>& data);
 
+/** Synchronises the content of a discrete matrix over MPI
+ *
+ * @return The synchronised matrix
+ */
 arma::Mat<arma::uword> SYNCHRONISED(
     const arma::Mat<arma::uword>& data);
 
+/** Synchronises the content of a continuous column vector over MPI
+ *
+ * @return The synchronised vector
+ */
 arma::Col<double> SYNCHRONISED(
     const arma::Col<double>& data);
 
+/** Synchronises the content of a discrete column vector over MPI
+ *
+ * @return The synchronised vector
+ */
 arma::Col<arma::uword> SYNCHRONISED(
     const arma::Col<arma::uword>& data);
 
+/** Synchronises the content of a continuous row vector over MPI
+ *
+ * @return The synchronised vector
+ */
 arma::Row<double> SYNCHRONISED(
     const arma::Row<double>& data);
 
+/** Synchronises the content of a discrete row vector over MPI
+ *
+ * @return The synchronised vector
+ */
 arma::Row<arma::uword> SYNCHRONISED(
     const arma::Row<arma::uword>& data);
 
+/** Synchronises a continuous number over MPI
+ *
+ * @return The synchronised number
+ */
 double SYNCHRONISED(
     const double data);
 
+/** Synchronises a discrete number over MPI
+ *
+ * @return The synchronised number
+ */
 arma::uword SYNCHRONISED(
     const arma::uword data);
 
+/** Synchronises a duration over MPI
+ *
+ * @return The synchronised duration
+ */
 std::chrono::microseconds SYNCHRONISED(
     const std::chrono::microseconds data);
 

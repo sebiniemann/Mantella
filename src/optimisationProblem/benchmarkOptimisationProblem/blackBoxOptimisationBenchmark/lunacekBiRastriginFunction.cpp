@@ -39,7 +39,7 @@ namespace mant {
               
             return std::min(std::pow(arma::norm(parameter_ - 2.5), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter_ + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter_ - 2.5))))));
           },
-          "BBOB Lunacek bi-Rastrigin Function");
+          "BBOB Lunacek bi-Rastrigin Function (f24)");
     }
   }
 }

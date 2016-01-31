@@ -29,7 +29,7 @@ namespace mant {
 
             return f0_ - arma::dot(parameterConditioning_, z);
           },
-          "BBOB Linear Slope");
+          "BBOB Linear Slope (f5)");
     }
   }
 }

@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestSphereFunction : public mant::bbob::SphereFunction {
  public:
   using mant::bbob::SphereFunction::SphereFunction;
@@ -23,11 +21,11 @@ SCENARIO("bbob::SphereFunction.objectiveFunction_", "[bbob::SphereFunction][bbob
     TestSphereFunction optimisationProblem(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -38,10 +36,10 @@ SCENARIO("bbob::SphereFunction.objectiveFunction_", "[bbob::SphereFunction][bbob
 
 SCENARIO("bbob::SphereFunction.getNormalisedObjectiveValue", "[bbob::SphereFunction][bbob::SphereFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -83,11 +81,11 @@ SCENARIO("bbob::SphereFunction.getNormalisedObjectiveValue", "[bbob::SphereFunct
 }
 
 SCENARIO("bbob::SphereFunction.getObjectiveFunctionName", "[bbob::SphereFunction][bbob::SphereFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sphere Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sphere Function (f1)");
   }
 }

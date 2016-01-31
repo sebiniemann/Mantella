@@ -29,7 +29,7 @@ namespace mant {
 
             return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1.0);
           },
-          "BBOB Composite Griewank Rosenbrock Function F8F2");
+          "BBOB Composite Griewank Rosenbrock Function F8F2 (f19)");
     }
   }
 }

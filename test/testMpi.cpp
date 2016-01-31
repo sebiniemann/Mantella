@@ -8,10 +8,10 @@
 SCENARIO("mpiBestSample", "[mpi][mpiBestSample]") {
 #if defined(SUPPORT_MPI)
   GIVEN("Two set of samples") {
-    const arma::uword numberOfElements = getDiscreteRandomNumber();
+    const arma::uword numberOfElements = discreteRandomNumber();
     CAPTURE(numberOfElements);
 
-    const arma::uword numberOfSamples = getDiscreteRandomNumber();
+    const arma::uword numberOfSamples = discreteRandomNumber();
     CAPTURE(numberOfSamples);
 
     MPI_Datatype MANT_MPI_PARAMETER;
@@ -26,7 +26,7 @@ SCENARIO("mpiBestSample", "[mpi][mpiBestSample]") {
     // The second input
     arma::Mat<double> secondMpiInput(2 + numberOfElements, numberOfSamples);
     secondMpiInput.row(0).fill(static_cast<double>(numberOfElements));
-    secondMpiInput.tail_rows(1 + numberOfElements) = getContinuousRandomNumbers(1 + numberOfElements, numberOfSamples);
+    secondMpiInput.tail_rows(1 + numberOfElements) = continuousRandomNumbers(1 + numberOfElements, numberOfSamples);
     CAPTURE(secondMpiInput);
 
     // The first input
@@ -34,7 +34,7 @@ SCENARIO("mpiBestSample", "[mpi][mpiBestSample]") {
     firstMpiInput.row(0).fill(static_cast<double>(numberOfElements));
     // Ensure that the first input has a lower objective value.
     firstMpiInput.row(1) = secondMpiInput.row(1) - 1;
-    firstMpiInput.tail_rows(numberOfElements) = getContinuousRandomNumbers(numberOfElements, numberOfSamples);
+    firstMpiInput.tail_rows(numberOfElements) = continuousRandomNumbers(numberOfElements, numberOfSamples);
     CAPTURE(firstMpiInput);
 
     // MPI uses singed integers, instead of unsigned ones.

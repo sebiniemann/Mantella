@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestWeierstrassFunction : public mant::bbob::WeierstrassFunction {
  public:
   using mant::bbob::WeierstrassFunction::WeierstrassFunction;
@@ -26,15 +24,15 @@ SCENARIO("bbob::WeierstrassFunction.objectiveFunction_", "[bbob::WeierstrassFunc
     CAPTURE(numberOfDimensions);
     TestWeierstrassFunction optimisationProblem(numberOfDimensions);
 
-    REQUIRE(optimisationProblem.rotationR_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_1.input"));
-    REQUIRE(optimisationProblem.rotationQ_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
+    REQUIRE(optimisationProblem.rotationR_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_1.input"));
+    REQUIRE(optimisationProblem.rotationQ_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -45,10 +43,10 @@ SCENARIO("bbob::WeierstrassFunction.objectiveFunction_", "[bbob::WeierstrassFunc
 
 SCENARIO("bbob::WeierstrassFunction.getNormalisedObjectiveValue", "[bbob::WeierstrassFunction][bbob::WeierstrassFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -90,11 +88,11 @@ SCENARIO("bbob::WeierstrassFunction.getNormalisedObjectiveValue", "[bbob::Weiers
 }
 
 SCENARIO("bbob::WeierstrassFunction.getObjectiveFunctionName", "[bbob::WeierstrassFunction][bbob::WeierstrassFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::WeierstrassFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Weierstrass Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Weierstrass Function (f16)");
   }
 }

@@ -33,7 +33,7 @@ namespace mant {
             const arma::Col<double>& z = rotationQ_ * (parameterConditioning_ % parameter_);
             return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
           },
-          "BBOB Sharp Ridge Function");
+          "BBOB Sharp Ridge Function (f13)");
     }
   }
 }

@@ -47,7 +47,7 @@ namespace mant {
 
             return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0);
           },
-          "BBOB Katsuura Function");
+          "BBOB Katsuura Function (f23)");
     }
   }
 }

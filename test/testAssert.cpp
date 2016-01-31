@@ -33,7 +33,7 @@ SCENARIO("verify", "[assert][verify]") {
 SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
   GIVEN("A matrix") {
     WHEN("The matrix is orthogonal with determinant 1 or -1 (a rotation matrix)") {
-      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
+      const arma::uword numberOfDimensions = discreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
       arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
@@ -48,7 +48,7 @@ SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
     }
 
     WHEN("The matrix is not square") {
-      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
+      const arma::uword numberOfDimensions = discreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
       const arma::Mat<double>& matrix = arma::randu<arma::Mat<double>>(numberOfDimensions, 1 + numberOfDimensions);
@@ -59,23 +59,9 @@ SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
       }
     }
 
-    WHEN("The matrix's determinant is neither 1 or -1") {
-      const arma::uword numberOfDimensions = getDiscreteRandomNumber();
-      CAPTURE(numberOfDimensions);
-
-      arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
-      // Increasing an element of an orthonormal rotation matrix by 1 should result in a determinant unequal to 1 or -1.
-      matrix(0, 0)++;
-      CAPTURE(matrix);
-
-      THEN("Return false") {
-        CHECK(mant::isRotationMatrix(matrix) == false);
-      }
-    }
-
     WHEN("The matrix's inverse is not equal to its transpose") {
       // We need at least 2 rows and columns for this to work.
-      const arma::uword numberOfDimensions = 1 + getDiscreteRandomNumber();
+      const arma::uword numberOfDimensions = 1 + discreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
       arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
@@ -93,10 +79,10 @@ SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
 SCENARIO("isPermutationVector", "[assert][isPermutationVector]") {
   GIVEN("A vector as well as numbers [cycleSize] and [numberOfElements]") {
     WHEN("[cycleSize] <= [numberOfElements]") {
-      const arma::uword cycleSize = getDiscreteRandomNumber();
+      const arma::uword cycleSize = discreteRandomNumber();
       CAPTURE(cycleSize);
 
-      const arma::uword numberOfElements = cycleSize + getDiscreteRandomNumber() - 1;
+      const arma::uword numberOfElements = cycleSize + discreteRandomNumber() - 1;
       CAPTURE(numberOfElements);
 
       AND_WHEN("The vector has [cycleSize] unique elements, all within [0, [numberOfElements] - 1]") {
@@ -148,10 +134,10 @@ SCENARIO("isPermutationVector", "[assert][isPermutationVector]") {
     }
 
     WHEN("[cycleSize] > [numberOfElements]") {
-      const arma::uword numberOfElements = getDiscreteRandomNumber();
+      const arma::uword numberOfElements = discreteRandomNumber();
       CAPTURE(numberOfElements);
 
-      const arma::uword cycleSize = numberOfElements + getDiscreteRandomNumber();
+      const arma::uword cycleSize = numberOfElements + discreteRandomNumber();
       CAPTURE(cycleSize);
 
       const arma::Col<arma::uword>& vector = arma::randi<arma::Col<arma::uword>>(cycleSize, arma::distr_param(0, static_cast<int>(numberOfElements) - 1));
@@ -166,11 +152,11 @@ SCENARIO("isPermutationVector", "[assert][isPermutationVector]") {
 
 SCENARIO("isSymmetric", "[assert][isSymmetric]") {
   GIVEN("A matrix") {
-    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
+    const arma::uword numberOfDimensions = discreteRandomNumber();
     CAPTURE(numberOfDimensions);
 
     WHEN("The matrix is symmetric") {
-      const arma::Mat<double>& matrix = arma::symmatu(getContinuousRandomNumbers(numberOfDimensions, numberOfDimensions));
+      const arma::Mat<double>& matrix = arma::symmatu(continuousRandomNumbers(numberOfDimensions, numberOfDimensions));
       CAPTURE(matrix);
 
       THEN("Return true") {
@@ -189,7 +175,7 @@ SCENARIO("isSymmetric", "[assert][isSymmetric]") {
 
     WHEN("The matrix has at least one (i,j)-te element that is unequal to its corresponding (j,i)-te element") {
       // We need at least 2 rows and columns for this to occur.
-      arma::Mat<double> matrix = arma::symmatu(getContinuousRandomNumbers(1 + numberOfDimensions, 1 + numberOfDimensions));
+      arma::Mat<double> matrix = arma::symmatu(continuousRandomNumbers(1 + numberOfDimensions, 1 + numberOfDimensions));
       matrix(0, 1)++;
       CAPTURE(matrix);
 
@@ -202,11 +188,11 @@ SCENARIO("isSymmetric", "[assert][isSymmetric]") {
 
 SCENARIO("isPositiveSemiDefinite", "[assert][isPositiveSemiDefinite]") {
   GIVEN("A matrix") {
-    const arma::uword numberOfDimensions = getDiscreteRandomNumber();
+    const arma::uword numberOfDimensions = discreteRandomNumber();
     CAPTURE(numberOfDimensions);
 
     WHEN("The matrix is positive semi-definite") {
-      arma::Mat<double> matrix = getContinuousRandomNumbers(numberOfDimensions, numberOfDimensions);
+      arma::Mat<double> matrix = continuousRandomNumbers(numberOfDimensions, numberOfDimensions);
       matrix *= matrix.t();
       CAPTURE(matrix);
 
@@ -220,12 +206,12 @@ SCENARIO("isPositiveSemiDefinite", "[assert][isPositiveSemiDefinite]") {
       CAPTURE(matrix);
 
       THEN("Return false") {
-        CHECK(mant::isSymmetric(matrix) == false);
+        CHECK(mant::isPositiveSemiDefinite(matrix) == false);
       }
     }
 
     WHEN("The matrix has at least one eigenvalue being negative or having an imaginary part") {
-      arma::Mat<double> matrix = getContinuousRandomNumbers(numberOfDimensions, numberOfDimensions);
+      arma::Mat<double> matrix = continuousRandomNumbers(numberOfDimensions, numberOfDimensions);
       matrix *= matrix.t();
       CAPTURE(matrix);
 
@@ -238,7 +224,7 @@ SCENARIO("isPositiveSemiDefinite", "[assert][isPositiveSemiDefinite]") {
 
 SCENARIO("isDimensionallyConsistent", "[assert][isDimensionallyConsistent]") {
   GIVEN("A set of samples") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfDimensions);
     mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
@@ -246,15 +232,16 @@ SCENARIO("isDimensionallyConsistent", "[assert][isDimensionallyConsistent]") {
     optimisationAlgorithm.setMaximalNumberOfIterations(100);
 
     ::mant::isCachingSamples = true;
-
     optimisationAlgorithm.optimise(optimisationProblem);
     ::mant::isCachingSamples = false;
 
     WHEN("All samples are dimensionally consistent") {
-      const auto& samples = optimisationProblem.getCachedSamples();
+      auto samples = optimisationProblem.getCachedSamples();
 
       THEN("Return true") {
         CHECK(samples.size() > 0);
+        CHECK(mant::isDimensionallyConsistent(samples) == true);
+        samples.clear();
         CHECK(mant::isDimensionallyConsistent(samples) == true);
       }
     }
@@ -262,7 +249,7 @@ SCENARIO("isDimensionallyConsistent", "[assert][isDimensionallyConsistent]") {
     WHEN("At least to samples have a different number of dimensions between them") {
       const auto& firstSamples = optimisationProblem.getCachedSamples();
 
-      const arma::uword differentNumberOfDimensions = getDifferentDiscreteRandomNumber(numberOfDimensions);
+      const arma::uword differentNumberOfDimensions = differentDiscreteRandomNumber(numberOfDimensions);
       CAPTURE(differentNumberOfDimensions);
       mant::bbob::SphereFunction secondOptimisationProblem(differentNumberOfDimensions);
 

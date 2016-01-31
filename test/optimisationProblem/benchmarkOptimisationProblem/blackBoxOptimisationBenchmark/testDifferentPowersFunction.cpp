@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestDifferentPowersFunction : public mant::bbob::DifferentPowersFunction {
  public:
   using mant::bbob::DifferentPowersFunction::DifferentPowersFunction;
@@ -23,11 +21,11 @@ SCENARIO("bbob::DifferentPowersFunction.objectiveFunction_", "[bbob::DifferentPo
     TestDifferentPowersFunction optimisationProblem(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -38,10 +36,10 @@ SCENARIO("bbob::DifferentPowersFunction.objectiveFunction_", "[bbob::DifferentPo
 
 SCENARIO("bbob::DifferentPowersFunction.getNormalisedObjectiveValue", "[bbob::DifferentPowersFunction][bbob::DifferentPowersFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -83,11 +81,11 @@ SCENARIO("bbob::DifferentPowersFunction.getNormalisedObjectiveValue", "[bbob::Di
 }
 
 SCENARIO("bbob::DifferentPowersFunction.getObjectiveFunctionName", "[bbob::DifferentPowersFunction][bbob::DifferentPowersFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::DifferentPowersFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Different Powers Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Different Powers Function (f14)");
   }
 }

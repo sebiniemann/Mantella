@@ -42,7 +42,7 @@ namespace mant {
 
             return 10.0 * std::pow(sum / static_cast<double>(numberOfDimensions_) +1.99951171875, 3.0);
           },
-          "BBOB Weierstrass Function");
+          "BBOB Weierstrass Function (f16)");
     }
   }
 }

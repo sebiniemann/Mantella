@@ -12,7 +12,7 @@ SCENARIO("polynomialSize", "[algebra][polynomialSize]") {
       CAPTURE(numberOfElements);
 
       // Includes 0
-      const arma::uword polynomialOrder = getDiscreteRandomNumber() - 1;
+      const arma::uword polynomialOrder = discreteRandomNumber() - 1;
       CAPTURE(polynomialOrder);
 
       THEN("Return 1") {
@@ -25,7 +25,7 @@ SCENARIO("polynomialSize", "[algebra][polynomialSize]") {
       CAPTURE(numberOfElements);
 
       // Includes 0
-      const arma::uword polynomialOrder = getDiscreteRandomNumber() - 1;
+      const arma::uword polynomialOrder = discreteRandomNumber() - 1;
       CAPTURE(polynomialOrder);
 
       THEN("Return 1 + [polynomialOrder]") {
@@ -34,7 +34,7 @@ SCENARIO("polynomialSize", "[algebra][polynomialSize]") {
     }
 
     WHEN("The number of elements is at least 2") {
-      const arma::uword numberOfElements = 1 + getDiscreteRandomNumber();
+      const arma::uword numberOfElements = 1 + discreteRandomNumber();
       CAPTURE(numberOfElements);
 
       AND_WHEN("The polynomial order is 0") {
@@ -65,7 +65,7 @@ SCENARIO("polynomialSize", "[algebra][polynomialSize]") {
       }
 
       AND_WHEN("The polynomial order has a value greater than 2") {
-        const arma::uword polynomialOrder = 2 + getDiscreteRandomNumber();
+        const arma::uword polynomialOrder = 2 + discreteRandomNumber();
         CAPTURE(polynomialOrder);
 
         THEN("Return the summed number of combinations for each degree") {

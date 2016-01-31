@@ -35,7 +35,7 @@ namespace mant {
 
             return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);
           },
-          "BBOB Schaffers F7 Function");
+          "BBOB Schaffers F7 Function (f17)");
     }
   }
 }

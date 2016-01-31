@@ -6,17 +6,17 @@
 #include <mantella>
 
 SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::KinematicallyRedundantMachines][krm::KinematicallyRedundantMachines.setEndEffectorTrajectory]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::krm::KinematicallyRedundantMachines optimisationProblem(numberOfDimensions);
 
-  const arma::uword numberOfPoses = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfPoses = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfPoses);
 
   GIVEN("An end-effector trajectory") {
     WHEN("The end-effector trajectory is finite and has exactly [numberOfDimensions] rows") {
-      const arma::Mat<double>& endEffectorTrajectory = getContinuousRandomNumbers(numberOfDimensions, numberOfPoses);
+      const arma::Mat<double>& endEffectorTrajectory = continuousRandomNumbers(numberOfDimensions, numberOfPoses);
       CAPTURE(endEffectorTrajectory);
 
       THEN("Throw no exception") {
@@ -24,7 +24,7 @@ SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::
       }
 
       THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = getContinuousRandomNumbers(numberOfDimensions);
+        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
         CAPTURE(parameter);
 
         optimisationProblem.setObjectiveFunction(
@@ -53,7 +53,7 @@ SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::
     }
 
     WHEN("The end-effector trajectory has less then [numberOfDimensions] rows") {
-      const arma::Mat<double>& endEffectorTrajectory = getContinuousRandomNumbers(numberOfDimensions - 1, numberOfPoses);
+      const arma::Mat<double>& endEffectorTrajectory = continuousRandomNumbers(numberOfDimensions - 1, numberOfPoses);
       CAPTURE(endEffectorTrajectory);
 
       THEN("Throw a std::logic_error") {
@@ -62,7 +62,7 @@ SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::
     }
 
     WHEN("The end-effector trajectory has more then [numberOfDimensions] rows") {
-      const arma::Mat<double>& endEffectorTrajectory = getContinuousRandomNumbers(numberOfDimensions + getDiscreteRandomNumber(), numberOfPoses);
+      const arma::Mat<double>& endEffectorTrajectory = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber(), numberOfPoses);
       CAPTURE(endEffectorTrajectory);
 
       THEN("Throw a std::logic_error") {
@@ -71,7 +71,7 @@ SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::
     }
 
     WHEN("At least one end-effector trajectory has an infinite element") {
-      arma::Mat<double> endEffectorTrajectory = getContinuousRandomNumbers(numberOfDimensions, numberOfPoses);
+      arma::Mat<double> endEffectorTrajectory = continuousRandomNumbers(numberOfDimensions, numberOfPoses);
       endEffectorTrajectory(0) = arma::datum::inf;
       CAPTURE(endEffectorTrajectory);
 
@@ -83,7 +83,7 @@ SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::
 }
 
 SCENARIO("krm::KinematicallyRedundantMachines.getEndEffectorTrajectory", "[krm::KinematicallyRedundantMachines][krm::KinematicallyRedundantMachines.getEndEffectorTrajectory]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
   CAPTURE(numberOfDimensions);
 
   mant::krm::KinematicallyRedundantMachines optimisationProblem(numberOfDimensions);
@@ -95,10 +95,10 @@ SCENARIO("krm::KinematicallyRedundantMachines.getEndEffectorTrajectory", "[krm::
   }
 
   GIVEN("An updated end-effector trajectory") {
-    const arma::uword numberOfPoses = SYNCHRONISED(getDiscreteRandomNumber());
+    const arma::uword numberOfPoses = SYNCHRONISED(discreteRandomNumber());
     CAPTURE(numberOfPoses);
 
-    const arma::Mat<double>& endEffectorTrajectory = getContinuousRandomNumbers(numberOfDimensions, numberOfPoses);
+    const arma::Mat<double>& endEffectorTrajectory = continuousRandomNumbers(numberOfDimensions, numberOfPoses);
     CAPTURE(endEffectorTrajectory);
 
     optimisationProblem.setEndEffectorTrajectory(endEffectorTrajectory);

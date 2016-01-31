@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestBuecheRastriginFunction : public mant::bbob::BuecheRastriginFunction {
  public:
   using mant::bbob::BuecheRastriginFunction::BuecheRastriginFunction;
@@ -23,11 +21,11 @@ SCENARIO("bbob::BuecheRastriginFunction.objectiveFunction_", "[bbob::BuecheRastr
     TestBuecheRastriginFunction optimisationProblem(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -38,10 +36,10 @@ SCENARIO("bbob::BuecheRastriginFunction.objectiveFunction_", "[bbob::BuecheRastr
 
 SCENARIO("bbob::BuecheRastriginFunction.getNormalisedObjectiveValue", "[bbob::BuecheRastriginFunction][bbob::BuecheRastriginFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -83,11 +81,11 @@ SCENARIO("bbob::BuecheRastriginFunction.getNormalisedObjectiveValue", "[bbob::Bu
 }
 
 SCENARIO("bbob::BuecheRastriginFunction.getObjectiveFunctionName", "[bbob::BuecheRastriginFunction][bbob::BuecheRastriginFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::BuecheRastriginFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Büche-Rastrigin Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Büche-Rastrigin Function (f4)");
   }
 }

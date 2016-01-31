@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestSharpRidgeFunction : public mant::bbob::SharpRidgeFunction {
  public:
   using mant::bbob::SharpRidgeFunction::SharpRidgeFunction;
@@ -25,14 +23,14 @@ SCENARIO("bbob::SharpRidgeFunction.objectiveFunction_", "[bbob::SharpRidgeFuncti
     CAPTURE(numberOfDimensions);
     TestSharpRidgeFunction optimisationProblem(numberOfDimensions);
 
-    REQUIRE(optimisationProblem.rotationQ_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
+    REQUIRE(optimisationProblem.rotationQ_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -43,10 +41,10 @@ SCENARIO("bbob::SharpRidgeFunction.objectiveFunction_", "[bbob::SharpRidgeFuncti
 
 SCENARIO("bbob::SharpRidgeFunction.getNormalisedObjectiveValue", "[bbob::SharpRidgeFunction][bbob::SharpRidgeFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -88,11 +86,11 @@ SCENARIO("bbob::SharpRidgeFunction.getNormalisedObjectiveValue", "[bbob::SharpRi
 }
 
 SCENARIO("bbob::SharpRidgeFunction.getObjectiveFunctionName", "[bbob::SharpRidgeFunction][bbob::SharpRidgeFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::SharpRidgeFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sharp Ridge Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Sharp Ridge Function (f13)");
   }
 }

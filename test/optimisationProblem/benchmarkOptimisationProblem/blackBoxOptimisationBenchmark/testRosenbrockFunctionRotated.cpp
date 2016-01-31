@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestRosenbrockFunctionRotated : public mant::bbob::RosenbrockFunctionRotated {
  public:
   using mant::bbob::RosenbrockFunctionRotated::RosenbrockFunctionRotated;
@@ -23,11 +21,11 @@ SCENARIO("bbob::RosenbrockFunctionRotated.objectiveFunction_", "[bbob::Rosenbroc
     TestRosenbrockFunctionRotated optimisationProblem(numberOfDimensions);
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -38,10 +36,10 @@ SCENARIO("bbob::RosenbrockFunctionRotated.objectiveFunction_", "[bbob::Rosenbroc
 
 SCENARIO("bbob::RosenbrockFunctionRotated.getNormalisedObjectiveValue", "[bbob::RosenbrockFunctionRotated][bbob::RosenbrockFunctionRotated.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -83,11 +81,11 @@ SCENARIO("bbob::RosenbrockFunctionRotated.getNormalisedObjectiveValue", "[bbob::
 }
 
 SCENARIO("bbob::RosenbrockFunctionRotated.getObjectiveFunctionName", "[bbob::RosenbrockFunctionRotated][bbob::RosenbrockFunctionRotated.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::RosenbrockFunctionRotated optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rosenbrock Function, rotated");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Rosenbrock Function, rotated (f9)");
   }
 }

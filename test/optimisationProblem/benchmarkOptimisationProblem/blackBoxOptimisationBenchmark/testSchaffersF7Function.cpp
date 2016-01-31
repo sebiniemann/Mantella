@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestSchaffersF7Function : public mant::bbob::SchaffersF7Function {
  public:
   using mant::bbob::SchaffersF7Function::SchaffersF7Function;
@@ -25,14 +23,14 @@ SCENARIO("bbob::SchaffersF7Function.objectiveFunction_", "[bbob::SchaffersF7Func
     CAPTURE(numberOfDimensions);
     TestSchaffersF7Function optimisationProblem(numberOfDimensions);
 
-    REQUIRE(optimisationProblem.rotationQ_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
+    REQUIRE(optimisationProblem.rotationQ_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_2.input"));
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -43,10 +41,10 @@ SCENARIO("bbob::SchaffersF7Function.objectiveFunction_", "[bbob::SchaffersF7Func
 
 SCENARIO("bbob::SchaffersF7Function.getNormalisedObjectiveValue", "[bbob::SchaffersF7Function][bbob::SchaffersF7Function.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -88,11 +86,11 @@ SCENARIO("bbob::SchaffersF7Function.getNormalisedObjectiveValue", "[bbob::Schaff
 }
 
 SCENARIO("bbob::SchaffersF7Function.getObjectiveFunctionName", "[bbob::SchaffersF7Function][bbob::SchaffersF7Function.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::SchaffersF7Function optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schaffers F7 Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Schaffers F7 Function (f17)");
   }
 }

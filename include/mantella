@@ -47,6 +47,10 @@
 #include <mantella_bits/numberTheory.hpp>
 #include <mantella_bits/probability.hpp>
 
+// Machine learning functions
+#include <mantella_bits/samplesAnalysis.hpp>
+#include <mantella_bits/samplesSelection.hpp>
+
 // Optimisation problems
 #include <mantella_bits/optimisationProblem.hpp>
 #include <mantella_bits/optimisationProblem/benchmarkOptimisationProblem.hpp>
@@ -83,7 +87,7 @@
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
+#include <mantella_bits/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 #include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>

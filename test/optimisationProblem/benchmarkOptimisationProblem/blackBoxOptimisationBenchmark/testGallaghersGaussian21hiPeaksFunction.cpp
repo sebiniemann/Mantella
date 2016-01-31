@@ -5,8 +5,6 @@
 // Mantella
 #include <mantella>
 
-extern std::string testDirectory;
-
 class TestGallaghersGaussian21hiPeaksFunction : public mant::bbob::GallaghersGaussian21hiPeaksFunction {
  public:
   using mant::bbob::GallaghersGaussian21hiPeaksFunction::GallaghersGaussian21hiPeaksFunction;
@@ -27,16 +25,16 @@ SCENARIO("bbob::GallaghersGaussian21hiPeaksFunction.objectiveFunction_", "[bbob:
     CAPTURE(numberOfDimensions);
     TestGallaghersGaussian21hiPeaksFunction optimisationProblem(numberOfDimensions);
 
-    REQUIRE(optimisationProblem.rotationQ_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_1.input"));
-    REQUIRE(optimisationProblem.localParameterConditionings_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_localParameterConditionings_40x21.input"));
-    REQUIRE(optimisationProblem.localParameterTranslations_.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_localParameterTranslations_40x21.input"));
+    REQUIRE(optimisationProblem.rotationQ_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_rotationMatrix_40x40_1.input"));
+    REQUIRE(optimisationProblem.localParameterConditionings_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_localParameterConditionings_40x21.input"));
+    REQUIRE(optimisationProblem.localParameterTranslations_.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_localParameterTranslations_40x21.input"));
 
     arma::Mat<double> parameters;
-    REQUIRE(parameters.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
+    REQUIRE(parameters.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/_parameters_40x100.input"));
 
     THEN("Return their objective value") {
       arma::Col<double> expectedObjectiveValues;
-      REQUIRE(expectedObjectiveValues.load(rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction_dim40_1x100.expected"));
+      REQUIRE(expectedObjectiveValues.load(::rootTestDataDirectory + "/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction_dim40_1x100.expected"));
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         CHECK(optimisationProblem.objectiveFunction_(parameters.col(n)) == Approx(expectedObjectiveValues(n)));
@@ -47,10 +45,10 @@ SCENARIO("bbob::GallaghersGaussian21hiPeaksFunction.objectiveFunction_", "[bbob:
 
 SCENARIO("bbob::GallaghersGaussian21hiPeaksFunction.getNormalisedObjectiveValue", "[bbob::GallaghersGaussian21hiPeaksFunction][bbob::GallaghersGaussian21hiPeaksFunction.getNormalisedObjectiveValue]") {
   GIVEN("A parameter") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+    const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
     CAPTURE(numberOfDimensions);
 
-    const arma::Col<double>& parameter = arma::normalise(getContinuousRandomNumbers(numberOfDimensions));
+    const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
     CAPTURE(parameter);
 
     WHEN("Instantiated multiple times") {
@@ -92,11 +90,11 @@ SCENARIO("bbob::GallaghersGaussian21hiPeaksFunction.getNormalisedObjectiveValue"
 }
 
 SCENARIO("bbob::GallaghersGaussian21hiPeaksFunction.getObjectiveFunctionName", "[bbob::GallaghersGaussian21hiPeaksFunction][bbob::GallaghersGaussian21hiPeaksFunction.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(1 + getDiscreteRandomNumber());
+  const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
   CAPTURE(numberOfDimensions);
   mant::bbob::GallaghersGaussian21hiPeaksFunction optimisationProblem(numberOfDimensions);
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Gallagher's Gaussian 21-hi Peaks Function");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "BBOB Gallagher's Gaussian 21-hi Peaks Function (f22)");
   }
 }
