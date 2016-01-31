@@ -5,6 +5,7 @@
 
 // Mantella
 #include "mantella_bits/optimisationAlgorithm.hpp"
+//test
 
 namespace mant {
   class OptimisationProblem;
@@ -59,7 +60,7 @@ namespace mant {
     void setRecombinationWeights(arma::Col<double> weights);
     arma::Col<double> getXmean() const;
     void setXmean(arma::Col<double> xmean);
-    
+
     arma::Mat<double> newGeneration_;
 
    protected:
@@ -79,7 +80,7 @@ namespace mant {
 
     //arxvalid needs to be here so it is available after the loop
     arma::Mat<double> newGenerationRaw_;
-    
+
     arma::Mat<double> newGenerationValid_; //arxvalid
     arma::Col<double> xmean_; //xmean
     arma::Col<double> xold_; //xold
