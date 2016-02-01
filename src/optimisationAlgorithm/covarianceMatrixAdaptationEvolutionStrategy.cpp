@@ -29,13 +29,13 @@ namespace mant {
           assert(differences_.has_inf() || arma::all(objectiveValues_ - differences_ - arma::min(objectiveValues_) + arma::min(differences_) < 1e-12 * arma::max(arma::ones<arma::Row<double>>(arma::size(objectiveValues_)), arma::abs(objectiveValues_))));
           
           //encountered a hard error, like eigenwert < 0
-          if(sigma_ == 0) {
+          if(sigma_ <= 0) {
             return true;
           }
           if (arma::max(diagD_) > 1e14 * arma::min(diagD_)) {
             return true;
           }
-          arma::Mat<double> tmp = 0.1 * sigma_ * BD_.col(std::floor(countiter_ % objectiveValues_.n_elem));
+          arma::Mat<double> tmp = 0.1 * sigma_ * BD_.col(countiter_ % objectiveValues_.n_elem);
           if (arma::all(xmean_ == xmean_ + tmp)) {
             return true;
           }
@@ -149,7 +149,7 @@ namespace mant {
             BD_ = B_.each_row() % diagD_.t();
           }
 
-          if (sigma_ * arma::max(diagD_) == 0) {//;should never happen
+          if (sigma_ * arma::max(diagD_) <= 0) {//;should never happen
             sigma_ = 0;
             return static_cast<arma::Mat<double>>(arma::randu(numberOfDimensions, lambda_));
           }
@@ -172,7 +172,7 @@ namespace mant {
     arma::uword numberOfDimensions = optimisationProblem.numberOfDimensions_;
     sigma_ = initialSigma_;
     if (lambda_ == std::numeric_limits<arma::uword>::max()) {
-      setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
+      setPopulationSize(4 + static_cast<arma::uword>(std::floor(3 * std::log(numberOfDimensions))), numberOfDimensions);
     }
     xmean_ = arma::randu(numberOfDimensions);
     newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
@@ -202,7 +202,7 @@ namespace mant {
     arma::uword numberOfDimensions = optimisationProblem.numberOfDimensions_;
     sigma_ = initialSigma_;
     if (lambda_ == std::numeric_limits<arma::uword>::max()) {
-      setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
+      setPopulationSize(4 + static_cast<arma::uword>(std::floor(3 * std::log(numberOfDimensions))), numberOfDimensions);
     }
     xmean_ = xMean;
     newGenerationRaw_ = arma::randn<arma::Mat<double>>(numberOfDimensions, lambda_);
@@ -243,7 +243,7 @@ namespace mant {
       const arma::Mat<double>& initialParameters) {
     countiter_ = 0;
     if (lambda_ == std::numeric_limits<arma::uword>::max()) {
-      setPopulationSize(4 + std::floor(3 * std::log(numberOfDimensions)), numberOfDimensions);
+      setPopulationSize(4 + static_cast<arma::uword>(std::floor(3 * std::log(numberOfDimensions))), numberOfDimensions);
     }
 
     pc_ = arma::zeros(numberOfDimensions);
@@ -277,7 +277,7 @@ namespace mant {
   void CovarianceMatrixAdaptationEvolutionStrategy::setPopulationSize(const arma::uword popSize, const arma::uword numberOfDimensions) {
     lambda_ = popSize;
     lambda_last_ = lambda_;
-    mu_ = std::floor(lambda_ / 2.0);
+    mu_ = static_cast<arma::uword>(std::floor(lambda_ / 2.0));
     recombinationWeights_ = std::log(mu_ + 0.5) - arma::log(arma::linspace(1, mu_, mu_));
     mueff_ = std::pow(arma::accu(recombinationWeights_), 2) / arma::accu(arma::square(recombinationWeights_)); //;variance-effective size of mu
     recombinationWeights_ = arma::normalise(recombinationWeights_, 1); //;normalize recombination weights array
