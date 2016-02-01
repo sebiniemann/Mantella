@@ -1,0 +1,18 @@
+sudo: required
+dist: trusty
+
+language: ruby
+rvm:
+  - 2.1
+
+os:
+  - linux
+  
+env:
+  global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up installation of html-proofer
+
+script:
+  - bundle install
+  - bundle exec jekyll serve&
+  - bundle exec htmlproof ./_site --disable-external

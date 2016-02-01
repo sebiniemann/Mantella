@@ -15,10 +15,6 @@ sections:
     subsections:
       - Installation
       - Hello World
-      - Solving your own Problems
-      - Fine-tuning
-      - Benchmarking
-      - Parallelisation
   - title: Optimisation Algorithms
     subsections:
       - Random Search
@@ -30,29 +26,8 @@ sections:
   - title: Optimisation Problems
     subsections:
       - Black-box Optimisation Benchmark
-      - Robot Pose Accuracy
-      - Robot Models
-  - title: Property Analyses
-    subsections:
-      - Fitness Distance Correlation
-      - Fitness Cloud Correlation
-      - Lipschitz Continuity
-      - Hölder Continuity
-      - Linear Model Analysis
-      - Quadratic Model Analysis
-      - Additive Separability
-      - Multiplicative Separability
-      - Linear Proportionality
+  - title: Problem Analyses
   - title: Helpers
-    subsections:
-      - Assert
-      - Random Number Generator
-      - Geometry
-      - Random Matrix Generator
-      - Quasi Random Sequence
-      - Set Theory
-      - Printable
-      - Unordered Map
   - title: Changelog
 
 # Avoids .html suffixes
@@ -62,4 +37,6 @@ permalink: pretty
 markdown: kramdown
 
 error_mode: :strict
+exclude: [vendor]
+
 array: []
