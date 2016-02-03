@@ -11,9 +11,9 @@
 #include <armadillo>
 
 // Mantella
+#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/randomNumberGenerator.hpp"
 
 namespace mant {
   CovarianceMatrixAdaptationEvolutionStrategy::CovarianceMatrixAdaptationEvolutionStrategy()
