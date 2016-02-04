@@ -123,7 +123,7 @@ namespace mant {
   void ParticleSwarmOptimisation::setNeighbourhoodTopologyFunction(
       std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction,
       const std::string& neighbourhoodTopologyFunctionName) {
-    verify(static_cast<bool>(neighbourhoodTopologyFunction), "setNeighbourhoodTopologyFunction: The neighbourhood topology function must be callable.");
+    verify(static_cast<bool>(neighbourhoodTopologyFunction), "ParticleSwarmOptimisation.setNeighbourhoodTopologyFunction: The neighbourhood-topology function must be callable.");
 
     neighbourhoodTopologyFunction_ = neighbourhoodTopologyFunction;
     neighbourhoodTopologyFunctionName_ = neighbourhoodTopologyFunctionName;

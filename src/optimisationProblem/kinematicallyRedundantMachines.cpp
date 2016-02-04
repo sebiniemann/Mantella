@@ -7,15 +7,18 @@
 namespace mant {
   namespace krm {
     KinematicallyRedundantMachines::KinematicallyRedundantMachines(
-        const arma::uword numberOfDimensions)
-        : OptimisationProblem(numberOfDimensions),
-          endEffectorTrajectory_(arma::zeros<arma::Mat<double>>(numberOfDimensions_)) {
+        const arma::uword numberOfProblemDimensions,
+        const arma::uword numberOfWorkspaceDimensions)
+        : OptimisationProblem(numberOfProblemDimensions),
+          numberOfWorkspaceDimensions_(numberOfWorkspaceDimensions) {
+      setEndEffectorTrajectory(arma::zeros<arma::Mat<double>>(numberOfWorkspaceDimensions_, 1));
     }
 
     void KinematicallyRedundantMachines::setEndEffectorTrajectory(
         const arma::Mat<double>& endEffectorTrajectory) {
-      verify(endEffectorTrajectory.n_rows == numberOfDimensions_, ""); // TODO
-      verify(endEffectorTrajectory.is_finite(), ""); // TODO
+      verify(endEffectorTrajectory.n_rows == numberOfWorkspaceDimensions_, "KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory's number of rows must be equal to the workspace's number of dimensions.");
+      verify(endEffectorTrajectory.n_cols > 0, "KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory's number of columns must be strict greater than 0.");
+      verify(endEffectorTrajectory.is_finite(), "KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory must be finite.");
 
       endEffectorTrajectory_ = endEffectorTrajectory;
 #if defined(SUPPORT_MPI)
