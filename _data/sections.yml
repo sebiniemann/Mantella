@@ -1,0 +1,20 @@
+- title: Overview
+- title: Why Mantella?
+- title: Getting Started
+  subsection:
+    - Installation
+    - Hello World
+- title: Optimisation Algorithms
+  subsection:
+    - Random Search
+    - Grid Search
+    - Hill Climbing
+    - Simulated Annealing
+    - Hooke-Jeeves Algorithm
+    - Particle Swarm Optimisation
+- title: Optimisation Problems
+  subsection:
+    - Black-box Optimisation Benchmark
+- title: Problem Analyses
+- title: Helpers
+- title: Changelog

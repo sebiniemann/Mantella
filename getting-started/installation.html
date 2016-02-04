@@ -14,25 +14,32 @@ layout: page
 
 <ul>
   <li>GCC 4.8.1, Clang 3.3 or any other C++11 feature complete compiler</li>
-  <li>Armadillo C++ minimum required is 5.100.2 (project page)</li>
+  <li>Armadillo C++ minimum required is 6.400.0</li>
 </ul>
 
-<p>Installing Armadillo C++ on Ubuntu (visit Armadillo's download page to find installation instructions for other operating systems):</p>
-<pre>sudo apt-get install libblas-dev liblapack-dev
-wget http://downloads.sourceforge.net/project/arma/armadillo-5.500.2.tar.gz
-tar -xzf armadillo-5.500.2.tar.gz
-cd armadillo-5.500.2
+<p>Installing Armadillo C++ on Ubuntu (visit <a href="http://arma.sourceforge.net/download.html">Armadillo's download page</a> to find installation instructions for other operating systems):</p>
+
+{% highlight bash %}
+sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
+wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.200.4.tar.gz
+mkdir armadillo
+tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
+cd armadillo
 cmake .
 make
-sudo make install</pre>
+sudo make install
+{% endhighlight %}
 
 {% include h2 title="Download and Install" %}
 
 <p>Mantella is a header-only library, downloading the latest stable version and placing the header files into a directory standardly searched by your compiler finishes the installation.</p>
 
-<pre>git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+{% highlight bash %}
+git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+cd Mantella
 cmake .
-make
-make install</pre>
+make -j 4
+sudo make install
+{% endhighlight %}
 
 <strong>Done.</strong> You can now start creating applications with Mantella.

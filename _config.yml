@@ -1,40 +1,16 @@
-# Site settings
-#baseurl: http://mantella.info
-
-# Note, it is not required for the title to match the project name
 title: Mantella
 description: Mantella is an efficiency-focused, modern C++ library for analysing and solving optimisation problems.
 
 github: https://github.com/SebastianNiemann/Mantella
 
-# Sections
-sections:
-  - title: Overview
-  - title: Why Mantella?
-  - title: Getting Started
-    subsections:
-      - Installation
-      - Hello World
-  - title: Optimisation Algorithms
-    subsections:
-      - Random Search
-      - Grid Search
-      - Hill Climbing
-      - Simulated Annealing
-      - Hooke-Jeeves Algorithm
-      - Particle Swarm Optimisation
-  - title: Optimisation Problems
-    subsections:
-      - Black-box Optimisation Benchmark
-  - title: Problem Analyses
-  - title: Helpers
-  - title: Changelog
-
 # Avoids .html suffixes
 permalink: pretty
 
-# Build settings
 markdown: kramdown
+highlighter: rouge
+
+sass:
+  style: compressed
 
 error_mode: :strict
 exclude: [vendor]
