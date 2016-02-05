@@ -50,7 +50,7 @@ namespace mant {
 
   void HookeJeevesAlgorithm::setInitialStepSize(
       const double initialStepSize) {
-    verify(initialStepSize > 0, "The initial step size must be strict greater than 0.");
+    verify(initialStepSize > 0, "HookeJeevesAlgorithm.setInitialStepSize: The initial step size must be strict greater than 0.");
 
     initialStepSize_ = initialStepSize;
   }
@@ -61,7 +61,7 @@ namespace mant {
 
   void HookeJeevesAlgorithm::setStepSizeDecrease(
       const double stepSizeDecrease) {
-    verify(stepSizeDecrease > 0 && stepSizeDecrease < 1, "The step size decrease must be within (0, 1)");
+    verify(stepSizeDecrease > 0 && stepSizeDecrease < 1, "HookeJeevesAlgorithm.setStepSizeDecrease: The step size decrease must be within the interval (0, 1).");
 
     stepSizeDecrease_ = stepSizeDecrease;
   }

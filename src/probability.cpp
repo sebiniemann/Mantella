@@ -50,8 +50,8 @@ namespace mant {
       const arma::Col<double>& parameter,
       const double minimalDistance,
       const double maximalDistance) {
-    verify(minimalDistance >= 0, "randomNeighbour: "); // TODO
-    verify(minimalDistance <= maximalDistance, "randomNeighbour: "); // TODO
+    verify(minimalDistance >= 0, "randomNeighbour: The minimal distance must be positive (including 0).");
+    verify(minimalDistance <= maximalDistance, "randomNeighbour: The minimal distance must be less than or equal to the maximal one.");
 
     return parameter + arma::normalise(arma::randn<arma::Col<double>>(parameter.n_elem)) * (minimalDistance + std::uniform_real_distribution<double>(0, 1)(Rng::getGenerator()) * (maximalDistance - minimalDistance));
   }

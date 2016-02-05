@@ -16,7 +16,7 @@
 namespace mant {
   namespace krm {
     ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR()
-        : KinematicallyRedundantMachines(3),
+        : KinematicallyRedundantMachines(3, 3),
           redundantJointsPosition_({0.6, 1.039230484541327, 0.0, 0.0, 1.2, 0.0}),
           redundantJointsAngles_({0.0, 1.0, -1.0, 0.0, -1.0, 0.0}),
           linkLengths_({0.6, 0.6, 0.6, 0.6, 0.6, 0.6}),
@@ -78,7 +78,7 @@ namespace mant {
             
             return poseInaccuracy;
           },
-          "KRPI Parallel Kinematic Machine 3PRRR");
+          "KRM Parallel Kinematic Machine 3PRRR");
     }
   }
 }

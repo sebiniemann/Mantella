@@ -34,7 +34,7 @@ namespace mant {
   void OptimisationProblem::setObjectiveFunction(
       const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction,
       const std::string& objectiveFunctionName) {
-    verify(static_cast<bool>(objectiveFunction), "setObjectiveFunction: The objective function must be callable.");
+    verify(static_cast<bool>(objectiveFunction), "OptimisationProblem.setObjectiveFunction: The objective function must be callable.");
 
     objectiveFunction_ = objectiveFunction;
     objectiveFunctionName_ = objectiveFunctionName;
@@ -45,7 +45,7 @@ namespace mant {
 
   void OptimisationProblem::setObjectiveFunction(
       const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction) {
-    setObjectiveFunction(objectiveFunction, "Unnamed, custom optimisation problem");
+    setObjectiveFunction(objectiveFunction, "Unnamed, custom objective function");
   }
 
   std::string OptimisationProblem::getObjectiveFunctionName() const {
@@ -54,9 +54,9 @@ namespace mant {
 
   double OptimisationProblem::getObjectiveValue(
       const arma::Col<double>& parameter) {
-    verify(static_cast<bool>(objectiveFunction_), ""); // TODO
-    verify(parameter.n_elem == numberOfDimensions_, "getObjectiveValue: The number of elements must be equal to the number of dimensions.");
-    verify(parameter.is_finite(), ""); // TODO
+    verify(static_cast<bool>(objectiveFunction_), "OptimisationProblem.getObjectiveValue: The objective function must be callable.");
+    verify(parameter.n_elem == numberOfDimensions_, "OptimisationProblem.getObjectiveValue: The number of elements must be equal to the number of dimensions.");
+    verify(parameter.is_finite(), "OptimisationProblem.getObjectiveValue: The parameter must be finite.");
 
     // Always increase the number of evaluations.
     ++numberOfEvaluations_;
@@ -97,8 +97,8 @@ namespace mant {
 
   void OptimisationProblem::setLowerBounds(
       const arma::Col<double>& lowerBounds) {
-    verify(lowerBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the lower bound must be equal to the number of problem dimensions.");
-    verify(lowerBounds.is_finite(), "setBounds: All elements within the lower bound must be finite.");
+    verify(lowerBounds.n_elem == numberOfDimensions_, "OptimisationProblem.setLowerBounds: The lower bounds' number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(lowerBounds.is_finite(), "OptimisationProblem.setLowerBounds: The lower bounds must be finite.");
 
     lowerBounds_ = lowerBounds;
 #if defined(SUPPORT_MPI)
@@ -112,8 +112,8 @@ namespace mant {
 
   void OptimisationProblem::setUpperBounds(
       const arma::Col<double>& upperBounds) {
-    verify(upperBounds.n_elem == numberOfDimensions_, "setBounds: The number of elements within the upper bound must be equal to the number of problem dimensions.");
-    verify(upperBounds.is_finite(), "setBounds: All elements within the upper bound must be finite.");
+    verify(upperBounds.n_elem == numberOfDimensions_, "OptimisationProblem.setUpperBounds: The upper bounds' number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(upperBounds.is_finite(), "OptimisationProblem.setUpperBounds: The upper bounds must be finite.");
 
     upperBounds_ = upperBounds;
 #if defined(SUPPORT_MPI)
@@ -127,8 +127,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterPermutation(
       const arma::Col<arma::uword>& parameterPermutation) {
-    verify(parameterPermutation.n_elem == numberOfDimensions_, "setParameterPermutation: The number of elements must be equal to the number of dimensions");
-    verify(isPermutationVector(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "setParameterPermutation: The parameter must be a permutation.");
+    verify(parameterPermutation.n_elem == numberOfDimensions_, "OptimisationProblem.setParameterPermutation: The parameter permutation's number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(isPermutationVector(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "OptimisationProblem.setParameterPermutation: The (provided) parameter permutation must be an actual permutation on the optimisation problem.");
 
 #if defined(SUPPORT_MPI)
     // MPI needs the exact type (here: *MPI_UNSIGNED*), while Armadillo's *arma::uword* is implementation dependent.
@@ -152,8 +152,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterScaling(
       const arma::Col<double>& parameterScaling) {
-    verify(parameterScaling.n_elem == numberOfDimensions_, "setParameterScaling: The number of elements must be equal to the number of dimensions.");
-    verify(parameterScaling.is_finite(), "setParameterScaling: All elements must be finite.");
+    verify(parameterScaling.n_elem == numberOfDimensions_, "OptimisationProblem.setParameterScaling: The parameter scaling's number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(parameterScaling.is_finite(), "OptimisationProblem.setParameterScaling: The parameter scaling must be finite.");
 
     parameterScaling_ = parameterScaling;
 #if defined(SUPPORT_MPI)
@@ -170,8 +170,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterTranslation(
       const arma::Col<double>& parameterTranslation) {
-    verify(parameterTranslation.n_elem == numberOfDimensions_, "setParameterTranslation: The number of elements must be equal to the number of dimensions.");
-    verify(parameterTranslation.is_finite(), "setParameterTranslation: All elements must be finite.");
+    verify(parameterTranslation.n_elem == numberOfDimensions_, "OptimisationProblem.setParameterTranslation: The parameter translation's number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(parameterTranslation.is_finite(), "OptimisationProblem.setParameterTranslation: The parameter translation must be finite.");
 
     parameterTranslation_ = parameterTranslation;
 #if defined(SUPPORT_MPI)
@@ -188,8 +188,8 @@ namespace mant {
 
   void OptimisationProblem::setParameterRotation(
       const arma::Mat<double>& parameterRotation) {
-    verify(parameterRotation.n_rows == numberOfDimensions_, "setParameterRotation: The number of rows must be equal to the number of dimensions.");
-    verify(isRotationMatrix(parameterRotation), "setParameterRotation: The parameter must be a rotation matrix.");
+    verify(parameterRotation.n_rows == numberOfDimensions_, "OptimisationProblem.setParameterRotation: The parameter rotation's number of rows must be equal to the optimisation problem's number of dimensions.");
+    verify(isRotationMatrix(parameterRotation), "OptimisationProblem.setParameterRotation: The (provided) parameter rotation must be an actual rotation matrix.");
 
     parameterRotation_ = parameterRotation;
 #if defined(SUPPORT_MPI)
@@ -206,7 +206,7 @@ namespace mant {
 
   void OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
-    verify(std::isfinite(objectiveValueScaling), "setObjectiveValueScaling: The objective value scaling must be finite.");
+    verify(std::isfinite(objectiveValueScaling), "OptimisationProblem.setObjectiveValueScaling: The objective value scaling must be finite.");
 
     objectiveValueScaling_ = objectiveValueScaling;
 #if defined(SUPPORT_MPI)
@@ -223,7 +223,7 @@ namespace mant {
 
   void OptimisationProblem::setObjectiveValueTranslation(
       const double objectiveValueTranslation) {
-    verify(std::isfinite(objectiveValueTranslation), "setObjectiveValueTranslation: The objective value translation must be finite.");
+    verify(std::isfinite(objectiveValueTranslation), "OptimisationProblem.setObjectiveValueTranslation: The objective value translation must be finite.");
 
     objectiveValueTranslation_ = objectiveValueTranslation;
 #if defined(SUPPORT_MPI)
@@ -244,9 +244,9 @@ namespace mant {
 
   void OptimisationProblem::setMinimalParameterDistance(
       const arma::Col<double>& minimalParameterDistance) {
-    verify(minimalParameterDistance.n_elem == numberOfDimensions_, "setMinimalParameterDistance: The number of elements must be equal to the number of dimensions.");
-    verify(arma::all(minimalParameterDistance >= 0), "setMinimalParameterDistance: "); // TODO
-    verify(minimalParameterDistance.is_finite(), "setMinimalParameterDistance: All elements within the minimal parameter distance must be finite.");
+    verify(minimalParameterDistance.n_elem == numberOfDimensions_, "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance's number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(arma::all(minimalParameterDistance >= 0), "OptimisationProblem.setMinimalParameterDistance: Each minimal parameter distance must be positive (including 0).");
+    verify(minimalParameterDistance.is_finite(), "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance must be finite.");
 
     minimalParameterDistance_ = minimalParameterDistance;
 #if defined(SUPPORT_MPI)

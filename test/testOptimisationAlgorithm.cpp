@@ -340,7 +340,7 @@ SCENARIO("OptimisationAlgorithm.getNextParametersFunctionName", "[OptimisationAl
       optimisationAlgorithm.setNextParametersFunction(nextParametersFunction);
 
       THEN("Return the default, unnamed next parameter function name") {
-        CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "Unnamed, custom next parameter function");
+        CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "Unnamed, custom next-parameter function");
       }
     }
   }
@@ -487,7 +487,7 @@ SCENARIO("OptimisationAlgorithm.getBoundariesHandlingFunctionName", "[Optimisati
       optimisationAlgorithm.setBoundariesHandlingFunction(boundariesHandlingFunction);
 
       THEN("Return the default, unnamed is stagnating function name") {
-        CHECK(optimisationAlgorithm.getBoundariesHandlingFunctionName() == "Unnamed, custom boundaries handling function");
+        CHECK(optimisationAlgorithm.getBoundariesHandlingFunctionName() == "Unnamed, custom boundaries-handling function");
       }
     }
   }
@@ -634,7 +634,7 @@ SCENARIO("OptimisationAlgorithm.getIsStagnatingFunctionName", "[OptimisationAlgo
       optimisationAlgorithm.setIsStagnatingFunction(isStagnatingFunction);
 
       THEN("Return the default, unnamed is stagnating function name") {
-        CHECK(optimisationAlgorithm.getIsStagnatingFunctionName() == "Unnamed, custom is stagnation function");
+        CHECK(optimisationAlgorithm.getIsStagnatingFunctionName() == "Unnamed, custom is-stagnation function");
       }
     }
   }
