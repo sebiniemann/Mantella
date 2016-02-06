@@ -15,7 +15,7 @@ namespace mant {
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
           if (arma::all(differences_ >= 0)) {
-            stepSize_ /= stepSizeDecrease_;
+            stepSize_ *= stepSizeDecrease_;
           }
 
           arma::Mat<double> nextParameters(numberOfDimensions_, 2 * numberOfDimensions_);
