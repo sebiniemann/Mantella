@@ -81,12 +81,10 @@ script:
   ## GCC
   ## - Unit tests with OpenMP support
   ## - Code coverage
-  ## - Memory leaks
   ## - Installation
   - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On .; fi
   - if [ "$CXX" == "g++" ]; then make -j 4; fi
   - if [ "$CXX" == "g++" ]; then ./bin/mantellaTest ~[!shouldfail] ./test/data; fi
-  - if [ "$CXX" == "g++" ]; then valgrind --leak-check=full --error-exitcode=1 ./bin/mantellaTest ~[!shouldfail] ./test/data; fi
   - if [ "$CXX" == "g++" ]; then sudo make install; fi
   
   # Clang
