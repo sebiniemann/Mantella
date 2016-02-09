@@ -985,7 +985,7 @@ SCENARIO("OptimisationAlgorithm.getMaximalDuration", "[OptimisationAlgorithm][Op
 
   WHEN("The default maximal duration is unchanged") {
     THEN("Return 10 seconds") {
-      CHECK(optimisationAlgorithm.getMaximalDuration() == std::chrono::seconds(10));
+      CHECK(optimisationAlgorithm.getMaximalDuration() == std::chrono::seconds(1));
     }
   }
 

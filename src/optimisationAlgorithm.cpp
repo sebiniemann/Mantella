@@ -16,7 +16,7 @@ namespace mant {
 
     setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
-    setMaximalDuration(std::chrono::seconds(10));
+    setMaximalDuration(std::chrono::seconds(1));
 
     setBoundariesHandlingFunction(
         [this](
