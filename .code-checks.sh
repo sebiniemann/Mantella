@@ -19,15 +19,15 @@ if [ -z "${1}" ] || [ "$1" == "format" ]; then
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
-  while read file; do
+  while read FILE; do
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
-    if [[ `clang-format -output-replacements-xml "${file}" | grep "<replacement " | wc -l` -ne 0 ]]; then
+    if [[ `clang-format -output-replacements-xml "${FILE}" | grep "<replacement " | wc -l` -ne 0 ]]; then
       if [ "$2" == "auto" ]; then
-        clang-format ${file} > "/tmp/.formatted"; cat "/tmp/.formatted" > ${file};
-        echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} was automatically formatted.";
+        clang-format ${FILE} > "/tmp/.formatted"; cat "/tmp/.formatted" > ${FILE};
+        echo "${RED_TEXT_COLOR}${FILE}${RESET_TEXT_COLOR} was automatically formatted.";
       else
-        echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} is not properly formatted. Please run '${GREEN_TEXT_COLOR}clang-format -i ${file}${RESET_TEXT_COLOR}'.";
+        echo "${RED_TEXT_COLOR}${FILE}${RESET_TEXT_COLOR} is not properly formatted. Please run '${GREEN_TEXT_COLOR}clang-format -i ${FILE}${RESET_TEXT_COLOR}'.";
       fi;
       FORMAT_ERROR_OCCURED=1;
       ANY_ERROR_OCCURED=1;
@@ -54,12 +54,12 @@ if [ -z "${1}" ] || [ "${1}" == "include" ]; then
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l);
   COUNTER=1;
   
-  while read file; do
+  while read FILE; do
     printf "[%3s%%] " "$(( (COUNTER * 100) / NUMBER_OF_FILES ))"
     
-    OUTPUT=$(include-what-you-use -std=c++11 -I include ${file} 2>&1);
+    OUTPUT=$(include-what-you-use -std=c++11 -I include ${FILE} 2>&1);
     if [[ "${OUTPUT}" =~ "full include-list for" ]]; then
-      echo "${RED_TEXT_COLOR}${file}${RESET_TEXT_COLOR} did not pass the include rules. Please run '${GREEN_TEXT_COLOR}include-what-you-use -std=c++11 -I include ${file}${RESET_TEXT_COLOR}'.";
+      echo "${RED_TEXT_COLOR}${FILE}${RESET_TEXT_COLOR} did not pass the include rules. Please run '${GREEN_TEXT_COLOR}include-what-you-use -std=c++11 -I include ${FILE}${RESET_TEXT_COLOR}'.";
       INCLUDE_ERROR_OCCURED=1;
       ANY_ERROR_OCCURED=1;
     else
