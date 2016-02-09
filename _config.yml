@@ -7,10 +7,11 @@ github: https://github.com/SebastianNiemann/Mantella
 permalink: pretty
 
 markdown: kramdown
+kramdown: 
+  input: GFM
+  parse_block_html: true
+  hard_wrap: false
 highlighter: rouge
-
-sass:
-  style: compressed
 
 error_mode: :strict
 exclude: [vendor]

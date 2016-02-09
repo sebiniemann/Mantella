@@ -1,27 +1,74 @@
-<hr>
+{% if include.subset %}
+  {% assign _breadcrumbs = include.subset | split: '/' %}
+  
+  {% for _interface in site.data.api %}
+    {% assign _url = _interface.title | slugify %}
+    {% if _url == _breadcrumbs[1] %}
+      {% if _breadcrumbs.size == 2 %}
+      
+{% include h1 title=_interface.title %}
+      
+        {% if _interface.groups %}
+          {% for _group in _interface.groups %}
+**{{ _group.title }}**
+            {% for _call in _group.functions %}
+              {% capture _shorted_call %}{% include function call=_call short="yes" %}{% endcapture %}
+- {{ _shorted_call | strip_newlines }}
+            {% endfor %}
+          {% endfor %}
+          
+          {% for _group in _interface.groups %}
+            {% for _call in _group.functions %}
+{% include function call=_call signature_prefix=_interface.title %}
+            {% endfor %}
+          {% endfor %}
+        {% else %}
+          {% for _call in _interface.functions %}
+            {% capture _shorted_call %}{% include function call=_call short="yes" %}{% endcapture %}
+- {{ _shorted_call | strip_newlines }}
+          {% endfor %}
+          
+          {% for _call in _interface.functions %}
+{% include function call=_call signature_prefix=_interface.title %}
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        {% if _interface.derivatives %}
+          {% for _interface in _interface.derivatives %}
+            {% assign _url = _interface.title | slugify %}
+            {% if _url == _breadcrumbs[2] %}
+{% include h1 title=_interface.title %}
 
-<h3 id="{{ include.call | slugify }}">
-  <strong>
-    {% if include.call contains "::" %}static {% endif %}
-    {% if include.returns %}<small>{{ include.returns }}</small> {% endif %}
-    {{ include.call }}(<a class="anchor pull-right hidden-print hidden-xs" href="#{{ include.call | slugify }}" aria-hidden="true">#</a>{% if include.params %}
-      {% assign params = include.params | split: ", " %}
-      <span style="display:table;margin-left:20px;">
-        {% for param in params %}
-          {% assign pair = param | split: " " %}
-          {% assign name = pair[-1] %}
-          {% assign type = pair | pop | join: " " %}
-          <span style="display:table-row">
-            <span style="display:table-cell;padding-right:20px;"><small>{{ type }}</small></span>
-            <span style="display:table-cell;padding-right:20px;font-size:65%">{{ name }}</span>
-          </span>
-        {% endfor %}
-      </span>
-    {% endif %})
-    {% if include.returns %}
-      {% if include.call contains "." or include.call contains "::" %}{% else %} <small>(stand-alone function)</small>{% endif %}
-    {% else %}
-      <small>(constructor)</small>
+              {% if _interface.groups %}
+                {% for _group in _interface.groups %}
+**{{ _group.title }}**
+                  {% for _call in _group.functions %}
+                    {% capture _shorted_call %}{% include function call=_call short="yes" %}{% endcapture %}
+- {{ _shorted_call | strip_newlines }}
+                  {% endfor %}
+                {% endfor %}
+                
+                {% for _group in _interface.groups %}
+                  {% for _call in _group.functions %}
+{% include function call=_call signature_prefix=_interface.title %}
+                  {% endfor %}
+                {% endfor %}
+              {% else %}
+                {% for _call in _interface.functions %}
+                  {% capture _shorted_call %}{% include function call=_call short="yes" %}{% endcapture %}
+- {{ _shorted_call | strip_newlines }}
+                {% endfor %}
+      
+                {% for _call in _interface.functions %}
+{% include function call=_call signature_prefix=_interface.title %}
+                {% endfor %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
     {% endif %}
-  </strong>
-</h3>
+  {% endfor %}
+{% else %}
+
+{% endif %}

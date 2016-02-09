@@ -52,9 +52,10 @@
   </head>
   <body>
     <header class="hidden-print">
+      <!-- Adds an JS controlled class (*affix*) to the navbar, so we can adjust the background-color on the landing page -->
       <nav class="navbar navbar-inverse navbar-fixed-top"{% if page.url == "/" %}data-spy="affix" data-offset-top="100" data-offset-bottom="0"{% endif %}>
         <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
+          <!-- Groups the project name and toggle button, for better mobile display -->
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
@@ -69,6 +70,7 @@
           <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
               <li><a href="{{ site.baseurl }}/getting-started/">Get Started</a></li>
+              <!-- Reduces *Documentation* to *Docs* on smaller displays -->
               <li><a href="{{ site.baseurl }}/overview/">Doc<span class="hidden-md hidden-lg">s</span><span class="hidden-xs hidden-sm">umentation</span></a></li>
               <li><a href="{{ site.baseurl }}/changelog/">Changelog</a></li>
             </ul>
@@ -97,9 +99,6 @@
     <script src="{{ site.baseurl }}/assets/js/ie10-viewport-bug-workaround.min.js"></script>
     <!-- MathJax -->
     <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      
-    <!-- Custom scripts -->
-    <script src="{{ site.baseurl }}/assets/js/custom.js"></script>
       
     <!-- Google Analytics OptOut (must be placed before the actual tracking code) -->
     <script>

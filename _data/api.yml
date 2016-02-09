@@ -1,0 +1,315 @@
+- title: Configuration
+  functions:
+    - extern bool isCachingSamples;
+    - extern bool isRecordingSampling;
+    - extern bool isVerbose;
+    
+    
+- title: Optimisation algorithms
+  groups: 
+    - title: Constructors
+      functions:
+        - explicit OptimisationAlgorithm();
+    - title: Optimiser
+      functions:
+        - void .optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters);
+    - title: Behaiviour
+      functions:
+        - void .setNextParametersFunction(std::function nextParameterFunction, const std::string& nextParametersFunctionName);
+        - void .setNextParametersFunction(std::function nextParameterFunction);
+        - std::string .getNextParametersFunctionName() const;
+        - void .setBoundariesHandlingFunction(std::function boundariesHandlingFunction, const std::string& boundariesHandlingFunctionName);
+        - void .setBoundariesHandlingFunction(std::function boundariesHandlingFunction);
+        - std::string .getBoundariesHandlingFunctionName() const;
+        - void .setIsStagnatingFunction(std::function stagnationDetectionFunction, const std::string& stagnationDetectionFunctionName);
+        - void .setIsStagnatingFunction(std::function stagnationDetectionFunction);
+        - std::string .getIsStagnatingFunctionName() const;
+        - void .setRestartingFunction(std::function restartingFunction, const std::string& restartingFunctionName);
+        - void .setRestartingFunction(std::function restartingFunction);
+        - std::string .getRestartingFunctionName() const;
+    - title: Termination criterias
+      functions:
+        - void .setAcceptableObjectiveValue(const double acceptableObjectiveValue);
+        - double .getAcceptableObjectiveValue() const;
+        - void .setMaximalNumberOfIterations(const arma::uword maximalNumberOfIterations);
+        - arma::uword .getMaximalNumberOfIterations() const;
+        - void .setMaximalDuration(const std::chrono::microseconds maximalDuration);
+        - std::chrono::microseconds .getMaximalDuration() const;
+    - title: Results
+      functions:
+        - bool .isFinished() const;
+        - bool .isTerminated() const;
+        - arma::uword .getNumberOfIterations() const;
+        - std::chrono::microseconds .getDuration() const;
+        - double .getBestObjectiveValue() const;
+        - arma::Col<double> .getBestParameter() const;
+    - title: Miscellaneous
+      functions:
+        - std::vector .getRecordedSampling() const;
+        - void .reset();
+        
+        
+  derivatives:
+    - title: Random search
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit RandomSearch();
+        - title: Optimiser
+          functions:
+            - void .optimise(OptimisationProblem& optimisationProblem);
+            
+            
+    - title: Hill climbing
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit HillClimbing();
+        - title: Optimiser
+          functions:
+            - void .optimise(OptimisationProblem& optimisationProblem);
+        - title: Parameterisation
+          functions:
+            - void .setMinimalStepSize(double minimalStepSize);
+            - double .getMinimalStepSize() const;
+            - void .setMaximalStepSize(double minimalStepSize);
+            - double .getMaximalStepSize() const;
+            
+            
+    - title: Simulated annealing
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit SimulatedAnnealing();
+        - title: Optimiser
+          functions:
+            - void .optimise(OptimisationProblem& optimisationProblem);
+        - title: Behaiviour
+          functions:
+            - void .setIsAcceptableStateFunction(std::function isAcceptableStateFunction, const std::string& isAcceptableStateFunctionName);
+            - void .setIsAcceptableStateFunction(std::function isAcceptableStateFunction);
+            - std::string .getIsAcceptableStateFunctionName() const;
+        - title: Parameterisation
+          functions:
+            - void .setMinimalStepSize(double minimalStepSize);
+            - double .getMinimalStepSize() const;
+            - void .setMaximalStepSize(double minimalStepSize);
+            - double .getMaximalStepSize() const;
+            
+            
+    - title: Hooke-Jeeves algorithm
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit HookeJeevesAlgorithm();
+        - title: Optimiser
+          functions:
+            - void optimise(OptimisationProblem& optimisationProblem);
+        - title: Parameterisation
+          functions:
+            - void setInitialStepSize(const double initialStepSize);
+            - double getInitialStepSize() const;
+            - void setStepSizeDecrease(const double stepSizeDecrease);
+            - double getStepSizeDecrease() const;
+            
+            
+    - title: Particle swarm optimisation
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit ParticleSwarmOptimisation();
+        - title: Optimiser
+          functions:
+            - void .optimise(OptimisationProblem& optimisationProblem, const arma::uword numberOfParticles);
+            - void .optimise(OptimisationProblem& optimisationProblem);
+        - title: Behaiviour
+          functions:
+            - void .setNeighbourhoodTopologyFunction(std::function neighbourhoodTopologyFunction, const std::string& neighbourhoodTopologyFunctionName);
+            - void .setNeighbourhoodTopologyFunction(std::function neighbourhoodTopologyFunction);
+            - std::string .getNeighbourhoodTopologyFunctionName() const;
+        - title: Parameterisation
+          functions:
+            - void .setMaximalAcceleration(const double maximalAcceleration);
+            - double .getMaximalAcceleration() const;
+            - void .setMaximalLocalAttraction(const double maximalLocalAttraction);
+            - double .getMaximalLocalAttraction() const;
+            - void .setMaximalGlobalAttraction(const double maximalGlobalAttraction);
+            - double .getMaximalGlobalAttraction() const;
+            
+            
+- title: Optimisation problems
+  groups: 
+    - title: Constructors
+      functions:
+        - explicit OptimisationProblem(const arma::uword numberOfDimensions);
+    - title: Constants
+      functions:
+        - const arma::uword .numberOfDimensions_;
+    - title: Objective
+      functions:
+        - void .setObjectiveFunction(const std::function objectiveFunction, const std::string& objectiveFunctionName);
+        - void .setObjectiveFunction(const std::function objectiveFunction);
+        - std::string .getObjectiveFunctionName() const;
+        - double .getObjectiveValue(const arma::Col<double>& parameter);
+        - double .getNormalisedObjectiveValue(const arma::Col<double>& parameter);
+    - title: Constraints
+      functions:
+        - void .setLowerBounds(const arma::Col<double>& lowerBounds);
+        - arma::Col<double> .getLowerBounds() const;
+        - void .setUpperBounds(const arma::Col<double>& upperBounds);
+        - arma::Col<double> .getUpperBounds() const;
+    - title: Parameter space modifiers
+      functions:
+        - void .setParameterPermutation(const arma::Col<arma::uword>& parameterPermutation);
+        - arma::Col<arma::uword> .getParameterPermutation() const;
+        - void .setParameterScaling(const arma::Col<double>& parameterScaling);
+        - arma::Col<double> .getParameterScaling() const;
+        - void .setParameterTranslation(const arma::Col<double>& parameterTranslation);
+        - arma::Col<double> .getParameterTranslation() const;
+        - void .setParameterRotation(const arma::Mat<double>& parameterRotation);
+        - arma::Mat<double> .getParameterRotation() const;
+        - void .setMinimalParameterDistance(const arma::Col<double>& minimalParameterDistance);
+        - arma::Col<double> .getMinimalParameterDistance() const;
+    - title: Objective value space modifiers
+      functions:
+        - void .setObjectiveValueScaling(const double objectiveValueScaling);
+        - double .getObjectiveValueScaling() const;
+        - void .setObjectiveValueTranslation(const double objectiveValueTranslation);
+        - double .getObjectiveValueTranslation() const;
+        - std::unordered_map .getCachedSamples() const;
+    - title: Counter
+      functions:
+        - arma::uword .getNumberOfEvaluations() const;
+        - arma::uword .getNumberOfDistinctEvaluations() const;
+    - title: Miscellaneous
+      functions:
+        - void .reset();
+        
+        
+  derivatives:
+    - title: Black-box optimisation benchmark
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit bbob::AttractiveSectorFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::BentCigarFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::BuecheRastriginFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::CompositeGriewankRosenbrockFunctionF8F2(const arma::uword numberOfDimensions);
+            - explicit bbob::DifferentPowersFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::DiscusFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::EllipsoidalFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::EllipsoidalFunctionRotated(const arma::uword numberOfDimensions);
+            - explicit bbob::GallaghersGaussian101mePeaksFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::GallaghersGaussian21hiPeaksFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::KatsuuraFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::LinearSlope(const arma::uword numberOfDimensions);
+            - explicit bbob::LunacekBiRastriginFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::RastriginFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::RastriginFunctionRotated(const arma::uword numberOfDimensions);
+            - explicit bbob::RosenbrockFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::RosenbrockFunctionRotated(const arma::uword numberOfDimensions);
+            - explicit bbob::SchaffersF7Function(const arma::uword numberOfDimensions);
+            - explicit bbob::SchaffersF7FunctionIllConditioned(const arma::uword numberOfDimensions);
+            - explicit bbob::SchwefelFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::SharpRidgeFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::SphereFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::StepEllipsoidalFunction(const arma::uword numberOfDimensions);
+            - explicit bbob::WeierstrassFunction(const arma::uword numberOfDimensions);
+        - title: Objective
+          functions:
+            - double .getOptimalObjectiveValue() const override;
+            
+            
+    - title: Kinematically redundant machines
+      groups: 
+        - title: Constructors
+          functions:
+            - explicit krm::ParallelKinematicMachine3PRPR();
+            - explicit krm::ParallelKinematicMachine3PRRR();
+            - explicit krm::ParallelKinematicMachine6PRUS();
+            - explicit krm::ParallelKinematicMachine6PUPS();
+        - title: Constants
+          functions:
+            - const arma::uword .numberOfWorkspaceDimensions_;
+        - title: End-effector trajectory
+          functions:
+            - void .setEndEffectorTrajectory(const arma::Mat<double>& endEffectorTrajectory);
+            - arma::Mat<double> getEndEffectorTrajectory() const;
+            
+            
+- title: Problem analyses
+
+
+  derivatives:
+    - title: Samples selection
+      functions:
+        - std::unordered_map elitists(const std::unordered_map& samples, const arma::uword numberOfSamplesToSelect);
+        
+        
+    - title: Samples analysis
+      groups: 
+        - title: Passive
+          functions:
+            - double fitnessDistanceCorrelation(const std::unordered_map& samples);
+            - double lipschitzContinuity(const std::unordered_map& samples);
+            - double fitnessDistanceCorrelation(const std::unordered_map& samples);
+        - title: Active
+          functions:
+            - std::vector additiveSeparability(OptimisationProblem& optimisationProblem, const arma::uword numberOfEvaluations, const double maximalDeviation, const double minimalConfidence);
+            
+            
+- title: Helpers
+
+
+  derivatives:
+    - title: Random number generator
+      functions:
+        - static std::mt19937_64& Rng::getGenerator();
+        - static void Rng::setSeed(const arma::arma_rng::seed_type seed);
+        - static void Rng::setRandomSeed();
+        - static arma::arma_rng::seed_type Rng::getSeed();
+        
+        
+    - title: Mathematical functions
+      groups: 
+        - title: Algebra
+          functions:
+            - arma::uword polynomialSize(const arma::uword numberOfElements, const arma::uword polynomialOrder);
+            - arma::Col<double> polynomial(const arma::Col<double>& parameter, const arma::uword polynomialOrder);
+        - title: Combinatorics
+          functions:
+            - arma::uword factorial(const arma::uword n);
+            - arma::uword nchoosek(arma::uword n, const arma::uword k);
+            - std::vector combinations(const arma::uword numberOfElements, const arma::uword combinationSize);
+            - std::vector multicombinations(const arma::uword numberOfElements, const arma::uword combinationsize);
+        - title: Geometry
+          functions:
+            - arma::Mat<double>::fixed<2, 2> rotationMatrix2D(const double angle);
+            - arma::Mat<double>::fixed<3, 3> rotationMatrix3D(const double rollAngle, const double pitchAngle, const double yawAngle);
+            - std::vector circleCircleIntersections(const arma::Col<double>::fixed<2>& firstCenter, const double firstRadius, const arma::Col<double>::fixed<2>& secondCenter, const double secondRadius);
+            - std::vector circleSphereIntersections(const arma::Col<double>::fixed<3>& circleCenter, const double circleRadius, const arma::Col<double>::fixed<3>& circleNormal, const arma::Col<double>::fixed<3>& sphereCenter, const double sphereRadius);
+        - title: Number theory
+          functions:
+            - arma::Mat<double> hammersleySet(const arma::Col<arma::uword>& base, const arma::Col<arma::uword>& seed, const arma::uword numberOfElements);
+            - arma::Mat<double> haltonSequence(const arma::Col<arma::uword>& base, const arma::Col<arma::uword>& seed, const arma::uword numberOfElements);
+            - arma::Col<double> vanDerCorputSequence(const arma::uword base, const arma::uword seed, const arma::uword numberOfElements);
+            - std::vector twoSetsPartitions(const arma::uword numberOfElements);
+        - title: Probability
+          functions:
+            - arma::Mat<double> randomRotationMatrix(const arma::uword numberOfDimensions);
+            - arma::Col<arma::uword> randomPermutationVector(const arma::uword numberOfElements, const arma::uword cycleSize);
+            - arma::Col<arma::uword> randomPermutationVector(const arma::uword numberOfElements);
+            - arma::Col<double> randomNeighbour(const arma::Col<double>& parameter, const double minimalDistance, const double maximalDistance);
+            
+            
+    - title: Armadillo and C++ STL
+      functions:
+        - arma::Col<arma::uword> range(const arma::uword start, const arma::uword end, const arma::uword stepSize);
+        - arma::Col<arma::uword> range(const arma::uword start, const arma::uword end);
+        - arma::uword Hash.operator(const arma::Col<double>& key) const;
+        - bool IsEqual.operator(const arma::Col<double>& firstKey, const arma::Col<double>& secondKey) const;
+        
+        
+    - title: Message passing interface
+      functions: 
+        - void mpiBestSample(void* firstInput, void* secondInput, int* size, MPI_Datatype* type);

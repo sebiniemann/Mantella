@@ -1,20 +1,29 @@
 - title: Overview
 - title: Why Mantella?
-- title: Getting Started
-  subsection:
+- title: Getting started
+  subsections:
     - Installation
-    - Hello World
-- title: Optimisation Algorithms
-  subsection:
-    - Random Search
-    - Grid Search
-    - Hill Climbing
-    - Simulated Annealing
-    - Hooke-Jeeves Algorithm
-    - Particle Swarm Optimisation
-- title: Optimisation Problems
-  subsection:
-    - Black-box Optimisation Benchmark
-- title: Problem Analyses
+    - Hello world
+- title: Configuration
+- title: Optimisation algorithms
+  subsections:
+    - Random search
+    - Hill climbing
+    - Simulated annealing
+    - Hooke-Jeeves algorithm
+    - Particle swarm optimisation
+- title: Optimisation problems
+  subsections:
+    - Black-box optimisation benchmark
+    - Kinematically redundant machines
+- title: Problem analyses
+  subsections:
+    - Samples selection
+    - Samples analysis
 - title: Helpers
+  subsections:
+  - Random number generator
+  - Mathematical functions
+  - Armadillo and C++ STL
+  - Message passing interface
 - title: Changelog

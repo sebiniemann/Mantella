@@ -17,6 +17,34 @@ Vagrant.configure(2) do |config|
     sudo apt-get update -qq
     sudo apt-get upgrade -qq
     
+    # Installs Mantella (including dependencies)
+    ## Installs Clang
+    sudo apt-get install -qq clang
+    
+    ## Installs CMake
+    sudo apt-get install -qq cmake
+    
+    ## Installs Armadillo C++
+    sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
+    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.200.4.tar.gz
+    mkdir armadillo
+    tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
+    cd armadillo
+    cmake .
+    make --quiet
+    sudo make --quiet install
+    cd ..
+    rm -Rf armadillo armadillo.tar.gz
+    
+    ## Installs Mantella
+    git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
+    cd Mantella
+    cmake .
+    make
+    sudo make install
+    cd ..
+    rm -Rf Mantella
+    
     # Installs Jekyll (github-pages) dependencies
     sudo apt-get install -qq ruby-dev
     sudo apt-get install -qq zlib1g-dev
@@ -35,38 +63,6 @@ Vagrant.configure(2) do |config|
     # Installs Jekyll (github-pages) and html-proofer
     cd /vagrant
     bundle install
-    
-    # Installs Mantella (including dependencies)
-    ## Installs Clang
-    sudo apt-get install -qq clang
-    
-    ## Installs CMake
-    sudo apt-get install -qq cmake
-    
-    ## Fixing some paths
-    echo "LD_LIBRARY_PATH=/usr/local/lib" | sudo tee --append /etc/environment > /dev/null
-    source /etc/environment
-    
-    ## Installs Armadillo C++
-    sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
-    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.200.4.tar.gz
-    mkdir armadillo
-    tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
-    cd armadillo
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
-    make --quiet
-    sudo make --quiet install
-    cd ..
-    rm -Rf armadillo armadillo.tar.gz
-    
-    ## Installs Mantella
-    git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
-    cd Mantella
-    cmake .
-    make
-    sudo make install
-    cd ..
-    rm -Rf Mantella
     
     # Installs useful development tools
     sudo apt-get install htop

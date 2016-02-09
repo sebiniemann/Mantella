@@ -1,0 +1,79 @@
+{% assign _params = include.call %}
+{% assign _params = _params | replace: 'static', '' %}
+{% assign _params = _params | replace: 'void ', '' %}
+{% assign _params = _params | replace: '&', '' %}
+{% assign _params = _params | replace: ')', '' %}
+{% assign _params = _params | replace: ' const', '' %}
+{% assign _params = _params | replace: 'override', '' %}
+{% assign _params = _params | replace: ';', '' %}
+{% assign _params = _params | escape | strip | split: '(' %}
+{% assign _return = _params[0] | split: ' ' %}
+{% assign _name = _return[-1] | strip %}
+{% assign _return = _return | pop | join: ' ' | strip %}
+{% assign _params = _params[1] | replace: 'const', '' | strip | split: ', ' %}
+
+{% capture _signature %}{{ _name }}{% endcapture %}
+{% for _param in _params %}
+  {% capture _signature %}{{ _signature }}-{{ _param | split: ' ' | pop | join: ' ' }}{% endcapture %}
+{% endfor %}
+{% assign _signature = _signature | slugify %}
+
+{% if include.short %}
+  {% capture _function %}
+    {% if _return contains 'extern' %}
+{{ _return | replace: 'extern ', '' }} {{ _name }}
+    {% elsif _return contains 'const' %}
+{{ _return | replace: 'const ', '' }} {{ _name }}
+    {% else %}
+{% if _name contains '::' %}{% unless _return contains 'explicit' %}static {% endunless %}{% endif %}
+{% unless _return == '' or  _return contains 'explicit' %}{{ _return }} {% endunless %}
+{{ _name }}({% if _params.size > 0 %}
+        {% for _param in _params %}
+          {% assign _param_pair = _param | split: ' ' %}
+          {% assign _param_type = _param_pair | pop | join: ' ' %}
+{{ _param_type }}{% if forloop.index != forloop.length %},{% endif %}
+        {% endfor %}
+{% endif %})
+    {% endif %}
+  {% endcapture %}
+[{{ _function | strip_newlines }}](#{{ _signature }})
+{% else %}
+  {% capture _function %}
+    {% if _return contains 'extern' %}
+<small>{{ _return | replace: 'extern ', '' }}</small> {{ _name }}<a class='anchor pull-right hidden-print hidden-xs' href='#{{ _signature }}' aria-hidden='true'>#</a><small> (global)</small>
+    {% elsif _return contains 'const' %}
+<small>{{ _return | replace: 'const ', '' }}</small> {{ _name }}<a class='anchor pull-right hidden-print hidden-xs' href='#{{ _signature }}' aria-hidden='true'>#</a><small> (constant)</small>
+    {% else %}
+{% if _name contains '::' %}{% unless _return contains 'explicit' %}static {% endunless %}{% endif %}
+{% unless _return == '' or  _return contains 'explicit' %}<small>{{ _return }}</small> {% endunless %}
+{{ _name }}(<a class='anchor pull-right hidden-print hidden-xs' href='#{{ _signature }}' aria-hidden='true'>#</a>{% if _params.size > 0 %}
+<span style='display:table;margin-left:20px;'>
+          {% for _param in _params %}
+            {% assign _param_pair = _param | split: ' ' %}
+            {% assign _param_name = _param_pair[-1] %}
+            {% assign _param_type = _param_pair | pop | join: ' ' %}
+<span style='display:table-row'>
+<span style='display:table-cell;padding-right:20px;'><small>{{ _param_type }}</small></span>
+<span style='display:table-cell;padding-right:20px;font-size:65%'>{{ _param_name }}</span>
+</span>
+          {% endfor %}
+</span>
+      {% endif %})
+      {% unless _name contains '.' or _name contains '::' %}
+<small>{% if _return contains 'explicit' %}(constructor){% else %}(stand-alone function){% endif %}</small>
+      {% endunless %}
+    {% endif %}
+  {% endcapture %}
+  {% assign _function = _function | strip_newlines %}
+
+
+<hr>
+
+<h3 id="{{ _signature | slugify }}">
+{{ _function | strip_newlines }}
+</h3>
+
+{% capture _signature %}{{ include.signature_prefix | slugify }}-{{ _signature }}{% endcapture %}
+{% include descriptions.md signature=_signature %}
+
+{% endif %}
