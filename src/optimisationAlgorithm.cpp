@@ -16,7 +16,7 @@ namespace mant {
 
     setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
-    setMaximalDuration(std::chrono::seconds(10));
+    setMaximalDuration(std::chrono::seconds(1));
 
     setBoundariesHandlingFunction(
         [this](
@@ -77,11 +77,11 @@ namespace mant {
   void OptimisationAlgorithm::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::Mat<double>& initialParameters) {
-    verify(initialParameters.is_finite(), "OptimisationAlgorithm.optimise: "); // TODO
-    verify(initialParameters.n_rows == optimisationProblem.numberOfDimensions_, "OptimisationAlgorithm.optimise: "); // TODO
-    verify(initialParameters.n_cols > 0, "OptimisationAlgorithm.optimise: "); // TODO
-    verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), "OptimisationAlgorithm.optimise: "); // TODO
-    verify(static_cast<bool>(nextParametersFunction_), "OptimisationAlgorithm.optimise: "); // TODO
+    verify(initialParameters.is_finite(), "OptimisationAlgorithm.optimise: The initial parameter must be finite.");
+    verify(initialParameters.n_rows == optimisationProblem.numberOfDimensions_, "OptimisationAlgorithm.optimise: The initial parameter's number of rows must be equal to the optimisation problem's number of dimensions.");
+    verify(initialParameters.n_cols > 0, "OptimisationAlgorithm.optimise: The initial parameter's number of columns must be strict greater than 0.");
+    verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), "OptimisationAlgorithm.optimise: The optimisation problem's lower bounds must be less than or equal to their upper bounds.");
+    verify(static_cast<bool>(nextParametersFunction_), "OptimisationAlgorithm.optimise: The next-parameter function must be callable.");
 
     if (::mant::isVerbose) {
       std::cout << "================================================================================\n";
@@ -151,7 +151,7 @@ namespace mant {
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction,
       const std::string& nextParametersFunctionName) {
-    verify(static_cast<bool>(nextParametersFunction), "setNextParametersFunction: The next parameters function must be callable.");
+    verify(static_cast<bool>(nextParametersFunction), "OptimisationAlgorithm.setNextParametersFunction: The next-parameters function must be callable.");
 
     nextParametersFunction_ = nextParametersFunction;
     nextParametersFunctionName_ = nextParametersFunctionName;
@@ -161,7 +161,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction) {
-    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next parameter function");
+    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next-parameter function");
   }
 
   std::string OptimisationAlgorithm::getNextParametersFunctionName() const {
@@ -171,7 +171,7 @@ namespace mant {
   void OptimisationAlgorithm::setBoundariesHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isOutOfLowerBound_, const arma::Mat<arma::uword>& isOutOfUpperBound_)> boundariesHandlingFunction,
       const std::string& boundariesHandlingFunctionName) {
-    verify(static_cast<bool>(boundariesHandlingFunction), "setBoundariesHandlingFunction: The boundaries handling function must be callable.");
+    verify(static_cast<bool>(boundariesHandlingFunction), "OptimisationAlgorithm.setBoundariesHandlingFunction: The boundaries-handling function must be callable.");
 
     boundariesHandlingFunction_ = boundariesHandlingFunction;
     boundariesHandlingFunctionName_ = boundariesHandlingFunctionName;
@@ -181,7 +181,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setBoundariesHandlingFunction(
       std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isOutOfLowerBound_, const arma::Mat<arma::uword>& isOutOfUpperBound_)> boundariesHandlingFunction) {
-    setBoundariesHandlingFunction(boundariesHandlingFunction, "Unnamed, custom boundaries handling function");
+    setBoundariesHandlingFunction(boundariesHandlingFunction, "Unnamed, custom boundaries-handling function");
   }
 
   std::string OptimisationAlgorithm::getBoundariesHandlingFunctionName() const {
@@ -191,7 +191,7 @@ namespace mant {
   void OptimisationAlgorithm::setIsStagnatingFunction(
       std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> stagnationDetectionFunction,
       const std::string& stagnationDetectionFunctionName) {
-    verify(static_cast<bool>(stagnationDetectionFunction), "setIsStagnatingFunction: The restart detection function must be callable.");
+    verify(static_cast<bool>(stagnationDetectionFunction), "OptimisationAlgorithm.setIsStagnatingFunction: The is-stagnating function must be callable.");
 
     isStagnatingFunction_ = stagnationDetectionFunction;
     isStagnatingFunctionName_ = stagnationDetectionFunctionName;
@@ -201,7 +201,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setIsStagnatingFunction(
       std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> stagnationDetectionFunction) {
-    setIsStagnatingFunction(stagnationDetectionFunction, "Unnamed, custom is stagnation function");
+    setIsStagnatingFunction(stagnationDetectionFunction, "Unnamed, custom is-stagnation function");
   }
 
   std::string OptimisationAlgorithm::getIsStagnatingFunctionName() const {
@@ -211,7 +211,7 @@ namespace mant {
   void OptimisationAlgorithm::setRestartingFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction,
       const std::string& restartingFunctionName) {
-    verify(static_cast<bool>(restartingFunction), "setRestartingFunction: The restart handling function must be callable.");
+    verify(static_cast<bool>(restartingFunction), "OptimisationAlgorithm.setRestartingFunction: The restarting function must be callable.");
 
     restartingFunction_ = restartingFunction;
     restartingFunctionName_ = restartingFunctionName;
@@ -239,7 +239,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setMaximalNumberOfIterations(
       const arma::uword maximalNumberOfIterations) {
-    verify(maximalNumberOfIterations > 0, ""); // TODO
+    verify(maximalNumberOfIterations > 0, "OptimisationAlgorithm.setMaximalNumberOfIterations: The maximal number of iterations must be strict greater than 0.");
 
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
@@ -250,7 +250,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setMaximalDuration(
       const std::chrono::microseconds maximalDuration) {
-    verify(maximalDuration.count() > 0, ""); // TODO
+    verify(maximalDuration.count() > 0, "OptimisationAlgorithm.setMaximalDuration: The maximal duration must be strict greater than 0 millisecond.");
 
     maximalDuration_ = maximalDuration;
   }

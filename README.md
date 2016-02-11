@@ -1,6 +1,6 @@
 [![Mantella](http://sebastianniemann.github.io/Mantella/assets/images/logo_with_name.png)](http://mantella.info/)
 
-Version 0.10.0
+Version 0.12.0
 ==============
 
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master) [![Join the chat at https://gitter.im/SebastianNiemann/Mantella](https://badges.gitter.im/SebastianNiemann/Mantella.svg)](https://gitter.im/SebastianNiemann/Mantella)
@@ -17,7 +17,7 @@ You will also find **detailed API information** under http://mantella.info/overv
 
 Got a Problem or Question?
 --------------------------
-If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella).
+If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella), or ask us directly on [Gitter](https://gitter.im/SebastianNiemann/Mantella).
 
 Found an Issue or Bug?
 ----------------------
@@ -29,7 +29,7 @@ Requesting a Feature?
 ---------------------
 If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues) labelled `feature request`.
 
-Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.
+Note that submitting a pull request, implementing your requested feature, usually speeds up the process.
 
 License
 -------

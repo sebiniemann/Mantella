@@ -43,7 +43,7 @@ namespace mant {
             
             return std::exp((bestObjectiveValue_ - objectiveValue) / std::exp(progress)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
         },
-        "Exponential"); // TODO (better name)
+        "Exponential");
 
     setMinimalStepSize(0);
     setMaximalStepSize(0.1);
@@ -52,7 +52,7 @@ namespace mant {
   void SimulatedAnnealing::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(minimalStepSize_ <= maximalStepSize_, ""); // TODO
+    verify(minimalStepSize_ <= maximalStepSize_, "SimulatedAnnealing.initialise: The minimal step size must be less than or equal to the maximal one.");
   }
 
   void SimulatedAnnealing::optimise(
@@ -63,7 +63,7 @@ namespace mant {
   void SimulatedAnnealing::setIsAcceptableStateFunction(
       std::function<bool(const double objectiveValue)> isAcceptableStateFunction,
       const std::string& isAcceptableStateFunctionName) {
-    verify(static_cast<bool>(isAcceptableStateFunction), "setIsAcceptableStateFunction: The function deciding whether or not an non-optimal state is acceptable must be callable.");
+    verify(static_cast<bool>(isAcceptableStateFunction), "SimulatedAnnealing.setIsAcceptableStateFunction: The is-acceptable-state function must be callable.");
 
     isAcceptableStateFunction_ = isAcceptableStateFunction;
     isAcceptableStateFunctionName_ = isAcceptableStateFunctionName;
@@ -71,7 +71,7 @@ namespace mant {
 
   void SimulatedAnnealing::setIsAcceptableStateFunction(
       std::function<bool(const double objectiveValue)> isAcceptableStateFunction) {
-    setIsAcceptableStateFunction(isAcceptableStateFunction, "Unnamed, custom is acceptable state function");
+    setIsAcceptableStateFunction(isAcceptableStateFunction, "Unnamed, custom is-acceptable-state function");
   }
 
   std::string SimulatedAnnealing::getIsAcceptableStateFunctionName() const {
@@ -80,7 +80,7 @@ namespace mant {
 
   void SimulatedAnnealing::setMinimalStepSize(
       const double minimalStepSize) {
-    verify(minimalStepSize >= 0, "The minimal step size must be at least 0 for each dimension.");
+    verify(minimalStepSize >= 0, "SimulatedAnnealing.setMinimalStepSize: The minimal step size must be positive (including 0).");
 
     minimalStepSize_ = minimalStepSize;
   }
@@ -91,7 +91,7 @@ namespace mant {
 
   void SimulatedAnnealing::setMaximalStepSize(
       const double maximalStepSize) {
-    verify(maximalStepSize > 0, "The maximal step size must be strict greater than 0 for each dimension.");
+    verify(maximalStepSize > 0, "SimulatedAnnealing.setMaximalStepSize: The maximal step size must be strict greater than 0.");
 
     maximalStepSize_ = maximalStepSize;
   }

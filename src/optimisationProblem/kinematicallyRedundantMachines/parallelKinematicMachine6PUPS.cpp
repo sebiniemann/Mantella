@@ -14,7 +14,7 @@
 namespace mant {
   namespace krm {
     ParallelKinematicMachine6PUPS::ParallelKinematicMachine6PUPS()
-        : KinematicallyRedundantMachines(6),
+        : KinematicallyRedundantMachines(6, 6),
           redundantJointsPosition_({-0.304055915910215, 0.304055915910215, 0.0, 0.304055915910215, 0.304055915910215, 0.0, 0.415348105304299, 0.111292189394084, 0.0, 0.111292189394084, -0.415348105304299, 0.0, -0.111292189394084, -0.415348105304299, 0.0, -0.415348105304299, 0.111292189394084, 0.0}),
           redundantJointsAngles_({0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0}),
           middleJointsMinimalLength_({0.39, 0.39, 0.39, 0.39, 0.39, 0.39}),
@@ -74,7 +74,7 @@ namespace mant {
             
             return poseInaccuracy;
           },
-          "KRPI Parallel Kinematic Machine 6PUPS");
+          "KRM Parallel Kinematic Machine 6PUPS");
     }
   }
 }

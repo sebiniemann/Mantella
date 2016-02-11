@@ -18,8 +18,8 @@
 namespace mant {
   double fitnessDistanceCorrelation(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
-    verify(samples.size() > 1, "fitnessDistanceCorrelation: The number of samples must be at least 2.");
-    verify(isDimensionallyConsistent(samples), ""); // TODO
+    verify(samples.size() > 1, "fitnessDistanceCorrelation: The number of samples must be strict greater than 1.");
+    verify(isDimensionallyConsistent(samples), "fitnessDistanceCorrelation: The samples must be dimensionally consistent");
 
     arma::Mat<double> parameters(samples.cbegin()->first.n_elem, samples.size());
     arma::Row<double> objectiveValues(parameters.n_cols);
@@ -42,8 +42,8 @@ namespace mant {
 
   double lipschitzContinuity(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
-    verify(samples.size() > 1, ""); // TODO
-    verify(isDimensionallyConsistent(samples), ""); // TODO
+    verify(samples.size() > 1, "lipschitzContinuity: The number of samples must be strict greater than 1.");
+    verify(isDimensionallyConsistent(samples), "lipschitzContinuity: The samples must be dimensionally consistent.");
 
     double continuity = 0.0;
     for (auto firstSample = samples.cbegin(); firstSample != samples.cend();) {
@@ -60,9 +60,9 @@ namespace mant {
       const arma::uword numberOfEvaluations,
       const double maximalDeviation,
       const double minimalConfidence) {
-    verify(maximalDeviation >= 0, ""); // TODO
-    verify(0 < minimalConfidence && minimalConfidence <= 1, ""); // TODO
-    verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), ""); // TODO
+    verify(maximalDeviation >= 0, "additiveSeparability: The maximal deviation must be positive (including 0).");
+    verify(0 < minimalConfidence && minimalConfidence <= 1, "additiveSeparability: The minimal confidence must be within the interval (0, 1].");
+    verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), "additiveSeparability: The optimisation problem's lower bounds must be less than or equal to their upper bounds.");
 
     std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = twoSetsPartitions(optimisationProblem.numberOfDimensions_);
 
