@@ -1,55 +1,21 @@
 {% case include.signature %}
 {% when "configuration-iscachingsamples" %}
 
-{% include example name="configuration/isCachingSamples.cpp" %}
+{% include example name="configuration/isCachingSamples.cpp" language="cpp" %}
 
 **Output:**
 
-```
-Number of evaluations: 3
-Number of discrete evaluations: 2
-Number of evaluations: 3
-Number of discrete evaluations: 3
-```
+{% include example name="configuration/isCachingSamples.cpp.output" language="text" %}
 
 {% when "configuration-isrecordingsampling" %}
 
 {% when "configuration-isverbose" %}
 
-{% include example name="configuration/isVerbose.cpp" %}
+{% include example name="configuration/isVerbose.cpp" language="cpp" %}
 
 **Output:**
 
-```
-================================================================================
-Solving optimisation problem: BBOB Sphere Function (f1)
-  Number of dimensions: 2
-  Lower bounds:   -5.0000  -5.0000
-  Upper bounds:    5.0000   5.0000
-  Acceptable objective value: -79.19
---------------------------------------------------------------------------------
-  Optimisation strategy: Hooke-Jeeves algorithm
-  Boundaries handling function: Map to bound
-  Stagnation detection function: Always false
-  Restarting function: Random
-
-  Iteration #0 (after 20ms) : Found better solution.
-    Difference to the previous best objective value: -inf
-    Best objective value: -37.3782
-    Best parameter:    0.7107   0.9467
-
-  Iteration #1 (after 700ms) : Found better solution.
-    Difference to the previous best objective value: -32.7573
-    Best objective value: -70.1356
-    Best parameter:    0.7107        0
-
-  Iteration #3 (after 737ms) : Found better solution.
-    Difference to the previous best objective value: -5.032
-    Best objective value: -75.1676
-    Best parameter:    0.7107   0.5000
-
-[ ... ]
-```
+{% include example name="configuration/isVerbose.cpp.output" language="text" %}
 
 {% when "optimisation-algorithms-optimisationalgorithm" %}
 

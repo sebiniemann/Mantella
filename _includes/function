@@ -12,7 +12,7 @@
 {% assign _return = _return | pop | join: ' ' | strip %}
 {% assign _params = _params[1] | replace: 'const', '' | strip | split: ', ' %}
 
-{% capture _signature %}{{ _name }}{% endcapture %}
+{% assign _signature = _name %}
 {% for _param in _params %}
   {% capture _signature %}{{ _signature }}-{{ _param | split: ' ' | pop | join: ' ' }}{% endcapture %}
 {% endfor %}

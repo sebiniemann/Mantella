@@ -20,13 +20,15 @@ Vagrant.configure(2) do |config|
     # Installs Mantella (including dependencies)
     ## Installs Clang
     sudo apt-get install -qq clang
+    sudo update-alternatives --set cc /usr/bin/clang
+    sudo update-alternatives --set c++ /usr/bin/clang++
     
     ## Installs CMake
     sudo apt-get install -qq cmake
     
     ## Installs Armadillo C++
     sudo apt-get install -qq libblas-dev liblapack-dev libopenblas-dev
-    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.200.4.tar.gz
+    wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.500.5.tar.gz
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo
@@ -63,6 +65,7 @@ Vagrant.configure(2) do |config|
     # Installs Jekyll (github-pages) and html-proofer
     cd /vagrant
     bundle install
+    rm Gemfile.lock
     
     # Installs useful development tools
     sudo apt-get install htop

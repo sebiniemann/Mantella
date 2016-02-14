@@ -16,7 +16,8 @@ Create a new source file called **hello_world.cpp** on your computer.
 <div role="tabpanel" class="tab-pane active" id="hello-world-cpp">
 For our first Mantella-based application, we want to initialise a pre-defined optimisation problem from the black-box optimisation benchmark, optimise it with a decent optimisation algorithm and print the best found parameter to the console.
 
-{% include example name="getting-started/hello_world.cpp" %}
+{% include example name="getting-started/hello_world.cpp" language="cpp" %}
+
 </div>
 <div role="tabpanel" class="tab-pane" id="hello-world-compile">
 
@@ -37,31 +38,28 @@ c++ -std=c++11 -march=native -O3 hello_world.cpp -larmadillo -lmantella -o hello
 </div>
 </div>
 
-**As we didn't yet specify an termination criteria**, the optimisation process will take 10 seconds per default. The actual output might may vary due to randomly initialised problems.
+**As we didn't yet specify an termination criteria**, the optimisation process will take 1 second per default. The actual output might may vary due to randomly initialised problems.
 
 **Possible output:**
 
-```
-bestParameter:    2.2944
-  -1.9968
-```
+{% include example name="getting-started/hello_world.cpp.output" language="text" %}
 
 {% include h2 title="Understanding what we just did" %}
 
 Our first line was to include the central Mantella include file `<mantella>`, which adds all internal Mantella headers, providing all of Mantella's features.
 
-{% include example name="getting-started/hello_world.cpp" offset="0" limit="1" %}
+{% include example name="getting-started/hello_world.cpp" language="cpp" offset="0" limit="1" %}
 
 Then we created a 2-dimensional instance of the [sphere function](/optimisation-problems/black-box-optimisation-benchmark/) from the black-box optimisation benchmark ...
 
-{% include example name="getting-started/hello_world.cpp" offset="3" limit="3" %}
+{% include example name="getting-started/hello_world.cpp" language="cpp" offset="3" limit="3" %}
 
 ... and used the [Hooke-Jeeves algorithm](/optimisation-algorithms/hooke-jeeves-algorithm/) to optimise the given problem.
-{% include example name="getting-started/hello_world.cpp" offset="7" limit="3" %}
+{% include example name="getting-started/hello_world.cpp" language="cpp" offset="7" limit="3" %}
 
 After the optimisation process finished, we printed out the best found parameter by using the `.getBestParameter()` Getter. The`.optimise(...)` method itself does not return any value, but fills various Getter defined in the [optimisation algorithms base class](/optimisation-algorithms/).
 
-{% include example name="getting-started/hello_world.cpp" offset="11" limit="2" %}
+{% include example name="getting-started/hello_world.cpp" language="cpp" offset="11" limit="2" %}
 
 Regarding the compiler options, we added `-std=c++11` to ensure C++11 is supported (if not set per default by your compiler) and `-march=native -O3` to make use of SIMD instructions (SSE2, SSE3, AVX, ...) and compiler optimisation.
 

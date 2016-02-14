@@ -31,7 +31,7 @@ If you are using any recent Linux distribution, you should already be equipped w
 2. **Install Armadillo C++ based on OpenBLAS** (visit [Armadillo's download page](http://arma.sourceforge.net/download.html) to find more information on how to use other implementations of BLAS and LAPACK):
 
         sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
-        wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.200.4.tar.gz
+        wget --quiet -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.500.5.tar.gz
         mkdir armadillo
         tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
         cd armadillo
