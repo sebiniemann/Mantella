@@ -41,7 +41,7 @@ sudo make install
 </div>
 
 <div class="container-fluid text-center landing-page landing-page-fifth">
-## Mantella has a permissive license<br><small>No need to be restrictive.</small></h2>
+## Mantella has a permissive license<br><small>No need to be restrictive.</small>
 
 <p class="lead">Mantella is licensed under the [MIT license](http://opensource.org/licenses/MIT).</p>
 </div>
