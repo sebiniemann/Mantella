@@ -27,7 +27,7 @@ Mantella also provides a wide range of competitive, state of the art optimisatio
 </div>
 
 <div class="container-fluid text-center landing-page landing-page-fourth">
-## Painless installation within a few minutes<br><small>Mantella is keeping a small dependency footprint, only requiring Armadillo C++ and C++11.</small>
+## Painless installation within a few minutes<br><small>Mantella is keeping a small dependency footprint,<br> only requiring Armadillo C++ and C++11.</small>
 
 {% highlight bash %}
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
@@ -41,7 +41,7 @@ sudo make install
 </div>
 
 <div class="container-fluid text-center landing-page landing-page-fifth">
-## Mantella has a permissive license<br><small>No need to be restrictive.</small></h2>
+## Mantella has a permissive license<br><small>No need to be restrictive.</small>
 
 <p class="lead">Mantella is licensed under the [MIT license](http://opensource.org/licenses/MIT).</p>
 </div>
