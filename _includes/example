@@ -1,10 +1,17 @@
-{% if include.limit and include.offset %}
-  {% capture _content %}{% include examples/{{ include.name }} %}{% endcapture %}
-  {% assign _splittedContent = _content | newline_to_br | split: '<br />' %}
-``` {{ include.language }}
-{% for _line in _splittedContent offset: include.offset limit: include.limit %}{{ _line | strip_newlines }}{% endfor %}```
-{% else %}
-``` {{ include.language }}
-{% include examples/{{ include.name }} %}
-```
-{% endif %}
+<div class="example panel panel-default">
+<div class="panel-heading" data-toggle="collapse" data-target="#{{ include.name }}-collapse" aria-expanded="false" aria-controls="{{ include.name }}-collapse">
+Code example
+</div>
+<div class="collapse" id="{{ include.name }}-collapse">
+<div class="panel-body">
+{% capture _output %}{% include examples/{{ include.name }}.cpp.output %}{% endcapture %}
+{{ _output | newline_to_br }}
+</div>
+<div class="panel-footer">
+<div class="highlighter-rouge">
+{% capture _name %}{{ include.name }}.cpp{% endcapture %}
+{% include source name=_name language="cpp" %}
+</div>
+</div>
+</div>
+</div>

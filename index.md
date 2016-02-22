@@ -21,7 +21,7 @@ layout: base
 <div class="container-fluid text-center landing-page landing-page-third">
 ## Mantella is new, but easy to use and master<br><small>Mantella helps you being productive and lets you focus on your own application.</small>
 
-{% include example name="getting-started/hello_world.cpp" %}
+{% include source name="getting-started/hello_world.cpp" %}
 
 Mantella also provides a wide range of competitive, state of the art optimisation algorithms<br> and can easily be extended using functional programming.
 </div>

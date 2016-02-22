@@ -1,0 +1,47 @@
+{% 
+for _interface in site.data.api %}{%
+  if _interface.groups %}{%
+    for _group in _interface.groups %}{%
+      for _call in _group.functions %}{%
+        capture _signature %}{% include function call=_call type="signature" %}{% endcapture %}{%
+        capture _prefixed_signature %}{{ _interface.title | slugify }}-{{ _signature }}{% endcapture %}{%
+        assign _prefixed_signature = _prefixed_signature %}{%
+        if include.signature == _prefixed_signature %}[{% include function call=_call type="name" %}](/{{ _interface.title | slugify }}/#{{ _signature }}){%
+        endif %}{%
+      endfor %}{%
+    endfor %}{%
+  else %}{%
+    for _call in _interface.functions %}{%
+      capture _signature %}{% include function call=_call type="signature" %}{% endcapture %}{%
+      capture _prefixed_signature %}{{ _interface.title | slugify }}-{{ _signature }}{% endcapture %}{%
+      assign _prefixed_signature = _prefixed_signature %}{%
+      if include.signature == _prefixed_signature %}[{% include function call=_call type="name" %}](/{{ _interface.title | slugify }}/#{{ _signature }}){%
+      endif %}{%
+    endfor %}{%
+  endif %}{%
+  
+  assign _prefix = _interface.title | slugify %}{%
+  if _interface.derivatives %}{%
+    for _interface in _interface.derivatives %}{% 
+      if _interface.groups %}{% 
+        for _group in _interface.groups %}{% 
+          for _call in _group.functions %}{%
+            capture _signature %}{% include function call=_call type="signature" %}{% endcapture %}{%
+            capture _prefixed_signature %}{{ _interface.title | slugify }}-{{ _signature }}{% endcapture %}{%
+            assign _prefixed_signature = _prefixed_signature %}{%
+            if include.signature == _prefixed_signature %}[{%include function call=_call type="name" %}](/{{ _prefix }}/{{ _interface.title | slugify }}/#{{ _signature }}){%
+            endif %}{%
+          endfor %}{%
+        endfor %}{%
+      else %}{%
+        for _call in _interface.functions %}{%
+          capture _signature %}{% include function call=_call type="signature" %}{% endcapture %}{%
+          capture _prefixed_signature %}{{ _interface.title | slugify }}-{{ _signature }}{% endcapture %}{%
+          assign _prefixed_signature = _prefixed_signature %}{%
+          if include.signature == _prefixed_signature %}[{%include function call=_call type="name" %}](/{{ _prefix }}/{{ _interface.title | slugify }}/#{{ _signature }}){%
+          endif %}{%
+        endfor %}{%
+      endif %}{%
+    endfor %}{%
+  endif %}{%
+endfor %}

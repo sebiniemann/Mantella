@@ -1,25 +1,53 @@
 {% case include.signature %}
 {% when "configuration-iscachingsamples" %}
 
-{% include example name="configuration/isCachingSamples.cpp" language="cpp" %}
+- If set to `true`, the objective value will only be calculated once per parameter.
+- The objective value of recurring parameters are than retrieved from the cache, instead of recalculating them.
+- Setting this to `true` will usually be useful if an optimisation algorithms significantly often revisits previous parameters due to its internal procedure, or because of a large minimal parameter distance.
+- The number of revisits can be measured by the difference between the number of evaluations and the number of distinct evaluations.
+- Default value is `false`
 
-**Output:**
+{% include example name=include.signature %}
 
-{% include example name="configuration/isCachingSamples.cpp.output" language="text" %}
+**See also**
+
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-getobjectivevalue-arma-col-double" %}
+- {% include link signature="optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-getnumberofevaluations" %}
+- {% include link signature="optimisation-problems-getnumberofdistinctevaluations" %}
 
 {% when "configuration-isrecordingsampling" %}
 
+- Lorem ipsum lorem ipsum
+- Lorem ipsum lorem ipsum lorem ipsum lorem ipsum (lorem ipsum lorem ipsum lorem ipsum) lorem ipsum lorem ipsum
+- Lorem ipsum lorem ipsum
+- Lorem ipsum lorem (ipsum lorem ipsum lorem) ipsum lorem ipsum lorem ipsum (lorem ipsum)
+
+{% include example name=include.signature %}
+
+**See also**
+
+- [isCachingSamples](#iscachingsamples)
+- [isVerbose](#isverbose)
+
 {% when "configuration-isverbose" %}
 
-{% include example name="configuration/isVerbose.cpp" language="cpp" %}
+- Lorem ipsum lorem ipsum lorem ipsum lorem ipsum (lorem ipsum lorem ipsum lorem ipsum) lorem ipsum lorem ipsum
+- Lorem ipsum lorem (ipsum lorem ipsum lorem) ipsum lorem ipsum lorem ipsum (lorem ipsum)
+- Lorem ipsum lorem ipsum
 
-**Output:**
+{% include example name=include.signature %}
 
-{% include example name="configuration/isVerbose.cpp.output" language="text" %}
+**See also**
+
+- [isCachingSamples](#iscachingsamples)
+- [isRecordingSampling](#isrecordingsampling)
 
 {% when "optimisation-algorithms-optimisationalgorithm" %}
 
-{% when "optimisation-algorithms-optimise-optimisationproblem-arma-mat-lt-double-gt" %}
+{% when "optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
@@ -153,35 +181,35 @@
 
 {% when "optimisation-problems-getobjectivefunctionname" %}
 
-{% when "optimisation-problems-getobjectivevalue-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-getobjectivevalue-arma-col-double" %}
 
-{% when "optimisation-problems-getnormalisedobjectivevalue-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
 
-{% when "optimisation-problems-setlowerbounds-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-setlowerbounds-arma-col-double" %}
 
 {% when "optimisation-problems-getlowerbounds" %}
 
-{% when "optimisation-problems-setupperbounds-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-setupperbounds-arma-col-double" %}
 
 {% when "optimisation-problems-getupperbounds" %}
 
-{% when "optimisation-problems-setparameterpermutation-arma-col-lt-arma-uword-gt" %}
+{% when "optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
 
 {% when "optimisation-problems-getparameterpermutation" %}
 
-{% when "optimisation-problems-setparameterscaling-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-setparameterscaling-arma-col-double" %}
 
 {% when "optimisation-problems-getparameterscaling" %}
 
-{% when "optimisation-problems-setparametertranslation-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-setparametertranslation-arma-col-double" %}
 
 {% when "optimisation-problems-getparametertranslation" %}
 
-{% when "optimisation-problems-setparameterrotation-arma-mat-lt-double-gt" %}
+{% when "optimisation-problems-setparameterrotation-arma-mat-double" %}
 
 {% when "optimisation-problems-getparameterrotation" %}
 
-{% when "optimisation-problems-setminimalparameterdistance-arma-col-lt-double-gt" %}
+{% when "optimisation-problems-setminimalparameterdistance-arma-col-double" %}
 
 {% when "optimisation-problems-getminimalparameterdistance" %}
 
@@ -261,7 +289,7 @@
 
 {% when "kinematically-redundant-machines-numberofworkspacedimensions" %}
 
-{% when "kinematically-redundant-machines-setendeffectortrajectory-arma-mat-lt-double-gt" %}
+{% when "kinematically-redundant-machines-setendeffectortrajectory-arma-mat-double" %}
 
 {% when "kinematically-redundant-machines-getendeffectortrajectory" %}
 
@@ -285,7 +313,7 @@
 
 {% when "mathematical-functions-polynomialsize-arma-uword-arma-uword" %}
 
-{% when "mathematical-functions-polynomial-arma-col-lt-double-gt-arma-uword" %}
+{% when "mathematical-functions-polynomial-arma-col-double-arma-uword" %}
 
 {% when "mathematical-functions-factorial-arma-uword" %}
 
@@ -299,13 +327,13 @@
 
 {% when "mathematical-functions-rotationmatrix3d-double-double-double" %}
 
-{% when "mathematical-functions-circlecircleintersections-arma-col-lt-double-gt-fixed-lt-2-gt-double-arma-col-lt-double-gt-fixed-lt-2-gt-double" %}
+{% when "mathematical-functions-circlecircleintersections-arma-col-double-fixed-2-double-arma-col-double-fixed-2-double" %}
 
-{% when "mathematical-functions-circlesphereintersections-arma-col-lt-double-gt-fixed-lt-3-gt-double-arma-col-lt-double-gt-fixed-lt-3-gt-arma-col-lt-double-gt-fixed-lt-3-gt-double" %}
+{% when "mathematical-functions-circlesphereintersections-arma-col-double-fixed-3-double-arma-col-double-fixed-3-arma-col-double-fixed-3-double" %}
 
-{% when "mathematical-functions-hammersleyset-arma-col-lt-arma-uword-gt-arma-col-lt-arma-uword-gt-arma-uword" %}
+{% when "mathematical-functions-hammersleyset-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
 
-{% when "mathematical-functions-haltonsequence-arma-col-lt-arma-uword-gt-arma-col-lt-arma-uword-gt-arma-uword" %}
+{% when "mathematical-functions-haltonsequence-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
 
 {% when "mathematical-functions-vandercorputsequence-arma-uword-arma-uword-arma-uword" %}
 
@@ -317,15 +345,15 @@
 
 {% when "mathematical-functions-randompermutationvector-arma-uword" %}
 
-{% when "mathematical-functions-randomneighbour-arma-col-lt-double-gt-double-double" %}
+{% when "mathematical-functions-randomneighbour-arma-col-double-double-double" %}
 
 {% when "armadillo-and-c-stl-range-arma-uword-arma-uword-arma-uword" %}
 
 {% when "armadillo-and-c-stl-range-arma-uword-arma-uword" %}
 
-{% when "armadillo-and-c-stl-hash-operator-arma-col-lt-double-gt" %}
+{% when "armadillo-and-c-stl-hash-operator-arma-col-double" %}
 
-{% when "armadillo-and-c-stl-isequal-operator-arma-col-lt-double-gt-arma-col-lt-double-gt" %}
+{% when "armadillo-and-c-stl-isequal-operator-arma-col-double-arma-col-double" %}
 
 {% when "message-passing-interface-mpibestsample-void-void-int-mpi-datatype" %}
 

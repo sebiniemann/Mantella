@@ -420,3 +420,23 @@ main .row > div {
     margin-right: 40px;
   }
 }
+
+.example {
+  margin-top: 20px;
+  .panel-heading p {
+      color: #959595;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 1px;
+      font-weight: bold;
+  }
+  .panel-footer {
+    padding: 0;
+  }
+  p {
+    font-size: 14px;
+  }
+  p, pre {
+    margin: 0;
+  }
+}

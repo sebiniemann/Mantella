@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs" role="tablist" id="{{ include.group | slugify }}">
+{% for _title in include.titles %}
+<li role="presentation"{% if forloop.index == 1 %} class="active"{% endif %}><a href="#{{ include.group | slugify }}-{{ _title | slugify }}" aria-controls="{{ include.group | slugify }}-{{ _title | slugify }}" role="tab" data-toggle="tab">{{ _title }}</a></li>
+{% endfor %}
+</ul>
+<div class="tab-content">
+{% for _title in include.titles %}
+<div role="tabpanel" class="tab-pane{% if forloop.index == 1 %} active{% endif %}" id="{{ include.group | slugify }}-{{ _title | slugify }}">
+{{ include.contents[forloop.index0] }}
+</div>
+{% endfor %}
+</div>
