@@ -3,7 +3,7 @@
 
 - If set to `true`, the objective value will only be calculated once per parameter.
 - The objective value of recurring parameters are than retrieved from the cache, instead of recalculating them.
-- Setting this to `true` will usually be useful if an optimisation algorithms significantly often revisits previous parameters due to its internal procedure, or because of a large minimal parameter distance.
+- Setting this to `true` is useful if an optimisation algorithms significantly often revisits previous parameters due to its internal procedure, or because of a large minimal parameter distance.
 - The number of revisits can be measured by the difference between the number of evaluations and the number of distinct evaluations.
 - Default value is `false`
 
@@ -17,33 +17,31 @@
 - {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
 - {% include link signature="optimisation-problems-getnumberofevaluations" %}
 - {% include link signature="optimisation-problems-getnumberofdistinctevaluations" %}
+- {% include link signature="optimisation-problems-getcachedsamples" %}
 
 {% when "configuration-isrecordingsampling" %}
 
-- Lorem ipsum lorem ipsum
-- Lorem ipsum lorem ipsum lorem ipsum lorem ipsum (lorem ipsum lorem ipsum lorem ipsum) lorem ipsum lorem ipsum
-- Lorem ipsum lorem ipsum
-- Lorem ipsum lorem (ipsum lorem ipsum lorem) ipsum lorem ipsum lorem ipsum (lorem ipsum)
+- If set to `true`, the evaluated parameters of an optimisation are recorded (in order of occurrence, including duplicates).
+- The recording is cleared when a new optimisation is issued.
+- Default value is `false`
 
 {% include example name=include.signature %}
 
 **See also**
 
-- [isCachingSamples](#iscachingsamples)
-- [isVerbose](#isverbose)
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+- {% include link signature="optimisation-algorithms-getrecordedsampling" %}
 
 {% when "configuration-isverbose" %}
 
-- Lorem ipsum lorem ipsum lorem ipsum lorem ipsum (lorem ipsum lorem ipsum lorem ipsum) lorem ipsum lorem ipsum
-- Lorem ipsum lorem (ipsum lorem ipsum lorem) ipsum lorem ipsum lorem ipsum (lorem ipsum)
-- Lorem ipsum lorem ipsum
+- If set to `true`, the optimisation process prints information on the problem and notable progress to the standard output stream `std::cout`.
+- Default value is `false`
 
 {% include example name=include.signature %}
 
 **See also**
 
-- [isCachingSamples](#iscachingsamples)
-- [isRecordingSampling](#isrecordingsampling)
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
 
 {% when "optimisation-algorithms-optimisationalgorithm" %}
 

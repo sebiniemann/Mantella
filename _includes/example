@@ -4,14 +4,12 @@ Code example
 </div>
 <div class="collapse" id="{{ include.name }}-collapse">
 <div class="panel-body">
-{% capture _output %}{% include examples/{{ include.name }}.cpp.output %}{% endcapture %}
-{{ _output | newline_to_br }}
+{% capture _name %}{{ include.name }}.cpp.output{% endcapture %}
+{% include source name=_name language="text" %}
 </div>
 <div class="panel-footer">
-<div class="highlighter-rouge">
 {% capture _name %}{{ include.name }}.cpp{% endcapture %}
 {% include source name=_name language="cpp" %}
-</div>
 </div>
 </div>
 </div>

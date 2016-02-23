@@ -430,6 +430,12 @@ main .row > div {
       letter-spacing: 1px;
       font-weight: bold;
   }
+  .panel-body{
+    padding: 0;
+    pre {
+      background-color: initial;
+    }
+  }
   .panel-footer {
     padding: 0;
   }

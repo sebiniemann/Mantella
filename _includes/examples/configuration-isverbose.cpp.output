@@ -10,155 +10,30 @@ Solving optimisation problem: BBOB Sphere Function (f1)
   Stagnation detection function: Always false
   Restarting function: Random
 
-  Iteration #0 (after 674ms) : Found better solution.
+  Iteration #0 (after 22ms) : Found better solution.
     Difference to the previous best objective value: -inf
     Best objective value: -64.509
     Best parameter:    0.7831   0.7984
 
-  Iteration #2 (after 999ms) : Found better solution.
+  Iteration #2 (after 433ms) : Found better solution.
     Difference to the previous best objective value: -13.3
     Best objective value: -77.809
     Best parameter:    0.7831   0.2984
 
-  Iteration #5 (after 1325ms) : Found better solution.
+  Iteration #5 (after 786ms) : Found better solution.
     Difference to the previous best objective value: -1.3625
     Best objective value: -79.1715
     Best parameter:    0.7831   0.4234
 
-  Iteration #9 (after 1610ms) : Found better solution.
+  Iteration #9 (after 1083ms) : Found better solution.
     Difference to the previous best objective value: -0.010021
     Best objective value: -79.1815
     Best parameter:    0.7675   0.4234
 
-  Iteration #10 (after 1845ms) : Found better solution.
-    Difference to the previous best objective value: -0.000586042
-    Best objective value: -79.1821
-    Best parameter:    0.7675   0.4078
-
-  Iteration #12 (after 2108ms) : Found better solution.
-    Difference to the previous best objective value: -0.00109301
-    Best objective value: -79.1832
-    Best parameter:    0.7753   0.4078
-
-  Iteration #12 (after 2368ms) : Found better solution.
-    Difference to the previous best objective value: -0.00471748
-    Best objective value: -79.1879
-    Best parameter:    0.7675   0.4156
-
-  Iteration #13 (after 2684ms) : Found better solution.
-    Difference to the previous best objective value: -0.00109301
-    Best objective value: -79.189
-    Best parameter:    0.7753   0.4156
-
-  Iteration #15 (after 2947ms) : Found better solution.
-    Difference to the previous best objective value: -0.000979374
-    Best objective value: -79.1899
-    Best parameter:    0.7714   0.4156
-
-  Iteration #18 (after 3193ms) : Found better solution.
-    Difference to the previous best objective value: -4.12588e-05
-    Best objective value: -79.19
-    Best parameter:    0.7724   0.4156
-
-  Iteration #20 (after 3456ms) : Found better solution.
-    Difference to the previous best objective value: -3.21246e-06
-    Best objective value: -79.19
-    Best parameter:    0.7719   0.4156
-
-  Iteration #22 (after 3749ms) : Found better solution.
-    Difference to the previous best objective value: -4.35423e-06
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4156
-
-  Iteration #23 (after 4083ms) : Found better solution.
-    Difference to the previous best objective value: -3.19644e-06
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #26 (after 4318ms) : Found better solution.
-    Difference to the previous best objective value: -2.9029e-08
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #26 (after 4632ms) : Found better solution.
-    Difference to the previous best objective value: -2.89447e-07
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #27 (after 4915ms) : Found better solution.
-    Difference to the previous best objective value: -2.9029e-08
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #29 (after 5239ms) : Found better solution.
-    Difference to the previous best objective value: -7.86178e-08
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #32 (after 5496ms) : Found better solution.
-    Difference to the previous best objective value: -9.35827e-10
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #34 (after 5730ms) : Found better solution.
-    Difference to the previous best objective value: -3.59123e-10
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #34 (after 6101ms) : Found better solution.
-    Difference to the previous best objective value: -6.28162e-10
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #35 (after 6349ms) : Found better solution.
-    Difference to the previous best objective value: -3.59108e-10
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #37 (after 6630ms) : Found better solution.
-    Difference to the previous best objective value: -1.84244e-10
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #39 (after 6865ms) : Found better solution.
-    Difference to the previous best objective value: -2.60343e-11
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #41 (after 7202ms) : Found better solution.
-    Difference to the previous best objective value: -2.21547e-11
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #42 (after 7434ms) : Found better solution.
-    Difference to the previous best objective value: -9.72022e-12
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #44 (after 7780ms) : Found better solution.
-    Difference to the previous best objective value: -8.2423e-13
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #46 (after 8095ms) : Found better solution.
-    Difference to the previous best objective value: -1.00897e-12
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #49 (after 8358ms) : Found better solution.
-    Difference to the previous best objective value: -1.42109e-14
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
-  Iteration #51 (after 8667ms) : Found better solution.
-    Difference to the previous best objective value: -1.42109e-14
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
-
   Terminated (run out of time or iterations).
-    Took 1000000 / 1000000 microseconds
-    Took 413429 / 18446744073709551615 iterations
+    Took 1360 / 1000000 microseconds
+    Took 10 / 10 iterations
     Difference to the acceptable objective value: inf
-    Best objective value: -79.19
-    Best parameter:    0.7721   0.4154
+    Best objective value: -79.1815
+    Best parameter:    0.7675   0.4234
 
