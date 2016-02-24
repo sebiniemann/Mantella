@@ -11,7 +11,7 @@ namespace mant {
       const bool expression,
       const std::string& errorMessage) {
     if (!expression) {
-      // Adds *Mantella - * to each error message, to better different between messages from Mantella or other libraries.
+      // Adds *Mantella - * to each error message, to better differentiate between messages from Mantella or other libraries.
       throw std::logic_error("Mantella - " + errorMessage);
     }
   }
