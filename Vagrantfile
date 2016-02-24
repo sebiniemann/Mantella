@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get update -qq
     sudo apt-get upgrade -qq
     
-    # Using Clang
+    # Clang
     sudo apt-get install -qq clang
     
     # Prerequirements (including optional features)
@@ -25,11 +25,11 @@ Vagrant.configure(2) do |config|
     mkdir armadillo
     tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
     cd armadillo
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
+    cmake .
     make --quiet
     sudo make --quiet install
     ### Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
-    sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} ';'
+    sudo find /usr/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} ';'
     cd ..
     rm -Rf armadillo armadillo.tar.gz
     
@@ -47,20 +47,16 @@ Vagrant.configure(2) do |config|
     sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
     sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
     sudo apt-get install -qq iwyu
-    sudo apt-get install -qq valgrind
     sudo apt-get install -qq lcov
     
-    # Useful development tools
+    # Debugging
+    sudo apt-get install -qq gdb
+    sudo apt-get install -qq valgrind
+    
+    # Other useful tools
     sudo apt-get install -qq htop
     sudo apt-get install -qq git
     sudo apt-get install -qq ccache
-    sudo apt-get install -qq gdb
     sudo apt-get install -qq dos2unix
-    
-    # Fixing some paths
-    echo "LD_LIBRARY_PATH=/usr/local/lib" | sudo tee --append /etc/environment > /dev/null
-    echo "MSAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4" | sudo tee --append /etc/environment > /dev/null
-    echo "ASAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer-3.4" | sudo tee --append /etc/environment > /dev/null
-    source /etc/environment
   SHELL
 end
