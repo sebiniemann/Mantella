@@ -37,7 +37,7 @@ make -j 4
 sudo make install
 {% endhighlight %} 
 
-[Install Armadillo C++](/getting-started/installation/), Install Mantella (see above), **Done!**
+[Install Armadillo C++](/getting-started/installation/#prerequirements), [Install Mantella](/getting-started/installation/#download-and-installation), **Done!**
 </div>
 
 <div class="container-fluid text-center landing-page landing-page-fifth">

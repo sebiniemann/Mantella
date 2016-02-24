@@ -17,6 +17,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get update -qq
     sudo apt-get upgrade -qq
     
+    # Installs git
+    sudo apt-get install -qq git
+    
     # Installs Mantella (including dependencies)
     ## Installs Clang
     sudo apt-get install -qq clang
@@ -47,6 +50,12 @@ Vagrant.configure(2) do |config|
     cd ..
     rm -Rf Mantella
     
+    # Installs useful development tools
+    sudo apt-get install -qq htop
+    sudo apt-get install -qq ccache
+    sudo apt-get install -qq gdb
+    sudo apt-get install -qq dos2unix
+    
     # Installs Jekyll (github-pages) dependencies
     sudo apt-get install -qq ruby-dev
     sudo apt-get install -qq zlib1g-dev
@@ -66,8 +75,5 @@ Vagrant.configure(2) do |config|
     cd /vagrant
     bundle install
     rm Gemfile.lock
-    
-    # Installs useful development tools
-    sudo apt-get install htop
   SHELL
 end

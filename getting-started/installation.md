@@ -13,9 +13,9 @@ While our goal is to keep the amount of dependencies at a minimum, we still requ
 
 **If you already installed a newer compiler, CMake or Armadillo C++ version, this will also work**. If not, the following instructions will guide you step by step throw their installation, depending on your operating system.
 
-{% assign titles_ = site.array %}
-{% assign contents_ = site.array %}
-{% assign titles_ = titles_ | push: "Linux" %}{% capture content_ %}
+{% assign _titles = site.array %}
+{% assign _contents = site.array %}
+{% assign _titles = _titles | push: "Linux" %}{% capture _content %}
 The following commands are based on Ubuntu, using `apt-get`. If you are using **another** Linux distributions, the names of each package might also differ.
 
 If you are using any recent Linux distribution, you should already be equipped with a C++11 feature complete compiler, like GCC 4.8.1+ or Clang 3.3+.
@@ -35,8 +35,8 @@ If you are using any recent Linux distribution, you should already be equipped w
         make
         sudo make install
         
-{% endcapture %}{% assign contents_ = contents_ | push: content_ %}
-{% assign titles_ = titles_ | push: "Mac OS X" %}{% capture content_ %}
+{% endcapture %}{% assign _contents = _contents | push: _content %}
+{% assign _titles = _titles | push: "Mac OS X" %}{% capture _content %}
 The following commands are based on [Homebrew](http://homebrew.sh), a package manager for OS X.
 
 If you are using any recent XCode version, you should already be equipped with a C++11 feature complete compiler, like Clang 3.3+.
@@ -50,8 +50,8 @@ If you are using any recent XCode version, you should already be equipped with a
         brew install openblas
         brew install armadillo
         
-{% endcapture %}{% assign contents_ = contents_ | push: content_ %}
-{% assign titles_ = titles_ | push: "Windows" %}{% capture content_ %}
+{% endcapture %}{% assign _contents = _contents | push: _content %}
+{% assign _titles = _titles | push: "Windows" %}{% capture _content %}
 The following steps are written for 64-bit systems and tested on Windows 7. If you want to work with a 32-bit version, it should be sufficient to replace OpenBLAS and MinGW with their 32-bit counterpart and explicitly choosing `Visual Studio 14 2015` as CMake generator, instead of `Visual Studio 14 2015 Win64` (see ). It is also possible to use any other BLAS/LAPACK library beside OpenBLAS, despite not being covered in this guide.
 
 1. **Install Visual Studio** ([download page](https://www.visualstudio.com/de-de/downloads/download-visual-studio-vs.aspx), 2015 Community version or better)
@@ -81,14 +81,14 @@ The above installation is already sufficient to compile Mantella and Mantella-ba
         - `C:\mingw-w64\bin\libgcc_s_seh-1.dll`
         - `C:\mingw-w64\bin\libgfortran-3.dll`
         - `C:\mingw-w64\bin\libquadmath-0.dll`
-{% endcapture %}{% assign contents_ = contents_ | push: content_ %}
-{% include tabs group="Prerequirements" titles=titles_ contents=contents_ %}
+{% endcapture %}{% assign _contents = _contents | push: _content %}
+{% include tabs group="Prerequirements" titles=_titles contents=_contents %}
 
 {% include h2 title="Download and installation" %}
 
-{% assign titles_ = site.array %}
-{% assign contents_ = site.array %}
-{% assign titles_ = titles_ | push: "Linux and Mac OS X" %}{% capture content_ %}
+{% assign _titles = site.array %}
+{% assign _contents = site.array %}
+{% assign _titles = _titles | push: "Linux and Mac OS X" %}{% capture _content %}
 ``` bash
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
 cd Mantella
@@ -96,8 +96,8 @@ cmake .
 make -j 4
 sudo make install
 ```
-{% endcapture %}{% assign contents_ = contents_ | push: content_ %}
-{% assign titles_ = titles_ | push: "Windows" %}{% capture content_ %}
+{% endcapture %}{% assign _contents = _contents | push: _content %}
+{% assign _titles = _titles | push: "Windows" %}{% capture _content %}
 ``` bash
 git clone --depth 1 --branch master https://github.com/SebastianNiemann/Mantella.git
 cd Mantella
@@ -106,7 +106,7 @@ cmake --build . --config Release
 ```
 
 You should now find `mantella.dll` under `.\lib\Release\`.
-{% endcapture %}{% assign contents_ = contents_ | push: content_ %}
-{% include tabs group="Installation" titles=titles_ contents=contents_ %}
+{% endcapture %}{% assign _contents = _contents | push: _content %}
+{% include tabs group="Installation" titles=_titles contents=_contents %}
 
 **Done.** You can now start building applications with Mantella.

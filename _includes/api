@@ -4,8 +4,7 @@ if include.subset %}{%
   for _interface in site.data.api %}{%
     assign _url = _interface.title | slugify %}{%
     if _url == _breadcrumbs[1] %}{%
-      if _breadcrumbs.size == 2 %}
-{% include h1 title=_interface.title %}{%
+      if _breadcrumbs.size == 2 %}{%
         if _interface.groups %}{%
           for _group in _interface.groups %}
 
@@ -35,8 +34,7 @@ if include.subset %}{%
         if _interface.derivatives %}{%
           for _interface in _interface.derivatives %}{%
             assign _url = _interface.title | slugify %}{%
-            if _url == _breadcrumbs[2] %}
-{% include h1 title=_interface.title %}{%
+            if _url == _breadcrumbs[2] %}{%
               if _interface.groups %}{%
                 for _group in _interface.groups %}
 

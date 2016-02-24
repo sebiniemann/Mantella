@@ -1,0 +1,16 @@
+<div class="panel-body">
+<div class="row">
+{% for path in include.paths %}
+<div class="col-xs-6">
+<a href="/assets/images/{{ path }}" class="thumbnail" target="_blank">
+<img class="img-responsive center-block" src="/assets/images/{{ path }}" alt="{{ include.alts[forloop.index0] }}">
+</a>
+</div>
+  {% assign is_even = forloop.index0 | modulo: 2 %}
+  {% if is_even == 1 and forloop.last == false %}
+</div>
+<div class="row">
+  {% endif %}
+{% endfor %}
+</div>
+</div>

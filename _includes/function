@@ -59,8 +59,8 @@ else %}{%
         endfor %}</span>{%
       endif %}){%
       unless _name contains '.' or _name contains '::' %}<small>{% 
-        if _return contains 'explicit' %}(constructor){%
-        else %}(stand-alone function){%
+        if _return contains 'explicit' %} (constructor){%
+        else %} (stand-alone function){%
         endif %}</small>{%
       endunless %}{%
     endif %}{%

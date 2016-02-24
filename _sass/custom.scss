@@ -423,12 +423,15 @@ main .row > div {
 
 .example {
   margin-top: 20px;
-  .panel-heading p {
+  .panel-heading {
+    cursor: pointer;
+    p {
       color: #959595;
       text-transform: uppercase;
       font-size: 12px;
       letter-spacing: 1px;
       font-weight: bold;
+    }
   }
   .panel-body{
     padding: 0;
