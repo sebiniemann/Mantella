@@ -7,9 +7,8 @@ if include.limit and include.offset %}{%
 ``` {{ include.language }}
 {% 
   for _line in _splitted_content offset: include.offset limit: include.limit %}{{
-    _line | strip_newlines }}{%
-  endfor %}
-```
+    _line }}{%
+  endfor %}```
 {% 
 else %}``` {{ include.language }}
 {% include examples/{{ include.name }} %}```{%
