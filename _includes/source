@@ -4,8 +4,7 @@ if include.limit and include.offset %}{%
     include examples/{{ include.name }} %}{%
   endcapture %}{%
   assign _splitted_content = _content | newline_to_br | split: '<br />' %}
-``` {{ include.language }}
-{% 
+``` {{ include.language }}{% 
   for _line in _splitted_content offset: include.offset limit: include.limit %}
 {{ _line | strip_newlines }}{%
   endfor %}
