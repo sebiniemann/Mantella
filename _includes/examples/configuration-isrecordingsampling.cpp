@@ -1,5 +1,5 @@
 #include <mantella>
-#include <iomanip>
+#include <iomanip> // Used for std::setw
 
 int main() {
   ::mant::isRecordingSampling = true;

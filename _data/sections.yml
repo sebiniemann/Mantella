@@ -4,6 +4,7 @@
   subsections:
     - Installation
     - Hello world
+- title: API overview
 - title: Configuration
 - title: Optimisation algorithms
   subsections:

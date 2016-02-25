@@ -67,5 +67,46 @@ if include.subset %}{%
     endif %}{%
   endfor %}{%
 else %}{%
+  for _interface in site.data.api %}
+{% include h2 title=_interface.title %}
+{%
+    if _interface.groups %}{%
+      for _group in _interface.groups %}
 
+**{{ _group.title }}**
+
+{%
+        for _call in _group.functions %}
+- [{% include function call=_call type="name" %}](/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
+        endfor %}{%
+      endfor %}{%
+    else %}{%
+      for _call in _interface.functions %}
+- [{% include function call=_call type="name" %}](/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
+      endfor %}{%
+    endif %}{%
+  
+    assign _prefix = _interface.title | slugify %}{%
+    if _interface.derivatives %}{%
+      for _interface in _interface.derivatives %}
+{% include h3 title=_interface.title %}
+{%
+        if _interface.groups %}{%
+          for _group in _interface.groups %}
+
+**{{ _group.title }}**
+
+{%
+            for _call in _group.functions %}
+- [{% include function call=_call type="name" %}](/{{ _prefix }}/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
+            endfor %}{%
+          endfor %}{%
+        else %}{%
+          for _call in _interface.functions %}
+- [{% include function call=_call type="name" %}](/{{ _prefix }}/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
+          endfor %}{%
+        endif %}{%
+      endfor %}{%
+    endif %}{%
+  endfor %}{%
 endif %}
