@@ -3,8 +3,7 @@ if include.limit and include.offset %}{%
   capture _content %}{% 
     include examples/{{ include.name }} %}{%
   endcapture %}{%
-  assign _splitted_content = _content | newline_to_br | split: '<br />' %}
-``` {{ include.language }}
+  assign _splitted_content = _content | newline_to_br | split: '<br />' %}``` {{ include.language }}
 {% 
   for _line in _splitted_content offset: include.offset limit: include.limit %}{{
     _line }}{%
