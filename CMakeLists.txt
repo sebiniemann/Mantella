@@ -276,6 +276,9 @@ add_library(mantella ${LIBRARY_TYPE}
   src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
   src/optimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/particleSwarmOptimisation.cpp
+
+  # Orbital Mechanics
+  src/orbitalMechanics.cpp
 )
 
 # Linking against prerequirements
