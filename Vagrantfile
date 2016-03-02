@@ -74,6 +74,5 @@ Vagrant.configure(2) do |config|
     # Installs Jekyll (github-pages) and html-proofer
     cd /vagrant
     bundle install
-    rm Gemfile.lock
   SHELL
 end

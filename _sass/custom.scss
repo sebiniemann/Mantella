@@ -61,6 +61,7 @@ main {
 
 .landing-page-first h1 {
   font-size: 70px;
+  margin-top: 80px;
 }
 
 @media (min-width: 768px) {
@@ -370,6 +371,12 @@ h1 {
   margin-bottom: 50px;
 }
 
+@media (max-width: 768px) {
+  .landing-page-first .lead {
+    margin-bottom: 25px;
+  }
+}
+
 .navbar-toggle {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -447,5 +454,21 @@ main .row > div {
   }
   p, pre {
     margin: 0;
+  }
+}
+
+aside {
+  .affix {
+    width: 262px;
+  }
+  .affix-bottom {
+    position: relative
+  }
+  li > a[href="#top"] {
+    font-size: 12px;
+    &:hover {
+      background-color: initial;
+      color: rgb(219, 78, 78);
+    }
   }
 }

@@ -7,7 +7,7 @@ int main() {
   mant::Rng::setRandomSeed();
   
   unsigned int numberOfDimensions = 2;
-  // Creates an array containing all 24 black box optimisation benchmark problems.
+  // Creates an array, containing all 24 black box optimisation benchmark problems.
   std::array<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>, 24> optimisationProblems = {
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::AttractiveSectorFunction(numberOfDimensions)),
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::BentCigarFunction(numberOfDimensions)),
@@ -35,24 +35,24 @@ int main() {
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::WeierstrassFunction(numberOfDimensions))
   };
   
-  // Evaluating the performance of the Hooke-Jeeves algorithm.
+  // Evaluates the performance of the Hooke-Jeeves algorithm.
   mant::HillClimbing optimisationAlgorithm;
   optimisationAlgorithm.setMaximalNumberOfIterations(1000);
   
-  // Rerun the evaluation 10 times, to address random effects.
+  // Reruns the evaluation 10 times, to address random effects and stores the number of iterations in numberOfIterations.
   unsigned int numberOfReruns = 10;
   arma::Mat<arma::uword> numberOfIterations(numberOfReruns, optimisationProblems.size());
   for (std::size_t n = 0; n < optimisationProblems.size(); ++n) {
     for (unsigned int k = 0; k < numberOfReruns; ++k) {
-      // Seeking a maximal deviation of 0.1 to the optimal objective value (quite easy problem).
+      // Sets the acceptable objective value to a maximal deviation of 0.1 towards the optimal objective value.
       optimisationAlgorithm.setAcceptableObjectiveValue(optimisationProblems.at(n)->getOptimalObjectiveValue() + 1e-1);
       optimisationAlgorithm.optimise(*optimisationProblems.at(n));
-      // Store the results, each column stands for an optimisation problem and each row for a run.
+      // Stores the number of iteration needed - each column stands for an optimisation problem and each row for a run.
       numberOfIterations(k, n) = optimisationAlgorithm.getNumberOfIterations();
     }
   }
 
-  // Print some statistics
+  // Prints some statistics (min, median, max).
   std::cout << "Problem name / Number of iterations:                   | Minimal | Median | Maximal\n";
   for (std::size_t n = 0; n < optimisationProblems.size(); ++n) {
     // arma::median will have the same return type as its input, but does not ensure that the value fits, so we need to cast its input to an appropriate type.

@@ -9,8 +9,8 @@ int main() {
   mant::HookeJeevesAlgorithm optimisationAlgorithm;
   optimisationAlgorithm.optimise(optimisationProblem);
 
-  // 3. Get your result"
-  std::cout << "bestParameter: " << optimisationAlgorithm.getBestParameter() << std::endl;
+  // 3. Get your result!
+  std::cout << "bestParameter:\n" << optimisationAlgorithm.getBestParameter() << std::endl;
 
   return 0;
 }

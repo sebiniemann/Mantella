@@ -10,28 +10,28 @@ Solving optimisation problem: BBOB Sphere Function (f1)
   Stagnation detection function: Always false
   Restarting function: Random
 
-  Iteration #0 (after 27ms) : Found better solution.
+  Iteration #0 (after 0ms) : Found better solution.
     Difference to the previous best objective value: -inf
     Best objective value: -64.509
     Best parameter:    0.7831   0.7984
 
-  Iteration #2 (after 369ms) : Found better solution.
+  Iteration #2 (after 0ms) : Found better solution.
     Difference to the previous best objective value: -13.3
     Best objective value: -77.809
     Best parameter:    0.7831   0.2984
 
-  Iteration #5 (after 669ms) : Found better solution.
+  Iteration #5 (after 0ms) : Found better solution.
     Difference to the previous best objective value: -1.3625
     Best objective value: -79.1715
     Best parameter:    0.7831   0.4234
 
-  Iteration #9 (after 970ms) : Found better solution.
+  Iteration #9 (after 1ms) : Found better solution.
     Difference to the previous best objective value: -0.010021
     Best objective value: -79.1815
     Best parameter:    0.7675   0.4234
 
   Terminated (run out of time or iterations).
-    Took 1259 / 1000000 microseconds
+    Took 98 / 1000000 microseconds
     Took 10 / 10 iterations
     Difference to the acceptable objective value: inf
     Best objective value: -79.1815

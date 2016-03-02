@@ -51,129 +51,257 @@
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
+- {% include link signature="optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
+- {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
+- {% include link signature="optimisation-algorithms-isfinished" %}
+- {% include link signature="optimisation-algorithms-isterminated" %}
+- {% include link signature="optimisation-algorithms-getbestobjectivevalue" %}
+- {% include link signature="optimisation-algorithms-getbestparameter" %}
+- {% include link signature="configuration-isverbose" %}
+
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-getnextparametersfunctionname" %}
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function" %}
 
 **See also**
 
 - {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function" %}
 
 {% when "optimisation-algorithms-getnextparametersfunctionname" %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-getboundarieshandlingfunctionname" %}
+- {% include link signature="optimisation-algorithms-getisstagnatingfunctionname" %}
+- {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
+
+{% when "optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
 
 **See also**
 
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-getboundarieshandlingfunctionname" %}
 - {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
-
-{% when "optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
-
-{% include example name=include.signature %}
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
 {% when "optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
 
 **See also**
 
 - {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function" %}
 
 {% when "optimisation-algorithms-getboundarieshandlingfunctionname" %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-getnextparametersfunctionname" %}
+- {% include link signature="optimisation-algorithms-getisstagnatingfunctionname" %}
+- {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
+
+{% when "optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
 
 **See also**
 
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-getisstagnatingfunctionname" %}
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 - {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
-
-{% when "optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
-
-{% include example name=include.signature %}
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
 {% when "optimisation-algorithms-setisstagnatingfunction-std-function" %}
 
 **See also**
 
 - {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function" %}
 
 {% when "optimisation-algorithms-getisstagnatingfunctionname" %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-getnextparametersfunctionname" %}
+- {% include link signature="optimisation-algorithms-getboundarieshandlingfunctionname" %}
+- {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
+
+{% when "optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
 
 **See also**
 
+- {% include link signature="optimisation-algorithms-setrestartingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
 - {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
-
-{% when "optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
-
-{% include example name=include.signature %}
 
 {% when "optimisation-algorithms-setrestartingfunction-std-function" %}
 
 **See also**
 
 - {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-setnextparametersfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
+- {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function" %}
 
 {% when "optimisation-algorithms-getrestartingfunctionname" %}
-
-{% include example name=include.signature %}
 
 **See also**
 
 - {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-algorithms-getnextparametersfunctionname" %}
+- {% include link signature="optimisation-algorithms-getboundarieshandlingfunctionname" %}
+- {% include link signature="optimisation-algorithms-getisstagnatingfunctionname" %}
 
 {% when "optimisation-algorithms-setacceptableobjectivevalue-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-getacceptableobjectivevalue" %}
+- {% include link signature="optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
+- {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
+
 {% when "optimisation-algorithms-getacceptableobjectivevalue" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
+- {% include link signature="optimisation-algorithms-getmaximalnumberofiterations" %}
+- {% include link signature="optimisation-algorithms-getmaximalduration" %}
 
 {% when "optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-getmaximalnumberofiterations" %}
+- {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
+- {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
+
 {% when "optimisation-algorithms-getmaximalnumberofiterations" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
+- {% include link signature="optimisation-algorithms-getacceptableobjectivevalue" %}
+- {% include link signature="optimisation-algorithms-getmaximalduration" %}
 
 {% when "optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-getmaximalduration" %}
+- {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
+- {% include link signature="optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
+
 {% when "optimisation-algorithms-getmaximalduration" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
+- {% include link signature="optimisation-algorithms-getacceptableobjectivevalue" %}
+- {% include link signature="optimisation-algorithms-getmaximalnumberofiterations" %}
 
 {% when "optimisation-algorithms-isfinished" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-isterminated" %}
+- {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
+
 {% when "optimisation-algorithms-isterminated" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-isterminated" %}
+- {% include link signature="optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
+- {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
 
 {% when "optimisation-algorithms-getnumberofiterations" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-getduration" %}
+- {% include link signature="optimisation-algorithms-getbestobjectivevalue" %}
+- {% include link signature="optimisation-algorithms-getbestparameter" %}
+
 {% when "optimisation-algorithms-getduration" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-getnumberofiterations" %}
+- {% include link signature="optimisation-algorithms-getbestobjectivevalue" %}
+- {% include link signature="optimisation-algorithms-getbestparameter" %}
 
 {% when "optimisation-algorithms-getbestobjectivevalue" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-getnumberofiterations" %}
+- {% include link signature="optimisation-algorithms-getduration" %}
+- {% include link signature="optimisation-algorithms-getbestparameter" %}
+
 {% when "optimisation-algorithms-getbestparameter" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-getnumberofiterations" %}
+- {% include link signature="optimisation-algorithms-getduration" %}
+- {% include link signature="optimisation-algorithms-getbestobjectivevalue" %}
+
 {% when "optimisation-algorithms-getrecordedsampling" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="configuration-isrecordingsampling" %}
 
 {% when "optimisation-algorithms-reset" %}
 
@@ -187,6 +315,10 @@
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+
 {% when "hill-climbing-hillclimbing" %}
 
 {% include example name=include.signature %}
@@ -195,21 +327,41 @@
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+
 {% when "hill-climbing-setminimalstepsize-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="hill-climbing-getminimalstepsize" %}
+- {% include link signature="hill-climbing-setmaximalstepsize-double" %}
+
 {% when "hill-climbing-getminimalstepsize" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="hill-climbing-setminimalstepsize-double" %}
+- {% include link signature="hill-climbing-getmaximalstepsize" %}
 
 {% when "hill-climbing-setmaximalstepsize-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="hill-climbing-getmaximalstepsize" %}
+- {% include link signature="hill-climbing-setminimalstepsize-double" %}
+
 {% when "hill-climbing-getmaximalstepsize" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="hill-climbing-setmaximalstepsize-double" %}
+- {% include link signature="hill-climbing-getminimalstepsize" %}
 
 {% when "simulated-annealing-simulatedannealing" %}
 
@@ -219,31 +371,62 @@
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+
 {% when "simulated-annealing-setisacceptablestatefunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="simulated-annealing-setisacceptablestatefunction-std-function" %}
+- {% include link signature="getisacceptablestatefunctionname" %}
+
 {% when "simulated-annealing-setisacceptablestatefunction-std-function" %}
+
+**See also**
+
+- {% include link signature="simulated-annealing-setisacceptablestatefunction-std-function-std-string" %}
 
 {% when "simulated-annealing-getisacceptablestatefunctionname" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="simulated-annealing-setisacceptablestatefunction-std-function-std-string" %}
 
 {% when "simulated-annealing-setminimalstepsize-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="simulated-annealing-getminimalstepsize" %}
+- {% include link signature="simulated-annealing-setmaximalstepsize-double" %}
+
 {% when "simulated-annealing-getminimalstepsize" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="simulated-annealing-setminimalstepsize-double" %}
+- {% include link signature="simulated-annealing-getmaximalstepsize" %}
 
 {% when "simulated-annealing-setmaximalstepsize-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="simulated-annealing-getmaximalstepsize" %}
+- {% include link signature="simulated-annealing-setminimalstepsize-double" %}
+
 {% when "simulated-annealing-getmaximalstepsize" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="simulated-annealing-setmaximalstepsize-double" %}
+- {% include link signature="simulated-annealing-getminimalstepsize" %}
 
 {% when "hooke-jeeves-algorithm-hookejeevesalgorithm" %}
 
@@ -253,21 +436,41 @@
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+
 {% when "hooke-jeeves-algorithm-setinitialstepsize-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="hooke-jeeves-algorithm-getinitialstepsize" %}
+- {% include link signature="hooke-jeeves-algorithm-setstepsizedecrease-double" %}
+
 {% when "hooke-jeeves-algorithm-getinitialstepsize" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="hooke-jeeves-algorithm-setinitialstepsize-double" %}
+- {% include link signature="hooke-jeeves-algorithm-getstepsizedecrease" %}
 
 {% when "hooke-jeeves-algorithm-setstepsizedecrease-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="hooke-jeeves-algorithm-getstepsizedecrease" %}
+- {% include link signature="hooke-jeeves-algorithm-setinitialstepsize-double" %}
+
 {% when "hooke-jeeves-algorithm-getstepsizedecrease" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="hooke-jeeves-algorithm-setstepsizedecrease-double" %}
+- {% include link signature="hooke-jeeves-algorithm-getinitialstepsize" %}
 
 {% when "particle-swarm-optimisation-particleswarmoptimisation" %}
 
@@ -277,151 +480,380 @@
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-optimise-optimisationproblem" %}
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+
 {% when "particle-swarm-optimisation-optimise-optimisationproblem" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-optimise-optimisationproblem-arma-uword" %}
+- {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
 
 {% when "particle-swarm-optimisation-setneighbourhoodtopologyfunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-setneighbourhoodtopologyfunction-std-function" %}
+- {% include link signature="particle-swarm-optimisation-getneighbourhoodtopologyfunctionname" %}
+
 {% when "particle-swarm-optimisation-setneighbourhoodtopologyfunction-std-function" %}
+
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-setneighbourhoodtopologyfunction-std-function-std-string" %}
 
 {% when "particle-swarm-optimisation-getneighbourhoodtopologyfunctionname" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-setneighbourhoodtopologyfunction-std-function-std-string" %}
 
 {% when "particle-swarm-optimisation-setmaximalacceleration-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-getmaximalacceleration" %}
+- {% include link signature="particle-swarm-optimisation-setmaximallocalattraction-double" %}
+- {% include link signature="particle-swarm-optimisation-setmaximalglobalattraction-double" %}
+
 {% when "particle-swarm-optimisation-getmaximalacceleration" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-setmaximalacceleration-double" %}
+- {% include link signature="particle-swarm-optimisation-getmaximallocalattraction" %}
+- {% include link signature="particle-swarm-optimisation-getmaximalglobalattraction" %}
 
 {% when "particle-swarm-optimisation-setmaximallocalattraction-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-getmaximallocalattraction" %}
+- {% include link signature="particle-swarm-optimisation-setmaximalacceleration-double" %}
+- {% include link signature="particle-swarm-optimisation-setmaximalglobalattraction-double" %}
+
 {% when "particle-swarm-optimisation-getmaximallocalattraction" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-setmaximallocalattraction-double" %}
+- {% include link signature="particle-swarm-optimisation-getmaximalacceleration" %}
+- {% include link signature="particle-swarm-optimisation-getmaximalglobalattraction" %}
 
 {% when "particle-swarm-optimisation-setmaximalglobalattraction-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-getmaximalglobalattraction" %}
+- {% include link signature="particle-swarm-optimisation-setmaximalacceleration-double" %}
+- {% include link signature="particle-swarm-optimisation-setmaximallocalattraction-double" %}
+
 {% when "particle-swarm-optimisation-getmaximalglobalattraction" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="particle-swarm-optimisation-setmaximalglobalattraction-double" %}
+- {% include link signature="particle-swarm-optimisation-getmaximalacceleration" %}
+- {% include link signature="particle-swarm-optimisation-getmaximallocalattraction" %}
 
 {% when "optimisation-problems-optimisationproblem-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-numberofdimensions" %}
+
 {% when "optimisation-problems-numberofdimensions" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-optimisationproblem-arma-uword" %}
 
 {% when "optimisation-problems-setobjectivefunction-std-function-std-string" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-setobjectivefunction-std-function" %}
+- {% include link signature="optimisation-problems-getobjectivefunctionname" %}
+
 {% when "optimisation-problems-setobjectivefunction-std-function" %}
+
+**See also**
+
+- {% include link signature="optimisation-problems-setobjectivefunction-std-function-std-string" %}
 
 {% when "optimisation-problems-getobjectivefunctionname" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setobjectivefunction-std-function-std-string" %}
 
 {% when "optimisation-problems-getobjectivevalue-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
+
 {% when "optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
+
+**See also**
+
+- {% include link signature="optimisation-problems-getobjectivevalue-arma-col-double" %}
 
 {% when "optimisation-problems-setlowerbounds-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getlowerbounds" %}
+- {% include link signature="optimisation-problems-setupperbounds-arma-col-double" %}
+
 {% when "optimisation-problems-getlowerbounds" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setlowerbounds-arma-col-double" %}
+- {% include link signature="optimisation-problems-getupperbounds" %}
 
 {% when "optimisation-problems-setupperbounds-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getupperbounds" %}
+- {% include link signature="optimisation-problems-setlowerbounds-arma-col-double" %}
+
 {% when "optimisation-problems-getupperbounds" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setupperbounds-arma-col-double" %}
+- {% include link signature="optimisation-problems-getlowerbounds" %}
 
 {% when "optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+
 {% when "optimisation-problems-getparameterpermutation" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
 
 {% when "optimisation-problems-setparameterscaling-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+
 {% when "optimisation-problems-getparameterscaling" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
 
 {% when "optimisation-problems-setparametertranslation-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+
 {% when "optimisation-problems-getparametertranslation" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
 
 {% when "optimisation-problems-setparameterrotation-arma-mat-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+
 {% when "optimisation-problems-getparameterrotation" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
 
 {% when "optimisation-problems-setminimalparameterdistance-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+
 {% when "optimisation-problems-getminimalparameterdistance" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
 
 {% when "optimisation-problems-setobjectivevaluescaling-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+
 {% when "optimisation-problems-getobjectivevaluescaling" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
 
 {% when "optimisation-problems-setobjectivevaluetranslation-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getobjectivevaluetranslation" %}
+- {% include link signature="optimisation-problems-setparameterpermutation-arma-col-arma-uword" %}
+- {% include link signature="optimisation-problems-setparameterscaling-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparametertranslation-arma-col-double" %}
+- {% include link signature="optimisation-problems-setparameterrotation-arma-mat-double" %}
+- {% include link signature="optimisation-problems-setminimalparameterdistance-arma-col-double" %}
+- {% include link signature="optimisation-problems-setobjectivevaluescaling-double" %}
+
 {% when "optimisation-problems-getobjectivevaluetranslation" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="optimisation-problems-setobjectivevaluetranslation-double" %}
+- {% include link signature="optimisation-problems-getparameterpermutation" %}
+- {% include link signature="optimisation-problems-getparameterscaling" %}
+- {% include link signature="optimisation-problems-getparametertranslation" %}
+- {% include link signature="optimisation-problems-getparameterrotation" %}
+- {% include link signature="optimisation-problems-getminimalparameterdistance" %}
+- {% include link signature="optimisation-problems-getobjectivevaluescaling" %}
 
 {% when "optimisation-problems-getcachedsamples" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="configuration-iscachingsamples" %}
+
 {% when "optimisation-problems-getnumberofevaluations" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-getnumberofdistinctevaluations" %}
+
 {% when "optimisation-problems-getnumberofdistinctevaluations" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-problems-getnumberofevaluations" %}
+- {% include link signature="configuration-iscachingsamples" %}
 
 {% when "optimisation-problems-reset" %}
 
@@ -1224,13 +1656,23 @@ $$C(X) := 0, \ \forall X$$
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-problems-numberofdimensions" %}
+
 {% when "kinematically-redundant-machines-setendeffectortrajectory-arma-mat-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="kinematically-redundant-machines-getendeffectortrajectory" %}
+
 {% when "kinematically-redundant-machines-getendeffectortrajectory" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="kinematically-redundant-machines-setendeffectortrajectory-arma-mat-double" %}
 
 {% when "samples-selection-elitists-std-unordered-map-arma-uword" %}
 
@@ -1252,6 +1694,11 @@ $$C(X) := 0, \ \forall X$$
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="random-number-generator-rng-setrandomseed" %}
+- {% include link signature="random-number-generator-rng-setseed-arma-arma-rng-seed-type" %}
+
 {% when "random-number-generator-rng-setseed-arma-arma-rng-seed-type" %}
 
 {% include example name=include.signature %}
@@ -1262,59 +1709,125 @@ $$C(X) := 0, \ \forall X$$
 
 {% when "random-number-generator-rng-getseed" %}
 
-{% include example name=include.signature %}
+**See also**
+
+- {% include link signature="random-number-generator-rng-setrandomseed" %}
+- {% include link signature="random-number-generator-rng-setseed-arma-arma-rng-seed-type" %}
 
 {% when "mathematical-functions-polynomialsize-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-polynomial-arma-col-double-arma-uword" %}
+
 {% when "mathematical-functions-polynomial-arma-col-double-arma-uword" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-polynomialsize-arma-uword-arma-uword" %}
 
 {% when "mathematical-functions-factorial-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-nchoosek-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-combinations-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-multicombinations-arma-uword-arma-uword" %}
+
 {% when "mathematical-functions-nchoosek-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-factorial-arma-uword" %}
+- {% include link signature="mathematical-functions-combinations-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-multicombinations-arma-uword-arma-uword" %}
 
 {% when "mathematical-functions-combinations-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-factorial-arma-uword" %}
+- {% include link signature="mathematical-functions-nchoosek-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-multicombinations-arma-uword-arma-uword" %}
+
 {% when "mathematical-functions-multicombinations-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-factorial-arma-uword" %}
+- {% include link signature="mathematical-functions-nchoosek-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-combinations-arma-uword-arma-uword" %}
 
 {% when "mathematical-functions-rotationmatrix2d-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-rotationmatrix3d-double-double-double" %}
+
 {% when "mathematical-functions-rotationmatrix3d-double-double-double" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-rotationmatrix2d-double" %}
 
 {% when "mathematical-functions-circlecircleintersections-arma-col-double-fixed-2-double-arma-col-double-fixed-2-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-circlesphereintersections-arma-col-double-fixed-3-double-arma-col-double-fixed-3-arma-col-double-fixed-3-double" %}
+
 {% when "mathematical-functions-circlesphereintersections-arma-col-double-fixed-3-double-arma-col-double-fixed-3-arma-col-double-fixed-3-double" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-circlecircleintersections-arma-col-double-fixed-2-double-arma-col-double-fixed-2-double" %}
 
 {% when "mathematical-functions-hammersleyset-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-haltonsequence-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-vandercorputsequence-arma-uword-arma-uword-arma-uword" %}
+
 {% when "mathematical-functions-haltonsequence-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-hammersleyset-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-vandercorputsequence-arma-uword-arma-uword-arma-uword" %}
+
 {% when "mathematical-functions-vandercorputsequence-arma-uword-arma-uword-arma-uword" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-hammersleyset-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
+- {% include link signature="mathematical-functions-haltonsequence-arma-col-arma-uword-arma-col-arma-uword-arma-uword" %}
 
 {% when "mathematical-functions-twosetspartitions-arma-uword" %}
 
@@ -1328,7 +1841,15 @@ $$C(X) := 0, \ \forall X$$
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="mathematical-functions-randompermutationvector-arma-uword" %}
+
 {% when "mathematical-functions-randompermutationvector-arma-uword" %}
+
+**See also**
+
+- {% include link signature="mathematical-functions-randompermutationvector-arma-uword-arma-uword" %}
 
 {% when "mathematical-functions-randomneighbour-arma-col-double-double-double" %}
 
@@ -1338,13 +1859,29 @@ $$C(X) := 0, \ \forall X$$
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="armadillo-and-c-stl-range-arma-uword-arma-uword" %}
+
 {% when "armadillo-and-c-stl-range-arma-uword-arma-uword" %}
+
+**See also**
+
+- {% include link signature="armadillo-and-c-stl-range-arma-uword-arma-uword-arma-uword" %}
 
 {% when "armadillo-and-c-stl-hash-operator-arma-col-double" %}
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="armadillo-and-c-stl-isequal-operator-arma-col-double-arma-col-double" %}
+
 {% when "armadillo-and-c-stl-isequal-operator-arma-col-double-arma-col-double" %}
+
+**See also**
+
+- {% include link signature="armadillo-and-c-stl-hash-operator-arma-col-double" %}
 
 {% when "message-passing-interface-mpibestsample-void-void-int-mpi-datatype" %}
 
