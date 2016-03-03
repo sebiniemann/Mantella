@@ -6,8 +6,8 @@
 <img class="img-responsive center-block" src="/assets/images/{{ path }}" alt="{{ include.alts[forloop.index0] }}">
 </a>
 </div>
-  {% assign is_even = forloop.index0 | modulo: 2 %}
-  {% if is_even == 1 and forloop.last == false %}
+  {% assign _is_even = forloop.index0 | modulo: 2 %}
+  {% if _is_even == 1 and forloop.last == false %}
 </div>
 <div class="row">
   {% endif %}

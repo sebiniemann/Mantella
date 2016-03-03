@@ -5,64 +5,46 @@ if include.subset %}{%
     assign _url = _interface.title | slugify %}{%
     if _url == _breadcrumbs[1] %}{%
       if _breadcrumbs.size == 2 %}{%
-        if _interface.groups %}{%
-          for _group in _interface.groups %}
+        for _group in _interface.groups %}{%
+          if _group.title %}
 
 **{{ _group.title }}**
 
 {%
-            for _call in _group.functions %}{%
-              capture _shorted_call %}{% include function call=_call type="short" %}{% endcapture %}
-- {{ _shorted_call }}{%
-            endfor %}{%
+          endif %}{%
+          for _function in _group.functions %}
+- {% include function call=_function type='short' %}{%
           endfor %}{%
-          for _group in _interface.groups %}{%
-            for _call in _group.functions %}
-{% include function call=_call signature_prefix=_interface.title %}{%
-            endfor %}{%
+        endfor %}{%
+        for _group in _interface.groups %}{%
+          for _function in _group.functions %}{%
+            assign _url = _interface.title | slugify %}
+{% include function call=_function prefix=_url type='full' %}{%
           endfor %}{%
-        else %}{%
-          for _call in _interface.functions %}{%
-            capture _shorted_call %}{% include function call=_call type="short" %}{% endcapture %}
-- {{ _shorted_call }}{%
-          endfor %}{%
-          for _call in _interface.functions %}
-{% include function call=_call signature_prefix=_interface.title %}{%
-          endfor %}{%
-        endif %}{%
+        endfor %}{%
       else %}{%
-        if _interface.derivatives %}{%
-          for _interface in _interface.derivatives %}{%
-            assign _url = _interface.title | slugify %}{%
-            if _url == _breadcrumbs[2] %}{%
-              if _interface.groups %}{%
-                for _group in _interface.groups %}
+        for _interface in _interface.childs %}{%
+          assign _url = _interface.title | slugify %}{%
+          if _url == _breadcrumbs[2] %}{%
+            for _group in _interface.groups %}{%
+              if _group.title %}
 
-**{{ _group.title }}**
+  **{{ _group.title }}**
 
-{%
-                  for _call in _group.functions %}{%
-                    capture _shorted_call %}{% include function call=_call type="short" %}{% endcapture %}
-- {{ _shorted_call }}{%
-                  endfor %}{%
-                endfor %}{%
-                for _group in _interface.groups %}{%
-                  for _call in _group.functions %}
-{% include function call=_call signature_prefix=_interface.title %}{%
-                  endfor %}{%
-                endfor %}{%
-              else %}{%
-                for _call in _interface.functions %}{%
-                  capture _shorted_call %}{% include function call=_call type="short" %}{% endcapture %}
-- {{ _shorted_call }}{%
-                endfor %}{%
-                for _call in _interface.functions %}
-{% include function call=_call signature_prefix=_interface.title %}{%
-                endfor %}{%
+  {%
               endif %}{%
-            endif %}{%
-          endfor %}{%
-        endif %}{%
+              for _function in _group.functions %}
+  - {% include function call=_function type='short' %}{%
+              endfor %}{%
+            endfor %}{%
+            for _group in _interface.groups %}{%
+              for _function in _group.functions %}{%
+                assign _url = _interface.title | slugify %}
+  {% include function call=_function prefix=_url type='full' %}{%
+              endfor %}{%
+            endfor %}{%
+          endif %}{%
+        endfor %}{%
       endif %}{%
     endif %}{%
   endfor %}{%
@@ -70,43 +52,34 @@ else %}{%
   for _interface in site.data.api %}
 {% include h2 title=_interface.title %}
 {%
-    if _interface.groups %}{%
-      for _group in _interface.groups %}
+    assign _url = _interface.title | slugify %}{%
+    for _group in _interface.groups %}{%
+      if _group.title %}
 
 **{{ _group.title }}**
 
 {%
-        for _call in _group.functions %}
-- [{% include function call=_call type="name" %}](/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
-        endfor %}{%
+      endif %}{%
+      for _function in _group.functions %}
+- {% include function call=_function prefix=_url type='short' %}{%
       endfor %}{%
-    else %}{%
-      for _call in _interface.functions %}
-- [{% include function call=_call type="name" %}](/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
-      endfor %}{%
-    endif %}{%
-  
-    assign _prefix = _interface.title | slugify %}{%
-    if _interface.derivatives %}{%
-      for _interface in _interface.derivatives %}
+    endfor %}{%
+    assign _url_prefix = _url %}{%
+    for _interface in _interface.childs %}{%
+      capture _url = _interface.title %}{{ _url_prefix }}/{{ _interface.title | slugify }}{% endcapture %}
 {% include h3 title=_interface.title %}
 {%
-        if _interface.groups %}{%
-          for _group in _interface.groups %}
+      for _group in _interface.groups %}{%
+        if _group.title %}
 
 **{{ _group.title }}**
 
 {%
-            for _call in _group.functions %}
-- [{% include function call=_call type="name" %}](/{{ _prefix }}/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
-            endfor %}{%
-          endfor %}{%
-        else %}{%
-          for _call in _interface.functions %}
-- [{% include function call=_call type="name" %}](/{{ _prefix }}/{{ _interface.title | slugify }}/#{% include function call=_call type="signature" %}){%
-          endfor %}{%
         endif %}{%
+        for _function in _group.functions %}
+- {% include function call=_function prefix=_url type='short' %}{%
+        endfor %}{%
       endfor %}{%
-    endif %}{%
+    endfor %}{%
   endfor %}{%
 endif %}
