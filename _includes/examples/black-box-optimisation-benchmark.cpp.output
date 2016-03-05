@@ -1,0 +1,25 @@
+Problem name / Number of iterations:                   | Minimal | Median | Maximal
+BBOB Attractive Sector Function (f6)                   | 20      | 158    | 295
+BBOB Bent Cigar Function (f12)                         | 1000    | 1000   | 1000
+BBOB Büche-Rastrigin Function (f4)                    | 342     | 1000   | 1000
+BBOB Composite Griewank Rosenbrock Function F8F2 (f19) | 26      | 135.5  | 409
+BBOB Different Powers Function (f14)                   | 11      | 44     | 88
+BBOB Discus Function (f11)                             | 1000    | 1000   | 1000
+BBOB Ellipsoidal Function (f2)                         | 622     | 1000   | 1000
+BBOB Ellipsoidal Function, rotated (f10)               | 997     | 1000   | 1000
+BBOB Gallagher's Gaussian 101-me Peaks Function (f21)  | 6       | 1000   | 1000
+BBOB Gallagher's Gaussian 21-hi Peaks Function (f22)   | 6       | 1000   | 1000
+BBOB Katsuura Function (f23)                           | 1000    | 1000   | 1000
+BBOB Linear Slope (f5)                                 | 32      | 81     | 233
+BBOB Lunacek bi-Rastrigin Function (f24)               | 1000    | 1000   | 1000
+BBOB Rastrigin Function (f3)                           | 162     | 1000   | 1000
+BBOB Rastrigin Function, rotated (f15)                 | 315     | 1000   | 1000
+BBOB Rosenbrock Function (f8)                          | 3       | 224    | 751
+BBOB Rosenbrock Function, rotated (f9)                 | 23      | 243    | 605
+BBOB Schaffers F7 Function (f17)                       | 103     | 218    | 475
+BBOB Schaffers F7 Function, ill-conditioned (f18)      | 774     | 1000   | 1000
+BBOB Schwefel Function (f20)                           | 154     | 1000   | 1000
+BBOB Sharp Ridge Function (f13)                        | 711     | 1000   | 1000
+BBOB Sphere Function (f1)                              | 15      | 38     | 65
+BBOB Step Ellipsoidal Function (f7)                    | 24      | 127    | 1000
+BBOB Weierstrass Function (f16)                        | 77      | 228.5  | 1000

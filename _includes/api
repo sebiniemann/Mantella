@@ -19,7 +19,10 @@ if include.subset %}{%
         for _group in _interface.groups %}{%
           for _function in _group.functions %}{%
             assign _url = _interface.title | slugify %}
-{% include function call=_function prefix=_url type='full' %}{%
+
+{% include function call=_function prefix=_url type='full' %}
+
+{%
           endfor %}{%
         endfor %}{%
       else %}{%
@@ -31,7 +34,7 @@ if include.subset %}{%
 
   **{{ _group.title }}**
 
-  {%
+{%
               endif %}{%
               for _function in _group.functions %}
   - {% include function call=_function type='short' %}{%
@@ -40,7 +43,10 @@ if include.subset %}{%
             for _group in _interface.groups %}{%
               for _function in _group.functions %}{%
                 assign _url = _interface.title | slugify %}
-  {% include function call=_function prefix=_url type='full' %}{%
+
+{% include function call=_function prefix=_url type='full' %}
+
+{%
               endfor %}{%
             endfor %}{%
           endif %}{%

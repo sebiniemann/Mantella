@@ -14,7 +14,7 @@
     - title: Optimiser
       functions:
         - void .optimise(OptimisationProblem optimisationProblem, arma::Mat<double> initialParameters)
-    - title: Behaiviour
+    - title: Behaviour
       functions:
         - void .setNextParametersFunction(std::function nextParameterFunction, std::string nextParametersFunctionName)
         - void .setNextParametersFunction(std::function nextParameterFunction)
@@ -28,7 +28,7 @@
         - void .setRestartingFunction(std::function restartingFunction, std::string restartingFunctionName)
         - void .setRestartingFunction(std::function restartingFunction)
         - std::string .getRestartingFunctionName()
-    - title: Termination criterias
+    - title: Termination criteria
       functions:
         - void .setAcceptableObjectiveValue(double acceptableObjectiveValue)
         - double .getAcceptableObjectiveValue()
@@ -85,7 +85,7 @@
         - title: Optimiser
           functions:
             - void .optimise(OptimisationProblem optimisationProblem)
-        - title: Behaiviour
+        - title: Behaviour
           functions:
             - void .setIsAcceptableStateFunction(std::function isAcceptableStateFunction, std::string isAcceptableStateFunctionName)
             - void .setIsAcceptableStateFunction(std::function isAcceptableStateFunction)
@@ -123,7 +123,7 @@
           functions:
             - void .optimise(OptimisationProblem optimisationProblem, arma::uword numberOfParticles)
             - void .optimise(OptimisationProblem optimisationProblem)
-        - title: Behaiviour
+        - title: Behaviour
           functions:
             - void .setNeighbourhoodTopologyFunction(std::function neighbourhoodTopologyFunction, std::string neighbourhoodTopologyFunctionName)
             - void .setNeighbourhoodTopologyFunction(std::function neighbourhoodTopologyFunction)
@@ -152,7 +152,7 @@
         - void .setObjectiveFunction(std::function objectiveFunction)
         - std::string .getObjectiveFunctionName()
         - double .getObjectiveValue(arma::Col<double> parameter)
-        - double .getNormalisedObjectiveValue(arma::Col<double> parameter)
+        - double .getNormalisedObjectiveValue(arma::Col<double> normalisedParameter)
     - title: Constraints
       functions:
         - void .setLowerBounds(arma::Col<double> lowerBounds)

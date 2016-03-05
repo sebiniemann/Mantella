@@ -35,11 +35,11 @@ case include.type %}{%
           assign _param_pair = _param | split: ' ' %}{%
           assign _param_type = _param_pair | pop | join: ' ' %}{{ _param_type }}{% 
           if forloop.index != forloop.length %}, {% endif %}{%
-        endfor %}{%
+        endfor %}){%
       endif %}{%
     endcapture %}[{{ _short }}]({%
-    if include.prefix %}/{{ include.prefix }}/#{{ _signature }}){%
-    endif %}{%
+    if include.prefix %}/{{ include.prefix }}/{%
+    endif %}#{{ _signature }}){%
   else %}{%
     capture _long %}{%
       if _return contains 'extern' %}<small>{{ _return | replace: 'extern ', '' }}</small> {{ _name }}<a class="anchor pull-right hidden-print hidden-xs" href="#{{ _signature }}" aria-hidden="true">#</a><small> (global)</small>{%
@@ -58,8 +58,8 @@ case include.type %}{%
         endif %}{%
       endif %}{%
     endcapture %}
-  <hr>
-  <h3 id="{{ _signature | slugify }}">{{ _long }}</h3>{%
-    capture _signature %}{{ include.prefix | replace: '/', '-' }}-{{ _signature }}{% endcapture %}
+<hr>
+<h3 id="{{ _signature | slugify }}">{{ _long }}</h3>{%
+  capture _signature %}{{ include.prefix | replace: '/', '-' }}-{{ _signature }}{% endcapture %}
 {% include descriptions.md signature=_signature %}{%
 endcase %}

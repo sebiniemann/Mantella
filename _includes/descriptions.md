@@ -45,9 +45,32 @@
 
 {% when "optimisation-algorithms-optimisationalgorithm" %}
 
+- Instantiates an optimisation algorithm.
+- The return value of any getter is the same as after a reset, until `.optimise(...)` is called.
+
+**Default behaviour**
+
+- The *next parameters* function is not set per default and needs to be either set by `.setNextParametersFunction(...)` or by using a specific optimisation algorithm, like `mant::HookeJeevesAlgorithm`.
+- The *boundaries handling* function will place any parameter outside the bounds to the nearest bound, dimension-wise.
+- The *is stagnating* function returns always false.
+- The *restarting* function returns a set of randomly and uniformly drawn parameters. The number of parameters is equal to the number of initial parameters on the first iteration and afterwards equal to the number of parameters returned by the (previous) *next parameters* function.
+
+**Default termination criteria**
+
+- The acceptable objective value is set to \\(-\infty\\).
+- The maximal number of iteration is set to the maximal representable integer (i.e. unset)
+- The maximal duration is set to \\(1\\) second.
+
 {% include example name=include.signature %}
 
 {% when "optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
+
+- Minimises an optimisation problem, starting with `initialParameters` as initial guess(es).
+- When `::mant::isVerbose` is set to true, the optimisation process will print out useful information about the optimisation progress. 
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the *next parameter* function is not set/callable.
 
 {% include example name=include.signature %}
 
@@ -64,6 +87,10 @@
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
+**Exceptions**
+
+- Throws a `std::logic_error`, if the *next parameter function* is not callable.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -75,6 +102,8 @@
 - {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function" %}
+
+- This is a shortcut for `.setNextParametersFunction(std::function, std::string)`, using `Unnamed, custom next-parameter function` as function name.
 
 **See also**
 
@@ -106,6 +135,8 @@
 
 {% when "optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
 
+- This is a shortcut for `.setBoundariesHandlingFunction(std::function, std::string)`, using `Unnamed, custom boundary-handling function` as function name.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
@@ -136,6 +167,8 @@
 
 {% when "optimisation-algorithms-setisstagnatingfunction-std-function" %}
 
+- This is a shortcut for `.setIsStagnatingFunction(std::function, std::string)`, using `Unnamed, custom is-stagnating function` as function name.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
@@ -165,6 +198,8 @@
 - {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
 
 {% when "optimisation-algorithms-setrestartingfunction-std-function" %}
+
+- This is a shortcut for `.setRestartingFunction(std::function, std::string)`, using `Unnamed, custom restarting function` as function name.
 
 **See also**
 
@@ -313,6 +348,8 @@
 
 {% when "random-search-optimise-optimisationproblem" %}
 
+- This is a shortcut for `.optimise(OptimisationProblem, arma::Mat<double>)`, using a randomly and uniformly drawn parameter as initial guess.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -324,6 +361,8 @@
 {% include example name=include.signature %}
 
 {% when "hill-climbing-optimise-optimisationproblem" %}
+
+- This is a shortcut for `.optimise(OptimisationProblem, arma::Mat<double>)`, using a randomly and uniformly drawn parameter as initial guess.
 
 {% include example name=include.signature %}
 
@@ -369,6 +408,8 @@
 
 {% when "simulated-annealing-optimise-optimisationproblem" %}
 
+- This is a shortcut for `.optimise(OptimisationProblem, arma::Mat<double>)`, using a randomly and uniformly drawn parameter as initial guess.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -385,6 +426,8 @@
 - {% include link signature="getisacceptablestatefunctionname" %}
 
 {% when "simulated-annealing-setisacceptablestatefunction-std-function" %}
+
+- This is a shortcut for `.setIsAcceptableStateFunction(std::function, std::string)`, using `Unnamed, custom is-isacceptable-state function` as function name.
 
 **See also**
 
@@ -434,6 +477,8 @@
 
 {% when "hooke-jeeves-algorithm-optimise-optimisationproblem" %}
 
+- This is a shortcut for `.optimise(OptimisationProblem, arma::Mat<double>)`, using a randomly and uniformly drawn parameter as initial guess.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -478,6 +523,8 @@
 
 {% when "particle-swarm-optimisation-optimise-optimisationproblem-arma-uword" %}
 
+- This is a shortcut for `.optimise(OptimisationProblem, arma::Mat<double>)`, using `numberOfParticles` randomly and uniformly drawn parameters as initial guess.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -486,6 +533,8 @@
 - {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
 
 {% when "particle-swarm-optimisation-optimise-optimisationproblem" %}
+
+- This is a shortcut for {% include link signature="particle-swarm-optimisation-optimise-optimisationproblem-arma-uword" %}, using 40 as population size.
 
 **See also**
 
@@ -502,6 +551,8 @@
 - {% include link signature="particle-swarm-optimisation-getneighbourhoodtopologyfunctionname" %}
 
 {% when "particle-swarm-optimisation-setneighbourhoodtopologyfunction-std-function" %}
+
+- This is a shortcut for `.setNeighbourhoodTopologyFunction(std::function, std::string)`, using `Unnamed, custom neighbourhood topology function` as function name.
 
 **See also**
 
@@ -592,6 +643,8 @@
 
 {% when "optimisation-problems-setobjectivefunction-std-function" %}
 
+- This is a shortcut for `.setObjectiveFunction(std::function, std::string)`, using `Unnamed, custom objective function` as function name.
+
 **See also**
 
 - {% include link signature="optimisation-problems-setobjectivefunction-std-function-std-string" %}
@@ -611,6 +664,8 @@
 - {% include link signature="optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
 
 {% when "optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
+
+- This is a shortcut for `.getObjectiveValue(.getLowerBounds() + normalisedParameter % (.getUpperBounds() - .getLowerBounds()))`.
 
 **See also**
 
@@ -953,7 +1008,7 @@ $$C(X) := 100 \cdot F_\text{penality}(X)$$
 
 **Parameter initialisation**
 
-- is randomly and uniformly translated to be within \([-4, 4]\) for odd and within \([0, 4]\) for even dimensions, rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \(-0.00001\) for odd and to \(0.00001\) for even dimensions instead.
+- The parameter space is randomly and uniformly translated to be within \\([-4, 4]\\) for odd and within \\([0, 4]\\) for even dimensions, rounded up to 4 decimal places. If the translation of a dimension would be zero, it is set to \\(-0.00001\\) for odd and to \\(0.00001\\) for even dimensions instead.
 
 {% include example name=include.signature %}
 
@@ -1847,6 +1902,8 @@ $$C(X) := 0, \ \forall X$$
 
 {% when "mathematical-functions-randompermutationvector-arma-uword" %}
 
+- This is a shortcut for `randomPermutationVector(numberOfElements, numberOfElements)`.
+
 **See also**
 
 - {% include link signature="mathematical-functions-randompermutationvector-arma-uword-arma-uword" %}
@@ -1864,6 +1921,8 @@ $$C(X) := 0, \ \forall X$$
 - {% include link signature="armadillo-and-c-stl-range-arma-uword-arma-uword" %}
 
 {% when "armadillo-and-c-stl-range-arma-uword-arma-uword" %}
+
+- This is a shortcut for `range(start, end, 1)`.
 
 **See also**
 

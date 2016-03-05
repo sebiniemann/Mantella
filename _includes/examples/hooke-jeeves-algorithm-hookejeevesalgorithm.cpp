@@ -4,7 +4,7 @@ int main() {
   unsigned int numberOfDimensions = 2;
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
-  mant::SimulatedAnnealing optimisationAlgorithm;
+  mant::HookeJeevesAlgorithm optimisationAlgorithm;
   optimisationAlgorithm.optimise(optimisationProblem);
 
   std::cout << "Best objective value: " << optimisationAlgorithm.getBestObjectiveValue() << "\n";
