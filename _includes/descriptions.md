@@ -70,7 +70,10 @@
 
 **Exceptions**
 
-- Throws a `std::logic_error`, if the *next parameter* function is not set/callable.
+- Throws a `std::logic_error`, if the *next parameters* function is not set/callable.
+- Throws a `std::logic_error`, if the objective function is not set/callable.
+- Throws a `std::logic_error`, if any element in `optimisationProblem.getLowerBounds()` is strict greater then its corresponding element in `optimisationProblem.getUpperBounds()`.
+- Throws a `std::logic_error`, if `initialParameters` is empty, infinite or its number if rows is unequal to `optimisationProblem.numberOfDimensions_`.
 
 {% include example name=include.signature %}
 
@@ -87,6 +90,24 @@
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
+{% include notice title="Normalised parameters" content="All internal optimisation functions like `nextParameterFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
+
+The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+
+- The full type of `nextParameterFunction` is `std::function<arma::Mat<double>(arma::uword numberOfDimensions_, arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
+  - **<small>Output</small>** `arma::Mat<double>`<br>
+    The *next parameters* function returns the next parameters to evaluate, whereas each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::uword numberOfDimensions_`<br>
+    The number of problem dimensions.
+  - **<small>Input</small>** `arma::Mat<double> parameters_`<br>
+    Contains the previously evaluated parameters, after boundary handling was applied. This may either be the initial parameters, or come from the last call to `nextParameterFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::Row<double> objectiveValues_`<br>
+    Contains the objective values of `parameters_`.
+  - **<small>Input</small>** `arma::Row<double> differences_>`<br>
+    Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
+- Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the next parameter function. These member variables are documented individually for each algorithm.
+- The *next parameters* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getNextParametersFunctionName()` for your own usage.
+
 **Exceptions**
 
 - Throws a `std::logic_error`, if the *next parameter function* is not callable.
@@ -100,6 +121,7 @@
 - {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
 - {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
 - {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
+- {% include link signature="optimisation-problems-getnormalisedobjectivevalue-arma-col-double" %}
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function" %}
 
@@ -113,6 +135,9 @@
 - {% include link signature="optimisation-algorithms-setrestartingfunction-std-function" %}
 
 {% when "optimisation-algorithms-getnextparametersfunctionname" %}
+
+- Return the name of the *next parameter* function or "Unnamed, custom next-parameter function" if no name was set.
+- Directly after instantiating, the return value will be empty, as no default *next parameter* function is set.
 
 **See also**
 
