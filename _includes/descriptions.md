@@ -52,7 +52,7 @@
 
 - The *next parameters* function is not set per default and needs to be either set by `.setNextParametersFunction(...)` or by using a specific optimisation algorithm, like `mant::HookeJeevesAlgorithm`.
 - The *boundaries handling* function will place any parameter outside the bounds to the nearest bound, dimension-wise.
-- The *is stagnating* function returns always false.
+- The *is stagnating* function returns always `false`.
 - The *restarting* function returns a set of randomly and uniformly drawn parameters. The number of parameters is equal to the number of initial parameters on the first iteration and afterwards equal to the number of parameters returned by the (previous) *next parameters* function.
 
 **Default termination criteria**
@@ -66,7 +66,7 @@
 {% when "optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
 
 - Minimises an optimisation problem, starting with `initialParameters` as initial guess(es).
-- When `::mant::isVerbose` is set to true, the optimisation process will print out useful information about the optimisation progress. 
+- When `::mant::isVerbose` is set to `true`, the optimisation process will print out useful information about the optimisation progress. 
 
 **Exceptions**
 
@@ -106,7 +106,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
   - **<small>Input</small>** `arma::Row<double> differences_>`<br>
     Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
 - Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *next parameters* function. These member variables are documented individually for each algorithm.
-- The *next parameters* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getNextParametersFunctionName()` for your own usage.
+- The *next parameters* function name is printed out when `::mant::isVerbose` is set to `true`, to identify the algorithm, or accessible by `.getNextParametersFunctionName()` for your own usage.
 
 **Exceptions**
 
@@ -162,7 +162,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
   - **<small>Input</small>** `arma::Row<double> isAboveUpperBound_`<br>
     Contains a \\(1\\) for each element in `parameters_` that is above the upper bound and a \\(0\\) otherwise. Each column stands for a parameter and each row for a dimension. To access the value that are out of bound, use `parameters_.elem(isAboveUpperBound_)`.
 - Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *boundaries-handling* function. These member variables are documented individually for each algorithm.
-- The *boundaries-handling* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getBoundariesHandlingFunctionName()` for your own usage.
+- The *boundaries-handling* function name is printed out when `::mant::isVerbose` is set to `true`, to identify the algorithm, or accessible by `.getBoundariesHandlingFunctionName()` for your own usage.
 
 **Exceptions**
 
@@ -209,7 +209,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 - The full type of `isStagnatingFunction` is `std::function<bool(arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
   - **<small>Output</small>** `bool`<br>
-    Returns true if the optimisation process is stagnating, i.e. the *restarting*  function should be used instead of the *next parameters* function and false otherwise.
+    Returns `true` if the optimisation process is stagnating, i.e. the *restarting*  function should be used instead of the *next parameters* function and `false` otherwise.
   - **<small>Input</small>** `arma::Mat<double> parameters_`<br>
     Contains the previously evaluated parameters, after boundaries handling was applied. This may either be the initial parameters, or come from the last call to `nextParametersFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
   - **<small>Input</small>** `arma::Row<double> objectiveValues_`<br>
@@ -217,7 +217,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
   - **<small>Input</small>** `arma::Row<double> differences_>`<br>
     Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
 - Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *is-stagnating* function. These member variables are documented individually for each algorithm.
-- The *is-stagnating* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getIsStagnatingFunctionName()` for your own usage.
+- The *is-stagnating* function name is printed out when `::mant::isVerbose` is set to `true`, to identify the algorithm, or accessible by `.getIsStagnatingFunctionName()` for your own usage.
 
 **Exceptions**
 
@@ -274,7 +274,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
   - **<small>Input</small>** `arma::Row<double> differences_>`<br>
     Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
 - Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *restarting* function. These member variables are documented individually for each algorithm.
-- The *restarting* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getRestartingFunctionName()` for your own usage.
+- The *restarting* function name is printed out when `::mant::isVerbose` is set to `true`, to identify the algorithm, or accessible by `.getRestartingFunctionName()` for your own usage.
 
 **Exceptions**
 
@@ -400,7 +400,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-isfinished" %}
 
-- Returns `true` if a parameter with an acceptable objective value was found and false otherwise.
+- Returns `true` if a parameter with an acceptable objective value was found and `false` otherwise.
 
 {% include example name=include.signature %}
 
@@ -411,7 +411,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-isterminated" %}
 
-- Returns true if either the maximal number of iterations or duration was reached and false otherwise.
+- Returns `true` if either the maximal number of iterations or duration was reached and `false` otherwise.
 
 {% include example name=include.signature %}
 
@@ -479,7 +479,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 {% when "optimisation-algorithms-getrecordedsampling" %}
 
 - Returns the recorded parameters and objective value pairs of an optimisation process (in order of occurrence, including duplicates).
-- The recording is turned off as default, to turn on the recording, set `::mant::isRecordingSampling` to true.
+- The recording is turned off as default, to turn on the recording, set `::mant::isRecordingSampling` to `true`.
 - The recording is emptied when `.optimise(...)` is called again.
 
 {% include example name=include.signature %}
