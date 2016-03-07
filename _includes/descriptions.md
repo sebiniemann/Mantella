@@ -553,8 +553,8 @@ The parameter is than automatically mapped to the actual parameter space by the 
 {% when "hill-climbing-setminimalstepsize-double" %}
 
 - Sets the minimal step size.
-- The minimal step sizes defines the minimal distance there should be between two consecutive parameters.
-- When  `OptimisationProblem.
+- The minimal step sizes defines the minimal distance that must be between two consecutive parameters.
+- When the minimal step sizes is sufficiently large compared to the problem space, adding also `OptimisationProblem.setMinimalParameterDistance(...)` and setting `::mant::isCachingSamples` to `true` can drastically improve the time taken by the optimisation process. The sweet spot is a compromise between avoiding a time consuming evaluation and keeping the cache lookup time short.
 
 {% include example name=include.signature %}
 
