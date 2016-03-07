@@ -90,7 +90,7 @@
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
-{% include normalised-parameters.md %}
+{% include notices/normalised-parameters.md %}
 
 - The full type of `nextParametersFunction` is `std::function<arma::Mat<double>(arma::uword numberOfDimensions_, arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
   - **<small>Output</small>** `arma::Mat<double>`<br>
@@ -146,7 +146,7 @@
 
 {% when "optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
 
-{% include normalised-parameters.md %}
+{% include notices/normalised-parameters.md %}
 
 - The full type of `boundariesHandlingFunction` is `std::function<arma::Mat<double>(arma::Mat<double> parameters_, arma::Mat<arma::uword> isBelowLowerBound_, arma::Mat<arma::uword> isAboveUpperBound_>`.
   - **<small>Output</small>** `arma::Mat<double>`<br>
@@ -199,7 +199,7 @@
 
 {% when "optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
 
-{% include normalised-parameters.md %}
+{% include notices/normalised-parameters.md %}
 
 - The full type of `isStagnatingFunction` is `std::function<bool(arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
   - **<small>Output</small>** `bool`<br>
@@ -252,7 +252,7 @@
 
 {% when "optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
-{% include normalised-parameters.md %}
+{% include notices/normalised-parameters.md %}
 
 The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
 
@@ -546,7 +546,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "hill-climbing-setminimalstepsize-double" %}
 
-{% include normalised-parameters.md %}
+{% include notices/normalised-parameters.md %}
 
 - Sets the minimal distance that must be between two consecutive parameters.
 - Since the parameter space is normalised to \\([0, 1]^N\\), the same (percentage) minimal step size is used for all dimensions, whereby a step size of \\(1\\) correlates to the dimension-wise distance between the lower and the upper bound.
