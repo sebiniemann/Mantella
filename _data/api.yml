@@ -16,14 +16,14 @@
         - void .optimise(OptimisationProblem optimisationProblem, arma::Mat<double> initialParameters)
     - title: Behaviour
       functions:
-        - void .setNextParametersFunction(std::function nextParameterFunction, std::string nextParametersFunctionName)
-        - void .setNextParametersFunction(std::function nextParameterFunction)
+        - void .setNextParametersFunction(std::function nextParametersFunction, std::string nextParametersFunctionName)
+        - void .setNextParametersFunction(std::function nextParametersFunction)
         - std::string .getNextParametersFunctionName()
         - void .setBoundariesHandlingFunction(std::function boundariesHandlingFunction, std::string boundariesHandlingFunctionName)
         - void .setBoundariesHandlingFunction(std::function boundariesHandlingFunction)
         - std::string .getBoundariesHandlingFunctionName()
-        - void .setIsStagnatingFunction(std::function stagnationDetectionFunction, std::string stagnationDetectionFunctionName)
-        - void .setIsStagnatingFunction(std::function stagnationDetectionFunction)
+        - void .setIsStagnatingFunction(std::function isStagnatingFunction, std::string isStagnatingFunctionName)
+        - void .setIsStagnatingFunction(std::function isStagnatingFunction)
         - std::string .getIsStagnatingFunctionName()
         - void .setRestartingFunction(std::function restartingFunction, std::string restartingFunctionName)
         - void .setRestartingFunction(std::function restartingFunction)
@@ -178,7 +178,7 @@
         - void .setObjectiveValueTranslation(double objectiveValueTranslation)
         - double .getObjectiveValueTranslation()
         - std::unordered_map .getCachedSamples()
-    - title: Counter
+    - title: Counters
       functions:
         - arma::uword .getNumberOfEvaluations()
         - arma::uword .getNumberOfDistinctEvaluations()

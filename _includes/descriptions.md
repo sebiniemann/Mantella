@@ -1,11 +1,11 @@
 {% case include.signature %}
 {% when "configuration-iscachingsamples" %}
 
-- If set to `true`, the objective value will only be calculated once per parameter.
+- When set to `true`, the objective value will only be calculated once per parameter.
 - The objective value of recurring parameters are than retrieved from the cache, instead of recalculating them.
 - Setting this to `true` is useful if an optimisation algorithms significantly often revisits previous parameters due to its internal procedure, or because of a large minimal parameter distance.
 - The number of revisits can be measured by the difference between the number of evaluations and the number of distinct evaluations.
-- Default value is `false`
+- The default value is `false`.
 
 {% include example name=include.signature %}
 
@@ -21,9 +21,9 @@
 
 {% when "configuration-isrecordingsampling" %}
 
-- If set to `true`, the evaluated parameters of an optimisation are recorded (in order of occurrence, including duplicates).
+- When set to `true`, the evaluated parameters and objective value pairs of an optimisation process are recorded (in order of occurrence, including duplicates).
 - The recording is cleared when a new optimisation is issued.
-- Default value is `false`
+- The default value is `false`.
 
 {% include example name=include.signature %}
 
@@ -34,8 +34,8 @@
 
 {% when "configuration-isverbose" %}
 
-- If set to `true`, the optimisation process prints information on the problem and notable progress to the standard output stream `std::cout`.
-- Default value is `false`
+- When set to `true`, the optimisation process prints information on the problem and notable progress to the standard output stream `std::cout`.
+- The default value is `false`.
 
 {% include example name=include.signature %}
 
@@ -58,7 +58,7 @@
 **Default termination criteria**
 
 - The acceptable objective value is set to \\(-\infty\\).
-- The maximal number of iteration is set to the maximal representable integer (i.e. unset)
+- The maximal number of iteration is set to the largest representable integer.
 - The maximal duration is set to \\(1\\) second.
 
 {% include example name=include.signature %}
@@ -90,27 +90,27 @@
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
-{% include notice title="Normalised parameters" content="All internal optimisation functions like `nextParameterFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
+{% include notice title="Normalised parameters" content="All internal optimisation functions like `nextParametersFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
 
 The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
 
-- The full type of `nextParameterFunction` is `std::function<arma::Mat<double>(arma::uword numberOfDimensions_, arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
+- The full type of `nextParametersFunction` is `std::function<arma::Mat<double>(arma::uword numberOfDimensions_, arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
   - **<small>Output</small>** `arma::Mat<double>`<br>
-    The *next parameters* function returns the next parameters to evaluate, whereas each column stands for a parameter and each row for a dimension.
+    The next parameters to evaluate, prior to the boundaries handling, whereas each column stands for a parameter and each row for a dimension.
   - **<small>Input</small>** `arma::uword numberOfDimensions_`<br>
     The number of problem dimensions.
   - **<small>Input</small>** `arma::Mat<double> parameters_`<br>
-    Contains the previously evaluated parameters, after boundary handling was applied. This may either be the initial parameters, or come from the last call to `nextParameterFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
+    Contains the previously evaluated parameters, after boundaries handling was applied. This may either be the initial parameters, or come from the last call to `nextParametersFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
   - **<small>Input</small>** `arma::Row<double> objectiveValues_`<br>
     Contains the objective values of `parameters_`.
   - **<small>Input</small>** `arma::Row<double> differences_>`<br>
     Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
-- Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the next parameter function. These member variables are documented individually for each algorithm.
+- Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *next parameters* function. These member variables are documented individually for each algorithm.
 - The *next parameters* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getNextParametersFunctionName()` for your own usage.
 
 **Exceptions**
 
-- Throws a `std::logic_error`, if the *next parameter function* is not callable.
+- Throws a `std::logic_error`, if the *next parameters* function is not callable.
 
 {% include example name=include.signature %}
 
@@ -136,8 +136,8 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getnextparametersfunctionname" %}
 
-- Return the name of the *next parameter* function or "Unnamed, custom next-parameter function" if no name was set.
-- Directly after instantiating, the return value will be empty, as no default *next parameter* function is set.
+- Returns the name of the *next parameter* function.
+- When the default *next parameter* is used, an empty string is returned, as no default *next parameter* function is defined.
 
 **See also**
 
@@ -147,6 +147,26 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
 
 {% when "optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
+
+{% include notice title="Normalised parameters" content="All internal optimisation functions like `boundariesHandlingFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
+
+The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+
+- The full type of `boundariesHandlingFunction` is `std::function<arma::Mat<double>(arma::Mat<double> parameters_, arma::Mat<arma::uword> isBelowLowerBound_, arma::Mat<arma::uword> isAboveUpperBound_>`.
+  - **<small>Output</small>** `arma::Mat<double>`<br>
+    The *boundaries-handling* function returns bounded parameters, whereas each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::Mat<double> parameters_`<br>
+    Contains the parameters to be evaluated. This may either be the initial parameters, or come from `nextParametersFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::Row<double> isBelowLowerBound_`<br>
+    Contains a \\(1\\) for each element in `parameters_` that is below the lower bound and a \\(0\\) otherwise. Each column stands for a parameter and each row for a dimension. To access the value that are out of bound, use `parameters_.elem(isBelowLowerBound_)`.
+  - **<small>Input</small>** `arma::Row<double> isAboveUpperBound_`<br>
+    Contains a \\(1\\) for each element in `parameters_` that is above the upper bound and a \\(0\\) otherwise. Each column stands for a parameter and each row for a dimension. To access the value that are out of bound, use `parameters_.elem(isAboveUpperBound_)`.
+- Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *boundaries-handling* function. These member variables are documented individually for each algorithm.
+- The *boundaries-handling* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getBoundariesHandlingFunctionName()` for your own usage.
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the *boundaries-handling* function is not callable.
 
 {% include example name=include.signature %}
 
@@ -160,7 +180,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-setboundarieshandlingfunction-std-function" %}
 
-- This is a shortcut for `.setBoundariesHandlingFunction(std::function, std::string)`, using `Unnamed, custom boundary-handling function` as function name.
+- This is a shortcut for `.setBoundariesHandlingFunction(std::function, std::string)`, using `Unnamed, custom boundaries-handling function` as function name.
 
 **See also**
 
@@ -171,6 +191,9 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getboundarieshandlingfunctionname" %}
 
+- Returns the name of the *boundaries-handling* function.
+- When the default function is used, `Map to bound` is returned.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
@@ -179,6 +202,26 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
 
 {% when "optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
+
+{% include notice title="Normalised parameters" content="All internal optimisation functions like `isStagnatingFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
+
+The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+
+- The full type of `isStagnatingFunction` is `std::function<bool(arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
+  - **<small>Output</small>** `bool`<br>
+    Returns true if the optimisation process is stagnating, i.e. the *restarting*  function should be used instead of the *next parameters* function and false otherwise.
+  - **<small>Input</small>** `arma::Mat<double> parameters_`<br>
+    Contains the previously evaluated parameters, after boundaries handling was applied. This may either be the initial parameters, or come from the last call to `nextParametersFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::Row<double> objectiveValues_`<br>
+    Contains the objective values of `parameters_`.
+  - **<small>Input</small>** `arma::Row<double> differences_>`<br>
+    Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
+- Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *is-stagnating* function. These member variables are documented individually for each algorithm.
+- The *is-stagnating* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getIsStagnatingFunctionName()` for your own usage.
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the *is-stagnating* function is not callable.
 
 {% include example name=include.signature %}
 
@@ -203,6 +246,9 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getisstagnatingfunctionname" %}
 
+- Returns the name of the *is-stagnating* function.
+- When the default function is used, `Always false` is returned.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
@@ -211,6 +257,28 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getrestartingfunctionname" %}
 
 {% when "optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
+
+{% include notice title="Normalised parameters" content="All internal optimisation functions like `restartingFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
+
+The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+
+- The full type of `restartingFunction` is `std::function<arma::Mat<double>(arma::uword numberOfDimensions_, arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
+  - **<small>Output</small>** `arma::Mat<double>`<br>
+    The next parameters to evaluate, prior to the boundaries handling, whereas each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::uword numberOfDimensions_`<br>
+    The number of problem dimensions.
+  - **<small>Input</small>** `arma::Mat<double> parameters_`<br>
+    Contains the previously evaluated parameters, after boundaries handling was applied. This may either be the initial parameters, or come from the last call to `nextParametersFunction` or `restartingFunction`. Each column stands for a parameter and each row for a dimension.
+  - **<small>Input</small>** `arma::Row<double> objectiveValues_`<br>
+    Contains the objective values of `parameters_`.
+  - **<small>Input</small>** `arma::Row<double> differences_>`<br>
+    Contains the difference between the objective values of `parameters_` and the previously best objective value, prior to evaluating any parameter in `parameters_`.
+- Beside the inputs mentioned above, specialised optimisation algorithms like `mant::ParticleSwarmOptimisation` provide publicly accessible member variables, that can also be used within the *restarting* function. These member variables are documented individually for each algorithm.
+- The *restarting* function name is printed out when `::mant::isVerbose` is set to true, to identify the algorithm, or accessible by `.getRestartingFunctionName()` for your own usage.
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the *restarting* function is not callable.
 
 {% include example name=include.signature %}
 
@@ -235,6 +303,9 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getrestartingfunctionname" %}
 
+- Returns the name of the *restarting* function.
+- When the default function is used, `Random` is returned.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
@@ -243,6 +314,9 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getisstagnatingfunctionname" %}
 
 {% when "optimisation-algorithms-setacceptableobjectivevalue-double" %}
+
+- Sets the threshold at which an objective value is acceptable, i.e. *good enough*.
+- When a parameter with such an objective value (or lower) is found, the optimisation process will terminate and `isFinished` will return `true`.
 
 {% include example name=include.signature %}
 
@@ -254,13 +328,25 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getacceptableobjectivevalue" %}
 
+- Returns the threshold at which an objective value is acceptable, i.e. *good enough*.
+- When the default value is used, \\(-\infty\\) is returned.
+- This termination criteria is checked after each evaluation and might therefore terminate the optimisation process before a whole iteration is finished.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
 - {% include link signature="optimisation-algorithms-getmaximalnumberofiterations" %}
 - {% include link signature="optimisation-algorithms-getmaximalduration" %}
+- {% include link signature="optimisation-algorithms-getbestobjectivevalue" %}
 
 {% when "optimisation-algorithms-setmaximalnumberofiterations-arma-uword" %}
+
+- Sets the maximal number of iterations the optimisation process can take.
+- The number of iterations is equal to the number of calls to `nextParametersFunction` and `restartingFunction` + 1 (for the initial parameters).
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the maximal number of iterations is 0.
 
 {% include example name=include.signature %}
 
@@ -269,8 +355,12 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getmaximalnumberofiterations" %}
 - {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
 - {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
+- {% include link signature="optimisation-algorithms-getnumberofiterations" %}
 
 {% when "optimisation-algorithms-getmaximalnumberofiterations" %}
+
+- Returns the maximal number of iterations the optimisation process can take.
+- When the default value is used, the largest representable integer is returned.
 
 **See also**
 
@@ -279,6 +369,14 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getmaximalduration" %}
 
 {% when "optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
+
+- Sets the maximal duration the optimisation process can take.
+- Due to the nature of duration counters, `.getDuration()` might be longer then the maximal duration.
+- This termination criteria is checked after each evaluation and might therefore terminate the optimisation process before a whole iteration is finished.
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the maximal duration is 0.
 
 {% include example name=include.signature %}
 
@@ -290,13 +388,19 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getmaximalduration" %}
 
+- Returns the maximal duration the optimisation process can take.
+- When the default value is used, \\(1\\) second is returned.
+
 **See also**
 
 - {% include link signature="optimisation-algorithms-setmaximalduration-std-chrono-microseconds" %}
 - {% include link signature="optimisation-algorithms-getacceptableobjectivevalue" %}
 - {% include link signature="optimisation-algorithms-getmaximalnumberofiterations" %}
+- {% include link signature="optimisation-algorithms-getduration" %}
 
 {% when "optimisation-algorithms-isfinished" %}
+
+- Returns `true` if a parameter with an acceptable objective value was found and false otherwise.
 
 {% include example name=include.signature %}
 
@@ -306,6 +410,8 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-setacceptableobjectivevalue-double" %}
 
 {% when "optimisation-algorithms-isterminated" %}
+
+- Returns true if either the maximal number of iterations or duration was reached and false otherwise.
 
 {% include example name=include.signature %}
 
@@ -317,6 +423,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getnumberofiterations" %}
 
+- Returns the number of iterations the optimisation process took.
+- This is equal to the number of calls to `nextParametersFunction` and `restartingFunction` + 1 (for the initial parameters).
+- The number of iterations is reset to \\(0\\) after `.optimise(...)` is called again.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -326,6 +436,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getbestparameter" %}
 
 {% when "optimisation-algorithms-getduration" %}
+
+- Returns the duration the optimisation process took.
+- Due to the nature of duration counters, the time taken might be longer then the maximal duration.
+- The duration is reset to \\(0\\) after `.optimise(...)` is called again.
 
 {% include example name=include.signature %}
 
@@ -337,6 +451,9 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getbestobjectivevalue" %}
 
+- Returns the best objective value found.
+- The best objective value is reset to \\(infty\\) after `.optimise(...)` is called again.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -346,6 +463,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-getbestparameter" %}
 
 {% when "optimisation-algorithms-getbestparameter" %}
+
+- Returns the parameter having the best objective value.
+- When multiple parameters have the same best objective value, only the first to encounter is returned.
+- The best parameters is emptied after `.optimise(...)` is called again.
 
 {% include example name=include.signature %}
 
@@ -357,6 +478,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-getrecordedsampling" %}
 
+- Returns the recorded parameters and objective value pairs of an optimisation process (in order of occurrence, including duplicates).
+- The recording is turned off as default, to turn on the recording, set `::mant::isRecordingSampling` to true.
+- The recording is emptied when `.optimise(...)` is called again.
+
 {% include example name=include.signature %}
 
 **See also**
@@ -365,11 +490,25 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-reset" %}
 
+- Resets all counters to \\(0\\), empties the recorded sampling best parameters and sets the best objective value to \\(-\infty\\).
+- This is automatically done when `.optimise(...)` is called.
+
 {% include example name=include.signature %}
 
 {% when "random-search-randomsearch" %}
 
+- Instantiates a random search.
+
+**Default behaviour**
+
+- The *next parameters* function returns a randomly and uniformly generated parameter within the upper and lower bounds.
+- All other functions are left as defined in `mant::OptimisationAlgorithm`.
+
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimisationalgorithm" %}
 
 {% when "random-search-optimise-optimisationproblem" %}
 
@@ -383,7 +522,23 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "hill-climbing-hillclimbing" %}
 
+- Instantiates a hill-climber.
+
+**Default behaviour**
+
+- The *next parameters* function returns a randomly and uniformly generated parameter within the minimal and maximal step size from  the currently best parameter.
+- All other functions are left as defined in `mant::OptimisationAlgorithm`.
+
+**Default step sizes**
+
+- The minimal step size is set to \\(0\\).
+- The maximal step size is set to \\(10\%\\) of the distance between the upper and lower bounds.
+
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimisationalgorithm" %}
 
 {% when "hill-climbing-optimise-optimisationproblem" %}
 
@@ -396,6 +551,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 - {% include link signature="optimisation-algorithms-optimise-optimisationproblem-arma-mat-double" %}
 
 {% when "hill-climbing-setminimalstepsize-double" %}
+
+- Sets the minimal step size.
+- The minimal step sizes defines the minimal distance there should be between two consecutive parameters.
+- When  `OptimisationProblem.
 
 {% include example name=include.signature %}
 
@@ -430,6 +589,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 {% when "simulated-annealing-simulatedannealing" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimisationalgorithm" %}
 
 {% when "simulated-annealing-optimise-optimisationproblem" %}
 
@@ -500,6 +663,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% include example name=include.signature %}
 
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimisationalgorithm" %}
+
 {% when "hooke-jeeves-algorithm-optimise-optimisationproblem" %}
 
 - This is a shortcut for `.optimise(OptimisationProblem, arma::Mat<double>)`, using a randomly and uniformly drawn parameter as initial guess.
@@ -545,6 +712,10 @@ The parameter is than automatically mapped to the actual parameter space by the 
 {% when "particle-swarm-optimisation-particleswarmoptimisation" %}
 
 {% include example name=include.signature %}
+
+**See also**
+
+- {% include link signature="optimisation-algorithms-optimisationalgorithm" %}
 
 {% when "particle-swarm-optimisation-optimise-optimisationproblem-arma-uword" %}
 
@@ -1706,9 +1877,9 @@ $$C(X) := 0, \ \forall X$$
 
 {% when "black-box-optimisation-benchmark-getoptimalobjectivevalue" %}
 
-- Returns the optimal (minimal) objective value for this problem **within the default bounds**.
-- There will be at least one parameter with this objective value **within the default bounds**.
-- The optimal objective value is not adjusted to any boundary changes.
+- Returns the optimal (minimal) objective value for this problem **within the upper and lower bounds**.
+- There will be at least one parameter with this objective value **within the upper and lower bounds**.
+- The optimal objective value is not adjusted, in case any bound is updated.
 
 **See also**
 
