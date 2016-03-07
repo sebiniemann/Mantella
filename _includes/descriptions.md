@@ -90,9 +90,7 @@
 
 {% when "optimisation-algorithms-setnextparametersfunction-std-function-std-string" %}
 
-{% include notice title="Normalised parameters" content="All internal optimisation functions like `nextParametersFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
-
-The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+{% include normalised-parameters.md %}
 
 - The full type of `nextParametersFunction` is `std::function<arma::Mat<double>(arma::uword numberOfDimensions_, arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
   - **<small>Output</small>** `arma::Mat<double>`<br>
@@ -148,9 +146,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-setboundarieshandlingfunction-std-function-std-string" %}
 
-{% include notice title="Normalised parameters" content="All internal optimisation functions like `boundariesHandlingFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
-
-The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+{% include normalised-parameters.md %}
 
 - The full type of `boundariesHandlingFunction` is `std::function<arma::Mat<double>(arma::Mat<double> parameters_, arma::Mat<arma::uword> isBelowLowerBound_, arma::Mat<arma::uword> isAboveUpperBound_>`.
   - **<small>Output</small>** `arma::Mat<double>`<br>
@@ -203,9 +199,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-setisstagnatingfunction-std-function-std-string" %}
 
-{% include notice title="Normalised parameters" content="All internal optimisation functions like `isStagnatingFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
-
-The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
+{% include normalised-parameters.md %}
 
 - The full type of `isStagnatingFunction` is `std::function<bool(arma::Mat<double> parameters_, arma::Row<double> objectiveValues_, arma::Row<double> differences_>`.
   - **<small>Output</small>** `bool`<br>
@@ -258,7 +252,7 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "optimisation-algorithms-setrestartingfunction-std-function-std-string" %}
 
-{% include notice title="Normalised parameters" content="All internal optimisation functions like `restartingFunction` must work on normalised parameters, handling the problem as if the lower bounds are all \\(0\\) and the upper bounds are all \\(1\\).
+{% include normalised-parameters.md %}
 
 The parameter is than automatically mapped to the actual parameter space by the optimisation problem's `.getNormalisedObjectiveValue(...)` method." %}
 
@@ -552,9 +546,16 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "hill-climbing-setminimalstepsize-double" %}
 
-- Sets the minimal step size.
-- The minimal step sizes defines the minimal distance that must be between two consecutive parameters.
+{% include normalised-parameters.md %}
+
+- Sets the minimal distance that must be between two consecutive parameters.
+- Since the parameter space is normalised to \\([0, 1]^N\\), the same (percentage) minimal step size is used for all dimensions, whereby a step size of \\(1\\) correlates to the dimension-wise distance between the lower and the upper bound.
+- To choose different (percentage) minimal step sizes for each dimension, use `OptimisationProblem.setParameterScaling(...)`.
 - When the minimal step sizes is sufficiently large compared to the problem space, adding also `OptimisationProblem.setMinimalParameterDistance(...)` and setting `::mant::isCachingSamples` to `true` can drastically improve the time taken by the optimisation process. The sweet spot is a compromise between avoiding a time consuming evaluation and keeping the cache lookup time short.
+
+**Exceptions**
+
+- Throws a `std::logic_error`, if the minimal step size is negative.
 
 {% include example name=include.signature %}
 
@@ -565,12 +566,18 @@ The parameter is than automatically mapped to the actual parameter space by the 
 
 {% when "hill-climbing-getminimalstepsize" %}
 
+- Returns the minimal distance.
+
 **See also**
 
 - {% include link signature="hill-climbing-setminimalstepsize-double" %}
 - {% include link signature="hill-climbing-getmaximalstepsize" %}
 
 {% when "hill-climbing-setmaximalstepsize-double" %}
+
+- Sets the maximal distance that can be between two consecutive parameters.
+- Since the parameter space is normalised to \\([0, 1]^N\\), the same (percentage) maximal step size is used for all dimensions, whereby a step size of \\(1\\) correlates to the dimension-wise distance between the lower and the upper bound.
+- To choose different (percentage) maximal step sizes for each dimension, use `OptimisationProblem.setParameterScaling(...)`.
 
 {% include example name=include.signature %}
 
