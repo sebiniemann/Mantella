@@ -37,10 +37,10 @@ namespace mant {
         std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isBelowLowerBound_, const arma::Mat<arma::uword>& isAboveUpperBound_)> boundariesHandlingFunction);
     std::string getBoundariesHandlingFunctionName() const;
     void setIsStagnatingFunction(
-        std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> stagnationDetectionFunction,
-        const std::string& stagnationDetectionFunctionName);
+        std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction,
+        const std::string& isStagnatingFunctionName);
     void setIsStagnatingFunction(
-        std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> stagnationDetectionFunction);
+        std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction);
     std::string getIsStagnatingFunctionName() const;
     void setRestartingFunction(
         std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction,
