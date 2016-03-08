@@ -152,7 +152,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
         CHECK(optimisationAlgorithm.getBestParameter().n_elem == differentNumberOfDimensions);
       }
 
-      AND_WHEN("The optimisation problem has no specific objective function and the next parameter function is not changed") {
+      AND_WHEN("The optimisation problem has no specific objective function and the next parameters function is not changed") {
         const arma::Mat<double>& initialParameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
         CAPTURE(initialParameters);
 
@@ -310,13 +310,13 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunction", "[OptimisationAlgori
 SCENARIO("OptimisationAlgorithm.getNextParametersFunctionName", "[OptimisationAlgorithm][OptimisationAlgorithm.getNextParametersFunctionName]") {
   mant::OptimisationAlgorithm optimisationAlgorithm;
 
-  WHEN("The default next parameter function is unchanged") {
+  WHEN("The default next parameters function is unchanged") {
     THEN("Return an empty string") {
       CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "");
     }
   }
 
-  WHEN("The default next parameter function was changed") {
+  WHEN("The default next parameters function was changed") {
     auto nextParametersFunction = [&optimisationAlgorithm](
         const arma::uword numberOfDimensions_,
         const arma::Mat<double>& parameters_,
@@ -325,22 +325,22 @@ SCENARIO("OptimisationAlgorithm.getNextParametersFunctionName", "[OptimisationAl
       return continuousRandomNumbers(numberOfDimensions_);
     };
 
-    AND_WHEN("A new next parameter function name was set") {
-      const std::string& nextParametersFunctionName = "My custom next parameter function name";
+    AND_WHEN("A new next parameters function name was set") {
+      const std::string& nextParametersFunctionName = "My custom next parameters function name";
       CAPTURE(nextParametersFunctionName);
 
       optimisationAlgorithm.setNextParametersFunction(nextParametersFunction, nextParametersFunctionName);
 
-      THEN("Return the next parameter function name") {
+      THEN("Return the next parameters function name") {
         CHECK(optimisationAlgorithm.getNextParametersFunctionName() == nextParametersFunctionName);
       }
     }
 
-    AND_WHEN("No new next parameter function name was set") {
+    AND_WHEN("No new next parameters function name was set") {
       optimisationAlgorithm.setNextParametersFunction(nextParametersFunction);
 
-      THEN("Return the default, unnamed next parameter function name") {
-        CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "Unnamed, custom next-parameter function");
+      THEN("Return the default, unnamed next parameters function name") {
+        CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "Unnamed, custom next parameters function");
       }
     }
   }

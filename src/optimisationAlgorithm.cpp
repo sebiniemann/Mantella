@@ -81,7 +81,7 @@ namespace mant {
     verify(initialParameters.n_rows == optimisationProblem.numberOfDimensions_, "OptimisationAlgorithm.optimise: The initial parameter's number of rows must be equal to the optimisation problem's number of dimensions.");
     verify(initialParameters.n_cols > 0, "OptimisationAlgorithm.optimise: The initial parameter's number of columns must be strict greater than 0.");
     verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), "OptimisationAlgorithm.optimise: The optimisation problem's lower bounds must be less than or equal to their upper bounds.");
-    verify(static_cast<bool>(nextParametersFunction_), "OptimisationAlgorithm.optimise: The next-parameter function must be callable.");
+    verify(static_cast<bool>(nextParametersFunction_), "OptimisationAlgorithm.optimise: The next parameters function must be callable.");
 
     if (::mant::isVerbose) {
       std::cout << "================================================================================\n";
@@ -151,7 +151,7 @@ namespace mant {
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction,
       const std::string& nextParametersFunctionName) {
-    verify(static_cast<bool>(nextParametersFunction), "OptimisationAlgorithm.setNextParametersFunction: The next-parameters function must be callable.");
+    verify(static_cast<bool>(nextParametersFunction), "OptimisationAlgorithm.setNextParametersFunction: The next parameters function must be callable.");
 
     nextParametersFunction_ = nextParametersFunction;
     nextParametersFunctionName_ = nextParametersFunctionName;
@@ -161,7 +161,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction) {
-    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next-parameter function");
+    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next parameters function");
   }
 
   std::string OptimisationAlgorithm::getNextParametersFunctionName() const {
