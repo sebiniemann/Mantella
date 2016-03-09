@@ -151,7 +151,7 @@ SCENARIO("OptimisationProblem.getObjectiveFunctionName", "[OptimisationProblem][
       optimisationProblem.setObjectiveFunction(objectiveFunction);
 
       THEN("Return the default, unnamed objective function name") {
-        CHECK(optimisationProblem.getObjectiveFunctionName() == "Unnamed, custom optimisation problem");
+        CHECK(optimisationProblem.getObjectiveFunctionName() == "Unnamed, custom objective function");
       }
     }
   }

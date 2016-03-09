@@ -69,6 +69,6 @@ SCENARIO("krm::ParallelKinematicMachine6PUPS.getObjectiveFunctionName", "[krm::P
   mant::krm::ParallelKinematicMachine6PUPS optimisationProblem;
 
   THEN("Return the objective function name") {
-    CHECK(optimisationProblem.getObjectiveFunctionName() == "KRPI Parallel Kinematic Machine 6PUPS");
+    CHECK(optimisationProblem.getObjectiveFunctionName() == "KRM Parallel Kinematic Machine 6PUPS");
   }
 }

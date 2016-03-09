@@ -103,7 +103,7 @@ SCENARIO("SimulatedAnnealing.getIsAcceptableStateFunctionName", "[SimulatedAnnea
       optimisationAlgorithm.setIsAcceptableStateFunction(isAcceptableStateFunction);
 
       THEN("Return the default, unnamed is acceptable state function name") {
-        CHECK(optimisationAlgorithm.getIsAcceptableStateFunctionName() == "Unnamed, custom is acceptable state function");
+        CHECK(optimisationAlgorithm.getIsAcceptableStateFunctionName() == "Unnamed, custom is-acceptable-state function");
       }
     }
   }

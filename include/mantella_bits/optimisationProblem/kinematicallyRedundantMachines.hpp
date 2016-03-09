@@ -10,8 +10,11 @@ namespace mant {
   namespace krm {
     class KinematicallyRedundantMachines : public OptimisationProblem {
      public:
+      const arma::uword numberOfWorkspaceDimensions_;
+
       explicit KinematicallyRedundantMachines(
-          const arma::uword numberOfDimensions);
+          const arma::uword numberOfProblemDimensions,
+          const arma::uword numberOfWorkspaceDimensions);
 
       void setEndEffectorTrajectory(
           const arma::Mat<double>& endEffectorTrajectory);

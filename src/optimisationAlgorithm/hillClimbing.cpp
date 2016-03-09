@@ -27,7 +27,7 @@ namespace mant {
   void HillClimbing::initialise(
       const arma::uword numberOfDimensions,
       const arma::Mat<double>& initialParameters) {
-    verify(minimalStepSize_ <= maximalStepSize_, ""); // TODO
+    verify(minimalStepSize_ <= maximalStepSize_, "HillClimbing.initialise: The minimal step size must be less than or equal to the maximal one.");
   }
 
   void HillClimbing::optimise(
@@ -37,7 +37,7 @@ namespace mant {
 
   void HillClimbing::setMinimalStepSize(
       const double minimalStepSize) {
-    verify(minimalStepSize >= 0, "The minimal step size must be at least 0 for each dimension.");
+    verify(minimalStepSize >= 0, "HillClimbing.setMinimalStepSize: The minimal step size must be positive (including 0).");
 
     minimalStepSize_ = minimalStepSize;
   }
@@ -48,7 +48,7 @@ namespace mant {
 
   void HillClimbing::setMaximalStepSize(
       const double maximalStepSize) {
-    verify(maximalStepSize > 0, "The maximal step size must be strict greater than 0 for each dimension.");
+    verify(maximalStepSize > 0, "HillClimbing.setMaximalStepSize: The maximal step size must be strict greater than 0.");
 
     maximalStepSize_ = maximalStepSize;
   }
