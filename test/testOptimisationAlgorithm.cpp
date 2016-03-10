@@ -56,7 +56,7 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
             return parameters_;
           });
 
-      AND_WHEN("The default boundaries handling function is unchanged") {
+      AND_WHEN("The default boundaries-handling function is unchanged") {
         TestOptimisationAlgorithm defaultOptimisationAlgorithm;
 
         const arma::Mat<double>& parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
@@ -363,11 +363,11 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
 
   mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
 
-  GIVEN("A boundaries handling function and its name") {
-    const std::string& boundariesHandlingFunctionName = "My custom boundaries handling function name";
+  GIVEN("A boundaries-handling function and its name") {
+    const std::string& boundariesHandlingFunctionName = "My custom boundaries-handling function name";
     CAPTURE(boundariesHandlingFunctionName);
 
-    WHEN("The boundaries handling function is callable") {
+    WHEN("The boundaries-handling function is callable") {
       auto boundariesHandlingFunction = [&optimisationAlgorithm](
           const arma::Mat<double>& parameters_,
           const arma::Mat<arma::uword>& isBelowLowerBound_,
@@ -403,15 +403,15 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
       }
     }
 
-    WHEN("The boundaries handling function is not callable") {
+    WHEN("The boundaries-handling function is not callable") {
       THEN("Throw a std::logic_error") {
         CHECK_THROWS_AS(optimisationAlgorithm.setBoundariesHandlingFunction(nullptr, boundariesHandlingFunctionName), std::logic_error);
       }
     }
   }
 
-  GIVEN("A boundaries handling function") {
-    WHEN("The boundaries handling function is callable") {
+  GIVEN("A boundaries-handling function") {
+    WHEN("The boundaries-handling function is callable") {
       auto boundariesHandlingFunction = [&optimisationAlgorithm](
           const arma::Mat<double>& parameters_,
           const arma::Mat<arma::uword>& isBelowLowerBound_,
@@ -447,7 +447,7 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
       }
     }
 
-    WHEN("The boundaries handling function is not callable") {
+    WHEN("The boundaries-handling function is not callable") {
       THEN("Throw a std::logic_error") {
         CHECK_THROWS_AS(optimisationAlgorithm.setBoundariesHandlingFunction(nullptr), std::logic_error);
       }
@@ -458,7 +458,7 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunction", "[OptimisationAl
 SCENARIO("OptimisationAlgorithm.getBoundariesHandlingFunctionName", "[OptimisationAlgorithm][OptimisationAlgorithm.getBoundariesHandlingFunctionName]") {
   mant::OptimisationAlgorithm optimisationAlgorithm;
 
-  WHEN("The default boundaries handling function is unchanged") {
+  WHEN("The default boundaries-handling function is unchanged") {
     THEN("Return 'Map to bound'") {
       CHECK(optimisationAlgorithm.getBoundariesHandlingFunctionName() == "Map to bound");
     }
@@ -473,7 +473,7 @@ SCENARIO("OptimisationAlgorithm.getBoundariesHandlingFunctionName", "[Optimisati
     };
 
     AND_WHEN("A new is stagnating function name was set") {
-      const std::string& boundariesHandlingFunctionName = "My custom boundaries handling function name";
+      const std::string& boundariesHandlingFunctionName = "My custom boundaries-handling function name";
       CAPTURE(boundariesHandlingFunctionName);
 
       optimisationAlgorithm.setBoundariesHandlingFunction(boundariesHandlingFunction, boundariesHandlingFunctionName);
@@ -514,7 +514,7 @@ SCENARIO("OptimisationAlgorithm.setIsStagnatingFunction", "[OptimisationAlgorith
     const std::string& isStagnatingFunctionName = "My custom is stagnating function name";
     CAPTURE(isStagnatingFunctionName);
 
-    WHEN("The boundaries handling function is callable") {
+    WHEN("The boundaries-handling function is callable") {
       auto isStagnatingFunction = [&optimisationAlgorithm](
           const arma::Mat<double>& parameters_,
           const arma::Row<double>& objectiveValues_,
@@ -661,7 +661,7 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunction", "[OptimisationAlgorithm]
     const std::string& restartingFunctionName = "My custom restarting function name";
     CAPTURE(restartingFunctionName);
 
-    WHEN("The boundaries handling function is callable") {
+    WHEN("The boundaries-handling function is callable") {
       auto restartingFunction = [&optimisationAlgorithm](
           const arma::uword numberOfDimensions_,
           const arma::Mat<double>& parameters_,
@@ -1439,7 +1439,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<arma::uword>& isAboveUpperBound_) {
         return parameters_;
         },
-        "My custom boundaries handling function name");
+        "My custom boundaries-handling function name");
     optimisationAlgorithm.setIsStagnatingFunction(
         [&optimisationAlgorithm](
             const arma::Mat<double>& parameters_,
@@ -1484,7 +1484,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
       optimisationAlgorithm.reset();
 
       CHECK(optimisationAlgorithm.getNextParametersFunctionName() == "My custom next parameters function name");
-      CHECK(optimisationAlgorithm.getBoundariesHandlingFunctionName() == "My custom boundaries handling function name");
+      CHECK(optimisationAlgorithm.getBoundariesHandlingFunctionName() == "My custom boundaries-handling function name");
       CHECK(optimisationAlgorithm.getIsStagnatingFunctionName() == "My custom is stagnating function name");
       CHECK(optimisationAlgorithm.getRestartingFunctionName() == "My custom restarting function name");
       CHECK(optimisationAlgorithm.getAcceptableObjectiveValue() == Approx(acceptableObjectiveValue));
