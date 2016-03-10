@@ -9,38 +9,39 @@ SCENARIO("brent", "[numericalAnalysis][brent]") {
   GIVEN("An objective function, a lower and upper bound, a maximal number of iterations and an acceptance tolerance") {
     auto objectiveFunction = [](
         const double parameter_) {
-      return std::pow(parameter_, 3.0) + 2.0;
+      return (parameter_ - 1.0) * std::pow(parameter_ + 1.0, 2.0) + 2.0;
     };
+    double objectiveFunctionRoot = (1.0 / 3.0) * (-1.0 - (4.0 / std::pow(19.0 - 3.0 * std::sqrt(33.0), 1.0 / 3.0)) - std::pow(19 - 3 * std::sqrt(33.0), 1.0 / 3.0));
 
     const arma::uword numberOfIterations = discreteRandomNumber() + 100;
 
     WHEN("The root is between the bounds") {
       THEN("Return root value") {
-        const double lowerBound = -1.0 - std::pow(2.0, 1.0 / 3.0) - std::abs(continuousRandomNumber());
-        const double upperBound = 1.0 - std::pow(2.0, 1.0 / 3.0) + std::abs(continuousRandomNumber());
+        const double lowerBound = -1.0 - objectiveFunctionRoot - std::abs(continuousRandomNumber());
+        const double upperBound = 1.0 + std::abs(continuousRandomNumber());
 
-        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(-std::pow(2.0, 1.0 / 3.0)));
+        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(objectiveFunctionRoot));
       }
     }
 
     WHEN("A bound is a root") {
       THEN("Return root value") {
-        double lowerBound = -std::pow(2.0, 1.0 / 3.0);
+        double lowerBound = objectiveFunctionRoot;
         double upperBound = lowerBound + std::abs(continuousRandomNumber());
-        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(-std::pow(2.0, 1.0 / 3.0)));
+        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(objectiveFunctionRoot));
 
-        upperBound = -std::pow(2.0, 1.0 / 3.0);
+        upperBound = objectiveFunctionRoot;
         lowerBound = upperBound - std::abs(continuousRandomNumber());
-        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(-std::pow(2.0, 1.0 / 3.0)));
+        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(objectiveFunctionRoot));
       }
     }
 
     WHEN("The bounds are equal and the root") {
       THEN("Return root value") {
-        const double lowerBound = -std::pow(2.0, 1.0 / 3.0);
-        const double upperBound = -std::pow(2.0, 1.0 / 3.0);
+        const double lowerBound = objectiveFunctionRoot;
+        const double upperBound = objectiveFunctionRoot;
 
-        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(-std::pow(2.0, 1.0 / 3.0)));
+        CHECK(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10) == Approx(objectiveFunctionRoot));
       }
     }
 
