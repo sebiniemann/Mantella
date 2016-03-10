@@ -10,12 +10,13 @@ namespace mant {
   namespace krm {
     class ParallelKinematicMachine3PRRR : public KinematicallyRedundantMachines {
      public:
+      explicit ParallelKinematicMachine3PRRR();
+
+     protected:
       const arma::Mat<double>::fixed<2, 3> redundantJointsPosition_;
       const arma::Mat<double>::fixed<2, 3> redundantJointsAngles_;
       const arma::Mat<double>::fixed<2, 3> linkLengths_;
       const arma::Mat<double>::fixed<2, 3> endEffectorJointsRelativePosition_;
-
-      explicit ParallelKinematicMachine3PRRR();
     };
   }
 }
