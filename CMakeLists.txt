@@ -228,6 +228,7 @@ add_library(mantella ${LIBRARY_TYPE}
   src/combinatorics.cpp
   src/geometry.cpp
   src/numberTheory.cpp
+  src/numericalAnalysis.cpp
   src/probability.cpp
   
   # Machine learning functions
@@ -386,6 +387,7 @@ if(BUILD_TESTS)
     test/testCombinatorics.cpp
     test/testGeometry.cpp
     test/testNumberTheory.cpp
+    test/testNumericalAnalysis.cpp
     test/testProbability.cpp
   
     # Machine learning functions
