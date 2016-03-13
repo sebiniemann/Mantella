@@ -1,7 +1,6 @@
 ---
 layout: page
 ---
-<div class="container">
 {% include h1 title="Contact" %}
 
 {% include h2 title="Impressum" %}
@@ -33,4 +32,3 @@ D-30167 Hannover
 You can refuse the use of Google Analytics by clicking on the following link. An opt-out cookie will be set on the computer, which prevents the future collection of your data when visiting this website: <a href="javascript:gaOptout()">Click here to opt-out of Google Analytics</a><
 
 Further information concerning the terms and conditions of use and data privacy can be found at <http://www.google.com/analytics/terms/gb.html> or at <https://www.google.de/intl/en_uk/policies/>. Please note that on this website, Google Analytics code is supplemented by "gat._anonymizeIp();" to ensure an anonymized collection of IP addresses (so called IP-masking).
-</div>
