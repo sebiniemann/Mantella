@@ -60,13 +60,13 @@ layout: base
             {% for _index in (0.._last_index) %}
               {% if _documents_url[_index] == page.url %}
                 {% if _index == 0 %}
-                   <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr; </span>Back</a></li>
+                   <li class="previous disabled"><a href="#top"><span aria-hidden="true">&larr; </span>Back</a></li>
                 {% else %}
                   {% assign _previous = _index | minus: 1 %}
                   <li class="previous"><a href="{{ _documents_url[_previous] }}"><span aria-hidden="true">&larr; </span>{{ _documents_title[_previous] }}</a></li>
                 {% endif %}
                 {% if _index == _last_index %}
-                   <li class="next disabled"><a href="#">Next<span aria-hidden="true"> &rarr;</span></a></li>
+                   <li class="next disabled"><a href="#top">Next<span aria-hidden="true"> &rarr;</span></a></li>
                 {% else %}
                   {% assign _next = _index | plus: 1 %}
                   <li class="next"><a href="{{ _documents_url[_next] }}">{{ _documents_title[_next] }}<span aria-hidden="true"> &rarr;</span></a></li>
