@@ -3,10 +3,6 @@ dist: trusty
 
 language: cpp
 
-branches:
-  except:
-    - gh-pages
-
 os:
   - linux
 
