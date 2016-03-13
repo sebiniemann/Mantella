@@ -20,4 +20,4 @@ env:
 script:
   - bundle install
   - bundle exec jekyll build
-  - bundle exec htmlproof ./_site --disable-external
+  - bundle exec htmlproofer ./_site --disable-external
