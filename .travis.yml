@@ -7,10 +7,15 @@ rvm:
 os:
   - linux
   
+# Whitelists gh-pages fortesting on Travis CI
+branches:
+  only:
+    - gh-pages
+  
 env:
   global:
-  # speeds up installing html-proofer
-  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true 
+    # speeds up installing html-proofer
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true 
 
 script:
   - bundle install
