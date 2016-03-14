@@ -49,10 +49,7 @@ namespace mant {
         const double maximalGlobalAttraction);
     double getMaximalGlobalAttraction() const;
 
-   protected:
-    std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction_;
-    std::string neighbourhoodTopologyFunctionName_;
-
+    // The following variables are only in public scope, to be used inside lambdas
     double maximalAcceleration_;
     double maximalLocalAttraction_;
     double maximalGlobalAttraction_;
@@ -68,5 +65,9 @@ namespace mant {
 
     arma::Mat<double> localBestSolutions_;
     arma::Col<double> localBestObjectiveValues_;
+
+   protected:
+    std::function<arma::Mat<arma::uword>()> neighbourhoodTopologyFunction_;
+    std::string neighbourhoodTopologyFunctionName_;
   };
 }
