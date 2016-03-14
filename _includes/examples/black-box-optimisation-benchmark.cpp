@@ -8,7 +8,7 @@ int main() {
   
   unsigned int numberOfDimensions = 2;
   // Creates an array, containing all 24 black box optimisation benchmark problems.
-  std::array<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>, 24> optimisationProblems = {{
+  std::array<std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>, 24> optimisationProblems = {
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::AttractiveSectorFunction(numberOfDimensions)),
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::BentCigarFunction(numberOfDimensions)),
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::BuecheRastriginFunction(numberOfDimensions)),
@@ -33,7 +33,7 @@ int main() {
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::SphereFunction(numberOfDimensions)),
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::StepEllipsoidalFunction(numberOfDimensions)),
     std::shared_ptr<mant::bbob::BlackBoxOptimisationBenchmark>(new mant::bbob::WeierstrassFunction(numberOfDimensions))
-  }};
+  };
   
   // Evaluates the performance of the Hooke-Jeeves algorithm.
   mant::HillClimbing optimisationAlgorithm;
