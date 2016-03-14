@@ -33,7 +33,7 @@ SCENARIO("verify", "[assert][verify]") {
 SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
   GIVEN("A matrix") {
     WHEN("The matrix is orthogonal with determinant 1 or -1 (a rotation matrix)") {
-      const arma::uword numberOfDimensions = discreteRandomNumber();
+      const arma::uword numberOfDimensions = 1 + discreteRandomNumber();
       CAPTURE(numberOfDimensions);
 
       arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
