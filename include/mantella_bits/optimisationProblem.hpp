@@ -54,6 +54,9 @@ namespace mant {
     void setParameterRotation(
         const arma::Mat<double>& parameterRotation);
     arma::Mat<double> getParameterRotation() const;
+    void setMinimalParameterDistance(
+        const arma::Col<double>& minimalParameterDistance);
+    arma::Col<double> getMinimalParameterDistance() const;
 
     // Objective value space modifiers
     void setObjectiveValueScaling(
@@ -65,9 +68,6 @@ namespace mant {
 
     // Caching
     std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
-    void setMinimalParameterDistance(
-        const arma::Col<double>& minimalParameterDistance);
-    arma::Col<double> getMinimalParameterDistance() const;
 
     // Evaluation
     arma::uword getNumberOfEvaluations() const;

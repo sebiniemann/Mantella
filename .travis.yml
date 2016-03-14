@@ -3,10 +3,6 @@ dist: trusty
 
 language: cpp
 
-branches:
-  except:
-    - gh-pages
-
 os:
   - linux
 
@@ -18,51 +14,11 @@ env:
   global:
     # Encrypted COVERITY_SCAN_TOKEN
     - secure: "M4RswpLBKVbIfY2k6W9mNFoSvJRpWFtMd5ynuMwgaBoaDbwn449KVfWKIlFruHGDfa9E/rB+y2twY5KktJm+RcLP8jvJCrWITy3E30rZQHAIgI1oAdy6i7NdMXHJYFQZs/eSYKZsN3/dfmzvnghA2txCG35tSxyLyb0vJp95VzY="
-
-before_install:
-  - sudo apt-get update -qq
   
 install:
   # Prerequirements (including optional features)
-  ## CMake
-  - sudo apt-get install -qq cmake;
-  
-  ## Armadillo C++
-  - sudo apt-get install -qq libblas-dev liblapack-dev
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq libopenblas-dev; fi
-  - wget -O armadillo.tar.gz http://downloads.sourceforge.net/project/arma/armadillo-6.400.3.tar.gz
-  - mkdir armadillo
-  - tar -xzf armadillo.tar.gz -C ./armadillo --strip-components=1
-  - cd armadillo
-  - cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
-  - make --quiet -j 4
-  - sudo make --quiet install
-  ### Fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
-  ### Using the *literal style* for this line, as it collides with YAML
-  - |-
-    sudo find /usr/local/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} \;
-  - cd ..
-  - rm -Rf armadillo armadillo.tar.gz
-  
-  ## MPI (This will actually install 3.x on Ubuntu 14.04+ and 2.x on previous versions)
-  - sudo apt-get install -qq libmpich2-dev
-
-  
-  # Testing
-  - sudo apt-get install -qq catch
-  ## Using clang-format-3.6
-  - sudo add-apt-repository 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.6 main'
-  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
-  - sudo apt-get update -qq
-  ## Rename clang-format to clang-format-3.5
-  - sudo mv /usr/local/clang-3.5.0/bin/clang-format /usr/local/clang-3.5.0/bin/clang-format-3.5
-  - sudo apt-get install -qq clang-format-3.6
-  ## Adds clang-format as an alternative to clang-format-3.6
-  - sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.6 100
-  - sudo update-alternatives --set clang-format /usr/bin/clang-format-3.6
-  - sudo apt-get install -qq iwyu
-  - sudo apt-get install -qq valgrind
-  - sudo apt-get install -qq lcov
+  - sudo chmod a+x ./.setup.sh
+  - ./.setup.sh
   ## Using coveralls to store and visualise the code coverage
   - gem install coveralls-lcov
   - sudo chmod a+x ./.code-checks.sh

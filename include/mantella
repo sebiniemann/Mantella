@@ -45,6 +45,7 @@
 #include <mantella_bits/combinatorics.hpp>
 #include <mantella_bits/geometry.hpp>
 #include <mantella_bits/numberTheory.hpp>
+#include <mantella_bits/numericalAnalysis.hpp>
 #include <mantella_bits/probability.hpp>
 
 // Machine learning functions

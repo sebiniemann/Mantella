@@ -189,7 +189,7 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
         parameters = arma::shuffle(arma::join_rows(parameters, parameters));
         CAPTURE(parameters);
 
-        AND_WHEN("All parameter and objective value modifications are non-default (including the minimal parameter distance)") {
+        AND_WHEN("All parameter and objective value modifications are non-default") {
           const arma::Col<arma::uword>& parameterPermutation = SYNCHRONISED(mant::randomPermutationVector(numberOfDimensions));
           optimisationProblem.setParameterPermutation(parameterPermutation);
           CAPTURE(parameterPermutation);
@@ -206,6 +206,10 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
           optimisationProblem.setParameterRotation(parameterRotation);
           CAPTURE(parameterRotation);
 
+          const arma::Col<double>& minimalParameterDistance = SYNCHRONISED(static_cast<arma::Col<double>>(arma::abs(continuousRandomNumbers(numberOfDimensions))));
+          optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
+          CAPTURE(minimalParameterDistance);
+
           // Objective value space modifiers
           const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
           optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
@@ -215,21 +219,31 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
           optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
           CAPTURE(objectiveValueTranslation);
 
-          THEN("Return the objective value") {
+          THEN("Return the objective values") {
             ::mant::isCachingSamples = true;
             for (arma::uword n = 0; n < parameters.n_cols; ++n) {
               const arma::Col<double>& parameter = parameters.col(n);
-              CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
+
+              arma::Col<double> discretisedParameter = parameter;
+              const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance > 0);
+              discretisedParameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance.elem(elementsToDiscretise)) % minimalParameterDistance.elem(elementsToDiscretise);
+
+              CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % discretisedParameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
             }
             ::mant::isCachingSamples = false;
           }
 
           AND_WHEN("Caching was enabled") {
-            THEN("Return the same objective value as when caching is disabled") {
+            THEN("Return the same objective values as when caching is disabled") {
               ::mant::isCachingSamples = false;
               for (arma::uword n = 0; n < parameters.n_cols; ++n) {
                 const arma::Col<double>& parameter = parameters.col(n);
-                CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
+
+                arma::Col<double> discretisedParameter = parameter;
+                const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance > 0);
+                discretisedParameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance.elem(elementsToDiscretise)) % minimalParameterDistance.elem(elementsToDiscretise);
+
+                CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % discretisedParameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
               }
               ::mant::isCachingSamples = false;
             }
@@ -1606,6 +1620,10 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
     optimisationProblem.setParameterRotation(parameterRotation);
     CAPTURE(parameterRotation);
 
+    const arma::Col<double>& minimalParameterDistance = SYNCHRONISED(static_cast<arma::Col<double>>(arma::abs(continuousRandomNumbers(numberOfDimensions))));
+    optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
+    CAPTURE(minimalParameterDistance);
+
     // Objective value space modifiers
     const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
     optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
@@ -1614,10 +1632,6 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
     const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
     optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
     CAPTURE(objectiveValueTranslation);
-
-    // Minimal parameter distance
-    const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions - 1));
-    CAPTURE(minimalParameterDistance);
 
     const arma::uword numberOfParameters = discreteRandomNumber();
     CAPTURE(numberOfParameters);
@@ -1642,7 +1656,12 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
 
       for (arma::uword n = 0; n < parameters.n_cols; ++n) {
         const arma::Col<double>& parameter = parameters.col(n);
-        CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
+
+        arma::Col<double> discretisedParameter = parameter;
+        const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance > 0);
+        discretisedParameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance.elem(elementsToDiscretise)) % minimalParameterDistance.elem(elementsToDiscretise);
+
+        CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % discretisedParameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
       }
     }
   }
