@@ -31,7 +31,7 @@ namespace mant {
         const double maximalStepSize);
     double getMaximalStepSize() const;
 
-   protected:
+    // The following variables are only in public scope, to be used inside lambdas
     double minimalStepSize_;
     double maximalStepSize_;
   };

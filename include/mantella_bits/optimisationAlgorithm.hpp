@@ -74,10 +74,21 @@ namespace mant {
 
     virtual ~OptimisationAlgorithm() = default;
 
-   protected:
+    // The following variables are only in public scope, to be used inside lambdas
     int nodeRank_;
     int numberOfNodes_;
 
+    double acceptableObjectiveValue_;
+
+    arma::uword maximalNumberOfIterations_;
+    arma::uword numberOfIterations_;
+    std::chrono::microseconds maximalDuration_;
+    std::chrono::microseconds duration_;
+
+    double bestObjectiveValue_;
+    arma::Col<double> bestParameter_;
+
+   protected:
     std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction_;
     std::string nextParametersFunctionName_;
     std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isBelowLowerBound_, const arma::Mat<arma::uword>& isAboveUpperBound_)> boundariesHandlingFunction_;
@@ -86,17 +97,7 @@ namespace mant {
     std::string isStagnatingFunctionName_;
     std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction_;
     std::string restartingFunctionName_;
-
-    double acceptableObjectiveValue_;
-
-    arma::uword maximalNumberOfIterations_;
-    arma::uword numberOfIterations_;
-    std::chrono::microseconds maximalDuration_;
-    std::chrono::microseconds duration_;
     std::chrono::time_point<std::chrono::steady_clock> initialTimePoint_;
-
-    double bestObjectiveValue_;
-    arma::Col<double> bestParameter_;
 
     std::vector<std::pair<arma::Col<double>, double>> recordedSampling_;
 

@@ -31,7 +31,7 @@ namespace mant {
         const double stepSizeDecrease);
     double getStepSizeDecrease() const;
 
-   protected:
+    // The following variables are only in public scope, to be used inside lambdas
     double initialStepSize_;
     double stepSizeDecrease_;
 

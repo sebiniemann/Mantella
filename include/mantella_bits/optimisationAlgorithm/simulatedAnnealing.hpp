@@ -42,13 +42,14 @@ namespace mant {
         const double maximalStepSize);
     double getMaximalStepSize() const;
 
-   protected:
-    std::function<bool(const double objectiveValue_)> isAcceptableStateFunction_;
-    std::string isAcceptableStateFunctionName_;
-
+    // The following variables are only in public scope, to be used inside lambdas
     double minimalStepSize_;
     double maximalStepSize_;
 
     arma::Col<double> state_;
+
+   protected:
+    std::function<bool(const double objectiveValue_)> isAcceptableStateFunction_;
+    std::string isAcceptableStateFunctionName_;
   };
 }
