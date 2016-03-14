@@ -28,8 +28,12 @@ int main(int argc, char* argv[]) {
   ::rootTestDataDirectory = argv[--argc];
   std::cout << "Using '" << ::rootTestDataDirectory << "' as location for the root test data directory." << std::endl;
 
-  // Setting the seed to a specific number makes erroneous tests better reproducible.
-  mant::Rng::setSeed(123456789);
+  // Randomly and uniformly initialise the random number generator.
+  mant::Rng::setRandomSeed();
+  std::cout << "Initialised tests with random seed: " << mant::Rng::getSeed() << std::endl;
+  // Setting the seed to a specific number to reproduce erroneous tests.
+  // mant::Rng::setSeed(123456789);
+  // std::cout << "Restored tests with seed: " << mant::Rng::getSeed() << std::endl;
 
   try {
     return Catch::Session().run(argc, argv);
