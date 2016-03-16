@@ -1,10 +1,9 @@
 #include "mantella_bits/orbitalMechanics.hpp"
 
 // C++ standard library
+#include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <stddef.h>
-#include <string>
 
 // Mantella
 #include "mantella_bits/assert.hpp"
@@ -53,7 +52,6 @@ namespace mant {
       double T00 = std::acos(lambda) + lambda * sqrt(1.0 - std::pow(lambda, 2.0));
       double T0 = T00 + T; //+ nMax * arma::datum::pi;
       double T1 = 2.0 / 3.0 * (1.0 - std::pow(lambda, 3.0));
-      arma::Col<double>::fixed<3> dTdxVector = {0.0, 0.0, 0.0};
 
       if (nMax > 0.0) {
         if (T00 > 0.0) { //if (T < T0) { // Halley iterations to find xM and TM
@@ -174,7 +172,11 @@ namespace mant {
       double inboundAcceleration = 1.0 / std::pow(inboundVelocityLength, 2.0);
       double outboundAcceleration = 1.0 / std::pow(outboundVelocityLength, 2.0);
 
-      double rp = mant::brent([&inboundAcceleration, &outboundAcceleration, &alpha](double parameter) { return std::asin(inboundAcceleration / (inboundAcceleration + parameter)) + std::asin(outboundAcceleration / (outboundAcceleration + parameter)) - alpha; }, LOWERBOUND, UPPERBOUND, 100, 1e-10); //TODO bounds
+      double rp = mant::brent(
+                [&inboundAcceleration, &outboundAcceleration, &alpha](double parameter) { 
+              return std::asin(inboundAcceleration / (inboundAcceleration + parameter)) + std::asin(outboundAcceleration / (outboundAcceleration + parameter)) - alpha; 
+                }, 
+                -2.0 - alpha, 2.0 + alpha, 100, 1e-10); //TODO bounds
 
       double DV = std::abs(std::sqrt(std::pow(outboundVelocityLength, 2) + 2.0 / rp) - std::sqrt(std::pow(inboundVelocityLength, 2) + 2.0 / rp));
 
@@ -200,7 +202,11 @@ namespace mant {
 
       //m2e begin
       //double E = ea + eccentricity * std::cos(ea);
-      ea = mant::brent([&eccentricity, &ea](double parameter) { return parameter - eccentricity * sin(parameter) - ea; }, 0.0, 2.0 * arma::datum::pi + 1.0, 100, 1e-10); //TODO bounds round about variable E, +1.0 wrong? Variable E nesecary?
+      ea = mant::brent(
+          [&eccentricity, &ea](double parameter) { 
+        return parameter - eccentricity * sin(parameter) - ea; 
+          }, 
+          0.0, 2.0 * arma::datum::pi + 10.0, 100, 1e-10); //TODO bounds round about variable E, +10.0 wrong? Variable E nesecary?
       //m2e end
 
       //par2ic begin
