@@ -44,51 +44,61 @@ namespace mant {
         lambda = -lambda;
       }
 
-      double T = std::sqrt(2.0 * standardGravitationalParameterOfSun / std::pow(semiPerimeter, 3.0)) * transferTime;
+      //double T = std::sqrt(2.0 * standardGravitationalParameterOfSun / std::pow(semiPerimeter, 3.0)) * transferTime;
 
       // 2 - We now have lambda, T and we will find all x
       // 2.1 - Let us first detect the maximum number of revolutions for which there exists a solution
-      double nMax = T / arma::datum::pi;
       double T00 = std::acos(lambda) + lambda * sqrt(1.0 - std::pow(lambda, 2.0));
-      double T0 = T00 + T; //+ nMax * arma::datum::pi;
-      double T1 = 2.0 / 3.0 * (1.0 - std::pow(lambda, 3.0));
+      //double T0 = T00 + T; //+ nMax * arma::datum::pi;
+      //double T1 = 2.0 / 3.0 * (1.0 - std::pow(lambda, 3.0));
+      
+      arma::uword maximalNumberOfRevolutions = 20;
+      arma::uword numberOfRevolutions;// = std::floor(T / arma::datum::pi);
+       
+      auto timeOfFlightFunction = [&lambda, &numberOfRevolutions](
+          const double parameter) {
+        double timeOfFlight;    
+        if(std::abs(1.0 - parameter) < 1e-12) {
+          return arma::datum::nan;
+        } else {
+          double a = 1.0 / (1.0 - std::pow(parameter, 2.0));
+          timeOfFlight = std::abs(a) * std::sqrt(std::abs(a));
+          
+          if(parameter < 1) {
+            double alpha = 2 * std::acos(parameter);
+            double beta = std::copysign(2 * std::asin( std::sqrt( std::pow(lambda, 2.0) / a)), lambda);
 
-      if (nMax > 0.0) {
-        if (T00 > 0.0) { //if (T < T0) { // Halley iterations to find xM and TM
-          double tNew = mant::brent(
-              [&lambda, &nMax](const double parameter) {
-            double umx2 = 1.0 - std::pow(parameter, 2.0);
-            double y = std::sqrt(1.0 - std::pow(lambda, 2.0) * umx2);
-            double timeOfFlight;
+            timeOfFlight *= (alpha - std::sin(alpha)) - (beta - std::sin(beta)) + 2.0 * arma::datum::pi * numberOfRevolutions;
+          } else {
+            double alpha = 2.0 * std::acosh(parameter);
+            double beta = std::copysign(2.0 * std::asinh( std::sqrt( std::pow(lambda, 2.0) / -a)), lambda);
             
-            if(std::abs(1.0 - parameter) < 1e-12) {
-              timeOfFlight = arma::datum::nan;
-            } else {
-              double a = 1.0 / (1.0 - std::pow(parameter, 2.0));
-              timeOfFlight = (std::abs(a) * std::sqrt(std::abs(a));
-              
-              if(parameter < 1) {
-                alfa = 2 * std::acos(parameter);
-                beta = std::copysign(2 * std::asin( std::sqrt( std::pow(lambda, 2.0) / a)), lambda);
-
-                timeOfFlight *= (alfa - std::sin(alfa)) - (beta - std::sin(beta)) + 2.0 * arma:datum::pi * nMax;
-              } else {
-                alfa = 2.0 * std::acosh(parameter);
-                beta = std::copysign(2.0 * std::asinh( std::sqrt( std::pow(lambda, 2.0) / -a)), lambda);
-                
-                timeOfFlight *= (beta - std::sinh(beta)) - (alfa - std::sinh(alfa));
-              }
-            }
-
-            return 1.0 / umx2 * (3.0 * timeOfFlight * parameter - 2.0 + 2.0 * std::pow(lambda, 3.0) * parameter / y) / 2.0;
-              },
-              -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100, 1e-10); //TODO bounds
-
-          if (tNew > T) { // TODO: T0 ?
-            nMax--;
+            timeOfFlight *= (beta - std::sinh(beta)) - (alpha - std::sinh(alpha));
           }
         }
+
+        return timeOfFlight / 2.0;
+      }; 
+      
+      std::vector<double> brentVector;
+      if (T00 > 0.0) { //if (T < T0) { // Halley iterations to find xM and TM
+            
+        brentVector.reserve(maximalNumberOfRevolutions * 2);
+        
+        for (numberOfRevolutions = 0; numberOfRevolutions < maximalNumberOfRevolutions; numberOfRevolutions++) {
+          
+          brentVector.at(2 * numberOfRevolutions) = mant::brent(timeOfFlightFunction, -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100, 1e-10);
+          lambda = -lambda;
+          
+          brentVector.at(2 * numberOfRevolutions + 1) = mant::brent(timeOfFlightFunction, -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100, 1e-10);
+          lambda = -lambda;        
+        }
+
+        // if (tNew > T) { // TODO: T0 ?
+          // nMax--;
+        // }
       }
+      
       
       
       ///////////////////////////
@@ -126,7 +136,7 @@ namespace mant {
 
       // We exit this if clause with Mmax being the maximum number of revolutions
       // for which there exists a solution. We crop it to m_multi_revs
-      nMax = std::min(20.0, nMax);
+      //nMax = std::min(20, nMax);
 
       // 2.2 We now allocate the memory for the output variables
       //std::vector<arma::Col<double>::fixed<3>> v1Vec; // std::vector< std::pair< arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3> > >
@@ -134,39 +144,39 @@ namespace mant {
       //std::vector<arma::Col<double>::fixed<3>> v2Vec;
       //v2Vec.resize(nMax * 2 + 1);
       std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> velocitiesVector;
-      velocitiesVector.reserve((arma::uword)nMax * 2 + 1);
+      velocitiesVector.reserve(maximalNumberOfRevolutions * 2 + 1);
       //std::vector<int> itersVec;
       //itersVec.resize(nMax * 2 + 1);
       std::vector<double> xVector;
-      xVector.reserve((arma::uword)nMax * 2 + 1);
+      xVector.reserve(maximalNumberOfRevolutions * 2 + 1);
 
       // 3 - We may now find all solutions in x,y
       // 3.1 0 rev solution
       // 3.1.1 initial guess
-      if (T >= T00) {
-        xVector.at(0) = -(T - T00) / (T - T00 + 4.0);
-      } else if (T <= T1) {
-        xVector.at(0) = T1 * (T1 - T) / (2.0 / 5.0 * (1.0 - std::pow(lambda, 5.0)) * T) + 1.0;
-      } else {
-        xVector.at(0) = std::pow((T / T00), 0.69314718055994529 / std::log(T1 / T00)) - 1.0;
-      }
+      // if (T >= T00) {
+        // xVector.at(0) = -(T - T00) / (T - T00 + 4.0);
+      // } else if (T <= T1) {
+        // xVector.at(0) = T1 * (T1 - T) / (2.0 / 5.0 * (1.0 - std::pow(lambda, 5.0)) * T) + 1.0;
+      // } else {
+        // xVector.at(0) = std::pow((T / T00), 0.69314718055994529 / std::log(T1 / T00)) - 1.0;
+      // }
 
       // 3.1.2 Householder iterations
       //itersVec[0] = brent(...); //need??? or TODO -> householder(T, xVector[0], 0.0, 1e-5, 15);
 
       // 3.2 multi rev solutions
-      double tmp;
-      for (std::size_t i = 1; i < nMax + 1; ++i) {
-        //3.2.1 left Householder iterations
-        tmp = std::pow((i * arma::datum::pi + arma::datum::pi) / (8.0 * T), 2.0 / 3.0);
-        xVector.at(2 * i - 1) = (tmp - 1.0) / (tmp + 1.0);
-        //itersVec[2 * i - 1] = brent(...); //need??? or TODO -> householder(T, xVector[2*i-1], i, 1e-8, 15);
+      // double tmp;
+      // for (arma::uword i = 1; i < maximalNumberOfRevolutions + 1; ++i) {
+        // 3.2.1 left Householder iterations
+        // tmp = std::pow((i * arma::datum::pi + arma::datum::pi) / (8.0 * T), 2.0 / 3.0);
+        // xVector.at(2 * i - 1) = (tmp - 1.0) / (tmp + 1.0);
+        // xVector.at(2 * i - 1) = brent(timeOfFlightFunction, xVector.at(2 * i - 1) - 4.0 * arma::datum::pi, xVector.at(2 * i - 1) + 4.0 * std::pow(arma::datum::pi, 2.0), 1e-10, 100);
 
-        //3.2.2 right Householder iterations
-        tmp = std::pow((8.0 * T) / (i * arma::datum::pi), 2.0 / 3.0);
-        xVector.at(2 * i) = (tmp - 1.0) / (tmp + 1.0);
-        //itersVec[2 * i] = brent(...); //need??? or TODO -> householder(T, xVector[2 * i], i, 1e-8, 15);
-      }
+        // 3.2.2 right Householder iterations
+        // tmp = std::pow((8.0 * T) / (i * arma::datum::pi), 2.0 / 3.0);
+        // xVector.at(2 * i) = (tmp - 1.0) / (tmp + 1.0);
+        // xVector.at(2 * i) = brent(timeOfFlightFunction, xVector.at(2 * i) - 4.0 * arma::datum::pi, xVector.at(2 * i) + 4.0 * std::pow(arma::datum::pi, 2.0), 1e-10, 100);; //need??? or TODO -> householder(T, xVector[2 * i], i, 1e-8, 15);
+      // }
 
       // 4 - For each found x value we reconstruct the terminal velocities
       double gamma = std::sqrt(standardGravitationalParameterOfSun * semiPerimeter / 2.0);
@@ -190,22 +200,37 @@ namespace mant {
         it2 = arma::normalise(arma::cross(depatureArrivalCrossProduct, arrivalPositionNormalised));
       }
 
-      if (isClockwise) {
-        it1 = -it1;
-        it2 = -it2;
-      }
+      // if (isClockwise) {
+        // it1 = -it1;
+        // it2 = -it2;
+      // }
+      
+      //auto velocityVectorsFunction = [&lambda, &i](){};
 
-      for (size_t i = 0; i < xVector.size(); ++i) {
-        y = std::sqrt(std::pow(lambda, 2.0) * (std::pow(xVector.at(i), 2.0) - 1.0) + 1.0);
-        vr1 = gamma * ((lambda * y - xVector.at(i)) - rho * (lambda * y + xVector.at(i))) / departureDistanceFromSun;
-        vr2 = -gamma * ((lambda * y - xVector.at(i)) + rho * (lambda * y + xVector.at(i))) / arrivalDistanceFromSun;
+      for (size_t i = 0; i < maximalNumberOfRevolutions; ++i) {
+        y = std::sqrt(std::pow(lambda, 2.0) * (std::pow(brentVector.at(2 * i), 2.0) - 1.0) + 1.0);
+        vr1 = gamma * ((lambda * y - brentVector.at(2 * i)) - rho * (lambda * y + brentVector.at(2 * i))) / departureDistanceFromSun;
+        vr2 = -gamma * ((lambda * y - brentVector.at(2 * i)) + rho * (lambda * y + brentVector.at(2 * i))) / arrivalDistanceFromSun;
 
-        vt = gamma * sigma * (y + lambda * xVector.at(i));
+        vt = gamma * sigma * (y + lambda * brentVector.at(2 * i));
         vt1 = vt / departureDistanceFromSun;
         vt2 = vt / arrivalDistanceFromSun;
 
-        //v1Vec.at(i) = vr1 * departurePositionNormalised + vt1 * it1;
-        //v2Vec.at(i) = vr2 * arrivalPositionNormalised + vt2 * it2;
+        velocitiesVector.push_back(std::make_pair(vr1 * departurePositionNormalised + vt1 * it1, vr2 * arrivalPositionNormalised + vt2 * it2));
+        
+        it1 = -it1;
+        it2 = -it2;
+        
+        y = std::sqrt(std::pow(lambda, 2.0) * (std::pow(brentVector.at(2 * i + 1), 2.0) - 1.0) + 1.0);
+        vr1 = gamma * ((lambda * y - brentVector.at(2 * i + 1)) - rho * (lambda * y + brentVector.at(2 * i + 1))) / departureDistanceFromSun;
+        vr2 = -gamma * ((lambda * y - brentVector.at(2 * i + 1)) + rho * (lambda * y + brentVector.at(2 * i + 1))) / arrivalDistanceFromSun;
+
+        vt = gamma * sigma * (y + lambda * brentVector.at(2 * i + 1));
+        vt1 = vt / departureDistanceFromSun;
+        vt2 = vt / arrivalDistanceFromSun;
+        
+        it1 = -it1;
+        it2 = -it2;
 
         velocitiesVector.push_back(std::make_pair(vr1 * departurePositionNormalised + vt1 * it1, vr2 * arrivalPositionNormalised + vt2 * it2));
       }
@@ -226,8 +251,9 @@ namespace mant {
       double outboundAcceleration = 1.0 / std::pow(outboundVelocityLength, 2.0);
 
       double rp = mant::brent(
-                [&inboundAcceleration, &outboundAcceleration, &alpha](double parameter) { 
-              return std::asin(inboundAcceleration / (inboundAcceleration + parameter)) + std::asin(outboundAcceleration / (outboundAcceleration + parameter)) - alpha; 
+                [&inboundAcceleration, &outboundAcceleration, &alpha](
+                    double parameter) { 
+                  return std::asin(inboundAcceleration / (inboundAcceleration + parameter)) + std::asin(outboundAcceleration / (outboundAcceleration + parameter)) - alpha; 
                 }, 
                 -2.0 - alpha, 2.0 + alpha, 100, 1e-10); //TODO bounds
 
@@ -256,8 +282,9 @@ namespace mant {
       //m2e begin
       //double E = ea + eccentricity * std::cos(ea);
       ea = mant::brent(
-          [&eccentricity, &ea](double parameter) { 
-        return parameter - eccentricity * sin(parameter) - ea; 
+          [&eccentricity, &ea](
+              double parameter) { 
+            return parameter - eccentricity * sin(parameter) - ea; 
           }, 
           0.0, 2.0 * arma::datum::pi + 10.0, 100, 1e-10); //TODO bounds round about variable E, +10.0 wrong? Variable E nesecary?
       //m2e end
