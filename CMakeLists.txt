@@ -231,6 +231,9 @@ add_library(mantella ${LIBRARY_TYPE}
   src/numericalAnalysis.cpp
   src/probability.cpp
   
+  # Orbital Mechanics
+  src/orbitalMechanics.cpp
+  
   # Machine learning functions
   src/samplesAnalysis.cpp
   src/samplesSelection.cpp
