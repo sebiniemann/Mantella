@@ -48,6 +48,9 @@
 #include <mantella_bits/numericalAnalysis.hpp>
 #include <mantella_bits/probability.hpp>
 
+// Orbital Mechanics
+#include <mantella_bits/orbitalMechanics.hpp>
+
 // Machine learning functions
 #include <mantella_bits/samplesAnalysis.hpp>
 #include <mantella_bits/samplesSelection.hpp>
@@ -93,7 +96,4 @@
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 #include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
-
-#Orbital Mechanics
-#include <mantella_bits/orbitalMechanics.hpp>
 // IWYU pragma: end_exports
