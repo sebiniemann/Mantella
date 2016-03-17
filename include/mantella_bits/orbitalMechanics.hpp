@@ -26,12 +26,12 @@ namespace mant {
         const double transferTime,
         const bool isClockwise);
 
-    arma::Col<double>::fixed<3> dTdx( //TODO remove when brent algorithm
-        double DT,
-        double DDT,
-        double DDDT,
-        const double x,
-        const double T);
+    // arma::Col<double>::fixed<3> dTdx( //TODO remove when brent algorithm
+        // double DT,
+        // double DDT,
+        // double DDDT,
+        // const double x,
+        // const double T);
 
     std::pair<double, double> gravityAssist(
         const arma::Col<double>::fixed<3>& inboundVelocity,
@@ -41,10 +41,10 @@ namespace mant {
         const double modifiedJulianDay2000,
         const arma::Mat<double>::fixed<2, 6>& keplerianElements);
 
-    double x2tof(
-        double timeOfFlight,
-        const double x,
-        const double N,
-        const double lambda);
+    // double x2tof(
+        // double timeOfFlight,
+        // const double x,
+        // const double N,
+        // const double lambda);
   }
 }
