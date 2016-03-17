@@ -231,6 +231,9 @@ add_library(mantella ${LIBRARY_TYPE}
   src/numericalAnalysis.cpp
   src/probability.cpp
   
+  # Orbital Mechanics
+  src/orbitalMechanics.cpp
+  
   # Machine learning functions
   src/samplesAnalysis.cpp
   src/samplesSelection.cpp
@@ -276,9 +279,6 @@ add_library(mantella ${LIBRARY_TYPE}
   src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
   src/optimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/particleSwarmOptimisation.cpp
-
-  # Orbital Mechanics
-  src/orbitalMechanics.cpp
 )
 
 # Linking against prerequirements
