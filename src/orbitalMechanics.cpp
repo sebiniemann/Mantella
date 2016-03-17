@@ -55,21 +55,74 @@ namespace mant {
 
       if (nMax > 0.0) {
         if (T00 > 0.0) { //if (T < T0) { // Halley iterations to find xM and TM
-          double xNew = mant::brent(
+          double tNew = mant::brent(
               [&lambda, &nMax](const double parameter) {
             double umx2 = 1.0 - std::pow(parameter, 2.0);
             double y = std::sqrt(1.0 - std::pow(lambda, 2.0) * umx2);
-            double brentT = x2tof(brentT, parameter, nMax, lambda); // TODO: brentT as parameter correct?
+            double timeOfFlight;
             
-            return 1.0 / umx2 * (3.0 * brentT * parameter - 2.0 + 2.0 * std::pow(lambda, 3.0) * parameter / y);
-              },
-              LOWERBOUND, UPPERBOUND, 100, 1e-10); //TODO bounds
+            if(std::abs(1.0 - parameter) < 1e-12) {
+              timeOfFlight = arma::datum::nan;
+            } else {
+              double a = 1.0 / (1.0 - std::pow(parameter, 2.0));
+              timeOfFlight = (std::abs(a) * std::sqrt(std::abs(a));
+              
+              if(parameter < 1) {
+                alfa = 2 * std::acos(parameter);
+                beta = std::copysign(2 * std::asin( std::sqrt( std::pow(lambda, 2.0) / a)), lambda);
 
-          if (x2tof(T0, xNew, nMax, lambda) > T) { // TODO: T0 ?
+                timeOfFlight *= (alfa - std::sin(alfa)) - (beta - std::sin(beta)) + 2.0 * arma:datum::pi * nMax;
+              } else {
+                alfa = 2.0 * std::acosh(parameter);
+                beta = std::copysign(2.0 * std::asinh( std::sqrt( std::pow(lambda, 2.0) / -a)), lambda);
+                
+                timeOfFlight *= (beta - std::sinh(beta)) - (alfa - std::sinh(alfa));
+              }
+            }
+
+            return 1.0 / umx2 * (3.0 * timeOfFlight * parameter - 2.0 + 2.0 * std::pow(lambda, 3.0) * parameter / y) / 2.0;
+              },
+              -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100, 1e-10); //TODO bounds
+
+          if (tNew > T) { // TODO: T0 ?
             nMax--;
           }
         }
       }
+      
+      
+      ///////////////////////////
+      
+      
+      
+         //(a * std::sqrt(a) * ((alfa - std::sin(alfa)) + 2.0 * arma::datum::pi * N)) / 2.0;
+         //-(a * std::sqrt(a) * ((alfa - std::sinh(alfa))) / 2.0;
+      
+      
+      
+      // if(std::abs(1.0 - x) < 1e-12) {
+        // return arma::datum::nan;
+      // } else {
+        // double a = 1.0 / (1.0 - std::pow(x, 2.0));
+        // timeOfFlight = (std::abs(a) * std::sqrt(std::abs(a));
+        
+        // if(x < 1) {
+          // alfa = 2 * std::acos(x);
+          // beta = std::copysign(2 * std::asin( std::sqrt( std::pow(lambda, 2.0) / a)), lambda);
+
+          // timeOfFlight *= (alfa - std::sin(alfa)) - (beta - std::sin(beta)) + 2.0 * arma:datum::pi * N;
+        // } else {
+          // alfa = 2.0 * std::acosh(x);
+          // beta = std::copysign(2.0 * std::asinh( std::sqrt( std::pow(lambda, 2.0) / -a)), lambda);
+          
+          // timeOfFlight *= (beta - std::sinh(beta)) - (alfa - std::sinh(alfa));
+        // }
+      // }
+      
+      // return timeOfFlight / 2.0; 
+      
+      
+      ///////////////////////////
 
       // We exit this if clause with Mmax being the maximum number of revolutions
       // for which there exists a solution. We crop it to m_multi_revs
@@ -273,85 +326,90 @@ namespace mant {
       //par2ic end
     }
 
-    double x2tof(
-        double timeOfFlight,
-        const double x,
-        const double N,
-        const double lambda) {
-      double battin = 0.01;
-      double lagrange = 0.2;
-      double dist = std::abs(x - 1.0);
+    // double x2tof(
+        // double timeOfFlight,
+        // const double x,
+        // const double N,
+        // const double lambda) {
+      // double battin = 0.01;
+      // double lagrange = 0.2;
+      // double dist = std::abs(x - 1.0);
 
-      if (dist < lagrange && dist > battin) {
-        double a = 1.0 / (1.0 - std::pow(x, 2.0));
-        if (a > 0) {
-          double alfa = 2.0 * std::acos(x);
-          double beta = 2.0 * std::asin(std::sqrt(std::pow(lambda, 2.0) / a));
+      
 
-          if (lambda < 0.0) {
-            beta = -beta;
-          }
+      
+      
+      // if (dist < lagrange && dist > battin) {
+        // double a = 1.0 / (1.0 - std::pow(x, 2.0));
+        // if (a > 0) {
+          // double alfa = 2.0 * std::acos(x);
+          // double beta = 2.0 * std::asin(std::sqrt(std::pow(lambda, 2.0) / a));
 
-          timeOfFlight = (a * std::sqrt(a) * ((alfa - std::sin(alfa)) - (beta - std::sin(beta)) + 2.0 * arma::datum::pi * N)) / 2.0;
-        } else {
-          double alfa = 2.0 * std::acosh(x);
-          double beta = 2.0 * std::asinh(std::sqrt(-std::pow(lambda, 2.0) / a));
+          // if (lambda < 0.0) {
+            // beta = -beta;
+          // }
 
-          if (lambda < 0.0) {
-            beta = -beta;
-          }
+          
+          // timeOfFlight = (a * std::sqrt(a) * ((alfa - std::sin(alfa)) - (beta - std::sin(beta)) + 2.0 * arma::datum::pi * N)) / 2.0;
+        // } else {
+          // double alfa = 2.0 * std::acosh(x);
+          // double beta = 2.0 * std::asinh(std::sqrt(-std::pow(lambda, 2.0) / a));
 
-          timeOfFlight = -a * std::sqrt(-a) * ((beta - std::sinh(beta)) - (alfa - std::sinh(alfa))) / 2.0;
-        }
-      } else {
-        double K = std::pow(lambda, 2.0);
-        double E = std::pow(x, 2.0) - 1.0;
-        double rho = std::abs(E);
-        double z = std::sqrt(1.0 + K * E);
+          // if (lambda < 0.0) {
+            // beta = -beta;
+          // }
 
-        if (dist < battin) { // We use Battin series timeOfFlight expression
-          double eta = z - lambda * x;
-          //double S1 = 0.5 * (1.0 - lambda - x * eta);
+          // timeOfFlight = -a * std::sqrt(-a) * ((beta - std::sinh(beta)) - (alfa - std::sinh(alfa))) / 2.0;
+        // }
+      // } else {
+        // double K = std::pow(lambda, 2.0);
+        // double E = std::pow(x, 2.0) - 1.0;
+        // double rho = std::abs(E);
+        // double z = std::sqrt(1.0 + K * E);
 
-          //hypergeometric function start
-          double Sj = 1.0;
-          double Cj = 1.0;
-          double Cj1 = 0.0;
-          double Sj1 = 0.0;
+        // if (dist < battin) { // We use Battin series timeOfFlight expression
+          // double eta = z - lambda * x;
+          // //double S1 = 0.5 * (1.0 - lambda - x * eta);
 
-          int shift = 0;
-          double err = 1.0;
+          // //hypergeometric function start
+          // double Sj = 1.0;
+          // double Cj = 1.0;
+          // double Cj1 = 0.0;
+          // double Sj1 = 0.0;
 
-          while (err > 1e-11) { // && shift < XY  ??????
-            Cj1 = Cj * (3.0 + shift) * (1.0 + shift) / (2.5 + shift) * 0.5 * (1.0 - lambda - x * eta) / (shift + 1);
-            Sj1 = Sj + Cj1;
-            err = std::abs(Cj1);
-            Sj = Sj1;
-            Cj = Cj1;
-            shift++;
-          }
-          //hypergeometric function end
+          // int shift = 0;
+          // double err = 1.0;
 
-          timeOfFlight = (std::pow(eta, 3.0) * (4.0 / 3.0) * Sj + 4.0 * lambda * eta) / 2.0 + N * arma::datum::pi / std::pow(rho, 1.5);
+          // while (err > 1e-11) { // && shift < XY  ??????
+            // Cj1 = Cj * (3.0 + shift) * (1.0 + shift) / (2.5 + shift) * 0.5 * (1.0 - lambda - x * eta) / (shift + 1);
+            // Sj1 = Sj + Cj1;
+            // err = std::abs(Cj1);
+            // Sj = Sj1;
+            // Cj = Cj1;
+            // shift++;
+          // }
+          // //hypergeometric function end
 
-        } else { // We use Lancaster timeOfFlight expresion
+          // timeOfFlight = (std::pow(eta, 3.0) * (4.0 / 3.0) * Sj + 4.0 * lambda * eta) / 2.0 + N * arma::datum::pi / std::pow(rho, 1.5);
 
-          double y = std::sqrt(rho);
-          double g = x * z - lambda * E;
-          double d = 0.0;
+        // } else { // We use Lancaster timeOfFlight expresion
 
-          if (E < 0) {
-            double l = acos(g);
-            d = N * arma::datum::pi + l;
+          // double y = std::sqrt(rho);
+          // double g = x * z - lambda * E;
+          // double d = 0.0;
 
-          } else {
-            double f = y * (z - lambda * x);
-            d = log(f + g);
-          }
-          timeOfFlight = (x - lambda * z - d / y) / E;
-        }
-      }
-      return timeOfFlight;
-    }
+          // if (E < 0) {
+            // double l = std::acos(g);
+            // d = N * arma::datum::pi + l;
+
+          // } else {
+            // double f = y * (z - lambda * x);
+            // d = log(f + g);
+          // }
+          // timeOfFlight = (x - lambda * z - d / y) / E;
+        // }
+      // }
+      // return timeOfFlight;
+    // }
   }
 }
