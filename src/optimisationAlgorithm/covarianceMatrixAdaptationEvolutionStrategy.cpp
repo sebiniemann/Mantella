@@ -50,7 +50,7 @@ namespace mant {
             const arma::Row<double>& objectiveValues,
             const arma::Row<double>& differences) {
           newGenerationValid_ = parameters; //arxvalid
-          fitnessRaw_ = objectiveValues.t();
+          arma::Col<double> fitnessRaw = objectiveValues.t();
 
           //;set internal parameters
           if (populationSize_ != populationSizeLast_) {
@@ -60,19 +60,19 @@ namespace mant {
           //;----- handle boundaries -----
           //;Assigned penalized fitness
           arma::Col<double> boundaryPenalty = arma::sum(arma::abs(newGenerationValid_ - newGeneration_)).t();
-          fitnessSel_ = fitnessRaw_ + boundaryPenalty;
+          arma::Col<double> fitnessSel = fitnessRaw + boundaryPenalty;
           //;----- end handle boundaries -----
 
           //;Sort by fitness
-          fitnessIdx_ = arma::sort_index(fitnessRaw_);
-          fitnessRaw_ = arma::sort(fitnessRaw_);
-          fitnessIdxSel_ = arma::sort_index(fitnessSel_);
-          fitnessSel_ = arma::sort(fitnessSel_); //;minimization
+          arma::Col<arma::uword> fitnessIdx = arma::sort_index(fitnessRaw);
+          fitnessRaw = arma::sort(fitnessRaw);
+          arma::Col<arma::uword> fitnessIdxSel = arma::sort_index(fitnessSel);
+          fitnessSel = arma::sort(fitnessSel); //;minimization
           
           //;Calculate new xmean, this is selection and recombination 
           xold_ = xmean_; //;for speed up of Eq. (2) and (3)
-          xmean_ = newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1)) * recombinationWeights_;
-          arma::Mat<double> zmean = newGenerationRaw_.cols(fitnessIdxSel_.rows(0, mu_ - 1)) * recombinationWeights_; //;==D^-1*B'*(xmean-xold)/sigma
+          xmean_ = newGeneration_.cols(fitnessIdxSel.rows(0, mu_ - 1)) * recombinationWeights_;
+          arma::Mat<double> zmean = newGenerationRaw_.cols(fitnessIdxSel.rows(0, mu_ - 1)) * recombinationWeights_; //;==D^-1*B'*(xmean-xold)/sigma
           
           //;Cumulation: update evolution paths
           ps_ = (1 - cs_) * ps_ + std::sqrt(cs_ * (2 - cs_) * mueff_) * (B_ * zmean); //;Eq. (4)
@@ -82,14 +82,14 @@ namespace mant {
           //;Adapt covariance matrix
           negCcov_ = 0;
           if ((ccov1_ + ccovmu_) > 0) {
-            arma::Mat<double> arpos = (static_cast<arma::Mat<double>>(newGeneration_.cols(fitnessIdxSel_.rows(0, mu_ - 1))).each_col() - xold_) / stepSize_;
+            arma::Mat<double> arpos = (static_cast<arma::Mat<double>>(newGeneration_.cols(fitnessIdxSel.rows(0, mu_ - 1))).each_col() - xold_) / stepSize_;
             negCcov_ = (1 - ccovmu_) * 0.25 * mueff_ / (std::pow(numberOfDimensions + 2, 1.5) + 2 * mueff_);
             double negAlphaOld = 0.5; //;where to make up for the variance loss, 0.5 means no idea what to do
             //;1 is slightly more robust and gives a better "guaranty" for pos. def., 
             //;but does it make sense from the learning perspective for large ccovmu?
 
             //;prepare vectors, compute negative updating matrix Cneg
-            arma::Mat<double> newGenerationRawNeg = newGenerationRaw_.cols(fitnessIdxSel_.rows(range(populationSize_ -1,populationSize_-mu_,1))); //arzneg
+            arma::Mat<double> newGenerationRawNeg = newGenerationRaw_.cols(fitnessIdxSel.rows(range(populationSize_ -1,populationSize_-mu_,1))); //arzneg
             arma::Col<double> ngRawNegNorm = arma::sort(arma::sqrt(arma::sum(arma::square(newGenerationRawNeg), 0))).t(); //arnorms
             arma::Col<double> ngRawNegNormFacs = ngRawNegNorm(range(ngRawNegNorm.n_elem-1,0,1)) / ngRawNegNorm; //arnormfacs
             ngRawNegNorm = ngRawNegNormFacs; //;for the record

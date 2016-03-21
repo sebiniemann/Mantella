@@ -92,10 +92,5 @@ namespace mant {
     arma::Col<double> diagD_; //diagD; diagonal matrix D defines the scaling
     double chiN_; //chiN
     double negCcov_; //neg.ccov
-
-    arma::Col<double> fitnessRaw_; //fitness.raw
-    arma::Col<double> fitnessSel_; //fitness.sel
-    arma::Col<arma::uword> fitnessIdx_; //fitness.idx
-    arma::Col<arma::uword> fitnessIdxSel_; //fitness.idxsel
   };
 }
