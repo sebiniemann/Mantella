@@ -13,8 +13,7 @@ namespace mant {
     std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> lambert(
         const arma::Col<double>::fixed<3>& departurePosition,
         const arma::Col<double>::fixed<3>& arrivalPosition,
-        const double transferTime,
-        const bool isClockwise) {
+        const double transferTime) {
       verify(transferTime > 0.0, "lambert: The transfer time must be greater than zero.");
 
       // 1 - Getting lambda and Ts
@@ -123,6 +122,7 @@ namespace mant {
 
         it1 = -it1;
         it2 = -it2;
+        lambda = -lambda;
 
         y = std::sqrt(std::pow(lambda, 2.0) * (std::pow(brentVector.at(2 * i + 1), 2.0) - 1.0) + 1.0);
         vr1 = gamma * ((lambda * y - brentVector.at(2 * i + 1)) - rho * (lambda * y + brentVector.at(2 * i + 1))) / departureDistanceFromSun;
@@ -134,6 +134,7 @@ namespace mant {
 
         it1 = -it1;
         it2 = -it2;
+        lambda = -lambda;
 
         velocitiesVector.push_back(std::make_pair(vr1 * departurePositionNormalised + vt1 * it1, vr2 * arrivalPositionNormalised + vt2 * it2));
       }

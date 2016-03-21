@@ -16,7 +16,6 @@ namespace mant {
     std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> lambert(
         const arma::Col<double>::fixed<3>& departurePosition,
         const arma::Col<double>::fixed<3>& arrivalPosition,
-        const double transferTime,
-        const bool isClockwise);
+        const double transferTime);
   }
 }
