@@ -19,31 +19,27 @@ namespace mant {
         const arma::uword numberOfDimensions,
         const arma::Mat<double>& initialParameters) override;
 
-    //using OptimisationAlgorithm::optimise;
-
     void optimise(
         OptimisationProblem& optimisationProblem);
     void optimise(
         OptimisationProblem& optimisationProblem,
-        const arma::uword popSize);
+        const arma::uword populationSize);
     void optimise(
         OptimisationProblem& optimisationProblem,
-        const arma::Col<double>& xMean);
+        const arma::Col<double>& meanParameter);
     void optimise(
         OptimisationProblem& optimisationProblem,
         const arma::Mat<double>& initialParameters);
     void optimise(
         OptimisationProblem& optimisationProblem,
-        const arma::Col<double>& xMean,
-        const arma::uword popSize);
+        const arma::Col<double>& meanParameter,
+        const arma::uword populationSize);
 
-    void setInitialStepSize(const double sigma); //insigma
+    void setInitialStepSize(const double initialStepSize); //insigma
     double getInitialStepSize();
     double getStepSize();
-    void setPopulationSize(const arma::uword popSize, const arma::uword numberOfDimensions);
+    void setPopulationSize(const arma::uword populationSize, const arma::uword numberOfDimensions);
     arma::uword getPopulationSize();
-    void setActiveCMA(bool activeCma); //activeCMA
-    bool isActiveCMA();
 
     double getCcov1() const;
     void setCcov1(double ccov1);
@@ -75,7 +71,6 @@ namespace mant {
     double ccum_; //defopts.CMA.ccum/cc;
     double ccov1_; //defopts.CMA.ccov1;
     double ccovmu_; //defopts.CMA.ccovmu;
-    bool activeCMA_; ////defopts.CMA.active; 0: active CMA 1: neg. updates with pos. def. check, 2: neg. updates
 
     //arxvalid needs to be here so it is available after the loop
     arma::Mat<double> newGenerationRaw_;
@@ -83,10 +78,10 @@ namespace mant {
     arma::Mat<double> newGenerationValid_; //arxvalid
     arma::Col<double> xmean_; //xmean
     arma::Col<double> xold_; //xold
-    arma::uword lambda_last_;
-    arma::uword lambda_; //population size
-    double sigma_; //sigma
-    double initialSigma_;
+    arma::uword populationSizeLast_;
+    arma::uword populationSize_; //population size
+    double stepSize_; //sigma
+    double initialStepSize_;
     arma::Col<double> pc_; //pc; evolution path for C
     arma::Col<double> ps_; //ps; evolution path for sigma
     arma::Mat<double> B_; //B
@@ -102,7 +97,5 @@ namespace mant {
     arma::Col<double> fitnessSel_; //fitness.sel
     arma::Col<arma::uword> fitnessIdx_; //fitness.idx
     arma::Col<arma::uword> fitnessIdxSel_; //fitness.idxsel
-
-    arma::uword countiter_; //countiter - counts main loop evaluations, NOT function evaluations
   };
 }

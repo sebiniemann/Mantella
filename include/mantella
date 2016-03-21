@@ -87,10 +87,10 @@
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 #include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 #include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
+#include <mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 // IWYU pragma: end_exports

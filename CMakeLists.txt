@@ -270,12 +270,12 @@ add_library(mantella ${LIBRARY_TYPE}
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
-  src/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
   src/optimisationAlgorithm/randomSearch.cpp
   src/optimisationAlgorithm/hillClimbing.cpp
   src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
   src/optimisationAlgorithm/simulatedAnnealing.cpp
   src/optimisationAlgorithm/particleSwarmOptimisation.cpp
+  src/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.cpp
 )
 
 # Linking against prerequirements
