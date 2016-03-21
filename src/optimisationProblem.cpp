@@ -204,6 +204,22 @@ namespace mant {
     return parameterRotation_;
   }
 
+  void OptimisationProblem::setMinimalParameterDistance(
+      const arma::Col<double>& minimalParameterDistance) {
+    verify(minimalParameterDistance.n_elem == numberOfDimensions_, "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance's number of elements must be equal to the optimisation problem's number of dimensions.");
+    verify(arma::all(minimalParameterDistance >= 0), "OptimisationProblem.setMinimalParameterDistance: Each minimal parameter distance must be positive (including 0).");
+    verify(minimalParameterDistance.is_finite(), "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance must be finite.");
+
+    minimalParameterDistance_ = minimalParameterDistance;
+#if defined(SUPPORT_MPI)
+    MPI_Bcast(minimalParameterDistance_.memptr(), static_cast<int>(minimalParameterDistance_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#endif
+  }
+
+  arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {
+    return minimalParameterDistance_;
+  }
+
   void OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
     verify(std::isfinite(objectiveValueScaling), "OptimisationProblem.setObjectiveValueScaling: The objective value scaling must be finite.");
@@ -240,22 +256,6 @@ namespace mant {
 
   std::unordered_map<arma::Col<double>, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
     return cachedSamples_;
-  }
-
-  void OptimisationProblem::setMinimalParameterDistance(
-      const arma::Col<double>& minimalParameterDistance) {
-    verify(minimalParameterDistance.n_elem == numberOfDimensions_, "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance's number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(arma::all(minimalParameterDistance >= 0), "OptimisationProblem.setMinimalParameterDistance: Each minimal parameter distance must be positive (including 0).");
-    verify(minimalParameterDistance.is_finite(), "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance must be finite.");
-
-    minimalParameterDistance_ = minimalParameterDistance;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(minimalParameterDistance_.memptr(), static_cast<int>(minimalParameterDistance_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
-  }
-
-  arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {
-    return minimalParameterDistance_;
   }
 
   arma::uword OptimisationProblem::getNumberOfEvaluations() const {

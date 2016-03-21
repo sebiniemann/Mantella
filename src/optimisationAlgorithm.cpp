@@ -81,7 +81,7 @@ namespace mant {
     verify(initialParameters.n_rows == optimisationProblem.numberOfDimensions_, "OptimisationAlgorithm.optimise: The initial parameter's number of rows must be equal to the optimisation problem's number of dimensions.");
     verify(initialParameters.n_cols > 0, "OptimisationAlgorithm.optimise: The initial parameter's number of columns must be strict greater than 0.");
     verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), "OptimisationAlgorithm.optimise: The optimisation problem's lower bounds must be less than or equal to their upper bounds.");
-    verify(static_cast<bool>(nextParametersFunction_), "OptimisationAlgorithm.optimise: The next-parameter function must be callable.");
+    verify(static_cast<bool>(nextParametersFunction_), "OptimisationAlgorithm.optimise: The next parameters function must be callable.");
 
     if (::mant::isVerbose) {
       std::cout << "================================================================================\n";
@@ -92,8 +92,8 @@ namespace mant {
       std::cout << "  Acceptable objective value: " << acceptableObjectiveValue_ << "\n";
       std::cout << "--------------------------------------------------------------------------------\n";
       std::cout << "  Optimisation strategy: " << nextParametersFunctionName_ << "\n";
-      std::cout << "  Boundaries handling function: " << boundariesHandlingFunctionName_ << "\n";
-      std::cout << "  Stagnation detection function: " << isStagnatingFunctionName_ << "\n";
+      std::cout << "  Boundaries-handling function: " << boundariesHandlingFunctionName_ << "\n";
+      std::cout << "  Is-stagnating function: " << isStagnatingFunctionName_ << "\n";
       std::cout << "  Restarting function: " << restartingFunctionName_ << "\n";
       std::cout << std::endl;
     }
@@ -151,7 +151,7 @@ namespace mant {
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction,
       const std::string& nextParametersFunctionName) {
-    verify(static_cast<bool>(nextParametersFunction), "OptimisationAlgorithm.setNextParametersFunction: The next-parameters function must be callable.");
+    verify(static_cast<bool>(nextParametersFunction), "OptimisationAlgorithm.setNextParametersFunction: The next parameters function must be callable.");
 
     nextParametersFunction_ = nextParametersFunction;
     nextParametersFunctionName_ = nextParametersFunctionName;
@@ -161,7 +161,7 @@ namespace mant {
 
   void OptimisationAlgorithm::setNextParametersFunction(
       std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction) {
-    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next-parameter function");
+    setNextParametersFunction(nextParametersFunction, "Unnamed, custom next parameters function");
   }
 
   std::string OptimisationAlgorithm::getNextParametersFunctionName() const {
@@ -189,19 +189,19 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setIsStagnatingFunction(
-      std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> stagnationDetectionFunction,
-      const std::string& stagnationDetectionFunctionName) {
-    verify(static_cast<bool>(stagnationDetectionFunction), "OptimisationAlgorithm.setIsStagnatingFunction: The is-stagnating function must be callable.");
+      std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction,
+      const std::string& isStagnatingFunctionName) {
+    verify(static_cast<bool>(isStagnatingFunction), "OptimisationAlgorithm.setIsStagnatingFunction: The is-stagnating function must be callable.");
 
-    isStagnatingFunction_ = stagnationDetectionFunction;
-    isStagnatingFunctionName_ = stagnationDetectionFunctionName;
+    isStagnatingFunction_ = isStagnatingFunction;
+    isStagnatingFunctionName_ = isStagnatingFunctionName;
 
     reset();
   }
 
   void OptimisationAlgorithm::setIsStagnatingFunction(
-      std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> stagnationDetectionFunction) {
-    setIsStagnatingFunction(stagnationDetectionFunction, "Unnamed, custom is-stagnation function");
+      std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction) {
+    setIsStagnatingFunction(isStagnatingFunction, "Unnamed, custom is-stagnation function");
   }
 
   std::string OptimisationAlgorithm::getIsStagnatingFunctionName() const {
