@@ -93,4 +93,5 @@
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
 #include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 #include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
+#include <mantella_bits/optimisationAlgorithm/covarianceMatrixAdaptationEvolutionStrategy.hpp>
 // IWYU pragma: end_exports
