@@ -16,4 +16,5 @@ Using octave
 Using MatLab  
 2. Using C++ compiler(MinGW): `mex -setup cpp`.  
 3. start command: `mex sphereFunction.cpp`.  
-	
+4. Run mex file: `result = sphereFunction([4,5,4])`.  
+5. The correct output for this example is `result = 16`.  
