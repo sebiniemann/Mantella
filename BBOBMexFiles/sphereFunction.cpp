@@ -24,5 +24,5 @@ void mexFunction (int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[]){
     plhs[0] = mxCreateNumericMatrix(1,1, mxDOUBLE_CLASS, mxREAL);
     *mxGetPr(plhs[0]) = objectiveValue;
 
- 	return;
+    return;
 }
