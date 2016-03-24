@@ -393,6 +393,9 @@ if(BUILD_TESTS)
     test/testNumericalAnalysis.cpp
     test/testProbability.cpp
   
+    # Orbital Mechanics
+    test/testOrbitalMechanics.cpp
+  
     # Machine learning functions
     test/testSamplesAnalysis.cpp
     test/testSamplesSelection.cpp
