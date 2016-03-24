@@ -1,155 +1,206 @@
 #include "mantella_bits/samplesAnalysis.hpp"
+#include "mantella_bits/config.hpp"
 
 // C++ standard library
 #include <algorithm>
 #include <cmath>
-#include <set>
+#include <memory>
+#include <stdexcept>
 #include <utility>
-// IWYU pragma: no_include <ext/alloc_traits.h>
 
 // Armadillo
 #include <armadillo>
 
 // Mantella
 #include "mantella_bits/assert.hpp"
-#include "mantella_bits/numberTheory.hpp"
+#include "mantella_bits/combinatorics.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   double fitnessDistanceCorrelation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
-    verify(samples.size() > 1, "fitnessDistanceCorrelation: The number of samples must be strict greater than 1.");
-    verify(isDimensionallyConsistent(samples), "fitnessDistanceCorrelation: The samples must be dimensionally consistent");
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
+    if (samples.size() < 2) {
+      throw std::invalid_argument("fitnessDistanceCorrelation: The number of samples must be greater than 2.");
+    } else if (!isDimensionallyConsistent(samples)) {
+      throw std::invalid_argument("fitnessDistanceCorrelation: The samples must be dimensionally consistent");
+    }
 
-    arma::Mat<double> parameters(samples.cbegin()->first.n_elem, samples.size());
-    arma::Row<double> objectiveValues(parameters.n_cols);
+    // Converts the set of samples into a matrix of parameters (each row is a dimension and each column a parameter) and a row vector of objective values, such that we can use Armadillo C++ to manipulate them.
+    arma::mat parameters(samples.cbegin()->first.n_elem, samples.size());
+    arma::rowvec objectiveValues(parameters.n_cols);
 
     arma::uword n = 0;
     for (const auto& sample : samples) {
       parameters.col(n) = sample.first;
       objectiveValues(n) = sample.second;
+
       ++n;
     }
 
+    // Determines one parameter having a minimal objective value within the set of samples.
+    // The best parameter is then subtracted from all other parameters, so that we can later calculated the distance towards the best one.
     arma::uword bestParameterIndex;
     objectiveValues.min(bestParameterIndex);
     parameters.each_col() -= parameters.col(bestParameterIndex);
+
+    // Excludes the best/reference parameter from the correlation, as it will always perfectly correlate with itself and therefore bias the correlation coefficient.
     parameters.shed_col(bestParameterIndex);
     objectiveValues.shed_col(bestParameterIndex);
 
+    // Uses `arma::sum(arma::square(...))` to emulate a column-wise vector norm operator that Armadillo C++ does not have (and this is not likely to change, as it interferes with matrix norms).
     return arma::as_scalar(arma::cor(arma::sqrt(arma::sum(arma::square(parameters))), objectiveValues));
   }
 
   double lipschitzContinuity(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples) {
-    verify(samples.size() > 1, "lipschitzContinuity: The number of samples must be strict greater than 1.");
-    verify(isDimensionallyConsistent(samples), "lipschitzContinuity: The samples must be dimensionally consistent.");
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
+    if (samples.size() < 2) {
+      throw std::invalid_argument("lipschitzContinuity: The number of samples must be greater than 1.");
+    } else if (!isDimensionallyConsistent(samples)) {
+      throw std::invalid_argument("lipschitzContinuity: The samples must be dimensionally consistent");
+    }
 
-    double continuity = 0.0;
+    double lipschitzContinuity = 0.0;
     for (auto firstSample = samples.cbegin(); firstSample != samples.cend();) {
       for (auto secondSample = ++firstSample; secondSample != samples.cend(); ++secondSample) {
-        continuity = std::max(continuity, std::abs(firstSample->second - secondSample->second) / arma::norm(firstSample->first - secondSample->first));
+        lipschitzContinuity = std::max(lipschitzContinuity, std::abs(firstSample->second - secondSample->second) / arma::norm(firstSample->first - secondSample->first));
       }
     }
 
-    return continuity;
+    return lipschitzContinuity;
   }
 
-  std::vector<arma::Col<arma::uword>> additiveSeparability(
+  std::vector<arma::uvec> additiveSeparability(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfEvaluations,
-      const double maximalDeviation,
       const double minimalConfidence) {
-    verify(maximalDeviation >= 0, "additiveSeparability: The maximal deviation must be positive (including 0).");
-    verify(0 < minimalConfidence && minimalConfidence <= 1, "additiveSeparability: The minimal confidence must be within the interval (0, 1].");
-    verify(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()), "additiveSeparability: The optimisation problem's lower bounds must be less than or equal to their upper bounds.");
+    // Objects like `optimisationProblem` perform all validations by themselves.
+    if (numberOfEvaluations < 1) {
+      throw std::domain_error("additiveSeparability: The number of evaluations must be greater than 0.");
+    } else if (minimalConfidence < 0.0 || minimalConfidence > 1.0) {
+      throw std::domain_error("additiveSeparability: The minimal confidence must be within the interval (0, 1].");
+    } else if (!isRepresentableAsFloatingPoint(numberOfEvaluations)) {
+      throw std::overflow_error("additiveSeparability: The number of elements must be representable as a floating point.");
+    }
 
-    std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> partitionCandidates = twoSetsPartitions(optimisationProblem.numberOfDimensions_);
+    if (minimalConfidence <= 0) {
+      std::vector<arma::uvec> partition;
+      partition.reserve(optimisationProblem.numberOfDimensions_);
 
-    arma::Row<arma::uword> confidences(partitionCandidates.size(), arma::fill::zeros);
+      for (arma::uword n = 0; n < optimisationProblem.numberOfDimensions_; ++n) {
+        partition.push_back({n});
+      }
+
+      return partition;
+    }
+
+    /* The first of two steps to analyse the additive separability of a function is to estimate all two-set separations that fulfil the deviation and confidence requirements.
+     * A function *f* is additive separable into two other function *g*, *h* if the following holds:
+     *
+     * f(x, y) - g(x) - h(y) = 0, for all x, y
+     *
+     * As it is practical impossible to simply guess two separations *g*, *h* of *f*, when we only got a caller to `.getObjectiveValue(...)` and no analytic form, we use a direct consequence from the equation above instead, that must also hold true for additive separable functions and uses only *f*:
+     *
+     * f(a, c) + f(b, d) - f(a, d) - f(b, c) = 0, for all a, b, c, d
+     *
+     */
+
+    std::vector<std::pair<arma::uvec, arma::uvec>> partitionCandidates = twoSetsPartitions(optimisationProblem.numberOfDimensions_);
+
+    arma::rowvec confidences(partitionCandidates.size(), arma::fill::zeros);
     for (arma::uword n = 0; n < partitionCandidates.size(); ++n) {
-      const std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>& partitionCandidate = partitionCandidates.at(n);
-
-      const arma::Col<double>& firstSubPartLowerBounds = optimisationProblem.getLowerBounds().elem(partitionCandidate.first);
-      const arma::Col<double>& firstSubPartUpperBounds = optimisationProblem.getUpperBounds().elem(partitionCandidate.first);
-      const arma::Col<double>& secondSubPartLowerBounds = optimisationProblem.getLowerBounds().elem(partitionCandidate.second);
-      const arma::Col<double>& secondSubPartUpperBounds = optimisationProblem.getUpperBounds().elem(partitionCandidate.second);
+      const std::pair<arma::uvec, arma::uvec>& partitionCandidate = partitionCandidates.at(n);
 
       for (arma::uword k = 0; k < numberOfEvaluations; ++k) {
-        const arma::Col<double>& firstSubPartA = firstSubPartLowerBounds + arma::randu<arma::Col<double>>(partitionCandidate.first.n_elem) % (firstSubPartUpperBounds - firstSubPartLowerBounds);
-        const arma::Col<double>& firstSubPartB = firstSubPartLowerBounds + arma::randu<arma::Col<double>>(partitionCandidate.first.n_elem) % (firstSubPartUpperBounds - firstSubPartLowerBounds);
-        const arma::Col<double>& secondSubPartA = secondSubPartLowerBounds + arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem) % (secondSubPartUpperBounds - secondSubPartLowerBounds);
-        const arma::Col<double>& secondSubPartB = secondSubPartLowerBounds + arma::randu<arma::Col<double>>(partitionCandidate.second.n_elem) % (secondSubPartUpperBounds - secondSubPartLowerBounds);
+        const arma::vec& firstFirstParamter = arma::randu<arma::vec>(optimisationProblem.numberOfDimensions_);
+        const arma::vec& secondSecondParameter = arma::randu<arma::vec>(optimisationProblem.numberOfDimensions_);
+        arma::vec firstSecondParameter = firstFirstParamter;
+        firstSecondParameter.elem(partitionCandidate.first) = secondSecondParameter.elem(partitionCandidate.first);
+        arma::vec secondFirstParameter = secondSecondParameter;
+        secondFirstParameter.elem(partitionCandidate.first) = firstFirstParamter.elem(partitionCandidate.first);
 
-        arma::Col<double> parameterAA(optimisationProblem.numberOfDimensions_);
-        parameterAA.elem(partitionCandidate.first) = firstSubPartA;
-        parameterAA.elem(partitionCandidate.second) = secondSubPartA;
-
-        arma::Col<double> parameterBB(optimisationProblem.numberOfDimensions_);
-        parameterBB.elem(partitionCandidate.first) = firstSubPartB;
-        parameterBB.elem(partitionCandidate.second) = secondSubPartB;
-
-        arma::Col<double> parameterAB(optimisationProblem.numberOfDimensions_);
-        parameterAB.elem(partitionCandidate.first) = firstSubPartA;
-        parameterAB.elem(partitionCandidate.second) = secondSubPartB;
-
-        arma::Col<double> parameterBA(optimisationProblem.numberOfDimensions_);
-        parameterBA.elem(partitionCandidate.first) = firstSubPartB;
-        parameterBA.elem(partitionCandidate.second) = secondSubPartA;
-
-        if (optimisationProblem.getObjectiveValue(parameterAA) + optimisationProblem.getObjectiveValue(parameterBB) - optimisationProblem.getObjectiveValue(parameterAB) - optimisationProblem.getObjectiveValue(parameterBA) <= maximalDeviation + 1e-12) {
+        // **Note:** The summation of not-a-number values results in a not-a-number value and comparing it with another value returns false, so everything will work out just fine.
+        if (std::abs(optimisationProblem.getObjectiveValueOfNormalisedParameter(firstFirstParamter) + optimisationProblem.getObjectiveValueOfNormalisedParameter(secondSecondParameter) - optimisationProblem.getObjectiveValueOfNormalisedParameter(firstSecondParameter) - optimisationProblem.getObjectiveValueOfNormalisedParameter(secondFirstParameter)) < ::mant::machinePrecision) {
           ++confidences(n);
+          if (confidences(n) / static_cast<double>(numberOfEvaluations) >= minimalConfidence) {
+            // Proceeds with the next partition candidate, as we already reached the confidence threshold.
+            break;
+          }
         }
       }
     }
 
-    std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> acceptablePartitionCandidates;
-    for (const auto acceptablePartitionCandidateIndex : static_cast<arma::Col<arma::uword>>(arma::find(confidences >= static_cast<arma::uword>(std::floor(minimalConfidence * static_cast<double>(numberOfEvaluations)))))) {
+    const arma::uvec& acceptablePartitionCandidatesIndicies = arma::find(confidences / static_cast<double>(numberOfEvaluations) >= minimalConfidence);
+    std::vector<std::pair<arma::uvec, arma::uvec>> acceptablePartitionCandidates;
+    acceptablePartitionCandidates.reserve(acceptablePartitionCandidatesIndicies.n_elem);
+
+    for (const auto acceptablePartitionCandidateIndex : acceptablePartitionCandidatesIndicies) {
       acceptablePartitionCandidates.push_back(partitionCandidates.at(acceptablePartitionCandidateIndex));
     }
 
-    std::vector<arma::Col<arma::uword>> partition;
+    /* The last of the two steps is to calculate the partition with the maximal number of parts, from all acceptable two-set partitions.
+     * If we now weaken our observation and assume that each accepted two-set partition holds true for **all** inputs, the partition with the maximal number of parts can be calculated by combining all intersections between one part and an other.
+     *
+     * For example, assume that we got 3 acceptable two-set partitions:
+     *
+     * - {{1, 2, 3, 4, 5}, {6}} 
+     * - {{1}, {2, 3, 4, 5, 6}}
+     * - {{1, 2, 3}, {4, 5, 6}}
+     *
+     * We would then calculate the intersection between the first two partitions:
+     *
+     * {{1, 2, 3, 4, 5}, {6}} intersect {{1}, {2, 3, 4, 5, 6}} = 
+     *   {{1, 2, 3, 4, 5} intersect {1}}             union
+     *   {{1, 2, 3, 4, 5} intersect {2, 3, 4, 5, 6}} union
+     *   {{6} intersect {1}}                         union \
+     *   {{6} intersect {2, 3, 4, 5, 6}}                   / skipped and directly replaced by {{6}}
+     *   = {{1}, {2, 3, 4, 5}, {6}}
+     *
+     * And intersect the resulting partitions with the remaining one:
+     *
+     * {{1}, {2, 3, 4, 5}, {6}} intersect {{1, 2, 3}, {4, 5, 6}} = 
+     *   {{1} intersect {1, 2, 3}}          union \
+     *   {{1} intersect {4, 5, 6}}          union / skipped and directly replaced by {{1}}
+     *   {{2, 3, 4, 5} intersect {1, 2, 3}} union
+     *   {{2, 3, 4, 5} intersect {4, 5, 6}} union
+     *   {{6} intersect {1, 2, 3}}          union \
+     *   {{6} intersect {4, 5, 6}}                / skipped and directly replaced by {{6}}
+     *   = {{1}, {2, 3}, {4, 5}, {6}}
+     *
+     * And get {{1}, {2, 3}, {4, 5}, {6}} as partition with the maximal number of parts.
+     */
+
     if (acceptablePartitionCandidates.size() > 1) {
-      std::set<arma::uword> skipableDimensions;
-      for (arma::uword n = 0; n < optimisationProblem.numberOfDimensions_; ++n) {
-        if (skipableDimensions.find(n) != skipableDimensions.cend()) {
-          skipableDimensions.erase(n);
-        } else {
-          std::vector<arma::Col<arma::uword>> contatiningPartitions;
-          for (const auto& acceptablePartitionCandidate : acceptablePartitionCandidates) {
-            if (!static_cast<arma::Col<arma::uword>>(arma::find(acceptablePartitionCandidate.first == n)).is_empty()) {
-              contatiningPartitions.push_back(acceptablePartitionCandidate.first);
-            } else {
-              contatiningPartitions.push_back(acceptablePartitionCandidate.second);
-            }
+      std::vector<arma::uvec> partition = {acceptablePartitionCandidates.at(0).first, acceptablePartitionCandidates.at(0).second};
+      acceptablePartitionCandidates.erase(acceptablePartitionCandidates.cbegin());
+
+      for (const auto& acceptablePartitionCandidate : acceptablePartitionCandidates) {
+        std::vector<arma::uvec> nextPartition;
+        for (const auto& part : partition) {
+          if (part.n_elem == 1) {
+            nextPartition.push_back(part);
+          } else {
+            // **Note:** `std::set_intersection` requires that all parts are ordered at this point.
+            std::vector<arma::uword> intersection;
+            std::set_intersection(part.begin(), part.end(), acceptablePartitionCandidate.first.begin(), acceptablePartitionCandidate.first.end(), intersection.begin());
+            nextPartition.push_back(arma::uvec(intersection));
+            intersection.clear();
+            std::set_intersection(part.begin(), part.end(), acceptablePartitionCandidate.second.begin(), acceptablePartitionCandidate.second.end(), intersection.begin());
+            nextPartition.push_back(arma::uvec(intersection));
           }
+        }
+        partition = nextPartition;
 
-          std::vector<arma::uword> part;
-          part.push_back(n);
-          for (arma::uword k = n + 1; k < optimisationProblem.numberOfDimensions_; ++k) {
-            bool isWithinAllPartitions = true;
-            for (const auto& contatiningPartition : contatiningPartitions) {
-              if (static_cast<arma::Col<arma::uword>>(arma::find(contatiningPartition == k)).is_empty()) {
-                isWithinAllPartitions = false;
-                break;
-              }
-            }
-
-            if (isWithinAllPartitions) {
-              part.push_back(k);
-              skipableDimensions.insert(k);
-            }
-          }
-
-          partition.push_back(arma::Col<arma::uword>(part));
+        // We are already finished, as there is no finer partition as having one part for each dimensions.
+        if (partition.size() == optimisationProblem.numberOfDimensions_) {
+          break;
         }
       }
-    } else if (acceptablePartitionCandidates.size()) {
-      partition = {acceptablePartitionCandidates.at(0).first, acceptablePartitionCandidates.at(0).second};
-    } else {
-      partition = {range(0, optimisationProblem.numberOfDimensions_ - 1)};
-    }
 
-    return partition;
+      return partition;
+    } else if (acceptablePartitionCandidates.size() == 1) {
+      return {acceptablePartitionCandidates.at(0).first, acceptablePartitionCandidates.at(0).second};
+    } else {
+      return {arma::regspace<arma::uvec>(0, optimisationProblem.numberOfDimensions_ - 1)};
+    }
   }
 }

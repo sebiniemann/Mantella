@@ -1,8 +1,10 @@
 #include "mantella_bits/optimisationProblem/kinematicallyRedundantMachines.hpp"
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
+
+// C++ standard library
+#include <stdexcept>
 
 // Mantella
-#include "mantella_bits/assert.hpp"
+#include "mantella_bits/mpi.hpp"
 
 namespace mant {
   namespace krm {
@@ -10,25 +12,29 @@ namespace mant {
         const arma::uword numberOfProblemDimensions,
         const arma::uword numberOfWorkspaceDimensions)
         : OptimisationProblem(numberOfProblemDimensions),
-          numberOfWorkspaceDimensions_(numberOfWorkspaceDimensions) {
-      setEndEffectorTrajectory(arma::zeros<arma::Mat<double>>(numberOfWorkspaceDimensions_, 1));
+          numberOfWorkspaceDimensions_(synchronise(numberOfWorkspaceDimensions)) {
+      if (numberOfWorkspaceDimensions_ == 0) {
+        throw std::domain_error("KinematicallyRedundantMachines: The number of workspace dimensions must be greater than 0.");
+      }
+
+      // Initialises the end-effector trajectory with a single position at (0, ..., 0).
+      setEndEffectorTrajectory(arma::zeros<arma::mat>(numberOfWorkspaceDimensions_, 1));
     }
 
     void KinematicallyRedundantMachines::setEndEffectorTrajectory(
-        const arma::Mat<double>& endEffectorTrajectory) {
-      verify(endEffectorTrajectory.n_rows == numberOfWorkspaceDimensions_, "KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory's number of rows must be equal to the workspace's number of dimensions.");
-      verify(endEffectorTrajectory.n_cols > 0, "KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory's number of columns must be strict greater than 0.");
-      verify(endEffectorTrajectory.is_finite(), "KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory must be finite.");
+        const arma::mat& endEffectorTrajectory) {
+      if (endEffectorTrajectory.is_empty()) {
+        throw std::invalid_argument("KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory's number of columns must be greater than 0.");
+      } else if (endEffectorTrajectory.n_rows != numberOfWorkspaceDimensions_) {
+        throw std::invalid_argument("KinematicallyRedundantMachines.setEndEffectorTrajectory: The end-effector trajectory's number of rows must be equal to the workspace's number of dimensions.");
+      }
 
-      endEffectorTrajectory_ = endEffectorTrajectory;
-#if defined(SUPPORT_MPI)
-      MPI_Bcast(endEffectorTrajectory_.memptr(), static_cast<int>(endEffectorTrajectory_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+      endEffectorTrajectory_ = synchronise(endEffectorTrajectory);
 
       reset();
     }
 
-    arma::Mat<double> KinematicallyRedundantMachines::getEndEffectorTrajectory() const {
+    arma::mat KinematicallyRedundantMachines::getEndEffectorTrajectory() const {
       return endEffectorTrajectory_;
     }
   }

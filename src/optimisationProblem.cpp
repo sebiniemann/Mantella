@@ -1,233 +1,230 @@
 #include "mantella_bits/optimisationProblem.hpp"
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
-#include <cassert>
-#include <cmath>
+#include <stdexcept>
 #include <utility>
 
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/config.hpp"
+#include "mantella_bits/mpi.hpp"
 
 namespace mant {
   OptimisationProblem::OptimisationProblem(
       const arma::uword numberOfDimensions)
-      : numberOfDimensions_(numberOfDimensions) {
-    // We avoid infinite values for any information on the problem, that could be used within an optimisation algorithm.
-    // Otherwise, we would need separate implementations to handle infinite boundaries.
-    setLowerBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) - 10);
-    setUpperBounds(arma::zeros<arma::Col<double>>(numberOfDimensions_) + 10);
+      : numberOfDimensions_(synchronise(numberOfDimensions)) {
+    if (numberOfDimensions_ < 1) {
+      throw std::domain_error("OptimisationProblem: The number of dimensions must be greater than 0.");
+    }
 
-    setParameterPermutation(range(0, numberOfDimensions_ - 1));
-    setParameterScaling(arma::ones<arma::Col<double>>(numberOfDimensions_));
-    setParameterTranslation(arma::zeros<arma::Col<double>>(numberOfDimensions_));
-    setParameterRotation(arma::eye<arma::Mat<double>>(numberOfDimensions_, numberOfDimensions_));
+    // Initialises the counters.
+    reset();
+
+    // Sets the default settings.
+    setLowerBounds(arma::zeros<arma::vec>(numberOfDimensions_) - 10);
+    setUpperBounds(arma::zeros<arma::vec>(numberOfDimensions_) + 10);
+
+    // Sets all parameter and objective value space modifiers with their neutral element.
+    setParameterPermutation(arma::regspace<arma::uvec>(0, numberOfDimensions_ - 1));
+    setParameterScaling(arma::ones<arma::vec>(numberOfDimensions_));
+    setParameterTranslation(arma::zeros<arma::vec>(numberOfDimensions_));
+    if (numberOfDimensions_ > 1) {
+      setParameterRotation(arma::eye<arma::mat>(numberOfDimensions_, numberOfDimensions_));
+    }
+    setMinimalParameterDistance(arma::zeros<arma::vec>(numberOfDimensions_));
 
     setObjectiveValueScaling(1.0);
     setObjectiveValueTranslation(0.0);
-
-    setMinimalParameterDistance(arma::zeros<arma::Col<double>>(numberOfDimensions_));
-
-    reset();
   }
 
-  void OptimisationProblem::setObjectiveFunction(
-      const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction,
-      const std::string& objectiveFunctionName) {
-    verify(static_cast<bool>(objectiveFunction), "OptimisationProblem.setObjectiveFunction: The objective function must be callable.");
+  void OptimisationProblem::setObjectiveFunctions(
+      const std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>>& objectiveFunctions) {
+    if (objectiveFunctions.size() == 0) {
+      throw std::invalid_argument("OptimisationProblem.setObjectiveFunctions: At least one objective function must be defined.");
+    }
 
-    objectiveFunction_ = objectiveFunction;
-    objectiveFunctionName_ = objectiveFunctionName;
+    for (const auto& objectiveFunction : objectiveFunctions) {
+      if (!static_cast<bool>(objectiveFunction.first)) {
+        throw std::invalid_argument("OptimisationProblem.setObjectiveFunctions: All objective functions must be callable.");
+      }
+    }
+
+    objectiveFunctions_ = objectiveFunctions;
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
 
-  void OptimisationProblem::setObjectiveFunction(
-      const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction) {
-    setObjectiveFunction(objectiveFunction, "Unnamed, custom objective function");
-  }
-
-  std::string OptimisationProblem::getObjectiveFunctionName() const {
-    return objectiveFunctionName_;
+  std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>> OptimisationProblem::getObjectiveFunctions() const {
+    return objectiveFunctions_;
   }
 
   double OptimisationProblem::getObjectiveValue(
-      const arma::Col<double>& parameter) {
-    verify(static_cast<bool>(objectiveFunction_), "OptimisationProblem.getObjectiveValue: The objective function must be callable.");
-    verify(parameter.n_elem == numberOfDimensions_, "OptimisationProblem.getObjectiveValue: The number of elements must be equal to the number of dimensions.");
-    verify(parameter.is_finite(), "OptimisationProblem.getObjectiveValue: The parameter must be finite.");
+      arma::vec parameter) {
+    if (parameter.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.getObjectiveValue: The number of elements must be equal to the optimisation problem's number of dimensions.");
+    } else if (objectiveFunctions_.size() == 0) {
+      throw std::invalid_argument("OptimisationProblem.getObjectiveValue: At least one objective function must be defined.");
+    }
 
-    // Always increase the number of evaluations.
-    ++numberOfEvaluations_;
+    ++usedNumberOfEvaluations_;
 
-    const arma::Col<double>& discretisedParameter = getDiscretisedParameter(parameter);
-    if (::mant::isCachingSamples) {
-      // Check if the result is already cached.
-      const auto n = cachedSamples_.find(discretisedParameter);
-      if (n == cachedSamples_.cend()) {
-        // Increases the number of distinct evaluations only, if we actually compute the value.
-        ++numberOfDistinctEvaluations_;
+    // Discretises the parameter
+    const arma::uvec& elementsToDiscretise = arma::find(minimalParameterDistance_ > 0);
+    parameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance_.elem(elementsToDiscretise)) % minimalParameterDistance_.elem(elementsToDiscretise);
+    if (numberOfDimensions_ > 1) {
+      parameter = parameter.elem(parameterPermutation_);
+    }
+    parameter = (parameterScaling_ % parameter - parameterTranslation_);
+    if (numberOfDimensions_ > 1) {
+      parameter = parameterRotation_ * parameter;
+    }
 
-        const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
-        // All objective values must be finite.
-        assert(std::isfinite(result));
+    double objectiveValue = 0.0;
+    const auto n = cachedSamples_.find(parameter);
+    if (n == cachedSamples_.cend()) {
+      // Increases the number of distinct evaluations only, if we actually compute the value.
+      ++usedNumberOfDistinctEvaluations_;
 
-        cachedSamples_.insert({discretisedParameter, result});
-        return result;
-      } else {
-        return n->second;
+      for (const auto& objectiveFunction : objectiveFunctions_) {
+        objectiveValue += objectiveFunction.first(parameter);
+      }
+
+      objectiveValue = objectiveValueScaling_ * objectiveValue + objectiveValueTranslation_;
+
+      if (::mant::isCachingSamples) {
+        cachedSamples_.insert({parameter, objectiveValue});
       }
     } else {
-      // Without caching, all function evaluations must be computed.
-      ++numberOfDistinctEvaluations_;
-
-      const double result = getModifiedObjectiveValue(objectiveFunction_(getModifiedParameter(discretisedParameter)));
-      // All objective values must be finite.
-      assert(std::isfinite(result));
-
-      return result;
+      objectiveValue = n->second;
     }
+
+    return objectiveValue;
   }
 
-  double OptimisationProblem::getNormalisedObjectiveValue(
-      const arma::Col<double>& parameter) {
-    return getObjectiveValue(lowerBounds_ + parameter % (upperBounds_ - lowerBounds_));
+  double OptimisationProblem::getObjectiveValueOfNormalisedParameter(
+      const arma::vec& normalisedParameter) {
+    if (normalisedParameter.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.getObjectiveValueOfNormalisedParameter: The number of elements must be equal to the optimisation problem's number of dimensions.");
+    } else if (arma::any(lowerBounds_ > upperBounds_)) {
+      throw std::logic_error("OptimisationProblem.getObjectiveValueOfNormalisedParameter: All upper bounds must be greater than their lower one.");
+    }
+
+    return getObjectiveValue(lowerBounds_ + normalisedParameter % (upperBounds_ - lowerBounds_));
   }
 
   void OptimisationProblem::setLowerBounds(
-      const arma::Col<double>& lowerBounds) {
-    verify(lowerBounds.n_elem == numberOfDimensions_, "OptimisationProblem.setLowerBounds: The lower bounds' number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(lowerBounds.is_finite(), "OptimisationProblem.setLowerBounds: The lower bounds must be finite.");
+      const arma::vec& lowerBounds) {
+    if (lowerBounds.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setLowerBounds: The lower bounds' number of elements must be equal to the optimisation problem's number of dimensions.");
+    }
 
-    lowerBounds_ = lowerBounds;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(lowerBounds_.memptr(), static_cast<int>(lowerBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    lowerBounds_ = synchronise(lowerBounds);
   }
 
-  arma::Col<double> OptimisationProblem::getLowerBounds() const {
+  arma::vec OptimisationProblem::getLowerBounds() const {
     return lowerBounds_;
   }
 
   void OptimisationProblem::setUpperBounds(
-      const arma::Col<double>& upperBounds) {
-    verify(upperBounds.n_elem == numberOfDimensions_, "OptimisationProblem.setUpperBounds: The upper bounds' number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(upperBounds.is_finite(), "OptimisationProblem.setUpperBounds: The upper bounds must be finite.");
+      const arma::vec& upperBounds) {
+    if (upperBounds.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setUpperBounds: The upper bounds' number of elements must be equal to the optimisation problem's number of dimensions.");
+    }
 
-    upperBounds_ = upperBounds;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(upperBounds_.memptr(), static_cast<int>(upperBounds_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    upperBounds_ = synchronise(upperBounds);
   }
 
-  arma::Col<double> OptimisationProblem::getUpperBounds() const {
+  arma::vec OptimisationProblem::getUpperBounds() const {
     return upperBounds_;
   }
 
   void OptimisationProblem::setParameterPermutation(
-      const arma::Col<arma::uword>& parameterPermutation) {
-    verify(parameterPermutation.n_elem == numberOfDimensions_, "OptimisationProblem.setParameterPermutation: The parameter permutation's number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(isPermutationVector(parameterPermutation, numberOfDimensions_, numberOfDimensions_), "OptimisationProblem.setParameterPermutation: The (provided) parameter permutation must be an actual permutation on the optimisation problem.");
+      const arma::uvec& parameterPermutation) {
+    if (parameterPermutation.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setParameterPermutation: The parameter permutation's number of elements must be equal to the optimisation problem's number of dimensions.");
+    } else if (!isPermutationVector(parameterPermutation, numberOfDimensions_, numberOfDimensions_)) {
+      throw std::invalid_argument("OptimisationProblem.setParameterPermutation: The parameter permutation must be an actual permutation on the optimisation problem.");
+    }
 
-#if defined(SUPPORT_MPI)
-    // MPI needs the exact type (here: *MPI_UNSIGNED*), while Armadillo's *arma::uword* is implementation dependent.
-    // Therefore, we convert the permutation matrix to a specific type first, ...
-    arma::Col<unsigned int> covertedParameterPermutation = arma::conv_to<arma::Col<unsigned int>>::from(parameterPermutation);
-    // ... synchronise it over MPI ...
-    MPI_Bcast(covertedParameterPermutation.memptr(), static_cast<int>(covertedParameterPermutation.n_elem), MPI_UNSIGNED, 0, MPI_COMM_WORLD);
-    // ... and reconvert/store is afterwards.
-    parameterPermutation_ = arma::conv_to<arma::Col<arma::uword>>::from(covertedParameterPermutation);
-#else
-    parameterPermutation_ = parameterPermutation;
-#endif
+    parameterPermutation_ = synchronise(parameterPermutation);
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
 
-  arma::Col<arma::uword> OptimisationProblem::getParameterPermutation() const {
+  arma::uvec OptimisationProblem::getParameterPermutation() const {
     return parameterPermutation_;
   }
 
   void OptimisationProblem::setParameterScaling(
-      const arma::Col<double>& parameterScaling) {
-    verify(parameterScaling.n_elem == numberOfDimensions_, "OptimisationProblem.setParameterScaling: The parameter scaling's number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(parameterScaling.is_finite(), "OptimisationProblem.setParameterScaling: The parameter scaling must be finite.");
+      const arma::vec& parameterScaling) {
+    if (parameterScaling.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setParameterScaling: The parameter scaling's number of elements must be equal to the optimisation problem's number of dimensions.");
+    }
 
-    parameterScaling_ = parameterScaling;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(parameterScaling_.memptr(), static_cast<int>(parameterScaling_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    parameterScaling_ = synchronise(parameterScaling);
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
 
-  arma::Col<double> OptimisationProblem::getParameterScaling() const {
+  arma::vec OptimisationProblem::getParameterScaling() const {
     return parameterScaling_;
   }
 
   void OptimisationProblem::setParameterTranslation(
-      const arma::Col<double>& parameterTranslation) {
-    verify(parameterTranslation.n_elem == numberOfDimensions_, "OptimisationProblem.setParameterTranslation: The parameter translation's number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(parameterTranslation.is_finite(), "OptimisationProblem.setParameterTranslation: The parameter translation must be finite.");
+      const arma::vec& parameterTranslation) {
+    if (parameterTranslation.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setParameterTranslation: The parameter translation's number of elements must be equal to the optimisation problem's number of dimensions.");
+    }
 
-    parameterTranslation_ = parameterTranslation;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(parameterTranslation_.memptr(), static_cast<int>(parameterTranslation_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    parameterTranslation_ = synchronise(parameterTranslation);
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
 
-  arma::Col<double> OptimisationProblem::getParameterTranslation() const {
+  arma::vec OptimisationProblem::getParameterTranslation() const {
     return parameterTranslation_;
   }
 
   void OptimisationProblem::setParameterRotation(
-      const arma::Mat<double>& parameterRotation) {
-    verify(parameterRotation.n_rows == numberOfDimensions_, "OptimisationProblem.setParameterRotation: The parameter rotation's number of rows must be equal to the optimisation problem's number of dimensions.");
-    verify(isRotationMatrix(parameterRotation), "OptimisationProblem.setParameterRotation: The (provided) parameter rotation must be an actual rotation matrix.");
+      const arma::mat& parameterRotation) {
+    if (parameterRotation.n_rows != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setParameterRotation: The parameter rotation's number of rows must be equal to the optimisation problem's number of dimensions.");
+    } else if (!isRotationMatrix(parameterRotation)) {
+      throw std::invalid_argument("OptimisationProblem.setParameterRotation: The parameter rotation must be an actual rotation matrix.");
+    }
 
-    parameterRotation_ = parameterRotation;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(parameterRotation_.memptr(), static_cast<int>(parameterRotation_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    parameterRotation_ = synchronise(parameterRotation);
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
   }
 
-  arma::Mat<double> OptimisationProblem::getParameterRotation() const {
+  arma::mat OptimisationProblem::getParameterRotation() const {
     return parameterRotation_;
   }
 
   void OptimisationProblem::setMinimalParameterDistance(
-      const arma::Col<double>& minimalParameterDistance) {
-    verify(minimalParameterDistance.n_elem == numberOfDimensions_, "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance's number of elements must be equal to the optimisation problem's number of dimensions.");
-    verify(arma::all(minimalParameterDistance >= 0), "OptimisationProblem.setMinimalParameterDistance: Each minimal parameter distance must be positive (including 0).");
-    verify(minimalParameterDistance.is_finite(), "OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance must be finite.");
+      const arma::vec& minimalParameterDistance) {
+    if (minimalParameterDistance.n_elem != numberOfDimensions_) {
+      throw std::invalid_argument("OptimisationProblem.setMinimalParameterDistance: The minimal parameter distance's number of elements must be equal to the optimisation problem's number of dimensions.");
+    } else if (arma::any(minimalParameterDistance < 0)) {
+      throw std::domain_error("OptimisationProblem.setMinimalParameterDistance: Each minimal parameter distance must be positive (including 0).");
+    }
 
-    minimalParameterDistance_ = minimalParameterDistance;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(minimalParameterDistance_.memptr(), static_cast<int>(minimalParameterDistance_.n_elem), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    minimalParameterDistance_ = synchronise(minimalParameterDistance);
   }
 
-  arma::Col<double> OptimisationProblem::getMinimalParameterDistance() const {
+  arma::vec OptimisationProblem::getMinimalParameterDistance() const {
     return minimalParameterDistance_;
   }
 
   void OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
-    verify(std::isfinite(objectiveValueScaling), "OptimisationProblem.setObjectiveValueScaling: The objective value scaling must be finite.");
-
-    objectiveValueScaling_ = objectiveValueScaling;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(&objectiveValueScaling_, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    objectiveValueScaling_ = synchronise(objectiveValueScaling);
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
@@ -239,12 +236,7 @@ namespace mant {
 
   void OptimisationProblem::setObjectiveValueTranslation(
       const double objectiveValueTranslation) {
-    verify(std::isfinite(objectiveValueTranslation), "OptimisationProblem.setObjectiveValueTranslation: The objective value translation must be finite.");
-
-    objectiveValueTranslation_ = objectiveValueTranslation;
-#if defined(SUPPORT_MPI)
-    MPI_Bcast(&objectiveValueTranslation_, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#endif
+    objectiveValueTranslation_ = synchronise(objectiveValueTranslation);
 
     // Resets all counters and caches, as the problem could have changed.
     reset();
@@ -254,45 +246,22 @@ namespace mant {
     return objectiveValueTranslation_;
   }
 
-  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
+  std::unordered_map<arma::vec, double, Hash, IsEqual> OptimisationProblem::getCachedSamples() const {
     return cachedSamples_;
   }
 
-  arma::uword OptimisationProblem::getNumberOfEvaluations() const {
-    return numberOfEvaluations_;
+  arma::uword OptimisationProblem::getUsedNumberOfEvaluations() const {
+    return usedNumberOfEvaluations_;
   }
 
-  arma::uword OptimisationProblem::getNumberOfDistinctEvaluations() const {
-    return numberOfDistinctEvaluations_;
+  arma::uword OptimisationProblem::getUsedNumberOfDistinctEvaluations() const {
+    return usedNumberOfDistinctEvaluations_;
   }
 
   void OptimisationProblem::reset() {
-    numberOfEvaluations_ = 0;
-    numberOfDistinctEvaluations_ = 0;
+    usedNumberOfEvaluations_ = 0;
+    usedNumberOfDistinctEvaluations_ = 0;
 
     cachedSamples_.clear();
-  }
-
-  arma::Col<double> OptimisationProblem::getDiscretisedParameter(
-      const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    arma::Col<double> discretisedParameter = parameter;
-    const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance_ > 0);
-    discretisedParameter.elem(elementsToDiscretise) = arma::floor(discretisedParameter.elem(elementsToDiscretise) / minimalParameterDistance_.elem(elementsToDiscretise)) % minimalParameterDistance_.elem(elementsToDiscretise);
-
-    return discretisedParameter;
-  }
-
-  arma::Col<double> OptimisationProblem::getModifiedParameter(
-      const arma::Col<double>& parameter) const {
-    assert(parameter.n_elem == numberOfDimensions_);
-
-    return parameterRotation_ * (parameterScaling_ % parameter.elem(parameterPermutation_) - parameterTranslation_);
-  }
-
-  double OptimisationProblem::getModifiedObjectiveValue(
-      const double objectiveValue) const {
-    return objectiveValueScaling_ * objectiveValue + objectiveValueTranslation_;
   }
 }

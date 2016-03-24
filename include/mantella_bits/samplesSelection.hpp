@@ -12,7 +12,7 @@
 // IWYU pragma: no_forward_declare mant::IsEqual
 
 namespace mant {
-  std::unordered_map<arma::Col<double>, double, Hash, IsEqual> elitists(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
+  std::unordered_map<arma::vec, double, Hash, IsEqual> elitists(
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect);
 }

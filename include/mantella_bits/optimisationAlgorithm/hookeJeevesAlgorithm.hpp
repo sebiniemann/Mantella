@@ -1,8 +1,5 @@
 #pragma once
 
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
@@ -14,11 +11,6 @@ namespace mant {
    public:
     explicit HookeJeevesAlgorithm();
 
-    void initialise(
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& initialParameters) override;
-
-    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
     using OptimisationAlgorithm::optimise;
 
     void optimise(
@@ -27,14 +19,16 @@ namespace mant {
     void setInitialStepSize(
         const double initialStepSize);
     double getInitialStepSize() const;
+
     void setStepSizeDecrease(
         const double stepSizeDecrease);
     double getStepSizeDecrease() const;
 
-    // The following variables are only in public scope, to be used inside lambdas
+    // Public accessible to be used in lambdas
+    double stepSize_;
+
+   protected:
     double initialStepSize_;
     double stepSizeDecrease_;
-
-    double stepSize_;
   };
 }

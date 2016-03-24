@@ -1,57 +1,44 @@
 // Catch
 #include <catch.hpp>
-#include "catchExtension.hpp"
-
-// Mantella
-#include <mantella>
+#include "catchHelper.hpp"
 
 SCENARIO("elitists", "[samplesSelection][elitists]") {
   GIVEN("A set of samples and a number of samples to select") {
-    arma::Mat<double> parameters;
-    REQUIRE(parameters.load(::rootTestDataDirectory + "/_parameters_3x100.input"));
-
-    arma::Row<double> objectiveValues;
-    REQUIRE(objectiveValues.load(::rootTestDataDirectory + "/_objectiveValues_1x100.input"));
-
-    std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      samples.insert({parameters.col(n), objectiveValues(n)});
+    WHEN("The set is empty") {
+      THEN("Return an empty set") {
+        CHECK(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({}), 0).empty() == true);
+      }
     }
 
-    WHEN("The set is dimensionally consistent and the number of samples to select is not larger than the number of samples") {
-      const arma::uword numberOfSamplesToSelect = 10;
-      CAPTURE(numberOfSamplesToSelect);
-
-      THEN("Return the elitists") {
-        arma::Row<arma::uword> expectedSamplesIndex;
-        REQUIRE(expectedSamplesIndex.load(::rootTestDataDirectory + "/elitists_1x10.expected"));
-
-        std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> expectedSamples;
-        for (arma::uword n = 0; n < expectedSamplesIndex.n_elem; ++n) {
-          expectedSamples.insert({parameters.col(expectedSamplesIndex(n)), objectiveValues(expectedSamplesIndex(n))});
-        }
-
-        HAS_SAME_SAMPLES(mant::elitists(samples, numberOfSamplesToSelect), expectedSamples);
+    WHEN("The number of samples to select is 0") {
+      THEN("Return an empty set") {
+        CHECK(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{0.0}, -1.0}}), 0).empty() == true);
       }
     }
 
     WHEN("The set is dimensionally inconsistent") {
-      const arma::uword numberOfSamplesToSelect = 10;
-      CAPTURE(numberOfSamplesToSelect);
-
-      samples.insert({continuousRandomNumbers(parameters.n_rows + 1), continuousRandomNumber()});
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(mant::elitists(samples, numberOfSamplesToSelect), std::logic_error);
+      THEN("Throw a invalid argument error") {
+        CHECK_THROWS_AS(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{0.0}, -1.0}, {{2.0, -3.0}, 4.0}}), 2), std::invalid_argument);
       }
     }
 
-    WHEN("The number of samples to select is larger than the number of samples") {
-      const arma::uword numberOfSamplesToSelect = samples.size() + 1;
-      CAPTURE(numberOfSamplesToSelect);
+    WHEN("The number of samples to select is greater than the set's size") {
+      THEN("Throw a logic error") {
+        CHECK_THROWS_AS(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{0.0}, -1.0}}), 2), std::logic_error);
+      }
+    }
 
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(mant::elitists(samples, numberOfSamplesToSelect), std::logic_error);
+    WHEN("The number of samples to select is equal to the set's size") {
+      THEN("Return the set") {
+        const std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>& expectedSet = {{{0.0, -3.0}, -1.0}, {{2.0, -3.0}, 4.0}};
+        CHECK(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{0.0, -3.0}, -1.0}, {{2.0, -3.0}, 4.0}}), 2) == expectedSet);
+      }
+    }
+
+    WHEN("The number of samples to select is less than the set's size") {
+      THEN("Return the elitists") {
+        const std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>& expectedSet = {{{0.0, -3.0}, -1.0}, {{2.0, -1.0}, -4.0}};
+        CHECK(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{2.0, -3.0}, 3.0}, {{0.0, -3.0}, -1.0}, {{2.0, -1.0}, -4.0}}), 2) == expectedSet);
       }
     }
   }
