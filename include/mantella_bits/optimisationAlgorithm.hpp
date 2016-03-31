@@ -48,6 +48,11 @@ namespace mant {
     void setRestartingFunction(
         std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction);
     std::string getRestartingFunctionName() const;
+    void setCommunicationFunction(
+        std::function<void()> communicationFunction, const std::string& communicationFunctionName);
+    void setCommunicationFunction(
+        std::function<void()> communicationFunction);
+    std::string getCommunicationFunctionName() const;
 
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
@@ -58,6 +63,9 @@ namespace mant {
     void setMaximalDuration(
         const std::chrono::microseconds maximalDuration);
     std::chrono::microseconds getMaximalDuration() const;
+    void setNumberOfCommunicationStalls(
+         const arma::uword numberOfCommunicationStalls);
+    arma::uword getNumberOfCommunicationStalls() const;
 
     bool isFinished() const;
     bool isTerminated() const;
@@ -77,6 +85,7 @@ namespace mant {
     // The following variables are only in public scope, to be used inside lambdas
     int nodeRank_;
     int numberOfNodes_;
+    arma::uword numberOfCommunicationStalls_;
 
     double acceptableObjectiveValue_;
 
@@ -97,6 +106,8 @@ namespace mant {
     std::string isStagnatingFunctionName_;
     std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction_;
     std::string restartingFunctionName_;
+    std::function<void()> communicationFunction_;
+    std::string communicationFunctionName_;
     std::chrono::time_point<std::chrono::steady_clock> initialTimePoint_;
 
     std::vector<std::pair<arma::Col<double>, double>> recordedSampling_;

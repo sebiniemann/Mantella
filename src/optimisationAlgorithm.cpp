@@ -17,6 +17,7 @@ namespace mant {
     setAcceptableObjectiveValue(-arma::datum::inf);
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(1));
+    setNumberOfCommunicationStalls(1);
 
     setBoundariesHandlingFunction(
         [this](
@@ -109,22 +110,34 @@ namespace mant {
     assert(objectiveValuesWithDifferences.first.n_elem == objectiveValuesWithDifferences.second.n_elem);
     assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
 
+    #if defined(SUPPORT_MPI)
+    communicationFunction_();
+    #endif
+
     while (!isTerminated() && !isFinished()) {
-      if (isStagnatingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
-        parameters = restartingFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
-      } else {
-        parameters = nextParametersFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
+
+
+      for (arma::uword n = 0; n < numberOfCommunicationStalls_; ++n) {
+
+        if (isStagnatingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
+          parameters = restartingFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
+        } else {
+          parameters = nextParametersFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
+        }
+        assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
+
+        parameters = boundariesHandlingFunction_(parameters, parameters<0.0, parameters> 1.0);
+        assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
+
+        objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
+        assert(objectiveValuesWithDifferences.first.n_elem == objectiveValuesWithDifferences.second.n_elem);
+        assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
       }
-      assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
+      #if defined(SUPPORT_MPI)
+        communicationFunction_();
+      #endif
 
-      parameters = boundariesHandlingFunction_(parameters, parameters<0.0, parameters> 1.0);
-      assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
 
-      objectiveValuesWithDifferences = evaluate(optimisationProblem, parameters);
-      assert(objectiveValuesWithDifferences.first.n_elem == objectiveValuesWithDifferences.second.n_elem);
-      assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
-
-      // Communication
     }
 
     // Sync best parameter
@@ -228,6 +241,26 @@ namespace mant {
     return restartingFunctionName_;
   }
 
+  void OptimisationAlgorithm::setCommunicationFunction(
+      std::function<void()> communicationFunction, const std::string& communicationFunctionName){
+    verify(static_cast<bool>(communicationFunction), "OptimisationAlgorithm.setCommunicationFunction: The communication function must be callable.");
+
+
+    communicationFunction_ = communicationFunction;
+    communicationFunctionName_ = communicationFunctionName;
+
+    reset();
+  }
+
+  void OptimisationAlgorithm::setCommunicationFunction(
+      std::function<void()> communicationFunction){
+    setCommunicationFunction(communicationFunction, "Unnamed, custom communication function");
+  }
+
+  std::string OptimisationAlgorithm::getCommunicationFunctionName() const {
+    return communicationFunctionName_;
+  }
+
   void OptimisationAlgorithm::setAcceptableObjectiveValue(
       const double acceptableObjectiveValue) {
     acceptableObjectiveValue_ = acceptableObjectiveValue;
@@ -257,6 +290,17 @@ namespace mant {
 
   std::chrono::microseconds OptimisationAlgorithm::getMaximalDuration() const {
     return maximalDuration_;
+  }
+
+  void OptimisationAlgorithm::setNumberOfCommunicationStalls(
+       const arma::uword numberOfCommunicationStalls) {
+    verify(numberOfCommunicationStalls > 0, "OptimisationAlgorithm.setNumberOfCommunicationStalls: The number of communications must be greater than 0.");
+
+    numberOfCommunicationStalls_ = numberOfCommunicationStalls;
+  }
+
+  arma::uword OptimisationAlgorithm::getNumberOfCommunicationStalls() const {
+    return numberOfCommunicationStalls_;
   }
 
   arma::uword OptimisationAlgorithm::getNumberOfIterations() const {
@@ -326,7 +370,12 @@ namespace mant {
 
       if (objectiveValue < bestObjectiveValue_) {
         if (::mant::isVerbose) {
+
+        #if defined(SUPPORT_MPI)
+          std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Node " << nodeRank_ << " Found better solution.\n";
+        #else
           std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Found better solution.\n";
+        #endif
           std::cout << "    Difference to the previous best objective value: " << objectiveValue - bestObjectiveValue_ << std::endl;
           std::cout << "    Best objective value: " << objectiveValue << "\n";
           std::cout << "    Best parameter: " << parameter.t() << std::endl;
