@@ -18,34 +18,14 @@ namespace mant {
         const double transferTime) {
       verify(transferTime > 0.0, "lambert: The transfer time must be greater than zero.");
 
-      // 1 - Getting lambda and Ts
       double flightDistance = arma::norm(departurePosition - arrivalPosition);
-
       double departureDistanceFromSun = arma::norm(departurePosition);
-      double arrivalDistanceFromSun = arma::norm(arrivalPosition);
-      
+      double arrivalDistanceFromSun = arma::norm(arrivalPosition);     
       double depatureArrivalDotProduct = arma::dot(departurePosition, arrivalPosition);
-/*
-      double semiPerimeter = (flightDistance + departureDistanceFromSun + arrivalDistanceFromSun) / 2.0;
-
-      arma::Col<double>::fixed<3> departurePositionNormalised = arma::normalise(departurePosition);
-      arma::Col<double>::fixed<3> arrivalPositionNormalised = arma::normalise(arrivalPosition);
-
-      arma::Col<double>::fixed<3> depatureArrivalCrossProduct = arma::normalise(arma::cross(departurePositionNormalised, arrivalPositionNormalised));
-
-      verify(depatureArrivalCrossProduct(2) != 0.0, "lambert: depatureArrivalCrossProduct must have a z component unequal zero.");
-
-      double lambda = std::sqrt(1.0 - flightDistance / semiPerimeter);
-
-      if (depatureArrivalCrossProduct(2) < 0.0) {
-        lambda = -lambda;
-      }
-*/
-      //double T00 = std::acos(lambda) + lambda * sqrt(1.0 - std::pow(lambda, 2.0));
 
       double t_m = 1.0;
       arma::uword maximalNumberOfRevolutions = 20;
-      arma::uword numberOfRevolutions; // = std::floor(T / arma::datum::pi);
+      arma::uword numberOfRevolutions; 
       
       double A = 0.0;
       double B = 0.0;
@@ -72,8 +52,7 @@ namespace mant {
         
         B = departureDistanceFromSun + arrivalDistanceFromSun + 1.0 / std::sqrt(c2) * (A * (parameter * c3 - 1.0));
         double chi = std::sqrt(B / c2);
-            
-       
+                 
         return 1.0 / std::sqrt(standardGravitationalParameterOfSun) * (std::pow(chi, 3.0) * c3 + A * std::sqrt(B)) / 86400.0 - transferTime;
       };
       
@@ -90,8 +69,6 @@ namespace mant {
       };
       
       std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> velocityPairs;
-      //if (std::acos(lambda) + lambda * sqrt(1.0 - std::pow(lambda, 2.0)) > 0.0) { //if (T < T0) { // Halley iterations to find xM and TM
-
       velocityPairs.reserve(maximalNumberOfRevolutions * 4 + 2);
       
       double lowerBound = -4.0 * arma::datum::pi;
@@ -107,7 +84,6 @@ namespace mant {
       t_m = -t_m;
       
       mant::OptimisationProblem timeOfFlightMinimumProblem(1);
-      //timeOfFlightMinimumProblem.setObjectiveFunction(timeOfFlightFunction);
       timeOfFlightMinimumProblem.setObjectiveFunction([&timeOfFlightFunction](const arma::Col<double>& parameter){
         return timeOfFlightFunction(parameter(0));
       });
@@ -165,79 +141,6 @@ namespace mant {
       }
       
       return velocityPairs;
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      /*
-     // }
-      //std::cout << "000" << std::endl;
-      
-      std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> velocitiesVector;
-      velocitiesVector.reserve(maximalNumberOfRevolutions * 2);
-      //std::cout << "0000" << std::endl;
-      double gamma = std::sqrt(standardGravitationalParameterOfSun * semiPerimeter / 2.0);
-      double rho = (departureDistanceFromSun - arrivalDistanceFromSun) / flightDistance;
-      double sigma = std::sqrt(1 - std::pow(rho, 2.0));
-
-      double vt;
-      double vr1;
-      double vt1;
-      double vr2;
-      double vt2;
-      double y;
-
-      arma::Col<double>::fixed<3> it1;
-      arma::Col<double>::fixed<3> it2;
-      if (depatureArrivalCrossProduct(2) < 0.0) {
-        it1 = arma::normalise(arma::cross(departurePositionNormalised, depatureArrivalCrossProduct));
-        it2 = arma::normalise(arma::cross(arrivalPositionNormalised, depatureArrivalCrossProduct));
-      } else {
-        it1 = arma::normalise(arma::cross(depatureArrivalCrossProduct, departurePositionNormalised));
-        it2 = arma::normalise(arma::cross(depatureArrivalCrossProduct, arrivalPositionNormalised));
-      }
-
-      //auto velocityVectorsFunction = [&lambda, &i](){};
-      //std::cout << "1" << std::endl;
-      for (arma::uword i = 0; i < maximalNumberOfRevolutions; ++i) {
-        y = std::sqrt(std::pow(lambda, 2.0) * (std::pow(velocityPairs.at(2 * i), 2.0) - 1.0) + 1.0);
-        vr1 = gamma * ((lambda * y - velocityPairs.at(2 * i)) - rho * (lambda * y + velocityPairs.at(2 * i))) / departureDistanceFromSun;
-        vr2 = -gamma * ((lambda * y - velocityPairs.at(2 * i)) + rho * (lambda * y + velocityPairs.at(2 * i))) / arrivalDistanceFromSun;
-
-        vt = gamma * sigma * (y + lambda * velocityPairs.at(2 * i));
-        vt1 = vt / departureDistanceFromSun;
-        vt2 = vt / arrivalDistanceFromSun;
-
-        velocitiesVector.push_back(std::make_pair(vr1 * departurePositionNormalised + vt1 * it1, vr2 * arrivalPositionNormalised + vt2 * it2));
-
-        it1 = -it1;
-        it2 = -it2;
-        lambda = -lambda;
-
-        y = std::sqrt(std::pow(lambda, 2.0) * (std::pow(velocityPairs.at(2 * i + 1), 2.0) - 1.0) + 1.0);
-        vr1 = gamma * ((lambda * y - velocityPairs.at(2 * i + 1)) - rho * (lambda * y + velocityPairs.at(2 * i + 1))) / departureDistanceFromSun;
-        vr2 = -gamma * ((lambda * y - velocityPairs.at(2 * i + 1)) + rho * (lambda * y + velocityPairs.at(2 * i + 1))) / arrivalDistanceFromSun;
-
-        vt = gamma * sigma * (y + lambda * velocityPairs.at(2 * i + 1));
-        vt1 = vt / departureDistanceFromSun;
-        vt2 = vt / arrivalDistanceFromSun;
-
-        it1 = -it1;
-        it2 = -it2;
-        lambda = -lambda;
-        //std::cout << "1.1 - " << i << std::endl;
-        velocitiesVector.push_back(std::make_pair(vr1 * departurePositionNormalised + vt1 * it1, vr2 * arrivalPositionNormalised + vt2 * it2));
-      }
-     // std::cout << "2" << std::endl;
-      return velocitiesVector;*/
     }
   }
 }
