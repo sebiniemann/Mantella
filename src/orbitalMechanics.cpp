@@ -6,6 +6,8 @@
 // Mantella
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/numericalAnalysis.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 
 namespace mant {
   namespace itd {
@@ -48,7 +50,7 @@ namespace mant {
       double A = 0.0;
       double B = 0.0;
       
-      auto timeOfFlightFunction = [&A, &B, &t_m, &depatureArrivalDotProduct, &departureDistanceFromSun, &arrivalDistanceFromSun, &transferTime, &standardGravitationalParameterOfSun](
+      auto timeOfFlightFunction = [&A, &B, &t_m, &depatureArrivalDotProduct, &departureDistanceFromSun, &arrivalDistanceFromSun, &transferTime](
           const double parameter) {
         
         double gamma = depatureArrivalDotProduct / (departureDistanceFromSun * arrivalDistanceFromSun);
@@ -72,20 +74,20 @@ namespace mant {
         double chi = std::sqrt(B / c2);
             
        
-        return 1.0 / std::sqrt(standardGravitationalParameterOfSun) * (std::pow(chi, 3.0) * c3 + A * std::sqrt(B)) / 86400.0; - transferTime;
+        return 1.0 / std::sqrt(standardGravitationalParameterOfSun) * (std::pow(chi, 3.0) * c3 + A * std::sqrt(B)) / 86400.0 - transferTime;
       };
       
       double F;
       double G;
       double Gdot;
       
-      auto calculateVelocityVectorsFunction = [&F, &G, &Gdot, &departurePosition, &arrivalPosition](){
+      auto calculateVelocityVectorsFunction = [&A, &B, &F, &G, &Gdot, &departurePosition, &departureDistanceFromSun, &arrivalPosition, &arrivalDistanceFromSun](){
         F = 1.0 - B / departureDistanceFromSun;
         G = A * std::sqrt(B / standardGravitationalParameterOfSun);
         Gdot = 1.0 - B / arrivalDistanceFromSun;
         
         return std::make_pair((1.0 / G) * (arrivalPosition - departurePosition * F), (1.0 / G) * (Gdot * arrivalPosition - departurePosition));
-      }
+      };
       
       std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> velocityPairs;
       //if (std::acos(lambda) + lambda * sqrt(1.0 - std::pow(lambda, 2.0)) > 0.0) { //if (T < T0) { // Halley iterations to find xM and TM
@@ -100,12 +102,15 @@ namespace mant {
       velocityPairs.push_back(calculateVelocityVectorsFunction());
       t_m = -t_m;
       
-      double brentShortWaySolution = mant::brent(timeOfFlightFunction, lowerBound, upperBound, 100, 1e-10);
+      double brentLongWaySolution = mant::brent(timeOfFlightFunction, lowerBound, upperBound, 100, 1e-10);
       velocityPairs.push_back(calculateVelocityVectorsFunction());
       t_m = -t_m;
       
       mant::OptimisationProblem timeOfFlightMinimumProblem(1);
-      timeOfFlightMinimumProblem.setObjectiveFunction(timeOfFlightFunction);
+      //timeOfFlightMinimumProblem.setObjectiveFunction(timeOfFlightFunction);
+      timeOfFlightMinimumProblem.setObjectiveFunction([&timeOfFlightFunction](const arma::Col<double>& parameter){
+        return timeOfFlightFunction(parameter(0));
+      });
       
       mant::HookeJeevesAlgorithm timeOfFlightMinimumAlgorithm;
       timeOfFlightMinimumAlgorithm.setMaximalNumberOfIterations(100);
@@ -119,21 +124,32 @@ namespace mant {
         timeOfFlightMinimumProblem.setUpperBounds({upperBound});          
         
         timeOfFlightMinimumAlgorithm.optimise(timeOfFlightMinimumProblem, arma::Col<double>((upperBound - lowerBound) / 2.0));          
-        double doubletimeOfFlightMinimum = timeOfFlightMinimumAlgorithm.getBestParameter();
+        arma::Col<double> timeOfFlightMinimum = timeOfFlightMinimumAlgorithm.getBestParameter();
 
-        double brentShortWaySolutionLeft = mant::brent(timeOfFlightFunction, lowerBound, timeOfFlightMinimum, 100, 1e-10);
-        std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentShortWaySolutionLeftVelocities = calculateVelocityVectorsFunction();
-        double brentShortWaySolutionRight = mant::brent(timeOfFlightFunction, timeOfFlightMinimum, upperBound, 100, 1e-10);
-        std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentShortWaySolutionRightVelocities = calculateVelocityVectorsFunction();
+        double brentShortWaySolutionLeft = mant::brent(timeOfFlightFunction, lowerBound, timeOfFlightMinimum(0), 100, 1e-10);
         
+        if(std::isnan(brentShortWaySolutionLeft)){
+          break;
+        }
+        
+        std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentShortWaySolutionLeftVelocities = calculateVelocityVectorsFunction();
+        
+        double brentShortWaySolutionRight = mant::brent(timeOfFlightFunction, timeOfFlightMinimum(0), upperBound, 100, 1e-10);
+        std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentShortWaySolutionRightVelocities = calculateVelocityVectorsFunction();   
         t_m = -t_m;
         
         timeOfFlightMinimumAlgorithm.optimise(timeOfFlightMinimumProblem, arma::Col<double>((upperBound - lowerBound) / 2.0));          
         timeOfFlightMinimum = timeOfFlightMinimumAlgorithm.getBestParameter();
         
-        double brentLongWaySolutionLeft = mant::brent(timeOfFlightFunction, lowerBound, timeOfFlightMinimum, 100, 1e-10);
+        double brentLongWaySolutionLeft = mant::brent(timeOfFlightFunction, lowerBound, timeOfFlightMinimum(0), 100, 1e-10);
+        
+        if(std::isnan(brentLongWaySolutionLeft)){
+          break;
+        }
+        
         std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentLongWaySolutionLeftVelocities = calculateVelocityVectorsFunction();
-        double brentLongWaySolutionRight = mant::brent(timeOfFlightFunction, timeOfFlightMinimum, upperBound, 100, 1e-10);
+        
+        double brentLongWaySolutionRight = mant::brent(timeOfFlightFunction, timeOfFlightMinimum(0), upperBound, 100, 1e-10);
         std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentLongWaySolutionRightVelocities = calculateVelocityVectorsFunction();
         
         t_m = -t_m;
