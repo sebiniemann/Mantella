@@ -43,7 +43,7 @@ namespace mant {
       return upperBound;
     }
 
-    verify(lowerBoundObjectiveValue * upperBoundObjectiveValue <= 0.0, "brent: The lower bound and upper bound objective value must have a different sign.");
+    verify(lowerBoundObjectiveValue * upperBoundObjectiveValue <= 0.0 || !std::isfinite(lowerBoundObjectiveValue) || !std::isfinite(upperBoundObjectiveValue), "brent: The lower bound and upper bound objective value must have a different sign.");
 
     // The previous upper bound is used within the interpolation and **must** be different from the current upper bound.
     // Therefore, the initial, previous upper bound is set to the lower bound.
@@ -65,7 +65,7 @@ namespace mant {
 
       double stepSize;
       // In case the correlation "a lower value is closer to the root" is incorrect, the interpolation is skipped and a bisection is performed.
-      if (std::abs(previousUpperBoundObjectiveValue) <= std::abs(upperBoundObjectiveValue)) {
+      if (std::abs(previousUpperBoundObjectiveValue) <= std::abs(upperBoundObjectiveValue) || !std::isfinite(lowerBoundObjectiveValue) || !std::isfinite(upperBoundObjectiveValue)) {
         stepSize = middleOfBounds;
       } else {
         double upperToPreviousUpperBoundObjectiveValueRatio = upperBoundObjectiveValue / previousUpperBoundObjectiveValue;
