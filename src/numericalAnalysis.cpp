@@ -24,9 +24,11 @@ namespace mant {
 
     // Returns the lower bound, if both bounds are equal and a root.
     if (std::abs(lowerBound - upperBound) < 1e-12) {
-      verify(lowerBoundObjectiveValue <= acceptableTolerance, "brent: Both bounds are equal, but neither is close enough to the root, resulting in an impossible to solve problem.");
-
-      return lowerBound;
+      if (lowerBoundObjectiveValue <= acceptableTolerance) {
+        return lowerBound;
+      } else {
+        return arma::datum::nan;
+      }
     }
 
     // Returns the lower bound, if its already close enough to the root.
