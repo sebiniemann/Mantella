@@ -21,6 +21,8 @@ namespace mant {
 
       double departureDistanceFromSun = arma::norm(departurePosition);
       double arrivalDistanceFromSun = arma::norm(arrivalPosition);
+      
+      double depatureArrivalDotProduct = arma::dot(departurePosition, arrivalPosition);
 
       double semiPerimeter = (flightDistance + departureDistanceFromSun + arrivalDistanceFromSun) / 2.0;
 
@@ -42,29 +44,31 @@ namespace mant {
       arma::uword maximalNumberOfRevolutions = 20;
       arma::uword numberOfRevolutions; // = std::floor(T / arma::datum::pi);
       std::cout << "0" << std::endl;
-      auto timeOfFlightFunction = [&lambda, &numberOfRevolutions, &transferTime](
+      auto timeOfFlightFunction = [&depatureArrivalDotProduct, &departureDistanceFromSun, &arrivalDistanceFromSun, &transferTime, &standardGravitationalParameterOfSun](
           const double parameter) {
-        double timeOfFlight;    
-        if (std::abs(1.0 - parameter) < 1e-12) {
-          return arma::datum::nan;
+        
+        double gamma = depatureArrivalDotProduct / (departureDistanceFromSun * arrivalDistanceFromSun);
+        double A = std::sqrt(departureDistanceFromSun * arrivalDistanceFromSun * (1.0 + gamma));
+        
+        // Calculates the values for the second and third Stumpff function c2 and c3.
+        double c2;
+        double c3;
+        if (parameter > 0){
+          c2 = (1.0 - std::cos(std::sqrt(parameter))) / parameter;
+          c3 = (1.0 - std::sin(std::sqrt(parameter)) / std::sqrt(parameter)) / parameter;
+        } else if (parameter < 0) {
+          c2 = (1.0 - std::cosh(std::sqrt(-parameter))) / parameter;
+          c3 = (1.0 - std::sinh(std::sqrt(-parameter)) / std::sqrt(-parameter)) / parameter;
         } else {
-          double a = 1.0 / (1.0 - std::pow(parameter, 2.0));
-          timeOfFlight = std::abs(a) * std::sqrt(std::abs(a));
-          
-          if (parameter < 1.0) {
-            double alpha = 2.0 * std::acos(parameter);
-            double beta = std::copysign(2 * std::asin( std::sqrt( std::pow(lambda, 2.0) / a)), lambda);
-
-            timeOfFlight *= (alpha - std::sin(alpha)) - (beta - std::sin(beta)) + 2.0 * arma::datum::pi * numberOfRevolutions;
-          } else {
-            double alpha = 2.0 * std::acosh(parameter);
-            double beta = std::copysign(2.0 * std::asinh( std::sqrt( std::pow(lambda, 2.0) / -a)), lambda);
-            
-            timeOfFlight *= (beta - std::sinh(beta)) - (alpha - std::sinh(alpha));
-          }
+          c2 = 1.0/2.0;
+          c3 = 1.0/6.0;
         }
-
-        return (timeOfFlight / 2.0) - transferTime;
+        
+        double B = departureDistanceFromSun + arrivalDistanceFromSun + 1.0 / std::sqrt(c2) * (A * (parameter * c3 - 1.0));
+        double chi = std::sqrt(B / c2);
+            
+       
+        return 1.0 / std::sqrt(standardGravitationalParameterOfSun) * (std::pow(chi, 3.0) * c3 + A * std::sqrt(B)) / 86400.0; - transferTime;
       };
       std::cout << "00" << std::endl;
       std::vector<double> brentVector;
