@@ -24,20 +24,20 @@ namespace mant {
       double departureDistanceFromSun = arma::norm(departurePosition);
       double arrivalDistanceFromSun = arma::norm(arrivalPosition);     
       double depatureArrivalDotProduct = arma::dot(departurePosition, arrivalPosition);
-
-      double t_m = 1.0;
+      
       arma::uword maximalNumberOfRevolutions = 20;
       arma::uword numberOfRevolutions; 
       
-      double A = 0.0;
+      double t_m = 1.0;
+      double A = t_m * std::sqrt(departureDistanceFromSun * arrivalDistanceFromSun * (1.0 + depatureArrivalDotProduct / (departureDistanceFromSun * arrivalDistanceFromSun)));
       double B = 0.0;
       
-      auto timeOfFlightFunction = [&A, &B, &t_m, &depatureArrivalDotProduct, &departureDistanceFromSun, &arrivalDistanceFromSun, &transferTime](
+      auto timeOfFlightFunction = [&A, &B, t_m, departureDistanceFromSun, arrivalDistanceFromSun, transferTime](
           const double parameter) {
-        
-        double gamma = depatureArrivalDotProduct / (departureDistanceFromSun * arrivalDistanceFromSun);
-        A = t_m * std::sqrt(departureDistanceFromSun * arrivalDistanceFromSun * (1.0 + gamma));
-        
+                
+        A = t_m * A;
+        std::cout << "A: " << A << "  -  ";
+                
         // Calculates the values for the second and third Stumpff function c2 and c3.
         double c2;
         double c3;
@@ -52,33 +52,42 @@ namespace mant {
           c3 = 1.0/6.0;
         }
         
-        B = departureDistanceFromSun + arrivalDistanceFromSun + 1.0 / std::sqrt(c2) * (A * (parameter * c3 - 1.0));
-                 
-        return 1.0 / std::sqrt(standardGravitationalParameterOfSun) * (std::pow(std::sqrt(B / c2), 3.0) * c3 + A * std::sqrt(B)) / 86400.0 - transferTime;
-      };
-      
-      double F;
-      double G;
-      double Gdot;
-      
-      auto calculateVelocityVectorsFunction = [&A, &B, &F, &G, &Gdot, &departurePosition, &departureDistanceFromSun, &arrivalPosition, &arrivalDistanceFromSun](){
-        F = 1.0 - B / departureDistanceFromSun;
-        G = A * std::sqrt(B / standardGravitationalParameterOfSun);
-        Gdot = 1.0 - B / arrivalDistanceFromSun;
+        std::cout << "c2: " << c2 << "  -  ";
+        std::cout << "c3: " << c3 << "  -  ";
         
-        return std::make_pair((1.0 / G) * (arrivalPosition - departurePosition * F), (1.0 / G) * (Gdot * arrivalPosition - departurePosition));
+        B = departureDistanceFromSun + arrivalDistanceFromSun + 1.0 / std::sqrt(c2) * (A * (parameter * c3 - 1.0));
+        
+        std::cout << "B: " << B << "  -  ";
+        std::cout << "val: " << 1.0 / std::sqrt(standardGravitationalParameterOfSun) * (std::pow(std::sqrt(B / c2), 3.0) * c3 + A * std::sqrt(B)) / 86400.0 - transferTime << std::endl;
+                 
+        return (1.0 / std::sqrt(standardGravitationalParameterOfSun)) * (std::pow(std::sqrt(B / c2), 3.0) * c3 + A * std::sqrt(B)) / 86400.0 - transferTime;
       };
       
+      std::cout << "function: " << timeOfFlightFunction(3.0 * std::pow(arma::datum::pi, 2.0)) << std::endl;
+      
+      auto calculateVelocityVectorsFunction = [A, B, &departurePosition, departureDistanceFromSun, &arrivalPosition, arrivalDistanceFromSun]() -> std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>{
+        std::cout << "begin calculateVelocityVectorsFunction" << std::endl;
+        double F = 1.0 - B / departureDistanceFromSun;
+        double G = A * std::sqrt(B / standardGravitationalParameterOfSun);
+        double Gdot = 1.0 - B / arrivalDistanceFromSun;
+        std::cout << "end calculateVelocityVectorsFunction" << std::endl;
+        return {(1.0 / G) * (arrivalPosition - departurePosition * F), (1.0 / G) * (Gdot * arrivalPosition - departurePosition)};
+      };
+      std::cout << "pre decl" << std::endl;
       std::vector<std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>> velocityPairs;
       velocityPairs.reserve(maximalNumberOfRevolutions * 4 + 2);
-      
-      double lowerBound = -4.0 * arma::datum::pi;
-      double upperBound = 4.0 * std::pow(arma::datum::pi, 2.0);
+      std::cout << "post decl" << std::endl;
+      double lowerBound = -2.0 * arma::datum::pi;
+      double upperBound = 3.0 * std::pow(arma::datum::pi, 2.0);
       
       // For zero revolutions
       std::cout << "0" << std::endl;
       double brentShortWaySolution = mant::brent(timeOfFlightFunction, lowerBound, upperBound, 100, 1e-10);
-      velocityPairs.push_back(calculateVelocityVectorsFunction());
+      std::cout << "pre push_back" << std::endl;
+      std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> varr = calculateVelocityVectorsFunction();
+      std::cout << "varr type: " << typeid(varr).name() << std::endl;
+      velocityPairs.push_back(varr);
+      std::cout << "post push_back" << std::endl;
       t_m = -t_m;
       std::cout << "1" << std::endl;
       double brentLongWaySolution = mant::brent(timeOfFlightFunction, lowerBound, upperBound, 100, 1e-10);
@@ -95,13 +104,13 @@ namespace mant {
 
       for (numberOfRevolutions = 1; numberOfRevolutions <= maximalNumberOfRevolutions; numberOfRevolutions++) {
         
-        lowerBound = 4.0 * std::pow((numberOfRevolutions) * arma::datum::pi, 2.0);
-        upperBound = 4.0 * std::pow((numberOfRevolutions + 1) * arma::datum::pi, 2.0); 
+        lowerBound = 6.0 * std::pow((numberOfRevolutions) * arma::datum::pi, 2.0);
+        upperBound = 2.0 * std::pow((numberOfRevolutions + 1) * arma::datum::pi, 2.0); 
         
         timeOfFlightMinimumProblem.setLowerBounds({lowerBound});
         timeOfFlightMinimumProblem.setUpperBounds({upperBound});          
         
-        timeOfFlightMinimumAlgorithm.optimise(timeOfFlightMinimumProblem, arma::Col<double>((upperBound - lowerBound) / 2.0));          
+      timeOfFlightMinimumAlgorithm.optimise(timeOfFlightMinimumProblem, {(upperBound - lowerBound) / 2.0});          
         arma::Col<double> timeOfFlightMinimum = timeOfFlightMinimumAlgorithm.getBestParameter();
         std::cout << "2 - " << numberOfRevolutions << std::endl;
         double brentShortWaySolutionLeft = mant::brent(timeOfFlightFunction, lowerBound, timeOfFlightMinimum(0), 100, 1e-10);
@@ -116,7 +125,7 @@ namespace mant {
         std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentShortWaySolutionRightVelocities = calculateVelocityVectorsFunction();   
         t_m = -t_m;
         
-        timeOfFlightMinimumAlgorithm.optimise(timeOfFlightMinimumProblem, arma::Col<double>((upperBound - lowerBound) / 2.0));          
+        timeOfFlightMinimumAlgorithm.optimise(timeOfFlightMinimumProblem, {(upperBound - lowerBound) / 2.0});          
         timeOfFlightMinimum = timeOfFlightMinimumAlgorithm.getBestParameter();
         std::cout << "4 - " << numberOfRevolutions << std::endl;
         double brentLongWaySolutionLeft = mant::brent(timeOfFlightFunction, lowerBound, timeOfFlightMinimum(0), 100, 1e-10);
@@ -131,10 +140,6 @@ namespace mant {
         std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> brentLongWaySolutionRightVelocities = calculateVelocityVectorsFunction();
         
         t_m = -t_m;
-        
-        if(std::isnan(brentShortWaySolutionLeft) || std::isnan(brentLongWaySolutionLeft)){
-          break;
-        }
 
         velocityPairs.push_back(brentShortWaySolutionLeftVelocities);          
         velocityPairs.push_back(brentShortWaySolutionRightVelocities);
