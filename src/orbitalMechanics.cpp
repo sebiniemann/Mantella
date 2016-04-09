@@ -25,14 +25,14 @@ namespace mant {
       double arrivalDistanceFromSun = arma::norm(arrivalPosition);     
       double depatureArrivalDotProduct = arma::dot(departurePosition, arrivalPosition);
       
-      arma::uword maximalNumberOfRevolutions = 20;
+      arma::uword maximalNumberOfRevolutions = 0;
       arma::uword numberOfRevolutions; 
       
       double t_m = 1.0;
       double A = t_m * std::sqrt(departureDistanceFromSun * arrivalDistanceFromSun * (1.0 + depatureArrivalDotProduct / (departureDistanceFromSun * arrivalDistanceFromSun)));
       double B = 0.0;
       
-      auto timeOfFlightFunction = [&A, &B, t_m, departureDistanceFromSun, arrivalDistanceFromSun, transferTime](
+      auto timeOfFlightFunction = [&A, &B, &t_m, &departureDistanceFromSun, &arrivalDistanceFromSun, &transferTime](
           const double parameter) {
                 
         A = t_m * A;
@@ -65,7 +65,7 @@ namespace mant {
       
       std::cout << "function: " << timeOfFlightFunction(3.0 * std::pow(arma::datum::pi, 2.0)) << std::endl;
       
-      auto calculateVelocityVectorsFunction = [A, B, &departurePosition, departureDistanceFromSun, &arrivalPosition, arrivalDistanceFromSun]() -> std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>{
+      auto calculateVelocityVectorsFunction = [&A, &B, &departurePosition, &departureDistanceFromSun, &arrivalPosition, &arrivalDistanceFromSun]() -> std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>>{
         std::cout << "begin calculateVelocityVectorsFunction" << std::endl;
         double F = 1.0 - B / departureDistanceFromSun;
         double G = A * std::sqrt(B / standardGravitationalParameterOfSun);
@@ -84,9 +84,9 @@ namespace mant {
       std::cout << "0" << std::endl;
       double brentShortWaySolution = mant::brent(timeOfFlightFunction, lowerBound, upperBound, 100, 1e-10);
       std::cout << "pre push_back" << std::endl;
-      std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> varr = calculateVelocityVectorsFunction();
-      std::cout << "varr type: " << typeid(varr).name() << std::endl;
-      velocityPairs.push_back(varr);
+      //std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> varr = calculateVelocityVectorsFunction();
+      //std::cout << "varr type: " << typeid(varr).name() << std::endl;
+      velocityPairs.push_back(calculateVelocityVectorsFunction());
       std::cout << "post push_back" << std::endl;
       t_m = -t_m;
       std::cout << "1" << std::endl;
@@ -106,7 +106,7 @@ namespace mant {
         
         lowerBound = 6.0 * std::pow((numberOfRevolutions) * arma::datum::pi, 2.0);
         upperBound = 2.0 * std::pow((numberOfRevolutions + 1) * arma::datum::pi, 2.0); 
-        
+        std::cout << "(lower, upper) = (" << lowerBound << ", " << upperBound << ")" << std::endl;
         timeOfFlightMinimumProblem.setLowerBounds({lowerBound});
         timeOfFlightMinimumProblem.setUpperBounds({upperBound});          
         
