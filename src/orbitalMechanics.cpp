@@ -17,7 +17,7 @@ namespace mant {
 
       double mjdReference = keplerianElements(6) - 51544.0; //mjd to mjd2000
       double nomalisedMjd2000 = (modifiedJulianDay2000 - mjdReference) * 86400.0; // in sec
-      
+
       double semiMajorAxis = keplerianElements(0) * 149597870691.0; //in km
       double eccentricity = keplerianElements(1);
       double inclination = (arma::datum::pi / 180.0) * keplerianElements(2);
@@ -29,7 +29,7 @@ namespace mant {
 
       double meanMotion = std::sqrt(standardGravitationalParameterOfSun / std::pow(semiMajorAxis, 3.0));
       ea += nomalisedMjd2000 * meanMotion;
-      
+
       //m2e begin
       double E = ea + eccentricity * std::cos(ea);
       ea = mant::brent([&ea, &eccentricity](
@@ -38,7 +38,7 @@ namespace mant {
       },
           E - 1.0, E + 1.0, 100, 1e-10); //TODO bounds round about variable E, +- 1.0 okay? Variable E nesecary?
       //m2e end
-      
+
       //par2ic begin
       double b;
       double n;
@@ -82,7 +82,6 @@ namespace mant {
       //par2ic end
     }
 
-    
     std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> orbitOnPosition(
         const double modifiedJulianDay2000,
         const arma::Mat<double>::fixed<2, 6>& keplerianElements) {
@@ -111,7 +110,7 @@ namespace mant {
       },
           E - 1.0, E + 1.0, 100, 1e-10); //TODO bounds round about variable E, +- 1.0 okay? Variable E nesecary?
       //m2e end
-      
+
       //par2ic begin
       double b;
       double n;

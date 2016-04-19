@@ -50,10 +50,10 @@ SCENARIO("orbitOnPosition", "[orbitalMechanics][orbitOnPosition]") {
       }
     }
   }
-  
+
   GIVEN("Timestamp in mjd2000 format and a 7-element vector with keplerian elements and a reference date in mjd format") {
-    arma::Col<double>::fixed<7> keplerianElementsAstroidData = {3.9501468,0.2391642,6.87574,16.88982,48.9603,229.49648, 54000};
-        
+    arma::Col<double>::fixed<7> keplerianElementsAstroidData = {3.9501468, 0.2391642, 6.87574, 16.88982, 48.9603, 229.49648, 54000};
+
     WHEN("Valid timestamp and keplerian elements are given") {
       THEN("Return position and velocity vector") {
         arma::Col<double>::fixed<3> expectedPosition = {-3.56269e+11, -6.3588e+11, -6.08879e+10};
@@ -81,7 +81,7 @@ SCENARIO("orbitOnPosition", "[orbitalMechanics][orbitOnPosition]") {
 
     WHEN("Eccentricity is 1.0 or greater") {
       THEN("Throw a std::logic_error") {
-        arma::Col<double>::fixed<7> keplerianElementsAstroidDataHighEccentricity = {3.9501468,1.2391642,6.87574,16.88982,48.9603,229.49648, 54000};
+        arma::Col<double>::fixed<7> keplerianElementsAstroidDataHighEccentricity = {3.9501468, 1.2391642, 6.87574, 16.88982, 48.9603, 229.49648, 54000};
 
         double mjd2000 = std::abs(continuousRandomNumber());
         CHECK_THROWS_AS(mant::itd::orbitOnPosition(mjd2000, keplerianElementsAstroidDataHighEccentricity), std::logic_error);
