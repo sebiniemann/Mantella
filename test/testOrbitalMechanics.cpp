@@ -56,8 +56,8 @@ SCENARIO("orbitOnPosition", "[orbitalMechanics][orbitOnPosition]") {
 
     WHEN("Valid timestamp and keplerian elements are given") {
       THEN("Return position and velocity vector") {
-        arma::Col<double>::fixed<3> expectedPosition = {-3.56269e+11, -6.3588e+11, -6.08879e+10};
-        arma::Col<double>::fixed<3> expectedVelocity = {10105.4, -5925.48, -1037.72};
+        arma::Col<double>::fixed<3> expectedPosition = {-5.79925e+11, 1.05904e+11, 3.25362e+10};
+        arma::Col<double>::fixed<3> expectedVelocity = {-6209.06, -13586.8, -1350.16};
 
         std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> resultPair = mant::itd::orbitOnPosition(1234.0, keplerianElementsAstroidData);
 
