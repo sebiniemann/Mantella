@@ -13,7 +13,7 @@ namespace mant {
 
     std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> orbitOnPosition(
         const double modifiedJulianDay2000,
-        const arma::Col<double>::fixed<6>& keplerianElements);
+        const arma::Col<double>::fixed<7>& keplerianElements);
         
     std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> orbitOnPosition(
         const double modifiedJulianDay2000,

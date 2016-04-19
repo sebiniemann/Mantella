@@ -12,19 +12,22 @@ namespace mant {
 
     std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> orbitOnPosition(
         const double modifiedJulianDay2000,
-        const arma::Col<double>::fixed<6>& keplerianElements) {
+        const arma::Col<double>::fixed<7>& keplerianElements) {
       verify(modifiedJulianDay2000 > -73048.0 && modifiedJulianDay2000 < 18263.0, "orbitOnPosition: The modifiedJulianDay2000 must be between -73048.0 and 18263.0.");
 
-      double nomalisedMjd2000 = (modifiedJulianDay2000 - 0.5) / 36525.0;
+      double mjdReference = keplerianElements(6) - 51544.0; //mjd to mjd2000
+      double nomalisedMjd2000 = (modifiedJulianDay2000 - mjdReference) * 86400.0; // ASTRO_DAY2SEC
+      
+      std::cout << "(t, ref, dt) = (" << modifiedJulianDay2000 << ", " << mjdReference << ", " << nomalisedMjd2000 << ")" << std::endl;
 
       //arma::Row<double>::fixed<6> keplerValuesPreCalculationVector = keplerianElements.row(0) + keplerianElements.row(1) * nomalisedMjd2000;
 
-      double semiMajorAxis = keplerianElements(0) * 149597870.691; //in km
+      double semiMajorAxis = keplerianElements(0) * 149597870691.0; //in km
       double eccentricity = keplerianElements(1);
       double inclination = (arma::datum::pi / 180.0) * keplerianElements(2);
-      double omg = (arma::datum::pi / 180.0) * keplerianElements(5);
-      double omp = (arma::datum::pi / 180.0) * (keplerianElements(4) - keplerianElements(5));
-      double ea = (arma::datum::pi / 180.0) * (keplerianElements(3) - keplerianElements(4));
+      double omg = (arma::datum::pi / 180.0) * keplerianElements(3);
+      double omp = (arma::datum::pi / 180.0) * keplerianElements(4);
+      double ea = (arma::datum::pi / 180.0) * keplerianElements(5);
 
       verify(eccentricity < 1.0, "orbitOnPosition: The eccentricity must be lesser than 1.0.");
 
@@ -40,7 +43,15 @@ namespace mant {
       },
           E - 1.0, E + 1.0, 100, 1e-10); //TODO bounds round about variable E, +- 1.0 okay? Variable E nesecary?
       //m2e end
-
+      
+      std::cout << "kepler-values: (" << semiMajorAxis << ", "
+                                      << eccentricity << ", "
+                                      << inclination << ", "
+                                      << omg << ", "
+                                      << omp << ", "
+                                      << ea << ")" << std::endl;
+      std::cout << "meanMotion: " << meanMotion << std::endl;
+                                      
       //par2ic begin
       double b;
       double n;
@@ -91,11 +102,13 @@ namespace mant {
         const arma::Mat<double>::fixed<2, 6>& keplerianElements) {
       verify(modifiedJulianDay2000 > -73048.0 && modifiedJulianDay2000 < 18263.0, "orbitOnPosition: The modifiedJulianDay2000 must be between -73048.0 and 18263.0.");
 
+      // Use data from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
+      // Referenced date is 2010-01-01 12:00:00 which is equal to 0.5 mjd2000
       double nomalisedMjd2000 = (modifiedJulianDay2000 - 0.5) / 36525.0;
 
       arma::Row<double>::fixed<6> keplerValuesPreCalculationVector = keplerianElements.row(0) + keplerianElements.row(1) * nomalisedMjd2000;
 
-      double semiMajorAxis = keplerValuesPreCalculationVector(0) * 149597870.691; //in km
+      double semiMajorAxis = keplerValuesPreCalculationVector(0) * 149597870691.0; //in m
       double eccentricity = keplerValuesPreCalculationVector(1);
       double inclination = (arma::datum::pi / 180.0) * keplerValuesPreCalculationVector(2);
       double omg = (arma::datum::pi / 180.0) * keplerValuesPreCalculationVector(5);
@@ -113,6 +126,13 @@ namespace mant {
           E - 1.0, E + 1.0, 100, 1e-10); //TODO bounds round about variable E, +- 1.0 okay? Variable E nesecary?
       //m2e end
 
+      std::cout << "kepler-values: (" << semiMajorAxis << ", "
+                                      << eccentricity << ", "
+                                      << inclination << ", "
+                                      << omg << ", "
+                                      << omp << ", "
+                                      << ea << ")" << std::endl;
+                                      
       //par2ic begin
       double b;
       double n;
