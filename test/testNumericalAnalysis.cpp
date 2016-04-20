@@ -45,6 +45,15 @@ SCENARIO("brent", "[numericalAnalysis][brent]") {
       }
     }
 
+    WHEN("The bounds are equal and there is no root in between") {
+      THEN("Return not a number") {
+        const double lowerBound = std::abs(continuousRandomNumber());
+        const double upperBound = lowerBound;
+
+        CHECK(std::isnan(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10)));
+      }
+    }
+
     WHEN("The objective function is not callable") {
       THEN("Throw a std::logic_error") {
         const double lowerBound = continuousRandomNumber();
@@ -67,15 +76,6 @@ SCENARIO("brent", "[numericalAnalysis][brent]") {
       THEN("Throw a std::logic_error") {
         const double lowerBound = continuousRandomNumber();
         const double upperBound = lowerBound - std::abs(continuousRandomNumber()) - 1.0;
-
-        CHECK_THROWS_AS(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10), std::logic_error);
-      }
-    }
-
-    WHEN("The bounds are equal and there is no root in between") {
-      THEN("Throw a std::logic_error") {
-        const double lowerBound = std::abs(continuousRandomNumber());
-        const double upperBound = lowerBound;
 
         CHECK_THROWS_AS(mant::brent(objectiveFunction, lowerBound, upperBound, numberOfIterations, 1e-10), std::logic_error);
       }
