@@ -96,7 +96,8 @@ namespace mant {
 
 #if defined(SUPPORT_MPI)
     setCommunicationFunction(
-        [this]() {
+        [this](
+          const arma::uword numberOfDimensions_) {
           arma::Col<double> localDataTable(numberOfDimensions_ + 1);
           arma::Mat<double> worldDataTable(numberOfDimensions_ + 1, numberOfNodes_);
 
