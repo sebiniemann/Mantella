@@ -106,10 +106,10 @@ namespace mant {
 
           if(MPI_Allgather(
               localDataTable.memptr(),
-              numberOfDimensions_ + 1,
+              static_cast<int>(numberOfDimensions_) + 1,
               MPI_DOUBLE,
               worldDataTable.memptr(),
-              numberOfDimensions_ + 1,
+              static_cast<int>(numberOfDimensions_) + 1,
               MPI_DOUBLE,
               MPI_COMM_WORLD) != MPI_SUCCESS)
           {
