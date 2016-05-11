@@ -106,7 +106,7 @@ namespace mant {
     std::string isStagnatingFunctionName_;
     std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction_;
     std::string restartingFunctionName_;
-    std::function<void()> communicationFunction_;
+    std::function<const arma::uword numberOfDimensions_> communicationFunction_;
     std::string communicationFunctionName_;
     std::chrono::time_point<std::chrono::steady_clock> initialTimePoint_;
 
