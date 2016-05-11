@@ -242,7 +242,7 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setCommunicationFunction(
-      std::function<void()> communicationFunction, const std::string& communicationFunctionName){
+      std::function<void(const arma::uword numberOfDimensions_)> communicationFunction, const std::string& communicationFunctionName){
     verify(static_cast<bool>(communicationFunction), "OptimisationAlgorithm.setCommunicationFunction: The communication function must be callable.");
 
 
