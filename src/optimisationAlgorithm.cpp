@@ -111,7 +111,7 @@ namespace mant {
     assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
 
     #if defined(SUPPORT_MPI)
-    communicationFunction_();
+    communicationFunction_(optimisationProblem.numberOfDimensions_);
     #endif
 
     while (!isTerminated() && !isFinished()) {
@@ -134,7 +134,7 @@ namespace mant {
         assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
       }
       #if defined(SUPPORT_MPI)
-        communicationFunction_();
+        communicationFunction_(optimisationProblem.numberOfDimensions_);
       #endif
 
 
