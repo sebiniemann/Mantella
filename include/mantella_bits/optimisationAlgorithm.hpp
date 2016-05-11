@@ -49,9 +49,9 @@ namespace mant {
         std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction);
     std::string getRestartingFunctionName() const;
     void setCommunicationFunction(
-        std::function<void()> communicationFunction, const std::string& communicationFunctionName);
+        std::function<void(arma::uword numberOfDimensions_)> communicationFunction, const std::string& communicationFunctionName);
     void setCommunicationFunction(
-        std::function<void()> communicationFunction);
+        std::function<void(arma::uword numberOfDimensions_)> communicationFunction);
     std::string getCommunicationFunctionName() const;
 
     void setAcceptableObjectiveValue(
@@ -106,7 +106,7 @@ namespace mant {
     std::string isStagnatingFunctionName_;
     std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction_;
     std::string restartingFunctionName_;
-    std::function<const arma::uword numberOfDimensions_> communicationFunction_;
+    std::function<void(const arma::uword numberOfDimensions_)> communicationFunction_;
     std::string communicationFunctionName_;
     std::chrono::time_point<std::chrono::steady_clock> initialTimePoint_;
 
