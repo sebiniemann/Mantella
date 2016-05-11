@@ -99,7 +99,7 @@ namespace mant {
         [this](
           const arma::uword numberOfDimensions_) {
           arma::Col<double> localDataTable(numberOfDimensions_ + 1);
-          arma::Mat<double> worldDataTable(numberOfDimensions_ + 1, numberOfNodes_);
+          arma::Mat<double> worldDataTable(numberOfDimensions_ + 1, static_cast<arma::uword>(numberOfNodes_));
 
           localDataTable(0) = bestObjectiveValue_;
           localDataTable.tail_rows(numberOfDimensions_) = bestParameter_;
