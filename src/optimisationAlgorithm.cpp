@@ -253,7 +253,7 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setCommunicationFunction(
-      std::function<void()> communicationFunction){
+      std::function<void(arma::uword numberOfDimensions_)> communicationFunction){
     setCommunicationFunction(communicationFunction, "Unnamed, custom communication function");
   }
 
