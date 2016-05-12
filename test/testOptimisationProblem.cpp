@@ -417,7 +417,7 @@ SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][Optimisati
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -549,7 +549,7 @@ SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][Optimisati
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -681,7 +681,7 @@ SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][O
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -809,7 +809,7 @@ SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][Optim
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -922,7 +922,7 @@ SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][O
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -1035,7 +1035,7 @@ SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][Opti
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -1163,7 +1163,7 @@ SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -1242,7 +1242,7 @@ SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProbl
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -1382,7 +1382,7 @@ SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProble
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
@@ -1590,7 +1590,7 @@ SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem
   WHEN("The optimisation problem was processed") {
     auto objectiveFunction = [&optimisationProblem](
         const arma::Col<double>& parameter_) {
-        return arma::accu(parameter_);
+      return arma::accu(parameter_);
     };
     optimisationProblem.setObjectiveFunction(objectiveFunction);
 

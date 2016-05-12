@@ -27,7 +27,7 @@ namespace mant {
           [this](
               const arma::Col<double>& redundantJointsActuation_) {
             assert(redundantJointsActuation_.n_elem == numberOfDimensions_);
-              
+
             double poseInaccuracy = 0.0;
             for (arma::uword n = 0; n < endEffectorTrajectory_.n_cols; ++n) {
               const arma::Col<double>::fixed<6>& endEffectorPose = endEffectorTrajectory_.col(n);
@@ -40,18 +40,18 @@ namespace mant {
               for (arma::uword k = 0; k < redundantJointsActuation_.n_elem; ++k) {
                 baseJointsPosition.col(k) += redundantJointsActuation_(k) * redundantJointsAngles_.col(k);
               }
-              
+
               arma::Mat<double>::fixed<3, 6> endEffectorJointsPosition = rotationMatrix3D(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelativePosition_;
               endEffectorJointsPosition.each_col() += endEffectorPosition;
-            
+
               const arma::Row<double>::fixed<6>& middleJointsLength = arma::sqrt(arma::sum(arma::square(endEffectorJointsPosition - baseJointsPosition)));
               if (arma::any(middleJointsMinimalLength_ > middleJointsLength || middleJointsLength > middleJointsMaximalLength_)) {
                 return 1.0;
               }
-            
+
               const arma::Mat<double>::fixed<3, 6>& baseToEndEffectorJointsPosition = endEffectorJointsPosition - baseJointsPosition;
               const arma::Mat<double>::fixed<3, 6>& endEffectorJointsRotatedPosition = endEffectorJointsPosition.each_col() - endEffectorPosition;
-            
+
               arma::Mat<double>::fixed<6, 6> forwardKinematic;
               forwardKinematic.head_rows(3) = baseToEndEffectorJointsPosition;
               for (arma::uword k = 0; k < forwardKinematic.n_rows; ++k) {
@@ -71,7 +71,7 @@ namespace mant {
                 poseInaccuracy = std::max(poseInaccuracy, 1.0 - 1.0 / arma::cond(solution));
               }
             }
-            
+
             return poseInaccuracy;
           },
           "KRM Parallel Kinematic Machine 6PUPS");

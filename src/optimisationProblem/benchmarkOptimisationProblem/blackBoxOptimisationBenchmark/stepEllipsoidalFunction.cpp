@@ -2,9 +2,9 @@
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
+#include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <algorithm>
 
 // Mantella
 #include "mantella_bits/probability.hpp"
@@ -31,7 +31,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             const arma::Col<double>& s = firstParameterConditioning_ % parameter_;
 
             arma::Col<double> z = s;

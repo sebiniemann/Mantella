@@ -21,12 +21,12 @@ namespace mant {
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          if(differences_(0) < 0) {
-            state_ = bestParameter_; 
+          if (differences_(0) < 0) {
+            state_ = bestParameter_;
           } else if (isAcceptableStateFunction_(differences_(0))) {
             state_ = parameters_.col(0);
           }
-          
+
           return randomNeighbour(state_, minimalStepSize_, maximalStepSize_);
         },
         "Simulated annealing");
@@ -34,14 +34,14 @@ namespace mant {
     setIsAcceptableStateFunction(
         [this](
             const double objectiveValue) {
-            double progress;
-            if (maximalNumberOfIterations_ < std::numeric_limits<arma::uword>::max()) {
-              progress = static_cast<double>(numberOfIterations_ / maximalNumberOfIterations_);
-            } else {
-              progress = static_cast<double>(duration_.count() / maximalDuration_.count());
-            }
-            
-            return std::exp((bestObjectiveValue_ - objectiveValue) / std::exp(progress)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
+          double progress;
+          if (maximalNumberOfIterations_ < std::numeric_limits<arma::uword>::max()) {
+            progress = static_cast<double>(numberOfIterations_ / maximalNumberOfIterations_);
+          } else {
+            progress = static_cast<double>(duration_.count() / maximalDuration_.count());
+          }
+
+          return std::exp((bestObjectiveValue_ - objectiveValue) / std::exp(progress)) < std::uniform_real_distribution<double>(0.0, 1.0)(Rng::getGenerator());
         },
         "Exponential");
 

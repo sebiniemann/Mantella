@@ -64,7 +64,7 @@ namespace mant {
         const std::chrono::microseconds maximalDuration);
     std::chrono::microseconds getMaximalDuration() const;
     void setNumberOfCommunicationStalls(
-         const arma::uword numberOfCommunicationStalls);
+        const arma::uword numberOfCommunicationStalls);
     arma::uword getNumberOfCommunicationStalls() const;
 
     bool isFinished() const;

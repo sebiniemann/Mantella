@@ -21,14 +21,14 @@ namespace mant {
           arma::Mat<double> nextParameters(numberOfDimensions_, 2 * numberOfDimensions_);
           for (arma::uword n = 0; n < numberOfDimensions_; ++n) {
             arma::Col<double> nextParameterCandidate = bestParameter_;
-            
+
             nextParameterCandidate(n) += stepSize_;
             nextParameters.col(2 * n) = nextParameterCandidate;
-            
+
             nextParameterCandidate(n) -= 2 * stepSize_;
             nextParameters.col(2 * n + 1) = nextParameterCandidate;
           }
-          
+
           return nextParameters;
         },
         "Hooke-Jeeves algorithm");

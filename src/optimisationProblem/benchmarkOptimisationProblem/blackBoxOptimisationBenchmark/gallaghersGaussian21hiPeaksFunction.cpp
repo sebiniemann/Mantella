@@ -2,9 +2,9 @@
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
+#include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <algorithm>
 #include <limits>
 
 // Mantella
@@ -34,7 +34,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             double maximalValue = std::numeric_limits<double>::lowest();
             for (arma::uword n = 0; n < 21; ++n) {
               const arma::Col<double>& localParameterTranslation = parameter_ - localParameterTranslations_.col(n);

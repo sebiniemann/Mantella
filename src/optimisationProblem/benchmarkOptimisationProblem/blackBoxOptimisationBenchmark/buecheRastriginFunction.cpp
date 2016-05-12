@@ -23,7 +23,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             arma::Col<double> z = parameterConditioning_ % getOscillatedParameter(parameter_);
             for (arma::uword n = 0; n < z.n_elem; n += 2) {
               if (z(n) > 0.0) {

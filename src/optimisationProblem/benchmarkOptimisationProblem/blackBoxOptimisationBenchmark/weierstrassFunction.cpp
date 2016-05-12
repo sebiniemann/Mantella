@@ -30,7 +30,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             const arma::Col<double>& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getOscillatedParameter(rotationR_ * parameter_)));
 
             double sum = 0.0;
@@ -40,7 +40,7 @@ namespace mant {
               }
             }
 
-            return 10.0 * std::pow(sum / static_cast<double>(numberOfDimensions_) +1.99951171875, 3.0);
+            return 10.0 * std::pow(sum / static_cast<double>(numberOfDimensions_) + 1.99951171875, 3.0);
           },
           "BBOB Weierstrass Function (f16)");
     }

@@ -23,7 +23,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             arma::Col<double> z = parameter_;
             z.elem(arma::find(parameter_ >= 5.0)).fill(5.0);
 

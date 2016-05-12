@@ -41,7 +41,6 @@ namespace mant {
           }
 
           for (arma::uword n = 0; n < particles_.n_cols; ++n) {
-
             const arma::Col<double>& particle = particles_.col(n);
 
             arma::uword neighbourhoodBestParticleIndex;
@@ -83,10 +82,10 @@ namespace mant {
 
     setNeighbourhoodTopologyFunction(
         [this]() {
-           arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles_, numberOfParticles_) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles_), 3.0));
-           neighbourhoodTopology.diag().ones();
+          arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles_, numberOfParticles_) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles_), 3.0));
+          neighbourhoodTopology.diag().ones();
 
-           return neighbourhoodTopology;
+          return neighbourhoodTopology;
         },
         "Random");
 
@@ -97,22 +96,21 @@ namespace mant {
 #if defined(SUPPORT_MPI)
     setCommunicationFunction(
         [this](
-          const arma::uword numberOfDimensions_) {
+            const arma::uword numberOfDimensions_) {
           arma::Col<double> localDataTable(numberOfDimensions_ + 1);
           arma::Mat<double> worldDataTable(numberOfDimensions_ + 1, static_cast<arma::uword>(numberOfNodes_));
 
           localDataTable(0) = bestObjectiveValue_;
           localDataTable.tail_rows(numberOfDimensions_) = bestParameter_;
 
-          if(MPI_Allgather(
-              localDataTable.memptr(),
-              static_cast<int>(numberOfDimensions_) + 1,
-              MPI_DOUBLE,
-              worldDataTable.memptr(),
-              static_cast<int>(numberOfDimensions_) + 1,
-              MPI_DOUBLE,
-              MPI_COMM_WORLD) != MPI_SUCCESS)
-          {
+          if (MPI_Allgather(
+                  localDataTable.memptr(),
+                  static_cast<int>(numberOfDimensions_) + 1,
+                  MPI_DOUBLE,
+                  worldDataTable.memptr(),
+                  static_cast<int>(numberOfDimensions_) + 1,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD) != MPI_SUCCESS) {
             std::cout << " ParticleSwarmOptimisation: MPI_Allgather failed." << std::endl;
           }
 

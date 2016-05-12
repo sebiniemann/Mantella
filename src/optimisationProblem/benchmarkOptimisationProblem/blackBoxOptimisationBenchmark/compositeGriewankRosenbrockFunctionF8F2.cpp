@@ -1,9 +1,9 @@
 #include "mantella_bits/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.hpp"
 
 // C++ standard library
+#include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <algorithm>
 
 // Mantella
 #include "mantella_bits/probability.hpp"
@@ -23,7 +23,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             const arma::Col<double>& s = max_ * parameter_ + 0.5;
             const arma::Col<double>& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
 

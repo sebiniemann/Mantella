@@ -21,7 +21,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             const arma::Col<double>& z = arma::abs(parameter_);
             return arma::norm(z % getConditionedParameter(arma::square(z)));
           },

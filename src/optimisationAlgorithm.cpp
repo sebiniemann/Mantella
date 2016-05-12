@@ -28,12 +28,12 @@ namespace mant {
           assert(isBelowLowerBound_.n_cols == parameters_.n_cols);
           assert(isAboveUpperBound_.n_rows == parameters_.n_rows);
           assert(isAboveUpperBound_.n_cols == parameters_.n_cols);
-            
+
           arma::Mat<double> boundedParameters = parameters_;
-          
+
           boundedParameters.elem(arma::find(isBelowLowerBound_)).fill(0);
           boundedParameters.elem(arma::find(isAboveUpperBound_)).fill(1);
-          
+
           return boundedParameters;
         },
         "Map to bound");
@@ -46,7 +46,7 @@ namespace mant {
           assert(objectiveValues_.n_elem == parameters_.n_cols);
           assert(differences_.n_elem == parameters_.n_cols);
           assert(differences_.has_inf() || arma::all(objectiveValues_ - differences_ - arma::min(objectiveValues_) + arma::min(differences_) < 1e-12 * arma::max(arma::ones<arma::Row<double>>(arma::size(objectiveValues_)), arma::abs(objectiveValues_))));
-          
+
           return false;
         },
         "Always false");
@@ -61,7 +61,7 @@ namespace mant {
           assert(objectiveValues_.n_elem == parameters_.n_cols);
           assert(differences_.n_elem == parameters_.n_cols);
           assert(differences_.has_inf() || arma::all(objectiveValues_ - differences_ - arma::min(objectiveValues_) + arma::min(differences_) < 1e-12 * arma::max(arma::ones<arma::Row<double>>(arma::size(objectiveValues_)), arma::abs(objectiveValues_))));
-          
+
           return arma::randu<arma::Mat<double>>(arma::size(parameters_));
         },
         "Random");
@@ -110,15 +110,12 @@ namespace mant {
     assert(objectiveValuesWithDifferences.first.n_elem == objectiveValuesWithDifferences.second.n_elem);
     assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
 
-    #if defined(SUPPORT_MPI)
+#if defined(SUPPORT_MPI)
     communicationFunction_(optimisationProblem.numberOfDimensions_);
-    #endif
+#endif
 
     while (!isTerminated() && !isFinished()) {
-
-
       for (arma::uword n = 0; n < numberOfCommunicationStalls_; ++n) {
-
         if (isStagnatingFunction_(parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second)) {
           parameters = restartingFunction_(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesWithDifferences.first, objectiveValuesWithDifferences.second);
         } else {
@@ -133,11 +130,9 @@ namespace mant {
         assert(objectiveValuesWithDifferences.first.n_elem == objectiveValuesWithDifferences.second.n_elem);
         assert(objectiveValuesWithDifferences.first.n_elem == parameters.n_cols);
       }
-      #if defined(SUPPORT_MPI)
-        communicationFunction_(optimisationProblem.numberOfDimensions_);
-      #endif
-
-
+#if defined(SUPPORT_MPI)
+      communicationFunction_(optimisationProblem.numberOfDimensions_);
+#endif
     }
 
     // Sync best parameter
@@ -242,9 +237,8 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setCommunicationFunction(
-      std::function<void(const arma::uword numberOfDimensions_)> communicationFunction, const std::string& communicationFunctionName){
+      std::function<void(const arma::uword numberOfDimensions_)> communicationFunction, const std::string& communicationFunctionName) {
     verify(static_cast<bool>(communicationFunction), "OptimisationAlgorithm.setCommunicationFunction: The communication function must be callable.");
-
 
     communicationFunction_ = communicationFunction;
     communicationFunctionName_ = communicationFunctionName;
@@ -253,7 +247,7 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setCommunicationFunction(
-      std::function<void(arma::uword numberOfDimensions_)> communicationFunction){
+      std::function<void(arma::uword numberOfDimensions_)> communicationFunction) {
     setCommunicationFunction(communicationFunction, "Unnamed, custom communication function");
   }
 
@@ -293,7 +287,7 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setNumberOfCommunicationStalls(
-       const arma::uword numberOfCommunicationStalls) {
+      const arma::uword numberOfCommunicationStalls) {
     verify(numberOfCommunicationStalls > 0, "OptimisationAlgorithm.setNumberOfCommunicationStalls: The number of communications must be greater than 0.");
 
     numberOfCommunicationStalls_ = numberOfCommunicationStalls;
@@ -370,12 +364,11 @@ namespace mant {
 
       if (objectiveValue < bestObjectiveValue_) {
         if (::mant::isVerbose) {
-
-        #if defined(SUPPORT_MPI)
+#if defined(SUPPORT_MPI)
           std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Node " << nodeRank_ << " Found better solution.\n";
-        #else
+#else
           std::cout << "  Iteration #" << numberOfIterations_ << " (after " << duration_.count() << "ms) : Found better solution.\n";
-        #endif
+#endif
           std::cout << "    Difference to the previous best objective value: " << objectiveValue - bestObjectiveValue_ << std::endl;
           std::cout << "    Best objective value: " << objectiveValue << "\n";
           std::cout << "    Best parameter: " << parameter.t() << std::endl;
