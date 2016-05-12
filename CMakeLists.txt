@@ -180,6 +180,7 @@ add_library(mantella
   src/optimisationAlgorithm/simulatedAnnealing.cpp
   # src/optimisationAlgorithm/differentialEvolution.cpp
   src/optimisationAlgorithm/particleSwarmOptimisation.cpp
+  src/optimisationAlgorithm/differentialEvolution.cpp
 )
 set_property(TARGET mantella PROPERTY CXX_STANDARD 14)
 set_property(TARGET mantella PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -299,6 +300,7 @@ if (BUILD_TESTS)
     test/optimisationAlgorithm/testSimulatedAnnealing.cpp
     test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
     test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
+    test/optimisationAlgorithm/testDifferentialEvolution.cpp
   )
   set_property(TARGET mantellaTests PROPERTY CXX_STANDARD 14)
   set_property(TARGET mantellaTests PROPERTY CXX_STANDARD_REQUIRED ON)
