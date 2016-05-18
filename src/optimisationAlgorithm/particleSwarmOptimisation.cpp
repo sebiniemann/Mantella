@@ -1,4 +1,5 @@
 #include "mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <cmath>
@@ -23,41 +24,43 @@ namespace mant {
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-          if (differences_(0) >= 0) {
+          if (arma::any(differences_ >= 0)) {
             randomiseTopology_ = true;
           }
-          
-          if (activeParticleIndex_ == 0 && randomiseTopology_) {
+
+          if (randomiseTopology_) {
             neighbourhoodTopology_ = neighbourhoodTopologyFunction_();
             randomiseTopology_ = false;
           }
-          
-          if (objectiveValues_(0) < localBestObjectiveValues_(activeParticleIndex_)) {
-            localBestObjectiveValues_(activeParticleIndex_) = objectiveValues_(0);
-            localBestSolutions_.col(activeParticleIndex_) = parameters_.col(0);
-          }
-          
-          activeParticleIndex_ = (activeParticleIndex_ + 1) % numberOfParticles_;
-          const arma::Col<double>& particle = particles_.col(activeParticleIndex_);
-          
-          arma::uword neighbourhoodBestParticleIndex;
-          arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(neighbourhoodTopology_.col(activeParticleIndex_));
-          static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
 
-          arma::Col<double> attractionCenter;
-          if (neighbourhoodParticlesIndecies(neighbourhoodBestParticleIndex) == activeParticleIndex_) {
-            attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(activeParticleIndex_) - particle)) / 2.0;
-          } else {
-            attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(activeParticleIndex_) - particle) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+          for (arma::uword n = 0; n < particles_.n_cols; ++n) {
+            if (objectiveValues_(n) < localBestObjectiveValues_(n)) {
+              localBestObjectiveValues_(n) = objectiveValues_(n);
+              localBestSolutions_.col(n) = parameters_.col(n);
+            }
           }
 
-          const arma::Col<double>& velocity =
-          maximalAcceleration_ * arma::randu<arma::Col<double>>(numberOfDimensions_) % velocities_.col(activeParticleIndex_) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
+          for (arma::uword n = 0; n < particles_.n_cols; ++n) {
+            const arma::Col<double>& particle = particles_.col(n);
 
-          particles_.col(activeParticleIndex_) += velocity;
-          velocities_.col(activeParticleIndex_) = velocity;
-            
-          return particles_.col(activeParticleIndex_);
+            arma::uword neighbourhoodBestParticleIndex;
+            arma::Col<arma::uword> neighbourhoodParticlesIndecies = arma::find(neighbourhoodTopology_.col(n));
+            static_cast<arma::Col<double>>(localBestObjectiveValues_.elem(neighbourhoodParticlesIndecies)).min(neighbourhoodBestParticleIndex);
+
+            arma::Col<double> attractionCenter;
+            if (neighbourhoodParticlesIndecies(neighbourhoodBestParticleIndex) == n) {
+              attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(n) - particle)) / 2.0;
+            } else {
+              attractionCenter = (maximalLocalAttraction_ * (localBestSolutions_.col(n) - particle) + maximalGlobalAttraction_ * (localBestSolutions_.col(neighbourhoodBestParticleIndex) - particle)) / 3.0;
+            }
+
+            const arma::Col<double>& velocity = maximalAcceleration_ * arma::randu<arma::Col<double>>(numberOfDimensions_) % velocities_.col(n) + randomNeighbour(attractionCenter, 0, arma::norm(attractionCenter));
+
+            particles_.col(n) += velocity;
+            velocities_.col(n) = velocity;
+          }
+
+          return particles_;
         },
         "Particle swarm optimisation");
 
@@ -67,28 +70,56 @@ namespace mant {
             const arma::Mat<arma::uword>& isBelowLowerBound_,
             const arma::Mat<arma::uword>& isAboveUpperBound_) {
           arma::Mat<double> boundedParameters = parameters_;
-          
+
           velocities_.elem(arma::find(isBelowLowerBound_)) *= -0.5;
           velocities_.elem(arma::find(isAboveUpperBound_)) *= -0.5;
-          
+
           boundedParameters.elem(arma::find(isBelowLowerBound_)).fill(0);
           boundedParameters.elem(arma::find(isAboveUpperBound_)).fill(1);
-          
+
           return boundedParameters;
         });
 
     setNeighbourhoodTopologyFunction(
         [this]() {
-           arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles_, numberOfParticles_) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles_), 3.0));
-           neighbourhoodTopology.diag().ones();
-           
-           return neighbourhoodTopology;
+          arma::Mat<arma::uword> neighbourhoodTopology = (arma::randu<arma::Mat<double>>(numberOfParticles_, numberOfParticles_) <= std::pow(1.0 - 1.0 / static_cast<double>(numberOfParticles_), 3.0));
+          neighbourhoodTopology.diag().ones();
+
+          return neighbourhoodTopology;
         },
         "Random");
 
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));
     setMaximalGlobalAttraction(maximalLocalAttraction_);
+
+#if defined(SUPPORT_MPI)
+    setCommunicationFunction(
+        [this](
+            const arma::uword numberOfDimensions_) {
+          arma::Col<double> localDataTable(numberOfDimensions_ + 1);
+          arma::Mat<double> worldDataTable(numberOfDimensions_ + 1, static_cast<arma::uword>(numberOfNodes_));
+
+          localDataTable(0) = bestObjectiveValue_;
+          localDataTable.tail_rows(numberOfDimensions_) = bestParameter_;
+
+          if (MPI_Allgather(
+                  localDataTable.memptr(),
+                  static_cast<int>(numberOfDimensions_) + 1,
+                  MPI_DOUBLE,
+                  worldDataTable.memptr(),
+                  static_cast<int>(numberOfDimensions_) + 1,
+                  MPI_DOUBLE,
+                  MPI_COMM_WORLD) != MPI_SUCCESS) {
+            std::cout << " ParticleSwarmOptimisation: MPI_Allgather failed." << std::endl;
+          }
+
+          arma::uword bestSolutionIndex;
+          bestObjectiveValue_ = worldDataTable.row(0).min(bestSolutionIndex);
+          bestParameter_ = worldDataTable(arma::span(1, numberOfDimensions_), bestSolutionIndex);
+        },
+        "MPI");
+#endif
   }
 
   void ParticleSwarmOptimisation::initialise(

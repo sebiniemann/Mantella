@@ -21,7 +21,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             const arma::Col<double>& z = arma::square(getOscillatedParameter(parameter_));
             return 1000000.0 * z(0) + arma::accu(z.tail(z.n_elem - 1));
           },

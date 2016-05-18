@@ -2,8 +2,8 @@
 
 // C++ standard library
 #include <cassert>
-#include <random>
 #include <cmath>
+#include <random>
 
 // Mantella
 #include "mantella_bits/randomNumberGenerator.hpp"
@@ -24,7 +24,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             arma::Col<double> s = parameter_;
             s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
 

@@ -371,7 +371,7 @@ if(BUILD_TESTS)
     test/testConfig.cpp
     
     # Assertions
-    test/testAssert.cpp
+    #test/testAssert.cpp
 
     # Random number generator
     test/testRandomNumberGenerator.cpp
@@ -429,12 +429,12 @@ if(BUILD_TESTS)
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PUPS.cpp
     
     # Optimisation algorithms
-    test/testOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/testRandomSearch.cpp
-    test/optimisationAlgorithm/testHillClimbing.cpp
-    test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
-    test/optimisationAlgorithm/testSimulatedAnnealing.cpp
-    test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
+    # test/testOptimisationAlgorithm.cpp
+    # test/optimisationAlgorithm/testRandomSearch.cpp
+    # test/optimisationAlgorithm/testHillClimbing.cpp
+    # test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    # test/optimisationAlgorithm/testSimulatedAnnealing.cpp
+    # test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
   )
 
   # Link against prerequirements

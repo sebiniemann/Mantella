@@ -108,7 +108,7 @@ SCENARIO("ParticleSwarmOptimisation.getNeighbourhoodTopologyFunctionName", "[Par
 
   WHEN("The default neighbourhood topology function was changed") {
     auto neighbourhoodTopologyFunction = [&optimisationAlgorithm]() {
-        return arma::Mat<arma::uword>(0);
+      return arma::Mat<arma::uword>(0);
     };
 
     AND_WHEN("A new neighbourhood topology function name was set") {

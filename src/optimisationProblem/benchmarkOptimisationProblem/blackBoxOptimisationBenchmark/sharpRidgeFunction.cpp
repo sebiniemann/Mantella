@@ -29,7 +29,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             const arma::Col<double>& z = rotationQ_ * (parameterConditioning_ % parameter_);
             return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
           },

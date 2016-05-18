@@ -2,10 +2,10 @@
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
-#include <cassert>
-#include <random>
-#include <cmath>
 #include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <random>
 
 // Mantella
 #include "mantella_bits/probability.hpp"
@@ -36,7 +36,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             return std::min(std::pow(arma::norm(parameter_ - 2.5), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter_ + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter_ - 2.5))))));
           },
           "BBOB Lunacek bi-Rastrigin Function (f24)");

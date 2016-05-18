@@ -33,7 +33,7 @@ SCENARIO("krm::KinematicallyRedundantMachines.setEndEffectorTrajectory", "[krm::
         optimisationProblem.setObjectiveFunction(
             [&optimisationProblem](
                 const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
+              return arma::accu(parameter_);
             });
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;

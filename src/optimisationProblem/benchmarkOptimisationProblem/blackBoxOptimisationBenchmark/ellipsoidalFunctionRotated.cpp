@@ -22,7 +22,7 @@ namespace mant {
           [this](
               const arma::Col<double>& parameter_) {
             assert(parameter_.n_elem == numberOfDimensions_);
-              
+
             return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter_)));
           },
           "BBOB Ellipsoidal Function, rotated (f10)");

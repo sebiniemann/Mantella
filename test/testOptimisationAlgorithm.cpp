@@ -1429,7 +1429,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-        return continuousRandomNumbers(numberOfDimensions_);
+          return continuousRandomNumbers(numberOfDimensions_);
         },
         "My custom next parameters function name");
     optimisationAlgorithm.setBoundariesHandlingFunction(
@@ -1437,7 +1437,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<double>& parameters_,
             const arma::Mat<arma::uword>& isBelowLowerBound_,
             const arma::Mat<arma::uword>& isAboveUpperBound_) {
-        return parameters_;
+          return parameters_;
         },
         "My custom boundaries-handling function name");
     optimisationAlgorithm.setIsStagnatingFunction(
@@ -1445,7 +1445,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-        return false;
+          return false;
         },
         "My custom is stagnating function name");
     optimisationAlgorithm.setRestartingFunction(
@@ -1454,7 +1454,7 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
             const arma::Mat<double>& parameters_,
             const arma::Row<double>& objectiveValues_,
             const arma::Row<double>& differences_) {
-        return continuousRandomNumbers(numberOfDimensions_);
+          return continuousRandomNumbers(numberOfDimensions_);
         },
         "My custom restarting function name");
 
