@@ -31,14 +31,14 @@ mark_as_advanced(
   MEASURE_CODE_COVERAGE
 )
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 
 # ------------------------
 # CHECKING PREREQUIREMENTS
 # ------------------------
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Checking prerequirements.")
 
 set(REQUIRED_ARMADILLO_VERSION "6.400.0")
@@ -57,7 +57,7 @@ if(NOT ARMADILLO_FOUND)
     if(ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
       message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if you want to link directly againt OpenBLAS instead.")
     endif()
-    
+
     message(STATUS "Found Armadillo: ${ARMADILLO_INCLUDE_DIR} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
     find_package(OpenBLAS REQUIRED)
   endif()
@@ -65,7 +65,7 @@ else()
   message(STATUS "Found Armadillo: ${ARMADILLO_LIBRARIES} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
 endif()
 include_directories(${ARMADILLO_INCLUDE_DIR})
-  
+
 if(SUPPORT_MPI)
   find_package(MPI REQUIRED)
   include_directories(${MPI_INCLUDE_PATH})
@@ -75,7 +75,7 @@ endif()
 # CONFIGURING COMPILER
 # --------------------
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Configuring compiler.")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -114,7 +114,7 @@ endif()
 # SETTING COMPILER FLAGS
 # ----------------------
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Setting compiler flags.")
   if(NOT CMAKE_COMPILER_IS_MSCV)
     message(STATUS "- Enabling C++11 features.")
@@ -140,7 +140,7 @@ message(STATUS "Setting compiler flags.")
   else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
   endif()
-  
+
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "- Setting build to 'Release'.")
   message(STATUS "  - Use 'cmake ... -DCMAKE_BUILD_TYPE=[Release|Debug]' to specify this.")
@@ -172,7 +172,7 @@ endif()
 # BUILDING LIBRARY
 # ----------------
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Configuring library build.")
 
 if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
@@ -188,7 +188,7 @@ if(CMAKE_COMPILER_IS_MSCV)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
   endif()
 endif()
-   
+
 # Include Mantella
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
 
@@ -210,19 +210,19 @@ endif()
 add_library(mantella ${LIBRARY_TYPE}
   # Configuration
   src/config.cpp
-  
+
   # Assertion
   src/assert.cpp
 
   # Random number generator
   src/randomNumberGenerator.cpp
-  
+
   # MPI
   src/mpi.cpp
-  
+
   # Armadillo
   src/armadillo.cpp
-  
+
   # Mathematical functions
   src/algebra.cpp
   src/combinatorics.cpp
@@ -230,11 +230,14 @@ add_library(mantella ${LIBRARY_TYPE}
   src/numberTheory.cpp
   src/numericalAnalysis.cpp
   src/probability.cpp
-  
+
+  # Machine learning models
+  src/kriging.cpp
+
   # Machine learning functions
   src/samplesAnalysis.cpp
   src/samplesSelection.cpp
-  
+
   # Optimisation problems
   src/optimisationProblem.cpp
   src/optimisationProblem/benchmarkOptimisationProblem.cpp
@@ -294,7 +297,7 @@ endif()
 # -------------------
 
 if(BUILD_TESTS)
-  message(STATUS "") 
+  message(STATUS "")
   message(STATUS "Configuring unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
 
@@ -306,11 +309,11 @@ if(BUILD_TESTS)
     message(STATUS "- Excluding code coverage measurement.")
     message(STATUS "  - Use 'cmake ... -DMEASURE_CODE_COVERAGE=ON' to add this.")
   endif()
-  
+
   message(STATUS "- Forcing debug build and deactivating code optimisation.")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
   set(CMAKE_BUILD_TYPE "Debug")
-  
+
   if(CMAKE_COMPILER_IS_CLANGXX OR CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "- Displaying compiler warnings.")
     if(CMAKE_COMPILER_IS_CLANGXX)
@@ -321,7 +324,7 @@ if(BUILD_TESTS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-global-constructors")
       # Ignore warnings for unknown options, as we make use of options introduced by more recent Clang versions.
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-warning-option")
-      
+
       # Ignore warnings resulting from <mpi.h>
       if(SUPPORT_MPI)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic")
@@ -337,16 +340,16 @@ if(BUILD_TESTS)
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-padded")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
-    
+
     message(STATUS "- Handling warnings as errors.")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
   endif()
-  
+
   # if(CMAKE_COMPILER_IS_CLANGXX)
     # message(STATUS "- Including a undefined behavior checker and memory error detector.")
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
   # endif()
-    
+
   if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
   endif()
@@ -354,34 +357,34 @@ if(BUILD_TESTS)
   # Check additional prerequirements
   find_package(Catch REQUIRED) # Catch (header only)
   include_directories(${CATCH_INCLUDE_DIRS}) # Catch
-  
+
   # Include catch extensions
   include_directories(${PROJECT_SOURCE_DIR}/test)
-  
+
   # Compile tests
   # All paths must start with "test/"
   add_executable(mantellaTest
     test/main.cpp
-    
+
     # Test framework extensions
     test/catchExtension.cpp
     test/testCatchExtension.cpp
-    
+
     # Configurations
     test/testConfig.cpp
-    
+
     # Assertions
     test/testAssert.cpp
 
     # Random number generator
     test/testRandomNumberGenerator.cpp
-    
+
     # MPI
     test/testMpi.cpp
-    
+
     # Armadillo
     test/testArmadillo.cpp
-  
+
     # Mathematical functions
     test/testAlgebra.cpp
     test/testCombinatorics.cpp
@@ -389,7 +392,7 @@ if(BUILD_TESTS)
     test/testNumberTheory.cpp
     test/testNumericalAnalysis.cpp
     test/testProbability.cpp
-  
+
     # Machine learning functions
     test/testSamplesAnalysis.cpp
     test/testSamplesSelection.cpp
@@ -427,7 +430,7 @@ if(BUILD_TESTS)
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRRR.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PRUS.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PUPS.cpp
-    
+
     # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/testRandomSearch.cpp
@@ -439,7 +442,7 @@ if(BUILD_TESTS)
 
   # Link against prerequirements
   target_link_libraries(mantellaTest mantella)
-  
+
   if(ARMADILLO_LIBRARIES)
     target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})
   else()
@@ -450,7 +453,7 @@ if(BUILD_TESTS)
     target_link_libraries(mantellaTest ${MPI_C_LIBRARIES})
   endif()
 else()
-  message(STATUS "") 
+  message(STATUS "")
   message(STATUS "Skipping unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=ON' to add this.")
 endif()
