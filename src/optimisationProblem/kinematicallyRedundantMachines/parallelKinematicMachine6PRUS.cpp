@@ -45,7 +45,7 @@ namespace mant {
                                     baseJointsPosition.col(k) += redundantJointsActuation_(k) * redundantJointsAngles_.col(k);
                                   }
 
-                                  arma::mat::fixed<3, 6> endEffectorJointsPosition = rotationMatrix3D(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelativePosition_;
+                                  arma::mat::fixed<3, 6> endEffectorJointsPosition = rotationMatrix3d(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelativePosition_;
                                   endEffectorJointsPosition.each_col() += endEffectorPosition;
 
                                   arma::mat::fixed<3, 6> middleJointsPosition;
