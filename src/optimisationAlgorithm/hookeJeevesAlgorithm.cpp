@@ -1,56 +1,83 @@
 #include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 
+// C++ standard library
+#include <functional>
+#include <stdexcept>
+#include <string>
+#include <utility>
+
+// Armadillo
+#include <armadillo>
+
 // Mantella
-#include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm()
       : OptimisationAlgorithm(),
         stepSize_(0) {
-    setNextParametersFunction(
-        [this](
-            const arma::uword numberOfDimensions_,
-            const arma::Mat<double>& parameters_,
-            const arma::Row<double>& objectiveValues_,
-            const arma::Row<double>& differences_) {
-          if (arma::all(differences_ >= 0)) {
-            stepSize_ *= stepSizeDecrease_;
-          }
-
-          arma::Mat<double> nextParameters(numberOfDimensions_, 2 * numberOfDimensions_);
-          for (arma::uword n = 0; n < numberOfDimensions_; ++n) {
-            arma::Col<double> nextParameterCandidate = bestParameter_;
-            
-            nextParameterCandidate(n) += stepSize_;
-            nextParameters.col(2 * n) = nextParameterCandidate;
-            
-            nextParameterCandidate(n) -= 2 * stepSize_;
-            nextParameters.col(2 * n + 1) = nextParameterCandidate;
-          }
+    // clang-format off
+    setInitialisingFunctions({{
+      [this](
+          const arma::uword numberOfDimensions_,
+          const arma::mat& initialParameters_) {
+        stepSize_ = getInitialStepSize();
+        
+        return initialParameters_;
+      },
+      "Reset step size to the initial one"
+    }});
+    
+    setNextParametersFunctions({{
+      [this](
+          const arma::uword numberOfDimensions_,
+          const arma::mat& parameters_,
+          const arma::rowvec& objectiveValues_,
+          const arma::rowvec& differences_) {
+        if (arma::all(differences_ >= 0)) {
+          stepSize_ *= getStepSizeDecrease();
+        }
+        
+        return parameters_;
+      },
+      "Decrease the step size if the last objective values where worse than the best one"
+    }, {
+      [this](
+          const arma::uword numberOfDimensions_,
+          const arma::mat& parameters_,
+          const arma::rowvec& objectiveValues_,
+          const arma::rowvec& differences_) {
+        arma::mat nextParameters(numberOfDimensions_, 2 * numberOfDimensions_);
+        for (arma::uword n = 0; n < numberOfDimensions_; ++n) {
+          arma::vec nextParameterCandidate = getBestFoundParameter();
           
-          return nextParameters;
-        },
-        "Hooke-Jeeves algorithm");
+          nextParameterCandidate(n) += stepSize_;
+          nextParameters.col(2 * n) = nextParameterCandidate;
+          
+          nextParameterCandidate(n) -= 2 * stepSize_;
+          nextParameters.col(2 * n + 1) = nextParameterCandidate;
+        }
+        
+        return nextParameters;
+      },
+      "Hooke-Jeeves algorithm"
+    }});
+    // clang-format on
 
     setInitialStepSize(1.0);
     setStepSizeDecrease(0.5);
   }
 
-  void HookeJeevesAlgorithm::initialise(
-      const arma::uword numberOfDimensions,
-      const arma::Mat<double>& initialParameters) {
-    stepSize_ = initialStepSize_;
-  }
-
   void HookeJeevesAlgorithm::optimise(
       OptimisationProblem& optimisationProblem) {
-    optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    optimise(optimisationProblem, arma::randu<arma::vec>(optimisationProblem.numberOfDimensions_));
   }
 
   void HookeJeevesAlgorithm::setInitialStepSize(
       const double initialStepSize) {
-    verify(initialStepSize > 0, "HookeJeevesAlgorithm.setInitialStepSize: The initial step size must be strict greater than 0.");
+    if (initialStepSize < 0) {
+      throw std::domain_error("HookeJeevesAlgorithm.setInitialStepSize: The initial step size must be positive (including 0).");
+    }
 
     initialStepSize_ = initialStepSize;
   }
@@ -61,7 +88,9 @@ namespace mant {
 
   void HookeJeevesAlgorithm::setStepSizeDecrease(
       const double stepSizeDecrease) {
-    verify(stepSizeDecrease > 0 && stepSizeDecrease < 1, "HookeJeevesAlgorithm.setStepSizeDecrease: The step size decrease must be within the interval (0, 1).");
+    if (stepSizeDecrease <= 0 || stepSizeDecrease >= 1) {
+      throw std::domain_error("HookeJeevesAlgorithm.setStepSizeDecrease: The step size decrease must be within the interval (0, 1).");
+    }
 
     stepSizeDecrease_ = stepSizeDecrease;
   }

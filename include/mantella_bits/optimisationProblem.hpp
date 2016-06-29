@@ -4,6 +4,8 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 // Armadillo
 #include <armadillo>
@@ -21,87 +23,76 @@ namespace mant {
     explicit OptimisationProblem(
         const arma::uword numberOfDimensions);
 
-    // Objective
-    void setObjectiveFunction(
-        const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction,
-        const std::string& objectiveFunctionName);
-    void setObjectiveFunction(
-        const std::function<double(const arma::Col<double>& parameter_)> objectiveFunction);
-    std::string getObjectiveFunctionName() const;
+    void setObjectiveFunctions(
+        const std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>>& objectiveFunctions);
+    std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>> getObjectiveFunctions() const;
+
     double getObjectiveValue(
-        const arma::Col<double>& parameter);
-    double getNormalisedObjectiveValue(
-        const arma::Col<double>& parameter);
+        arma::vec parameter);
+    double getObjectiveValueOfNormalisedParameter(
+        const arma::vec& normalisedParameter);
 
-    // Constraints
     void setLowerBounds(
-        const arma::Col<double>& lowerBounds);
-    arma::Col<double> getLowerBounds() const;
+        const arma::vec& lowerBounds);
+    arma::vec getLowerBounds() const;
+
     void setUpperBounds(
-        const arma::Col<double>& upperBounds);
-    arma::Col<double> getUpperBounds() const;
+        const arma::vec& upperBounds);
+    arma::vec getUpperBounds() const;
 
-    // Parameter space modifiers
     void setParameterPermutation(
-        const arma::Col<arma::uword>& parameterPermutation);
-    arma::Col<arma::uword> getParameterPermutation() const;
-    void setParameterScaling(
-        const arma::Col<double>& parameterScaling);
-    arma::Col<double> getParameterScaling() const;
-    void setParameterTranslation(
-        const arma::Col<double>& parameterTranslation);
-    arma::Col<double> getParameterTranslation() const;
-    void setParameterRotation(
-        const arma::Mat<double>& parameterRotation);
-    arma::Mat<double> getParameterRotation() const;
-    void setMinimalParameterDistance(
-        const arma::Col<double>& minimalParameterDistance);
-    arma::Col<double> getMinimalParameterDistance() const;
+        const arma::uvec& parameterPermutation);
+    arma::uvec getParameterPermutation() const;
 
-    // Objective value space modifiers
+    void setParameterScaling(
+        const arma::vec& parameterScaling);
+    arma::vec getParameterScaling() const;
+
+    void setParameterTranslation(
+        const arma::vec& parameterTranslation);
+    arma::vec getParameterTranslation() const;
+
+    void setParameterRotation(
+        const arma::mat& parameterRotation);
+    arma::mat getParameterRotation() const;
+
+    void setMinimalParameterDistance(
+        const arma::vec& minimalParameterDistance);
+    arma::vec getMinimalParameterDistance() const;
+
     void setObjectiveValueScaling(
         const double objectiveValueScaling);
     double getObjectiveValueScaling() const;
+
     void setObjectiveValueTranslation(
         const double objectiveValueTranslation);
     double getObjectiveValueTranslation() const;
 
-    // Caching
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> getCachedSamples() const;
+    std::unordered_map<arma::vec, double, Hash, IsEqual> getCachedSamples() const;
 
-    // Evaluation
-    arma::uword getNumberOfEvaluations() const;
-    arma::uword getNumberOfDistinctEvaluations() const;
+    arma::uword getUsedNumberOfEvaluations() const;
+    arma::uword getUsedNumberOfDistinctEvaluations() const;
 
     void reset();
 
    protected:
-    std::function<double(const arma::Col<double>& parameter_)> objectiveFunction_;
-    std::string objectiveFunctionName_;
+    std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>> objectiveFunctions_;
 
-    arma::Col<double> lowerBounds_;
-    arma::Col<double> upperBounds_;
-    arma::Col<double> boundsNormalisiation_;
+    arma::vec lowerBounds_;
+    arma::vec upperBounds_;
 
-    arma::Col<arma::uword> parameterPermutation_;
-    arma::Col<double> parameterScaling_;
-    arma::Col<double> parameterTranslation_;
-    arma::Mat<double> parameterRotation_;
+    arma::uvec parameterPermutation_;
+    arma::vec parameterScaling_;
+    arma::vec parameterTranslation_;
+    arma::mat parameterRotation_;
+    arma::vec minimalParameterDistance_;
 
     double objectiveValueScaling_;
     double objectiveValueTranslation_;
 
-    arma::uword numberOfEvaluations_;
-    arma::uword numberOfDistinctEvaluations_;
+    std::unordered_map<arma::vec, double, Hash, IsEqual> cachedSamples_;
 
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> cachedSamples_;
-    arma::Col<double> minimalParameterDistance_;
-
-    arma::Col<double> getDiscretisedParameter(
-        const arma::Col<double>& parameter) const;
-    arma::Col<double> getModifiedParameter(
-        const arma::Col<double>& parameter) const;
-    double getModifiedObjectiveValue(
-        const double objectiveValue) const;
+    arma::uword usedNumberOfEvaluations_;
+    arma::uword usedNumberOfDistinctEvaluations_;
   };
 }

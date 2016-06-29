@@ -1,28 +1,21 @@
 #pragma once
 
-// C++ standard library
-#include <vector>
-#include <utility>
-
 // Armadillo
 #include <armadillo>
 
 namespace mant {
-  arma::Mat<double> hammersleySet(
-      const arma::Col<arma::uword>& base,
-      const arma::Col<arma::uword>& seed,
+  arma::mat hammersleySet(
+      const arma::uvec& base,
+      const arma::uvec& seed,
       const arma::uword numberOfElements);
 
-  arma::Mat<double> haltonSequence(
-      const arma::Col<arma::uword>& base,
-      const arma::Col<arma::uword>& seed,
+  arma::mat haltonSequence(
+      const arma::uvec& base,
+      const arma::uvec& seed,
       const arma::uword numberOfElements);
 
-  arma::Col<double> vanDerCorputSequence(
+  arma::vec vanDerCorputSequence(
       const arma::uword base,
       const arma::uword seed,
-      const arma::uword numberOfElements);
-
-  std::vector<std::pair<arma::Col<arma::uword>, arma::Col<arma::uword>>> twoSetsPartitions(
       const arma::uword numberOfElements);
 }
