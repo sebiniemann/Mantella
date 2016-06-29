@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 namespace mant {
-  arma::mat::fixed<2, 2> rotationMatrix2D(
+  arma::mat::fixed<2, 2> rotationMatrix2d(
       const double angle) {
     // clang-format off
     return arma::mat::fixed<2, 2>({
@@ -16,7 +16,7 @@ namespace mant {
     // clang-format on
   }
 
-  arma::mat::fixed<3, 3> rotationMatrix3D(
+  arma::mat::fixed<3, 3> rotationMatrix3d(
       const double rollAngle,
       const double pitchAngle,
       const double yawAngle) {
