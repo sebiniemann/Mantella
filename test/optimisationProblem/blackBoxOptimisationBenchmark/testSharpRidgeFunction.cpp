@@ -14,7 +14,7 @@ SCENARIO("bbob::SharpRidgeFunction.getObjectiveFunctions", "[bbob::SharpRidgeFun
   GIVEN("A parameter") {
     THEN("Return its objective value") {
       TestSharpRidgeFunction optimisationProblem(3);
-      optimisationProblem.rotationQ_ = mant::rotationMatrix3D(0.1, 0.2, 0.3);
+      optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
 
       CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(1002.5862890835));
     }
