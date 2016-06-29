@@ -14,7 +14,7 @@ namespace mant {
    public:
     explicit ParticleSwarmOptimisation();
 
-    using OptimisationAlgorithm::optimise;
+    using PopulationBasedOptimisationAlgorithm::optimise;
 
     void optimise(
         OptimisationProblem& optimisationProblem);

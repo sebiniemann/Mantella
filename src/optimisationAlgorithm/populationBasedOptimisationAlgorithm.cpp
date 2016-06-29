@@ -1,5 +1,8 @@
 #include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
 
+// C++ standard library
+#include <stdexcept>
+
 namespace mant {
   PopulationBasedOptimisationAlgorithm::PopulationBasedOptimisationAlgorithm()
       : OptimisationAlgorithm() {

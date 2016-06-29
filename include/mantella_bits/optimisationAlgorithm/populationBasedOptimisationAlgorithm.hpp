@@ -1,7 +1,13 @@
 #pragma once
 
+// Armadillo
+#include <armadillo>
+
 // Mantella
 #include "mantella_bits/optimisationAlgorithm.hpp"
+namespace mant {
+  class OptimisationProblem;
+}
 
 namespace mant {
   class PopulationBasedOptimisationAlgorithm : public OptimisationAlgorithm {

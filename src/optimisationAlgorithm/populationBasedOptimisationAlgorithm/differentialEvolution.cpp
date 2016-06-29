@@ -1,8 +1,11 @@
 #include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/differentialEvolution.hpp"
 
 // C++ standard library
-#include <cstdlib>
-#include <random>
+#include <functional>
+#include <limits>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
 // Mantella
 #include "mantella_bits/optimisationProblem.hpp"
@@ -55,7 +58,7 @@ namespace mant {
 
   void DifferentialEvolution::optimise(
       OptimisationProblem& optimisationProblem) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::mat>(optimisationProblem.numberOfDimensions_, populationSize_));
+    optimise(optimisationProblem, arma::randu<arma::mat>(optimisationProblem.numberOfDimensions_, populationSize_));
   }
 
   void DifferentialEvolution::setScalingFactor(
