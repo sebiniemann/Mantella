@@ -32,24 +32,20 @@ namespace mant {
       }
       setParameterTranslation(parameterTranslation);
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          arma::vec z = parameterConditioning_ % getOscillatedParameter(parameter_);
-          for (arma::uword n = 0; n < z.n_elem; n += 2) {
-            if (z(n) > 0.0) {
-              z(n) *= 10.0;
-            }
-          }
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
-        },
-        "BBOB Büche-Rastrigin Function (f4)"
-      }});
-      // clang-format on
+                                arma::vec z = parameterConditioning_ % getOscillatedParameter(parameter_);
+                                for (arma::uword n = 0; n < z.n_elem; n += 2) {
+                                  if (z(n) > 0.0) {
+                                    z(n) *= 10.0;
+                                  }
+                                }
+
+                                return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+                              },
+          "BBOB Büche-Rastrigin Function (f4)"}});
     }
   }
 }

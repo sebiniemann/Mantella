@@ -47,23 +47,19 @@ namespace mant {
         localParameterConditionings_.col(n) = getParameterConditioning(condition) / std::sqrt(condition);
       }
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          double maximalValue = std::numeric_limits<decltype(maximalValue)>::lowest();
-          for (arma::uword n = 0; n < 21; ++n) {
-            const arma::vec& localParameterTranslation = parameter_ - localParameterTranslations_.col(n);
-            maximalValue = std::max(maximalValue, weights_(n) * std::exp(-0.5 / static_cast<decltype(maximalValue)>(numberOfDimensions_) * arma::dot(localParameterTranslation, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(n)) * rotationQ_ * localParameterTranslation)));
-          }
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
-        },
-        "BBOB Gallagher's Gaussian 21-hi Peaks Function (f22)"
-      }});
-      // clang-format on
+                                double maximalValue = std::numeric_limits<decltype(maximalValue)>::lowest();
+                                for (arma::uword n = 0; n < 21; ++n) {
+                                  const arma::vec& localParameterTranslation = parameter_ - localParameterTranslations_.col(n);
+                                  maximalValue = std::max(maximalValue, weights_(n) * std::exp(-0.5 / static_cast<decltype(maximalValue)>(numberOfDimensions_) * arma::dot(localParameterTranslation, rotationQ_.t() * arma::diagmat(localParameterConditionings_.col(n)) * rotationQ_ * localParameterTranslation)));
+                                }
+
+                                return std::pow(getOscillatedValue(10.0 - maximalValue), 2.0);
+                              },
+          "BBOB Gallagher's Gaussian 21-hi Peaks Function (f22)"}});
     }
   }
 }

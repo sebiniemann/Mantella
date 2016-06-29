@@ -26,18 +26,14 @@ namespace mant {
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          const arma::vec& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter_));
-          return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
-        },
-        "BBOB Bent Cigar Function (f12)"
-      }});
-      // clang-format on
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
+
+                                const arma::vec& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter_));
+                                return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
+                              },
+          "BBOB Bent Cigar Function (f12)"}});
     }
   }
 }

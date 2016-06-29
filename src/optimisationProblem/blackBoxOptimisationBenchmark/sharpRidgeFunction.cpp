@@ -29,18 +29,14 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          const arma::vec& z = rotationQ_ * (parameterConditioning_ % parameter_);
-          return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
-        },
-        "BBOB Sharp Ridge Function (f13)"
-      }});
-      // clang-format on
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
+
+                                const arma::vec& z = rotationQ_ * (parameterConditioning_ % parameter_);
+                                return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
+                              },
+          "BBOB Sharp Ridge Function (f13)"}});
     }
   }
 }

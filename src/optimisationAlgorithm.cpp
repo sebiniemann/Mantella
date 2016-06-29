@@ -31,13 +31,12 @@ namespace mant {
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(1));
 
-    // clang-format off
     setBoundariesHandlingFunctions({{[this](
-           const arma::mat& parameters_,
-           const arma::umat& isBelowLowerBound_,
-           const arma::umat& isAboveUpperBound_) {
-         return arma::clamp(parameters_, 0.0, 1.0);
-       },
+                                         const arma::mat& parameters_,
+                                         const arma::umat& isBelowLowerBound_,
+                                         const arma::umat& isAboveUpperBound_) {
+                                       return arma::clamp(parameters_, 0.0, 1.0);
+                                     },
         "Set parts of an parameter that are out of bound directly to to bound"}});
 
     setRestartingFunctions({{[this](
@@ -50,14 +49,13 @@ namespace mant {
         "Place all parameters randomly within the bounds"}});
 
     setCommunicationFunctions({{[this](
-                                 const arma::uword numberOfDimensions_,
-                                 const arma::mat& parameters_,
-                                 const arma::rowvec& objectiveValues_,
-                                 const arma::rowvec& differences_) {
-                               return parameters_;
-                             },
+                                    const arma::uword numberOfDimensions_,
+                                    const arma::mat& parameters_,
+                                    const arma::rowvec& objectiveValues_,
+                                    const arma::rowvec& differences_) {
+                                  return parameters_;
+                                },
         "Find the cluster-wide best found sample"}});
-// clang-format on
 
 #if defined(SUPPORT_MPI)
     MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);

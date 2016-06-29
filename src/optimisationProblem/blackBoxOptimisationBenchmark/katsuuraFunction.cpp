@@ -32,32 +32,28 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          arma::vec z = rotationQ_ * (parameterConditioning_ % parameter_);
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          double product = 1.0;
-          for (arma::uword n = 0; n < z.n_elem; ++n) {
-            const double value = z(n);
+                                arma::vec z = rotationQ_ * (parameterConditioning_ % parameter_);
 
-            double sum = 0.0;
-            for (arma::uword k = 1; k < 33; ++k) {
-              const double power = std::pow(2.0, k);
-              sum += std::abs(power * value - std::round(power * value)) / power;
-            }
+                                double product = 1.0;
+                                for (arma::uword n = 0; n < z.n_elem; ++n) {
+                                  const double value = z(n);
 
-            product *= std::pow(1.0 + (static_cast<decltype(product)>(n) + 1.0) * sum, 10.0 / std::pow(numberOfDimensions_, 1.2));
-          }
+                                  double sum = 0.0;
+                                  for (arma::uword k = 1; k < 33; ++k) {
+                                    const double power = std::pow(2.0, k);
+                                    sum += std::abs(power * value - std::round(power * value)) / power;
+                                  }
 
-          return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0);
-        },
-        "BBOB Katsuura Function (f23)"
-      }});
-      // clang-format on
+                                  product *= std::pow(1.0 + (static_cast<decltype(product)>(n) + 1.0) * sum, 10.0 / std::pow(numberOfDimensions_, 1.2));
+                                }
+
+                                return 10.0 / std::pow(numberOfDimensions_, 2.0) * (product - 1.0);
+                              },
+          "BBOB Katsuura Function (f23)"}});
     }
   }
 }

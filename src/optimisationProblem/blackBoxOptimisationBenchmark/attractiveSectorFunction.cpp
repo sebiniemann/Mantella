@@ -29,20 +29,16 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          arma::vec z = rotationQ_ * (parameterConditioning_ % parameter_);
-          z.elem(arma::find(z % parameterTranslation_ > 0.0)) *= 100.0;
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);
-        },
-        "BBOB Attractive Sector Function (f6)"
-      }});
-      // clang-format on
+                                arma::vec z = rotationQ_ * (parameterConditioning_ % parameter_);
+                                z.elem(arma::find(z % parameterTranslation_ > 0.0)) *= 100.0;
+
+                                return std::pow(getOscillatedValue(std::pow(arma::norm(z), 2.0)), 0.9);
+                              },
+          "BBOB Attractive Sector Function (f6)"}});
     }
   }
 }

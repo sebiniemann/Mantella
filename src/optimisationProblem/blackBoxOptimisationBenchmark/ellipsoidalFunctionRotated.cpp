@@ -26,17 +26,13 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter_)));
-        },
-        "BBOB Ellipsoidal Function, rotated (f10)"
-      }});
-      // clang-format on
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
+
+                                return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter_)));
+                              },
+          "BBOB Ellipsoidal Function, rotated (f10)"}});
     }
   }
 }

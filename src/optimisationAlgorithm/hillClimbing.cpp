@@ -18,31 +18,25 @@ namespace mant {
       : OptimisationAlgorithm() {
     bestFoundParameter_ = 2.0 * arma::ones<arma::vec>(3);
 
-    // clang-format off
-    setInitialisingFunctions({{
-      [this](
-          const arma::uword numberOfDimensions_,
-          const arma::mat& initialParameters_) {
-        if(getMinimalStepSize() > getMaximalStepSize()) {
-          throw std::logic_error("HillClimbing.initialisingFunctions: The maximal step size must be must be greater than or equal to the minimal one.");
-        }
-        
-        return initialParameters_;
-      },
-      "Step size validation"
-    }});
-    
-    setNextParametersFunctions({{
-      [this](
-          const arma::uword numberOfDimensions_,
-          const arma::mat& parameters_,
-          const arma::rowvec& objectiveValues_,
-          const arma::rowvec& differences_) {
-        return randomNeighbour(getBestFoundParameter(), getMinimalStepSize(), getMaximalStepSize());
-      },
-      "Return a random neighbour of the best parameter within the step sizes"
-    }});
-    // clang-format on
+    setInitialisingFunctions({{[this](
+                                   const arma::uword numberOfDimensions_,
+                                   const arma::mat& initialParameters_) {
+                                 if (getMinimalStepSize() > getMaximalStepSize()) {
+                                   throw std::logic_error("HillClimbing.initialisingFunctions: The maximal step size must be must be greater than or equal to the minimal one.");
+                                 }
+
+                                 return initialParameters_;
+                               },
+        "Step size validation"}});
+
+    setNextParametersFunctions({{[this](
+                                     const arma::uword numberOfDimensions_,
+                                     const arma::mat& parameters_,
+                                     const arma::rowvec& objectiveValues_,
+                                     const arma::rowvec& differences_) {
+                                   return randomNeighbour(getBestFoundParameter(), getMinimalStepSize(), getMaximalStepSize());
+                                 },
+        "Return a random neighbour of the best parameter within the step sizes"}});
 
     setMinimalStepSize(0.0);
     setMaximalStepSize(0.1);

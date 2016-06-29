@@ -31,22 +31,18 @@ namespace mant {
       // A vector with all elements randomly and uniformly set to either 2 or -2.
       setParameterScaling(arma::zeros<arma::vec>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator_) ? 2.0 : -2.0));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          arma::vec s = parameter_;
-          s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          const arma::vec& z = 100.0 * (parameterConditioning_ % (s - 4.2096874633) + 4.2096874633);
+                                arma::vec s = parameter_;
+                                s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
 
-          return 0.01 * (418.9828872724339 - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<double>(numberOfDimensions_)) + 100.0 * arma::accu(arma::pow(arma::max(arma::zeros<arma::vec>(numberOfDimensions_), arma::abs(z / 100.0) - 5.0), 2.0));
-        },
-        "BBOB Schwefel Function (f20)"
-      }});
-      // clang-format on
+                                const arma::vec& z = 100.0 * (parameterConditioning_ % (s - 4.2096874633) + 4.2096874633);
+
+                                return 0.01 * (418.9828872724339 - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<double>(numberOfDimensions_)) + 100.0 * arma::accu(arma::pow(arma::max(arma::zeros<arma::vec>(numberOfDimensions_), arma::abs(z / 100.0) - 5.0), 2.0));
+                              },
+          "BBOB Schwefel Function (f20)"}});
     }
   }
 }

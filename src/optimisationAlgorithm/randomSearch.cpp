@@ -14,18 +14,14 @@
 namespace mant {
   RandomSearch::RandomSearch()
       : OptimisationAlgorithm() {
-    // clang-format off
-    setNextParametersFunctions({{
-      [this](
-          const arma::uword numberOfDimensions_,
-          const arma::mat& parameters_,
-          const arma::rowvec& objectiveValues_,
-          const arma::rowvec& differences_) {
-        return arma::randu<arma::vec>(numberOfDimensions_);
-      },
-      "Random search"
-    }});
-    // clang-format on
+    setNextParametersFunctions({{[this](
+                                     const arma::uword numberOfDimensions_,
+                                     const arma::mat& parameters_,
+                                     const arma::rowvec& objectiveValues_,
+                                     const arma::rowvec& differences_) {
+                                   return arma::randu<arma::vec>(numberOfDimensions_);
+                                 },
+        "Random search"}});
   }
 
   void RandomSearch::optimise(
