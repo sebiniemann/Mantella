@@ -7,13 +7,13 @@
 #include <stdexcept>
 
 namespace mant {
-  arma::mat::fixed<2, 2> rotationMatrix2D(
+  arma::mat::fixed<2, 2> rotationMatrix2d(
       const double angle) {
     return arma::mat::fixed<2, 2>({std::cos(angle), -std::sin(angle),
         std::sin(angle), std::cos(angle)});
   }
 
-  arma::mat::fixed<3, 3> rotationMatrix3D(
+  arma::mat::fixed<3, 3> rotationMatrix3d(
       const double rollAngle,
       const double pitchAngle,
       const double yawAngle) {
