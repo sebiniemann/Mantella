@@ -2,73 +2,44 @@
 
 // C++ standard library
 #include <cmath>
+#include <stdexcept>
 
 // Mantella
-#include "mantella_bits/assert.hpp"
+#include "mantella_bits/geometry.hpp"
 #include "mantella_bits/numericalAnalysis.hpp"
 
 namespace mant {
   namespace itd {
-
-    std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> orbitOnPosition(
+    std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionOnOrbit(
         const double modifiedJulianDay,
-        const arma::Col<double>::fixed<7>& keplerianElements) {
-      if (!std::isfinite(modifiedJulianDay)) {
-        // TODO
-        verify(std::isfinite(modifiedJulianDay), "orbitOnPosition: The modifiedJulianDay must be finite.");
-      }
-
-      double timePassedSincePeriapsis = (modifiedJulianDay - keplerianElements(6)) * 86400.0; // in sec
-
-      double semiMajorAxis = keplerianElements(0) * 149597870691.0; //in km
-      double eccentricity = keplerianElements(1);
-      double inclination = (arma::datum::pi / 180.0) * keplerianElements(2);
-      double omg = (arma::datum::pi / 180.0) * keplerianElements(3);
-      double omp = (arma::datum::pi / 180.0) * keplerianElements(4);
-      double ea = (arma::datum::pi / 180.0) * keplerianElements(5);
-
+        const arma::vec::fixed<7>& keplerianElements) {
+      const double eccentricity = keplerianElements(1);
       if (eccentricity >= 1.0) {
-        // TODO
-        verify(eccentricity < 1.0, "orbitOnPosition: The eccentricity must be lesser than 1.0.");
+        throw std::domain_error("positionOnOrbit: The eccentricity must be less than 1.");
       }
-      double meanMotion = std::sqrt(standardGravitationalParameterOfSun / std::pow(semiMajorAxis, 3.0));
-      ea += timePassedSincePeriapsis * meanMotion;
 
-      //m2e begin
-      ea = mant::brent([&ea, &eccentricity](
-                           double parameter) { 
-        return parameter - eccentricity * std::sin(parameter) - ea;
+      const double semiMajorAxis = keplerianElements(0);
+      const double inclination = keplerianElements(2);
+      const double longitudeOfTheAscendingNode = keplerianElements(3);
+      const double argumentOfPeriapsis = keplerianElements(4);
+      const double meanAnomaly = keplerianElements(5) + (modifiedJulianDay - keplerianElements(6)) * std::sqrt(::mant::itd::heliocentricGravitationalConstant / std::pow(semiMajorAxis, 3.0));
+
+      const double eccentricAnomaly = mant::brent([&meanAnomaly, &eccentricity](
+                                                      double parameter) {
+        return parameter - eccentricity * std::sin(parameter) - meanAnomaly;
       },
-          ea + eccentricity * std::cos(ea) - 1.0, ea + eccentricity * std::cos(ea) + 1.0, 100, 1e-10); //TODO bounds round about (ea + eccentricity * std::cos(ea)) +- 1.0 okay?
-      //m2e end
+          meanAnomaly + eccentricity * std::cos(meanAnomaly) - 1.0, meanAnomaly + eccentricity * std::cos(meanAnomaly) + 1.0, 100);
 
-      //par2ic begin
-      double b = semiMajorAxis * std::sqrt(1.0 - std::pow(eccentricity, 2.0));
-      double n = std::sqrt(standardGravitationalParameterOfSun / std::pow(semiMajorAxis, 3.0));
-      double xper = semiMajorAxis * (std::cos(ea) - eccentricity);
-      double yper = b * std::sin(ea);
-      double xdotper = -(semiMajorAxis * n * std::sin(ea)) / (1.0 - eccentricity * std::cos(ea));
-      double ydotper = (b * n * std::cos(ea)) / (1.0 - eccentricity * std::cos(ea));
+      if (std::isnan(eccentricAnomaly)) {
+        throw std::runtime_error("positionOnOrbit: Could not solve for the eccentric anomaly.");
+      }
 
-      double cosomg = std::cos(omg);
-      double cosomp = std::cos(omp);
-      double sinomg = std::sin(omg);
-      double sinomp = std::sin(omp);
-      double cosi = std::cos(inclination);
-      double sini = std::sin(inclination);
+      double y = semiMajorAxis * std::sqrt(1.0 - std::pow(eccentricity, 2.0));
+      double n = std::sqrt(::mant::itd::heliocentricGravitationalConstant / std::pow(semiMajorAxis, 3.0));
 
-      arma::Mat<double>::fixed<3, 3> rotationMatrix = {{cosomg * cosomp - sinomg * sinomp * cosi, -cosomg * sinomp - sinomg * cosomp * cosi, sinomg * sini},
-          {sinomg * cosomp + cosomg * sinomp * cosi, -sinomg * sinomp + cosomg * cosomp * cosi, -cosomg * sini},
-          {sinomp * sini, cosomp * sini, cosi}};
+      const arma::mat& rotationMatrix = rotationMatrix3dExtrinsic(longitudeOfTheAscendingNode, inclination, argumentOfPeriapsis);
 
-      arma::Col<double>::fixed<3> temp = {xper, yper, 0.0};
-      arma::Col<double>::fixed<3> temp2 = {xdotper, ydotper, 0.0};
-
-      arma::Col<double>::fixed<3> positionVector = rotationMatrix * temp;
-      arma::Col<double>::fixed<3> velocityVector = rotationMatrix * temp2;
-
-      return std::make_pair(positionVector, velocityVector);
-      //par2ic end
+      return {rotationMatrix * arma::vec({semiMajorAxis * (std::cos(eccentricAnomaly) - eccentricity), y * std::sin(eccentricAnomaly), 0.0}), rotationMatrix * arma::vec({-(semiMajorAxis * n * std::sin(eccentricAnomaly)) / (1.0 - eccentricity * std::cos(eccentricAnomaly)), (y * n * std::cos(eccentricAnomaly)) / (1.0 - eccentricity * std::cos(eccentricAnomaly)), 0.0})};
     }
   }
 }

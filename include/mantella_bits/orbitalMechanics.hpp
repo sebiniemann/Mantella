@@ -8,10 +8,9 @@
 
 namespace mant {
   namespace itd {
+    const double heliocentricGravitationalConstant = 1.32712440018e20;
 
-    const double standardGravitationalParameterOfSun = 1.32712440018e20;
-
-    std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> orbitOnPosition(
+    std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> positionOnOrbit(
         const double modifiedJulianDay2000,
         const arma::Col<double>::fixed<7>& keplerianElements);
   }
