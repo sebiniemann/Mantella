@@ -13,7 +13,7 @@ namespace mant {
         std::sin(angle), std::cos(angle)});
   }
 
-  arma::mat::fixed<3, 3> rotationMatrix3d(
+  arma::mat::fixed<3, 3> rotationMatrix3dIntrinsic(
       const double rollAngle,
       const double pitchAngle,
       const double yawAngle) {
@@ -26,6 +26,21 @@ namespace mant {
         -std::sin(pitchAngle),
         std::cos(pitchAngle) * std::sin(rollAngle),
         std::cos(pitchAngle) * std::cos(rollAngle)});
+  }
+
+  arma::mat::fixed<3, 3> rotationMatrix3dExtrinsic(
+      const double rollAngle,
+      const double pitchAngle,
+      const double yawAngle) {
+    return arma::mat::fixed<3, 3>({std::cos(rollAngle) * std::cos(yawAngle) - std::cos(pitchAngle) * std::sin(rollAngle) * std::sin(yawAngle),
+        std::cos(yawAngle) * std::sin(rollAngle) + std::cos(rollAngle) * std::cos(pitchAngle) * std::sin(yawAngle),
+        std::sin(pitchAngle) * std::sin(yawAngle),
+        -std::cos(rollAngle) * std::sin(yawAngle) - std::cos(pitchAngle) * std::cos(yawAngle) * std::sin(rollAngle),
+        std::cos(rollAngle) * std::cos(pitchAngle) * std::cos(yawAngle) - std::sin(rollAngle) * std::sin(yawAngle),
+        std::cos(yawAngle) * std::sin(pitchAngle),
+        std::sin(rollAngle) * std::sin(pitchAngle),
+        -std::cos(rollAngle) * std::sin(pitchAngle),
+        std::cos(pitchAngle)});
   }
 
   std::vector<arma::vec::fixed<2>> circleCircleIntersections(

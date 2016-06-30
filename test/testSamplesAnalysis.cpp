@@ -129,8 +129,6 @@ SCENARIO("additiveSeparability", "[samplesAnalysis][additiveSeparability]") {
                                                     },
             "Test function"}});
 
-        CAPTURE(mant::additiveSeparability(optimisationProblem, 100, 0.9));
-
         CHECK(hasSameElements(mant::additiveSeparability(optimisationProblem, 100, 0.9), {{0, 1}}) == true);
       }
     }
