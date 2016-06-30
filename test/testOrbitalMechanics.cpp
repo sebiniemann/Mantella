@@ -2,10 +2,19 @@
 #include <catch.hpp>
 #include "catchHelper.hpp"
 
+SCENARIO("stumpffFunction", "[orbitalMechanics][stumpffFunction]") {
+  GIVEN("A parameter and a type") {
+    THEN("Return the result of the Stumpff function") {
+      CHECK(mant::itd::stumpffFunction(2.0, 4) == Approx(-0.065180743));
+      CHECK(mant::itd::stumpffFunction(-2.0, 5) == Approx(0.2962413847));
+    }
+  }
+}
+
 SCENARIO("positionOnOrbit", "[orbitalMechanics][positionOnOrbit]") {
-  GIVEN("Timestamp in mjd format and a 7-element vector with keplerian elements and a reference date in mjd format") {
+  GIVEN("A modified Julian date, Keplerian elements and a modified Julian reference date") {
     WHEN("Valid timestamp and keplerian elements are given") {
-      THEN("Return position and velocity vector") {
+      THEN("The eccentricity is less than 1.0") {
         std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> positionAndVelocity = mant::itd::positionOnOrbit(4453401600.0, arma::vec({108209474522.8824, 0.0067767205622176587, 0.059248274299581655, 1.3383157887557473, 0.95858056664193103, 0.87043843382287189, 4453401600.0}));
 
         CHECK(arma::approx_equal(positionAndVelocity.first, arma::vec({-1.0749198944842783e+11, -3.9372234530840988e+09, 6.1508375249456024e+09}), "reldiff", ::mant::machinePrecision) == true);
@@ -13,9 +22,9 @@ SCENARIO("positionOnOrbit", "[orbitalMechanics][positionOnOrbit]") {
       }
     }
 
-    WHEN("Eccentricity is 1.0 or greater") {
+    WHEN("The eccentricity is equal to or greater than 1.0") {
       THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(mant::itd::positionOnOrbit(54000.0, arma::vec({7.233268496749391e-01, 1.6755697267164094, 3.394589632336535e+00, 5.518541455452200e+01, 7.667837563371675e+01, 4.931425178852966e+01, 51544.0})), std::logic_error);
+        CHECK_THROWS_AS(mant::itd::positionOnOrbit(4453401600.0, arma::vec({108209474522.8824, 1.0067767205622176587, 0.059248274299581655, 1.3383157887557473, 0.95858056664193103, 0.87043843382287189, 4453401600.0})), std::logic_error);
       }
     }
   }

@@ -5,11 +5,36 @@
 #include <stdexcept>
 
 // Mantella
+#include "mantella_bits/combinatorics.hpp"
 #include "mantella_bits/geometry.hpp"
 #include "mantella_bits/numericalAnalysis.hpp"
 
 namespace mant {
   namespace itd {
+    double stumpffFunction(
+        const double parameter,
+        const arma::uword type) {
+      if (type == 0) {
+        if (parameter > 0.0) {
+          return std::cos(std::sqrt(parameter));
+        } else if (parameter < 0.0) {
+          return std::cosh(std::sqrt(-parameter));
+        } else {
+          return 0.5;
+        }
+      } else if (type == 1) {
+        if (parameter > 0.0) {
+          return std::sin(std::sqrt(parameter)) / std::sqrt(parameter);
+        } else if (parameter < 0.0) {
+          return std::sinh(std::sqrt(-parameter)) / std::sqrt(-parameter);
+        } else {
+          return 5.0 / 6.0;
+        }
+      } else {
+        return (1.0 / factorial(type) - stumpffFunction(parameter, type - 2)) / parameter;
+      }
+    }
+
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionOnOrbit(
         const double modifiedJulianDay,
         const arma::vec::fixed<7>& keplerianElements) {
