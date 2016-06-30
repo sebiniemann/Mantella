@@ -16,6 +16,25 @@
 
 namespace mant {
   decltype(Rng::generator_) Rng::generator_;
+  decltype(Rng::generators_) Rng::generators_;
+  
+  void Rng::initialiseGenerators(arma::uword numberOfGenerators) {
+    if (numberOfGenerators > generators_.size()) {
+      const arma::uword numberOfMissingGenerators = numberOfGenerators - generators_.size();
+      std::random_device randomDevice;
+      for (arma::uword n = 0; n < numberOfMissingGenerators; ++n) {
+        generators_.emplace_back(randomDevice());
+      }
+    }
+  }
+    
+  std::mt19937_64& Rng::getGenerator(arma::uword threadNumber) {
+    if (threadNumber > generators_.size() - 1) {
+      throw std::invalid_argument("Rng.getGenerator: The thread number must be within [0, generators_.size() - 1].");
+    }
+
+    return generators_.at(threadNumber);
+  }
 
   void Rng::setSeed(
       const std::random_device::result_type seed) {

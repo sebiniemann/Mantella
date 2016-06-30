@@ -3,6 +3,9 @@
 // C++ standard library
 #include <random>
 
+// Armadillo
+#include <armadillo>
+
 namespace mant {
   class Rng {
    public:
@@ -13,8 +16,13 @@ namespace mant {
     Rng& operator=(const Rng&) = delete;
     Rng& operator=(Rng&&) = delete;
 
+    static std::vector<std::mt19937_64> generators_;
     static std::mt19937_64 generator_;
-
+    
+    static void initialiseGenerators(arma::uword numberOfGenerators);
+    
+    static std::mt19937_64& getGenerator(arma::uword threadNumber);
+    
     static void setSeed(
         const std::random_device::result_type seed);
 
