@@ -17,11 +17,12 @@ namespace mant {
           const arma::uword numberOfWorkspaceDimensions);
 
       void setEndEffectorTrajectory(
-          const arma::Mat<double>& endEffectorTrajectory);
-      arma::Mat<double> getEndEffectorTrajectory() const;
+          const arma::mat& endEffectorTrajectory);
+
+      arma::mat getEndEffectorTrajectory() const;
 
      protected:
-      arma::Mat<double> endEffectorTrajectory_;
+      arma::mat endEffectorTrajectory_;
     };
   }
 }

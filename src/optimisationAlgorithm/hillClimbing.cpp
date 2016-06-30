@@ -1,43 +1,57 @@
 #include "mantella_bits/optimisationAlgorithm/hillClimbing.hpp"
 
+// C++ standard library
+#include <functional>
+#include <stdexcept>
+#include <string>
+#include <utility>
+
+// Armadillo
+#include <armadillo>
+
 // Mantella
-#include "mantella_bits/assert.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
 #include "mantella_bits/probability.hpp"
 
 namespace mant {
   HillClimbing::HillClimbing()
-      : OptimisationAlgorithm(),
-        minimalStepSize_(arma::datum::nan),
-        maximalStepSize_(arma::datum::nan) {
-    setNextParametersFunction(
-        [this](
-            const arma::uword numberOfDimensions_,
-            const arma::Mat<double>& parameters_,
-            const arma::Row<double>& objectiveValues_,
-            const arma::Row<double>& differences_) {
-          return randomNeighbour(bestParameter_, minimalStepSize_, maximalStepSize_);
-        },
-        "Hill climbing");
+      : OptimisationAlgorithm() {
+    bestFoundParameter_ = 2.0 * arma::ones<arma::vec>(3);
 
-    setMinimalStepSize(0);
+    setInitialisingFunctions({{[this](
+                                   const arma::uword numberOfDimensions_,
+                                   const arma::mat& initialParameters_) {
+                                 if (getMinimalStepSize() > getMaximalStepSize()) {
+                                   throw std::logic_error("HillClimbing.initialisingFunctions: The maximal step size must be must be greater than or equal to the minimal one.");
+                                 }
+
+                                 return initialParameters_;
+                               },
+        "Step size validation"}});
+
+    setNextParametersFunctions({{[this](
+                                     const arma::uword numberOfDimensions_,
+                                     const arma::mat& parameters_,
+                                     const arma::rowvec& objectiveValues_,
+                                     const arma::rowvec& differences_) {
+                                   return randomNeighbour(getBestFoundParameter(), getMinimalStepSize(), getMaximalStepSize());
+                                 },
+        "Return a random neighbour of the best parameter within the step sizes"}});
+
+    setMinimalStepSize(0.0);
     setMaximalStepSize(0.1);
-  }
-
-  void HillClimbing::initialise(
-      const arma::uword numberOfDimensions,
-      const arma::Mat<double>& initialParameters) {
-    verify(minimalStepSize_ <= maximalStepSize_, "HillClimbing.initialise: The minimal step size must be less than or equal to the maximal one.");
   }
 
   void HillClimbing::optimise(
       OptimisationProblem& optimisationProblem) {
-    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::Col<double>>(optimisationProblem.numberOfDimensions_));
+    OptimisationAlgorithm::optimise(optimisationProblem, arma::randu<arma::vec>(optimisationProblem.numberOfDimensions_));
   }
 
   void HillClimbing::setMinimalStepSize(
       const double minimalStepSize) {
-    verify(minimalStepSize >= 0, "HillClimbing.setMinimalStepSize: The minimal step size must be positive (including 0).");
+    if (minimalStepSize < 0) {
+      throw std::domain_error("HillClimbing.setMinimalStepSize: The minimal step size must be positive (including 0).");
+    }
 
     minimalStepSize_ = minimalStepSize;
   }
@@ -48,7 +62,9 @@ namespace mant {
 
   void HillClimbing::setMaximalStepSize(
       const double maximalStepSize) {
-    verify(maximalStepSize > 0, "HillClimbing.setMaximalStepSize: The maximal step size must be strict greater than 0.");
+    if (maximalStepSize < 0) {
+      throw std::domain_error("HillClimbing.setMaximalStepSize: The maximal step size must be positive (including 0).");
+    }
 
     maximalStepSize_ = maximalStepSize;
   }
