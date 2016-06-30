@@ -25,18 +25,14 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          const arma::vec& z = arma::abs(parameter_);
-          return arma::norm(z % getConditionedParameter(arma::square(z)));
-        },
-        "BBOB Different Powers Function (f14)"
-      }});
-      // clang-format on
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
+
+                                const arma::vec& z = arma::abs(parameter_);
+                                return arma::norm(z % getConditionedParameter(arma::square(z)));
+                              },
+          "BBOB Different Powers Function (f14)"}});
     }
   }
 }

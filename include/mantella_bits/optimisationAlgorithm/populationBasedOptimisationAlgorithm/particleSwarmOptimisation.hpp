@@ -4,21 +4,17 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationAlgorithm.hpp"
+#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;
 }
 
 namespace mant {
-  class ParticleSwarmOptimisation : public OptimisationAlgorithm {
+  class ParticleSwarmOptimisation : public PopulationBasedOptimisationAlgorithm {
    public:
     explicit ParticleSwarmOptimisation();
 
-    using OptimisationAlgorithm::optimise;
-
-    void optimise(
-        OptimisationProblem& optimisationProblem,
-        const arma::uword numberOfParticles);
+    using PopulationBasedOptimisationAlgorithm::optimise;
 
     void optimise(
         OptimisationProblem& optimisationProblem);

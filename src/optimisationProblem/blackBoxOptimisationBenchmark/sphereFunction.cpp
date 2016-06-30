@@ -22,17 +22,13 @@ namespace mant {
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          return std::pow(arma::norm(parameter_), 2.0);
-        },
-        "BBOB Sphere Function (f1)"
-      }});
-      // clang-format on
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
+
+                                return std::pow(arma::norm(parameter_), 2.0);
+                              },
+          "BBOB Sphere Function (f1)"}});
     }
   }
 }

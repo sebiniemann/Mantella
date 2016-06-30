@@ -87,51 +87,55 @@ namespace mant {
     void reset();
 
    protected:
-    // clang-format off
     std::vector<std::pair<
-      std::function<arma::mat(
-        const arma::uword numberOfDimensions_,
-        const arma::mat& initialParameters_)>,
-      std::string>> initialisingFunctions_;
-      
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& initialParameters_)>,
+        std::string>>
+        initialisingFunctions_;
+
     std::vector<std::pair<
-      std::function<arma::mat(
-        const arma::uword numberOfDimensions_,
-        const arma::mat& parameters_,
-        const arma::rowvec& objectiveValues_,
-        const arma::rowvec& differences_)>,
-      std::string>> nextParametersFunctions_;
-      
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        nextParametersFunctions_;
+
     std::vector<std::pair<
-      std::function<arma::mat(
-        const arma::mat& parameters_,
-        const arma::umat& isBelowLowerBound_,
-        const arma::umat& isAboveUpperBound_)>,
-      std::string>> boundariesHandlingFunctions_;
-      
+        std::function<arma::mat(
+            const arma::mat& parameters_,
+            const arma::umat& isBelowLowerBound_,
+            const arma::umat& isAboveUpperBound_)>,
+        std::string>>
+        boundariesHandlingFunctions_;
+
     std::vector<std::pair<
-      std::function<bool(
-        const arma::mat& parameters_,
-        const arma::rowvec& objectiveValues_,
-        const arma::rowvec& differences_)>,
-      std::string>> isStagnatingFunctions_;
-      
+        std::function<bool(
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        isStagnatingFunctions_;
+
     std::vector<std::pair<
-      std::function<arma::mat(
-        const arma::uword numberOfDimensions_,
-        const arma::mat& parameters_,
-        const arma::rowvec& objectiveValues_,
-        const arma::rowvec& differences_)>,
-      std::string>> restartingFunctions_;
-      
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        restartingFunctions_;
+
     std::vector<std::pair<
-      std::function<arma::mat(
-        const arma::uword numberOfDimensions_,
-        const arma::mat& parameters_,
-        const arma::rowvec& objectiveValues_,
-        const arma::rowvec& differences_)>,
-      std::string>> communicationFunctions_;
-    // clang-format on
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        communicationFunctions_;
 
     int nodeRank_;
     int numberOfNodes_;

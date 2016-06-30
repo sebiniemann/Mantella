@@ -27,20 +27,16 @@ namespace mant {
 
       setParameterRotation(arma::eye<arma::mat>(numberOfDimensions_, numberOfDimensions_) * (std::bernoulli_distribution(0.5)(Rng::generator_) ? 1.0 : -1.0));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          arma::vec z = parameter_;
-          z.elem(arma::find(parameter_ >= 5.0)).fill(5.0);
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          return f0_ - arma::dot(parameterConditioning_, z);
-        },
-        "BBOB Linear Slope (f5)"
-      }});
-      // clang-format on
+                                arma::vec z = parameter_;
+                                z.elem(arma::find(parameter_ >= 5.0)).fill(5.0);
+
+                                return f0_ - arma::dot(parameterConditioning_, z);
+                              },
+          "BBOB Linear Slope (f5)"}});
     }
   }
 }

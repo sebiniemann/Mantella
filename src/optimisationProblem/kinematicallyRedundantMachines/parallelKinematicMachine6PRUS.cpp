@@ -28,69 +28,65 @@ namespace mant {
       setLowerBounds(arma::zeros<arma::vec>(numberOfDimensions_) - 0.6);
       setUpperBounds(arma::zeros<arma::vec>(numberOfDimensions_) + 0.2);
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& redundantJointsActuation_) {
-          assert(redundantJointsActuation_.n_elem == numberOfDimensions_);
-          
-          double poseInaccuracy = 0.0;
-          for (arma::uword n = 0; n < endEffectorTrajectory_.n_cols; ++n) {
-            const arma::vec::fixed<6>& endEffectorPose = endEffectorTrajectory_.col(n);
-            const arma::vec::fixed<3>& endEffectorPosition = endEffectorPose.head(3);
-            const double endEffectorRollAngle = endEffectorPose(3);
-            const double endEffectorPitchAngle = endEffectorPose(4);
-            const double endEffectorYawAngle = endEffectorPose(5);
-          
-            arma::mat::fixed<3, 6> baseJointsPosition = redundantJointsPosition_;
-            for (arma::uword k = 0; k < redundantJointsActuation_.n_elem; ++k) {
-              baseJointsPosition.col(k) += redundantJointsActuation_(k) * redundantJointsAngles_.col(k);
-            }
-            
-            arma::mat::fixed<3, 6> endEffectorJointsPosition = rotationMatrix3d(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelativePosition_;
-            endEffectorJointsPosition.each_col() += endEffectorPosition;
-          
-            arma::mat::fixed<3, 6> middleJointsPosition;
-            for (arma::uword k = 0; k < baseJointsPosition.n_cols; ++k) {
-              const std::vector<arma::vec::fixed<3>>& intersections = circleSphereIntersections(baseJointsPosition.col(k), linkLengths_(0, k), baseJointsNormal_.col(k), endEffectorJointsPosition.col(k), linkLengths_(1, k));
-              
-              if (intersections.size() > 1) {
-                middleJointsPosition.col(k) = intersections.at(0);
-              } else {
-                return std::numeric_limits<decltype(poseInaccuracy)>::infinity();
-              }
-            }
-          
-            const arma::mat::fixed<3, 6>& baseToMiddleJointsPosition = middleJointsPosition - baseJointsPosition;
-            const arma::mat::fixed<3, 6>& middleToEndEffectorJointsPosition = endEffectorJointsPosition - middleJointsPosition;
-            const arma::mat::fixed<3, 6>& baseToEndEffectorJointsPosition = endEffectorJointsPosition - baseJointsPosition;
-            const arma::mat::fixed<3, 6>& endEffectorJointsRotatedPosition = endEffectorJointsPosition.each_col() - endEffectorPosition;
-            
-            arma::mat::fixed<6, 6> forwardKinematic;
-            forwardKinematic.head_rows(3) = middleToEndEffectorJointsPosition;
-            for (arma::uword k = 0; k < forwardKinematic.n_rows; ++k) {
-              forwardKinematic.submat(3, k, 5, k) = arma::cross(endEffectorJointsRotatedPosition.col(k), middleToEndEffectorJointsPosition.col(k));
-            }
-            
-            arma::mat::fixed<6, 12> inverseKinematic(arma::fill::zeros);
-            inverseKinematic.diag() = baseToEndEffectorJointsPosition.row(0) % baseToMiddleJointsPosition.row(1) - baseToEndEffectorJointsPosition.row(1) % baseToMiddleJointsPosition.row(0);
-            for (arma::uword k = 0; k < redundantJointsActuation_.n_elem; ++k) {
-              inverseKinematic(k, 6 + k) = arma::dot(middleToEndEffectorJointsPosition.col(k), redundantJointsAngles_.col(k));
-            }
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& redundantJointsActuation_) {
+                                assert(redundantJointsActuation_.n_elem == numberOfDimensions_);
 
-            arma::mat solution;
-            if (!arma::solve(solution, forwardKinematic.t(), inverseKinematic)) {
-              return std::numeric_limits<decltype(poseInaccuracy)>::infinity();
-            } else {
-              poseInaccuracy = std::max(poseInaccuracy, arma::cond(solution));
-            }
-          }
-          
-          return poseInaccuracy;
-        },
-        "KRM Parallel Kinematic Machine 6PRUS"
-      }});
-      // clang-format on
+                                double poseInaccuracy = 0.0;
+                                for (arma::uword n = 0; n < endEffectorTrajectory_.n_cols; ++n) {
+                                  const arma::vec::fixed<6>& endEffectorPose = endEffectorTrajectory_.col(n);
+                                  const arma::vec::fixed<3>& endEffectorPosition = endEffectorPose.head(3);
+                                  const double endEffectorRollAngle = endEffectorPose(3);
+                                  const double endEffectorPitchAngle = endEffectorPose(4);
+                                  const double endEffectorYawAngle = endEffectorPose(5);
+
+                                  arma::mat::fixed<3, 6> baseJointsPosition = redundantJointsPosition_;
+                                  for (arma::uword k = 0; k < redundantJointsActuation_.n_elem; ++k) {
+                                    baseJointsPosition.col(k) += redundantJointsActuation_(k) * redundantJointsAngles_.col(k);
+                                  }
+
+                                  arma::mat::fixed<3, 6> endEffectorJointsPosition = rotationMatrix3d(endEffectorRollAngle, endEffectorPitchAngle, endEffectorYawAngle) * endEffectorJointsRelativePosition_;
+                                  endEffectorJointsPosition.each_col() += endEffectorPosition;
+
+                                  arma::mat::fixed<3, 6> middleJointsPosition;
+                                  for (arma::uword k = 0; k < baseJointsPosition.n_cols; ++k) {
+                                    const std::vector<arma::vec::fixed<3>>& intersections = circleSphereIntersections(baseJointsPosition.col(k), linkLengths_(0, k), baseJointsNormal_.col(k), endEffectorJointsPosition.col(k), linkLengths_(1, k));
+
+                                    if (intersections.size() > 1) {
+                                      middleJointsPosition.col(k) = intersections.at(0);
+                                    } else {
+                                      return std::numeric_limits<decltype(poseInaccuracy)>::infinity();
+                                    }
+                                  }
+
+                                  const arma::mat::fixed<3, 6>& baseToMiddleJointsPosition = middleJointsPosition - baseJointsPosition;
+                                  const arma::mat::fixed<3, 6>& middleToEndEffectorJointsPosition = endEffectorJointsPosition - middleJointsPosition;
+                                  const arma::mat::fixed<3, 6>& baseToEndEffectorJointsPosition = endEffectorJointsPosition - baseJointsPosition;
+                                  const arma::mat::fixed<3, 6>& endEffectorJointsRotatedPosition = endEffectorJointsPosition.each_col() - endEffectorPosition;
+
+                                  arma::mat::fixed<6, 6> forwardKinematic;
+                                  forwardKinematic.head_rows(3) = middleToEndEffectorJointsPosition;
+                                  for (arma::uword k = 0; k < forwardKinematic.n_rows; ++k) {
+                                    forwardKinematic.submat(3, k, 5, k) = arma::cross(endEffectorJointsRotatedPosition.col(k), middleToEndEffectorJointsPosition.col(k));
+                                  }
+
+                                  arma::mat::fixed<6, 12> inverseKinematic(arma::fill::zeros);
+                                  inverseKinematic.diag() = baseToEndEffectorJointsPosition.row(0) % baseToMiddleJointsPosition.row(1) - baseToEndEffectorJointsPosition.row(1) % baseToMiddleJointsPosition.row(0);
+                                  for (arma::uword k = 0; k < redundantJointsActuation_.n_elem; ++k) {
+                                    inverseKinematic(k, 6 + k) = arma::dot(middleToEndEffectorJointsPosition.col(k), redundantJointsAngles_.col(k));
+                                  }
+
+                                  arma::mat solution;
+                                  if (!arma::solve(solution, forwardKinematic.t(), inverseKinematic)) {
+                                    return std::numeric_limits<decltype(poseInaccuracy)>::infinity();
+                                  } else {
+                                    poseInaccuracy = std::max(poseInaccuracy, arma::cond(solution));
+                                  }
+                                }
+
+                                return poseInaccuracy;
+                              },
+          "KRM Parallel Kinematic Machine 6PRUS"}});
     }
   }
 }

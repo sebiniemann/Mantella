@@ -18,53 +18,48 @@
 namespace mant {
   SimulatedAnnealing::SimulatedAnnealing()
       : OptimisationAlgorithm() {
-    // clang-format off
-    setInitialisingFunctions({{
-      [this](
-          const arma::uword numberOfDimensions_,
-          const arma::mat& initialParameters_) {
-        if(minimalStepSize_ > maximalStepSize_) {
-          throw std::logic_error("SimulatedAnnealing.initialisingFunctions: The maximal step size must be must be greater than or equal to the minimal one.");
-        }
-        
-        return initialParameters_;
-      },
-      "Step size validation"
-    }});
+    setInitialisingFunctions({{[this](
+                                   const arma::uword numberOfDimensions_,
+                                   const arma::mat& initialParameters_) {
+                                 if (minimalStepSize_ > maximalStepSize_) {
+                                   throw std::logic_error("SimulatedAnnealing.initialisingFunctions: The maximal step size must be must be greater than or equal to the minimal one.");
+                                 }
 
-    setNextParametersFunctions({{
-      [this](
-          const arma::uword numberOfDimensions_,
-          const arma::mat& parameters_,
-          const arma::rowvec& objectiveValues_,
-          const arma::rowvec& differences_) {
-        if(differences_(0) < 0) {
-          state_ = getBestFoundParameter(); 
-        } else {
-          double durationEnergy = getUsedDuration() / getMaximalDuration();
-          double numberOfIterationsEnergy = getUsedNumberOfIterations() / getMaximalNumberOfIterations();
-          
-          double energy;
-          if (durationEnergy > numberOfIterationsEnergy) {
-            energy = std::exp(-(objectiveValues_(0) - getBestFoundObjectiveValue()) / (1.0 - durationEnergy));
-          } else {
-            energy = std::exp(-(objectiveValues_(0) - getBestFoundObjectiveValue()) / (1.0 - numberOfIterationsEnergy));
-          }
-          
-          if (std::bernoulli_distribution(energy)(Rng::generator_)) {
-            state_ = parameters_.col(0);
-          }
-        }
-        
-        return randomNeighbour(state_, minimalStepSize_, maximalStepSize_);
-      },
-      "Simulated annealing"
-    }});
+                                 return initialParameters_;
+                               },
+        "Step size validation"}});
+
+    setNextParametersFunctions({{[this](
+                                     const arma::uword numberOfDimensions_,
+                                     const arma::mat& parameters_,
+                                     const arma::rowvec& objectiveValues_,
+                                     const arma::rowvec& differences_) {
+                                   if (differences_(0) < 0) {
+                                     state_ = getBestFoundParameter();
+                                   } else {
+                                     double durationEnergy = getUsedDuration() / getMaximalDuration();
+                                     double numberOfIterationsEnergy = getUsedNumberOfIterations() / getMaximalNumberOfIterations();
+
+                                     double energy;
+                                     if (durationEnergy > numberOfIterationsEnergy) {
+                                       energy = std::exp(-(objectiveValues_(0) - getBestFoundObjectiveValue()) / (1.0 - durationEnergy));
+                                     } else {
+                                       energy = std::exp(-(objectiveValues_(0) - getBestFoundObjectiveValue()) / (1.0 - numberOfIterationsEnergy));
+                                     }
+
+                                     if (std::bernoulli_distribution(energy)(Rng::generator_)) {
+                                       state_ = parameters_.col(0);
+                                     }
+                                   }
+
+                                   return randomNeighbour(state_, minimalStepSize_, maximalStepSize_);
+                                 },
+        "Simulated annealing"}});
 
     setMinimalStepSize(0);
     setMaximalStepSize(0.1);
   }
-    
+
   void SimulatedAnnealing::optimise(
       OptimisationProblem& optimisationProblem) {
     // Objects like `optimisationProblem` perform all validations by themselves.
@@ -79,7 +74,7 @@ namespace mant {
 
     minimalStepSize_ = minimalStepSize;
   }
-  
+
   double SimulatedAnnealing::getMinimalStepSize() const {
     return minimalStepSize_;
   }
@@ -92,7 +87,7 @@ namespace mant {
 
     maximalStepSize_ = maximalStepSize;
   }
-  
+
   double SimulatedAnnealing::getMaximalStepSize() const {
     return maximalStepSize_;
   }

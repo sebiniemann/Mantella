@@ -31,30 +31,26 @@ namespace mant {
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-          
-          const arma::vec& s = firstParameterConditioning_ % parameter_;
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          arma::vec z = s;
-          for (arma::uword n = 0; n < z.n_elem; ++n) {
-            const double value = s(n);
+                                const arma::vec& s = firstParameterConditioning_ % parameter_;
 
-            if (std::abs(value) > 0.5) {
-              z(n) = std::round(value);
-            } else {
-              z(n) = std::round(value * 10.0) / 10.0;
-            }
-          }
+                                arma::vec z = s;
+                                for (arma::uword n = 0; n < z.n_elem; ++n) {
+                                  const double value = s(n);
 
-          return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
-        },
-        "BBOB Step Ellipsoidal Function (f7)"
-      }});
-      // clang-format on
+                                  if (std::abs(value) > 0.5) {
+                                    z(n) = std::round(value);
+                                  } else {
+                                    z(n) = std::round(value * 10.0) / 10.0;
+                                  }
+                                }
+
+                                return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
+                              },
+          "BBOB Step Ellipsoidal Function (f7)"}});
     }
   }
 }

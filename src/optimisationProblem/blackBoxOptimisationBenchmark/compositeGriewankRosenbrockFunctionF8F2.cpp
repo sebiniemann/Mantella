@@ -27,20 +27,16 @@ namespace mant {
 
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      // clang-format off
-      setObjectiveFunctions({{
-        [this](
-            const arma::vec& parameter_) {
-          assert(parameter_.n_elem == numberOfDimensions_);
-            
-          const arma::vec& s = max_ * parameter_ + 0.5;
-          const arma::vec& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
+      setObjectiveFunctions({{[this](
+                                  const arma::vec& parameter_) {
+                                assert(parameter_.n_elem == numberOfDimensions_);
 
-          return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1.0);
-        },
-        "BBOB Composite Griewank Rosenbrock Function F8F2 (f19)"
-      }});
-      // clang-format on
+                                const arma::vec& s = max_ * parameter_ + 0.5;
+                                const arma::vec& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
+
+                                return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1.0);
+                              },
+          "BBOB Composite Griewank Rosenbrock Function F8F2 (f19)"}});
     }
   }
 }

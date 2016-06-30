@@ -9,32 +9,23 @@
 namespace mant {
   arma::mat::fixed<2, 2> rotationMatrix2d(
       const double angle) {
-    // clang-format off
-    return arma::mat::fixed<2, 2>({
-      std::cos(angle), -std::sin(angle),
-      std::sin(angle),  std::cos(angle)});
-    // clang-format on
+    return arma::mat::fixed<2, 2>({std::cos(angle), -std::sin(angle),
+        std::sin(angle), std::cos(angle)});
   }
 
   arma::mat::fixed<3, 3> rotationMatrix3d(
       const double rollAngle,
       const double pitchAngle,
       const double yawAngle) {
-    // clang-format off
-    return arma::mat::fixed<3, 3>({
-      // First column
-      std::cos(yawAngle) * std::cos(pitchAngle),
-      std::cos(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) - std::sin(yawAngle) * std::cos(rollAngle),
-      std::cos(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) + std::sin(yawAngle) * std::sin(rollAngle),
-      // Second column
-      std::sin(yawAngle) * std::cos(pitchAngle),
-      std::sin(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) + std::cos(yawAngle) * std::cos(rollAngle),
-      std::sin(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) - std::cos(yawAngle) * std::sin(rollAngle),
-      // Last column
-      -std::sin(pitchAngle),
-      std::cos(pitchAngle) * std::sin(rollAngle),
-      std::cos(pitchAngle) * std::cos(rollAngle)});
-    // clang-format on
+    return arma::mat::fixed<3, 3>({std::cos(yawAngle) * std::cos(pitchAngle),
+        std::cos(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) - std::sin(yawAngle) * std::cos(rollAngle),
+        std::cos(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) + std::sin(yawAngle) * std::sin(rollAngle),
+        std::sin(yawAngle) * std::cos(pitchAngle),
+        std::sin(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) + std::cos(yawAngle) * std::cos(rollAngle),
+        std::sin(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) - std::cos(yawAngle) * std::sin(rollAngle),
+        -std::sin(pitchAngle),
+        std::cos(pitchAngle) * std::sin(rollAngle),
+        std::cos(pitchAngle) * std::cos(rollAngle)});
   }
 
   std::vector<arma::vec::fixed<2>> circleCircleIntersections(
