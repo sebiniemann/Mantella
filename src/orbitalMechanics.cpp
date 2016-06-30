@@ -34,13 +34,42 @@ namespace mant {
         return (1.0 / factorial(type) - stumpffFunction(parameter, type - 2)) / parameter;
       }
     }
+    
+    // The following calculations are based on universal variables, following the work of Bate et al.
+    // To understand the following equations, we advise to carefully read the following book:
+    // @see R. Bate et al. (1971). Fundamentals of Astrodynamics. Dover Publications, ed. 1, pp. 191-197.
+    double timeOfFlight(
+        const double universalVariable,
+        const arma::vec::fixed<3> departurePosition, 
+        const arma::vec::fixed<3> arrivalPosition,
+        const bool useProgradeTrajectory) {
+      if (arma::approx_equal(departurePosition, arrivalPosition, "absdiff", ::mant::machinePrecision)) {
+        return 0.0;
+      }
+          
+      const double departureDistanceToSun = arma::norm(departurePosition);
+      const double arrivalDistanceToSun = arma::norm(arrivalPosition);
+      
+      double trueAnomaly = std::acos(arma::norm_dot(departurePosition, arrivalPosition));
+      if (useProgradeTrajectory != arma::cross(departurePosition, arrivalPosition)(2) > 0) {
+        trueAnomaly = 2.0 * arma::datum::pi - trueAnomaly;
+      }
 
-    std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionOnOrbit(
+      const double secondStumpffValue = stumpffFunction(universalVariable, 2);
+      const double thirdStumpffValue = stumpffFunction(universalVariable, 3);
+      
+      const double A = std::sin(trueAnomaly) * std::sqrt(departureDistanceToSun * arrivalDistanceToSun / (1.0 - std::cos(trueAnomaly)));
+      const double y = departureDistanceToSun + arrivalDistanceToSun + (A * universalVariable * thirdStumpffValue - 1.0) / std::sqrt(secondStumpffValue);
+          
+      return (std::pow(y / secondStumpffValue, 1.5) * thirdStumpffValue + A * std::sqrt(y)) / std::sqrt(heliocentricGravitationalConstant);
+    }
+
+    std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(
         const double modifiedJulianDay,
         const arma::vec::fixed<7>& keplerianElements) {
       const double eccentricity = keplerianElements(1);
       if (eccentricity >= 1.0) {
-        throw std::domain_error("positionOnOrbit: The eccentricity must be less than 1.");
+        throw std::domain_error("positionAndVelocityOnOrbit: The eccentricity must be less than 1.");
       }
 
       const double semiMajorAxis = keplerianElements(0);
@@ -56,11 +85,11 @@ namespace mant {
           meanAnomaly + eccentricity * std::cos(meanAnomaly) - 1.0, meanAnomaly + eccentricity * std::cos(meanAnomaly) + 1.0, 100);
 
       if (std::isnan(eccentricAnomaly)) {
-        throw std::runtime_error("positionOnOrbit: Could not solve for the eccentric anomaly.");
+        throw std::runtime_error("positionAndVelocityOnOrbit: Could not solve for the eccentric anomaly.");
       }
 
-      double y = semiMajorAxis * std::sqrt(1.0 - std::pow(eccentricity, 2.0));
-      double n = std::sqrt(::mant::itd::heliocentricGravitationalConstant / std::pow(semiMajorAxis, 3.0));
+      const double y = semiMajorAxis * std::sqrt(1.0 - std::pow(eccentricity, 2.0));
+      const double n = std::sqrt(::mant::itd::heliocentricGravitationalConstant / std::pow(semiMajorAxis, 3.0));
 
       const arma::mat& rotationMatrix = rotationMatrix3dExtrinsic(longitudeOfTheAscendingNode, inclination, argumentOfPeriapsis);
 
