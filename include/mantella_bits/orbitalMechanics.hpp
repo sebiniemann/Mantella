@@ -14,8 +14,14 @@ namespace mant {
         const double parameter,
         const arma::uword type);
 
-    std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> positionOnOrbit(
-        const double modifiedJulianDay2000,
+    double timeOfFlight(
+        const double universalVariable,
+        const arma::vec::fixed<3> departurePosition,
+        const arma::vec::fixed<3> arrivalPosition,
+        const bool useProgradeTrajectory);
+
+    std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> positionAndVelocityOnOrbit(
+        const double modifiedJulianDate2000,
         const arma::Col<double>::fixed<7>& keplerianElements);
   }
 }
