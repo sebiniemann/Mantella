@@ -1,14 +1,20 @@
 #include "mantella_bits/orbitalMechanics.hpp"
 
 // C++ standard library
+#include <algorithm>
 #include <cmath>
+#include <functional>
+#include <limits>
 #include <stdexcept>
+#include <string>
 
 // Mantella
 #include "mantella_bits/combinatorics.hpp"
 #include "mantella_bits/config.hpp"
 #include "mantella_bits/geometry.hpp"
+#include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 #include "mantella_bits/numericalAnalysis.hpp"
+#include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
   namespace itd {
@@ -109,9 +115,9 @@ namespace mant {
 
       if (transferTime < ::mant::machinePrecision) {
         if (arma::approx_equal(departurePosition, arrivalPosition, "absdiff", ::mant::machinePrecision)) {
-          return {arma::onces<arma::vec>(3), arma::ones<arma::vec>(3)};
+          return {arma::ones<arma::vec>(3), arma::ones<arma::vec>(3)};
         } else {
-          return {arma::onces<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
+          return {arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
         }
       }
 
@@ -124,51 +130,50 @@ namespace mant {
         universalVariable = brent(timeOfFlightFunction, -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100);
       } else {
         OptimisationProblem optimisationProblem(1);
-        optimisationProblem.setObjectiveFunctions({{[&timeOfFlightFunction] (const arma::vec& universalVariable)
-          return timeOfFlightFunction(universalVariable(0));
-        "Time of flight difference"
+        optimisationProblem.setObjectiveFunctions({{[&timeOfFlightFunction] (const arma::vec& universalVariable) {
+            return timeOfFlightFunction(universalVariable(0));
+        }, "Time of flight difference"
+        }});
+        HookeJeevesAlgorithm optimisationAlgorithm;
+        optimisationAlgorithm.setMaximalNumberOfIterations(100);
+        optimisationAlgorithm.setAcceptableObjectiveValue(std::min(transferTime - 2.0 * ::mant::machinePrecision, std::nexttoward(transferTime, 0.0)));
+        optimisationAlgorithm.optimise(optimisationProblem);
+
+        if (!optimisationAlgorithm.isFinished()) {
+          return {arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
+        }
+
+        if (useProgradeTrajectory) {
+          universalVariable = brent(timeOfFlightFunction, 4.0 * std::pow(numberOfRevolutions * arma::datum::pi, 2.0), optimisationAlgorithm.getBestFoundParameter()(0), 100);
+        } else {
+          universalVariable = brent(timeOfFlightFunction, optimisationAlgorithm.getBestFoundParameter()(0), 4.0 * std::pow((numberOfRevolutions + 1) * arma::datum::pi, 2.0), 100);
+        }
       }
-    });
-    HookeJeevesAlgorithm optimisationAlgorithm;
-    optimisationAlgorithm.setMaximalNumberOfIterations(100);
-    optimisationAlgorithm.setAcceptableObjectiveValue(std::min(transferTime - 2.0 * ::mant::machinePrecision, std::nexttoward(transferTime, 0.0)));
-    optimisationAlgorithm.optimise(optimisationProblem);
 
-    if (!optimisationAlgorithm.isFinished()) {
-      return {arma::onces<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
+      if (!std::isfinite(universalVariable)) {
+        return {arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
+      }
+
+      const double departureDistanceToSun = arma::norm(departurePosition);
+      const double arrivalDistanceToSun = arma::norm(arrivalPosition);
+
+      double trueAnomaly = std::acos(arma::norm_dot(departurePosition, arrivalPosition));
+      if (useProgradeTrajectory != arma::vec(arma::cross(departurePosition, arrivalPosition))(2) > 0) {
+        trueAnomaly = 2.0 * arma::datum::pi - trueAnomaly;
+      }
+
+      const double secondStumpffValue = stumpffFunction(universalVariable, 2);
+      const double thirdStumpffValue = stumpffFunction(universalVariable, 3);
+
+      const double A = std::sin(trueAnomaly) * std::sqrt(departureDistanceToSun * arrivalDistanceToSun / (1.0 - std::cos(trueAnomaly)));
+      const double y = departureDistanceToSun + arrivalDistanceToSun + (A * (universalVariable * thirdStumpffValue - 1.0)) / std::sqrt(secondStumpffValue);
+
+      double firstLagrangeCoefficient = 1.0 - y / departureDistanceToSun;
+      double secondLagrangeCoefficient = A * std::sqrt(y / ::mant::itd::heliocentricGravitationalConstant);
+      double firstLagrangeCoefficientDeriavte = std::sqrt(::mant::itd::heliocentricGravitationalConstant) / (departureDistanceToSun * arrivalDistanceToSun) * std::sqrt(y / secondStumpffValue) * (universalVariable * thirdStumpffValue - 1.0);
+      double secondLagrangeCoefficientDeriavte = 1.0 - y / arrivalDistanceToSun;
+
+      return {1.0 / secondLagrangeCoefficient * (arrivalPosition - firstLagrangeCoefficient * departurePosition), firstLagrangeCoefficientDeriavte* departurePosition + secondLagrangeCoefficientDeriavte* arrivalPosition};
     }
-
-    if (useProgradeTrajectory) {
-      universalVariable = brent(timeOfFlightFunction, 4.0 * std::pow(numberOfRevolutions * arma::datum::pi, 2.0), optimisationAlgorithm.getBestParameter()(0), 100);
-    } else {
-      universalVariable = brent(timeOfFlightFunction, optimisationAlgorithm.getBestParameter()(0), 4.0 * std::pow((numberOfRevolutions + 1) * arma::datum::pi, 2.0), 100);
-    }
   }
-
-  if (!std::isfinite(universalVariable)) {
-    return {arma::onces<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
-  }
-
-  const double departureDistanceToSun = arma::norm(departurePosition);
-  const double arrivalDistanceToSun = arma::norm(arrivalPosition);
-
-  double trueAnomaly = std::acos(arma::norm_dot(departurePosition, arrivalPosition));
-  if (useProgradeTrajectory != arma::vec(arma::cross(departurePosition, arrivalPosition))(2) > 0) {
-    trueAnomaly = 2.0 * arma::datum::pi - trueAnomaly;
-  }
-
-  const double secondStumpffValue = stumpffFunction(universalVariable, 2);
-  const double thirdStumpffValue = stumpffFunction(universalVariable, 3);
-
-  const double A = std::sin(trueAnomaly) * std::sqrt(departureDistanceToSun * arrivalDistanceToSun / (1.0 - std::cos(trueAnomaly)));
-  const double y = departureDistanceToSun + arrivalDistanceToSun + (A * (universalVariable * thirdStumpffValue - 1.0)) / std::sqrt(secondStumpffValue);
-
-  double firstLagrangeCoefficient = 1.0 - y / departureDistanceToSun;
-  double secondLagrangeCoefficient = A * std::sqrt(y / ::mant::itd::heliocentricGravitationalConstant);
-  double firstLagrangeCoefficientDeriavte = std::sqrt(::mant::itd::heliocentricGravitationalConstant) / (departureDistanceToSun * arrivalDistanceToSun) * std::sqrt(y / secondStumpffValue) * (universalVariable * thirdStumpffValue - 1.0);
-  double secondLagrangeCoefficientDeriavte = 1.0 - y / arrivalDistanceToSun;
-
-  return {1.0 / secondLagrangeCoefficient * (arrivalPosition - firstLagrangeCoefficient * departurePosition), firstLagrangeCoefficientDeriavte* departurePosition + secondLagrangeCoefficientDeriavte* arrivalPosition};
-}
-}
 }
