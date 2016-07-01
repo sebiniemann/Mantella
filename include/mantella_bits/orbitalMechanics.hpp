@@ -20,8 +20,15 @@ namespace mant {
         const arma::vec::fixed<3> arrivalPosition,
         const bool useProgradeTrajectory);
 
-    std::pair<arma::Col<double>::fixed<3>, arma::Col<double>::fixed<3>> positionAndVelocityOnOrbit(
-        const double modifiedJulianDate2000,
-        const arma::Col<double>::fixed<7>& keplerianElements);
+    std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(
+        const double modifiedJulianDate,
+        const arma::vec::fixed<7>& keplerianElements);
+
+    std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> lambert(
+        const arma::vec::fixed<3>& departurePosition,
+        const arma::vec::fixed<3>& arrivalPosition,
+        const bool useProgradeTrajectory,
+        const arma::uword numberOfRevolutions,
+        const double transferTime);
   }
 }

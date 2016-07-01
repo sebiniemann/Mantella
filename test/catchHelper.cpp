@@ -160,7 +160,7 @@ namespace arma {
   }
 
   bool operator!(
-      const Col<uword>& vector) {
+      const uvec& vector) {
     return !all(vector);
   }
 }

@@ -26,6 +26,7 @@ namespace mant {
     }
 
     double lowerBoundObjectiveValue = objectiveFunction(lowerBound);
+
     if (std::abs(lowerBound - upperBound) < ::mant::machinePrecision) {
       // Both bounds are too close ...
       if (std::abs(lowerBoundObjectiveValue) >= ::mant::machinePrecision) {
