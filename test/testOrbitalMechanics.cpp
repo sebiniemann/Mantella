@@ -14,7 +14,8 @@ SCENARIO("stumpffFunction", "[orbitalMechanics][stumpffFunction]") {
 SCENARIO("timeOfFlight", "[orbitalMechanics][timeOfFlight]") {
   GIVEN("A universal variable, a departure position, an arrival position and wheter to use a prograde trajectory or not") {
     THEN("Return the time of flight") {
-      CHECK(mant::itd::timeOfFlight(0.5, {-1.0749198944842783e+11, -3.9372234530840988e+09, 6.1508375249456024e+09}, {-0.9049198944842783e+11, -3.9382234530840988e+09, 5.5508375249456024e+09}, true) == Approx(0.0));
+      CHECK(mant::itd::timeOfFlight(70, {137579269223.10669, 57556354100.251083, 272149.17967159057}, {-71760063272.15799, 79838850401.634674, 5233319855.1410503}, false) == Approx(41917704.4099042565));
+      CHECK(mant::itd::timeOfFlight(10, {137579269223.10669, 57556354100.251083, 272149.17967159057}, {-71760063272.15799, 79838850401.634674, 5233319855.1410503}, true) == Approx(1861083.3342981364));
     }
   }
 }

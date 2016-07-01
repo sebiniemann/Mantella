@@ -52,6 +52,7 @@ namespace mant {
       const double arrivalDistanceToSun = arma::norm(arrivalPosition);
 
       double trueAnomaly = std::acos(arma::norm_dot(departurePosition, arrivalPosition));
+
       if (useProgradeTrajectory != arma::vec(arma::cross(departurePosition, arrivalPosition))(2) > 0) {
         trueAnomaly = 2.0 * arma::datum::pi - trueAnomaly;
       }
@@ -60,7 +61,7 @@ namespace mant {
       const double thirdStumpffValue = stumpffFunction(universalVariable, 3);
 
       const double A = std::sin(trueAnomaly) * std::sqrt(departureDistanceToSun * arrivalDistanceToSun / (1.0 - std::cos(trueAnomaly)));
-      const double y = departureDistanceToSun + arrivalDistanceToSun + (A * universalVariable * thirdStumpffValue - 1.0) / std::sqrt(secondStumpffValue);
+      const double y = departureDistanceToSun + arrivalDistanceToSun + (A * (universalVariable * thirdStumpffValue - 1.0)) / std::sqrt(secondStumpffValue);
 
       return (std::pow(y / secondStumpffValue, 1.5) * thirdStumpffValue + A * std::sqrt(y)) / std::sqrt(heliocentricGravitationalConstant);
     }
