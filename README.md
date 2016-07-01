@@ -1,6 +1,6 @@
 [![Mantella](http://sebastianniemann.github.io/Mantella/assets/images/logo_with_name.png)](http://mantella.info/)
 
-Version 0.12.0
+Version 0.20.0
 ==============
 
 [![Travis CI Build Status](https://travis-ci.org/SebastianNiemann/Mantella.png?branch=master)](https://travis-ci.org/SebastianNiemann/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Coverage Status](https://coveralls.io/repos/SebastianNiemann/Mantella/badge.svg?branch=master)](https://coveralls.io/r/SebastianNiemann/Mantella?branch=master) [![Join the chat at https://gitter.im/SebastianNiemann/Mantella](https://badges.gitter.im/SebastianNiemann/Mantella.svg)](https://gitter.im/SebastianNiemann/Mantella)
@@ -35,4 +35,4 @@ License
 -------
 Distributed under [MIT license](http://opensource.org/licenses/MIT).
 
-Copyright (c) 2013-2015 [Sebastian Niemann](mailto:niemann@sra.uni-hannover.de) and contributors.
+Copyright (c) 2013-2016 [Sebastian Niemann](mailto:niemann@sra.uni-hannover.de) and contributors.

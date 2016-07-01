@@ -1,56 +1,60 @@
 # Project specific
+## Common build folders
 bin/
 build/
 lib/
+## Automatically generated from `include/mantella_bits/config.hpp.cmake`
 include/mantella_bits/config.hpp
 
-# Qt Designer
-*.autosave
-*.user*
-*.cbp
+# Development tools
+## Vagrant
+.vagrant/
 
-# Netbeans
-nbproject/
-
-# CLion
-*.iml
-.idea/
-
-# CMake
+## CMake
 CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
 install_manifest.txt
 
-# Vagrant
-.vagrant/
+## Jekyll (introduced by the gh-pages branch)
+_site/
+.sass-cache/
 
-# C++
-# Compiled Object files
+## IDEs
+### Qt Designer
+*.autosave
+*.user*
+*.cbp
+### Netbeans
+nbproject/
+
+### CLion
+*.iml
+.idea/
+
+## Language specific
+### C++
+#### Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
-# Precompiled Headers
+#### Precompiled Headers
 *.gch
 *.pch
-# Compiled Dynamic libraries
+#### Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
-# Fortran module files
+#### Fortran module files
 *.mod
-# Compiled Static libraries
+#### Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
-# Executables
+#### Executables
 *.exe
 *.out
 *.app
-
-# Jekyll
-_site/
-.sass-cache/

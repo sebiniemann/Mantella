@@ -1,60 +1,69 @@
-cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
-
-project(Mantella CXX C)
+cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 # Retrieves the version numbers from "include/mantella", avoiding possible inconsistency.
-file(STRINGS "${PROJECT_SOURCE_DIR}/include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
+file(STRINGS "./include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
-# Adds additional cmake modules
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+project(Mantella VERSION "${MANTELLA_VERSION}" LANGUAGES CXX C)
 
-if(APPLE)
-  # Use @rpath on Mac OS X.
-  set(CMAKE_MACOSX_RPATH ON)
-endif()
+# Adds additional cmake modules
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
 option(SUPPORT_OMP "Add OpenMP support" ON)
 option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
-option(USE_CCACHE "Use ccache" OFF)
 option(BUILD_TESTS "Build tests" OFF)
-option(MEASURE_CODE_COVERAGE "Measure code coverage" OFF)
 
 mark_as_advanced(
-  USE_CCACHE
   BUILD_TESTS
-  MEASURE_CODE_COVERAGE
 )
 
+if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+endif()
+
+if (NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+endif()
+
+if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+endif()
+  
 message(STATUS "") 
 message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 
-# ------------------------
-# CHECKING PREREQUIREMENTS
-# ------------------------
+if (NOT CMAKE_BUILD_TYPE)
+  message(STATUS "- Setting build to 'Release'.")
+  message(STATUS "  - Use 'cmake ... -DCMAKE_BUILD_TYPE=[Release|Debug]' to specify this.")
+  set(CMAKE_BUILD_TYPE "Release")
+endif()
+
+# --------------------
+# FINDING DEPENDENCIES
+# --------------------
 
 message(STATUS "") 
-message(STATUS "Checking prerequirements.")
+message(STATUS "Finding dependencies.")
 
-set(REQUIRED_ARMADILLO_VERSION "6.400.0")
+set(REQUIRED_ARMADILLO_VERSION "6.700.0")
 find_package(Armadillo QUIET)
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
-if(NOT ARMADILLO_FOUND)
+if (NOT ARMADILLO_FOUND)
   # Unlike `find_package(Armadillo ...)` suggests, Armadillo can be used if its runtime library is missing, as long as `ARMA_USE_WRAPPER` is undefined/outcommented inside Armadillo's configuration file. In this case, we can also directly link against BLAS/LAPACK libraries instead.
   # However, we need to make sure that a missing runtime library was the only reason for `ARMADILLO_FOUND` to be unset.
   # Currently, we only support OpenBLAS as a replacement for Armadillo's runtime library.
-  if(NOT ARMADILLO_INCLUDE_DIR)
+  if (NOT ARMADILLO_INCLUDE_DIR)
     message(FATAL_ERROR "Could NOT find Armadillo includes.")
-  elseif(ARMADILLO_VERSION_STRING VERSION_LESS REQUIRED_ARMADILLO_VERSION)
+  elseif (ARMADILLO_VERSION_STRING VERSION_LESS REQUIRED_ARMADILLO_VERSION)
     message(FATAL_ERROR "Found unsuitable Armadillo version ${ARMADILLO_VERSION_STRING}, but required is at least ${REQUIRED_ARMADILLO_VERSION} (found at ${ARMADILLO_INCLUDE_DIR}).")
   else()
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
-    if(ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
+    if (ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
       message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if you want to link directly againt OpenBLAS instead.")
     endif()
     
@@ -64,150 +73,45 @@ if(NOT ARMADILLO_FOUND)
 else()
   message(STATUS "Found Armadillo: ${ARMADILLO_LIBRARIES} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
 endif()
-include_directories(${ARMADILLO_INCLUDE_DIR})
-  
-if(SUPPORT_MPI)
+
+if (SUPPORT_MPI)
+  message(STATUS "- Adding MPI support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
   find_package(MPI REQUIRED)
-  include_directories(${MPI_INCLUDE_PATH})
-endif()
-
-# --------------------
-# CONFIGURING COMPILER
-# --------------------
-
-message(STATUS "") 
-message(STATUS "Configuring compiler.")
-
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CMAKE_COMPILER_IS_CLANGXX ON)
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  set(CMAKE_COMPILER_IS_MSCV ON)
-endif ()
-
-if(CMAKE_COMPILER_IS_CLANGXX)
-  message(STATUS "- Detected Clang compiler.")
-elseif(CMAKE_COMPILER_IS_GNUCXX)
-  message(STATUS "- Detected GCC compiler.")
-elseif(CMAKE_COMPILER_IS_MSCV)
-  message(STATUS "- Detected MSCV compiler.")
 else()
-  message(STATUS "- Detected neither Clang, GCC nor MSCV but '${CMAKE_CXX_COMPILER_ID}' instead. Compiler flags may not be optimal.")
+  message(STATUS "- Excluding MPI support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=ON' to add this.")
 endif()
 
-if(USE_CCACHE)
-  find_program(CCACHE_FOUND ccache)
-  message(STATUS "- Trying to use ccache to speed up recompilations.")
-  message(STATUS "  - Use 'cmake ... -DUSE_CCACHE=Off' to exclude this.")
-  if(CCACHE_FOUND)
-    message(STATUS "  - Using ccache.")
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-  else()
-    message(STATUS "  - ccache was no found on your system.")
-  endif()
-else()
-  message(STATUS "- Excluding ccache usage.")
-  message(STATUS "  - Use 'cmake ... -DUSE_CCACHE=ON' to add this.")
-endif()
-
-# ----------------------
-# SETTING COMPILER FLAGS
-# ----------------------
-
-message(STATUS "") 
-message(STATUS "Setting compiler flags.")
-  if(NOT CMAKE_COMPILER_IS_MSCV)
-    message(STATUS "- Enabling C++11 features.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  endif()
-
-  if(SUPPORT_SIMD)
-    message(STATUS "- Adding SSE3, SSE4, AVX, ... support.")
-    message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=Off' to exclude this.")
-    if(CMAKE_COMPILER_IS_MSCV)
-      message(STATUS "  - Using MSCV's default settings.")
-    else()
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-    endif()
-  else()
-    message(STATUS "- Excluding SSE3, SSE4, AVX, ... support.")
-    message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=ON' to add this.")
-  endif()
-
-  message(STATUS "- Using level 3 code optimisation.")
-  if(CMAKE_COMPILER_IS_MSCV)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-  endif()
-  
-if(NOT CMAKE_BUILD_TYPE)
-  message(STATUS "- Setting build to 'Release'.")
-  message(STATUS "  - Use 'cmake ... -DCMAKE_BUILD_TYPE=[Release|Debug]' to specify this.")
-  set(CMAKE_BUILD_TYPE "Release")
-endif()
-
-if(SUPPORT_OMP)
+if (SUPPORT_OMP)
   message(STATUS "- Trying to add OpenMP support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=Off' to exclude this.")
-  if(CMAKE_COMPILER_IS_MSCV)
-    message(STATUS "  - Using MSCV's automatic parallelisation as a replacement for OpenMP.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Qpar")
+
+  find_package(OpenMP)
+  if (OPENMP_FOUND)
+    message(STATUS "  - Added OpenMP support.")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
   else()
-    find_package(OpenMP)
-    if (OPENMP_FOUND)
-      message(STATUS "  - Added OpenMP support.")
-      set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    else()
-      message(STATUS "  - OpenMP is not supported by your compiler.")
-    endif()
+    message(STATUS "  - OpenMP is not supported by your compiler.")
+    set(SUPPORT_OMP OFF)
   endif()
 else()
   message(STATUS "- Excluding OpenMP support.")
   message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=ON' to add this.")
 endif()
 
-# ----------------
-# BUILDING LIBRARY
-# ----------------
+# -------------------------
+# CONFIGURING LIBRARY BUILD
+# -------------------------
 
 message(STATUS "") 
 message(STATUS "Configuring library build.")
 
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-endif()
-
-if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-endif()
-
-if(CMAKE_COMPILER_IS_MSCV)
-  if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-  endif()
-endif()
-   
-# Include Mantella
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
-
-if(SUPPORT_MPI)
-  message(STATUS "- Adding MPI support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
-else()
-  message(STATUS "- Excluding MPI support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=ON' to add this.")
-endif()
 configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
 
-set(LIBRARY_TYPE SHARED)
-if(WIN32)
-  set(LIBRARY_TYPE STATIC)
-endif()
-
 # All paths must start with "src/"
-add_library(mantella ${LIBRARY_TYPE}
+add_library(mantella
   # Configuration
   src/config.cpp
   
@@ -240,32 +144,31 @@ add_library(mantella ${LIBRARY_TYPE}
   
   # Optimisation problems
   src/optimisationProblem.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/discusFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/linearSlope.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
-  src/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/attractiveSectorFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/bentCigarFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/buecheRastriginFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/compositeGriewankRosenbrockFunctionF8F2.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/differentPowersFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/discusFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/ellipsoidalFunctionRotated.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian101mePeaksFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/gallaghersGaussian21hiPeaksFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/katsuuraFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/linearSlope.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/lunacekBiRastriginFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rastriginFunctionRotated.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/rosenbrockFunctionRotated.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7Function.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/schaffersF7FunctionIllConditioned.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/schwefelFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/sharpRidgeFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/sphereFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/stepEllipsoidalFunction.cpp
+  src/optimisationProblem/blackBoxOptimisationBenchmark/weierstrassFunction.cpp
   src/optimisationProblem/kinematicallyRedundantMachines.cpp
   src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRPR.cpp
   src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRRR.cpp
@@ -274,101 +177,64 @@ add_library(mantella ${LIBRARY_TYPE}
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
-  src/optimisationAlgorithm/randomSearch.cpp
   src/optimisationAlgorithm/hillClimbing.cpp
   src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
+  src/optimisationAlgorithm/randomSearch.cpp
   src/optimisationAlgorithm/simulatedAnnealing.cpp
-  src/optimisationAlgorithm/particleSwarmOptimisation.cpp
+  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
+  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/differentialEvolution.cpp
+  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
 )
+set_property(TARGET mantella PROPERTY CXX_STANDARD 14)
+set_property(TARGET mantella PROPERTY CXX_STANDARD_REQUIRED ON)
 
-# Linking against prerequirements
-if(ARMADILLO_LIBRARIES)
-  target_link_libraries(mantella ${ARMADILLO_LIBRARIES})
+if (SUPPORT_SIMD)
+  message(STATUS "- Adding SSE3, SSE4, AVX, ... support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=Off' to exclude this.")
+  target_compile_options(mantella PRIVATE -march=native)
 else()
-  target_link_libraries(mantella ${OPENBLAS_LIBRARIES})
+  message(STATUS "- Excluding SSE3, SSE4, AVX, ... support.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=ON' to add this.")
 endif()
 
-if(SUPPORT_MPI)
-  target_link_libraries(mantella ${MPI_C_LIBRARIES})
+message(STATUS "- Using level 3 code optimisation.")
+target_compile_options(mantella PRIVATE -O3)
+
+target_include_directories(mantella PUBLIC 
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+
+target_include_directories(mantella SYSTEM PUBLIC ${ARMADILLO_INCLUDE_DIR})
+if (ARMADILLO_LIBRARIES)
+  target_link_libraries(mantella PUBLIC ${ARMADILLO_LIBRARIES})
+else()
+  target_link_libraries(mantella PUBLIC ${OPENBLAS_LIBRARIES})
 endif()
 
-# -------------------
-# BUILDING UNIT TESTS
-# -------------------
+if (SUPPORT_MPI)
+  target_include_directories(mantella SYSTEM PUBLIC ${MPI_INCLUDE_PATH})
+  target_link_libraries(mantella PUBLIC ${MPI_C_LIBRARIES})
+endif()
 
-if(BUILD_TESTS)
+# ----------------------
+# CONFIGURING UNIT TESTS
+# ----------------------
+
+if (BUILD_TESTS)
   message(STATUS "") 
   message(STATUS "Configuring unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
-
-  if(MEASURE_CODE_COVERAGE)
-    message(STATUS "- Adding code coverage measurement.")
-    message(STATUS "  - Use 'cmake ... -DMEASURE_CODE_COVERAGE=Off' to exclude this.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
-  else()
-    message(STATUS "- Excluding code coverage measurement.")
-    message(STATUS "  - Use 'cmake ... -DMEASURE_CODE_COVERAGE=ON' to add this.")
-  endif()
-  
-  message(STATUS "- Forcing debug build and deactivating code optimisation.")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
-  set(CMAKE_BUILD_TYPE "Debug")
-  
-  if(CMAKE_COMPILER_IS_CLANGXX OR CMAKE_COMPILER_IS_GNUCXX)
-    message(STATUS "- Displaying compiler warnings.")
-    if(CMAKE_COMPILER_IS_CLANGXX)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weverything")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-exit-time-destructors")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-global-constructors")
-      # Ignore warnings for unknown options, as we make use of options introduced by more recent Clang versions.
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-warning-option")
-      
-      # Ignore warnings resulting from <mpi.h>
-      if(SUPPORT_MPI)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-old-style-cast")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-extra-semi")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-reserved-id-macro")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-align")
-      endif()
-    elseif(CMAKE_COMPILER_IS_GNUCXX)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
-    endif()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-padded")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
     
-    message(STATUS "- Handling warnings as errors.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-  endif()
-  
-  # if(CMAKE_COMPILER_IS_CLANGXX)
-    # message(STATUS "- Including a undefined behavior checker and memory error detector.")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
-  # endif()
-    
-  if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-  endif()
-
-  # Check additional prerequirements
+  # Additional requirement
   find_package(Catch REQUIRED) # Catch (header only)
-  include_directories(${CATCH_INCLUDE_DIRS}) # Catch
   
-  # Include catch extensions
-  include_directories(${PROJECT_SOURCE_DIR}/test)
-  
-  # Compile tests
   # All paths must start with "test/"
-  add_executable(mantellaTest
+  add_executable(mantellaTests
     test/main.cpp
     
     # Test framework extensions
-    test/catchExtension.cpp
-    test/testCatchExtension.cpp
+    test/catchHelper.cpp
+    test/testCatchHelper.cpp
     
     # Configurations
     test/testConfig.cpp
@@ -392,6 +258,9 @@ if(BUILD_TESTS)
     test/testNumberTheory.cpp
     test/testNumericalAnalysis.cpp
     test/testProbability.cpp
+    
+    # Orbital Mechanics
+    test/testOrbitalMechanics.cpp
   
     # Orbital Mechanics
     test/testOrbitalMechanics.cpp
@@ -402,32 +271,31 @@ if(BUILD_TESTS)
 
     # Optimisation problems
     test/testOptimisationProblem.cpp
-    test/optimisationProblem/testBenchmarkOptimisationProblem.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/testBlackBoxOptimisationBenchmark.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
-    test/optimisationProblem/benchmarkOptimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
+    test/optimisationProblem/testBlackBoxOptimisationBenchmark.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testAttractiveSectorFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testBentCigarFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testBuecheRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testCompositeGriewankRosenbrockFunctionF8F2.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testDifferentPowersFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testDiscusFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testEllipsoidalFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian101mePeaksFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testGallaghersGaussian21hiPeaksFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testKatsuuraFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLinearSlope.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testLunacekBiRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRastriginFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testRosenbrockFunctionRotated.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7Function.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchaffersF7FunctionIllConditioned.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSchwefelFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSharpRidgeFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testSphereFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testStepEllipsoidalFunction.cpp
+    test/optimisationProblem/blackBoxOptimisationBenchmark/testWeierstrassFunction.cpp
     test/optimisationProblem/testKinematicallyRedundantMachines.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRPR.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRRR.cpp
@@ -436,25 +304,52 @@ if(BUILD_TESTS)
     
     # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/testHillClimbing.cpp
     test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    test/optimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/testSimulatedAnnealing.cpp
-    test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
+    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testDifferentialEvolution.cpp
+    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
   )
-
-  # Link against prerequirements
-  target_link_libraries(mantellaTest mantella)
+  set_property(TARGET mantellaTests PROPERTY CXX_STANDARD 14)
+  set_property(TARGET mantellaTests PROPERTY CXX_STANDARD_REQUIRED ON)
   
-  if(ARMADILLO_LIBRARIES)
-    target_link_libraries(mantellaTest ${ARMADILLO_LIBRARIES})
+  message(STATUS "- Adding debugging symbols.")
+  target_compile_options(mantellaTests PRIVATE -g)
+  
+  if (CMAKE_COMPILER_IS_GNUCXX)
+    message(STATUS "- Adding code coverage measurement.")
+    target_compile_options(mantella PRIVATE --coverage)
+    target_link_libraries(mantella PRIVATE --coverage)
+  endif()
+  
+  message(STATUS "- Displaying compiler warnings (globally).")
+  if (CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options(
+      -Wall
+      -Wextra
+      -Wno-unknown-pragmas)
   else()
-    target_link_libraries(mantellaTest ${OPENBLAS_LIBRARIES})
+    add_compile_options(
+      -Weverything
+      -fsanitize=undefined
+      -Wno-c++98-compat
+      -Wno-weak-vtables
+      -Wno-exit-time-destructors
+      -Wno-global-constructors
+      -Wno-unknown-warning-option)
   endif()
-
-  if(SUPPORT_MPI)
-    target_link_libraries(mantellaTest ${MPI_C_LIBRARIES})
-  endif()
+  
+  message(STATUS "- Handling warnings as errors (globally).")
+  add_compile_options(
+    -Wno-padded
+    -Wno-unused-parameter
+    -Wno-c++98-compat-pedantic
+    -Werror)
+  
+  target_include_directories(mantellaTests PRIVATE ${CATCH_INCLUDE_DIRS})
+  target_link_libraries(mantellaTests PUBLIC mantella)
 else()
   message(STATUS "") 
   message(STATUS "Skipping unit tests.")
@@ -468,7 +363,7 @@ endif()
 message(STATUS "")
 message(STATUS "Configuring library installation.")
 
-if(NOT INSTALL_INCLUDE_DIR)
+if (NOT INSTALL_INCLUDE_DIR)
   set(INSTALL_INCLUDE_DIR "include")
 endif()
 
@@ -477,22 +372,34 @@ set_property(TARGET mantella PROPERTY SOVERSION ${MANTELLA_VERSION_MAJOR})
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-if(NOT INSTALL_LIB_DIR)
+if (NOT INSTALL_LIB_DIR)
   set(INSTALL_LIB_DIR "lib")
+endif()
+
+if (NOT INSTALL_BIN_DIR)
+  set(INSTALL_BIN_DIR "bin")
 endif()
 
 install(TARGETS mantella
   ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
-  LIBRARY DESTINATION ${INSTALL_LIB_DIR})
-
+  LIBRARY DESTINATION ${INSTALL_LIB_DIR}
+  RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+  
 message(STATUS "")
-message(STATUS "Noticable CMAKE variables:")
-message(STATUS "- CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}.")
+message(STATUS "Noticable variables:")
+message(STATUS "- CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
+message(STATUS "- CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
 message(STATUS "- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message(STATUS "- BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message(STATUS "- CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-message(STATUS "- ARCHIVE_OUTPUT_DIRECTORY = ${ARCHIVE_OUTPUT_DIRECTORY}")
-message(STATUS "- EXECUTABLE_OUTPUT_PATH = ${EXECUTABLE_OUTPUT_PATH}")
+message(STATUS "- CMAKE_ARCHIVE_OUTPUT_DIRECTORY = ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+message(STATUS "- CMAKE_RUNTIME_OUTPUT_DIRECTORY = ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "- SUPPORT_SIMD = ${SUPPORT_SIMD}")
+message(STATUS "- SUPPORT_OPENMP = ${SUPPORT_OPENMP}")
+message(STATUS "- SUPPORT_MPI = ${SUPPORT_MPI}")
+message(STATUS "- ARMADILLO_LIBRARIES = ${ARMADILLO_LIBRARIES}")
 message(STATUS "- INSTALL_INCLUDE_DIR = ${INSTALL_INCLUDE_DIR}")
 message(STATUS "- INSTALL_LIB_DIR = ${INSTALL_LIB_DIR}")
+message(STATUS "- INSTALL_BIN_DIR = ${INSTALL_BIN_DIR}")
 message(STATUS "")
