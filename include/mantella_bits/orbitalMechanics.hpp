@@ -21,7 +21,7 @@ namespace mant {
         const bool useProgradeTrajectory);
 
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(
-        const double modifiedJulianDate2000,
+        const double modifiedJulianDate,
         const arma::vec::fixed<7>& keplerianElements);
 
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> lambert(
