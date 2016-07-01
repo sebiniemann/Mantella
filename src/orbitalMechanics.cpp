@@ -12,8 +12,8 @@
 #include "mantella_bits/combinatorics.hpp"
 #include "mantella_bits/config.hpp"
 #include "mantella_bits/geometry.hpp"
-#include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 #include "mantella_bits/numericalAnalysis.hpp"
+#include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
 
 namespace mant {
@@ -130,10 +130,10 @@ namespace mant {
         universalVariable = brent(timeOfFlightFunction, -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100);
       } else {
         OptimisationProblem optimisationProblem(1);
-        optimisationProblem.setObjectiveFunctions({{[&timeOfFlightFunction] (const arma::vec& universalVariable) {
-            return timeOfFlightFunction(universalVariable(0));
-        }, "Time of flight difference"
-        }});
+        optimisationProblem.setObjectiveFunctions({{[&timeOfFlightFunction](const arma::vec& universalVariable) {
+                                                      return timeOfFlightFunction(universalVariable(0));
+                                                    },
+            "Time of flight difference"}});
         HookeJeevesAlgorithm optimisationAlgorithm;
         optimisationAlgorithm.setMaximalNumberOfIterations(100);
         optimisationAlgorithm.setAcceptableObjectiveValue(std::min(transferTime - 2.0 * ::mant::machinePrecision, std::nexttoward(transferTime, 0.0)));
@@ -173,7 +173,7 @@ namespace mant {
       double firstLagrangeCoefficientDeriavte = std::sqrt(::mant::itd::heliocentricGravitationalConstant) / (departureDistanceToSun * arrivalDistanceToSun) * std::sqrt(y / secondStumpffValue) * (universalVariable * thirdStumpffValue - 1.0);
       double secondLagrangeCoefficientDeriavte = 1.0 - y / arrivalDistanceToSun;
 
-      return {1.0 / secondLagrangeCoefficient * (arrivalPosition - firstLagrangeCoefficient * departurePosition), firstLagrangeCoefficientDeriavte* departurePosition + secondLagrangeCoefficientDeriavte* arrivalPosition};
+      return {1.0 / secondLagrangeCoefficient * (arrivalPosition - firstLagrangeCoefficient * departurePosition), firstLagrangeCoefficientDeriavte * departurePosition + secondLagrangeCoefficientDeriavte * arrivalPosition};
     }
   }
 }
