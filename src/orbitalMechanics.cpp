@@ -6,6 +6,7 @@
 
 // Mantella
 #include "mantella_bits/combinatorics.hpp"
+#include "mantella_bits/config.hpp"
 #include "mantella_bits/geometry.hpp"
 #include "mantella_bits/numericalAnalysis.hpp"
 
@@ -51,7 +52,7 @@ namespace mant {
       const double arrivalDistanceToSun = arma::norm(arrivalPosition);
       
       double trueAnomaly = std::acos(arma::norm_dot(departurePosition, arrivalPosition));
-      if (useProgradeTrajectory != arma::cross(departurePosition, arrivalPosition)(2) > 0) {
+      if (useProgradeTrajectory != arma::vec(arma::cross(departurePosition, arrivalPosition))(2) > 0) {
         trueAnomaly = 2.0 * arma::datum::pi - trueAnomaly;
       }
 
