@@ -35,22 +35,22 @@ namespace mant {
         return (1.0 / factorial(type) - stumpffFunction(parameter, type - 2)) / parameter;
       }
     }
-    
+
     // The following calculations are based on universal variables, following the work of Bate et al.
     // To understand the following equations, we advise to carefully read the following book:
     // @see R. Bate et al. (1971). Fundamentals of Astrodynamics. Dover Publications, ed. 1, pp. 191-197.
     double timeOfFlight(
         const double universalVariable,
-        const arma::vec::fixed<3> departurePosition, 
+        const arma::vec::fixed<3> departurePosition,
         const arma::vec::fixed<3> arrivalPosition,
         const bool useProgradeTrajectory) {
       if (arma::approx_equal(departurePosition, arrivalPosition, "absdiff", ::mant::machinePrecision)) {
         return 0.0;
       }
-          
+
       const double departureDistanceToSun = arma::norm(departurePosition);
       const double arrivalDistanceToSun = arma::norm(arrivalPosition);
-      
+
       double trueAnomaly = std::acos(arma::norm_dot(departurePosition, arrivalPosition));
       if (useProgradeTrajectory != arma::vec(arma::cross(departurePosition, arrivalPosition))(2) > 0) {
         trueAnomaly = 2.0 * arma::datum::pi - trueAnomaly;
@@ -58,10 +58,10 @@ namespace mant {
 
       const double secondStumpffValue = stumpffFunction(universalVariable, 2);
       const double thirdStumpffValue = stumpffFunction(universalVariable, 3);
-      
+
       const double A = std::sin(trueAnomaly) * std::sqrt(departureDistanceToSun * arrivalDistanceToSun / (1.0 - std::cos(trueAnomaly)));
       const double y = departureDistanceToSun + arrivalDistanceToSun + (A * universalVariable * thirdStumpffValue - 1.0) / std::sqrt(secondStumpffValue);
-          
+
       return (std::pow(y / secondStumpffValue, 1.5) * thirdStumpffValue + A * std::sqrt(y)) / std::sqrt(heliocentricGravitationalConstant);
     }
 
