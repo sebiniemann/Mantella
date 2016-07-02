@@ -19,42 +19,15 @@ namespace mant {
         const arma::vec& firstKey,
         const arma::vec& secondKey) const;
   };
-
-  /////////////////////////RANDU
-  //double
-  double randu() {
-    std::mt19937_64& generator = Rng::getGenerator(omp_get_thread_num());
-    std::uniform_real_distribution<double> distribution;
-    return distribution(generator);
-  }
-
-  //generic scalar
-  template<typename eT>
-  typename arma::arma_scalar_only<eT>::result randu() {
-    std::mt19937_64& generator = Rng::getGenerator(omp_get_thread_num());
-    std::uniform_real_distribution<double> distribution;
-    return eT(distribution(generator));
-  }
   
-  //col or row, generic elems
-  template<typename obj_type>
-  static obj_type randu(const arma::uword numberOfElements, const arma::arma_empty_class junk1 = arma::arma_empty_class(), const typename arma::arma_Mat_Col_Row_only<obj_type>::result* junk2 = 0) {
-    arma_ignore(junk1);
-    arma_ignore(junk2);
-
-    if(arma::is_Row<obj_type>::value == true) {
-      arma::Row<typename obj_type::elem_type> vector(numberOfElements);
-      for(arma::uword i = 0; i < vector.n_elem; i++) {
-        vector(i) = randu<typename obj_type::elem_type>();
-      }
-      return vector;
-    } else {
-      arma::Col<typename obj_type::elem_type> vector(numberOfElements);
-      for(arma::uword i = 0; i < vector.n_elem; i++) {
-        vector(i) = randu<typename obj_type::elem_type>();
-      }
-      return vector;
-    }
+  arma::mat randu(
+      const arma::uword numberOfRows,)
+      const arma::uword numberOfColumns)
+    arma::mat randomMatrix(numberOfRows, numberOfColumns);
+    auto distribution = std::bind(uniform_real_distribution<double>, Rng::getGenerator());
+    vector<int> vec(10);
+    generate(begin(vec), end(vec), gen);
+    return randomMatrix;
   }
   
   //matrix, generic elems

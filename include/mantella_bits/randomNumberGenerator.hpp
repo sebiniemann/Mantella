@@ -19,9 +19,11 @@ namespace mant {
     static std::vector<std::mt19937_64> generators_;
     static std::mt19937_64 generator_;
     
-    static void initialiseGenerators(arma::uword numberOfGenerators);
+    static void initialiseGenerators(
+        arma::uword numberOfGenerators);
     
-    static std::mt19937_64& getGenerator(arma::uword threadNumber);
+    static std::mt19937_64& getGenerator(
+        arma::uword threadNumber);
     
     static void setSeed(
         const std::random_device::result_type seed);
