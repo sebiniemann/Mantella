@@ -16,8 +16,8 @@ namespace mant {
         throw std::domain_error("SaveTheEarth: The last solar body in the sequence must be the asteroid 2001 TW229.");
       }
       
-      setLowerBounds(arma::join_cols(arma::vec({4769020800.0}), arma::zeros<arma::vec>(numberOfDimensions_ - 1) + 4769020800.0));
-      setUpperBounds(arma::join_cols(arma::vec({5400172800.0}), arma::zeros<arma::vec>(numberOfDimensions_ - 1) + 6346252800.0));
+      setLowerBounds(arma::join_cols(arma::vec({4769020800.0}), arma::zeros<arma::vec>(numberOfDimensions_ - 1) + 0.0));
+      setUpperBounds(arma::join_cols(arma::vec({5400172800.0}), arma::zeros<arma::vec>(numberOfDimensions_ - 1) + 946080000.0));
 
       setObjectiveFunctions({{[this](
           const arma::vec& launchAndTransferTimes) {
@@ -25,9 +25,11 @@ namespace mant {
         
         if (!arma::approx_equal(arma::sort(launchAndTransferTimes), launchAndTransferTimes, "absdiff", ::mant::machinePrecision)) {
           return 0;
-        } else if (launchAndTransferTimes(0) + launchAndTransferTimes(numberOfDimensions_ - 1) > 946080000.0) {
+        } else if (arma::accu(launchAndTransferTimes.tail(numberOfDimensions_ - 1)) > 946080000.0) {
           return 0;
         }
+        
+        launchAndTransferTimes.tail(numberOfDimensions_ - 1) += launchAndTransferTimes(0);
         
         double deltaV = 0.0;
         
