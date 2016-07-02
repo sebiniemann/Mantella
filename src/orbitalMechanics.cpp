@@ -70,7 +70,11 @@ namespace mant {
 
       double timeOfFlight = (std::pow(y / secondStumpffValue, 1.5) * thirdStumpffValue + A * std::sqrt(y)) / std::sqrt(heliocentricGravitationalConstant);
       if (std::isnan(timeOfFlight)) {
-        timeOfFlight = std::numeric_limits<double>::infinity();
+        if (universalVariable > 0) {
+          timeOfFlight = std::numeric_limits<double>::infinity();
+        } else {
+          timeOfFlight = -std::numeric_limits<double>::infinity();
+        }
       }
 
       return timeOfFlight;
@@ -108,6 +112,20 @@ namespace mant {
       return {rotationMatrix * arma::vec({semiMajorAxis * (std::cos(eccentricAnomaly) - eccentricity), y * std::sin(eccentricAnomaly), 0.0}), rotationMatrix * arma::vec({-(semiMajorAxis * n * std::sin(eccentricAnomaly)) / (1.0 - eccentricity * std::cos(eccentricAnomaly)), (y * n * std::cos(eccentricAnomaly)) / (1.0 - eccentricity * std::cos(eccentricAnomaly)), 0.0})};
     }
 
+    arma::vec::fixed<3> gravityAssist(
+        const arma::vec::fixed<3>& satelliteVelocity,
+        const arma::vec::fixed<3>& planetPosition,
+        const arma::vec::fixed<3>& planetVelocity,
+        const double standardGravitationalParameter,
+        const double periapsis) {
+      const double satelliteVelocityMagnitude = arma::norm(satelliteVelocity);
+      const double excessVelocityMagnitude = arma::norm(satelliteVelocity - planetVelocity);
+      const double alpha = std::acos(arma::norm_dot(satelliteVelocity, planetVelocity));
+      const double phi_2 = std::atan2(satelliteVelocityMagnitude * std::cos(alpha) - arma::norm(planetVelocity), satelliteVelocityMagnitude * std::sin(alpha)) + 2 * std::asin(1.0 / (periapsis * std::pow(excessVelocityMagnitude, 2.0) / standardGravitationalParameter + 1.0));
+
+      return excessVelocityMagnitude * std::cos(phi_2) * arma::normalise(planetVelocity) + excessVelocityMagnitude * std::sin(phi_2) * arma::normalise(planetPosition);
+    }
+
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> lambert(
         const arma::vec::fixed<3>& departurePosition,
         const arma::vec::fixed<3>& arrivalPosition,
@@ -132,7 +150,7 @@ namespace mant {
 
       double universalVariable;
       if (numberOfRevolutions == 0) {
-        double previousMachinePrecision = ::mant::machinePrecision;
+        const double previousMachinePrecision = ::mant::machinePrecision;
         ::mant::machinePrecision = std::max(::mant::machinePrecision, ::mant::machinePrecision * transferTime);
         universalVariable = brent(timeOfFlightFunction, -4.0 * arma::datum::pi, 4.0 * std::pow(arma::datum::pi, 2.0), 100);
         ::mant::machinePrecision = previousMachinePrecision;
@@ -151,7 +169,7 @@ namespace mant {
           return {arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity(), arma::ones<arma::vec>(3) + std::numeric_limits<double>::infinity()};
         }
 
-        double previousMachinePrecision = ::mant::machinePrecision;
+        const double previousMachinePrecision = ::mant::machinePrecision;
         ::mant::machinePrecision = std::max(::mant::machinePrecision, ::mant::machinePrecision * transferTime);
         if (useProgradeTrajectory) {
           universalVariable = brent(timeOfFlightFunction, 4.0 * std::pow(numberOfRevolutions * arma::datum::pi, 2.0), optimisationAlgorithm.getBestFoundParameter()(0), 100);
@@ -179,10 +197,10 @@ namespace mant {
       const double A = std::sin(trueAnomaly) * std::sqrt(departureDistanceToSun * arrivalDistanceToSun / (1.0 - std::cos(trueAnomaly)));
       const double y = departureDistanceToSun + arrivalDistanceToSun + (A * (universalVariable * thirdStumpffValue - 1.0)) / std::sqrt(secondStumpffValue);
 
-      double firstLagrangeCoefficient = 1.0 - y / departureDistanceToSun;
-      double secondLagrangeCoefficient = A * std::sqrt(y / ::mant::itd::heliocentricGravitationalConstant);
-      double firstLagrangeCoefficientDeriavte = std::sqrt(::mant::itd::heliocentricGravitationalConstant) / (departureDistanceToSun * arrivalDistanceToSun) * std::sqrt(y / secondStumpffValue) * (universalVariable * thirdStumpffValue - 1.0);
-      double secondLagrangeCoefficientDeriavte = 1.0 - y / arrivalDistanceToSun;
+      const double firstLagrangeCoefficient = 1.0 - y / departureDistanceToSun;
+      const double secondLagrangeCoefficient = A * std::sqrt(y / ::mant::itd::heliocentricGravitationalConstant);
+      const double firstLagrangeCoefficientDeriavte = std::sqrt(::mant::itd::heliocentricGravitationalConstant) / (departureDistanceToSun * arrivalDistanceToSun) * std::sqrt(y / secondStumpffValue) * (universalVariable * thirdStumpffValue - 1.0);
+      const double secondLagrangeCoefficientDeriavte = 1.0 - y / arrivalDistanceToSun;
 
       arma::vec departureVelocity = 1.0 / secondLagrangeCoefficient * (arrivalPosition - firstLagrangeCoefficient * departurePosition);
       return {departureVelocity, firstLagrangeCoefficientDeriavte * departurePosition + secondLagrangeCoefficientDeriavte * departureVelocity};

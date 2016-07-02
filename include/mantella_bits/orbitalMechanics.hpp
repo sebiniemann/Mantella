@@ -24,6 +24,13 @@ namespace mant {
         const double modifiedJulianDate,
         const arma::vec::fixed<7>& keplerianElements);
 
+    arma::vec::fixed<3> gravityAssist(
+        const arma::vec::fixed<3>& satelliteVelocity,
+        const arma::vec::fixed<3>& planetPosition,
+        const arma::vec::fixed<3>& planetVelocity,
+        const double standardGravitationalParameter,
+        const double periapsis);
+
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> lambert(
         const arma::vec::fixed<3>& departurePosition,
         const arma::vec::fixed<3>& arrivalPosition,

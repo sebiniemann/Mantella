@@ -265,6 +265,9 @@ if (BUILD_TESTS)
     # Orbital Mechanics
     test/testOrbitalMechanics.cpp
   
+    # Orbital Mechanics
+    test/testOrbitalMechanics.cpp
+  
     # Machine learning functions
     test/testSamplesAnalysis.cpp
     test/testSamplesSelection.cpp
