@@ -22,7 +22,7 @@ namespace mant {
         const bool useProgradeTrajectory);
 
     double sphereOfInfluenceRadius(
-        const double semimajorAxis,
+        const double distance,
         const double mass);
 
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(

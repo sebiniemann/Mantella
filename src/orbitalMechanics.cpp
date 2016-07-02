@@ -81,9 +81,9 @@ namespace mant {
     }
 
     double sphereOfInfluenceRadius(
-        const double semimajorAxis,
+        const double distance,
         const double mass) {
-      return std::pow(mass / ::mant::itd::solarMass, 0.4) * semimajorAxis;
+      return std::pow(mass / ::mant::itd::solarMass, 0.4) * distance;
     }
 
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(

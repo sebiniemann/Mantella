@@ -28,7 +28,7 @@ SCENARIO("sphereOfInfluenceRadius", "[orbitalMechanics][sphereOfInfluenceRadius]
   GIVEN("A universal variable, a departure position, an arrival position and whether to use a prograde trajectory or not") {
     THEN("Return the time of flight") {
       // Venus at the first gravity assist during the Cassini-Huygens mission.
-      CHECK(mant::itd::sphereOfInfluenceRadius(1.082081565315099e+11, 4.867e24) == Approx(616194206.6671903133));
+      CHECK(mant::itd::sphereOfInfluenceRadius(arma::norm(arma::vec({1.0958474846549156e+10, -1.0758115275186798e+11, -4.1768951438493319e+09})), 4.867e24) == Approx(616194206.6671903133));
     }
   }
 }
