@@ -13,7 +13,7 @@ namespace mant {
             std::vector<std::tuple<arma::uword, bool, arma::uword>> solarBodiesSequence);
             
       protected:
-        arma::mat::fixed<7, 6> keplerianElements_;
+        arma::mat::fixed<7, 7> keplerianElements_;
         arma::vec::fixed<6> standardGravitationalParameters_;
         arma::vec::fixed<6> minimalPeriapsides_;
         arma::vec::fixed<6> masses_;

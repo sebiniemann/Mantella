@@ -3,6 +3,8 @@
 // Mantella
 #include "mantella_bits/optimisationProblem.hpp"
 
-class GlobalTrajectoryOptimisationCompetition : public mant::OptimisationProblem {
-  
-};
+namespace mant {
+  class GlobalTrajectoryOptimisationCompetition : public mant::OptimisationProblem {
+    using OptimisationProblem::OptimisationProblem;
+  };
+}
