@@ -1,1 +1,1 @@
-#include "mantella_bits/optimisationProblem/globaleTrajectoryOptimisationProblem.hpp"
+#include "mantella_bits/optimisationProblem/globalTrajectoryOptimisationCompetition.hpp"
