@@ -34,9 +34,9 @@ namespace mant {
 
     setNextParametersFunctions({{[this](
                                      const arma::uword numberOfDimensions_,
-                                     const arma::Mat<double>& parameters_,
-                                     const arma::Row<double>& objectiveValues_,
-                                     const arma::Row<double>& differences_) {
+                                     const arma::mat& parameters_,
+                                     const arma::rowvec& objectiveValues_,
+                                     const arma::rowvec& differences_) {
                                    for (arma::uword n = 0; n < populationSize_; ++n) {
                                      if (objectiveValues_(n) < localBestObjectiveValues_(n)) {
                                        population_.col(n) = parameters_.col(n);

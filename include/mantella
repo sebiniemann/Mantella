@@ -44,6 +44,9 @@
 #include <mantella_bits/numericalAnalysis.hpp>
 #include <mantella_bits/probability.hpp>
 
+// Orbital Mechanics
+#include <mantella_bits/orbitalMechanics.hpp>
+
 // Machine learning functions
 #include <mantella_bits/samplesAnalysis.hpp>
 #include <mantella_bits/samplesSelection.hpp>

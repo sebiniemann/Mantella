@@ -135,6 +135,9 @@ add_library(mantella
   src/numericalAnalysis.cpp
   src/probability.cpp
   
+  # Orbital Mechanics
+  src/orbitalMechanics.cpp
+  
   # Machine learning functions
   src/samplesAnalysis.cpp
   src/samplesSelection.cpp
@@ -255,6 +258,15 @@ if (BUILD_TESTS)
     test/testNumberTheory.cpp
     test/testNumericalAnalysis.cpp
     test/testProbability.cpp
+    
+    # Orbital Mechanics
+    test/testOrbitalMechanics.cpp
+  
+    # Orbital Mechanics
+    test/testOrbitalMechanics.cpp
+  
+    # Orbital Mechanics
+    test/testOrbitalMechanics.cpp
   
     # Machine learning functions
     test/testSamplesAnalysis.cpp
