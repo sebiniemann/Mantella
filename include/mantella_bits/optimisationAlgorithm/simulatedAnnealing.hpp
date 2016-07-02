@@ -1,9 +1,5 @@
 #pragma once
 
-// C++ standard library
-#include <functional>
-#include <string>
-
 // Armadillo
 #include <armadillo>
 
@@ -18,38 +14,24 @@ namespace mant {
    public:
     explicit SimulatedAnnealing();
 
-    void initialise(
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& initialParameters) override;
-
-    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
     using OptimisationAlgorithm::optimise;
 
     void optimise(
         OptimisationProblem& optimisationProblem);
 
-    void setIsAcceptableStateFunction(
-        std::function<bool(const double objectiveValue_)> isAcceptableStateFunction,
-        const std::string& isAcceptableStateFunctionName);
-    void setIsAcceptableStateFunction(
-        std::function<bool(const double objectiveValue_)> isAcceptableStateFunction);
-    std::string getIsAcceptableStateFunctionName() const;
-
     void setMinimalStepSize(
         const double minimalStepSize);
     double getMinimalStepSize() const;
+
     void setMaximalStepSize(
         const double maximalStepSize);
     double getMaximalStepSize() const;
 
-    // The following variables are only in public scope, to be used inside lambdas
-    double minimalStepSize_;
-    double maximalStepSize_;
-
-    arma::Col<double> state_;
+    // Public accessible to be used in lambdas
+    arma::vec state_;
 
    protected:
-    std::function<bool(const double objectiveValue_)> isAcceptableStateFunction_;
-    std::string isAcceptableStateFunctionName_;
+    double minimalStepSize_;
+    double maximalStepSize_;
   };
 }

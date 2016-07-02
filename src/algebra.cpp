@@ -1,88 +1,58 @@
 #include "mantella_bits/algebra.hpp"
 
+// C++ standard library
+#include <limits>
+#include <stdexcept>
+
 // Mantella
 #include "mantella_bits/combinatorics.hpp"
 
 namespace mant {
   arma::uword polynomialSize(
       const arma::uword numberOfElements,
-      const arma::uword polynomialOrder) {
-    // The number of parameter combinations for the constant term.
+      const arma::uword highestDegree) {
+    if (numberOfElements == 0 || highestDegree == 0) {
+      return 1;
+    }
+
+    // Gets initialised with the number of constant terms (degree = 0).
     arma::uword polynomialSize = 1;
     // Sums up the number of parameter combinations for each degree > 0.
-    for (arma::uword n = 1; n <= polynomialOrder; ++n) {
-      polynomialSize += nchoosek(numberOfElements + n - 1, n);
+    for (arma::uword degree = 1; degree <= highestDegree; ++degree) {
+      const arma::uword numberOfCombinations = nchoosek(numberOfElements + degree - 1, degree);
+
+      if (std::numeric_limits<decltype(polynomialSize)>::max() - polynomialSize < numberOfCombinations) {
+        throw std::overflow_error("polynomialSize: The polynomial size will be greater than the largest supported integer.");
+      }
+
+      polynomialSize += numberOfCombinations;
     }
 
     return polynomialSize;
   }
 
-  arma::Col<double> polynomial(
-      const arma::Col<double>& parameter,
-      const arma::uword polynomialOrder) {
-    arma::Col<double> polynomial(polynomialSize(parameter.n_elem, polynomialOrder));
-
-    // For any polynomial, all constant terms are 1.
-    switch (polynomialOrder) {
-      case 0: { // Constant polynomials
-        // Constant term
-        polynomial(0) = 1.0;
-      } break;
-      case 1: { // Linear polynomials
-        // Linear term
-        polynomial.head(parameter.n_elem) = parameter;
-        // Constant term
-        polynomial(parameter.n_elem) = 1;
-      } break;
-      case 2: { // Quadratic polynomials
-        // Quadratic term
-        arma::uword n = 0;
-        for (arma::uword k = 0; k < parameter.n_elem; ++k) {
-          for (arma::uword l = k; l < parameter.n_elem; ++l) {
-            polynomial(n++) = parameter(k) * parameter(l);
-          }
-        }
-        // Linear term
-        polynomial.subvec(n, n + parameter.n_elem - 1) = parameter;
-        // Constant term
-        polynomial(polynomial.n_elem - 1) = 1;
-      } break;
-      case 3: { // Cubic polynomials
-        // Cubic term
-        arma::uword n = 0;
-        for (arma::uword k = 0; k < parameter.n_elem; ++k) {
-          for (arma::uword l = k; l < parameter.n_elem; ++l) {
-            for (arma::uword m = l; m < parameter.n_elem; ++m) {
-              polynomial(n++) = parameter(k) * parameter(l) * parameter(m);
-            }
-          }
-        }
-        // Quadratic term
-        for (arma::uword k = 0; k < parameter.n_elem; ++k) {
-          for (arma::uword l = k; l < parameter.n_elem; ++l) {
-            polynomial(n++) = parameter(k) * parameter(l);
-          }
-        }
-        // Linear term
-        polynomial.subvec(n, n + parameter.n_elem - 1) = parameter;
-        // Constant term
-        polynomial(polynomial.n_elem - 1) = 1;
-      } break;
-      default: { // Polynomials of degree >= 4
-        // All terms, expect the linear and constant one.
-        arma::uword n = 0;
-        // Generates the term for all degrees > 1
-        for (arma::uword d = 2; d <= polynomialOrder; ++d) {
-          for (const auto& multicombination : multicombinations(parameter.n_elem, d)) {
-            polynomial(n++) = arma::prod(parameter.elem(multicombination));
-          }
-        }
-        // Linear term
-        polynomial.subvec(n, n + parameter.n_elem - 1) = parameter;
-        // Constant term
-        polynomial(polynomial.n_elem - 1) = 1;
-      } break;
+  arma::vec polynomial(
+      const arma::vec& parameter,
+      const arma::uword highestDegree) {
+    if (parameter.n_elem == 0 || highestDegree == 0) {
+      // By definition, the constant term is 1.
+      return {1.0};
     }
+
+    arma::vec polynomial(polynomialSize(parameter.n_elem, highestDegree));
+    arma::uword n = 0;
+    // Generates all terms for degree > 1
+    for (arma::uword degree = highestDegree; degree >= 2; --degree) {
+      for (const auto& multicombination : multicombinations(parameter.n_elem, degree)) {
+        const arma::vec& partialParameter = parameter.elem(multicombination);
+
+        polynomial(n++) = arma::prod(partialParameter);
+      }
+    }
+    // Linear term
+    polynomial.subvec(n, n + parameter.n_elem - 1) = parameter;
+    // By definition, the constant term is 1.
+    polynomial(polynomial.n_elem - 1) = 1;
 
     return polynomial;
   }

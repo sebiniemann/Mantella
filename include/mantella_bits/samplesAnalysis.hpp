@@ -17,14 +17,13 @@ namespace mant {
 
 namespace mant {
   double fitnessDistanceCorrelation(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples);
 
   double lipschitzContinuity(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples);
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples);
 
-  std::vector<arma::Col<arma::uword>> additiveSeparability(
+  std::vector<arma::uvec> additiveSeparability(
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfEvaluations,
-      const double maximalDeviation,
       const double minimalConfidence);
 }

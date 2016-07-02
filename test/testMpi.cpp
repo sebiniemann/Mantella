@@ -1,53 +1,105 @@
 // Catch
 #include <catch.hpp>
-#include "catchExtension.hpp"
+#include "catchHelper.hpp"
 
-// Mantella
-#include <mantella>
+SCENARIO("synchronise", "[mpi][synchronise]") {
+  GIVEN("A continuous matrix") {
+    WHEN("The first node's matrix is empty") {
+      THEN("All nodes return an empty matrix") {
+        arma::mat matrix;
 
-SCENARIO("mpiBestSample", "[mpi][mpiBestSample]") {
-#if defined(SUPPORT_MPI)
-  GIVEN("Two set of samples") {
-    const arma::uword numberOfElements = discreteRandomNumber();
-    CAPTURE(numberOfElements);
+        if (::nodeRank != 0) {
+          matrix = {1.0};
+        }
 
-    const arma::uword numberOfSamples = discreteRandomNumber();
-    CAPTURE(numberOfSamples);
+        CHECK(mant::synchronise(matrix).is_empty() == true);
+      }
+    }
 
-    MPI_Datatype MANT_MPI_PARAMETER;
-    // The first value is the number of dimensions.
-    // The second value is the objective value.
-    // The third to last values are the parameter.
-    MPI_Type_contiguous(static_cast<int>(2 + numberOfElements), MPI_DOUBLE, &MANT_MPI_PARAMETER);
-    MPI_Type_commit(&MANT_MPI_PARAMETER);
+    WHEN("The first node's matrix is non-empty") {
+      THEN("All nodes return the first node's matrix") {
+        arma::mat matrix;
 
-    // mant::mpiBestSample (like any MPI_Op_Func) uses the second parameter as input/output parameter, replacing it by the *more optimal* input.
-    // To observe this, we ensure that the first input is *more optimal* (has a lower objective value).
-    // The second input
-    arma::Mat<double> secondMpiInput(2 + numberOfElements, numberOfSamples);
-    secondMpiInput.row(0).fill(static_cast<double>(numberOfElements));
-    secondMpiInput.tail_rows(1 + numberOfElements) = continuousRandomNumbers(1 + numberOfElements, numberOfSamples);
-    CAPTURE(secondMpiInput);
+        if (::nodeRank == 0) {
+          matrix = arma::mat({{1.0, std::numeric_limits<double>::infinity()}, {-2.0, -std::numeric_limits<double>::infinity()}});
+        }
 
-    // The first input
-    arma::Mat<double> firstMpiInput(2 + numberOfElements, numberOfSamples);
-    firstMpiInput.row(0).fill(static_cast<double>(numberOfElements));
-    // Ensure that the first input has a lower objective value.
-    firstMpiInput.row(1) = secondMpiInput.row(1) - 1;
-    firstMpiInput.tail_rows(numberOfElements) = continuousRandomNumbers(numberOfElements, numberOfSamples);
-    CAPTURE(firstMpiInput);
-
-    // MPI uses singed integers, instead of unsigned ones.
-    int signedNumberOfSamples = static_cast<int>(numberOfSamples);
-
-    arma::Mat<double> expectedFirstMpiInput = firstMpiInput;
-    arma::Mat<double> expectedSecondMpiInput = firstMpiInput;
-
-    THEN("Set the second input to the samples with the pair-wise lowest objective value") {
-      mant::mpiBestSample(firstMpiInput.memptr(), secondMpiInput.memptr(), &signedNumberOfSamples, &MANT_MPI_PARAMETER);
-      IS_EQUAL(expectedFirstMpiInput, firstMpiInput); // The first input should remain untouched.
-      IS_EQUAL(expectedSecondMpiInput, secondMpiInput); // The second parameter should be replaced by the first one.
+        CHECK(arma::approx_equal(mant::synchronise(matrix), arma::mat({{1.0, std::numeric_limits<double>::infinity()}, {-2.0, -std::numeric_limits<double>::infinity()}}), "absdiff", ::mant::machinePrecision) == true);
+      }
     }
   }
-#endif
+
+  GIVEN("A continuous vector") {
+    WHEN("The first node's matrix is empty") {
+      THEN("All nodes return an empty vector") {
+        arma::vec vector;
+
+        if (::nodeRank != 0) {
+          vector = {1.0};
+        }
+
+        CHECK(mant::synchronise(vector).is_empty() == true);
+      }
+    }
+
+    WHEN("The first node's vector is non-empty") {
+      THEN("All nodes return the first node's vector") {
+        arma::vec vector;
+
+        if (::nodeRank == 0) {
+          vector = arma::vec({1.0, std::numeric_limits<double>::infinity()});
+        }
+        CHECK(arma::approx_equal(mant::synchronise(vector), arma::vec({1.0, std::numeric_limits<double>::infinity()}), "absdiff", ::mant::machinePrecision) == true);
+      }
+    }
+  }
+
+  GIVEN("A discrete vector") {
+    WHEN("The first node's matrix is empty") {
+      THEN("All nodes return an empty vector") {
+        arma::uvec vector;
+
+        if (::nodeRank != 0) {
+          vector = {1};
+        }
+
+        CHECK(mant::synchronise(vector).is_empty() == true);
+      }
+    }
+
+    WHEN("The first node's vector is non-empty") {
+      THEN("All nodes return the first node's vector") {
+        arma::uvec vector;
+
+        if (::nodeRank == 0) {
+          vector = arma::uvec({1});
+        }
+        CHECK(arma::all(arma::vectorise(mant::synchronise(vector) == arma::uvec({1}))) == true);
+      }
+    }
+  }
+
+  GIVEN("A continuous value") {
+    THEN("All nodes return the first node's value") {
+      double value = 0.0;
+
+      if (::nodeRank == 0) {
+        value = -1.0;
+      }
+
+      CHECK(mant::synchronise(value) == Approx(-1.0));
+    }
+  }
+
+  GIVEN("A discrete value") {
+    THEN("All nodes return the first node's value") {
+      arma::uword value = 0;
+
+      if (::nodeRank == 0) {
+        value = 1;
+      }
+
+      CHECK(mant::synchronise(value) == 1);
+    }
+  }
 }

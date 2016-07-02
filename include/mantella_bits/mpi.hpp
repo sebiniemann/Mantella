@@ -1,13 +1,21 @@
 #pragma once
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
-#if defined(SUPPORT_MPI)
+// Armadillo
+#include <armadillo>
+
 namespace mant {
-  // The interface must be compatible to MPI_User_function. See the MPI documentation for more information.
-  void mpiBestSample(
-      void* firstInput,
-      void* secondInput,
-      int* size,
-      MPI_Datatype* type);
+  arma::mat synchronise(
+      arma::mat data);
+
+  arma::vec synchronise(
+      arma::vec data);
+
+  arma::uvec synchronise(
+      const arma::uvec& data);
+
+  double synchronise(
+      double data);
+
+  arma::uword synchronise(
+      const arma::uword data);
 }
-#endif
