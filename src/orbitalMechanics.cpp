@@ -47,8 +47,8 @@ namespace mant {
     // @see R. Bate et al. (1971). Fundamentals of Astrodynamics. Dover Publications, ed. 1, pp. 191-197.
     double timeOfFlight(
         const double universalVariable,
-        const arma::vec::fixed<3> departurePosition,
-        const arma::vec::fixed<3> arrivalPosition,
+        const arma::vec::fixed<3>& departurePosition,
+        const arma::vec::fixed<3>& arrivalPosition,
         const bool useProgradeTrajectory) {
       if (arma::approx_equal(departurePosition, arrivalPosition, "absdiff", ::mant::machinePrecision)) {
         return 0.0;
@@ -78,6 +78,12 @@ namespace mant {
       }
 
       return timeOfFlight;
+    }
+
+    double sphereOfInfluenceRadius(
+        const double semimajorAxis,
+        const double mass) {
+      return std::pow(mass / ::mant::itd::solarMass, 0.4) * semimajorAxis;
     }
 
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(
