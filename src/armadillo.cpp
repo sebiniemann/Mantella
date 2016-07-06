@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <functional>
+#include <random>
 #include <stdexcept>
 
 // Mantella
@@ -66,5 +67,39 @@ namespace mant {
 
     // TODO Explain why this works (based on the C++ specification)
     return arma::approx_equal(firstKey, secondKey, "absdiff", ::mant::machinePrecision);
+  }
+  
+  arma::mat randu(
+      const arma::uword numberOfRows,
+      const arma::uword numberOfColumns) {
+    arma::mat randomMatrix(numberOfRows, numberOfColumns);
+    auto distribution = std::bind(std::uniform_real_distribution<double>(), Rng::getGenerator(getThreadNumber()));
+    std::generate(randomMatrix.begin(), randomMatrix.end(), distribution);
+    return randomMatrix;
+  }
+  
+  arma::vec randu(
+      const arma::uword numberOfElements) {
+    arma::vec randomVector(numberOfElements);
+    auto distribution = std::bind(std::uniform_real_distribution<double>(), Rng::getGenerator(getThreadNumber()));
+    std::generate(randomVector.begin(), randomVector.end(), distribution);
+    return randomVector;
+  }
+  
+  arma::mat randn(
+      const arma::uword numberOfRows,
+      const arma::uword numberOfColumns) {
+    arma::mat randomMatrix(numberOfRows, numberOfColumns);
+    auto distribution = std::bind(std::normal_distribution<double>(), Rng::getGenerator(getThreadNumber()));
+    std::generate(randomMatrix.begin(), randomMatrix.end(), distribution);
+    return randomMatrix;
+  }
+  
+  arma::vec randn(
+      const arma::uword numberOfElements) {
+    arma::vec randomVector(numberOfElements);
+    auto distribution = std::bind(std::normal_distribution<double>(), Rng::getGenerator(getThreadNumber()));
+    std::generate(randomVector.begin(), randomVector.end(), distribution);
+    return randomVector;
   }
 }
