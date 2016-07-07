@@ -1,5 +1,10 @@
 #include "mantella_bits/config.hpp"
 
+// MPI
+#if defined(SUPPORT_MPI)
+#include <mpi.h> // IWYU pragma: keep
+#endif
+
 namespace mant {
   bool isCachingSamples(false);
   bool isRecordingSampling(false);
