@@ -14,7 +14,7 @@ compiler:
 
 install:
   - sudo docker build -t ubuntu/mantella:latest .
-  - sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name -t -d  mantella ubuntu/mantella
+  - sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
   - sudo docker exec mantella apt-get install -y rubygems && gem install coveralls-lcov
   
 addons:

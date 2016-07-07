@@ -26,6 +26,6 @@ Vagrant.configure(2) do |config|
     su vagrant
     cd /vagrant
     docker build -t ubuntu/mantella:latest .
-    docker run -v /vagrant:/mantella -w /mantella --name -t -d  mantella ubuntu/mantella
+    docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
   SHELL
 end
