@@ -41,12 +41,12 @@ script:
       cmake -DBUILD_TESTS=ON . && \
       make -j 4 && \
       ./bin/mantellaTests && \
-      make install" \
-    else; sudo docker exec mantella /bin/bash -c "\
+      make install"; \
+    else sudo docker exec mantella /bin/bash -c "\
       cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON . && \
       make -j 4 && \
       mpiexec -n 4 ./bin/mantellaTests && \
-      ./.code.sh --all" \
+      ./.code.sh --all"; \
     fi
   
 after_success:
