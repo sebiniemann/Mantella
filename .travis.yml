@@ -27,19 +27,22 @@ addons:
     branch_pattern: coverity_scan
 
 script:
+  # Test matrix
+  ## GCC
+  ### - Unit tests with OpenMP support
+  ### - Code coverage
+  ### - Installation
+  ## Clang
+  ### - Unit tests with MPI support
+  ### - Code format
+  ### - Include rules
   - | 
     if [ "$CXX" == "g++" ]; then sudo docker exec mantella /bin/bash -c "\
-      ## - Unit tests with OpenMP support
-      ## - Code coverage
-      ## - Installation
       cmake -DBUILD_TESTS=ON . && \
       make -j 4 && \
       ./bin/mantellaTests && \
       make install" \
     else; sudo docker exec mantella /bin/bash -c "\
-      ## - Unit tests with MPI support
-      ## - Code format
-      ## - Include rules
       cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON . && \
       make -j 4 && \
       mpiexec -n 4 ./bin/mantellaTests && \
