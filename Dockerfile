@@ -24,7 +24,7 @@ RUN apt-get install -y clang-3.8 && \
     update-alternatives --remove clang++ /usr/bin/clang++ && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set clang++ /usr/bin/clang++-3.8
-
+    
 # CMake
 RUN apt-get install -y cmake
 
@@ -55,7 +55,9 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
 ## Include rules
-RUN apt-get install -y iwyu 
+### Adds the correct 
+RUN apt-get install -y iwyu && \
+    export CPATH=$CPATH:/usr/lib/gcc/x86_64-linux-gnu/6/include:/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed:/usr/lib/llvm-3.8/lib/clang/3.8.1/include
 
 ## Unit tests
 RUN apt-get install -y catch

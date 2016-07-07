@@ -17,7 +17,7 @@
 namespace mant {
   decltype(Rng::generator_) Rng::generator_;
   decltype(Rng::generators_) Rng::generators_;
-  
+
   void Rng::initialiseGenerators(
       arma::uword numberOfGenerators) {
     if (numberOfGenerators > generators_.size()) {
@@ -28,7 +28,7 @@ namespace mant {
       }
     }
   }
-    
+
   std::mt19937_64& Rng::getGenerator(
       arma::uword threadNumber) {
     if (threadNumber > generators_.size() - 1) {

@@ -10,7 +10,7 @@ namespace mant {
   bool isRecordingSampling(false);
   bool isVerbose(false);
   double machinePrecision(1e-12);
-  
+
   arma::uword getNodeRank() {
 #if defined(SUPPORT_MPI)
     int nodeRank_;
@@ -29,7 +29,7 @@ namespace mant {
     return 1;
 #endif
   }
-  
+
   arma::uword getThreadNumber() {
 #if defined(_OPENMP)
     return omp_get_thread_num();
@@ -37,7 +37,7 @@ namespace mant {
     return 0;
 #endif
   }
-  
+
   arma::uword getNumberOfThreads() {
 #if defined(_OPENMP)
     return omp_get_max_threads();

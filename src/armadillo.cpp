@@ -68,7 +68,7 @@ namespace mant {
     // TODO Explain why this works (based on the C++ specification)
     return arma::approx_equal(firstKey, secondKey, "absdiff", ::mant::machinePrecision);
   }
-  
+
   arma::mat randu(
       const arma::uword numberOfRows,
       const arma::uword numberOfColumns) {
@@ -77,7 +77,7 @@ namespace mant {
     std::generate(randomMatrix.begin(), randomMatrix.end(), distribution);
     return randomMatrix;
   }
-  
+
   arma::vec randu(
       const arma::uword numberOfElements) {
     arma::vec randomVector(numberOfElements);
@@ -85,7 +85,7 @@ namespace mant {
     std::generate(randomVector.begin(), randomVector.end(), distribution);
     return randomVector;
   }
-  
+
   arma::mat randn(
       const arma::uword numberOfRows,
       const arma::uword numberOfColumns) {
@@ -94,7 +94,7 @@ namespace mant {
     std::generate(randomMatrix.begin(), randomMatrix.end(), distribution);
     return randomMatrix;
   }
-  
+
   arma::vec randn(
       const arma::uword numberOfElements) {
     arma::vec randomVector(numberOfElements);

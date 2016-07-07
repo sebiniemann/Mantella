@@ -13,7 +13,7 @@ namespace mant {
   extern bool isRecordingSampling;
   extern bool isVerbose;
   extern double machinePrecision;
-  
+
   arma::uword getNodeRank();
   arma::uword getNumberOfNode();
   arma::uword getThreadNumber();
