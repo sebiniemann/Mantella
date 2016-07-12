@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>HowTo Describe &mdash; Mantella 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Mantella 1.0 documentation" href="index.html"/>
+        <link rel="prev" title="Welcome to Mantella’s documentation!" href="mantella.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="mantella.html" class="icon icon-home"> Mantella
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HowTo Describe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-sqhinx-doxygen-and-breathe-on-your-vm">Install Sqhinx, Doxygen and Breathe on your VM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-documentation">Generate documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#describe-in-code">Describe in Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#normally-comment">Normally Comment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-image">Include image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-examples">Include examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-html">Include HTML</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-math">Include math</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-code-block">Include code-block</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#describe-in-rst">Describe in rst</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#added-doxygen-commends">Added doxygen commends</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="mantella.html">Mantella</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="mantella.html">Docs</a> &raquo;</li>
+      
+    <li>HowTo Describe</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/howTo.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="howto-describe">
+<h1>HowTo Describe<a class="headerlink" href="#howto-describe" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-sqhinx-doxygen-and-breathe-on-your-vm">
+<h2>Install Sqhinx, Doxygen and Breathe on your VM<a class="headerlink" href="#install-sqhinx-doxygen-and-breathe-on-your-vm" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>apt-get install python-sphinx
+apt-get install doxygen
+sudo pip install breathe
+</pre></div>
+</div>
+</div>
+<div class="section" id="generate-documentation">
+<h2>Generate documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Go in path <em>/mantella</em> and execute <em>./generateDoc.sh</em> .
+The generated HTML files you will see in <em>/doc/_bulid/</em> .</p>
+</div>
+<div class="section" id="describe-in-code">
+<h2>Describe in Code<a class="headerlink" href="#describe-in-code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="normally-comment">
+<h3>Normally Comment<a class="headerlink" href="#normally-comment" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span>/*! @brief Brief description.
+ *    Brief description continued.
+ *
+ *  Detailed description starts here.
+ */
+</pre></div>
+</div>
+</div>
+<div class="section" id="include-image">
+<h3>Include image<a class="headerlink" href="#include-image" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+\image html image.png
+</pre>
+<p>The image file must be in /doc_includes/image/</p>
+</div>
+<div class="section" id="include-examples">
+<h3>Include examples<a class="headerlink" href="#include-examples" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+\include example.cpp
+</pre>
+<p>The example file must be in /doc_includes/example</p>
+</div>
+<div class="section" id="include-html">
+<h3>Include HTML<a class="headerlink" href="#include-html" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+\verbatim embed:rst
+  .. raw:: html
+    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+        Any HTML code
+    &lt;/html&gt;
+\endverbatim
+</pre>
+</div>
+<div class="section" id="include-math">
+<h3>Include math<a class="headerlink" href="#include-math" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+\verbatim embed:rst
+   .. math::
+     Any Math
+\endverbatim
+</pre>
+</div>
+<div class="section" id="include-code-block">
+<h3>Include code-block<a class="headerlink" href="#include-code-block" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+\verbatim embed:rst
+  .. code-block:: [language]
+
+              Any code
+
+\endverbatim
+</pre>
+</div>
+</div>
+<div class="section" id="describe-in-rst">
+<h2>Describe in rst<a class="headerlink" href="#describe-in-rst" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="added-doxygen-commends">
+<h3>Added doxygen commends<a class="headerlink" href="#added-doxygen-commends" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+.. doxygenclass:: [Class] (mant::HillClimbing)
+   :project: mantella
+   :protected-members: //If specified, the protected members of the class will be displayed.
+   :private-members: //If specified, the private members of the class will be displayed.
+   :undoc-members: //If specified, the undocumented members of the class will be displayed.
+   :outline: //This displays only the names of the class members and not their documentation.
+   :members: crack, isCracked //This displays the class documentation with only the members listed in the :members: option.1
+</pre>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="mantella.html" class="btn btn-neutral" title="Welcome to Mantella’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Sebastian Niemann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
