@@ -30,7 +30,7 @@ namespace mant {
 
   Kriging::Kriging(
       const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-      const std::function<double(const arma::Col<double>&)> regressionFunction,
+      const std::function<arma::Col<double>(const arma::Col<double>&)> regressionFunction,
       const std::function<double(const arma::Col<double>&)> correlationFunction)
       : regressionFunction_(regressionFunction),
         correlationFunction_(correlationFunction) {

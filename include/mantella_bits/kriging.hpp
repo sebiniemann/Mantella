@@ -14,12 +14,12 @@
 namespace mant {
   class Kriging {
    public:
-    const std::function<double(const arma::Col<double>&)> regressionFunction_;
+    const std::function<arma::Col<double>(const arma::Col<double>&)> regressionFunction_;
     const std::function<double(const arma::Col<double>&)> correlationFunction_;
 
     Kriging(
         const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-        const std::function<double(const arma::Col<double>&)> regressionFunction,
+        const std::function<arma::Col<double>(const arma::Col<double>&)> regressionFunction,
         const std::function<double(const arma::Col<double>&)> correlationFunction);
 
     void train();
