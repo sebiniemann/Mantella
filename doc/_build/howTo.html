@@ -31,6 +31,7 @@
 
   
     <link rel="top" title="Mantella 1.0 documentation" href="index.html"/>
+        <link rel="next" title="Yet does not comment" href="yetdoesnotcomment.html"/>
         <link rel="prev" title="Welcome to Mantella’s documentation!" href="mantella.html"/> 
 
   
@@ -82,7 +83,7 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">HowTo Describe</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#install-sqhinx-doxygen-and-breathe-on-your-vm">Install Sqhinx, Doxygen and Breathe on your VM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-sqhinx-doxygen-and-breathe-on-your-pc">Install Sqhinx, Doxygen and Breathe on your PC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generate-documentation">Generate documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#describe-in-code">Describe in Code</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#normally-comment">Normally Comment</a></li>
@@ -99,6 +100,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="yetdoesnotcomment.html">Yet does not comment</a></li>
 </ul>
 
             
@@ -145,13 +147,21 @@
             
   <div class="section" id="howto-describe">
 <h1>HowTo Describe<a class="headerlink" href="#howto-describe" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="install-sqhinx-doxygen-and-breathe-on-your-vm">
-<h2>Install Sqhinx, Doxygen and Breathe on your VM<a class="headerlink" href="#install-sqhinx-doxygen-and-breathe-on-your-vm" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-sqhinx-doxygen-and-breathe-on-your-pc">
+<h2>Install Sqhinx, Doxygen and Breathe on your PC<a class="headerlink" href="#install-sqhinx-doxygen-and-breathe-on-your-pc" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>apt-get install python-sphinx
 apt-get install doxygen
 sudo pip install breathe
+sudo pip install sphinx_rtd_theme
 </pre></div>
 </div>
+<p>For other Systems please read here:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://www.sphinx-doc.org/en/stable/install.html">install_sphinx</a></li>
+<li><a class="reference external" href="http://www.stack.nl/~dimitri/doxygen/download.html#gitrepos">install_doxygen</a></li>
+</ul>
+</div></blockquote>
 </div>
 <div class="section" id="generate-documentation">
 <h2>Generate documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h2>
@@ -230,6 +240,8 @@ The generated HTML files you will see in <em>/doc/_bulid/</em> .</p>
    :outline: //This displays only the names of the class members and not their documentation.
    :members: crack, isCracked //This displays the class documentation with only the members listed in the :members: option.1
 </pre>
+<p>To read on <a class="reference external" href="http://breathe.readthedocs.io/en/latest/directives.html">Doc_Breathe</a></p>
+<p>For more Info about <a class="reference external" href="http://www.sphinx-doc.org/en/stable/contents.html">Doc_Sphinx</a></p>
 </div>
 </div>
 </div>
@@ -240,6 +252,8 @@ The generated HTML files you will see in <em>/doc/_bulid/</em> .</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="yetdoesnotcomment.html" class="btn btn-neutral float-right" title="Yet does not comment" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="mantella.html" class="btn btn-neutral" title="Welcome to Mantella’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
