@@ -1,395 +1,214 @@
 // Catch
 #include <catch.hpp>
-#include "catchExtension.hpp"
-
-// Mantella
-#include <mantella>
+#include "catchHelper.hpp"
 
 SCENARIO("OptimisationProblem.numberOfDimensions_", "[OptimisationProblem][OptimisationProblem.numberOfDimensions_]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
+  if (::nodeRank == 0) {
+    mant::OptimisationProblem optimisationProblem(2);
 
-  CAPTURE(numberOfDimensions);
+    THEN("Return the first node's number of dimensions_") {
+      CHECK(optimisationProblem.numberOfDimensions_ == 2);
+    }
+  } else {
+    mant::OptimisationProblem optimisationProblem(4);
 
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  THEN("Return the number of dimensions_") {
-    CHECK(optimisationProblem.numberOfDimensions_ == numberOfDimensions);
+    THEN("Return the first node's number of dimensions_") {
+      CHECK(optimisationProblem.numberOfDimensions_ == 2);
+    }
   }
 }
 
 SCENARIO("OptimisationProblem::OptimisationProblem", "[OptimisationProblem][OptimisationProblem::OptimisationProblem]") {
   GIVEN("A number of dimensions") {
     WHEN("The number of dimensions is greater than 0") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
       THEN("Throw no exception") {
-        CHECK_NOTHROW(mant::OptimisationProblem optimisationProblem(numberOfDimensions));
+        CHECK_NOTHROW(mant::OptimisationProblem optimisationProblem(2));
       }
     }
 
     WHEN("The number of dimensions is 0") {
-      THEN("Throw a std::logic_error") {
+      THEN("Throw a logic error") {
         CHECK_THROWS_AS(mant::OptimisationProblem optimisationProblem(0), std::logic_error);
       }
     }
   }
 }
 
-SCENARIO("OptimisationProblem.setObjectiveFunction", "[OptimisationProblem][OptimisationProblem.setObjectiveFunction]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
+SCENARIO("OptimisationProblem.setObjectiveFunctions", "[OptimisationProblem][OptimisationProblem.setObjectiveFunctions]") {
+  GIVEN("A vector of named objective functions") {
+    WHEN("An objective function is not callable") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setObjectiveFunctions({{nullptr, "Test function"}}), std::invalid_argument);
+      }
+    }
 
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
+    WHEN("A objective function name is empty") {
+      THEN("Throw no exception") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::accu(parameter_); }, ""}}));
+      }
+    }
 
-  GIVEN("An objective function and its name") {
-    const std::string& objectiveFunctionnName = "My custom objective function name";
-    CAPTURE(objectiveFunctionnName);
+    WHEN("The names are not unique") {
+      THEN("Throw no exception") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::accu(parameter_); }, "Test function"}, {[](const arma::vec& parameter_) { return arma::prod(parameter_); }, "Test function"}}));
+      }
+    }
 
     WHEN("The objective function is callable") {
-      auto objectiveFunction = [&optimisationProblem](
-          const arma::Col<double>& parameter_) {
-        return 0;
-      };
+      THEN("Throw no exception and reset the cache and all counters") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::accu(parameter_); }, "Test function"}}));
 
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setObjectiveFunction(objectiveFunction, objectiveFunctionnName));
-      }
-
-      THEN("Reset all counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-
-        optimisationProblem.setObjectiveFunction(objectiveFunction);
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({2.0, 1.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setObjectiveFunction(objectiveFunction, objectiveFunctionnName);
+        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::prod(parameter_); }, "Test function"}}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-    }
-
-    WHEN("The objective function is not callable") {
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setObjectiveFunction(nullptr, objectiveFunctionnName), std::logic_error);
-      }
-    }
-  }
-
-  GIVEN("An objective function") {
-    WHEN("The objective function is callable") {
-      auto objectiveFunction = [&optimisationProblem](
-          const arma::Col<double>& parameter_) {
-        return 0;
-      };
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setObjectiveFunction(objectiveFunction));
-      }
-
-      THEN("Reset all counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-
-        optimisationProblem.setObjectiveFunction(objectiveFunction);
-        // Populates the cache and increments the counter
-        ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
-        ::mant::isCachingSamples = false;
-
-        optimisationProblem.setObjectiveFunction(objectiveFunction);
-
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-    }
-
-    WHEN("The objective function is not callable") {
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setObjectiveFunction(nullptr), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == true);
       }
     }
   }
 }
 
-SCENARIO("OptimisationProblem.getObjectiveFunctionName", "[OptimisationProblem][OptimisationProblem.getObjectiveFunctionName]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  WHEN("The default objective function is unchanged") {
-    THEN("Return an empty string") {
-      CHECK(optimisationProblem.getObjectiveFunctionName() == "");
-    }
-  }
-
-  WHEN("The default objective function was changed") {
-    auto objectiveFunction = [&optimisationProblem](
-        const arma::Col<double>& parameter_) {
-      return 0;
-    };
-
-    AND_WHEN("A new objective function name was set") {
-      const std::string& objectiveFunctionName = "My custom objective function name";
-      CAPTURE(objectiveFunctionName);
-
-      optimisationProblem.setObjectiveFunction(objectiveFunction, objectiveFunctionName);
-
-      THEN("Return the objective function name") {
-        CHECK(optimisationProblem.getObjectiveFunctionName() == objectiveFunctionName);
-      }
-    }
-
-    AND_WHEN("No new objective function name was set") {
-      optimisationProblem.setObjectiveFunction(objectiveFunction);
-
-      THEN("Return the default, unnamed objective function name") {
-        CHECK(optimisationProblem.getObjectiveFunctionName() == "Unnamed, custom objective function");
-      }
+SCENARIO("OptimisationProblem.getObjectiveFunctions", "[OptimisationProblem][OptimisationProblem.getObjectiveFunctions]") {
+  WHEN("The default objective functions are unchanged") {
+    THEN("Return an empty set") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(optimisationProblem.getObjectiveFunctions().empty() == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][OptimisationProblem.getObjectiveValue]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
   GIVEN("A parameter") {
-    WHEN("The default objective function is unchanged") {
-      const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameter);
+    WHEN("The parameter is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
 
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue({}), std::invalid_argument);
       }
     }
 
-    WHEN("The default objective function was changed") {
-      auto objectiveFunction = [&optimisationProblem](
-          const arma::Col<double>& parameter_) {
-        return arma::accu(parameter_);
-      };
-      optimisationProblem.setObjectiveFunction(objectiveFunction);
+    WHEN("The parameters number of rows are unequal to the problem's number of dimensions") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
 
-      AND_WHEN("All parameters are finite and have exactly [numberOfDimensions] rows") {
-        const arma::uword numberOfParameters = discreteRandomNumber();
-        CAPTURE(numberOfParameters);
-
-        arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-        // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
-        parameters = arma::shuffle(arma::join_rows(parameters, parameters));
-        CAPTURE(parameters);
-
-        AND_WHEN("All parameter and objective value modifications are non-default") {
-          const arma::Col<arma::uword>& parameterPermutation = SYNCHRONISED(mant::randomPermutationVector(numberOfDimensions));
-          optimisationProblem.setParameterPermutation(parameterPermutation);
-          CAPTURE(parameterPermutation);
-
-          const arma::Col<double>& parameterScaling = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-          optimisationProblem.setParameterScaling(parameterScaling);
-          CAPTURE(parameterScaling);
-
-          const arma::Col<double>& parameterTranslation = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-          optimisationProblem.setParameterTranslation(parameterTranslation);
-          CAPTURE(parameterTranslation);
-
-          const arma::Mat<double>& parameterRotation = SYNCHRONISED(mant::randomRotationMatrix(numberOfDimensions));
-          optimisationProblem.setParameterRotation(parameterRotation);
-          CAPTURE(parameterRotation);
-
-          const arma::Col<double>& minimalParameterDistance = SYNCHRONISED(static_cast<arma::Col<double>>(arma::abs(continuousRandomNumbers(numberOfDimensions))));
-          optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
-          CAPTURE(minimalParameterDistance);
-
-          // Objective value space modifiers
-          const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
-          optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-          CAPTURE(objectiveValueScaling);
-
-          const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
-          optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-          CAPTURE(objectiveValueTranslation);
-
-          THEN("Return the objective values") {
-            ::mant::isCachingSamples = true;
-            for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-              const arma::Col<double>& parameter = parameters.col(n);
-
-              arma::Col<double> discretisedParameter = parameter;
-              const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance > 0);
-              discretisedParameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance.elem(elementsToDiscretise)) % minimalParameterDistance.elem(elementsToDiscretise);
-
-              CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % discretisedParameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
-            }
-            ::mant::isCachingSamples = false;
-          }
-
-          AND_WHEN("Caching was enabled") {
-            THEN("Return the same objective values as when caching is disabled") {
-              ::mant::isCachingSamples = false;
-              for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-                const arma::Col<double>& parameter = parameters.col(n);
-
-                arma::Col<double> discretisedParameter = parameter;
-                const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance > 0);
-                discretisedParameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance.elem(elementsToDiscretise)) % minimalParameterDistance.elem(elementsToDiscretise);
-
-                CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % discretisedParameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
-              }
-              ::mant::isCachingSamples = false;
-            }
-          }
-        }
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue({1.0}), std::invalid_argument);
       }
+    }
 
-      AND_WHEN("The parameter has less then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions - 1);
-        CAPTURE(parameter);
-
-        THEN("Throw a std::logic_error") {
-          CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
-        }
+    WHEN("The objective functions vector is empty") {
+      THEN("Throw a logic error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue({1.0, -2.0}), std::invalid_argument);
       }
+    }
 
-      AND_WHEN("The parameter has more then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
-        CAPTURE(parameter);
+    WHEN("The objective functions vector is non-empty") {
+      THEN("Return the objective value, increase all counters and cache its value if supported") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
 
-        THEN("Throw a std::logic_error") {
-          CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
-        }
-      }
+        ::mant::isCachingSamples = true;
+        CHECK(optimisationProblem.getObjectiveValue({1.0, -2.0}) == Approx(-1.0));
+        ::mant::isCachingSamples = false;
 
-      AND_WHEN("The parameter is infinite") {
-        arma::Col<double> parameter = continuousRandomNumbers(numberOfDimensions);
-        parameter(0) = arma::datum::inf;
-        CAPTURE(parameter);
-
-        THEN("Throw a std::logic_error") {
-          CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
-        }
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == false);
       }
     }
   }
 }
 
-SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProblem][OptimisationProblem.getNormalisedObjectiveValue]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
+SCENARIO("OptimisationProblem.getObjectiveValueOfNormalisedParameter", "[OptimisationProblem][OptimisationProblem.getObjectiveValueOfNormalisedParameter]") {
+  GIVEN("A parameter") {
+    WHEN("The parameter is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
 
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  GIVEN("A normalised parameter") {
-    WHEN("The default objective function is unchanged") {
-      const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
-      CAPTURE(parameter);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({}), std::invalid_argument);
       }
     }
 
-    WHEN("The default objective function was changed") {
-      auto objectiveFunction = [&optimisationProblem](
-          const arma::Col<double>& parameter_) {
-        return arma::accu(parameter_);
-      };
-      optimisationProblem.setObjectiveFunction(objectiveFunction);
+    WHEN("The parameters number of rows are unequal to the problem's number of dimensions") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
 
-      AND_WHEN("All parameters are finite and have exactly [numberOfDimensions] rows") {
-        const arma::uword numberOfParameters = discreteRandomNumber();
-        CAPTURE(numberOfParameters);
-
-        arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-        // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
-        parameters = arma::shuffle(arma::join_rows(parameters, parameters));
-        CAPTURE(parameters);
-
-        AND_WHEN("All parameter and objective value modifications are non-default (including the minimal parameter distance)") {
-          // Parameter space modifiers
-          const arma::Col<arma::uword>& parameterPermutation = SYNCHRONISED(mant::randomPermutationVector(numberOfDimensions));
-          optimisationProblem.setParameterPermutation(parameterPermutation);
-          CAPTURE(parameterPermutation);
-
-          const arma::Col<double>& parameterScaling = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-          optimisationProblem.setParameterScaling(parameterScaling);
-          CAPTURE(parameterScaling);
-
-          const arma::Col<double>& parameterTranslation = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-          optimisationProblem.setParameterTranslation(parameterTranslation);
-          CAPTURE(parameterTranslation);
-
-          const arma::Mat<double>& parameterRotation = SYNCHRONISED(mant::randomRotationMatrix(numberOfDimensions));
-          optimisationProblem.setParameterRotation(parameterRotation);
-
-          CAPTURE(parameterRotation);
-
-          // Objective value space modifiers
-          const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
-          optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-          CAPTURE(objectiveValueScaling);
-
-          const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
-          optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-          CAPTURE(objectiveValueTranslation);
-
-          THEN("Return the objective value") {
-            ::mant::isCachingSamples = true;
-            for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-              const arma::Col<double>& parameter = parameters.col(n);
-              CHECK(optimisationProblem.getNormalisedObjectiveValue((parameter - optimisationProblem.getLowerBounds()) / (optimisationProblem.getUpperBounds() - optimisationProblem.getLowerBounds())) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
-            }
-            ::mant::isCachingSamples = false;
-          }
-
-          AND_WHEN("Caching was enabled") {
-            THEN("Return the same objective values as when caching is disabled") {
-              ::mant::isCachingSamples = false;
-              for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-                const arma::Col<double>& parameter = parameters.col(n);
-                CHECK(optimisationProblem.getNormalisedObjectiveValue((parameter - optimisationProblem.getLowerBounds()) / (optimisationProblem.getUpperBounds() - optimisationProblem.getLowerBounds())) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % parameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
-              }
-              ::mant::isCachingSamples = false;
-            }
-          }
-        }
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0}), std::invalid_argument);
       }
+    }
 
-      AND_WHEN("The parameter has less then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions - 1));
-        CAPTURE(parameter);
+    WHEN("A lower bound is greater then the upper one") {
+      THEN("Throw a logic error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+        optimisationProblem.setLowerBounds({2.0, 3.0});
+        optimisationProblem.setUpperBounds({-2.0, 3.0});
 
-        THEN("Throw a std::logic_error") {
-          CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
-        }
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0}), std::logic_error);
       }
+    }
 
-      AND_WHEN("The parameter has more then [numberOfDimensions] elements") {
-        const arma::Col<double>& parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions + discreteRandomNumber()));
-        CAPTURE(parameter);
-
-        THEN("Throw a std::logic_error") {
-          CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
-        }
+    WHEN("The objective functions vector is empty") {
+      THEN("Throw a logic error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0, -2.0}), std::invalid_argument);
       }
+    }
 
-      AND_WHEN("The parameter is infinite") {
-        arma::Col<double> parameter = arma::normalise(continuousRandomNumbers(numberOfDimensions));
-        parameter(0) = arma::datum::inf;
-        CAPTURE(parameter);
+    WHEN("The objective functions vector is non-empty") {
+      THEN("Return the objective value, increase all counters and cache its value if supported") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
 
-        THEN("Throw a std::logic_error") {
-          CHECK_THROWS_AS(optimisationProblem.getObjectiveValue(parameter), std::logic_error);
-        }
+        // The default bounds are set to -10 and 10.
+        ::mant::isCachingSamples = true;
+        CHECK(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0, -2.0}) == Approx(-40.0));
+        ::mant::isCachingSamples = false;
+
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == false);
       }
     }
   }
@@ -397,1272 +216,567 @@ SCENARIO("OptimisationProblem.getNormalisedObjectiveValue", "[OptimisationProble
 
 SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][OptimisationProblem.setLowerBounds]") {
   GIVEN("Some lower bounds") {
-    WHEN("The lower bounds are finite and have exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(lowerBounds);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setLowerBounds(lowerBounds));
+    WHEN("The lower bounds are empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setLowerBounds({}), std::invalid_argument);
       }
+    }
 
-      THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("The number of lower bounds is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setLowerBounds({1.0}), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setLowerBounds({1.0, 2.0, 3.0}), std::invalid_argument);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The number of lower bounds are equal to the problem's number of dimension") {
+      THEN("Throw no exception and keep all counters and caches intact") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setLowerBounds(lowerBounds);
+        CHECK_NOTHROW(optimisationProblem.setLowerBounds({std::numeric_limits<double>::quiet_NaN(), -std::numeric_limits<double>::infinity()}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 1);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 1);
-        CHECK(optimisationProblem.getCachedSamples().size() == 1);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The lower bounds are synchronised over MPI") {
-        optimisationProblem.setLowerBounds(lowerBounds);
-        IS_EQUAL(optimisationProblem.getLowerBounds(), SYNCHRONISED(lowerBounds));
-      }
-#endif
-    }
-
-    WHEN("The lower bound is greater than the upper bound") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(upperBounds);
-
-      optimisationProblem.setUpperBounds(upperBounds);
-
-      const arma::Col<double>& lowerBounds = upperBounds + arma::ones<arma::Col<double>>(numberOfDimensions);
-      CAPTURE(lowerBounds);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setLowerBounds(lowerBounds));
-      }
-    }
-
-    WHEN("The lower bounds have less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions - 1);
-      CAPTURE(lowerBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
-      }
-    }
-
-    WHEN("The lower bounds have more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
-      CAPTURE(lowerBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
-      }
-    }
-
-    WHEN("At least one lower bound is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<double> lowerBounds = continuousRandomNumbers(numberOfDimensions);
-      lowerBounds(0) = arma::datum::inf;
-      CAPTURE(lowerBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds(lowerBounds), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == false);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getLowerBounds", "[OptimisationProblem][OptimisationProblem.getLowerBounds]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  GIVEN("Default lower bounds") {
-    THEN("Return the default lower bounds (-10, ..., -10)^n") {
-      IS_EQUAL(optimisationProblem.getLowerBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) - 10);
-    }
-  }
-
-  GIVEN("An updated lower bounds") {
-    const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions);
-    CAPTURE(lowerBounds);
-
-    optimisationProblem.setLowerBounds(lowerBounds);
-
-    THEN("Return the updated lower bounds") {
-      IS_EQUAL(optimisationProblem.getLowerBounds(), SYNCHRONISED(lowerBounds));
+  WHEN("The default lower bounds are unchanged") {
+    THEN("Return -10") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(arma::approx_equal(optimisationProblem.getLowerBounds(), arma::vec({-10.0, -10.0}), "absdiff", ::mant::machinePrecision) == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][OptimisationProblem.setUpperBounds]") {
   GIVEN("Some upper bounds") {
-    WHEN("The upper bounds are finite and have exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(upperBounds);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setUpperBounds(upperBounds));
+    WHEN("The upper bounds are empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setUpperBounds({}), std::invalid_argument);
       }
+    }
 
-      THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("The number of upper bounds is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setUpperBounds({1.0}), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setUpperBounds({1.0, 2.0, 3.0}), std::invalid_argument);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The number of upper bounds are equal to the problem's number of dimension") {
+      THEN("Throw no exception and keep all counters and caches intact") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setUpperBounds(upperBounds);
+        CHECK_NOTHROW(optimisationProblem.setUpperBounds({std::numeric_limits<double>::quiet_NaN(), -std::numeric_limits<double>::infinity()}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 1);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 1);
-        CHECK(optimisationProblem.getCachedSamples().size() == 1);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The upper bounds are synchronised over MPI") {
-        optimisationProblem.setUpperBounds(upperBounds);
-        IS_EQUAL(optimisationProblem.getUpperBounds(), SYNCHRONISED(upperBounds));
-      }
-#endif
-    }
-
-    WHEN("The upper bounds are greater than the lower bounds") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& lowerBounds = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(lowerBounds);
-
-      optimisationProblem.setLowerBounds(lowerBounds);
-
-      const arma::Col<double>& upperBounds = lowerBounds - arma::ones<arma::Col<double>>(numberOfDimensions);
-      CAPTURE(upperBounds);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setUpperBounds(upperBounds));
-      }
-    }
-
-    WHEN("The upper bounds have less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions - 1);
-      CAPTURE(upperBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
-      }
-    }
-
-    WHEN("The upper bounds have more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
-      CAPTURE(upperBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
-      }
-    }
-
-    WHEN("At least one upper bound is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<double> upperBounds = continuousRandomNumbers(numberOfDimensions);
-      upperBounds(0) = arma::datum::inf;
-      CAPTURE(upperBounds);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds(upperBounds), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == false);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getUpperBounds", "[OptimisationProblem][OptimisationProblem.getUpperBounds]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  GIVEN("Default upper bounds") {
-    THEN("Return the default upper bounds (10, ..., 10)^n") {
-      IS_EQUAL(optimisationProblem.getUpperBounds(), arma::zeros<arma::Col<double>>(numberOfDimensions) + 10);
-    }
-  }
-
-  GIVEN("An updated upper bounds") {
-    const arma::Col<double>& upperBounds = continuousRandomNumbers(numberOfDimensions);
-    CAPTURE(upperBounds);
-
-    optimisationProblem.setUpperBounds(upperBounds);
-
-    THEN("Return the updated upper bounds") {
-      IS_EQUAL(optimisationProblem.getUpperBounds(), SYNCHRONISED(upperBounds));
+  WHEN("The default upper bounds are unchanged") {
+    THEN("Return 10") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(arma::approx_equal(optimisationProblem.getUpperBounds(), arma::vec({10.0, 10.0}), "absdiff", ::mant::machinePrecision) == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][OptimisationProblem.setParameterPermutation]") {
   GIVEN("A parameter permutation") {
-    WHEN("The parameter permutation has [numberOfDimensions] unique elements, all within [0, [numberOfDimensions] - 1]") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
-      CAPTURE(parameterPermutation);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setParameterPermutation(parameterPermutation));
+    WHEN("The permutation is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation({}), std::invalid_argument);
       }
+    }
 
-      THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("Its not a permutation") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation({0, 3}), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation({0, 0}), std::invalid_argument);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The permutation's size is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(arma::uvec({0})), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(arma::uvec({0, 1, 2})), std::invalid_argument);
+      }
+    }
+
+    WHEN("The permutation's size is equal to the problem's number of dimension") {
+      THEN("Throw no exception and reset all counters and caches") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setParameterPermutation(parameterPermutation);
+        CHECK_NOTHROW(optimisationProblem.setParameterPermutation({1, 0}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The parameter permutation is synchronised over MPI") {
-        optimisationProblem.setParameterPermutation(parameterPermutation);
-        IS_EQUAL(optimisationProblem.getParameterPermutation(), SYNCHRONISED(parameterPermutation));
-      }
-#endif
-    }
-
-    WHEN("The parameter permutation has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions - 1);
-      CAPTURE(parameterPermutation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter permutation has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions + discreteRandomNumber());
-      CAPTURE(parameterPermutation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter permutation has at least one element not in [0, [numberOfElements] - 1]") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
-      parameterPermutation(0) = numberOfDimensions;
-      CAPTURE(parameterPermutation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter permutation has non-unique elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<arma::uword> parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
-      parameterPermutation(0) = parameterPermutation(1);
-      CAPTURE(parameterPermutation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(parameterPermutation), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == true);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getParameterPermutation", "[OptimisationProblem][OptimisationProblem.getParameterPermutation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
   WHEN("The default parameter permutation is unchanged") {
-    THEN("Return [0, ..., [numberOfDimensions] - 1]") {
-      IS_EQUAL(optimisationProblem.getParameterPermutation(), mant::range(0, numberOfDimensions - 1));
-    }
-  }
-
-  WHEN("The default parameter permutation was changed") {
-    const arma::Col<arma::uword>& parameterPermutation = mant::randomPermutationVector(numberOfDimensions);
-    CAPTURE(parameterPermutation);
-
-    optimisationProblem.setParameterPermutation(parameterPermutation);
-
-    THEN("Return the updated parameter permutation") {
-      IS_EQUAL(optimisationProblem.getParameterPermutation(), SYNCHRONISED(parameterPermutation));
+    THEN("Return (1, ..., n)") {
+      mant::OptimisationProblem optimisationProblem(3);
+      CHECK(arma::all(optimisationProblem.getParameterPermutation() == arma::uvec({0, 1, 2})) == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][OptimisationProblem.setParameterScaling]") {
   GIVEN("A parameter scaling") {
-    WHEN("The parameter scaling is finite and has exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameterScaling);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setParameterScaling(parameterScaling));
+    WHEN("The scaling is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterScaling({}), std::invalid_argument);
       }
+    }
 
-      THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("The scaling's size is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(arma::vec({0.0})), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(arma::vec({0.0, 1.0, 2.0})), std::invalid_argument);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The scaling's size is equal to the problem's number of dimension") {
+      THEN("Throw no exception and reset all counters and caches") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setParameterScaling(parameterScaling);
+        CHECK_NOTHROW(optimisationProblem.setParameterScaling({-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The parameter scaling is synchronised over MPI") {
-        optimisationProblem.setParameterScaling(parameterScaling);
-        IS_EQUAL(optimisationProblem.getParameterScaling(), SYNCHRONISED(parameterScaling));
-      }
-#endif
-    }
-
-    WHEN("The parameter scaling has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions - 1);
-      CAPTURE(parameterScaling);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(parameterScaling), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter scaling has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
-      CAPTURE(parameterScaling);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(parameterScaling), std::logic_error);
-      }
-    }
-
-    WHEN("At least one element in the parameter scaling is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<double> parameterScaling = continuousRandomNumbers(numberOfDimensions);
-      parameterScaling(0) = arma::datum::inf;
-      CAPTURE(parameterScaling);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(parameterScaling), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == true);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getParameterScaling", "[OptimisationProblem][OptimisationProblem.getParameterScaling]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
   WHEN("The default parameter scaling is unchanged") {
-    THEN("Return a vector of ones") {
-      IS_EQUAL(optimisationProblem.getParameterScaling(), arma::ones<arma::Col<double>>(numberOfDimensions));
-    }
-  }
-
-  WHEN("The default parameter scaling was changed") {
-    const arma::Col<double>& parameterScaling = continuousRandomNumbers(numberOfDimensions);
-    CAPTURE(parameterScaling);
-
-    optimisationProblem.setParameterScaling(parameterScaling);
-
-    THEN("Return the updated parameter permutation") {
-      IS_EQUAL(optimisationProblem.getParameterScaling(), SYNCHRONISED(parameterScaling));
+    THEN("Return (1, ..., 1)") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(arma::all(optimisationProblem.getParameterScaling() == arma::vec({1.0, 1.0})) == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][OptimisationProblem.setParameterTranslation]") {
   GIVEN("A parameter translation") {
-    WHEN("The parameter translation is finite and has exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions);
-      CAPTURE(parameterTranslation);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setParameterTranslation(parameterTranslation));
+    WHEN("The translation is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation({}), std::invalid_argument);
       }
+    }
 
-      THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("The translation's size is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(arma::vec({0.0})), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(arma::vec({0.0, 1.0, 2.0})), std::invalid_argument);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The translation's size is equal to the problem's number of dimension") {
+      THEN("Throw no exception and reset all counters and caches") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setParameterTranslation(parameterTranslation);
+        CHECK_NOTHROW(optimisationProblem.setParameterTranslation({-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The parameter translation is synchronised over MPI") {
-        optimisationProblem.setParameterTranslation(parameterTranslation);
-        IS_EQUAL(optimisationProblem.getParameterTranslation(), SYNCHRONISED(parameterTranslation));
-      }
-#endif
-    }
-
-    WHEN("The parameter translation has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions - 1);
-      CAPTURE(parameterTranslation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(parameterTranslation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter translation has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
-      CAPTURE(parameterTranslation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(parameterTranslation), std::logic_error);
-      }
-    }
-
-    WHEN("At least one element in the parameter translation is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<double> parameterTranslation = continuousRandomNumbers(numberOfDimensions + discreteRandomNumber());
-      parameterTranslation(0) = arma::datum::inf;
-      CAPTURE(parameterTranslation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(parameterTranslation), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == true);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getParameterTranslation", "[OptimisationProblem][OptimisationProblem.getParameterTranslation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
   WHEN("The default parameter translation is unchanged") {
-    THEN("Return a vector of zeros") {
-      IS_EQUAL(optimisationProblem.getParameterTranslation(), arma::zeros<arma::Col<double>>(numberOfDimensions));
-    }
-  }
-
-  WHEN("The default parameter translation was changed") {
-    const arma::Col<double>& parameterTranslation = continuousRandomNumbers(numberOfDimensions);
-    CAPTURE(parameterTranslation);
-
-    optimisationProblem.setParameterTranslation(parameterTranslation);
-
-    THEN("Return the updated parameter translation") {
-      IS_EQUAL(optimisationProblem.getParameterTranslation(), SYNCHRONISED(parameterTranslation));
+    THEN("Return (0, ..., 0)") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(arma::all(optimisationProblem.getParameterTranslation() == arma::vec({0.0, 0.0})) == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][OptimisationProblem.setParameterRotation]") {
   GIVEN("A parameter rotation") {
-    WHEN("The parameter rotation is orthogonal") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-      CAPTURE(parameterRotation);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setParameterRotation(parameterRotation));
+    WHEN("The parameter is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterRotation({}), std::invalid_argument);
       }
+    }
 
-      THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("Its not a rotation matrix") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(arma::mat::fixed<1, 1>({1.0})), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(arma::mat({{1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}})), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(arma::mat({{1.0, 0.0}, {0.0, -2.0}})), std::invalid_argument);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The parameter's size is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(3);
+        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(mant::randomRotationMatrix(2)), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(mant::randomRotationMatrix(4)), std::invalid_argument);
+      }
+    }
+
+    WHEN("The parameter's size is equal to the problem's number of dimension") {
+      THEN("Throw no exception and reset all counters and caches") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setParameterRotation(parameterRotation);
+        CHECK_NOTHROW(optimisationProblem.setParameterRotation(mant::randomRotationMatrix(2)));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The parameter rotation is synchronised over MPI") {
-        optimisationProblem.setParameterRotation(parameterRotation);
-        IS_EQUAL(optimisationProblem.getParameterRotation(), SYNCHRONISED(parameterRotation));
-      }
-#endif
-    }
-
-    WHEN("The parameter rotation has less than [numberOfDimensions] rows or columns") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions - 1);
-      CAPTURE(parameterRotation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter rotation has more than [numberOfDimensions] rows or columns") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions + discreteRandomNumber());
-      CAPTURE(parameterRotation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter rotation is not square") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Mat<double>& parameterRotation = continuousRandomNumbers(numberOfDimensions, 1 + numberOfDimensions);
-      CAPTURE(parameterRotation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
-      }
-    }
-
-    WHEN("The parameter rotation's inverse is not equal to its transpose") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Mat<double> parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-      // Increasing an element of an orthonormal rotation matrix by 1 should result in an inequality transpose and inverse.
-      parameterRotation(0, 0)++;
-      CAPTURE(parameterRotation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(parameterRotation), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == true);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getParameterRotation", "[OptimisationProblem][OptimisationProblem.getParameterRotation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
   WHEN("The default parameter rotation is unchanged") {
     THEN("Return an identity matrix") {
-      IS_EQUAL(optimisationProblem.getParameterRotation(), arma::eye<arma::Mat<double>>(numberOfDimensions, numberOfDimensions));
-    }
-  }
-
-  WHEN("The default parameter rotation was changed") {
-    const arma::Mat<double>& parameterRotation = mant::randomRotationMatrix(numberOfDimensions);
-    CAPTURE(parameterRotation);
-
-    optimisationProblem.setParameterRotation(parameterRotation);
-
-    THEN("Return the updated parameter rotation") {
-      IS_EQUAL(optimisationProblem.getParameterRotation(), SYNCHRONISED(parameterRotation));
-    }
-  }
-}
-
-SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][OptimisationProblem.setObjectiveValueScaling]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  GIVEN("An objective value scaling") {
-    WHEN("The objective value scaling is finite") {
-      const double objectiveValueScaling = continuousRandomNumber();
-      CAPTURE(objectiveValueScaling);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setObjectiveValueScaling(objectiveValueScaling));
-      }
-
-      THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
-        ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
-        ::mant::isCachingSamples = false;
-
-        optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The objective value scaling is synchronised over MPI") {
-        optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-        CHECK(optimisationProblem.getObjectiveValueScaling() == Approx(SYNCHRONISED(objectiveValueScaling)));
-      }
-#endif
-    }
-
-    WHEN("The objective value scaling is infinite") {
-      const double objectiveValueScaling = arma::datum::inf;
-      CAPTURE(objectiveValueScaling);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setObjectiveValueScaling(objectiveValueScaling), std::logic_error);
-      }
-    }
-  }
-}
-
-SCENARIO("OptimisationProblem.getObjectiveValueScaling", "[OptimisationProblem][OptimisationProblem.getObjectiveValueScaling]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  WHEN("The default objective value scaling is unchanged") {
-    THEN("Return 1") {
-      CHECK(optimisationProblem.getObjectiveValueScaling() == 1.0);
-    }
-  }
-
-  WHEN("The default objective value scaling was changed") {
-    const double objectiveValueScaling = continuousRandomNumber();
-    CAPTURE(objectiveValueScaling);
-
-    optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-
-    THEN("Return the updated objective value scaling") {
-      CHECK(optimisationProblem.getObjectiveValueScaling() == Approx(SYNCHRONISED(objectiveValueScaling)));
-    }
-  }
-}
-
-SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProblem][OptimisationProblem.setObjectiveValueTranslation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  GIVEN("An objective value translation") {
-    WHEN("The objective value translation is finite") {
-      const double objectiveValueTranslation = continuousRandomNumber();
-      CAPTURE(objectiveValueTranslation);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation));
-      }
-
-      THEN("Reset the counters (number of (distinct) evaluations) and cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
-
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
-        ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
-        ::mant::isCachingSamples = false;
-
-        optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The objective value translation is synchronised over MPI") {
-        optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-        CHECK(optimisationProblem.getObjectiveValueTranslation() == Approx(SYNCHRONISED(objectiveValueTranslation)));
-      }
-#endif
-    }
-
-    WHEN("The objective value translation is infinite") {
-      const double objectiveValueTranslation = arma::datum::inf;
-      CAPTURE(objectiveValueTranslation);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation), std::logic_error);
-      }
-    }
-  }
-}
-
-SCENARIO("OptimisationProblem.getObjectiveValueTranslation", "[OptimisationProblem][OptimisationProblem.getObjectiveValueTranslation]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  WHEN("The default objective value translation is unchanged") {
-    THEN("Return 0") {
-      CHECK(optimisationProblem.getObjectiveValueTranslation() == 0.0);
-    }
-  }
-
-  WHEN("The default objective value translation was changed") {
-    const double objectiveValueTranslation = continuousRandomNumber();
-    CAPTURE(objectiveValueTranslation);
-
-    optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-
-    THEN("Return the updated objective value translation") {
-      CHECK(optimisationProblem.getObjectiveValueTranslation() == Approx(SYNCHRONISED(objectiveValueTranslation)));
-    }
-  }
-}
-
-SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][OptimisationProblem.getCachedSamples]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  WHEN("The optimisation problem was just initialised or reset") {
-    THEN("Return an empty set") {
-      CHECK(optimisationProblem.getCachedSamples().size() == 0);
-    }
-  }
-
-  WHEN("The optimisation problem was processed") {
-    auto objectiveFunction = [](
-        const arma::Col<double>& parameter) {
-      return arma::accu(parameter % mant::range(1, parameter.n_elem));
-    };
-    optimisationProblem.setObjectiveFunction(objectiveFunction);
-
-    const arma::uword numberOfParameters = discreteRandomNumber();
-    CAPTURE(numberOfParameters);
-
-    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-    // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
-    parameters = arma::shuffle(arma::join_rows(parameters, parameters));
-    CAPTURE(parameters);
-
-    AND_WHEN("Caching was disabled") {
-      ::mant::isCachingSamples = false;
-
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
-      ::mant::isCachingSamples = false;
-
-      THEN("Return an empty set") {
-        CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      }
-    }
-
-    AND_WHEN("Caching was enabled") {
-      std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> expectedSamples;
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        const arma::Col<double> parameter = parameters.col(n);
-        expectedSamples.insert({parameter, objectiveFunction(parameter)});
-      }
-
-      ::mant::isCachingSamples = true;
-
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
-      ::mant::isCachingSamples = false;
-
-      THEN("Return the cached samples") {
-        HAS_SAME_SAMPLES(optimisationProblem.getCachedSamples(), expectedSamples);
-      }
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(arma::approx_equal(optimisationProblem.getParameterRotation(), arma::eye<arma::mat>(2, 2), "absdiff", ::mant::machinePrecision) == true);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProblem][OptimisationProblem.setMinimalParameterDistance]") {
   GIVEN("A minimal parameter distance") {
-    WHEN("The minimal parameter distance is finite, positive (including 0) and has exactly [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions));
-      CAPTURE(minimalParameterDistance);
-
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(optimisationProblem.setMinimalParameterDistance(minimalParameterDistance));
+    WHEN("The parameter is empty") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance({}), std::invalid_argument);
       }
+    }
 
-      THEN("Do not reset the counters (number of (distinct) evaluations) or cache") {
-        const arma::Col<double>& parameter = continuousRandomNumbers(numberOfDimensions);
-        CAPTURE(parameter);
+    WHEN("The parameter contains negative values") {
+      THEN("Throw a domain error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(arma::vec({1.0, -2.0})), std::domain_error);
+      }
+    }
 
-        optimisationProblem.setObjectiveFunction(
-            [&optimisationProblem](
-                const arma::Col<double>& parameter_) {
-            return arma::accu(parameter_);
-            });
-        // Populates the cache and increments the counter
+    WHEN("The parameter's size is unequal to the problem's number of dimension") {
+      THEN("Throw an invalid argument error") {
+        mant::OptimisationProblem optimisationProblem(2);
+        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(arma::vec({0.0})), std::invalid_argument);
+        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(arma::vec({0.0, 1.0, 2.0})), std::invalid_argument);
+      }
+    }
+
+    WHEN("The parameter's size is equal to the problem's number of dimension") {
+      THEN("Throw no exception and keep all counters and caches intact") {
+        mant::OptimisationProblem optimisationProblem(2);
+        optimisationProblem.setObjectiveFunctions({{[](
+                                                        const arma::vec& parameter_) {
+                                                      return arma::accu(parameter_);
+                                                    },
+            "Test function"}});
+
         ::mant::isCachingSamples = true;
-        optimisationProblem.getObjectiveValue(parameter);
+        optimisationProblem.getObjectiveValue({1.0, -2.0});
         ::mant::isCachingSamples = false;
 
-        optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
+        CHECK_NOTHROW(optimisationProblem.setMinimalParameterDistance({std::numeric_limits<double>::infinity(), 0.0}));
 
-        CHECK(optimisationProblem.getNumberOfEvaluations() == 1);
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 1);
-        CHECK(optimisationProblem.getCachedSamples().size() == 1);
-      }
-
-#if defined(SUPPORT_MPI)
-      THEN("The minimal parameter distance is synchronised over MPI") {
-        optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
-        IS_EQUAL(optimisationProblem.getMinimalParameterDistance(), SYNCHRONISED(minimalParameterDistance));
-      }
-#endif
-    }
-
-    WHEN("The minimal parameter distance has less then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(1 + discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions - 1));
-      CAPTURE(minimalParameterDistance);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(minimalParameterDistance), std::logic_error);
-      }
-    }
-
-    WHEN("The minimal parameter distance has more then [numberOfDimensions] elements") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions + discreteRandomNumber()));
-      CAPTURE(minimalParameterDistance);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(minimalParameterDistance), std::logic_error);
-      }
-    }
-
-    WHEN("At least one element in the minimal parameter distance is negative") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      const arma::Col<double>& minimalParameterDistance = -arma::abs(continuousRandomNumbers(numberOfDimensions));
-      CAPTURE(minimalParameterDistance);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(minimalParameterDistance), std::logic_error);
-      }
-    }
-
-    WHEN("At least one element in the minimal parameter distance is infinite") {
-      const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-      CAPTURE(numberOfDimensions);
-
-      mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-      arma::Col<double> minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions));
-      minimalParameterDistance(0) = arma::datum::inf;
-      CAPTURE(minimalParameterDistance);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(minimalParameterDistance), std::logic_error);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == false);
       }
     }
   }
 }
 
 SCENARIO("OptimisationProblem.getMinimalParameterDistance", "[OptimisationProblem][OptimisationProblem.getMinimalParameterDistance]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
-
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
   WHEN("The default minimal parameter distance is unchanged") {
-    THEN("Return a vector of zeros") {
-      IS_EQUAL(optimisationProblem.getMinimalParameterDistance(), arma::zeros<arma::Col<double>>(numberOfDimensions));
-    }
-  }
-
-  WHEN("The default minimal parameter distance was changed") {
-    const arma::Col<double>& minimalParameterDistance = arma::abs(continuousRandomNumbers(numberOfDimensions));
-    CAPTURE(minimalParameterDistance);
-
-    optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
-
-    THEN("Return the updated minimal parameter distance") {
-      IS_EQUAL(optimisationProblem.getMinimalParameterDistance(), SYNCHRONISED(minimalParameterDistance));
+    THEN("Return (0, ..., 0)") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(arma::approx_equal(optimisationProblem.getMinimalParameterDistance(), arma::vec({0.0, 0.0}), "absdiff", ::mant::machinePrecision) == true);
     }
   }
 }
 
-SCENARIO("OptimisationProblem.getNumberOfEvaluations", "[OptimisationProblem][OptimisationProblem.getNumberOfEvaluations]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
+SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][OptimisationProblem.setObjectiveValueScaling]") {
+  GIVEN("An objective value scaling") {
+    THEN("Throw no exception and reset all counters and caches") {
+      mant::OptimisationProblem optimisationProblem(2);
+      optimisationProblem.setObjectiveFunctions({{[](
+                                                      const arma::vec& parameter_) {
+                                                    return arma::accu(parameter_);
+                                                  },
+          "Test function"}});
 
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
-
-  WHEN("The optimisation problem was just initialised or reset") {
-    THEN("Return 0") {
-      CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-    }
-  }
-
-  WHEN("The optimisation problem was processed") {
-    auto objectiveFunction = [](
-        const arma::Col<double>& parameter) {
-      return arma::accu(parameter % mant::range(1, parameter.n_elem));
-    };
-    optimisationProblem.setObjectiveFunction(objectiveFunction);
-
-    const arma::uword numberOfParameters = discreteRandomNumber();
-    CAPTURE(numberOfParameters);
-
-    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-    // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
-    parameters = arma::shuffle(arma::join_rows(parameters, parameters));
-    CAPTURE(parameters);
-
-    THEN("Return the number of evaluations, whether caching was enabled or not") {
       ::mant::isCachingSamples = true;
-
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
       ::mant::isCachingSamples = false;
 
-      CHECK(optimisationProblem.getNumberOfEvaluations() == 2 * numberOfParameters);
+      CHECK_NOTHROW(optimisationProblem.setObjectiveValueScaling(std::numeric_limits<double>::quiet_NaN()));
+
+      CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+      CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+      CHECK(optimisationProblem.getCachedSamples().empty() == true);
     }
   }
 }
 
-SCENARIO("OptimisationProblem.getNumberOfDistinctEvaluations", "[OptimisationProblem][OptimisationProblem.getNumberOfDistinctEvaluations]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
+SCENARIO("OptimisationProblem.getObjectiveValueScaling", "[OptimisationProblem][OptimisationProblem.getObjectiveValueScaling]") {
+  WHEN("The default objective value scaling is unchanged") {
+    THEN("Return 1") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(optimisationProblem.getObjectiveValueScaling() == 1.0);
+    }
+  }
+}
 
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
+SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProblem][OptimisationProblem.setObjectiveValueTranslation]") {
+  GIVEN("An objective value translation") {
+    THEN("Throw no exception and reset all counters and caches") {
+      mant::OptimisationProblem optimisationProblem(2);
+      optimisationProblem.setObjectiveFunctions({{[](
+                                                      const arma::vec& parameter_) {
+                                                    return arma::accu(parameter_);
+                                                  },
+          "Test function"}});
 
-  WHEN("The optimisation problem was just initialised or reset") {
-    THEN("Return 0") {
-      CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
+      ::mant::isCachingSamples = true;
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+      ::mant::isCachingSamples = false;
+
+      CHECK_NOTHROW(optimisationProblem.setObjectiveValueTranslation(std::numeric_limits<double>::quiet_NaN()));
+
+      CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+      CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+      CHECK(optimisationProblem.getCachedSamples().empty() == true);
+    }
+  }
+}
+
+SCENARIO("OptimisationProblem.getObjectiveValueTranslation", "[OptimisationProblem][OptimisationProblem.getObjectiveValueTranslation]") {
+  WHEN("The default objective value translation is unchanged") {
+    THEN("Return 1") {
+      mant::OptimisationProblem optimisationProblem(2);
+      CHECK(optimisationProblem.getObjectiveValueTranslation() == 0.0);
+    }
+  }
+}
+
+SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][OptimisationProblem.getCachedSamples]") {
+  WHEN("Caching is not supported") {
+    THEN("Return an empty set") {
+      mant::OptimisationProblem optimisationProblem(2);
+      optimisationProblem.setObjectiveFunctions({{[](
+                                                      const arma::vec& parameter_) {
+                                                    return arma::accu(parameter_);
+                                                  },
+          "Test function"}});
+
+      // Caching is unsupported by default
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+
+      CHECK(optimisationProblem.getCachedSamples().empty() == true);
     }
   }
 
-  WHEN("The optimisation problem was processed") {
-    auto objectiveFunction = [](
-        const arma::Col<double>& parameter) {
-      return arma::accu(parameter % mant::range(1, parameter.n_elem));
-    };
-    optimisationProblem.setObjectiveFunction(objectiveFunction);
+  WHEN("Caching is supported") {
+    THEN("Return the cached samples") {
+      mant::OptimisationProblem optimisationProblem(2);
+      optimisationProblem.setObjectiveFunctions({{[](
+                                                      const arma::vec& parameter_) {
+                                                    return arma::accu(parameter_);
+                                                  },
+          "Test function"}});
 
-    const arma::uword numberOfParameters = discreteRandomNumber();
-    CAPTURE(numberOfParameters);
-
-    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-    // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
-    parameters = arma::shuffle(arma::join_rows(parameters, parameters));
-    CAPTURE(parameters);
-
-    AND_WHEN("Caching was disabled") {
-      ::mant::isCachingSamples = false;
-
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
-      ::mant::isCachingSamples = false;
-
-      THEN("Return the same as *.getNumberOfEvaluations*") {
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == optimisationProblem.getNumberOfEvaluations());
-      }
-    }
-
-    AND_WHEN("Caching was enabled") {
       ::mant::isCachingSamples = true;
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        optimisationProblem.getObjectiveValue(parameters.col(n));
-      }
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+      optimisationProblem.getObjectiveValue({3.0, -3.0});
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
       ::mant::isCachingSamples = false;
 
-      THEN("Return the number of discrete evaluations") {
-        CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == numberOfParameters);
-      }
+      const std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>& expectedCachedSamples = {{{1.0, -2.0}, -1.0}, {{3.0, -3.0}, 0.0}};
+      CHECK(optimisationProblem.getCachedSamples() == expectedCachedSamples);
+    }
+  }
+}
+
+SCENARIO("OptimisationProblem.getUsedNumberOfEvaluations", "[OptimisationProblem][OptimisationProblem.getUsedNumberOfEvaluations]") {
+  THEN("Return the used number of evaluations") {
+    mant::OptimisationProblem optimisationProblem(2);
+    optimisationProblem.setObjectiveFunctions({{[](
+                                                    const arma::vec& parameter_) {
+                                                  return arma::accu(parameter_);
+                                                },
+        "Test function"}});
+
+    ::mant::isCachingSamples = true;
+    optimisationProblem.getObjectiveValue({1.0, -2.0});
+    optimisationProblem.getObjectiveValue({3.0, -3.0});
+    optimisationProblem.getObjectiveValue({1.0, -2.0});
+    ::mant::isCachingSamples = false;
+
+    CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 3);
+  }
+}
+
+SCENARIO("OptimisationProblem.getUsedNumberOfDistinctEvaluations", "[OptimisationProblem][OptimisationProblem.getUsedNumberOfDistinctEvaluations]") {
+  WHEN("Caching is not supported") {
+    THEN("Return the same as `.getUsedNumberOfEvaluations()`") {
+      mant::OptimisationProblem optimisationProblem(2);
+      optimisationProblem.setObjectiveFunctions({{[](
+                                                      const arma::vec& parameter_) {
+                                                    return arma::accu(parameter_);
+                                                  },
+          "Test function"}});
+
+      // Caching is unsupported by default
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+      optimisationProblem.getObjectiveValue({3.0, -3.0});
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+
+      CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == optimisationProblem.getUsedNumberOfEvaluations());
+    }
+  }
+
+  WHEN("Caching is supported") {
+    THEN("Return the  user number of distinct evaluations") {
+      mant::OptimisationProblem optimisationProblem(2);
+      optimisationProblem.setObjectiveFunctions({{[](
+                                                      const arma::vec& parameter_) {
+                                                    return arma::accu(parameter_);
+                                                  },
+          "Test function"}});
+
+      ::mant::isCachingSamples = true;
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+      optimisationProblem.getObjectiveValue({3.0, -3.0});
+      optimisationProblem.getObjectiveValue({1.0, -2.0});
+      ::mant::isCachingSamples = false;
+
+      CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 2);
     }
   }
 }
 
 SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem.reset]") {
-  const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-  CAPTURE(numberOfDimensions);
+  THEN("Reset all counters and caches while leaving everything else intact") {
+    mant::OptimisationProblem optimisationProblem(2);
+    optimisationProblem.setObjectiveFunctions({{[](
+                                                    const arma::vec& parameter_) {
+                                                  return arma::accu(parameter_);
+                                                },
+        "Test function"}});
 
-  mant::OptimisationProblem optimisationProblem(numberOfDimensions);
+    optimisationProblem.setLowerBounds({1.0, -3.0});
+    optimisationProblem.setUpperBounds({2.0, 3.0});
+    optimisationProblem.setParameterPermutation({1, 0});
+    optimisationProblem.setParameterScaling({-1.0, 3.0});
+    optimisationProblem.setParameterTranslation({-1.0, 3.0});
+    const arma::mat& randomMatrix = mant::synchronise(mant::randomRotationMatrix(2));
+    optimisationProblem.setParameterRotation(randomMatrix);
+    optimisationProblem.setMinimalParameterDistance({1.0, 3.0});
+    optimisationProblem.setObjectiveValueScaling(3.0);
+    optimisationProblem.setObjectiveValueTranslation(-2.0);
 
-  WHEN("The optimisation problem was processed") {
-    auto objectiveFunction = [&optimisationProblem](
-        const arma::Col<double>& parameter_) {
-        return arma::accu(parameter_);
-    };
-    optimisationProblem.setObjectiveFunction(objectiveFunction);
+    optimisationProblem.reset();
 
-    // Constraints
-    const arma::Col<double>& lowerBounds = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-    optimisationProblem.setLowerBounds(lowerBounds);
-    CAPTURE(lowerBounds);
+    CHECK(arma::approx_equal(optimisationProblem.getLowerBounds(), arma::vec({1.0, -3.0}), "absdiff", ::mant::machinePrecision) == true);
+    CHECK(arma::approx_equal(optimisationProblem.getUpperBounds(), arma::vec({2.0, 3.0}), "absdiff", ::mant::machinePrecision) == true);
+    CHECK(arma::all(optimisationProblem.getParameterPermutation() == arma::uvec({1, 0})) == true);
+    CHECK(arma::approx_equal(optimisationProblem.getParameterScaling(), arma::vec({-1.0, 3.0}), "absdiff", ::mant::machinePrecision) == true);
+    CHECK(arma::approx_equal(optimisationProblem.getParameterTranslation(), arma::vec({-1.0, 3.0}), "absdiff", ::mant::machinePrecision) == true);
+    CHECK(arma::approx_equal(optimisationProblem.getParameterRotation(), randomMatrix, "absdiff", ::mant::machinePrecision) == true);
+    CHECK(arma::approx_equal(optimisationProblem.getMinimalParameterDistance(), arma::vec({1.0, 3.0}), "absdiff", ::mant::machinePrecision) == true);
+    CHECK(optimisationProblem.getObjectiveValueScaling() == Approx(3.0));
+    CHECK(optimisationProblem.getObjectiveValueTranslation() == Approx(-2.0));
 
-    const arma::Col<double>& upperBounds = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-    optimisationProblem.setUpperBounds(upperBounds);
-    CAPTURE(upperBounds);
+    CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
+    CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
+    CHECK(optimisationProblem.getCachedSamples().empty() == true);
 
-    // Parameter space modifiers
-    const arma::Col<arma::uword>& parameterPermutation = SYNCHRONISED(mant::randomPermutationVector(numberOfDimensions));
-    optimisationProblem.setParameterPermutation(parameterPermutation);
-    CAPTURE(parameterPermutation);
-
-    const arma::Col<double>& parameterScaling = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-    optimisationProblem.setParameterScaling(parameterScaling);
-    CAPTURE(parameterScaling);
-
-    const arma::Col<double>& parameterTranslation = SYNCHRONISED(continuousRandomNumbers(numberOfDimensions));
-    optimisationProblem.setParameterTranslation(parameterTranslation);
-    CAPTURE(parameterTranslation);
-
-    const arma::Mat<double>& parameterRotation = SYNCHRONISED(mant::randomRotationMatrix(numberOfDimensions));
-    optimisationProblem.setParameterRotation(parameterRotation);
-    CAPTURE(parameterRotation);
-
-    const arma::Col<double>& minimalParameterDistance = SYNCHRONISED(static_cast<arma::Col<double>>(arma::abs(continuousRandomNumbers(numberOfDimensions))));
-    optimisationProblem.setMinimalParameterDistance(minimalParameterDistance);
-    CAPTURE(minimalParameterDistance);
-
-    // Objective value space modifiers
-    const double objectiveValueScaling = SYNCHRONISED(continuousRandomNumber());
-    optimisationProblem.setObjectiveValueScaling(objectiveValueScaling);
-    CAPTURE(objectiveValueScaling);
-
-    const double objectiveValueTranslation = SYNCHRONISED(continuousRandomNumber());
-    optimisationProblem.setObjectiveValueTranslation(objectiveValueTranslation);
-    CAPTURE(objectiveValueTranslation);
-
-    const arma::uword numberOfParameters = discreteRandomNumber();
-    CAPTURE(numberOfParameters);
-
-    arma::Mat<double> parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-    // Duplicated all parameters and shuffle them afterwards, to observe if it works as expected with/without caching.
-    parameters = arma::shuffle(arma::join_rows(parameters, parameters));
-    CAPTURE(parameters);
-
-    ::mant::isCachingSamples = true;
-    for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-      optimisationProblem.getObjectiveValue(parameters.col(n));
-    }
-    ::mant::isCachingSamples = false;
-
-    THEN("Reset only the counters (number of (distinct) evaluations) and cache") {
-      optimisationProblem.reset();
-
-      CHECK(optimisationProblem.getCachedSamples().size() == 0);
-      CHECK(optimisationProblem.getNumberOfEvaluations() == 0);
-      CHECK(optimisationProblem.getNumberOfDistinctEvaluations() == 0);
-
-      for (arma::uword n = 0; n < parameters.n_cols; ++n) {
-        const arma::Col<double>& parameter = parameters.col(n);
-
-        arma::Col<double> discretisedParameter = parameter;
-        const arma::Col<arma::uword>& elementsToDiscretise = arma::find(minimalParameterDistance > 0);
-        discretisedParameter.elem(elementsToDiscretise) = arma::floor(parameter.elem(elementsToDiscretise) / minimalParameterDistance.elem(elementsToDiscretise)) % minimalParameterDistance.elem(elementsToDiscretise);
-
-        CHECK(optimisationProblem.getObjectiveValue(parameter) == Approx(objectiveValueScaling * objectiveFunction(parameterRotation * (parameterScaling % discretisedParameter.elem(parameterPermutation) - parameterTranslation)) + objectiveValueTranslation));
-      }
-    }
+    CHECK_NOTHROW(optimisationProblem.getObjectiveValue(arma::vec({1.0, -1.0})));
   }
 }

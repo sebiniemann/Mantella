@@ -11,6 +11,5 @@ namespace mant {
       std::function<double(double)> objectiveFunction,
       double lowerBound,
       double upperBound,
-      arma::uword maximalNumberOfIterations,
-      double acceptableTolerance);
+      arma::uword maximalNumberOfIterations);
 }

@@ -1,182 +1,59 @@
 // Catch
 #include <catch.hpp>
-#include "catchExtension.hpp"
-
-// C++ standard library
-#include <unordered_set>
-
-// Mantella
-#include <mantella>
-
-SCENARIO("range", "[armadillo][range]") {
-  GIVEN("Two discrete numbers [a] and [b] and a step size") {
-    WHEN("[a] < [b]") {
-      // Including zero
-      const arma::uword a = discreteRandomNumber() - 1;
-      CAPTURE(a);
-
-      const arma::uword b = a + discreteRandomNumber();
-      CAPTURE(b);
-
-      const arma::uword stepSize = discreteRandomNumber();
-      CAPTURE(stepSize);
-
-      THEN("Return the range") {
-        IS_EQUAL(mant::range(a, b, stepSize), arma::linspace<arma::Col<arma::uword>>(a, b, (b - a) / stepSize + 1));
-      }
-    }
-
-    WHEN("[a] = [b]") {
-      // Including zero
-      const arma::uword a = discreteRandomNumber() - 1;
-      CAPTURE(a);
-
-      const arma::uword b = a;
-      CAPTURE(b);
-
-      const arma::uword stepSize = discreteRandomNumber();
-      CAPTURE(stepSize);
-
-      THEN("Return only a (or b)") {
-        IS_EQUAL(mant::range(a, b, stepSize), {a});
-      }
-    }
-
-    WHEN("[a] > [b]") {
-      const arma::uword a = 4;
-      CAPTURE(a);
-
-      const arma::uword b = 1;
-      CAPTURE(b);
-
-      const arma::uword stepSize = 2;
-      CAPTURE(stepSize);
-
-      THEN("Return the range") {
-        IS_EQUAL(mant::range(a, b, stepSize), {4, 2});
-      }
-    }
-  }
-
-  GIVEN("Two discrete numbers [a] and [b]") {
-    WHEN("[a] < [b]") {
-      // Including zero
-      const arma::uword a = discreteRandomNumber() - 1;
-      CAPTURE(a);
-
-      const arma::uword b = a + discreteRandomNumber();
-      CAPTURE(b);
-
-      THEN("Return the range") {
-        IS_EQUAL(mant::range(a, b), arma::linspace<arma::Col<arma::uword>>(a, b, b - a + 1));
-      }
-    }
-
-    WHEN("[a] = [b]") {
-      // Including zero
-      const arma::uword a = discreteRandomNumber() - 1;
-      CAPTURE(a);
-
-      const arma::uword b = a;
-      CAPTURE(b);
-
-      THEN("Return only a (or b)") {
-        IS_EQUAL(mant::range(a, b), {a});
-      }
-    }
-
-    WHEN("[a] > [b]") {
-      const arma::uword a = 4;
-      CAPTURE(a);
-
-      const arma::uword b = 1;
-      CAPTURE(b);
-
-      const arma::uword stepSize = 2;
-      CAPTURE(stepSize);
-
-      arma::Col<arma::uword> range((a - b) / stepSize + 1);
-      for (arma::uword n = 0; n < range.n_elem; ++n) {
-        // Calculates the next element from scratch (instead of increasing it step by step), to reduce rounding errors.
-        range(n) = a - stepSize * n;
-      }
-
-      THEN("Return the range") {
-        IS_EQUAL(mant::range(a, b, stepSize), range);
-      }
-    }
-  }
-}
+#include "catchHelper.hpp"
 
 SCENARIO("Hash", "[armadillo][Hash]") {
-  GIVEN("One million 5-dimensional parameters") {
-    mant::Hash hash;
+  GIVEN("A parameter") {
+    WHEN("The parameter is empty") {
+      THEN("Throw an invalid argument") {
+        CHECK_THROWS_AS(mant::Hash()({}), std::invalid_argument);
+      }
+    }
 
-    const arma::uword numberOfParameters = 1000000;
-    CAPTURE(numberOfParameters);
+    WHEN("The parameter contains NaNs") {
+      THEN("Throw a domain error") {
+        CHECK_THROWS_AS(mant::Hash()(arma::vec({std::numeric_limits<double>::quiet_NaN()})), std::domain_error);
+      }
+    }
 
-    const arma::uword numberOfDimensions = 5;
-    CAPTURE(numberOfParameters);
-
-    WHEN("All parameters are randomly and uniformly distributed") {
-      const arma::Mat<double>& parameters = continuousRandomNumbers(numberOfDimensions, numberOfParameters);
-      CAPTURE(parameters);
-
-      THEN("There is at most one hash collision") {
-        std::unordered_set<arma::uword> hashes;
-
-        unsigned int numberOfCollisions = 0;
-        for (unsigned int n = 0; n < parameters.n_cols; ++n) {
-          auto result = hashes.insert(hash(parameters.col(n)));
-          if (!result.second) {
-            ++numberOfCollisions;
-          }
-        }
-
-        CHECK(numberOfCollisions < 2);
+    WHEN("The parameter does not contain NaNs") {
+      THEN("Throw no exception") {
+        CHECK_NOTHROW(mant::Hash()(arma::vec({1.0, std::numeric_limits<double>::infinity()})));
       }
     }
   }
 }
 
 SCENARIO("IsEqual", "[armadillo][IsEqual]") {
-  GIVEN("Two vectors") {
-    mant::IsEqual isEqual;
-
-    const arma::uword numberOfElements = discreteRandomNumber();
-    CAPTURE(numberOfElements);
-
-    const arma::Col<double>& firstParameter = continuousRandomNumbers(numberOfElements);
-    CAPTURE(firstParameter);
-
-    WHEN("Both are identical (having the same elements in the same order)") {
-      const arma::Col<double>& secondParameter = firstParameter;
-      CAPTURE(secondParameter);
-
+  GIVEN("Two parameters") {
+    WHEN("Both parameters are empty") {
       THEN("Return true") {
-        CHECK(isEqual(firstParameter, secondParameter) == true);
+        CHECK(mant::IsEqual()({}, {}) == true);
       }
     }
 
-    WHEN("Both have the same number of elements but at least one different element") {
-      arma::Col<double> secondParameter = firstParameter;
-      secondParameter(0) += 1;
-      CAPTURE(secondParameter);
-
+    WHEN("One parameter is a subset of the other one") {
       THEN("Return false") {
-        CHECK(isEqual(firstParameter, secondParameter) == false);
+        CHECK(mant::IsEqual()(arma::vec({1.0, -2.0}), arma::vec({1.0})) == false);
+        CHECK(mant::IsEqual()(arma::vec({1.0}), arma::vec({1.0, -2.0})) == false);
       }
     }
 
-    WHEN("Both have a different number of elements") {
-      const arma::uword differentNumberOfDimensions = differentDiscreteRandomNumber(numberOfElements);
-      CAPTURE(differentNumberOfDimensions);
-
-      const arma::Col<double>& secondParameter = continuousRandomNumbers(differentNumberOfDimensions);
-      CAPTURE(secondParameter);
-
+    WHEN("Both parameters contain NaNs") {
       THEN("Return false") {
-        CHECK(isEqual(firstParameter, secondParameter) == false);
+        CHECK(mant::IsEqual()(arma::vec({std::numeric_limits<double>::quiet_NaN()}), arma::vec({std::numeric_limits<double>::quiet_NaN()})) == false);
+      }
+    }
+
+    WHEN("Both parameters are equal in size but contain different values") {
+      THEN("Return false") {
+        CHECK(mant::IsEqual()(arma::vec({0.0}), arma::vec({-1.0})) == false);
+      }
+    }
+
+    WHEN("Both parameters are identical") {
+      THEN("Return true") {
+        CHECK(mant::IsEqual()(arma::vec({1.0, -std::numeric_limits<double>::infinity()}), arma::vec({1.0, -std::numeric_limits<double>::infinity()})) == true);
       }
     }
   }

@@ -1,30 +1,69 @@
 // Catch
 #include <catch.hpp>
-#include "catchExtension.hpp"
+#include "catchHelper.hpp"
 
-// Mantella
-#include <mantella>
-
-SCENARIO("verify", "[assert][verify]") {
-  GIVEN("An expression and a error message") {
-    const std::string& errorMessage = "Some message ...";
-    CAPTURE(errorMessage);
-
-    WHEN("The expression is false") {
-      const bool expression = false;
-      CAPTURE(expression);
-
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(mant::verify(expression, errorMessage), std::logic_error);
+SCENARIO("isRepresentableAsInteger", "[assert][isRepresentableAsInteger]") {
+  GIVEN("A floating point") {
+    WHEN("The value is 0") {
+      THEN("Return true") {
+        CHECK(mant::isRepresentableAsInteger(0.0) == true);
       }
     }
 
-    WHEN("The expression is true") {
-      const bool expression = true;
-      CAPTURE(expression);
+    WHEN("The value is NaN") {
+      THEN("Return false") {
+        CHECK(mant::isRepresentableAsInteger(std::numeric_limits<double>::quiet_NaN()) == false);
+      }
+    }
 
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(mant::verify(expression, errorMessage));
+    WHEN("The value is +/-infinity") {
+      THEN("Return false") {
+        CHECK(mant::isRepresentableAsInteger(std::numeric_limits<double>::infinity()) == false);
+      }
+    }
+    WHEN("The value is not an integer") {
+      THEN("Return false") {
+        CHECK(mant::isRepresentableAsInteger(2.5) == false);
+      }
+    }
+
+    WHEN("The value is a negative integer") {
+      THEN("Return false") {
+        CHECK(mant::isRepresentableAsInteger(-2.0) == false);
+      }
+    }
+
+    WHEN("The value is an integer and greater than largest supported integer") {
+      THEN("Return false") {
+        CHECK(mant::isRepresentableAsInteger(static_cast<double>(std::numeric_limits<arma::uword>::max()) * 2.0) == false);
+      }
+    }
+
+    WHEN("The value is an integer and less than or equal to the largest supported integer") {
+      THEN("Return true") {
+        CHECK(mant::isRepresentableAsInteger(10.0) == true);
+      }
+    }
+  }
+}
+
+SCENARIO("isRepresentableAsFloatingPoint", "[assert][isRepresentableAsFloatingPoint]") {
+  GIVEN("An integer") {
+    WHEN("The value is 0") {
+      THEN("Return true") {
+        CHECK(mant::isRepresentableAsFloatingPoint(0) == true);
+      }
+    }
+
+    WHEN("The value is not representable as a floating point") {
+      THEN("Return false") {
+        CHECK(mant::isRepresentableAsFloatingPoint(9'007'199'254'740'993) == false);
+      }
+    }
+
+    WHEN("The value is representable as a floating point") {
+      THEN("Return true") {
+        CHECK(mant::isRepresentableAsFloatingPoint(10) == true);
       }
     }
   }
@@ -32,119 +71,103 @@ SCENARIO("verify", "[assert][verify]") {
 
 SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
   GIVEN("A matrix") {
-    WHEN("The matrix is orthogonal with determinant 1 or -1 (a rotation matrix)") {
-      const arma::uword numberOfDimensions = 1 + discreteRandomNumber();
-      CAPTURE(numberOfDimensions);
+    WHEN("The matrix is empty") {
+      THEN("Return false") {
+        CHECK(mant::isRotationMatrix({}) == false);
+      }
+    }
 
-      arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
-      CAPTURE(matrix);
+    WHEN("The matrix contains NaNs") {
+      THEN("Return false") {
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<2, 2>({1.0, 0.0, std::numeric_limits<double>::quiet_NaN(), 0.0})) == false);
+      }
+    }
 
-      THEN("Return true") {
-        CHECK(mant::isRotationMatrix(matrix) == true);
-        // Inverts the determinant's sign
-        matrix.swap_cols(0, 1);
-        CHECK(mant::isRotationMatrix(matrix) == true);
+    WHEN("The matrix contains +/-infinity") {
+      THEN("Return false") {
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<2, 2>({1.0, 0.0, std::numeric_limits<double>::infinity(), 0.0})) == false);
+      }
+    }
+
+    WHEN("The matrix has less than 2 dimensions") {
+      THEN("Return false") {
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<1, 1>({1.0})) == false);
       }
     }
 
     WHEN("The matrix is not square") {
-      const arma::uword numberOfDimensions = discreteRandomNumber();
-      CAPTURE(numberOfDimensions);
-
-      const arma::Mat<double>& matrix = arma::randu<arma::Mat<double>>(numberOfDimensions, 1 + numberOfDimensions);
-      CAPTURE(matrix);
-
       THEN("Return false") {
-        CHECK(mant::isRotationMatrix(matrix) == false);
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<3, 2>({1.0, 0.0, 1.0, 0.0, 1.0, 0.0})) == false);
+      }
+    }
+
+    WHEN("The matrix's determinant is neither 1 or -1") {
+      THEN("Return false") {
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<2, 2>({1.0, 0.0, 0.0, -2.0})) == false);
       }
     }
 
     WHEN("The matrix's inverse is not equal to its transpose") {
-      // We need at least 2 rows and columns for this to work.
-      const arma::uword numberOfDimensions = 1 + discreteRandomNumber();
-      CAPTURE(numberOfDimensions);
-
-      arma::Mat<double> matrix = mant::randomRotationMatrix(numberOfDimensions);
-      // Increasing an element of an orthonormal rotation matrix by 1 should result in an inequality transpose and inverse.
-      matrix(0, 0)++;
-      CAPTURE(matrix);
-
       THEN("Return false") {
-        CHECK(mant::isRotationMatrix(matrix) == false);
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<2, 2>({1.0, 0.0, 0.0, -2.0})) == false);
+      }
+    }
+
+    WHEN("The matrix is a rotation matrix with determinant 1") {
+      THEN("Return true") {
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<4, 4>({1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0})) == true);
+      }
+    }
+
+    WHEN("The matrix is a rotation matrix with determinant -1") {
+      THEN("Return true") {
+        CHECK(mant::isRotationMatrix(arma::mat::fixed<4, 4>({1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0})) == true);
       }
     }
   }
 }
 
 SCENARIO("isPermutationVector", "[assert][isPermutationVector]") {
-  GIVEN("A vector as well as numbers [cycleSize] and [numberOfElements]") {
-    WHEN("[cycleSize] <= [numberOfElements]") {
-      const arma::uword cycleSize = discreteRandomNumber();
-      CAPTURE(cycleSize);
-
-      const arma::uword numberOfElements = cycleSize + discreteRandomNumber() - 1;
-      CAPTURE(numberOfElements);
-
-      AND_WHEN("The vector has [cycleSize] unique elements, all within [0, [numberOfElements] - 1]") {
-        const arma::Col<arma::uword>& vector = mant::randomPermutationVector(numberOfElements, cycleSize);
-        CAPTURE(vector);
-
-        THEN("Return true") {
-          CHECK(mant::isPermutationVector(vector, numberOfElements, cycleSize) == true);
-        }
-      }
-
-      AND_WHEN("The vector has less then [cycleSize] elements") {
-        const arma::Col<arma::uword>& vector = mant::randomPermutationVector(numberOfElements, cycleSize - 1);
-        CAPTURE(vector);
-
-        THEN("Return false") {
-          CHECK(mant::isPermutationVector(vector, numberOfElements, cycleSize) == false);
-        }
-      }
-
-      AND_WHEN("The vector has more then [cycleSize] elements") {
-        const arma::Col<arma::uword>& vector = arma::randi<arma::Col<arma::uword>>(1 + cycleSize, arma::distr_param(0, static_cast<int>(numberOfElements) - 1));
-        CAPTURE(vector);
-
-        THEN("Return false") {
-          CHECK(mant::isPermutationVector(vector, numberOfElements, cycleSize) == false);
-        }
-      }
-
-      AND_WHEN("The vector has at least one element not in [0, [numberOfElements] - 1]") {
-        arma::Col<arma::uword> vector = mant::randomPermutationVector(numberOfElements, cycleSize);
-        vector(0) = numberOfElements;
-        CAPTURE(vector);
-
-        THEN("Return false") {
-          CHECK(mant::isPermutationVector(vector, numberOfElements, cycleSize) == false);
-        }
-      }
-
-      AND_WHEN("The vector has non-unique elements") {
-        arma::Col<arma::uword> vector = mant::randomPermutationVector(1 + numberOfElements, 1 + cycleSize);
-        vector(0) = vector(1);
-        CAPTURE(vector);
-
-        THEN("Return false") {
-          CHECK(mant::isPermutationVector(vector, numberOfElements, cycleSize) == false);
-        }
+  GIVEN("A vector, a number of elements and a cycle size.") {
+    WHEN("The vector is empty") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({}, 10, 1) == false);
       }
     }
 
-    WHEN("[cycleSize] > [numberOfElements]") {
-      const arma::uword numberOfElements = discreteRandomNumber();
-      CAPTURE(numberOfElements);
-
-      const arma::uword cycleSize = numberOfElements + discreteRandomNumber();
-      CAPTURE(cycleSize);
-
-      const arma::Col<arma::uword>& vector = arma::randi<arma::Col<arma::uword>>(cycleSize, arma::distr_param(0, static_cast<int>(numberOfElements) - 1));
-      CAPTURE(vector);
-
+    WHEN("The number of elements is 0") {
       THEN("Return false") {
-        CHECK(mant::isPermutationVector(vector, numberOfElements, cycleSize) == false);
+        CHECK(mant::isPermutationVector({0, 1}, 0, 2) == false);
+      }
+    }
+
+    WHEN("The cycle size is 0") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 1}, 10, 0) == false);
+      }
+    }
+
+    WHEN("The vector's number of elements is less than the cycle size") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 1}, 1, 10) == false);
+      }
+    }
+
+    WHEN("The vector's elements are not within `{0, ..., numberOfElements - 1}`") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 2}, 2, 2) == false);
+      }
+    }
+
+    WHEN("The vector's elements are not unique") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 0}, 10, 2) == false);
+      }
+    }
+
+    WHEN("The vector is a permutation of `cycleSize`-elements from `{0, ..., numberOfElements - 1}`") {
+      THEN("Return true") {
+        CHECK(mant::isPermutationVector({1, 4, 2, 0}, 10, 4) == true);
       }
     }
   }
@@ -152,35 +175,39 @@ SCENARIO("isPermutationVector", "[assert][isPermutationVector]") {
 
 SCENARIO("isSymmetric", "[assert][isSymmetric]") {
   GIVEN("A matrix") {
-    const arma::uword numberOfDimensions = discreteRandomNumber();
-    CAPTURE(numberOfDimensions);
+    WHEN("The matrix is empty") {
+      THEN("Return false") {
+        CHECK(mant::isSymmetric({}) == false);
+      }
+    }
 
-    WHEN("The matrix is symmetric") {
-      const arma::Mat<double>& matrix = arma::symmatu(continuousRandomNumbers(numberOfDimensions, numberOfDimensions));
-      CAPTURE(matrix);
+    WHEN("The matrix contains NaNs") {
+      THEN("Return false") {
+        CHECK(mant::isSymmetric(arma::mat::fixed<2, 2>({std::numeric_limits<double>::quiet_NaN(), 0.0, 0.0, 0.0})) == false);
+      }
+    }
 
+    WHEN("The matrix has only one element") {
       THEN("Return true") {
-        CHECK(mant::isSymmetric(matrix) == true);
+        CHECK(mant::isSymmetric(arma::mat({1.0})) == true);
       }
     }
 
     WHEN("The matrix is not square") {
-      const arma::Mat<double>& matrix = arma::randu<arma::Mat<double>>(numberOfDimensions, 1 + numberOfDimensions);
-      CAPTURE(matrix);
-
       THEN("Return false") {
-        CHECK(mant::isSymmetric(matrix) == false);
+        CHECK(mant::isSymmetric(arma::mat::fixed<2, 1>({1.0, 0.0})) == false);
       }
     }
 
-    WHEN("The matrix has at least one (i,j)-te element that is unequal to its corresponding (j,i)-te element") {
-      // We need at least 2 rows and columns for this to occur.
-      arma::Mat<double> matrix = arma::symmatu(continuousRandomNumbers(1 + numberOfDimensions, 1 + numberOfDimensions));
-      matrix(0, 1)++;
-      CAPTURE(matrix);
-
+    WHEN("The matrix is not equal to its transpose") {
       THEN("Return false") {
-        CHECK(mant::isSymmetric(matrix) == false);
+        CHECK(mant::isSymmetric(arma::mat::fixed<2, 2>({0.0, 1.0, 0.0, 0.0})) == false);
+      }
+    }
+
+    WHEN("The matrix is symmetric") {
+      THEN("Return true") {
+        CHECK(mant::isSymmetric(arma::mat::fixed<2, 2>({1.0, -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), 3.0})) == true);
       }
     }
   }
@@ -188,86 +215,61 @@ SCENARIO("isSymmetric", "[assert][isSymmetric]") {
 
 SCENARIO("isPositiveSemiDefinite", "[assert][isPositiveSemiDefinite]") {
   GIVEN("A matrix") {
-    const arma::uword numberOfDimensions = discreteRandomNumber();
-    CAPTURE(numberOfDimensions);
+    WHEN("The matrix is empty") {
+      THEN("Return false") {
+        CHECK(mant::isSymmetric({}) == false);
+      }
+    }
 
-    WHEN("The matrix is positive semi-definite") {
-      arma::Mat<double> matrix = continuousRandomNumbers(numberOfDimensions, numberOfDimensions);
-      matrix *= matrix.t();
-      CAPTURE(matrix);
-
-      THEN("Return true") {
-        CHECK(mant::isPositiveSemiDefinite(matrix) == true);
+    WHEN("The matrix contains NaNs") {
+      THEN("Return false") {
+        CHECK(mant::isSymmetric(arma::mat({std::numeric_limits<double>::quiet_NaN()})) == false);
       }
     }
 
     WHEN("The matrix is not square") {
-      const arma::Mat<double>& matrix = arma::randu<arma::Mat<double>>(numberOfDimensions, 1 + numberOfDimensions);
-      CAPTURE(matrix);
-
       THEN("Return false") {
-        CHECK(mant::isPositiveSemiDefinite(matrix) == false);
+        CHECK(mant::isPositiveSemiDefinite(arma::mat::fixed<2, 1>({1.0, 0.0})) == false);
       }
     }
 
-    WHEN("The matrix has at least one eigenvalue being negative or having an imaginary part") {
-      arma::Mat<double> matrix = continuousRandomNumbers(numberOfDimensions, numberOfDimensions);
-      matrix *= matrix.t();
-      CAPTURE(matrix);
-
+    WHEN("The matrix has not only positive, real eigenvalues") {
       THEN("Return false") {
-        CHECK(mant::isPositiveSemiDefinite(-matrix) == false);
+        CHECK(mant::isPositiveSemiDefinite(arma::mat::fixed<2, 2>({1.0, 0.0, 0.0, -2.0})) == false);
+      }
+    }
+
+    WHEN("The matrix is positive semi-definite") {
+      THEN("Return true") {
+        CHECK(mant::isPositiveSemiDefinite(arma::mat::fixed<2, 2>({1.0, 0.0, 0.0, 0.0})) == true);
+      }
+    }
+
+    WHEN("The matrix is positive definite") {
+      THEN("Return true") {
+        CHECK(mant::isPositiveSemiDefinite(arma::mat({std::numeric_limits<double>::infinity()})) == true);
       }
     }
   }
 }
 
 SCENARIO("isDimensionallyConsistent", "[assert][isDimensionallyConsistent]") {
-  GIVEN("A set of samples") {
-    const arma::uword numberOfDimensions = SYNCHRONISED(discreteRandomNumber());
-    CAPTURE(numberOfDimensions);
-    mant::bbob::SphereFunction optimisationProblem(numberOfDimensions);
-
-    mant::RandomSearch optimisationAlgorithm;
-    optimisationAlgorithm.setMaximalNumberOfIterations(100);
-
-    ::mant::isCachingSamples = true;
-    optimisationAlgorithm.optimise(optimisationProblem);
-    ::mant::isCachingSamples = false;
-
-    WHEN("All samples are dimensionally consistent") {
-      auto samples = optimisationProblem.getCachedSamples();
-
+  GIVEN("A map") {
+    WHEN("The map is empty") {
       THEN("Return true") {
-        CHECK(samples.size() > 0);
-        CHECK(mant::isDimensionallyConsistent(samples) == true);
-        samples.clear();
-        CHECK(mant::isDimensionallyConsistent(samples) == true);
+        CHECK(mant::isDimensionallyConsistent({}) == true);
       }
     }
 
-    WHEN("At least to samples have a different number of dimensions between them") {
-      const auto& firstSamples = optimisationProblem.getCachedSamples();
-
-      const arma::uword differentNumberOfDimensions = differentDiscreteRandomNumber(numberOfDimensions);
-      CAPTURE(differentNumberOfDimensions);
-      mant::bbob::SphereFunction secondOptimisationProblem(differentNumberOfDimensions);
-
-      ::mant::isCachingSamples = true;
-      optimisationAlgorithm.optimise(secondOptimisationProblem);
-      ::mant::isCachingSamples = false;
-
-      const auto& secondSamples = secondOptimisationProblem.getCachedSamples();
-
-      std::unordered_map<arma::Col<double>, double, mant::Hash, mant::IsEqual> samples;
-      samples.insert(firstSamples.begin(), firstSamples.end());
-      samples.insert(secondSamples.begin(), secondSamples.end());
-
+    WHEN("The map has two samples with a different number of dimensions") {
       THEN("Return false") {
-        CHECK(firstSamples.size() > 0);
-        CHECK(secondSamples.size() > 0);
-        CHECK(samples.size() > 0);
-        CHECK(mant::isDimensionallyConsistent(samples) == false);
+        CHECK(mant::isDimensionallyConsistent({{{0.0}, -1.0}, {{2.0, -3.0}, 4.0}}) == false);
+      }
+    }
+
+    WHEN("The map is dimensionally consistent") {
+      THEN("Return true") {
+        CHECK(mant::isDimensionallyConsistent({{{0.0}, -1.0}, {{-std::numeric_limits<double>::infinity()}, std::numeric_limits<double>::quiet_NaN()}}) == true);
       }
     }
   }

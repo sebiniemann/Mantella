@@ -1,6 +1,7 @@
 #pragma once
 
 // C++ standard library
+#include <utility>
 #include <vector>
 
 // Armadillo
@@ -14,11 +15,18 @@ namespace mant {
       arma::uword n,
       const arma::uword k);
 
-  std::vector<arma::Col<arma::uword>> combinations(
+  arma::uword secondStirlingNumber(
       const arma::uword numberOfElements,
-      const arma::uword combinationSize);
+      const arma::uword numberOfParts);
 
-  std::vector<arma::Col<arma::uword>> multicombinations(
+  std::vector<arma::uvec> combinations(
       const arma::uword numberOfElements,
-      const arma::uword combinationsize);
+      const arma::uword cycleSize);
+
+  std::vector<arma::uvec> multicombinations(
+      const arma::uword numberOfElements,
+      const arma::uword cycleSize);
+
+  std::vector<std::pair<arma::uvec, arma::uvec>> twoSetsPartitions(
+      const arma::uword numberOfElements);
 }
