@@ -14,28 +14,28 @@
 namespace mant {
   class Kriging {
    public:
-    const std::function<arma::Col<double>(const arma::Col<double>&)> regressionFunction_;
-    const std::function<double(const arma::Col<double>&)> correlationFunction_;
+    const std::function<arma::vec(const arma::vec&)> regressionFunction_;
+    const std::function<double(const arma::vec&)> correlationFunction_;
 
     Kriging(
-        const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-        const std::function<arma::Col<double>(const arma::Col<double>&)> regressionFunction,
-        const std::function<double(const arma::Col<double>&)> correlationFunction);
+        const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
+        const std::function<arma::vec(const arma::vec&)> regressionFunction,
+        const std::function<double(const arma::vec&)> correlationFunction);
 
     void train();
     double predict(
-        const arma::Col<double>& parameter) const;
+        const arma::vec& parameter) const;
 
    protected:
-    std::unordered_map<arma::Col<double>, double, Hash, IsEqual> samples_;
+    std::unordered_map<arma::vec, double, Hash, IsEqual> samples_;
 
-    arma::Col<double> meanParameter_;
-    arma::Col<double> standardDeviationParameter_;
+    arma::vec meanParameter_;
+    arma::vec standardDeviationParameter_;
 
     double meanObjectiveValue_;
     double standardDeviationObjectiveValue_;
 
-    arma::Col<double> beta_;
-    arma::Col<double> gamma_;
+    arma::vec beta_;
+    arma::vec gamma_;
   };
 }

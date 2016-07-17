@@ -1,6 +1,7 @@
 #include "mantella_bits/kriging.hpp"
 
 // C++ standard library
+#include <cassert>
 #include <utility>
 
 // Mantella
@@ -8,37 +9,37 @@
 #include "mantella_bits/assert.hpp"
 
 namespace mant {
-  arma::Col<double> getOrdinaryLeastSquaresEstimate(
-      const arma::Mat<double>& parameters,
-      const arma::Row<double>& objectiveValues) {
-    verify(parameters.n_cols == objectiveValues.n_elem, "");
+  arma::vec getOrdinaryLeastSquaresEstimate(
+      const arma::mat& parameters,
+      const arma::rowvec& objectiveValues) {
+    assert(parameters.n_cols == objectiveValues.n_elem && "");
 
     return arma::solve(parameters * parameters.t(), parameters) * objectiveValues.t();
   }
 
-  arma::Col<double> getGeneralisedLeastSquaresEstimate(
-      const arma::Mat<double>& parameters,
-      const arma::Row<double>& objectiveValues,
-      const arma::Mat<double>& variance) {
-    verify(parameters.n_cols == objectiveValues.n_elem, "");
-    verify(parameters.n_cols == variance.n_rows, "");
-    verify(variance.is_square(), "");
+  arma::vec getGeneralisedLeastSquaresEstimate(
+      const arma::mat& parameters,
+      const arma::rowvec& objectiveValues,
+      const arma::mat& variance) {
+    assert(parameters.n_cols == objectiveValues.n_elem && "");
+    assert(parameters.n_cols == variance.n_rows && "");
+    assert(variance.is_square() && "");
 
-    arma::Mat<double> cholesky = arma::chol(variance);
+    arma::mat cholesky = arma::chol(variance);
     return getOrdinaryLeastSquaresEstimate(parameters * cholesky, objectiveValues * cholesky);
   }
 
   Kriging::Kriging(
-      const std::unordered_map<arma::Col<double>, double, Hash, IsEqual>& samples,
-      const std::function<arma::Col<double>(const arma::Col<double>&)> regressionFunction,
-      const std::function<double(const arma::Col<double>&)> correlationFunction)
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
+      const std::function<arma::vec(const arma::vec&)> regressionFunction,
+      const std::function<double(const arma::vec&)> correlationFunction)
       : regressionFunction_(regressionFunction),
         correlationFunction_(correlationFunction) {
   }
 
   void Kriging::train() {
-    arma::Mat<double> parameters(samples_.begin()->first.n_elem, samples_.size());
-    arma::Row<double> objectiveValues(samples_.size());
+    arma::mat parameters(samples_.begin()->first.n_elem, samples_.size());
+    arma::rowvec objectiveValues(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
       parameters.col(n) = sample.first;
@@ -58,11 +59,11 @@ namespace mant {
     objectiveValues -= meanObjectiveValue_;
     objectiveValues /= standardDeviationObjectiveValue_;
 
-    arma::Mat<double> correlations(parameters.n_cols, parameters.n_cols);
+    arma::mat correlations(parameters.n_cols, parameters.n_cols);
     correlations.diag().zeros();
 
     for (n = 0; n < parameters.n_cols; ++n) {
-      const arma::Col<double>& parameter = parameters.col(n);
+      const arma::vec& parameter = parameters.col(n);
       for (arma::uword k = n + 1; k < parameters.n_cols; ++k) {
         correlations(n, k) = correlationFunction_(parameters.col(k) - parameter);
       }
@@ -76,10 +77,10 @@ namespace mant {
   }
 
   double Kriging::predict(
-      const arma::Col<double>& parameter) const {
-    const arma::Col<double>& normalisedParameter = (parameter - meanParameter_) / standardDeviationParameter_;
+      const arma::vec& parameter) const {
+    const arma::vec& normalisedParameter = (parameter - meanParameter_) / standardDeviationParameter_;
 
-    arma::Col<double> correlations(samples_.size());
+    arma::vec correlations(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
       correlations(n++) = correlationFunction_(sample.first - normalisedParameter);
