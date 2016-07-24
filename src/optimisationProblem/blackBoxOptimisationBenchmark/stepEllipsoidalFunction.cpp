@@ -20,37 +20,33 @@ namespace mant {
   namespace bbob {
     StepEllipsoidalFunction::StepEllipsoidalFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions),
-          firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
-          secondParameterConditioning_(getParameterConditioning(100.0)),
-          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("StepEllipsoidalFunction: The number of dimensions must be greater than 1.");
-      }
+        : BlackBoxOptimisationBenchmark(numberOfDimensions), firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))), secondParameterConditioning_(getParameterConditioning(100.0)), rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+      assert(numberOfDimensions_ > 1 && "StepEllipsoidalFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& s = firstParameterConditioning_ % parameter_;
+              const arma::vec& s = firstParameterConditioning_ % parameter_;
 
-                                arma::vec z = s;
-                                for (arma::uword n = 0; n < z.n_elem; ++n) {
-                                  const double value = s(n);
+              arma::vec z = s;
+              for (arma::uword n = 0; n < z.n_elem; ++n) {
+                const double value = s(n);
 
-                                  if (std::abs(value) > 0.5) {
-                                    z(n) = std::round(value);
-                                  } else {
-                                    z(n) = std::round(value * 10.0) / 10.0;
-                                  }
-                                }
+                if (std::abs(value) > 0.5) {
+                  z(n) = std::round(value);
+                } else {
+                  z(n) = std::round(value * 10.0) / 10.0;
+                }
+              }
 
-                                return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
-                              },
-          "BBOB Step Ellipsoidal Function (f7)"}});
+              return 0.1 * std::max(std::abs(s(0)) / 10000.0, arma::dot(secondParameterConditioning_, arma::square(rotationQ_ * z)));
+            },
+            "BBOB Step Ellipsoidal Function (f7)"}});
     }
   }
 }

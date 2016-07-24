@@ -4,18 +4,6 @@
 
 SCENARIO("randomRotationMatrix", "[probability][randomRotationMatrix]") {
   GIVEN("A number of dimensions") {
-    WHEN("The number of dimensions is 0") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::randomRotationMatrix(0), std::domain_error);
-      }
-    }
-
-    WHEN("The number of dimensions is less than 2") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::randomRotationMatrix(1), std::domain_error);
-      }
-    }
-
     WHEN("The number of dimensions is greater than 2") {
       THEN("Return a rotation matrix") {
         CHECK(mant::isRotationMatrix(mant::randomRotationMatrix(5)) == true);
@@ -34,24 +22,6 @@ SCENARIO("randomRotationMatrix", "[probability][randomRotationMatrix]") {
 
 SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
   GIVEN("A number of elements and a cycle size") {
-    WHEN("The number of elements is 0") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::randomPermutationVector(0, 2), std::domain_error);
-      }
-    }
-
-    WHEN("The cycle size is 0") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::randomPermutationVector(2, 0), std::domain_error);
-      }
-    }
-
-    WHEN("The cycle size is greater than the number of elements") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::randomPermutationVector(2, 3), std::logic_error);
-      }
-    }
-
     WHEN("The cycle size is less than the number of elements") {
       THEN("Return a uniformly and randomly distributed permutation vector") {
         CHECK(mant::isPermutationVector(mant::randomPermutationVector(10, 5), 10, 5) == true);
@@ -82,31 +52,12 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
 
 SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
   GIVEN("A parameter, a minimal and a maximal distance") {
-    WHEN("The parameter is empty") {
-      THEN("Throw a invalid argument error") {
-        CHECK_THROWS_AS(mant::randomNeighbour({}, 0.0, 1.0), std::invalid_argument);
-      }
-    }
-
-    WHEN("A distance is negative") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::randomNeighbour(arma::vec({1.0}), -1.0, 1.0), std::domain_error);
-        CHECK_THROWS_AS(mant::randomNeighbour(arma::vec({1.0}), -2.0, -1.0), std::domain_error);
-      }
-    }
-
-    WHEN("The minimal distance is greater than the maximal one") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::randomNeighbour(arma::vec({1.0}), 1.0, 0.0), std::logic_error);
-      }
-    }
-
     WHEN("The minimal distance is equal to the maximal one") {
       THEN("Return a uniformly distributed neighbour") {
         arma::mat::fixed<100000, 1> angles;
         arma::mat::fixed<100000, 1> lengths;
 
-        const arma::vec& parameter({1.0, -2.0});
+        const arma::vec& parameter{1.0, -2.0};
         for (arma::uword n = 0; n < angles.n_rows; ++n) {
           const arma::vec& neighbour = parameter - mant::randomNeighbour(parameter, 2.0, 2.0);
 
@@ -124,7 +75,7 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
         arma::mat::fixed<100000, 1> angles;
         arma::mat::fixed<100000, 1> lengths;
 
-        const arma::vec& parameter({1.0, -2.0});
+        const arma::vec& parameter{1.0, -2.0};
         for (arma::uword n = 0; n < angles.n_rows; ++n) {
           const arma::vec& neighbour = parameter - mant::randomNeighbour(parameter, 1.0, 2.0);
 

@@ -1,10 +1,12 @@
 #include "mantella_bits/assert.hpp"
-#include "mantella_bits/config.hpp"
 
 // C++ standard library
 #include <cmath>
 #include <limits>
 #include <utility>
+
+// Mantella
+#include "mantella_bits/config.hpp"
 
 namespace mant {
   bool isRepresentableAsInteger(
@@ -28,7 +30,8 @@ namespace mant {
     } else if (!rotationCandidate.is_square()) {
       // ... square and ...
       return false;
-      // Uses the Moore-Penrose pseudo-inverse instead of `arma::inv(...)`, as the matrix might not be invertible.
+      // Uses the Moore-Penrose pseudo-inverse instead of `arma::inv(...)`, as the
+      // matrix might not be invertible.
     } else if (!arma::approx_equal(arma::pinv(rotationCandidate).t(), rotationCandidate, "absdiff", ::mant::machinePrecision)) {
       // ... its transpose must be equal to its inverse.
       return false;
@@ -107,7 +110,7 @@ namespace mant {
 
   bool isDimensionallyConsistent(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
-    if (samples.size() < 1) {
+    if (samples.empty()) {
       // By definition, empty sets of samples are dimensionally consistent.
       return true;
     }

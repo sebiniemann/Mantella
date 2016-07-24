@@ -16,7 +16,7 @@ SCENARIO("isRepresentableAsInteger", "[assert][isRepresentableAsInteger]") {
       }
     }
 
-    WHEN("The value is +/-infinity") {
+    WHEN("The value is infinity") {
       THEN("Return false") {
         CHECK(mant::isRepresentableAsInteger(std::numeric_limits<double>::infinity()) == false);
       }
@@ -83,7 +83,7 @@ SCENARIO("isRotationMatrix", "[assert][isRotationMatrix]") {
       }
     }
 
-    WHEN("The matrix contains +/-infinity") {
+    WHEN("The matrix contains infinity") {
       THEN("Return false") {
         CHECK(mant::isRotationMatrix(arma::mat::fixed<2, 2>({1.0, 0.0, std::numeric_limits<double>::infinity(), 0.0})) == false);
       }
@@ -202,6 +202,12 @@ SCENARIO("isSymmetric", "[assert][isSymmetric]") {
     WHEN("The matrix is not equal to its transpose") {
       THEN("Return false") {
         CHECK(mant::isSymmetric(arma::mat::fixed<2, 2>({0.0, 1.0, 0.0, 0.0})) == false);
+      }
+    }
+
+    WHEN("The matrix's upper and lower triangle differs by less than the defined machine precision") {
+      THEN("Return true") {
+        CHECK(mant::isSymmetric(arma::mat::fixed<2, 2>({1.0, 0.0, std::nexttoward(::mant::machinePrecision, 0.0), 3.0})) == true);
       }
     }
 

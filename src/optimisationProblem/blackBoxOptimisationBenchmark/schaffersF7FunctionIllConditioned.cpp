@@ -19,26 +19,23 @@ namespace mant {
   namespace bbob {
     SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions),
-          parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))),
-          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("SchaffersF7FunctionIllConditioned: The number of dimensions must be greater than 1.");
-      }
+        : BlackBoxOptimisationBenchmark(numberOfDimensions), parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))), rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+      assert(numberOfDimensions_ > 1 && "SchaffersF7FunctionIllConditioned: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter_)));
-                                const arma::vec& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
+              const arma::vec& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter_)));
+              const arma::vec& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
 
-                                return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);
-                              },
-          "BBOB Schaffers F7 Function, ill-conditioned (f18)"}});
+              return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);
+            },
+            "BBOB Schaffers F7 Function, ill-conditioned (f18)"}});
     }
   }
 }

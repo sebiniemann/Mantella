@@ -10,6 +10,9 @@ namespace mant {
   arma::vec synchronise(
       arma::vec data);
 
+  arma::umat synchronise(
+      const arma::umat& data);
+
   arma::uvec synchronise(
       const arma::uvec& data);
 

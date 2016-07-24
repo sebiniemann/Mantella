@@ -29,22 +29,23 @@ namespace mant {
           parameterConditinong_(getParameterConditioning(10.0)),
           rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))),
           rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("LunacekBiRastriginFunction: The number of dimensions must be greater than 1.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("LunacekBiRastriginFunction: The number of elements must be representable as a floating point.");
+      assert(numberOfDimensions_ > 1 && "LunacekBiRastriginFunction: The number of dimensions must be greater than 1.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("LunacekBiRastriginFunction: The number of elements must be representable as a floating point.");
       }
 
       // A vector with all elements randomly and uniformly set to either 2 or -2.
-      setParameterScaling(arma::zeros<arma::vec>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator_) ? 2.0 : -2.0));
+      setParameterScaling(arma::zeros<arma::vec>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                return std::min(std::pow(arma::norm(parameter_ - 2.5), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter_ + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter_ - 2.5))))));
-                              },
-          "BBOB Lunacek bi-Rastrigin Function (f24)"}});
+              return std::min(std::pow(arma::norm(parameter_ - 2.5), 2.0), static_cast<double>(numberOfDimensions_) + s_ * std::pow(arma::norm(parameter_ + mu_), 2.0)) + 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * rotationQ_ * (parameterConditinong_ % (rotationR_ * (parameter_ - 2.5))))));
+            },
+            "BBOB Lunacek bi-Rastrigin Function (f24)"}});
     }
   }
 }

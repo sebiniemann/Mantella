@@ -5,11 +5,13 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
   config.vm.provider "virtualbox" do |vb|
-    # Increases the memory as some weird internal compiler errors occur, if the compiler runs out-of-memory.
+    # Increases the memory, avoiding that the compiler runs out-of-memory.
     vb.memory = 1536
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    # Installs Docker
+    # See https://docs.docker.com/engine/installation/linux/ubuntulinux/ for more details
     sudo apt-get update
     sudo apt-get install -y apt-transport-https ca-certificates
     
@@ -20,12 +22,12 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y linux-image-extra-$(uname -r)
     sudo apt-get install -y docker-engine
     
-    sudo groupadd docker
-    sudo usermod -aG docker vagrant
-    
-    su vagrant
+    # Builds and runs Mantella's Docker image
     cd /vagrant
-    docker build -t ubuntu/mantella:latest .
-    docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+    sudo docker build -t ubuntu/mantella:latest .
+    sudo docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+    
+    ## Adds useful applications to the running Docker container
+    sudo docker exec mantella apt-get install -y vim
   SHELL
 end

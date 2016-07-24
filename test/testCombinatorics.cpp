@@ -10,12 +10,6 @@ SCENARIO("factorial", "[combinatorics][factorial]") {
       }
     }
 
-    WHEN("The factorial is overflowing") {
-      THEN("Return an overflow error") {
-        CHECK_THROWS_AS(mant::factorial(100), std::overflow_error);
-      }
-    }
-
     WHEN("The number is not overflowing") {
       THEN("Return the factorial") {
         CHECK(mant::factorial(10) == 3628800);
@@ -106,12 +100,6 @@ SCENARIO("secondStirlingNumber", "[combinatorics][secondStirlingNumber]") {
 
 SCENARIO("combinations", "[combinatorics][combinations]") {
   GIVEN("Two numbers n and k") {
-    WHEN("n is 0") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::combinations(0, 2), std::domain_error);
-      }
-    }
-
     WHEN("k is 0") {
       THEN("Return an empty vector") {
         CHECK(mant::combinations(2, 0).empty() == true);
@@ -121,12 +109,6 @@ SCENARIO("combinations", "[combinatorics][combinations]") {
     WHEN("k is 1") {
       THEN("Return the combinations") {
         CHECK(hasSameElements(mant::combinations(2, 1), std::vector<arma::uvec>({{0}, {1}})) == true);
-      }
-    }
-
-    WHEN("n is less than k") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::combinations(2, 3), std::logic_error);
       }
     }
 
@@ -146,12 +128,6 @@ SCENARIO("combinations", "[combinatorics][combinations]") {
 
 SCENARIO("multicombinations", "[combinatorics][multicombinations]") {
   GIVEN("Two numbers n and k") {
-    WHEN("n is 0") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::multicombinations(0, 2), std::domain_error);
-      }
-    }
-
     WHEN("k is 0") {
       THEN("Return an empty vector") {
         CHECK(mant::multicombinations(2, 0).empty() == true);
@@ -186,18 +162,6 @@ SCENARIO("multicombinations", "[combinatorics][multicombinations]") {
 
 SCENARIO("twoSetsPartitions", "[combinatorics][twoSetsPartitions]") {
   GIVEN("A number of elements") {
-    WHEN("The number of elements is 0") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::twoSetsPartitions(0), std::domain_error);
-      }
-    }
-
-    WHEN("The number is less than 2") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::twoSetsPartitions(1), std::domain_error);
-      }
-    }
-
     WHEN("The number of elements is greater than 1") {
       THEN("Return all two set partitions") {
         CHECK(hasSameElements(mant::twoSetsPartitions(4), std::vector<std::pair<arma::uvec, arma::uvec>>({{{0}, {1, 2, 3}}, {{1}, {0, 2, 3}}, {{2}, {0, 1, 3}}, {{3}, {0, 1, 2}}, {{0, 1}, {2, 3}}, {{0, 2}, {1, 3}}, {{0, 3}, {1, 2}}})) == true);

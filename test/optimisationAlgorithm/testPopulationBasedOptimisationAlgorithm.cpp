@@ -4,13 +4,6 @@
 
 SCENARIO("PopulationBasedOptimisationAlgorithm.setPopulationSize", "[PopulationBasedOptimisationAlgorithm][PopulationBasedOptimisationAlgorithm.setPopulationSize]") {
   GIVEN("A population size") {
-    WHEN("The population size is 0") {
-      THEN("Throw a domain error") {
-        mant::PopulationBasedOptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setPopulationSize(0), std::domain_error);
-      }
-    }
-
     WHEN("The population size is greater than 0") {
       THEN("Throw no exception") {
         mant::PopulationBasedOptimisationAlgorithm optimisationAlgorithm;

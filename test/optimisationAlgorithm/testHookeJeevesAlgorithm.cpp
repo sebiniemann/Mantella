@@ -26,13 +26,6 @@ SCENARIO("HookeJeevesAlgorithm.optimise", "[HookeJeevesAlgorithm][HookeJeevesAlg
 
 SCENARIO("HookeJeevesAlgorithm.setInitialStepSize", "[HookeJeevesAlgorithm][HookeJeevesAlgorithm.setInitialStepSize]") {
   GIVEN("An initial step size") {
-    WHEN("The initial step size is negative") {
-      THEN("Throw a domain error") {
-        mant::HookeJeevesAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setInitialStepSize(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The initial step size is positive or 0") {
       THEN("Throw no exception") {
         mant::HookeJeevesAlgorithm optimisationAlgorithm;
@@ -53,20 +46,6 @@ SCENARIO("HookeJeevesAlgorithm.getInitialStepSize", "[HookeJeevesAlgorithm][Hook
 
 SCENARIO("HookeJeevesAlgorithm.setStepSizeDecrease", "[HookeJeevesAlgorithm][HookeJeevesAlgorithm.setStepSizeDecrease]") {
   GIVEN("A step size decrease") {
-    WHEN("The step size decrease is less than or equal to 0") {
-      THEN("Throw a domain error") {
-        mant::HookeJeevesAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setStepSizeDecrease(0.0), std::domain_error);
-      }
-    }
-
-    WHEN("The step size decrease is greater than or equal to 1") {
-      THEN("Throw a domain error") {
-        mant::HookeJeevesAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setStepSizeDecrease(1.0), std::domain_error);
-      }
-    }
-
     WHEN("The step size decrease is within (0, 1)") {
       THEN("Throw no exception") {
         mant::HookeJeevesAlgorithm optimisationAlgorithm;

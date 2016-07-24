@@ -3,16 +3,16 @@ Contributing to Mantella
 
 This guide will accompany you on your first contribution to Mantella, covering everything from setting up a development system to committing your changes.
 
-In case you are already done and only want to submit a pull request, go directly to **Committing your changes** (at the end of the document).
+In case you only want to submit a pull request, go directly to **Filing a pull request** (at the end of the document).
 
 **If you are in a hurry**, feel free to skip any part at your own account, but be aware that this might delay accepting your pull request (as someone needs to invest the time to finish it up :wink:), especially if the implementation is not yet working.
 
 Let us know what you are planning
 ---------------------------------
 
-If you found a bug in the source code, a mistake in any kind of documentation or you are missing some features within Mantella and want to implement/fix it yourself, please let us know in advance, so we can discuss how to implement the feature or handle the bug beforehand. This way, we can also give you early support and advices on your contribution.
+If you found a bug in the source code, a mistake in any kind of documentation or you are missing some features within Mantella and want to implement/fix it yourself, please let us know in advance, so we can discuss the implementation or handle the bug beforehand. This way, we can also give you early support and advices.
 
-To do this, simply add an issue to the [GitHub issue tracker](https://github.com/SebastianNiemann/Mantella/issues), describing what you plan to do and make clear whether you are already working on it. You can also contact us directly on [Gitter](https://gitter.im/SebastianNiemann/Mantella) at any point of your contribution.
+To do this, simply add an issue to the [GitHub issue tracker](https://github.com/SebastianNiemann/Mantella/issues), describing what you plan to do and make clear whether you are already working on it or not. You can also contact us directly on [Gitter](https://gitter.im/SebastianNiemann/Mantella) at any point of your contribution.
 
 In case you found a bug and want to fix it, please give us informations on what got wrong and how to reproduce it.
 
@@ -21,7 +21,7 @@ Forking Mantella
 
 ### Contributors
 
-Your next step will be to fork Mantella on GitHub, for example by hitting `Fork` on the GitHub website and download your fork onto your local machine using the [Git tool](https://git-scm.com/downloads) of your choice.
+Your first step will be to fork Mantella on GitHub, for example by hitting `Fork` on the GitHub website and download your fork onto your local machine using the [Git tool](https://git-scm.com/downloads) of your choice.
 
 ### Team members
 
@@ -29,33 +29,45 @@ If you are a long-time contributor to Mantella and got write permissions for the
 
 ``` bash
 git checkout master
-git branch YourUsername/YourAwesomeBranch
-git checkout YourUsername/YourAwesomeBranch
+git pull
+git checkout -b YourUsername/YourAwesomeBranch
 ```
 
 Setting up a development system
 -------------------------------
 
-**The recommended and most easiest way** to set up a Mantella development system (including all dependencies), is to install [Vagrant](https://www.vagrantup.com/), clone Mantella onto your local machine, go to Mantella's root directory and run Vagrant.
+**The recommended and most easiest way** to set up a Mantella development system (including all dependencies), is to install 
+[Docker](https://www.docker.com) and run:
 
 ```
 git clone http://github.com/SebastianNiemann/Mantella.git
 cd Mantella
-vagrant up
+sudo docker build -t ubuntu/mantella:latest .
+sudo docker run -v .:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
 ```
 
 **Done!**
 
-This will install an Ubuntu virtual machine and set up all required dependencies, together with other useful tools for testing or debugging.
+This will install a virtual machine and set up all required dependencies, together with other useful tools for testing or debugging. You can then connect to the Docker machine using:
 
-You can then connect to the Vagrant machine using your SSH client of choice (using `localhost:2222` as host:port and `vagrant` as username as well as password). The content of Mantella will then be accessible in the `/vagrant` folder on your virtual machine, being shared with the host system.
+```
+sudo docker exec -i -t mantella /bin/bash
+```
 
-**Another way** is to manually run `./.setup.sh` on a local machine that you want to upgrade into a Mantella development system. Be aware that this script is written for Ubuntu 15.10 and may not work on other versions or operating systems. However, it also provides an overview about what is needed.
+In case you have problems installing Docker on your operation system (typically on non-Linux machines), you can also install [Vagrant](https://www.vagrantup.com) after cloning Mantella and run:
+
+```
+vagrant up
+```
+
+to install a virtual machine including our Docker machine.
+
+You can then connect to the Vagrant machine using your SSH client of choice (using `localhost:2222` as host:port and `vagrant` as username as well as password) and access the Docker machine inside Vagrant using `sudo docker exec -i -t mantella /bin/bash` as before.
 
 Coding guidelines
 -----------------
 
-**Most important:** Read some existing code, to get a better understanding of our code style :wink:
+**Most important: Read some existing code, to get a better understanding of our code style :wink:**
 
 Section `Testing your work` covers tools and commands to automatically check some of the following guidelines.
 
@@ -65,90 +77,82 @@ When adding new files, put your sources under `src/`, headers under `include/man
 
 To include them into the library file and test binary, add your sources and tests to `CMakeLists.txt` and your headers into `include/mantella`.
 
-By convention, we place all files directly into `src/`, `include/mantella_bits/` or `test/` and only add subfolders for base class (like `OptimisationProblem`), placing derivatives of such classes into these subfolders.
+By convention, we place all files directly into `src/`, `include/mantella_bits/` or `test/` and only add sub folders for base classes (like `OptimisationProblem`), placing derivatives of such classes into these sub folders.
 
 ### Our code style and conventions
 
-We usually follow the [Google style guide](https://code.google.com/p/google-styleguide/), with some exemptions/additions:
+We usually follow the [Google style guide](https://code.google.com/p/google-styleguide/), with some notable exemptions/additions:
 
 - **Never** break your code just because you reached some number of characters. Wrapping long code lines or comments should be done by your IDE, without changing the code.
-- Avoid abbreviating variables and always write out their (meaning)full name.
-- Put code in loops, if- or case-statements in `{ ... }`-blocks (even if its just one line).
+- Avoid abbreviating variables and always write out their (meaning) full name.
 - Use `#pragma once` instead of `#ifndef ...` as include guards.
-- Group similar `#include`s (C++ STL, Armadillo, Mantella, ...) together.
-- Use `mant::verify` if you want to check any user input and `assert` if the inputs are generated by another function or already verified.
 - By conventions, we use `arma::uword` for all integer types (expects MPI forces us to use `int`) and `double` for all floating-point types.
-- Always specify the whole template type (using `arma::Mat<double>` instead of `arma::Mat<>`) and avoid `typedef`'s (using `arma::Mat<double>` instead of `arma::mat`).
-- [Include what you use](http://include-what-you-use.org/) (IWYU): For every symbol that you use in a source file, either the source or its header file should include a header that contains the declaration of that symbol.
 
 ### Writing tests
 
 We use [Catch's BDD-style](https://github.com/philsquared/Catch/blob/master/docs/test-cases-and-sections.md) to write our tests, whereby `SCENARIO` is used to identify the (member) function to be tested and `GIVEN` to differentiate between multiple overloads of the same function.
 
-The actual test cases are then organised by the `WHEN` (sometimes followed by `AND_WHEN`) and `THEN` (sometimes followed by `AND_THEN`) blocks and **cover positive tests, as well as exception tests**.
+The actual test cases are then organised by `WHEN` and `THEN` blocks, **covering positive tests, as well as exception tests**.
 
 ``` cpp
 // Catch
 #include <catch.hpp>
-#include "catchExtension.hpp"
-
-// Mantella
-#include <mantella>
+#include "catchHelpers.hpp"
 
 SCENARIO("myNewFunction", "[nameOfFile][myNewFunction]") {
   GIVEN("A number of elements and a precision value") {
-    /* Tests for myNewFunction(arma::uword, double) goes here */
+    WHEN("The number of elements is 0") {
+      THEN("Throw a domain error") {
+        CHECK_THROWS_AS(myNewFunction(0, 1e-12), std::domain_error);
+      }
+    }
+    
+    WHEN("The precision value is infinite") {
+      THEN("Throw a domain error") {
+        CHECK_THROWS_AS(myNewFunction(1, std::numeric_limits<double>::NaN()), std::domain_error);
+        CHECK_THROWS_AS(myNewFunction(1, std::numeric_limits<double>::infinity()), std::domain_error);
+      }
+    }
   }
   
   GIVEN("A number of elements") {
-    /* Tests for myNewFunction(arma::uword) goes here */
+    WHEN("The number of elements greater than 0") {
+      THEN("Return 42") {
+        CHECK(myNewFunction(100, 1e-3) == 42);
+      }
+    }
+  }
+}
+
+
+
+SCENARIO("myNextNewFunction", "[nameOfFile][myNextNewFunction]") {
+  GIVEN("A matrix") {
+    WHEN("The matrix is empty") {
+      THEN("Throw an invalid argument") {
+        CHECK_THROWS_AS(myNextNewFunction(arma::mat()), std::invalid_argument);
+      }
+    }
   }
 }
 ```
 
-If you are adding tests for a whole class, each `SCENARIO` covers a single member function or class attribute and uses `nameOfClass.myNewFunction` instead of `myNewFunction`.
-
-Subnamespaces (like `mant::bbob::`) are also added as prefix, resulting in `bbob::myNewFunction` instead of `myNewFunction`.
-
-#### Choosing and logging test values
-
-In most cases, the parameters of a function to be tested can either have any random value or need to fulfil a property (e.g. being positive or greater than other parameters), instead of being set to a specific number/value.
-
-In such cases, use a randomly generated number to make the test input more fussy.
-
-`/test/catchExtension.hpp` provides a lot random number generators for this purpose (`discreteRandomNumbers(...)`, `continuousRandomNumbers(...)`, ...). There are also helper functions to check complex conditions, like that two matrices are equal (`IS_EQUAL(...)`) or that the elements in a vector are uniformly drawn (`IS_UNIFORM(...)`).
-
-To ease debugging failing tests, each value assignment should be [logged using Catch](https://github.com/philsquared/Catch/blob/master/docs/logging.md)'s `CAPTURE(...)` command.
+You might also want to take a look into `catchHelper.hpp`, as it adds some functions to ease testing more complex cases.
 
 ### Adding inline comments
 
 Describe complex parts of your code as well as [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)) as specific as possible and avoid vague descriptions.
 
-**If you had to think a lot on how to implement something or needed to learn on [StackOverflow](http://stackoverflow.com/) or other site about how to do it, it is a complex part.**
+**If you had to think about how to implement something or needed to learn it on [StackOverflow](http://stackoverflow.com/) (or any other site) about how to do it, it is a complex part.**
 
-However, if you find yourself documenting code that is hard to read or understand, you should consider to rewrite such tricky or unclear code. In general, you should strive for readable, maintainable code, by using well-known patterns and simple structures.
-
-**Do not include doxygen or javadoc style comments**, these are regarded as user documents and placed into our [user docuemntation](http://mantella.info/api-overview/).
-
-### Updating the user documentation
-
-To update or extend the user documentation, you need to switch to the `gh-pages` branch at first, which contains the [Jekyll](https://jekyllrb.com/)-based source code for our website.
-
-```
-git checkout gh-pages
-git pull
-```
-
-New functions can than be added by extending `_data/api.yml` and putting their description into `_includes/description.md`. Code example are placed into `_includes/examples/` an executed by running `.compile.sh`. This will automatically add the example's output into `_includes/examples/`.
-
-**You shouldn't extend the changelog yourself**, issuing a new version and publishing the changelog will be done by one of the project owners.
+However, if you find yourself documenting code that is hard to read or understand, you should consider to rewrite such tricky or unclear code first. In general, you should strive for readable, maintainable code, by using well-known patterns and simple structures.
 
 Testing your work
 -----------------
 
 ### Being in sync with the code style
 
-You can check most code style rules and the IWYU rule by running the `./.code-checks.sh` script at Mantella's root directory. Use `./.code-checks.sh help` to get more information on additional options.
+You can check most code style rules and include-what-you-use (IWYU) rules by running the `./.code.sh --all` script at Mantella's root directory. Use `./.code.sh --help` to get more information on additional options.
 
 ### Running tests
 
@@ -156,33 +160,25 @@ You can check most code style rules and the IWYU rule by running the `./.code-ch
 mkdir build
 cd build
 rm -Rf CMakeCache.txt CMakeFiles/ cmake_install.cmake Makefile # Cleans up previous builds
-cmake -DSUPPORT_MPI=On -DBUILD_TESTS=On -DMEASURE_CODE_COVERAGE=On ..
-make
+cmake -DBUILD_TESTS=ON ..
+make -j 4
 ```
-
-**In case you are building on a Windows machine**, you also want to add `-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=~` to the `cmake` command, as a symbolic link needs to be created during the `make` command, which is not supported on Windows hosts.
 
 To execute your test, run
 
 ``` bash
-../bin/mantellaTest ../test/data
+../bin/mantellaTests
 ```
 
-Executing the tests can also be further configured by using [Catch's commandline options](https://github.com/philsquared/Catch/blob/master/docs/command-line.md), for example excluding tests that should fail
+Executing the tests can also be further configured by using [Catch's commandline options](https://github.com/philsquared/Catch/blob/master/docs/command-line.md). For example, running just a subset of tests
 
 ``` bash
-../bin/mantellaTest ~[!shouldfail] ../test/data
-```
-
-or running just a subset of tests
-
-``` bash
-../bin/mantellaTest [myNewFunction] ../test/data
+../bin/mantellaTest [myNewFunction]
 ```
 
 ### Measuring the code coverage
 
-Assuming you are still in the `build/` directory, you can measure the code coverage by running [lcov](http://ltp.sourceforge.net/coverage/lcov.php).
+Assuming you are still in the `build/` directory and already run all tests, you can measure the code coverage by running [lcov](http://ltp.sourceforge.net/coverage/lcov.php).
 
 ```
 cd ./CMakeFiles/mantella.dir/src/
@@ -205,48 +201,10 @@ genhtml coverage.info
 
 **Be aware that reaching a 100% code coverage will most likely not result in a 100% functional coverage.** However, a less than 100% code coverage always guarantees a less than 100% functional coverage. 
 
-### Validating the user documentation
+Filing a pull request
+---------------------
 
-To validated your changes to the user documentation, you need to switch to the `gh-pages` branch at first, which contains the [Jekyll](https://jekyllrb.com/)-based source code for our website.
-
-```
-git checkout gh-pages
-git pull
-```
-
-This branch also contains a (specialised) `Vagrantfile`, setting up a development platform for the website, including Jekyll, website tests and everything to run our code examples.
-
-```
-vagrant up
-```
-
-You can than run a local web server, being accessible under `http://localhost:4000` ...
-
-```
-bundle exec jekyll serve --host 0.0.0.0
-```
-
-... or just generate the `_site` folder (which contains the actually delivered web site) to run the tests.
-
-```
-bundle exec jekyll build
-```
-
-Use `.compile.sh` to ensure that all code examples compile (you may want to revert the output files, otherwise you will commit a lot of changes) and `bundle exec htmlproofer ./_site --disable-external` to check for deadlinks.
-
-Committing your changes
------------------------
-
-**If your fork or branch contains multiple commits**, please squash everything together into a single commit and provide a meaningful commit message (instead of simply aggregating all commit messages).
-
-``` bash
-git checkout master
-git pull
-git checkout MyAwesomeBranch
-git rebase -i master
-```
-
-Commit messages should then be organised as followed:
+Pull request messages should then be organised as followed:
 
 ``` text
 <tag>: <subject>
@@ -259,12 +217,11 @@ Commit messages should then be organised as followed:
 ### Tag
 Add one of the following tags, that describe your changes the best.
 
-- `api`: Your change will break the current API in any way.
-- `feature`: You added a new feature.
-- `fix`: You fixed something.
-- `test`: You changed a test.
-- `documentation`: You changed the documentation.
-- `refactor`:  You refactored some code.
+- `api break`: Your change will break the existing API in any way.
+- `feature`: You added a new feature, without breaking the existing API.
+- `fix`: You fixed a bug.
+- `test`: You changed or added a test.
+- `documentation`: You extended or corrected the documentation.
 - `maintenance`: For anything else.
 
 ### Subject
@@ -281,7 +238,3 @@ Note that we cannot accept contributions that are either missing a licence state
 ``` text
 My contribution is licensed under the MIT license.
 ```
-
-#### Team members
-
-Team members are excluded from this, as one part of becoming a team member is to sign a statement already handling all future contributions.

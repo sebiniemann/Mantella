@@ -26,13 +26,6 @@ SCENARIO("HillClimbing.optimise", "[HillClimbing][HillClimbing.optimise]") {
 
 SCENARIO("HillClimbing.setMinimalStepSize", "[HillClimbing][HillClimbing.setMinimalStepSize]") {
   GIVEN("A minimal step size") {
-    WHEN("The minimal step size is negative") {
-      THEN("Throw a domain error") {
-        mant::HillClimbing optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMinimalStepSize(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The minimal step size is positive or 0") {
       THEN("Throw no exception") {
         mant::HillClimbing optimisationAlgorithm;
@@ -53,13 +46,6 @@ SCENARIO("HillClimbing.getMinimalStepSize", "[HillClimbing][HillClimbing.getMini
 
 SCENARIO("HillClimbing.setMaximalStepSize", "[HillClimbing][HillClimbing.setMaximalStepSize]") {
   GIVEN("A maximal step size") {
-    WHEN("The maximal step size is negative") {
-      THEN("Throw a domain error") {
-        mant::HillClimbing optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMaximalStepSize(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The maximal step size is positive or 0") {
       THEN("Throw no exception") {
         mant::HillClimbing optimisationAlgorithm;

@@ -1,5 +1,4 @@
 #pragma once
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <chrono>
@@ -17,6 +16,8 @@
 #include <armadillo>
 
 // Mantella
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
+#include "mantella_bits/probability.hpp"
 namespace mant {
   class OptimisationProblem;
 }
@@ -27,27 +28,66 @@ namespace mant {
     explicit OptimisationAlgorithm();
 
     void setInitialisingFunctions(
-        const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& initialParameters_)>, std::string>>& initialisingFunctions);
+        const std::vector<std::pair<
+            std::function<
+                arma::mat(
+                    const arma::uword numberOfDimensions_,
+                    const arma::mat& initialParameters_)>,
+            std::string>>& initialisingFunctions);
+
     std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& initialParameters_)>, std::string>> getInitialisingFunctions() const;
 
     void setNextParametersFunctions(
-        const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& nextParametersFunctions);
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& nextParametersFunctions);
+
     std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getNextParametersFunctions() const;
 
     void setBoundariesHandlingFunctions(
-        const std::vector<std::pair<std::function<arma::mat(const arma::mat& parameters_, const arma::umat& isBelowLowerBound_, const arma::umat& isAboveUpperBound_)>, std::string>>& boundariesHandlingFunctions);
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::mat& parameters_,
+                const arma::umat& isBelowLowerBound_,
+                const arma::umat& isAboveUpperBound_)>,
+            std::string>>& boundariesHandlingFunctions);
+
     std::vector<std::pair<std::function<arma::mat(const arma::mat& parameters_, const arma::umat& isBelowLowerBound_, const arma::umat& isAboveUpperBound_)>, std::string>> getBoundariesHandlingFunctions() const;
 
     void setIsStagnatingFunctions(
-        const std::vector<std::pair<std::function<bool(const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& isStagnatingFunctions);
+        const std::vector<std::pair<
+            std::function<bool(
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& isStagnatingFunctions);
+
     std::vector<std::pair<std::function<bool(const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getIsStagnatingFunctions() const;
 
     void setRestartingFunctions(
-        const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& restartingFunctions);
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& restartingFunctions);
+
     std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getRestartingFunctions() const;
 
     void setCommunicationFunctions(
-        const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& communicationFunctions);
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& communicationFunctions);
+
     std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getCommunicationFunctions() const;
 
     void optimise(
@@ -62,7 +102,8 @@ namespace mant {
         const double acceptableObjectiveValue);
     double getAcceptableObjectiveValue() const;
 
-    void setMaximalNumberOfIterations(
+    void
+    setMaximalNumberOfIterations(
         const arma::uword maximalNumberOfIterations);
     arma::uword getMaximalNumberOfIterations() const;
 
@@ -80,9 +121,6 @@ namespace mant {
     double getBestFoundObjectiveValue() const;
 
     std::vector<std::pair<arma::vec, double>> getRecordedSampling() const;
-
-    int getNodeRank() const;
-    int getNumberOfNodes() const;
 
     void reset();
 
@@ -137,9 +175,6 @@ namespace mant {
         std::string>>
         communicationFunctions_;
 
-    int nodeRank_;
-    int numberOfNodes_;
-
     arma::uword numberOfCommunicationStalls_;
 
     double acceptableObjectiveValue_;
@@ -163,7 +198,6 @@ namespace mant {
     arma::mat normalisedParameters(
         const OptimisationProblem& optimisationProblem,
         const arma::mat& parameters) const;
-
     arma::mat denormalisedParameters(
         const OptimisationProblem& optimisationProblem,
         const arma::mat& normalisedParameters) const;

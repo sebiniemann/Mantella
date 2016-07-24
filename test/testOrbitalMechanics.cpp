@@ -2,7 +2,11 @@
 #include <catch.hpp>
 #include "catchHelper.hpp"
 
-// The following tests are based on the Cassini-Huygens mission, but only to the extend that the position and velocity of Earth and Venus should be correct. The satellit's position and especially its velocity might be slightly off from the real mission, as we do not included its mass, start procedure or actual thrusts during the mission.
+// The following tests are based on the Cassini-Huygens mission, but only to the
+// extend that the position and velocity of Earth and Venus should be correct.
+// The satellit's position and especially its velocity might be slightly off
+// from the real mission, as we do not included its mass, start procedure or
+// actual thrusts during the mission.
 SCENARIO("stumpffFunction", "[orbitalMechanics][stumpffFunction]") {
   GIVEN("A parameter and a type") {
     THEN("Return the result of the Stumpff function") {
@@ -56,12 +60,6 @@ SCENARIO("positionAndVelocityOnOrbit", "[orbitalMechanics][positionAndVelocityOn
         CHECK(arma::approx_equal(positionAndVelocity.second, arma::vec({1.6669675918095876e+04, 2.4668643369510577e+04, 1.2225097790873254e-01}), "reldiff", ::mant::machinePrecision) == true);
       }
     }
-
-    WHEN("The eccentricity is equal to or greater than 1.0") {
-      THEN("Throw a std::logic_error") {
-        CHECK_THROWS_AS(mant::itd::positionAndVelocityOnOrbit(4453401600.0, arma::vec({108209474522.8824, 1.0067767205622176587, 0.059248274299581655, 1.3383157887557473, 0.95858056664193103, 0.87043843382287189, 4453401600.0})), std::logic_error);
-      }
-    }
   }
 }
 
@@ -84,7 +82,9 @@ SCENARIO("lambert", "[orbitalMechanics][lambert]") {
 
       // From Venus (after one revolution) back towards Earth.
       departureAndArivalVelocity = mant::itd::lambert({1.0958474846549156e+10, -1.0758115275186798e+11, -4.1768951438493319e+09}, {1.2400638592866623e+11, -8.3833980661523087e+10, 3.2922006660828856e+05}, false, 1, 41385600.0);
-      // Due to the varying middle bound when calculating the universal variable for the multi-revolution case, the precise value is bound to the systems randomness.
+      // Due to the varying middle bound when calculating the universal variable
+      // for the multi-revolution case, the precise value is bound to the
+      // systems randomness.
       CHECK(arma::all(departureAndArivalVelocity.first < 1e5) == true);
       CHECK(arma::all(departureAndArivalVelocity.second < 1e5) == true);
     }

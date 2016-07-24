@@ -19,18 +19,4 @@ namespace mant {
         const arma::vec& firstKey,
         const arma::vec& secondKey) const;
   };
-
-  arma::mat randu(
-      const arma::uword numberOfRows,
-      const arma::uword numberOfColumns);
-
-  arma::vec randu(
-      const arma::uword numberOfElements);
-
-  arma::mat randn(
-      const arma::uword numberOfRows,
-      const arma::uword numberOfColumns);
-
-  arma::vec randn(
-      const arma::uword numberOfElements);
 }

@@ -4,21 +4,21 @@
 
 SCENARIO("Hash", "[armadillo][Hash]") {
   GIVEN("A parameter") {
-    WHEN("The parameter is empty") {
-      THEN("Throw an invalid argument") {
-        CHECK_THROWS_AS(mant::Hash()({}), std::invalid_argument);
-      }
-    }
+    THEN("Throw no exception and have at most 1 collision between 100.000 randomly independent parameters") {
+      mant::Hash hashFunction;
 
-    WHEN("The parameter contains NaNs") {
-      THEN("Throw a domain error") {
-        CHECK_THROWS_AS(mant::Hash()(arma::vec({std::numeric_limits<double>::quiet_NaN()})), std::domain_error);
-      }
-    }
-
-    WHEN("The parameter does not contain NaNs") {
-      THEN("Throw no exception") {
-        CHECK_NOTHROW(mant::Hash()(arma::vec({1.0, std::numeric_limits<double>::infinity()})));
+      std::vector<arma::uword> hashes;
+      hashes.reserve(100'000);
+      bool hasAlreadyCollided = false;
+      for (arma::uword n = 0; n < 100'000; ++n) {
+        // The actual hash value depends on the used C++ library, wherefore we cannot test is directly.
+        const arma::uword hash = hashFunction(mant::uniformRandomNumbers(10));
+        if (std::find(hashes.cbegin(), hashes.cend(), hash) != hashes.cend()) {
+          CHECK(hasAlreadyCollided == false);
+          hasAlreadyCollided = true;
+        } else {
+          hashes.push_back(hash);
+        }
       }
     }
   }
@@ -45,15 +45,27 @@ SCENARIO("IsEqual", "[armadillo][IsEqual]") {
       }
     }
 
+    WHEN("Both parameters contain infinity") {
+      THEN("Return true") {
+        CHECK(mant::IsEqual()(arma::vec({std::numeric_limits<double>::infinity()}), arma::vec({std::numeric_limits<double>::infinity()})) == true);
+      }
+    }
+
     WHEN("Both parameters are equal in size but contain different values") {
       THEN("Return false") {
         CHECK(mant::IsEqual()(arma::vec({0.0}), arma::vec({-1.0})) == false);
       }
     }
 
+    WHEN("Both parameters differ by less than the defined machine precision") {
+      THEN("Return true") {
+        CHECK(mant::IsEqual()(arma::vec({0.0}), arma::vec({std::nexttoward(::mant::machinePrecision, 0.0)})) == true);
+      }
+    }
+
     WHEN("Both parameters are identical") {
       THEN("Return true") {
-        CHECK(mant::IsEqual()(arma::vec({1.0, -std::numeric_limits<double>::infinity()}), arma::vec({1.0, -std::numeric_limits<double>::infinity()})) == true);
+        CHECK(mant::IsEqual()(arma::vec({1.0, -3.0}), arma::vec({1.0, -3.0})) == true);
       }
     }
   }
