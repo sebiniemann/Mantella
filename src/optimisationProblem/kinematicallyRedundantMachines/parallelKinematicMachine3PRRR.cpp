@@ -20,10 +20,18 @@ namespace mant {
   namespace krm {
     ParallelKinematicMachine3PRRR::ParallelKinematicMachine3PRRR()
         : KinematicallyRedundantMachines(3, 3),
-          redundantJointsPosition_({0.6, 1.039230484541327, 0.0, 0.0, 1.2, 0.0}),
-          redundantJointsAngles_({0.0, 1.0, -1.0, 0.0, -1.0, 0.0}),
-          linkLengths_({0.6, 0.6, 0.6, 0.6, 0.6, 0.6}),
-          endEffectorJointsRelativePosition_({-0.000066580445834, 0.106954081945581, -0.092751709777083, -0.053477040972790, 0.092818290222917, -0.053477040972790}) {
+          redundantJointsPosition_(
+              {{0.6, 0.0, 1.2},
+               {1.039230484541327, 0.0, 0.0}}),
+          redundantJointsAngles_(
+              {{0.0, -1.0, -1.0},
+               {1.0, 0.0, 0.0}}),
+          linkLengths_(
+              {{0.6, 0.6, 0.6},
+               {0.6, 0.6, 0.6}}),
+          endEffectorJointsRelativePosition_(
+              {{-0.000066580445834, -0.092751709777083, 0.092818290222917},
+               {0.106954081945581, -0.053477040972790, -0.053477040972790}}) {
       setLowerBounds({-0.5, -0.2, -0.2});
       setUpperBounds({0.5, 0.8, 0.8});
 

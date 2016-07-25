@@ -5,16 +5,16 @@
 
 namespace mant {
   arma::mat hammersleySet(
-      const arma::uvec& base,
-      const arma::uvec& seed,
+      const arma::uvec& bases,
+      const arma::uvec& seeds,
       const arma::uword numberOfElements);
   arma::mat hammersleySet(
       const arma::uvec& base,
       const arma::uword numberOfElements);
 
   arma::mat haltonSequence(
-      const arma::uvec& base,
-      const arma::uvec& seed,
+      const arma::uvec& bases,
+      const arma::uvec& seeds,
       const arma::uword numberOfElements);
   arma::mat haltonSequence(
       const arma::uvec& base,

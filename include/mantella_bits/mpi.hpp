@@ -15,12 +15,12 @@ namespace mant {
 
   arma::uvec synchronise(
       const arma::uvec& data);
-      
+
   arma::rowvec synchronise(
       arma::rowvec data);
-      
+
   arma::urowvec synchronise(
-      arma::urowvec data);
+      const arma::urowvec& data);
 
   double synchronise(
       double data);

@@ -54,7 +54,7 @@ SCENARIO("synchronise", "[mpi][synchronise]") {
       }
     }
   }
-  
+
   GIVEN("A continuous column vector") {
     WHEN("The first node's matrix is empty") {
       THEN("All nodes return an empty vector") {
@@ -105,7 +105,7 @@ SCENARIO("synchronise", "[mpi][synchronise]") {
       }
     }
   }
-  
+
   GIVEN("A continuous row vector") {
     WHEN("The first node's matrix is empty") {
       THEN("All nodes return an empty vector") {

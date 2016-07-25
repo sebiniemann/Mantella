@@ -41,7 +41,7 @@ namespace mant {
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -104,7 +104,7 @@ namespace mant {
 
     // ... all eigenvalues must be positive (including 0).
     arma::cx_vec eigenValues;
-    if(!arma::eig_gen(eigenValues, positiveSemiMatrixCandidate)) {
+    if (!arma::eig_gen(eigenValues, positiveSemiMatrixCandidate)) {
       return false;
     }
 

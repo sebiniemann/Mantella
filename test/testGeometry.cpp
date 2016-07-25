@@ -4,11 +4,9 @@
 
 SCENARIO("rotationMatrix2d", "[geometry][rotationMatrix2d]") {
   GIVEN("An angle") {
-    double angle;
-
     WHEN("The angle is finite") {
       THEN("Return a 2-dimensional rotation matrix") {
-        CHECK(arma::approx_equal(mant::rotationMatrix2d(1.0), arma::mat::fixed<2, 2>({0.540302305868140, -0.841470984807897, 0.841470984807897, 0.540302305868140}), "absdiff", ::mant::machinePrecision) == true);
+        CHECK(arma::approx_equal(mant::rotationMatrix2d(1.0), arma::mat::fixed<2, 2>({{0.540302305868140, -0.841470984807897}, {0.841470984807897, 0.540302305868140}}), "absdiff", ::mant::machinePrecision) == true);
       }
     }
   }
@@ -18,7 +16,7 @@ SCENARIO("rotationMatrix3d", "[geometry][rotationMatrix3d]") {
   GIVEN("A roll, pitch and yaw angle") {
     WHEN("The angles are finite") {
       THEN("Return a 3-dimensional rotation matrix") {
-        CHECK(arma::approx_equal(mant::rotationMatrix3d(-1.0, 2.0, -3.0), arma::mat::fixed<3, 3>({0.411982245665683, 0.058726644927621, -0.909297426825682, 0.833737651774157, -0.426917621276207, 0.350175488374015, -0.367630462924899, -0.902381585483331, -0.224845095366153}), "absdiff", ::mant::machinePrecision) == true);
+        CHECK(arma::approx_equal(mant::rotationMatrix3d(-1.0, 2.0, -3.0), arma::mat::fixed<3, 3>({{0.411982245665683, 0.833737651774157, -0.367630462924899}, {0.058726644927621, -0.426917621276207, -0.902381585483331}, {-0.909297426825682, 0.350175488374015, -0.224845095366153}}), "absdiff", ::mant::machinePrecision) == true);
       }
     }
   }

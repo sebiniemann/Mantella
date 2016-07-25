@@ -14,7 +14,9 @@ namespace mant {
       const double angle) {
     assert(std::isfinite(angle) && "rotationMatrix2d: The angle must be finite.");
 
-    return arma::mat::fixed<2, 2>({std::cos(angle), -std::sin(angle), std::sin(angle), std::cos(angle)});
+    return arma::mat(
+    {{std::cos(angle), -std::sin(angle)},
+    {std::sin(angle), std::cos(angle)}});
   }
 
   arma::mat::fixed<3, 3> rotationMatrix3d(
@@ -28,33 +30,33 @@ namespace mant {
     // In case the Tait-Bryan angles losses a rank, i.e. a gimbal lock would occur.
     if (std::abs(std::fmod(pitchAngle, arma::datum::pi / 2.0)) < ::mant::machinePrecision) {
       // Uses quaternions
-      const arma::vec::fixed<4>& quaternion = {
+      const arma::vec& quaternion = {
           std::cos(rollAngle / 2.0) * std::cos(pitchAngle / 2.0) * std::cos(yawAngle / 2.0) + std::sin(rollAngle / 2.0) * std::sin(pitchAngle / 2.0) * std::sin(yawAngle / 2.0),
           std::sin(rollAngle / 2.0) * std::cos(pitchAngle / 2.0) * std::cos(yawAngle / 2.0) - std::cos(rollAngle / 2.0) * std::sin(pitchAngle / 2.0) * std::sin(yawAngle / 2.0),
           std::cos(rollAngle / 2.0) * std::sin(pitchAngle / 2.0) * std::cos(yawAngle / 2.0) + std::sin(rollAngle / 2.0) * std::cos(pitchAngle / 2.0) * std::sin(yawAngle / 2.0),
           std::cos(rollAngle / 2.0) * std::cos(pitchAngle / 2.0) * std::sin(yawAngle / 2.0) - std::sin(rollAngle / 2.0) * std::sin(pitchAngle / 2.0) * std::cos(yawAngle / 2.0)};
-      return arma::mat::fixed<3, 3>(
-          {1.0 - 2.0 * (std::pow(quaternion(2), 2.0) + std::pow(quaternion(3), 2.0)),
-           2.0 * (quaternion(1) * quaternion(2) + quaternion(3) * quaternion(0)),
-           2.0 * (quaternion(1) * quaternion(3) - quaternion(2) * quaternion(0)),
-           2.0 * (quaternion(1) * quaternion(2) - quaternion(3) * quaternion(0)),
-           1.0 - 2.0 * (std::pow(quaternion(1), 2.0) + std::pow(quaternion(3), 2.0)),
-           2.0 * (quaternion(2) * quaternion(3) + quaternion(1) * quaternion(0)),
-           2.0 * (quaternion(1) * quaternion(3) + quaternion(2) * quaternion(0)),
-           2.0 * (quaternion(2) * quaternion(3) - quaternion(1) * quaternion(0)),
-           1.0 - 2.0 * (std::pow(quaternion(1), 2.0) + std::pow(quaternion(2), 2.0))});
+      return arma::mat(
+          {{1.0 - 2.0 * (std::pow(quaternion(2), 2.0) + std::pow(quaternion(3), 2.0)),
+            2.0 * (quaternion(1) * quaternion(2) - quaternion(3) * quaternion(0)),
+            2.0 * (quaternion(1) * quaternion(3) + quaternion(2) * quaternion(0))},
+           {2.0 * (quaternion(1) * quaternion(2) + quaternion(3) * quaternion(0)),
+            1.0 - 2.0 * (std::pow(quaternion(1), 2.0) + std::pow(quaternion(3), 2.0)),
+            2.0 * (quaternion(2) * quaternion(3) - quaternion(1) * quaternion(0))},
+           {2.0 * (quaternion(1) * quaternion(3) - quaternion(2) * quaternion(0)),
+            2.0 * (quaternion(2) * quaternion(3) + quaternion(1) * quaternion(0)),
+            1.0 - 2.0 * (std::pow(quaternion(1), 2.0) + std::pow(quaternion(2), 2.0))}});
     } else {
       // Uses Z,Y,X Tait-Bryan angles
-      return arma::mat::fixed<3, 3>(
-          {std::cos(yawAngle) * std::cos(pitchAngle),
-           std::sin(yawAngle) * std::cos(pitchAngle),
-           -std::sin(pitchAngle),
-           std::cos(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) - std::sin(yawAngle) * std::cos(rollAngle),
-           std::sin(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) + std::cos(yawAngle) * std::cos(rollAngle),
-           std::cos(pitchAngle) * std::sin(rollAngle),
-           std::cos(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) + std::sin(yawAngle) * std::sin(rollAngle),
-           std::sin(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) - std::cos(yawAngle) * std::sin(rollAngle),
-           std::cos(pitchAngle) * std::cos(rollAngle)});
+      return arma::mat(
+          {{std::cos(yawAngle) * std::cos(pitchAngle),
+            std::cos(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) - std::sin(yawAngle) * std::cos(rollAngle),
+            std::cos(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) + std::sin(yawAngle) * std::sin(rollAngle)},
+           {std::sin(yawAngle) * std::cos(pitchAngle),
+            std::sin(yawAngle) * std::sin(pitchAngle) * std::sin(rollAngle) + std::cos(yawAngle) * std::cos(rollAngle),
+            std::sin(yawAngle) * std::sin(pitchAngle) * std::cos(rollAngle) - std::cos(yawAngle) * std::sin(rollAngle)},
+           {-std::sin(pitchAngle),
+            std::cos(pitchAngle) * std::sin(rollAngle),
+            std::cos(pitchAngle) * std::cos(rollAngle)}});
     }
   }
 

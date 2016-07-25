@@ -107,7 +107,7 @@ SCENARIO("secondStirlingNumber", "[combinatorics][secondStirlingNumber]") {
         CHECK(mant::secondStirlingNumber(3, 2) == 3);
       }
     }
-    
+
     WHEN("The second Stirling number is overflowing") {
       THEN("Throw an overflow error") {
         CHECK_THROWS_AS(mant::secondStirlingNumber(200, 100), std::overflow_error);

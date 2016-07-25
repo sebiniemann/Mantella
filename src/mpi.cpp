@@ -128,7 +128,7 @@ namespace mant {
       } else {
         for (const auto element : data) {
           if (element > std::numeric_limits<unsigned long long>::max()) {
-        throw std::range_error("synchronise: The numbers to be synchronised must be less than or equal to the largest supported MPI integer.");
+            throw std::range_error("synchronise: The numbers to be synchronised must be less than or equal to the largest supported MPI integer.");
           }
         }
       }
@@ -196,7 +196,7 @@ namespace mant {
       } else {
         for (const auto element : data) {
           if (element > std::numeric_limits<unsigned long long>::max()) {
-        throw std::range_error("synchronise: The numbers to be synchronised must be less than or equal to the largest supported MPI integer.");
+            throw std::range_error("synchronise: The numbers to be synchronised must be less than or equal to the largest supported MPI integer.");
           }
         }
       }

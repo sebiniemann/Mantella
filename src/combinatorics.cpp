@@ -103,7 +103,7 @@ namespace mant {
      * This avoids temporarily storing large integers and allows us to calculate greater Stirling numbers, before hitting an overflow.
      * However, the fractions are not representable as an integer in most cases, wherefore we perform the whole computation based on floating points.
      */
-     
+
     // The largest values we are converting later on are actually reduced by 1.
     if (!isRepresentableAsFloatingPoint(numberOfElements - 1)) {
       throw std::range_error("secondStirlingNumber: The number of elements must be representable as a floating point.");
