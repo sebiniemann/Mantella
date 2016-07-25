@@ -82,28 +82,28 @@ namespace mant {
   arma::uword secondStirlingNumber(
       const arma::uword numberOfElements,
       const arma::uword numberOfParts) {
-    if (numberOfElements == 0 || numberOfParts == 0 ||
-        numberOfElements < numberOfParts) {
+    if (numberOfElements == 0 || numberOfParts == 0 || numberOfElements < numberOfParts) {
       return 0;
     } else if (numberOfParts == 1 || numberOfElements == numberOfParts) {
       return 1;
     }
 
-    // Instead of calculating the second Stirling number directly based on its explicit formula
-    //
-    //  1     k               / k \
-    // --- * sum (-1)^(k-l) * |   | * l^n
-    //  k!   l=1              \ l /
-    //
-    // we wrote it as
-    //
-    //  k                   l^(n-1)
-    // sum (-1)^(k-l) * ---------------
-    // l=1              (l-1)! * (k-l)!
-    //
-    // This avoids temporarily storing large integers and allows us to calculate greater Stirling numbers, before hitting an overflow.
-    // However, the fractions are not representable as an integer in most cases, wherefore we perform the whole computation based on floating points.
-
+    /* Instead of calculating the second Stirling number directly based on its explicit formula
+     *
+     *  1     k               / k \
+     * --- * sum (-1)^(k-l) * |   | * l^n
+     *  k!   l=1              \ l /
+     *
+     * we wrote it as
+     *
+     *  k                   l^(n-1)
+     * sum (-1)^(k-l) * ---------------
+     * l=1              (l-1)! * (k-l)!
+     *
+     * This avoids temporarily storing large integers and allows us to calculate greater Stirling numbers, before hitting an overflow.
+     * However, the fractions are not representable as an integer in most cases, wherefore we perform the whole computation based on floating points.
+     */
+     
     // The largest values we are converting later on are actually reduced by 1.
     if (!isRepresentableAsFloatingPoint(numberOfElements - 1)) {
       throw std::range_error("secondStirlingNumber: The number of elements must be representable as a floating point.");
@@ -113,7 +113,11 @@ namespace mant {
 
     double secondStirlingNumber = 0;
     for (arma::uword l = 1; l <= numberOfParts; ++l) {
-      secondStirlingNumber += std::pow(-1.0, static_cast<decltype(secondStirlingNumber)>(numberOfParts - l)) * std::pow(l, (static_cast<decltype(secondStirlingNumber)>(numberOfElements - 1))) / (factorial(l - 1) * factorial(numberOfParts - l));
+      try {
+        secondStirlingNumber += std::pow(-1.0, static_cast<decltype(secondStirlingNumber)>(numberOfParts - l)) * std::pow(l, (static_cast<decltype(secondStirlingNumber)>(numberOfElements - 1))) / (factorial(l - 1) * factorial(numberOfParts - l));
+      } catch (const std::overflow_error& exception) {
+        throw std::overflow_error("secondStirlingNumber: The second Stirling number will be greater than the largest supported integer.");
+      }
     }
     // Fixes rounding errors due to the limited precision.
     secondStirlingNumber = std::round(secondStirlingNumber);

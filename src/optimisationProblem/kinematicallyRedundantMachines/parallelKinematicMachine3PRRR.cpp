@@ -75,7 +75,11 @@ namespace mant {
                 if (!arma::solve(solution, forwardKinematic.t(), inverseKinematic)) {
                   return std::numeric_limits<decltype(poseInaccuracy)>::infinity();
                 } else {
-                  poseInaccuracy = std::max(poseInaccuracy, arma::cond(solution));
+                  try {
+                    poseInaccuracy = std::max(poseInaccuracy, arma::cond(solution));
+                  } catch (...) {
+                    return std::numeric_limits<decltype(poseInaccuracy)>::infinity();
+                  }
                 }
               }
 

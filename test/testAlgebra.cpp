@@ -55,11 +55,5 @@ SCENARIO("polynomial", "[algebra][polynomial]") {
         CHECK(arma::approx_equal(mant::polynomial({-2.0, 3.0}, 3), arma::vec({-8.0, 12.0, -18.0, 27.0, 4.0, -6.0, 9.0, -2.0, 3.0, 1.0}), "absdiff", ::mant::machinePrecision) == true);
       }
     }
-
-    WHEN("The polynomials size is not addressable") {
-      THEN("Throw an overflow error") {
-        CHECK_THROWS_AS(mant::polynomial(arma::zeros<arma::vec>(100), 100), std::overflow_error);
-      }
-    }
   }
 }

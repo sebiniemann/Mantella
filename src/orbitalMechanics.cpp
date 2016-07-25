@@ -41,7 +41,12 @@ namespace mant {
           return 5.0 / 6.0;
         }
       } else {
-        return (1.0 / factorial(static_cast<double>(type - 2)) - stumpffFunction(parameter, type - 2)) / parameter;
+        try {
+          return (1.0 / factorial(static_cast<double>(type - 2)) - stumpffFunction(parameter, type - 2)) / parameter;
+        } catch (const std::overflow_error& exception) {
+          // As `factorial(...)` overflows, `1.0 / factorial(...)` is expected to be insignificantly small.
+          return -stumpffFunction(parameter, type - 2) / parameter;
+        }
       }
     }
 

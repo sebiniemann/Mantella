@@ -38,8 +38,7 @@ namespace mant {
 
     // Determines one parameter having a minimal objective value within the set of samples.
     // The best parameter is then subtracted from all other parameters, so that we can later calculated the distance towards the best one.
-    arma::uword bestParameterIndex;
-    objectiveValues.min(bestParameterIndex);
+    arma::uword bestParameterIndex = objectiveValues.index_min();
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
     // Excludes the best/reference parameter from the correlation, as it will always perfectly correlate with itself and therefore bias the correlation coefficient.

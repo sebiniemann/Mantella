@@ -10,9 +10,15 @@ SCENARIO("factorial", "[combinatorics][factorial]") {
       }
     }
 
-    WHEN("The number is not overflowing") {
+    WHEN("The factorial is not overflowing") {
       THEN("Return the factorial") {
         CHECK(mant::factorial(10) == 3628800);
+      }
+    }
+
+    WHEN("The factorial is overflowing") {
+      THEN("Throw an overflow error") {
+        CHECK_THROWS_AS(mant::factorial(100), std::overflow_error);
       }
     }
   }
@@ -55,6 +61,12 @@ SCENARIO("nchoosek", "[combinatorics][nchoosek]") {
         CHECK(mant::nchoosek(3, 2) == 3);
       }
     }
+
+    WHEN("The binomial coefficient is overflowing") {
+      THEN("Throw an overflow error") {
+        CHECK_THROWS_AS(mant::nchoosek(100, 50), std::overflow_error);
+      }
+    }
   }
 }
 
@@ -93,6 +105,12 @@ SCENARIO("secondStirlingNumber", "[combinatorics][secondStirlingNumber]") {
     WHEN("The number of elements is greater than the number of parts") {
       THEN("Return the second Stirling number") {
         CHECK(mant::secondStirlingNumber(3, 2) == 3);
+      }
+    }
+    
+    WHEN("The second Stirling number is overflowing") {
+      THEN("Throw an overflow error") {
+        CHECK_THROWS_AS(mant::secondStirlingNumber(200, 100), std::overflow_error);
       }
     }
   }

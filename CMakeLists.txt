@@ -50,7 +50,7 @@ endif()
 message(STATUS "") 
 message(STATUS "Finding dependencies.")
 
-set(REQUIRED_ARMADILLO_VERSION "6.700.0")
+set(REQUIRED_ARMADILLO_VERSION "7.300.0")
 find_package(Armadillo QUIET)
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
 if (NOT ARMADILLO_FOUND)

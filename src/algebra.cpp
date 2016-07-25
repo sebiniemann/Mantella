@@ -19,8 +19,13 @@ namespace mant {
     arma::uword polynomialSize = 1;
     // Sums up the number of parameter combinations for each degree > 0.
     for (arma::uword degree = 1; degree <= highestDegree; ++degree) {
-      const arma::uword numberOfCombinations = nchoosek(numberOfIndeterminates + degree - 1, degree);
-
+      arma::uword numberOfCombinations;
+      try {
+        numberOfCombinations = nchoosek(numberOfIndeterminates + degree - 1, degree);
+      } catch (const std::overflow_error& exception) {
+        throw std::overflow_error("polynomialSize: The polynomial size will be greater than the largest supported integer.");
+      }
+      
       if (std::numeric_limits<decltype(polynomialSize)>::max() - polynomialSize < numberOfCombinations) {
         throw std::overflow_error("polynomialSize: The polynomial size will be greater than the largest supported integer.");
       }
@@ -38,8 +43,9 @@ namespace mant {
       // By definition, the constant term is 1.
       return {1.0};
     }
-
+  
     arma::vec polynomial(polynomialSize(parameter.n_elem, highestDegree));
+
     arma::uword n = 0;
     // Generates all terms for degree > 1
     for (arma::uword degree = highestDegree; degree >= 2; --degree) {

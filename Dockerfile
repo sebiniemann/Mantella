@@ -30,7 +30,7 @@ RUN apt-get install -y clang-3.8 && \
 # - Armadillo C++ (and fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
 RUN apt-get install -y cmake
 RUN apt-get install -y wget xz-utils libblas-dev liblapack-dev libopenblas-dev && \
-    wget -O armadillo.tar.xz http://downloads.sourceforge.net/arma/armadillo-7.200.2.tar.xz && \
+    wget -O armadillo.tar.xz http://downloads.sourceforge.net/arma/armadillo-7.300.0.tar.xz && \
     mkdir armadillo && \
     tar -xJf armadillo.tar.xz -C ./armadillo --strip-components=1 && \
     cd armadillo && \

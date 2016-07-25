@@ -28,15 +28,20 @@ namespace mant {
       //  ... be finite, ...
       return false;
     } else if (!rotationCandidate.is_square()) {
-      // ... square and ...
+      // ... square, ...
       return false;
-      // Uses the Moore-Penrose pseudo-inverse instead of `arma::inv(...)`, as the
-      // matrix might not be invertible.
-    } else if (!arma::approx_equal(arma::pinv(rotationCandidate).t(), rotationCandidate, "absdiff", ::mant::machinePrecision)) {
-      // ... its transpose must be equal to its inverse.
-      return false;
+    } else {
+      arma::mat inverse;
+      // Uses the Moore-Penrose pseudo-inverse instead of `arma::inv(...)`, as the matrix might not be invertible.
+      if (!arma::pinv(inverse, rotationCandidate)) {
+        // ... invertible and ...
+        return false;
+      } else if (!arma::approx_equal(inverse.t(), rotationCandidate, "absdiff", ::mant::machinePrecision)) {
+        // ... its transpose must be equal to its inverse.
+        return false;
+      }
     }
-
+    
     return true;
   }
 
@@ -99,9 +104,7 @@ namespace mant {
 
     // ... all eigenvalues must be positive (including 0).
     arma::cx_vec eigenValues;
-    try {
-      arma::eig_gen(eigenValues, positiveSemiMatrixCandidate);
-    } catch (...) {
+    if(!arma::eig_gen(eigenValues, positiveSemiMatrixCandidate)) {
       return false;
     }
 
