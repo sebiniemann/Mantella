@@ -244,57 +244,104 @@ SCENARIO("hasSameElements", "[catchHelper][hasSameElements]") {
   }
 }
 
-SCENARIO("isUniformlyDistributed", "[catchHelper][isUniformlyDistributed]") {
-  GIVEN("A continuous matrix, a lower and an upper bound") {
-    WHEN("The matrix is empty") {
+SCENARIO("hasSameDistribution", "[catchHelper][hasSameDistribution]") {
+  GIVEN("A vector and a cumulative distribution") {
+    WHEN("Either the vector or the distribution is empty") {
       THEN("Return false") {
-        CHECK(isUniformlyDistributed(arma::mat(), 0.0, 1.0) == false);
+        CHECK(hasSameDistribution(arma::vec({1.0}), arma::vec()) == false);
+        CHECK(hasSameDistribution(arma::vec(), arma::vec({1.0})) == false);
       }
     }
 
-    WHEN("A bound is NaN") {
-      THEN("Return false") {
-        CHECK(isUniformlyDistributed(mant::uniformRandomNumbers(100000, 10), std::numeric_limits<double>::quiet_NaN(), 1.0) == false);
-        CHECK(isUniformlyDistributed(mant::uniformRandomNumbers(100000, 10), 0.0, std::numeric_limits<double>::quiet_NaN()) == false);
-      }
-    }
-
-    WHEN("A bound is infinity") {
-      THEN("Return false") {
-        CHECK(isUniformlyDistributed(mant::uniformRandomNumbers(100000, 10), -std::numeric_limits<double>::infinity(), 1.0) == false);
-        CHECK(isUniformlyDistributed(mant::uniformRandomNumbers(100000, 10), 0.0, std::numeric_limits<double>::infinity()) == false);
-      }
-    }
-
-    WHEN("The matrix is not uniformly drawn from `[lowerBound, upperBound]`") {
-      THEN("Return false") {
-        CHECK(isUniformlyDistributed(mant::normalRandomNumbers(100000, 10), 0.0, 1.0) == false);
-      }
-    }
-
-    WHEN("The matrix is uniformly drawn from `[lowerBound, upperBound]`") {
+    WHEN("Both are empty") {
       THEN("Return true") {
-        CHECK(isUniformlyDistributed(mant::uniformRandomNumbers(100000, 10), 0.0, 1.0) == true);
+        CHECK(hasSameDistribution(arma::vec(), arma::vec()) == true);
+      }
+    }
+
+    WHEN("The vector has a different distribution") {
+      THEN("Return false") {
+        CHECK(hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(mant::uniformRandomNumbers(100000), 100)) / 100000.0), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(100000), -100.0, 100.0), 100)) / 100000.0)) == false);
+      }
+    }
+
+    WHEN("The vector has the same distribution") {
+      THEN("Return true") {
+        CHECK(hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(100000), -100.0, 100.0), 100)) / 100000.0), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(100000), -100.0, 100.0), 100)) / 100000.0)) == true);
       }
     }
   }
+}
 
-  GIVEN("A discrete matrix, a lower and an upper bound") {
-    WHEN("The matrix is empty") {
+SCENARIO("isUniformDistributed", "[catchHelper][isUniformDistributed]") {
+  GIVEN("A vector") {
+    WHEN("The vector is empty") {
       THEN("Return false") {
-        CHECK(isUniformlyDistributed(arma::umat(), 0, 1) == false);
+        CHECK(isUniformDistributed(arma::vec(), 0.0, 1.0) == false);
       }
     }
 
-    WHEN("The matrix is not uniformly drawn from `[lowerBound, upperBound]`") {
+    WHEN("The vector is not uniformly distributed") {
       THEN("Return false") {
-        CHECK(isUniformlyDistributed(arma::randi<arma::umat>(100000, 10, arma::distr_param(0, 1)), 0, 2) == false);
+        CHECK(isUniformDistributed(mant::normalRandomNumbers(100000), 0.0, 1.0) == false);
       }
     }
 
-    WHEN("The matrix is uniformly drawn from `[lowerBound, upperBound]`") {
+    WHEN("The vector is uniformly distributed") {
       THEN("Return true") {
-        CHECK(isUniformlyDistributed(arma::randi<arma::umat>(100000, 10, arma::distr_param(0, 2)), 0, 2) == true);
+        CHECK(isUniformDistributed(mant::uniformRandomNumbers(100000) * 2.0 + 1.0, 1.0, 2.0) == true);
+      }
+    }
+  }
+}
+
+SCENARIO("isNormalDistributed", "[catchHelper][isNormalDistributed]") {
+  GIVEN("A vector") {
+    WHEN("The vector is empty") {
+      THEN("Return false") {
+        CHECK(isNormalDistributed(arma::vec(), 1.0) == false);
+      }
+    }
+
+    WHEN("The vector is not normal distributed") {
+      THEN("Return false") {
+        CHECK(isNormalDistributed(mant::uniformRandomNumbers(100000), 1.0) == false);
+      }
+    }
+
+    WHEN("The vector is normal distributed") {
+      THEN("Return true") {
+        arma::vec::fixed<100000> normalDistribution;
+        for (arma::uword n = 0; n < normalDistribution.n_elem; ++n) {
+          normalDistribution(n) = std::normal_distribution<double>(0.0, 3.0)(mant::Rng::getGenerator());
+        }
+        CHECK(isNormalDistributed(normalDistribution, 3.0) == true);
+      }
+    }
+  }
+}
+
+SCENARIO("isCauchyDistributed", "[catchHelper][isCauchyDistributed]") {
+  GIVEN("A vector") {
+    WHEN("The vector is empty") {
+      THEN("Return false") {
+        CHECK(isCauchyDistributed(arma::vec(), 1.0) == false);
+      }
+    }
+
+    WHEN("The vector is not Cauchy distributed") {
+      THEN("Return false") {
+        CHECK(isCauchyDistributed(mant::uniformRandomNumbers(100000), 1.0) == false);
+      }
+    }
+
+    WHEN("The vector is Cauchy distributed") {
+      THEN("Return true") {
+        arma::vec::fixed<100000> cauchyDistribtion;
+        for (arma::uword n = 0; n < cauchyDistribtion.n_elem; ++n) {
+          cauchyDistribtion(n) = std::cauchy_distribution<double>(0.0, 10.0)(mant::Rng::getGenerator());
+        }
+        CHECK(isCauchyDistributed(cauchyDistribtion, 10.0) == true);
       }
     }
   }

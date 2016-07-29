@@ -41,6 +41,11 @@ namespace mant {
     return permutation.head(cycleSize);
   }
 
+  arma::uvec randomPermutationVector(
+      const arma::uword numberOfElements) {
+    return randomPermutationVector(numberOfElements, numberOfElements);
+  }
+
   arma::vec randomNeighbour(
       const arma::vec& parameter,
       const double minimalDistance,

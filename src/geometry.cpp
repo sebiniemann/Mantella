@@ -15,8 +15,8 @@ namespace mant {
     assert(std::isfinite(angle) && "rotationMatrix2d: The angle must be finite.");
 
     return arma::mat(
-    {{std::cos(angle), -std::sin(angle)},
-    {std::sin(angle), std::cos(angle)}});
+        {{std::cos(angle), -std::sin(angle)},
+         {std::sin(angle), std::cos(angle)}});
   }
 
   arma::mat::fixed<3, 3> rotationMatrix3d(

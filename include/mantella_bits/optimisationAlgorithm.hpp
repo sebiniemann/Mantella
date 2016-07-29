@@ -102,8 +102,7 @@ namespace mant {
         const double acceptableObjectiveValue);
     double getAcceptableObjectiveValue() const;
 
-    void
-    setMaximalNumberOfIterations(
+    void setMaximalNumberOfIterations(
         const arma::uword maximalNumberOfIterations);
     arma::uword getMaximalNumberOfIterations() const;
 

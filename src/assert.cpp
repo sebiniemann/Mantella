@@ -66,6 +66,12 @@ namespace mant {
     return true;
   }
 
+  bool isPermutationVector(
+      const arma::uvec& permutationCandidate,
+      const arma::uword numberOfElements) {
+    return isPermutationVector(permutationCandidate, numberOfElements, numberOfElements);
+  }
+
   bool isSymmetric(
       const arma::mat& symmetricCandidate) {
     if (symmetricCandidate.is_empty()) {

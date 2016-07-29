@@ -172,6 +172,44 @@ SCENARIO("isPermutationVector", "[assert][isPermutationVector]") {
       }
     }
   }
+
+  GIVEN("A vector and a number of elements") {
+    WHEN("The vector is empty") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({}, 10) == false);
+      }
+    }
+
+    WHEN("The number of elements is 0") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 1}, 0) == false);
+      }
+    }
+
+    WHEN("The vector's number of elements is less than the number of elements") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 1}, 1) == false);
+      }
+    }
+
+    WHEN("The vector's elements are not within `{0, ..., numberOfElements - 1}`") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 2}, 2) == false);
+      }
+    }
+
+    WHEN("The vector's elements are not unique") {
+      THEN("Return false") {
+        CHECK(mant::isPermutationVector({0, 0}, 2) == false);
+      }
+    }
+
+    WHEN("The vector is a permutation of of `(0, ..., numberOfElements - 1)`") {
+      THEN("Return true") {
+        CHECK(mant::isPermutationVector({1, 4, 2, 0, 3, 5, 9, 7, 8, 6}, 10) == true);
+      }
+    }
+  }
 }
 
 SCENARIO("isSymmetric", "[assert][isSymmetric]") {

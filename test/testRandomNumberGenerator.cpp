@@ -21,9 +21,9 @@ SCENARIO("Rng::setRandomSeed", "[randomNumberGenerator][Rng::setRandomSeed]") {
   // much we could assert/test about generating random seeds.
   WHEN("The return seed is reset after generating a sequence of random numbers") {
     THEN("Return the same random values again") {
-      arma::mat::fixed<100000, 1> seeds;
+      arma::vec::fixed<100000> seeds;
       seeds.imbue([]() { return static_cast<double>(mant::Rng::setRandomSeed()); });
-      CHECK(isUniformlyDistributed(seeds, std::numeric_limits<std::random_device::result_type>::min(), std::numeric_limits<std::random_device::result_type>::max()) == true);
+      CHECK(isUniformDistributed(seeds, std::numeric_limits<std::random_device::result_type>::min(), std::numeric_limits<std::random_device::result_type>::max()) == true);
     }
   }
 }

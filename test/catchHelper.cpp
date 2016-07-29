@@ -240,39 +240,87 @@ bool hasSameElements(
   return true;
 }
 
-bool isUniformlyDistributed(
-    const arma::mat& data,
-    const double lowerBound,
-    const double upperBound) {
-  assert(upperBound > lowerBound && "isUniformlyDistributed: The upper bound must be greater than the lower one.");
+bool hasSameDistribution(
+    const arma::vec& actualDistribution,
+    const arma::vec& expectedDstribution) {
+  assert(actualDistribution.is_sorted("ascend"));
+  assert(expectedDstribution.is_sorted("ascend"));
+  assert(actualDistribution.n_elem == expectedDstribution.n_elem);
 
-  if (!mant::isRepresentableAsFloatingPoint(data.size())) {
-    throw std::range_error("isUniformlyDistributed: The data's number of rows must be representable as a floating point.");
-  }
-
-  if (data.is_empty() || !std::isfinite(lowerBound) || !std::isfinite(upperBound)) {
+  if (actualDistribution.empty() != expectedDstribution.empty()) {
     return false;
+  } else if (actualDistribution.empty() && expectedDstribution.empty()) {
+    return true;
   }
 
-  // The number of bins is fixed to 10 and 0.001 is used as p-value to calculate
-  // the chi-square value for 9 degrees of freedom.
-  return arma::all(static_cast<double>(data.n_rows) * arma::rowvec(arma::sum(arma::square(arma::conv_to<arma::mat>::from(arma::umat(arma::histc(data, arma::linspace<arma::vec>(lowerBound, upperBound, 11))).head_rows(10)) / static_cast<double>(data.n_rows) - 0.1) / 0.1)) <= 27.88);
+  if (!mant::isRepresentableAsFloatingPoint(expectedDstribution.n_elem)) {
+    throw std::range_error("hasSameDistribution: The number of elements must be representable as a floating point.");
+  }
+
+  // Uses a Kolmogorov-Smirnov test with significance  level 99.5%.
+  return arma::max(arma::abs(actualDistribution - expectedDstribution)) < 1.73 * std::sqrt(2.0 / static_cast<double>(expectedDstribution.n_elem));
 }
 
-bool isUniformlyDistributed(
-    const arma::umat& data,
-    const arma::uword lowerBound,
-    const arma::uword upperBound) {
-  if (upperBound <= lowerBound) {
-    assert(upperBound > lowerBound && "isUniformlyDistributed: The upper bound must be greater than the lower one.");
-  }
+bool isUniformDistributed(
+    const arma::vec& data,
+    const double lowerBound,
+    const double upperBound) {
+  assert(lowerBound <= upperBound);
 
   if (data.is_empty()) {
     return false;
   }
 
-  // Uses 0.001 as p-value for the chi-square value.
-  const std::array<double, 10> chiSquareValue = {{10.83, 13.82, 16.27, 18.47, 20.52, 22.46, 24.32, 26.12, 27.88, 29.59}};
+  if (!mant::isRepresentableAsFloatingPoint(data.n_elem)) {
+    throw std::range_error("isUniformDistributed: The data's number of elements must be representable as a floating point.");
+  }
 
-  return arma::all(static_cast<double>(data.n_rows) * arma::rowvec(arma::sum(arma::square(arma::conv_to<arma::mat>::from(arma::histc(data, arma::regspace<arma::uvec>(lowerBound, upperBound))) / static_cast<double>(data.n_rows) - (1.0 / (upperBound - lowerBound + 1))) / (1.0 / (upperBound - lowerBound + 1)))) <= chiSquareValue.at(upperBound - lowerBound - 1));
+  arma::vec uniformDistribtion(arma::size(data));
+  for (arma::uword n = 0; n < uniformDistribtion.n_elem; ++n) {
+    uniformDistribtion(n) = std::uniform_real_distribution<double>(lowerBound, upperBound)(mant::Rng::getGenerator());
+  }
+
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(data, 100)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(uniformDistribtion, 100)) / static_cast<double>(uniformDistribtion.n_elem)));
+}
+
+bool isNormalDistributed(
+    const arma::vec& data,
+    const double standardDeviation) {
+  assert(standardDeviation >= 0.0);
+
+  if (data.is_empty()) {
+    return false;
+  }
+
+  if (!mant::isRepresentableAsFloatingPoint(data.n_elem)) {
+    throw std::range_error("isNormalDistributed: The data's number of elements must be representable as a floating point.");
+  }
+
+  arma::vec normalDistribtion(arma::size(data));
+  for (arma::uword n = 0; n < normalDistribtion.n_elem; ++n) {
+    normalDistribtion(n) = std::normal_distribution<double>(0.0, standardDeviation)(mant::Rng::getGenerator());
+  }
+
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -1000.0, 1000.0), 100)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(normalDistribtion, -1000.0, 1000.0), 100)) / static_cast<double>(normalDistribtion.n_elem)));
+}
+
+bool isCauchyDistributed(
+    const arma::vec& data,
+    const double scale) {
+  assert(scale >= 0.0);
+
+  if (data.is_empty()) {
+    return false;
+  }
+
+  if (!mant::isRepresentableAsFloatingPoint(data.n_elem)) {
+    throw std::range_error("isCauchyDistributed: The data's number of elements must be representable as a floating point.");
+  }
+
+  arma::vec cauchyDistribtion(arma::size(data));
+  for (arma::uword n = 0; n < cauchyDistribtion.n_elem; ++n) {
+    cauchyDistribtion(n) = std::cauchy_distribution<double>(0.0, scale)(mant::Rng::getGenerator());
+  }
+
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -100.0, 100.0), 100)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(cauchyDistribtion, -100.0, 100.0), 100)) / static_cast<double>(cauchyDistribtion.n_elem)));
 }

@@ -50,7 +50,8 @@ namespace mant {
       }
     }
 
-    // The following calculations are based on universal variables, following the work of Bate et al. To understand the following equations, we advise to carefully read the following book:
+    // The following calculations are based on universal variables, following the work of Bate et al.
+    // To understand the following equations, we advise to carefully read the following book:
     // @see R. Bate et al. (1971). Fundamentals of Astrodynamics. Dover Publications, ed. 1, pp. 191-197.
     double timeOfFlight(
         const double universalVariable,
