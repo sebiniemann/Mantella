@@ -1,4 +1,5 @@
 #pragma once
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <chrono>
@@ -16,7 +17,6 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 namespace mant {
   class OptimisationProblem;
 }

@@ -15,7 +15,6 @@
 // IWYU pragma: no_include "mpi.h"
 
 // Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 #if defined(SUPPORT_MPI)
 #include "mantella_bits/assert.hpp" // IWYU pragma: keep
 #endif

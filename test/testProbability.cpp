@@ -8,7 +8,7 @@ SCENARIO("randomRotationMatrix", "[probability][randomRotationMatrix]") {
       THEN("Return a rotation matrix") {
         CHECK(mant::isRotationMatrix(mant::randomRotationMatrix(5)) == true);
 
-        arma::vec::fixed<100000> angles;
+        arma::vec::fixed<10000> angles;
         for (arma::uword n = 0; n < angles.n_elem; ++n) {
           const arma::vec& rotatedUnitVector = mant::randomRotationMatrix(2) * arma::vec({1.0, 0.0});
           angles(n) = std::atan2(rotatedUnitVector(1), rotatedUnitVector(0));
@@ -26,7 +26,7 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
       THEN("Return a uniformly and randomly distributed permutation vector") {
         CHECK(mant::isPermutationVector(mant::randomPermutationVector(10, 5), 10, 5) == true);
 
-        arma::umat::fixed<100000, 5> permutations;
+        arma::umat::fixed<10000, 5> permutations;
         for (arma::uword n = 0; n < permutations.n_rows; ++n) {
           permutations.row(n) = mant::randomPermutationVector(10, 5).t();
         }
@@ -41,7 +41,7 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
       THEN("Return a uniformly and randomly distributed permutation vector") {
         CHECK(mant::isPermutationVector(mant::randomPermutationVector(5, 5), 5, 5) == true);
 
-        arma::umat::fixed<100000, 5> permutations;
+        arma::umat::fixed<10000, 5> permutations;
         for (arma::uword n = 0; n < permutations.n_rows; ++n) {
           permutations.row(n) = mant::randomPermutationVector(5, 5).t();
         }
@@ -57,7 +57,7 @@ SCENARIO("randomPermutationVector", "[probability][randomPermutationVector]") {
     THEN("Return a uniformly and randomly distributed permutation vector") {
       CHECK(mant::isPermutationVector(mant::randomPermutationVector(5), 5) == true);
 
-      arma::umat::fixed<100000, 5> permutations;
+      arma::umat::fixed<10000, 5> permutations;
       for (arma::uword n = 0; n < permutations.n_rows; ++n) {
         permutations.row(n) = mant::randomPermutationVector(5).t();
       }
@@ -73,8 +73,8 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
   GIVEN("A parameter, a minimal and a maximal distance") {
     WHEN("The minimal distance is equal to the maximal one") {
       THEN("Return a uniformly distributed neighbour") {
-        arma::vec::fixed<100000> angles;
-        arma::vec::fixed<100000> lengths;
+        arma::vec::fixed<10000> angles;
+        arma::vec::fixed<10000> lengths;
 
         const arma::vec& parameter{1.0, -2.0};
         for (arma::uword n = 0; n < angles.n_rows; ++n) {
@@ -91,8 +91,8 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
 
     WHEN("The minimal distance is less than the maximal one") {
       THEN("Return a uniformly distributed neighbour") {
-        arma::vec::fixed<100000> angles;
-        arma::vec::fixed<100000> lengths;
+        arma::vec::fixed<10000> angles;
+        arma::vec::fixed<10000> lengths;
 
         const arma::vec& parameter{1.0, -2.0};
         for (arma::uword n = 0; n < angles.n_rows; ++n) {
@@ -110,8 +110,8 @@ SCENARIO("randomNeighbour", "[probability][randomNeighbour]") {
 
   GIVEN("A parameter and a maximal distance") {
     THEN("Return a uniformly distributed neighbour") {
-      arma::vec::fixed<100000> angles;
-      arma::vec::fixed<100000> lengths;
+      arma::vec::fixed<10000> angles;
+      arma::vec::fixed<10000> lengths;
 
       const arma::vec& parameter{1.0, -2.0};
       for (arma::uword n = 0; n < angles.n_rows; ++n) {
