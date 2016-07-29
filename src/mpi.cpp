@@ -1,4 +1,5 @@
 #include "mantella_bits/mpi.hpp"
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #if defined(SUPPORT_MPI)
@@ -10,9 +11,6 @@
 #if defined(SUPPORT_MPI)
 #include <mpi.h> // IWYU pragma: keep
 #endif
-
-// Mantella
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 namespace mant {
   arma::mat synchronise(
