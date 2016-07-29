@@ -4,9 +4,9 @@ MAINTAINER Sebastian Niemann <niemann@sra.uni-hannover.de>
 
 RUN apt-get update
 
-# Installs compilers and sets them as default
+# Installs compilers
 # - GCC
-# - Clang
+# - Clang (set as default)
 RUN apt-get install -y g++-5 && \
     update-alternatives --remove g++ /usr/bin/gcc && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
@@ -17,13 +17,19 @@ RUN apt-get install -y g++-5 && \
     update-alternatives --remove gcov /usr/bin/gcov && \
     update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 100 && \
     update-alternatives --set gcov /usr/bin/gcov-5
-RUN apt-get install -y clang-3.8 && \
+RUN apt-get install -y clang-3.7 && \
     update-alternatives --remove clang /usr/bin/clang && \
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100 && \
-    update-alternatives --set clang /usr/bin/clang-3.8 && \
+    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.7 100 && \
+    update-alternatives --set clang /usr/bin/clang-3.7 && \
     update-alternatives --remove clang++ /usr/bin/clang++ && \
-    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 && \
-    update-alternatives --set clang++ /usr/bin/clang++-3.8
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.7 100 && \
+    update-alternatives --set clang++ /usr/bin/clang++-3.7 && \
+    update-alternatives --remove cc /usr/bin/cc && \
+    update-alternatives --install /usr/bin/cc cc /usr/bin/clang-3.7 100 && \
+    update-alternatives --set cc /usr/bin/clang-3.7 && \
+    update-alternatives --remove c++ /usr/bin/c++ && \
+    update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.7 100 && \
+    update-alternatives --set c++ /usr/bin/clang++-3.7
     
 # Installs dependencies
 # - CMake
@@ -59,7 +65,7 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
 RUN apt-get install -y iwyu && \
-    export CPATH=$CPATH:/usr/lib/gcc/x86_64-linux-gnu/6/include:/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed:/usr/lib/llvm-3.8/lib/clang/3.8.1/include
+    export CPATH=/usr/lib/llvm-3.7/lib/clang/3.7.1/include:/usr/lib/gcc/x86_64-linux-gnu/5.4.0/include:/usr/lib/gcc/x86_64-linux-gnu/5.4.0/include-fixed
 
 # Installs benchmarker
 # - Google microbenchmark library
