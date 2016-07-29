@@ -3,9 +3,6 @@
 // Armadillo
 #include <armadillo>
 
-// Mantella
-#include "mantella_bits/randomNumberGenerator.hpp"
-
 namespace mant {
   class Hash {
    public:

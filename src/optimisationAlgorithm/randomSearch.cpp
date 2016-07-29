@@ -1,7 +1,6 @@
 #include "mantella_bits/optimisationAlgorithm/randomSearch.hpp"
 
 // C++ standard library
-#include <cassert>
 #include <functional>
 #include <string>
 #include <utility>

@@ -1,5 +1,8 @@
 #pragma once
 
+// C++ standard library
+#include <random>
+
 // Armadillo
 #include <armadillo>
 

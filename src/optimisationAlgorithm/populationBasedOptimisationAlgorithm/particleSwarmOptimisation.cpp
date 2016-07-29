@@ -1,11 +1,10 @@
 #include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp"
 
 // C++ standard library
-#include <cassert>
 #include <cmath>
 #include <functional>
 #include <limits>
-#include <stdexcept>
+#include <random>
 #include <string>
 #include <utility>
 #include <vector>

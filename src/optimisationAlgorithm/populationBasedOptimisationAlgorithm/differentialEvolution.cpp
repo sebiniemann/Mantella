@@ -1,10 +1,8 @@
 #include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/differentialEvolution.hpp"
 
 // C++ standard library
-#include <cassert>
 #include <functional>
 #include <limits>
-#include <stdexcept>
 #include <string>
 #include <utility>
 

@@ -3,7 +3,6 @@
 // C++ standard library
 #include <cassert>
 #include <functional>
-#include <random>
 
 // Mantella
 #include "mantella_bits/config.hpp"

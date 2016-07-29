@@ -5,7 +5,6 @@
 #include <cassert>
 #include <cmath>
 #include <limits>
-#include <stdexcept>
 
 // Mantella
 #include "mantella_bits/config.hpp"

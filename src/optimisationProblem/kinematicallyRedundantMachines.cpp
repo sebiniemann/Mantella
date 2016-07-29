@@ -2,7 +2,6 @@
 
 // C++ standard library
 #include <cassert>
-#include <stdexcept>
 
 // Mantella
 #include "mantella_bits/mpi.hpp"

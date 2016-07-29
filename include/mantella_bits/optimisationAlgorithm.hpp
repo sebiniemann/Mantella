@@ -17,7 +17,6 @@
 
 // Mantella
 #include "mantella_bits/config.hpp" // IWYU pragma: keep
-#include "mantella_bits/probability.hpp"
 namespace mant {
   class OptimisationProblem;
 }

@@ -2,11 +2,8 @@
 
 // C++ standard library
 #include <cassert>
-#include <random>
-#include <stdexcept>
 
 // Mantella
-#include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/randomNumberGenerator.hpp"
 
 namespace mant {

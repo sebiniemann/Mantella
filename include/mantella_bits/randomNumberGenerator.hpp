@@ -1,7 +1,9 @@
 #pragma once
 
 // C++ standard library
+#include <array>
 #include <random>
+#include <stdexcept>
 
 // Armadillo
 #include <armadillo>

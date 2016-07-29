@@ -4,7 +4,6 @@
 #include <cassert>
 #include <functional>
 #include <random>
-#include <stdexcept>
 #include <string>
 #include <utility>
 

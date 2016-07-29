@@ -3,6 +3,7 @@
 // C++ standard library
 #include <cmath>
 #include <limits>
+#include <stdexcept>
 #include <utility>
 
 // Mantella

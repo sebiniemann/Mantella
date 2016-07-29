@@ -2,7 +2,6 @@
 
 // C++ standard library
 #include <cassert>
-#include <stdexcept>
 
 namespace mant {
   PopulationBasedOptimisationAlgorithm::PopulationBasedOptimisationAlgorithm()

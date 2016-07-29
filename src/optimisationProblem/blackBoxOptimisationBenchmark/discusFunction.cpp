@@ -3,7 +3,6 @@
 // C++ standard library
 #include <cassert>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 

@@ -1,9 +1,7 @@
 #include "mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp"
 
 // C++ standard library
-#include <cassert>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -12,6 +10,7 @@
 
 // Mantella
 #include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/probability.hpp"
 
 namespace mant {
   HookeJeevesAlgorithm::HookeJeevesAlgorithm()

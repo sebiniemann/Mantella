@@ -5,12 +5,11 @@
 #include <algorithm> // IWYU pragma: keep
 #endif
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <memory>
 #include <numeric>
-#include <ratio>
-#include <stdexcept>
 
 // MPI
 // IWYU pragma: no_include "mpi.h"
@@ -21,6 +20,7 @@
 #include "mantella_bits/assert.hpp" // IWYU pragma: keep
 #endif
 #include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/probability.hpp"
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm() {

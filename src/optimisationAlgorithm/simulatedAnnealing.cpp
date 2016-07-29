@@ -7,7 +7,6 @@
 #include <functional>
 #include <random>
 #include <ratio>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
