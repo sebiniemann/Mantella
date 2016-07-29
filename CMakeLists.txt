@@ -174,6 +174,7 @@ add_library(mantella SHARED
   src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine3PRRR.cpp
   src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6PRUS.cpp
   src/optimisationProblem/kinematicallyRedundantMachines/parallelKinematicMachine6PUPS.cpp
+  src/optimisationProblem/globalTrajectoryOptimisationCompetition/saveTheEarth.cpp
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
@@ -304,6 +305,7 @@ if (BUILD_TESTS)
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRRR.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PRUS.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PUPS.cpp
+    test/optimisationProblem/globalTrajectoryOptimisationCompetition/testSaveTheEarth.cpp
     
     # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
