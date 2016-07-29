@@ -10,6 +10,9 @@
 #include <limits>
 #include <memory>
 #include <numeric>
+#if defined(SUPPORT_MPI)
+#include <stdexcept> // IWYU pragma: keep
+#endif
 
 // MPI
 // IWYU pragma: no_include "mpi.h"

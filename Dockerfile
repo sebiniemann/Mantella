@@ -65,7 +65,7 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
 RUN apt-get install -y iwyu && \
-    export CPATH=/usr/lib/llvm-3.7/lib/clang/3.7.1/include:/usr/lib/gcc/x86_64-linux-gnu/5.4.0/include:/usr/lib/gcc/x86_64-linux-gnu/5.4.0/include-fixed
+    export CPATH=$CPATH:/usr/lib/llvm-3.7/lib/clang/3.7.1/include
 
 # Installs benchmarker
 # - Google microbenchmark library

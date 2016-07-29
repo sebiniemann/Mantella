@@ -1,5 +1,10 @@
 #include "mantella_bits/config.hpp"
 
+// C++ standard library
+#if defined(SUPPORT_MPI)
+#include <stdexcept> // IWYU pragma: keep
+#endif
+
 // MPI
 #if defined(SUPPORT_MPI)
 #include <mpi.h> // IWYU pragma: keep
