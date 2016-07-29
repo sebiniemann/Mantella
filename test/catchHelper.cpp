@@ -257,8 +257,8 @@ bool hasSameDistribution(
     throw std::range_error("hasSameDistribution: The number of elements must be representable as a floating point.");
   }
 
-  // Uses a Kolmogorov-Smirnov test with significance  level 99.5%.
-  return arma::max(arma::abs(actualDistribution - expectedDstribution)) < 1.73 * std::sqrt(2.0 / static_cast<double>(expectedDstribution.n_elem));
+  // Uses a Kolmogorov-Smirnov test with significance level 99.5%.
+  return arma::max(arma::abs(actualDistribution - expectedDstribution)) * std::sqrt(static_cast<double>(expectedDstribution.n_elem) / 2.0) <= std::sqrt(std::log(2.0 / 0.995) / 2.0);
 }
 
 bool isUniformDistributed(
@@ -280,7 +280,7 @@ bool isUniformDistributed(
     uniformDistribtion(n) = std::uniform_real_distribution<double>(lowerBound, upperBound)(mant::Rng::getGenerator());
   }
 
-  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(data, 100)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(uniformDistribtion, 100)) / static_cast<double>(uniformDistribtion.n_elem)));
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(data, 10)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(uniformDistribtion, 10)) / static_cast<double>(uniformDistribtion.n_elem)));
 }
 
 bool isNormalDistributed(
@@ -301,7 +301,7 @@ bool isNormalDistributed(
     normalDistribtion(n) = std::normal_distribution<double>(0.0, standardDeviation)(mant::Rng::getGenerator());
   }
 
-  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -1000.0, 1000.0), 100)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(normalDistribtion, -1000.0, 1000.0), 100)) / static_cast<double>(normalDistribtion.n_elem)));
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -100.0, 100.0), 10)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(normalDistribtion, -1000.0, 1000.0), 10)) / static_cast<double>(normalDistribtion.n_elem)));
 }
 
 bool isCauchyDistributed(
@@ -322,5 +322,5 @@ bool isCauchyDistributed(
     cauchyDistribtion(n) = std::cauchy_distribution<double>(0.0, scale)(mant::Rng::getGenerator());
   }
 
-  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -100.0, 100.0), 100)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(cauchyDistribtion, -100.0, 100.0), 100)) / static_cast<double>(cauchyDistribtion.n_elem)));
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -100.0, 100.0), 10)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(cauchyDistribtion, -100.0, 100.0), 10)) / static_cast<double>(cauchyDistribtion.n_elem)));
 }

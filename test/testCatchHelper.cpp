@@ -261,13 +261,13 @@ SCENARIO("hasSameDistribution", "[catchHelper][hasSameDistribution]") {
 
     WHEN("The vector has a different distribution") {
       THEN("Return false") {
-        CHECK(hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(mant::uniformRandomNumbers(10000), 100)) / 10000.0), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(10000), -100.0, 100.0), 100)) / 10000.0)) == false);
+        CHECK(hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(mant::uniformRandomNumbers(10000), 10)) / 10000.0), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::ones<arma::vec>(10000), 10)) / 10000.0)) == false);
       }
     }
 
     WHEN("The vector has the same distribution") {
       THEN("Return true") {
-        CHECK(hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(10000), -100.0, 100.0), 100)) / 10000.0), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(10000), -100.0, 100.0), 100)) / 10000.0)) == true);
+        CHECK(hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(10000), -100.0, 100.0), 10)) / 10000.0), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(mant::normalRandomNumbers(10000), -100.0, 100.0), 10)) / 10000.0)) == true);
       }
     }
   }
@@ -283,7 +283,7 @@ SCENARIO("isUniformDistributed", "[catchHelper][isUniformDistributed]") {
 
     WHEN("The vector is not uniformly distributed") {
       THEN("Return false") {
-        CHECK(isUniformDistributed(mant::normalRandomNumbers(10000), 0.0, 1.0) == false);
+        CHECK(isUniformDistributed(arma::ones<arma::vec>(10000), 0.0, 1.0) == false);
       }
     }
 
@@ -305,7 +305,7 @@ SCENARIO("isNormalDistributed", "[catchHelper][isNormalDistributed]") {
 
     WHEN("The vector is not normal distributed") {
       THEN("Return false") {
-        CHECK(isNormalDistributed(mant::uniformRandomNumbers(10000), 1.0) == false);
+        CHECK(isNormalDistributed(arma::ones<arma::vec>(10000), 1.0) == false);
       }
     }
 
@@ -331,7 +331,7 @@ SCENARIO("isCauchyDistributed", "[catchHelper][isCauchyDistributed]") {
 
     WHEN("The vector is not Cauchy distributed") {
       THEN("Return false") {
-        CHECK(isCauchyDistributed(mant::uniformRandomNumbers(10000), 1.0) == false);
+        CHECK(isCauchyDistributed(arma::ones<arma::vec>(10000), 1.0) == false);
       }
     }
 
