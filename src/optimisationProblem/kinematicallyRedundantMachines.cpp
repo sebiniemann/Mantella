@@ -11,7 +11,8 @@ namespace mant {
     KinematicallyRedundantMachines::KinematicallyRedundantMachines(
         const arma::uword numberOfProblemDimensions,
         const arma::uword numberOfWorkspaceDimensions)
-        : OptimisationProblem(numberOfProblemDimensions), numberOfWorkspaceDimensions_(synchronise(numberOfWorkspaceDimensions)) {
+        : OptimisationProblem(numberOfProblemDimensions),
+          numberOfWorkspaceDimensions_(synchronise(numberOfWorkspaceDimensions)) {
       assert(numberOfWorkspaceDimensions_ > 0 && "KinematicallyRedundantMachines: The number of workspace dimensions must be greater than 0.");
 
       // Initialises the end-effector trajectory with a single position at (0, ..., 0).

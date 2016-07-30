@@ -18,7 +18,9 @@ namespace mant {
   namespace bbob {
     SharpRidgeFunction::SharpRidgeFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions), parameterConditioning_(getParameterConditioning(std::sqrt(10.0))), rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
+          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
       assert(numberOfDimensions_ > 1 && "SharpRidgeFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());

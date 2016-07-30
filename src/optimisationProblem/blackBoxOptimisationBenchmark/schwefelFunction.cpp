@@ -20,7 +20,8 @@ namespace mant {
   namespace bbob {
     SchwefelFunction::SchwefelFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions), parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
       assert(numberOfDimensions_ > 1 && "SchwefelFunction: The number of dimensions must be greater than 1.");
 
       if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {

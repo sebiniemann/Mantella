@@ -9,7 +9,7 @@ namespace mant {
       const arma::uvec& seeds,
       const arma::uword numberOfElements);
   arma::mat hammersleySet(
-      const arma::uvec& base,
+      const arma::uvec& bases,
       const arma::uword numberOfElements);
 
   arma::mat haltonSequence(
@@ -17,7 +17,7 @@ namespace mant {
       const arma::uvec& seeds,
       const arma::uword numberOfElements);
   arma::mat haltonSequence(
-      const arma::uvec& base,
+      const arma::uvec& bases,
       const arma::uword numberOfElements);
 
   arma::vec vanDerCorputSequence(

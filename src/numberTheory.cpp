@@ -46,7 +46,10 @@ namespace mant {
     return hammersleySet(bases, arma::zeros<arma::uvec>(arma::size(bases)), numberOfElements);
   }
 
-  arma::mat haltonSequence(const arma::uvec& bases, const arma::uvec& seeds, const arma::uword numberOfElements) {
+  arma::mat haltonSequence(
+      const arma::uvec& bases,
+      const arma::uvec& seeds,
+      const arma::uword numberOfElements) {
     assert(!bases.is_empty() && "haltonSequence: The bases must not be empty.");
     assert(arma::size(bases) == arma::size(seeds) && "haltonSequence: The number of bases must be equal to the number of seeds.");
     assert(arma::all(bases > 1) && "haltonSequence: All bases must be greater than 1.");

@@ -15,7 +15,8 @@ namespace mant {
   namespace bbob {
     RosenbrockFunction::RosenbrockFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions), max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
       assert(numberOfDimensions_ > 1 && "RosenbrockFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(0.75 * getRandomParameterTranslation());

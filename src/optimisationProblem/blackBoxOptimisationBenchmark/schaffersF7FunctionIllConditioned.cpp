@@ -18,7 +18,9 @@ namespace mant {
   namespace bbob {
     SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions), parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))), rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          parameterConditioning_(getParameterConditioning(std::sqrt(1000.0))),
+          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
       assert(numberOfDimensions_ > 1 && "SchaffersF7FunctionIllConditioned: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());

@@ -18,7 +18,8 @@ namespace mant {
   namespace bbob {
     RosenbrockFunctionRotated::RosenbrockFunctionRotated(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions), max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
       assert(numberOfDimensions_ > 1 && "RosenbrockFunctionRotated: The number of dimensions must be greater than 1.");
 
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));

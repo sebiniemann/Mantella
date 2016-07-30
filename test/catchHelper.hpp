@@ -80,7 +80,8 @@ namespace arma {
 
   /** Returns true when any value is 0 and false otherwise.
    */
-  bool operator!(const uvec& vector);
+  bool operator!(
+      const uvec& vector);
 }
 
 /** Returns true when `actual` contains the same values (in any order) as `expected` and false otherwise.

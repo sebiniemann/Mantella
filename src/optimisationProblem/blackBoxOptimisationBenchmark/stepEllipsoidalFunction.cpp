@@ -19,7 +19,10 @@ namespace mant {
   namespace bbob {
     StepEllipsoidalFunction::StepEllipsoidalFunction(
         const arma::uword numberOfDimensions)
-        : BlackBoxOptimisationBenchmark(numberOfDimensions), firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))), secondParameterConditioning_(getParameterConditioning(100.0)), rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+        : BlackBoxOptimisationBenchmark(numberOfDimensions),
+          firstParameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
+          secondParameterConditioning_(getParameterConditioning(100.0)),
+          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
       assert(numberOfDimensions_ > 1 && "StepEllipsoidalFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
