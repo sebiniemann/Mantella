@@ -7,14 +7,15 @@
 //
 // Main developers:
 //   Sebastian Niemann <niemann@sra.uni-hannover.de> (Lead developer)
+//   Oskar Pusz
 //   Daniel Kiechle
 //   Wolff Bock von Wülfingen
-//   Oskar Pusz
+//   Philipp Schiffmann
 //------------------------------------------------------------------------------
 #pragma once
 
 #define MANTELLA_VERSION_MAJOR 0
-#define MANTELLA_VERSION_MINOR 20
+#define MANTELLA_VERSION_MINOR 21
 #define MANTELLA_VERSION_PATCH 0
 
 //
