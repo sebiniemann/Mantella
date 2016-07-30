@@ -66,6 +66,11 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
 RUN apt-get install -y iwyu
 ENV CPATH "$CPATH:/usr/lib/llvm-3.7/lib/clang/3.7.1/include"
+# - Clang-tidy
+RUN apt-get install -y clang-tidy-3.8 && \
+    update-alternatives --remove clang-tidy /usr/bin/clang-tidy && \
+    update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-3.8 100 && \
+    update-alternatives --set clang-tidy /usr/bin/clang-tidy-3.8
 
 # Installs benchmarker
 # - Google microbenchmark library

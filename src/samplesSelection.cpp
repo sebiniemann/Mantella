@@ -17,7 +17,7 @@ namespace mant {
   std::unordered_map<arma::vec, double, Hash, IsEqual> elitists(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect) {
-    assert(samples.size() = > numberOfSamplesToSelect && "elitists: The number of given samples must be greater than or equal to the number of samples to select.");
+    assert(samples.size() >= numberOfSamplesToSelect && "elitists: The number of given samples must be greater than or equal to the number of samples to select.");
     assert(isDimensionallyConsistent(samples) && "elitists: The samples must be dimensionally consistent.");
 
     if (samples.size() == 0) {
