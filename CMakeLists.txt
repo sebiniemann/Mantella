@@ -133,7 +133,7 @@ message(STATUS "Configuring library build.")
 configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
 
 # All paths must start with "src/"
-add_library(mantella
+add_library(mantella SHARED
   # Configuration
   src/config.cpp
   
@@ -415,7 +415,6 @@ message(STATUS "Noticable variables:")
 message(STATUS "- CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
 message(STATUS "- CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
 message(STATUS "- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
-message(STATUS "- BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message(STATUS "- CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_ARCHIVE_OUTPUT_DIRECTORY = ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_RUNTIME_OUTPUT_DIRECTORY = ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
