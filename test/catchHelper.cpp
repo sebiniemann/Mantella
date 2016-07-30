@@ -257,8 +257,8 @@ bool hasSameDistribution(
     throw std::range_error("hasSameDistribution: The number of elements must be representable as a floating point.");
   }
 
-  // Uses a Kolmogorov-Smirnov test with significance level 99.5%.
-  return arma::max(arma::abs(actualDistribution - expectedDstribution)) * std::sqrt(static_cast<double>(expectedDstribution.n_elem) / 2.0) <= std::sqrt(std::log(2.0 / 0.995) / 2.0);
+  // Uses a Kolmogorov-Smirnov test with significance level 95%.
+  return arma::max(arma::abs(actualDistribution - expectedDstribution)) * std::sqrt(static_cast<double>(expectedDstribution.n_elem) / 2.0) <= std::sqrt(std::log(2.0 / 0.95) / 2.0);
 }
 
 bool isUniformDistributed(
