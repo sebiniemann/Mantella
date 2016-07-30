@@ -50,8 +50,8 @@ RUN apt-get install -y wget xz-utils libblas-dev liblapack-dev libopenblas-dev &
 
 # Installs optional dependencies
 # - MPI (including missing default include path)
-RUN apt-get install -y libmpich-dev && \
-    export CPATH=$CPATH:/usr/include/mpich/
+RUN apt-get install -y libmpich-dev
+ENV  CPATH "$CPATH:/usr/include/mpich/"
 
 # Installs testing libraries
 # - Catch
@@ -64,8 +64,8 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --remove clang-format /usr/bin/clang-format && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
-RUN apt-get install -y iwyu && \
-    export CPATH=$CPATH:/usr/lib/llvm-3.7/lib/clang/3.7.1/include
+RUN apt-get install -y iwyu
+ENV CPATH "$CPATH:/usr/lib/llvm-3.7/lib/clang/3.7.1/include"
 
 # Installs benchmarker
 # - Google microbenchmark library
