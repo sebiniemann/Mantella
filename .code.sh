@@ -22,6 +22,7 @@ print_help() {
   echo '-f, --format [fix]                          Checks the code formatting rules.'
   echo '                                            Add "fix" to automatically fix formatting errors.'
   echo '-i, --include                               Checks the include rules.'
+  echo '-s, --static                                Performs static code analysis.'
   echo '-a, --all                                   Checks all rules.'
 }
 
@@ -99,6 +100,41 @@ do_include() {
   echo "${MAGENTA_TEXT_COLOR}done.${RESET_TEXT_COLOR}"
 }
 
+do_static() {
+  local FILES
+  local NUMBER_OF_FILES
+  local COUNTER
+  
+  STATIC_ERROR_OCCURED=0
+  
+  echo "${MAGENTA_TEXT_COLOR}Performing static code analysis${RESET_TEXT_COLOR}"
+  
+  FILES=$(find src -type f -name \*.cpp)
+  NUMBER_OF_FILES=$(echo "${FILES}" | wc -l)
+  COUNTER=1
+  
+  while read -r FILE; do
+    printf "[%3s%%] %s" "$(( (COUNTER * 100) / NUMBER_OF_FILES ))" "${FILE}"
+    
+    OUTPUT=$(clang-tidy "${FILE}" -- -std=c++14 -Iinclude)
+    if [[ "${OUTPUT}" ]]; then
+      echo "${OUTPUT}"
+      STATIC_ERROR_OCCURED=1
+      ANY_ERROR_OCCURED=1
+    else
+      printf "%s" "${REPLACE_LAST_LINE}"
+    fi
+    
+    COUNTER=$((++COUNTER))
+  done <<< "${FILES}"
+  
+  if [[ ${STATIC_ERROR_OCCURED} == 0 ]]; then
+    echo "${GREEN_TEXT_COLOR}Everything is fine.${RESET_TEXT_COLOR}"
+  fi
+  
+  echo "${MAGENTA_TEXT_COLOR}done.${RESET_TEXT_COLOR}"
+}
+
 if [ ! -f './include/mantella' ]; then
   echo "${RED_TEXT_COLOR}Could not find Mantella. Make sure to start this script within Mantella's root path.${RESET_TEXT_COLOR}"
   exit 1
@@ -124,9 +160,13 @@ else
       -i|--include)
         do_include
       ;;
+      -s|--static)
+        do_static
+      ;;
       -a|--all)
         do_format
         do_include
+        do_static
       ;;
       *)
         error "Unexpected option ${OPTION}"

@@ -24,22 +24,23 @@ namespace mant {
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
           rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))),
           rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("RastriginFunctionRotated: The number of dimensions must be greater than 1.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("RastriginFunctionRotated: The number of elements must be representable as a floating point.");
+      assert(numberOfDimensions_ > 1 && "RastriginFunctionRotated: The number of dimensions must be greater than 1.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("RastriginFunctionRotated: The number of elements must be representable as a floating point.");
       }
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.2, getOscillatedParameter(rotationR_ * parameter_))));
-                                return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
-                              },
-          "BBOB Rastrigin Function, rotated (f15)"}});
+              const arma::vec& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.2, getOscillatedParameter(rotationR_ * parameter_))));
+              return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+            },
+            "BBOB Rastrigin Function, rotated (f15)"}});
     }
   }
 }

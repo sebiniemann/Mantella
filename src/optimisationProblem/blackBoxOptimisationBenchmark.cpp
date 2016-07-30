@@ -2,12 +2,14 @@
 
 // C++ standard library
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <random>
 #include <stdexcept>
 
 // Mantella
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/probability.hpp"
 #include "mantella_bits/randomNumberGenerator.hpp"
 
 // This implementation contains a lot of *magic numbers* and behaviour, introduced by the black-box optimisation benchmark, but only partially explained in the paper.
@@ -26,7 +28,7 @@ namespace mant {
 
     arma::vec BlackBoxOptimisationBenchmark::getRandomParameterTranslation() {
       // The parameter space is randomly translated by [-4, 4]^N, rounded up to 4 decimal places.
-      arma::vec randomParameterTranslation = arma::floor(arma::randu<arma::vec>(numberOfDimensions_) * 1e4) / 1e4 * 8.0 - 4.0;
+      arma::vec randomParameterTranslation = arma::floor(uniformRandomNumbers(numberOfDimensions_, std::uniform_real_distribution<double>(-4.0, 4.0)) * 1e4) / 1e4;
       // In case the parameter space would remain unchanged, it is forcefully translated by -0.00001.
       randomParameterTranslation.elem(arma::find(randomParameterTranslation == 0.0)).fill(-1e-5);
 
@@ -36,7 +38,7 @@ namespace mant {
     arma::vec BlackBoxOptimisationBenchmark::getParameterConditioning(
         const double conditionNumber) {
       if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("BlackBoxOptimisationBenchmark.parameterConditioning: The number of elements must be representable as a floating point.");
+        throw std::range_error("BlackBoxOptimisationBenchmark.parameterConditioning: The number of elements must be representable as a floating point.");
       }
 
       arma::vec parameterConditioning(numberOfDimensions_);
@@ -49,10 +51,10 @@ namespace mant {
 
     arma::vec BlackBoxOptimisationBenchmark::getConditionedParameter(
         const arma::vec& parameter) {
-      if (parameter.n_elem != numberOfDimensions_) {
-        throw std::logic_error("BlackBoxOptimisationBenchmark.getConditionedParameter: The parameter's number of elements must be equal to the optimisation problem's number of dimensions.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("BlackBoxOptimisationBenchmark.getConditionedParameter: The number of elements must be representable as a floating point.");
+      assert(parameter.n_elem == numberOfDimensions_ && "BlackBoxOptimisationBenchmark.getConditionedParameter: The parameter's number of elements must be equal to the optimisation problem's number of dimensions.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("BlackBoxOptimisationBenchmark.getConditionedParameter: The number of elements must be representable as a floating point.");
       }
 
       arma::vec conditionedParameter(numberOfDimensions_);
@@ -66,10 +68,10 @@ namespace mant {
     arma::vec BlackBoxOptimisationBenchmark::getAsymmetricParameter(
         const double asymmetry,
         const arma::vec& parameter) {
-      if (parameter.n_elem != numberOfDimensions_) {
-        throw std::logic_error("BlackBoxOptimisationBenchmark.asymmetricParameter: The parameter's number of elements must be equal to the optimisation problem's number of dimensions.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("BlackBoxOptimisationBenchmark.asymmetricParameter: The number of elements must be representable as a floating point.");
+      assert(parameter.n_elem == numberOfDimensions_ && "BlackBoxOptimisationBenchmark.asymmetricParameter: The parameter's number of elements must be equal to the optimisation problem's number of dimensions.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("BlackBoxOptimisationBenchmark.asymmetricParameter: The number of elements must be representable as a floating point.");
       }
 
       arma::vec asymmetricParameter(numberOfDimensions_);
@@ -88,9 +90,7 @@ namespace mant {
 
     arma::vec BlackBoxOptimisationBenchmark::getOscillatedParameter(
         const arma::vec& parameter) {
-      if (parameter.n_elem != numberOfDimensions_) {
-        throw std::logic_error("BlackBoxOptimisationBenchmark.oscillatedParameter: The parameter's number of elements must be equal to the optimisation problem's number of dimensions.");
-      }
+      assert(parameter.n_elem == numberOfDimensions_ && "BlackBoxOptimisationBenchmark.oscillatedParameter: The parameter's number of elements must be equal to the optimisation problem's number of dimensions.");
 
       arma::vec oscillatedParameter(numberOfDimensions_);
       for (arma::uword n = 0; n < numberOfDimensions_; ++n) {
@@ -101,7 +101,7 @@ namespace mant {
     }
 
     double BlackBoxOptimisationBenchmark::getRandomObjectiveValueTranslation() {
-      return std::min(1000.0, std::max(-1000.0, std::floor(std::cauchy_distribution<double>(0.0, 100.0)(Rng::generator_) * 100.0) / 100.0));
+      return std::min(1000.0, std::max(-1000.0, std::floor(std::cauchy_distribution<double>(0.0, 100.0)(Rng::getGenerator()) * 1e2) / 1e2));
     }
 
     double BlackBoxOptimisationBenchmark::getOscillatedValue(

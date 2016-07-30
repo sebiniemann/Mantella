@@ -3,7 +3,6 @@
 // C++ standard library
 #include <cassert>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -16,19 +15,18 @@ namespace mant {
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(1000000.0)) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("EllipsoidalFunction: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "EllipsoidalFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter_)));
-                              },
-          "BBOB Ellipsoidal Function (f2)"}});
+              return arma::dot(parameterConditioning_, arma::square(getOscillatedParameter(parameter_)));
+            },
+            "BBOB Ellipsoidal Function (f2)"}});
     }
   }
 }

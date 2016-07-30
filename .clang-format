@@ -1,16 +1,17 @@
 ---
 Language: Cpp
 BasedOnStyle: Google
+Standard: Cpp11
 
-AlignAfterOpenBracket: false
+AlignAfterOpenBracket: AlwaysBreak
 AlignTrailingComments: false
+AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
-AlwaysBreakBeforeMultilineStrings: false
+BinPackArguments: false
 BinPackParameters: false
 ColumnLimit: 0
 DerivePointerAlignment: false
 NamespaceIndentation: All
 SpacesBeforeTrailingComments: 1
 ...
-

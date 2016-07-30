@@ -4,7 +4,8 @@
 
 class TestSchaffersF7FunctionIllConditioned : public mant::bbob::SchaffersF7FunctionIllConditioned {
  public:
-  using mant::bbob::SchaffersF7FunctionIllConditioned::SchaffersF7FunctionIllConditioned;
+  using mant::bbob::SchaffersF7FunctionIllConditioned::
+      SchaffersF7FunctionIllConditioned;
 
   // Increases the visibility of internal parameters, to make them accessible.
   using mant::bbob::SchaffersF7FunctionIllConditioned::rotationQ_;
@@ -14,9 +15,9 @@ SCENARIO("bbob::SchaffersF7FunctionIllConditioned.getObjectiveFunctions", "[bbob
   GIVEN("A parameter") {
     THEN("Return its objective value") {
       TestSchaffersF7FunctionIllConditioned optimisationProblem(3);
-      optimisationProblem.rotationQ_ = mant::rotationMatrix3dIntrinsic(0.1, 0.2, 0.3);
+      optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
 
-      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(96.39599099));
+      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(114.514121272));
     }
   }
 

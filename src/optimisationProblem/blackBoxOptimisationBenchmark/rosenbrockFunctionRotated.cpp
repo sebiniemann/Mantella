@@ -5,7 +5,6 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -21,20 +20,19 @@ namespace mant {
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("RosenbrockFunctionRotated: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "RosenbrockFunctionRotated: The number of dimensions must be greater than 1.");
 
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = max_ * parameter_ + 0.5;
-                                return 100.0 * std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), 2.0) + std::pow(arma::norm(z.head(z.n_elem - 1) - 1.0), 2.0);
-                              },
-          "BBOB Rosenbrock Function, rotated (f9)"}});
+              const arma::vec& z = max_ * parameter_ + 0.5;
+              return 100.0 * std::pow(arma::norm(arma::square(z.head(z.n_elem - 1)) - z.tail(z.n_elem - 1)), 2.0) + std::pow(arma::norm(z.head(z.n_elem - 1) - 1.0), 2.0);
+            },
+            "BBOB Rosenbrock Function, rotated (f9)"}});
     }
   }
 }

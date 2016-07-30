@@ -1,10 +1,13 @@
 #include "mantella_bits/assert.hpp"
-#include "mantella_bits/config.hpp"
 
 // C++ standard library
 #include <cmath>
 #include <limits>
+#include <stdexcept>
 #include <utility>
+
+// Mantella
+#include "mantella_bits/config.hpp"
 
 namespace mant {
   bool isRepresentableAsInteger(
@@ -26,12 +29,18 @@ namespace mant {
       //  ... be finite, ...
       return false;
     } else if (!rotationCandidate.is_square()) {
-      // ... square and ...
+      // ... square, ...
       return false;
+    } else {
+      arma::mat inverse;
       // Uses the Moore-Penrose pseudo-inverse instead of `arma::inv(...)`, as the matrix might not be invertible.
-    } else if (!arma::approx_equal(arma::pinv(rotationCandidate).t(), rotationCandidate, "absdiff", ::mant::machinePrecision)) {
-      // ... its transpose must be equal to its inverse.
-      return false;
+      if (!arma::pinv(inverse, rotationCandidate)) {
+        // ... invertible and ...
+        return false;
+      } else if (!arma::approx_equal(inverse.t(), rotationCandidate, "absdiff", ::mant::machinePrecision)) {
+        // ... its transpose must be equal to its inverse.
+        return false;
+      }
     }
 
     return true;
@@ -56,6 +65,12 @@ namespace mant {
     }
 
     return true;
+  }
+
+  bool isPermutationVector(
+      const arma::uvec& permutationCandidate,
+      const arma::uword numberOfElements) {
+    return isPermutationVector(permutationCandidate, numberOfElements, numberOfElements);
   }
 
   bool isSymmetric(
@@ -96,9 +111,7 @@ namespace mant {
 
     // ... all eigenvalues must be positive (including 0).
     arma::cx_vec eigenValues;
-    try {
-      arma::eig_gen(eigenValues, positiveSemiMatrixCandidate);
-    } catch (...) {
+    if (!arma::eig_gen(eigenValues, positiveSemiMatrixCandidate)) {
       return false;
     }
 
@@ -107,7 +120,7 @@ namespace mant {
 
   bool isDimensionallyConsistent(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
-    if (samples.size() < 1) {
+    if (samples.empty()) {
       // By definition, empty sets of samples are dimensionally consistent.
       return true;
     }

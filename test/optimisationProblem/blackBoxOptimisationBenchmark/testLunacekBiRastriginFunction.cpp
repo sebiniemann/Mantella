@@ -15,10 +15,10 @@ SCENARIO("bbob::LunacekBiRastriginFunction.getObjectiveFunctions", "[bbob::Lunac
   GIVEN("A parameter") {
     THEN("Return its objective value") {
       TestLunacekBiRastriginFunction optimisationProblem(3);
-      optimisationProblem.rotationQ_ = mant::rotationMatrix3dIntrinsic(0.1, 0.2, 0.3);
-      optimisationProblem.rotationR_ = mant::rotationMatrix3dIntrinsic(-0.1, -0.2, -0.3);
+      optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
+      optimisationProblem.rotationR_ = mant::rotationMatrix3d(-0.1, -0.2, -0.3);
 
-      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(61.9131042635));
+      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(60.6314611883));
     }
   }
 

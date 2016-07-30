@@ -1,17 +1,18 @@
 #include "mantella_bits/optimisationAlgorithm.hpp"
-#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #if defined(SUPPORT_MPI)
 #include <algorithm> // IWYU pragma: keep
 #endif
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <memory>
 #include <numeric>
-#include <ratio>
-#include <stdexcept>
+#if defined(SUPPORT_MPI)
+#include <stdexcept> // IWYU pragma: keep
+#endif
 
 // MPI
 // IWYU pragma: no_include "mpi.h"
@@ -21,6 +22,7 @@
 #include "mantella_bits/assert.hpp" // IWYU pragma: keep
 #endif
 #include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/probability.hpp"
 
 namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm() {
@@ -31,47 +33,42 @@ namespace mant {
     setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
     setMaximalDuration(std::chrono::seconds(1));
 
-    setBoundariesHandlingFunctions({{[this](
-                                         const arma::mat& parameters_,
-                                         const arma::umat& isBelowLowerBound_,
-                                         const arma::umat& isAboveUpperBound_) {
-                                       return arma::clamp(parameters_, 0.0, 1.0);
-                                     },
-        "Set parts of an parameter that are out of bound directly to to bound"}});
+    setBoundariesHandlingFunctions(
+        {{[this](
+              const arma::mat& parameters_,
+              const arma::umat& isBelowLowerBound_,
+              const arma::umat& isAboveUpperBound_) {
+            return arma::clamp(parameters_, 0.0, 1.0);
+          },
+          "Set parts of an parameter that are out of bound directly to to bound"}});
 
-    setRestartingFunctions({{[this](
-                                 const arma::uword numberOfDimensions_,
-                                 const arma::mat& parameters_,
-                                 const arma::rowvec& objectiveValues_,
-                                 const arma::rowvec& differences_) {
-                               return arma::randu<arma::mat>(arma::size(parameters_));
-                             },
-        "Place all parameters randomly within the bounds"}});
+    setRestartingFunctions(
+        {{[this](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_) {
+            return uniformRandomNumbers(parameters_.n_rows, parameters_.n_cols);
+          },
+          "Place all parameters randomly within the bounds"}});
 
-    setCommunicationFunctions({{[this](
-                                    const arma::uword numberOfDimensions_,
-                                    const arma::mat& parameters_,
-                                    const arma::rowvec& objectiveValues_,
-                                    const arma::rowvec& differences_) {
-                                  return parameters_;
-                                },
-        "Find the cluster-wide best found sample"}});
-
-#if defined(SUPPORT_MPI)
-    MPI_Comm_rank(MPI_COMM_WORLD, &nodeRank_);
-    MPI_Comm_size(MPI_COMM_WORLD, &numberOfNodes_);
-#else
-    nodeRank_ = 0;
-    numberOfNodes_ = 1;
-#endif
+    setCommunicationFunctions(
+        {{[this](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_) { return parameters_; },
+          "Find the cluster-wide best found sample"}});
   }
 
   void OptimisationAlgorithm::setInitialisingFunctions(
-      const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& initialParameters_)>, std::string>>& initialisingFunctions) {
+      const std::vector<std::pair<
+          std::function<arma::mat(
+              const arma::uword numberOfDimensions_,
+              const arma::mat& initialParameters_)>,
+          std::string>>& initialisingFunctions) {
     for (const auto& initialisingFunction : initialisingFunctions) {
-      if (!static_cast<bool>(initialisingFunction.first)) {
-        throw std::invalid_argument("OptimisationAlgorithm.setInitialisingFunctions: All initialising functions must be callable.");
-      }
+      assert(static_cast<bool>(initialisingFunction.first) && "OptimisationAlgorithm.setInitialisingFunctions: All initialising functions must be callable.");
     }
 
     initialisingFunctions_ = initialisingFunctions;
@@ -82,15 +79,16 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setNextParametersFunctions(
-      const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& nextParametersFunctions) {
-    if (nextParametersFunctions.empty()) {
-      throw std::invalid_argument("OptimisationAlgorithm.setNextParametersFunctions: At least one next parameters function must be defined.");
-    }
-
+      const std::vector<std::pair<
+          std::function<arma::mat(
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_)>,
+          std::string>>& nextParametersFunctions) {
+    assert(!nextParametersFunctions.empty() && "OptimisationAlgorithm.setNextParametersFunctions: At least one next parameters function must be defined.");
     for (const auto& nextParametersFunction : nextParametersFunctions) {
-      if (!static_cast<bool>(nextParametersFunction.first)) {
-        throw std::invalid_argument("OptimisationAlgorithm.setNextParametersFunctions: All *next parameters* functions must be callable.");
-      }
+      assert(static_cast<bool>(nextParametersFunction.first) && "OptimisationAlgorithm.setNextParametersFunctions: All *next parameters* functions must be callable.");
     }
 
     nextParametersFunctions_ = nextParametersFunctions;
@@ -101,11 +99,14 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setBoundariesHandlingFunctions(
-      const std::vector<std::pair<std::function<arma::mat(const arma::mat& parameters_, const arma::umat& isBelowLowerBound_, const arma::umat& isAboveUpperBound_)>, std::string>>& boundariesHandlingFunctions) {
+      const std::vector<std::pair<
+          std::function<arma::mat(
+              const arma::mat& parameters_,
+              const arma::umat& isBelowLowerBound_,
+              const arma::umat& isAboveUpperBound_)>,
+          std::string>>& boundariesHandlingFunctions) {
     for (const auto& boundariesHandlingFunction : boundariesHandlingFunctions) {
-      if (!static_cast<bool>(boundariesHandlingFunction.first)) {
-        throw std::invalid_argument("OptimisationAlgorithm.setBoundariesHandlingFunctions: All boundaries-handling functions must be callable.");
-      }
+      assert(static_cast<bool>(boundariesHandlingFunction.first) && "OptimisationAlgorithm.setBoundariesHandlingFunctions: All boundaries-handling functions must be callable.");
     }
 
     boundariesHandlingFunctions_ = boundariesHandlingFunctions;
@@ -116,11 +117,14 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setIsStagnatingFunctions(
-      const std::vector<std::pair<std::function<bool(const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& isStagnatingFunctions) {
+      const std::vector<std::pair<
+          std::function<bool(
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_)>,
+          std::string>>& isStagnatingFunctions) {
     for (const auto& isStagnatingFunction : isStagnatingFunctions) {
-      if (!static_cast<bool>(isStagnatingFunction.first)) {
-        throw std::invalid_argument("OptimisationAlgorithm.setIsStagnatingFunctions: All *is stagnating* functions must be callable.");
-      }
+      assert(static_cast<bool>(isStagnatingFunction.first) && "OptimisationAlgorithm.setIsStagnatingFunctions: All *is stagnating* functions must be callable.");
     }
 
     isStagnatingFunctions_ = isStagnatingFunctions;
@@ -131,11 +135,15 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setRestartingFunctions(
-      const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& restartingFunctions) {
+      const std::vector<std::pair<
+          std::function<arma::mat(
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_)>,
+          std::string>>& restartingFunctions) {
     for (const auto& restartingFunction : restartingFunctions) {
-      if (!static_cast<bool>(restartingFunction.first)) {
-        throw std::invalid_argument("OptimisationAlgorithm.setRestartingFunctions: All restarting functions must be callable.");
-      }
+      assert(static_cast<bool>(restartingFunction.first) && "OptimisationAlgorithm.setRestartingFunctions: All restarting functions must be callable.");
     }
 
     restartingFunctions_ = restartingFunctions;
@@ -146,11 +154,15 @@ namespace mant {
   }
 
   void OptimisationAlgorithm::setCommunicationFunctions(
-      const std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>>& communicationFunctions) {
+      const std::vector<std::pair<
+          std::function<arma::mat(
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_)>,
+          std::string>>& communicationFunctions) {
     for (const auto& restartingFunction : communicationFunctions) {
-      if (!static_cast<bool>(restartingFunction.first)) {
-        throw std::invalid_argument("OptimisationAlgorithm.setCommunicationFunctions: All communication functions must be callable.");
-      }
+      assert(static_cast<bool>(restartingFunction.first) && "OptimisationAlgorithm.setCommunicationFunctions: All communication functions must be callable.");
     }
 
     communicationFunctions_ = communicationFunctions;
@@ -163,83 +175,61 @@ namespace mant {
   void OptimisationAlgorithm::optimise(
       OptimisationProblem& optimisationProblem,
       const arma::mat& initialParameters) {
-    // Objects like `optimisationProblem` perform all validations by themselves.
-    if (initialParameters.is_empty()) {
-      throw std::invalid_argument("OptimisationAlgorithm.optimise: The initial parameter's number of columns must be greater than 0.");
-    } else if (initialParameters.n_rows != optimisationProblem.numberOfDimensions_) {
-      throw std::invalid_argument("OptimisationAlgorithm.optimise: The initial parameter's number of rows must be equal to the optimisation problem's number of dimensions.");
-    } else if (nextParametersFunctions_.empty()) {
-      throw std::invalid_argument("OptimisationAlgorithm.optimise: At least one next parameters function must be defined.");
-    }
+    assert(!initialParameters.is_empty() && "OptimisationAlgorithm.optimise: The initial parameter's number of columns must be greater than 0.");
+    assert(initialParameters.n_rows == optimisationProblem.numberOfDimensions_ && "OptimisationAlgorithm.optimise: The initial parameter's number of rows must be equal to the optimisation problem's number of dimensions.");
+    assert(!nextParametersFunctions_.empty() && "OptimisationAlgorithm.optimise: At least one next parameters function must be defined.");
 
 #if defined(SUPPORT_MPI)
     if (optimisationProblem.numberOfDimensions_ > std::numeric_limits<int>::max() - 2) {
-      throw std::overflow_error("OptimisationAlgorithm.optimise: The number of dimensions must be less than the largest supported integer minus 2 if used with MPI support.");
+      throw std::range_error("OptimisationAlgorithm.optimise: The number of dimensions must be less than the largest supported integer minus 2 if used with MPI support.");
     } else if (!isRepresentableAsFloatingPoint(optimisationProblem.numberOfDimensions_)) {
-      throw std::overflow_error("OptimisationAlgorithm.optimise: The number of dimensions must be representable as a floating point if used with MPI support.");
+      throw std::range_error("OptimisationAlgorithm.optimise: The number of dimensions must be representable as a floating point if used with MPI support.");
     }
 #endif
 
     if (::mant::isVerbose) {
-      const auto functionNameConcatenatingFunction =
-          [](
-              const std::string& accumulatedName,
-              const auto& nextFunction) {
-            return accumulatedName + "\n  - " + nextFunction.second;
-          };
+      const auto functionNameConcatenatingFunction = [](
+          const std::string& accumulatedName,
+          const auto& nextFunction) {
+        return accumulatedName + "\n  - " + nextFunction.second;
+      };
 
       const auto& objectiveFunctions = optimisationProblem.getObjectiveFunctions();
 
-      std::cout << "================================================================================\n";
-      std::cout << "Solving optimisation problem: " << std::accumulate(objectiveFunctions.begin() + 1, objectiveFunctions.end(), objectiveFunctions.at(0).second, functionNameConcatenatingFunction) << "\n";
-      std::cout << "  Number of dimensions: " << optimisationProblem.numberOfDimensions_ << "\n";
-      std::cout << "  Lower bounds: " << optimisationProblem.getLowerBounds().t();
-      std::cout << "  Upper bounds: " << optimisationProblem.getUpperBounds().t();
-      std::cout << "  Acceptable objective value: " << acceptableObjectiveValue_ << "\n";
-      std::cout << "--------------------------------------------------------------------------------\n";
+      std::cout << "================================================================================\n"
+                << "Solving optimisation problem: "
+                << std::accumulate(objectiveFunctions.begin() + 1, objectiveFunctions.end(), objectiveFunctions.at(0).second, functionNameConcatenatingFunction)
+                << "\n"
+                << "  Number of dimensions: " << optimisationProblem.numberOfDimensions_ << "\n"
+                << "  Lower bounds: " << optimisationProblem.getLowerBounds().t()
+                << "  Upper bounds: " << optimisationProblem.getUpperBounds().t()
+                << "  Acceptable objective value: " << acceptableObjectiveValue_ << "\n"
+                << "--------------------------------------------------------------------------------\n";
 
-      std::cout << "  Initialising functions: \n  - ";
-      if (initialisingFunctions_.size() < 1) {
-        std::cout << "Do nothing";
-      } else {
-        std::cout << std::accumulate(initialisingFunctions_.begin() + 1, initialisingFunctions_.end(), initialisingFunctions_.at(0).second, functionNameConcatenatingFunction);
-      }
-      std::cout << "\n";
+      std::cout << "  Initialising functions: \n  - "
+                << (initialisingFunctions_.size() < 1 ? "Do nothing" : std::accumulate(initialisingFunctions_.begin() + 1, initialisingFunctions_.end(), initialisingFunctions_.at(0).second, functionNameConcatenatingFunction))
+                << "\n";
 
-      std::cout << "  Optimisation strategies: \n  - " << std::accumulate(nextParametersFunctions_.begin() + 1, nextParametersFunctions_.end(), nextParametersFunctions_.at(0).second, functionNameConcatenatingFunction) << "\n";
+      std::cout << "  Optimisation strategies: \n  - "
+                << std::accumulate(nextParametersFunctions_.begin() + 1, nextParametersFunctions_.end(), nextParametersFunctions_.at(0).second, functionNameConcatenatingFunction)
+                << "\n";
 
-      std::cout << "  Boundaries-handling functions: \n  - ";
-      if (boundariesHandlingFunctions_.size() < 1) {
-        std::cout << "Do nothing";
-      } else {
-        std::cout << std::accumulate(boundariesHandlingFunctions_.begin() + 1, boundariesHandlingFunctions_.end(), boundariesHandlingFunctions_.at(0).second, functionNameConcatenatingFunction);
-      }
-      std::cout << "\n";
+      std::cout << "  Boundaries-handling functions: \n  - "
+                << (boundariesHandlingFunctions_.size() < 1 ? "Do nothing" : std::accumulate(boundariesHandlingFunctions_.begin() + 1, boundariesHandlingFunctions_.end(), boundariesHandlingFunctions_.at(0).second, functionNameConcatenatingFunction))
+                << "\n";
 
-      std::cout << "  Is stagnating functions: \n  - ";
-      if (isStagnatingFunctions_.size() < 1) {
-        std::cout << "Return always false";
-      } else {
-        std::cout << std::accumulate(isStagnatingFunctions_.begin() + 1, isStagnatingFunctions_.end(), isStagnatingFunctions_.at(0).second, functionNameConcatenatingFunction);
-      }
-      std::cout << "\n";
+      std::cout << "  Is-stagnating functions: \n  - "
+                << (isStagnatingFunctions_.size() < 1 ? "Return always false" : std::accumulate(isStagnatingFunctions_.begin() + 1, isStagnatingFunctions_.end(), isStagnatingFunctions_.at(0).second, functionNameConcatenatingFunction))
+                << "\n";
 
-      std::cout << "  Restarting functions: \n  - ";
-      if (restartingFunctions_.size() < 1) {
-        std::cout << "Do nothing";
-      } else {
-        std::cout << std::accumulate(restartingFunctions_.begin() + 1, restartingFunctions_.end(), restartingFunctions_.at(0).second, functionNameConcatenatingFunction);
-      }
-      std::cout << "\n";
+      std::cout << "  Restarting functions: \n  - "
+                << (restartingFunctions_.size() < 1 ? "Do nothing" : std::accumulate(restartingFunctions_.begin() + 1, restartingFunctions_.end(), restartingFunctions_.at(0).second, functionNameConcatenatingFunction))
+                << "\n";
 
 #if defined(SUPPORT_MPI)
-      std::cout << "  Communication functions: \n  - ";
-      if (communicationFunctions_.size() < 1) {
-        std::cout << "Do nothing";
-      } else {
-        std::cout << std::accumulate(communicationFunctions_.begin() + 1, communicationFunctions_.end(), communicationFunctions_.at(0).second, functionNameConcatenatingFunction);
-      }
-      std::cout << "\n";
+      std::cout << "  Communication functions: \n  - "
+                << (communicationFunctions_.size() < 1 ? "Do nothing" : std::accumulate(communicationFunctions_.begin() + 1, communicationFunctions_.end(), communicationFunctions_.at(0).second, functionNameConcatenatingFunction))
+                << "\n";
 #endif
 
       std::cout << std::endl;
@@ -253,12 +243,14 @@ namespace mant {
     for (const auto& initialisingFunction : initialisingFunctions_) {
       parameters = initialisingFunction.first(optimisationProblem.numberOfDimensions_, parameters);
       assert(!parameters.is_empty());
+      assert(!parameters.has_nan());
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
     }
 
     for (const auto& boundariesHandlingFunction : boundariesHandlingFunctions_) {
       parameters = boundariesHandlingFunction.first(parameters, parameters<0.0, parameters> 1.0);
       assert(!parameters.is_empty());
+      assert(!parameters.has_nan());
       assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
     }
 
@@ -279,12 +271,14 @@ namespace mant {
           for (const auto& restartingFunction : restartingFunctions_) {
             parameters = restartingFunction.first(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesAndDifferences.first, objectiveValuesAndDifferences.second);
             assert(!parameters.is_empty());
+            assert(!parameters.has_nan());
             assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
           }
         } else {
           for (const auto& nextParametersFunction : nextParametersFunctions_) {
             parameters = nextParametersFunction.first(optimisationProblem.numberOfDimensions_, parameters, objectiveValuesAndDifferences.first, objectiveValuesAndDifferences.second);
             assert(!parameters.is_empty());
+            assert(!parameters.has_nan());
             assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
           }
         }
@@ -292,6 +286,7 @@ namespace mant {
         for (const auto& boundariesHandlingFunction : boundariesHandlingFunctions_) {
           parameters = boundariesHandlingFunction.first(parameters, parameters<0.0, parameters> 1.0);
           assert(!parameters.is_empty());
+          assert(!parameters.has_nan());
           assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
         }
 
@@ -339,11 +334,12 @@ namespace mant {
         std::cout << "  Terminated (run out of time or iterations).\n";
       }
 
-      std::cout << "    Took " << usedDuration_.count() << " / " << maximalDuration_.count() << " microseconds" << std::endl;
-      std::cout << "    Took " << usedNumberOfIterations_ << " / " << maximalNumberOfIterations_ << " iterations" << std::endl;
-      std::cout << "    Difference to the acceptable objective value: " << bestFoundObjectiveValue_ - acceptableObjectiveValue_ << std::endl;
-      std::cout << "    Best found objective value: " << bestFoundObjectiveValue_ << "\n";
-      std::cout << "    Best found parameter: " << bestFoundParameter_.t() << std::endl;
+      std::cout << "    Took " << usedDuration_.count() << " / " << maximalDuration_.count() << " microseconds\n"
+                << "    Took " << usedNumberOfIterations_ << " / " << maximalNumberOfIterations_ << " iterations\n"
+                << "    Difference to the acceptable objective value: " << bestFoundObjectiveValue_ - acceptableObjectiveValue_ << "\n"
+                << "    Best found objective value: " << bestFoundObjectiveValue_ << "\n"
+                << "    Best found parameter: " << bestFoundParameter_.t()
+                << std::endl;
     }
   }
 
@@ -367,10 +363,6 @@ namespace mant {
 
   void OptimisationAlgorithm::setMaximalNumberOfIterations(
       const arma::uword maximalNumberOfIterations) {
-    if (maximalNumberOfIterations == 0) {
-      throw std::domain_error("OptimisationAlgorithm.setMaximalNumberOfIterations: The maximal number of iterations must be greater than 0.");
-    }
-
     maximalNumberOfIterations_ = maximalNumberOfIterations;
   }
 
@@ -380,10 +372,6 @@ namespace mant {
 
   void OptimisationAlgorithm::setMaximalDuration(
       const std::chrono::microseconds maximalDuration) {
-    if (maximalDuration == std::chrono::microseconds(0)) {
-      throw std::domain_error("OptimisationAlgorithm.setMaximalDuration: The maximal duration must be greater than 0 millisecond.");
-    }
-
     maximalDuration_ = maximalDuration;
   }
 
@@ -423,14 +411,6 @@ namespace mant {
     return recordedSampling_;
   }
 
-  int OptimisationAlgorithm::getNodeRank() const {
-    return nodeRank_;
-  }
-
-  int OptimisationAlgorithm::getNumberOfNodes() const {
-    return numberOfNodes_;
-  }
-
   void OptimisationAlgorithm::reset() {
     usedNumberOfIterations_ = 0;
     bestFoundObjectiveValue_ = std::numeric_limits<double>::infinity();
@@ -442,8 +422,7 @@ namespace mant {
   }
 
   std::pair<arma::rowvec, arma::rowvec> OptimisationAlgorithm::getObjectiveValuesAndDifferences(
-      OptimisationProblem& optimisationProblem,
-      const arma::mat& parameters) {
+      OptimisationProblem& optimisationProblem, const arma::mat& parameters) {
     // Objects like `optimisationProblem` perform all validations by themselves.
     assert(!parameters.is_empty());
     assert(parameters.n_rows == optimisationProblem.numberOfDimensions_);
@@ -469,14 +448,16 @@ namespace mant {
 
       if (objectiveValue < bestFoundObjectiveValue_) {
         if (::mant::isVerbose) {
-          std::cout << "  Iteration #" << usedNumberOfIterations_ << " (after " << usedDuration_.count() << "ms):";
+          std::cout << "  Iteration #" << usedNumberOfIterations_ << " (after "
+                    << usedDuration_.count() << "ms)"
 #if defined(SUPPORT_MPI)
-          std::cout << " On node " << nodeRank_ << ":";
+                    << " On node " << nodeRank() << ""
 #endif
-          std::cout << " Found better solution.\n";
-          std::cout << "    Difference to the previous best objective value: " << objectiveValue - bestFoundObjectiveValue_ << "\n";
-          std::cout << "    Best found objective value: " << objectiveValue << "\n";
-          std::cout << "    Best found parameter: " << denormalisedParameters(optimisationProblem, parameter).t() << std::endl;
+                    << ": Found better solution.\n"
+                    << "    Difference to the previous best objective value: " << objectiveValue - bestFoundObjectiveValue_ << "\n"
+                    << "    Best found objective value: " << objectiveValue << "\n"
+                    << "    Best found parameter: " << denormalisedParameters(optimisationProblem, parameter).t()
+                    << std::endl;
         }
 
         bestFoundParameter_ = parameter;
@@ -495,27 +476,39 @@ namespace mant {
   arma::mat OptimisationAlgorithm::normalisedParameters(
       const OptimisationProblem& optimisationProblem,
       const arma::mat& parameters) const {
-    return (parameters.each_col() - optimisationProblem.getLowerBounds()).each_col() / (optimisationProblem.getUpperBounds() - optimisationProblem.getLowerBounds());
+    assert(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()));
+    assert(!parameters.has_nan());
+
+    arma::mat normalisedParameters(arma::size(parameters));
+
+    for (arma::uword n = 0; n < normalisedParameters.n_rows; ++n) {
+      if (std::abs(optimisationProblem.getLowerBounds()(n) - optimisationProblem.getUpperBounds()(n)) < ::mant::machinePrecision) {
+        normalisedParameters.row(n).fill(optimisationProblem.getLowerBounds()(n));
+      } else {
+        normalisedParameters.row(n) = (parameters.row(n) - optimisationProblem.getLowerBounds()(n)) / (optimisationProblem.getUpperBounds()(n) - optimisationProblem.getLowerBounds()(n));
+      }
+    }
+
+    return normalisedParameters;
   }
 
   arma::mat OptimisationAlgorithm::denormalisedParameters(
       const OptimisationProblem& optimisationProblem,
       const arma::mat& normalisedParameters) const {
+    assert(arma::all(optimisationProblem.getLowerBounds() <= optimisationProblem.getUpperBounds()));
+    assert(!normalisedParameters.has_nan());
+
     return (normalisedParameters.each_col() % (optimisationProblem.getUpperBounds() - optimisationProblem.getLowerBounds())).each_col() + optimisationProblem.getLowerBounds();
   }
 
 #if defined(SUPPORT_MPI)
-  void OptimisationAlgorithm::mpiOpBestSample(
-      void* firstInput,
-      void* secondInput,
-      int* size,
-      MPI_Datatype* type) {
+  void OptimisationAlgorithm::mpiOpBestSample(void* firstInput, void* secondInput, int* size, MPI_Datatype* type) {
     // Casts both inputs to their actual type.
     double* firstSample = static_cast<double*>(firstInput);
     double* secondSample = static_cast<double*>(secondInput);
 
     /* Each sample contains the following information:
-     *
+     * 
      * Index | Description
      * ----- | -----------------------------------
      * 0     | The number of elements (arma::uword)

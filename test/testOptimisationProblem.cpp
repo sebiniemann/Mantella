@@ -3,7 +3,7 @@
 #include "catchHelper.hpp"
 
 SCENARIO("OptimisationProblem.numberOfDimensions_", "[OptimisationProblem][OptimisationProblem.numberOfDimensions_]") {
-  if (::nodeRank == 0) {
+  if (mant::nodeRank() == 0) {
     mant::OptimisationProblem optimisationProblem(2);
 
     THEN("Return the first node's number of dimensions_") {
@@ -25,49 +25,65 @@ SCENARIO("OptimisationProblem::OptimisationProblem", "[OptimisationProblem][Opti
         CHECK_NOTHROW(mant::OptimisationProblem optimisationProblem(2));
       }
     }
-
-    WHEN("The number of dimensions is 0") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::OptimisationProblem optimisationProblem(0), std::logic_error);
-      }
-    }
   }
 }
 
 SCENARIO("OptimisationProblem.setObjectiveFunctions", "[OptimisationProblem][OptimisationProblem.setObjectiveFunctions]") {
   GIVEN("A vector of named objective functions") {
-    WHEN("An objective function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setObjectiveFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("A objective function name is empty") {
       THEN("Throw no exception") {
         mant::OptimisationProblem optimisationProblem(2);
-        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::accu(parameter_); }, ""}}));
+        CHECK_NOTHROW(
+            optimisationProblem.setObjectiveFunctions(
+                {{[](
+                      const arma::vec& parameter_) {
+                    return arma::accu(parameter_);
+                  },
+                  ""}}));
       }
     }
 
     WHEN("The names are not unique") {
       THEN("Throw no exception") {
         mant::OptimisationProblem optimisationProblem(2);
-        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::accu(parameter_); }, "Test function"}, {[](const arma::vec& parameter_) { return arma::prod(parameter_); }, "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationProblem.setObjectiveFunctions(
+                {{[](
+                      const arma::vec& parameter_) {
+                    return arma::accu(parameter_);
+                  },
+                  "Test function"},
+                 {[](
+                      const arma::vec& parameter_) {
+                    return arma::prod(parameter_);
+                  },
+                  "Test function"}}));
       }
     }
 
     WHEN("The objective function is callable") {
       THEN("Throw no exception and reset the cache and all counters") {
         mant::OptimisationProblem optimisationProblem(2);
-        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::accu(parameter_); }, "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationProblem.setObjectiveFunctions(
+                {{[](
+                      const arma::vec& parameter_) {
+                    return arma::accu(parameter_);
+                  },
+                  "Test function"}}));
 
         // Populates the cache and increments the counter
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({2.0, 1.0});
         ::mant::isCachingSamples = false;
 
-        CHECK_NOTHROW(optimisationProblem.setObjectiveFunctions({{[](const arma::vec& parameter_) { return arma::prod(parameter_); }, "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationProblem.setObjectiveFunctions(
+                {{[](
+                      const arma::vec& parameter_) {
+                    return arma::prod(parameter_);
+                  },
+                  "Test function"}}));
 
         CHECK(optimisationProblem.getUsedNumberOfEvaluations() == 0);
         CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() == 0);
@@ -88,47 +104,15 @@ SCENARIO("OptimisationProblem.getObjectiveFunctions", "[OptimisationProblem][Opt
 
 SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][OptimisationProblem.getObjectiveValue]") {
   GIVEN("A parameter") {
-    WHEN("The parameter is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The parameters number of rows are unequal to the problem's number of dimensions") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue({1.0}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The objective functions vector is empty") {
-      THEN("Throw a logic error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValue({1.0, -2.0}), std::invalid_argument);
-      }
-    }
-
     WHEN("The objective functions vector is non-empty") {
       THEN("Return the objective value, increase all counters and cache its value if supported") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         CHECK(optimisationProblem.getObjectiveValue({1.0, -2.0}) == Approx(-1.0));
@@ -144,62 +128,15 @@ SCENARIO("OptimisationProblem.getObjectiveValue", "[OptimisationProblem][Optimis
 
 SCENARIO("OptimisationProblem.getObjectiveValueOfNormalisedParameter", "[OptimisationProblem][OptimisationProblem.getObjectiveValueOfNormalisedParameter]") {
   GIVEN("A parameter") {
-    WHEN("The parameter is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The parameters number of rows are unequal to the problem's number of dimensions") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0}), std::invalid_argument);
-      }
-    }
-
-    WHEN("A lower bound is greater then the upper one") {
-      THEN("Throw a logic error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
-        optimisationProblem.setLowerBounds({2.0, 3.0});
-        optimisationProblem.setUpperBounds({-2.0, 3.0});
-
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0}), std::logic_error);
-      }
-    }
-
-    WHEN("The objective functions vector is empty") {
-      THEN("Throw a logic error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.getObjectiveValueOfNormalisedParameter({1.0, -2.0}), std::invalid_argument);
-      }
-    }
-
     WHEN("The objective functions vector is non-empty") {
       THEN("Return the objective value, increase all counters and cache its value if supported") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         // The default bounds are set to -10 and 10.
         ::mant::isCachingSamples = true;
@@ -216,29 +153,15 @@ SCENARIO("OptimisationProblem.getObjectiveValueOfNormalisedParameter", "[Optimis
 
 SCENARIO("OptimisationProblem.setLowerBounds", "[OptimisationProblem][OptimisationProblem.setLowerBounds]") {
   GIVEN("Some lower bounds") {
-    WHEN("The lower bounds are empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The number of lower bounds is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds({1.0}), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setLowerBounds({1.0, 2.0, 3.0}), std::invalid_argument);
-      }
-    }
-
     WHEN("The number of lower bounds are equal to the problem's number of dimension") {
       THEN("Throw no exception and keep all counters and caches intact") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -265,29 +188,15 @@ SCENARIO("OptimisationProblem.getLowerBounds", "[OptimisationProblem][Optimisati
 
 SCENARIO("OptimisationProblem.setUpperBounds", "[OptimisationProblem][OptimisationProblem.setUpperBounds]") {
   GIVEN("Some upper bounds") {
-    WHEN("The upper bounds are empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The number of upper bounds is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds({1.0}), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setUpperBounds({1.0, 2.0, 3.0}), std::invalid_argument);
-      }
-    }
-
     WHEN("The number of upper bounds are equal to the problem's number of dimension") {
       THEN("Throw no exception and keep all counters and caches intact") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -314,37 +223,15 @@ SCENARIO("OptimisationProblem.getUpperBounds", "[OptimisationProblem][Optimisati
 
 SCENARIO("OptimisationProblem.setParameterPermutation", "[OptimisationProblem][OptimisationProblem.setParameterPermutation]") {
   GIVEN("A parameter permutation") {
-    WHEN("The permutation is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("Its not a permutation") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation({0, 3}), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation({0, 0}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The permutation's size is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(arma::uvec({0})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterPermutation(arma::uvec({0, 1, 2})), std::invalid_argument);
-      }
-    }
-
     WHEN("The permutation's size is equal to the problem's number of dimension") {
       THEN("Throw no exception and reset all counters and caches") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -371,29 +258,15 @@ SCENARIO("OptimisationProblem.getParameterPermutation", "[OptimisationProblem][O
 
 SCENARIO("OptimisationProblem.setParameterScaling", "[OptimisationProblem][OptimisationProblem.setParameterScaling]") {
   GIVEN("A parameter scaling") {
-    WHEN("The scaling is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterScaling({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The scaling's size is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(arma::vec({0.0})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterScaling(arma::vec({0.0, 1.0, 2.0})), std::invalid_argument);
-      }
-    }
-
     WHEN("The scaling's size is equal to the problem's number of dimension") {
       THEN("Throw no exception and reset all counters and caches") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -420,29 +293,15 @@ SCENARIO("OptimisationProblem.getParameterScaling", "[OptimisationProblem][Optim
 
 SCENARIO("OptimisationProblem.setParameterTranslation", "[OptimisationProblem][OptimisationProblem.setParameterTranslation]") {
   GIVEN("A parameter translation") {
-    WHEN("The translation is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The translation's size is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(arma::vec({0.0})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterTranslation(arma::vec({0.0, 1.0, 2.0})), std::invalid_argument);
-      }
-    }
-
     WHEN("The translation's size is equal to the problem's number of dimension") {
       THEN("Throw no exception and reset all counters and caches") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -469,38 +328,15 @@ SCENARIO("OptimisationProblem.getParameterTranslation", "[OptimisationProblem][O
 
 SCENARIO("OptimisationProblem.setParameterRotation", "[OptimisationProblem][OptimisationProblem.setParameterRotation]") {
   GIVEN("A parameter rotation") {
-    WHEN("The parameter is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("Its not a rotation matrix") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(arma::mat::fixed<1, 1>({1.0})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(arma::mat({{1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(arma::mat({{1.0, 0.0}, {0.0, -2.0}})), std::invalid_argument);
-      }
-    }
-
-    WHEN("The parameter's size is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(3);
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(mant::randomRotationMatrix(2)), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setParameterRotation(mant::randomRotationMatrix(4)), std::invalid_argument);
-      }
-    }
-
     WHEN("The parameter's size is equal to the problem's number of dimension") {
       THEN("Throw no exception and reset all counters and caches") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -527,36 +363,15 @@ SCENARIO("OptimisationProblem.getParameterRotation", "[OptimisationProblem][Opti
 
 SCENARIO("OptimisationProblem.setMinimalParameterDistance", "[OptimisationProblem][OptimisationProblem.setMinimalParameterDistance]") {
   GIVEN("A minimal parameter distance") {
-    WHEN("The parameter is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("The parameter contains negative values") {
-      THEN("Throw a domain error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(arma::vec({1.0, -2.0})), std::domain_error);
-      }
-    }
-
-    WHEN("The parameter's size is unequal to the problem's number of dimension") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(arma::vec({0.0})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationProblem.setMinimalParameterDistance(arma::vec({0.0, 1.0, 2.0})), std::invalid_argument);
-      }
-    }
-
     WHEN("The parameter's size is equal to the problem's number of dimension") {
       THEN("Throw no exception and keep all counters and caches intact") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         ::mant::isCachingSamples = true;
         optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -585,11 +400,10 @@ SCENARIO("OptimisationProblem.setObjectiveValueScaling", "[OptimisationProblem][
   GIVEN("An objective value scaling") {
     THEN("Throw no exception and reset all counters and caches") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       ::mant::isCachingSamples = true;
       optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -617,11 +431,10 @@ SCENARIO("OptimisationProblem.setObjectiveValueTranslation", "[OptimisationProbl
   GIVEN("An objective value translation") {
     THEN("Throw no exception and reset all counters and caches") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       ::mant::isCachingSamples = true;
       optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -649,11 +462,10 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
   WHEN("Caching is not supported") {
     THEN("Return an empty set") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       // Caching is unsupported by default
       optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -665,11 +477,10 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
   WHEN("Caching is supported") {
     THEN("Return the cached samples") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       ::mant::isCachingSamples = true;
       optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -686,11 +497,10 @@ SCENARIO("OptimisationProblem.getCachedSamples", "[OptimisationProblem][Optimisa
 SCENARIO("OptimisationProblem.getUsedNumberOfEvaluations", "[OptimisationProblem][OptimisationProblem.getUsedNumberOfEvaluations]") {
   THEN("Return the used number of evaluations") {
     mant::OptimisationProblem optimisationProblem(2);
-    optimisationProblem.setObjectiveFunctions({{[](
-                                                    const arma::vec& parameter_) {
-                                                  return arma::accu(parameter_);
-                                                },
-        "Test function"}});
+    optimisationProblem.setObjectiveFunctions(
+        {{[](
+              const arma::vec& parameter_) { return arma::accu(parameter_); },
+          "Test function"}});
 
     ::mant::isCachingSamples = true;
     optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -706,11 +516,10 @@ SCENARIO("OptimisationProblem.getUsedNumberOfDistinctEvaluations", "[Optimisatio
   WHEN("Caching is not supported") {
     THEN("Return the same as `.getUsedNumberOfEvaluations()`") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       // Caching is unsupported by default
       optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -724,11 +533,10 @@ SCENARIO("OptimisationProblem.getUsedNumberOfDistinctEvaluations", "[Optimisatio
   WHEN("Caching is supported") {
     THEN("Return the  user number of distinct evaluations") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       ::mant::isCachingSamples = true;
       optimisationProblem.getObjectiveValue({1.0, -2.0});
@@ -744,11 +552,10 @@ SCENARIO("OptimisationProblem.getUsedNumberOfDistinctEvaluations", "[Optimisatio
 SCENARIO("OptimisationProblem.reset", "[OptimisationProblem][OptimisationProblem.reset]") {
   THEN("Reset all counters and caches while leaving everything else intact") {
     mant::OptimisationProblem optimisationProblem(2);
-    optimisationProblem.setObjectiveFunctions({{[](
-                                                    const arma::vec& parameter_) {
-                                                  return arma::accu(parameter_);
-                                                },
-        "Test function"}});
+    optimisationProblem.setObjectiveFunctions(
+        {{[](
+              const arma::vec& parameter_) { return arma::accu(parameter_); },
+          "Test function"}});
 
     optimisationProblem.setLowerBounds({1.0, -3.0});
     optimisationProblem.setUpperBounds({2.0, 3.0});

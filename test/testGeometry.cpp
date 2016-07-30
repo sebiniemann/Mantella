@@ -4,31 +4,19 @@
 
 SCENARIO("rotationMatrix2d", "[geometry][rotationMatrix2d]") {
   GIVEN("An angle") {
-    double angle;
-
     WHEN("The angle is finite") {
       THEN("Return a 2-dimensional rotation matrix") {
-        CHECK(arma::approx_equal(mant::rotationMatrix2d(1.0), arma::mat::fixed<2, 2>({0.540302305868140, -0.841470984807897, 0.841470984807897, 0.540302305868140}), "absdiff", ::mant::machinePrecision) == true);
+        CHECK(arma::approx_equal(mant::rotationMatrix2d(1.0), arma::mat::fixed<2, 2>({{0.540302305868140, -0.841470984807897}, {0.841470984807897, 0.540302305868140}}), "absdiff", ::mant::machinePrecision) == true);
       }
     }
   }
 }
 
-SCENARIO("rotationMatrix3dIntrinsic", "[geometry][rotationMatrix3dIntrinsic]") {
+SCENARIO("rotationMatrix3d", "[geometry][rotationMatrix3d]") {
   GIVEN("A roll, pitch and yaw angle") {
     WHEN("The angles are finite") {
       THEN("Return a 3-dimensional rotation matrix") {
-        CHECK(arma::approx_equal(mant::rotationMatrix3dIntrinsic(-1.0, 2.0, -3.0), arma::mat::fixed<3, 3>({0.411982245665683, 0.833737651774157, -0.367630462924899, 0.058726644927621, -0.426917621276207, -0.902381585483331, -0.909297426825682, 0.350175488374015, -0.224845095366153}), "absdiff", ::mant::machinePrecision) == true);
-      }
-    }
-  }
-}
-
-SCENARIO("rotationMatrix3dExtrinsic", "[geometry][rotationMatrix3dExtrinsic]") {
-  GIVEN("A roll, pitch and yaw angle") {
-    WHEN("The angles are finite") {
-      THEN("Return a 3-dimensional rotation matrix") {
-        CHECK(arma::approx_equal(mant::rotationMatrix3dExtrinsic(-1.0, 2.0, -3.0), arma::mat::fixed<3, 3>({-0.4854784609636683, 0.8647801027370980, -0.1283200602024567, 0.4229185717425478, 0.1038465651516682, -0.9001976297355174, -0.7651474012342926, -0.4912954964338819, -0.4161468365471424}), "absdiff", ::mant::machinePrecision) == true);
+        CHECK(arma::approx_equal(mant::rotationMatrix3d(-1.0, 2.0, -3.0), arma::mat::fixed<3, 3>({{0.411982245665683, 0.833737651774157, -0.367630462924899}, {0.058726644927621, -0.426917621276207, -0.902381585483331}, {-0.909297426825682, 0.350175488374015, -0.224845095366153}}), "absdiff", ::mant::machinePrecision) == true);
       }
     }
   }
@@ -63,7 +51,6 @@ SCENARIO("circleCircleIntersections", "[geometry][circleCircleIntersections]") {
     WHEN("One circle is a dot (the radius is 0 and The distance is equal to `firstRadius`) on the other circle (which is not a dot)") {
       THEN("Return 1 intersection") {
         CHECK(mant::circleCircleIntersections({2.5, 1.2}, 3.2, {5.7, 1.2}, 0.0) == std::vector<arma::vec::fixed<2>>({{5.7, 1.2}}));
-        // Tests that it is not depending on the order
         CHECK(mant::circleCircleIntersections({5.7, 1.2}, 0.0, {2.5, 1.2}, 3.2) == std::vector<arma::vec::fixed<2>>({{5.7, 1.2}}));
       }
     }
@@ -83,12 +70,6 @@ SCENARIO("circleCircleIntersections", "[geometry][circleCircleIntersections]") {
     WHEN("The centers distance is less than `abs(firstRadius - secondRadius)`") {
       THEN("Return 0 intersections") {
         CHECK(mant::circleCircleIntersections({2.5, 1.2}, 3.2, {2.8, 1.6}, 0.6).empty() == true);
-      }
-    }
-
-    WHEN("Both circles are identical (same radius and center)") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::circleCircleIntersections({2.5, 1.2}, 3.2, {2.5, 1.2}, 3.2), std::logic_error);
       }
     }
   }
@@ -153,12 +134,6 @@ SCENARIO("circleSphereIntersections", "[geometry][circleSphereIntersections]") {
     WHEN("The sphere's intersection circle's center distance to the circle's center is less than `abs(circleRadius - intersectionCircleRadius)`") {
       THEN("Return 0 intersections") {
         CHECK(mant::circleSphereIntersections({-2.17603910288870, -1.50364082820138, 5.35751318672055}, 1.43225689874261, {0.176604220410152, -0.247642470535383, -0.952619628246476}, {-4.26292172088363, 1.80075110090070, 1.42342000000000}, 7.78421349144159).empty() == true);
-      }
-    }
-
-    WHEN("The sphere's intersection circle is identical (same radius and center) to the circle") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::circleSphereIntersections({4.18240810714397, -4.140718315562911, 3.165517912607086}, 3.616619200562912, {0.057471463902417, -0.044336228909495, 0.997362185789595}, {4.0, -4.0, 0.0}, 4.81180968646967), std::logic_error);
       }
     }
 

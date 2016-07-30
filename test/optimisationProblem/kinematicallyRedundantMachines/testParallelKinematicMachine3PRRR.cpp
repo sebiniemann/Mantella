@@ -33,7 +33,7 @@ SCENARIO("krm::ParallelKinematicMachine3PRRR.getUpperBounds", "[krm::ParallelKin
 SCENARIO("krm::ParallelKinematicMachine3PRRR.getObjectiveFunctions", "[krm::ParallelKinematicMachine3PRRR][krm::ParallelKinematicMachine3PRRR.getObjectiveFunctions]") {
   GIVEN("An redundant joints actuation and an end effector pose") {
     mant::krm::ParallelKinematicMachine3PRRR optimisationProblem;
-    optimisationProblem.setEndEffectorTrajectory(arma::vec({0.1, 0.05, -0.05}));
+    optimisationProblem.setEndEffectorTrajectory(arma::vec({0.1, 0.05, 0.05}));
 
     CHECK(optimisationProblem.getObjectiveFunctions().size() == 1);
     CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({0.009376303840997, 0.091501367086860, 0.092977707039855}) == Approx(293.8775769234));

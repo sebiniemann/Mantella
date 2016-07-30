@@ -16,10 +16,10 @@ SCENARIO("bbob::AttractiveSectorFunction.getObjectiveFunctions", "[bbob::Attract
     THEN("Return its objective value") {
       TestAttractiveSectorFunction optimisationProblem(3);
       optimisationProblem.parameterTranslation_ = arma::vec({2.0, 3.0, -1.0});
-      optimisationProblem.rotationQ_ = mant::rotationMatrix3dIntrinsic(0.1, 0.2, 0.3);
+      optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
 
       CHECK(optimisationProblem.getObjectiveFunctions().size() == 1);
-      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(64.5770719418));
+      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(49576.1198225102));
     }
   }
 

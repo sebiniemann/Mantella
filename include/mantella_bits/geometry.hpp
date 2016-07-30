@@ -10,12 +10,7 @@ namespace mant {
   arma::mat::fixed<2, 2> rotationMatrix2d(
       const double angle);
 
-  arma::mat::fixed<3, 3> rotationMatrix3dIntrinsic(
-      const double rollAngle,
-      const double pitchAngle,
-      const double yawAngle);
-
-  arma::mat::fixed<3, 3> rotationMatrix3dExtrinsic(
+  arma::mat::fixed<3, 3> rotationMatrix3d(
       const double rollAngle,
       const double pitchAngle,
       const double yawAngle);

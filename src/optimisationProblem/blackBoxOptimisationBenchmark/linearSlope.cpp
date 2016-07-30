@@ -4,7 +4,6 @@
 #include <cassert>
 #include <functional>
 #include <random>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -21,22 +20,21 @@ namespace mant {
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(10.0)),
           f0_(5.0 * arma::accu(parameterConditioning_)) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("LinearSlope: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "LinearSlope: The number of dimensions must be greater than 1.");
 
-      setParameterRotation(arma::eye<arma::mat>(numberOfDimensions_, numberOfDimensions_) * (std::bernoulli_distribution(0.5)(Rng::generator_) ? 1.0 : -1.0));
+      setParameterRotation(arma::eye<arma::mat>(numberOfDimensions_, numberOfDimensions_) * (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 1.0 : -1.0));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                arma::vec z = parameter_;
-                                z.elem(arma::find(parameter_ >= 5.0)).fill(5.0);
+              arma::vec z = parameter_;
+              z.elem(arma::find(parameter_ >= 5.0)).fill(5.0);
 
-                                return f0_ - arma::dot(parameterConditioning_, z);
-                              },
-          "BBOB Linear Slope (f5)"}});
+              return f0_ - arma::dot(parameterConditioning_, z);
+            },
+            "BBOB Linear Slope (f5)"}});
     }
   }
 }

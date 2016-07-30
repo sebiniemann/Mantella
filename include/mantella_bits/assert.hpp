@@ -25,6 +25,9 @@ namespace mant {
       const arma::uvec& permutationCandidate,
       const arma::uword numberOfElements,
       const arma::uword cycleSize);
+  bool isPermutationVector(
+      const arma::uvec& permutationCandidate,
+      const arma::uword numberOfElements);
 
   bool isSymmetric(
       const arma::mat& symmetricCandidate);

@@ -3,7 +3,6 @@
 // C++ standard library
 #include <functional>
 #include <limits>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -14,59 +13,57 @@
 namespace mant {
   DifferentialEvolution::DifferentialEvolution()
       : PopulationBasedOptimisationAlgorithm() {
-    setInitialisingFunctions({{[this](
-                                   const arma::uword numberOfDimensions_,
-                                   const arma::mat& initialParameters_) {
-                                 population_ = initialParameters_;
+    setInitialisingFunctions(
+        {{[this](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& initialParameters_) {
+            population_ = initialParameters_;
 
-                                 return initialParameters_;
-                               },
-                                  "Population initialisation"},
-        {[this](
-             const arma::uword numberOfDimensions_,
-             const arma::mat& initialParameters_) {
-                                localBestObjectiveValues_.set_size(populationSize_);
-                                localBestObjectiveValues_.fill(std::numeric_limits<double>::infinity());
+            return initialParameters_;
+          },
+          "Population initialisation"},
+         {[this](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& initialParameters_) {
+            localBestObjectiveValues_.set_size(populationSize_);
+            localBestObjectiveValues_.fill(std::numeric_limits<double>::infinity());
 
-                                return initialParameters_;
-                              },
-            "Local best objective values initialisation"}});
+            return initialParameters_;
+          },
+          "Local best objective values initialisation"}});
 
-    setNextParametersFunctions({{[this](
-                                     const arma::uword numberOfDimensions_,
-                                     const arma::mat& parameters_,
-                                     const arma::rowvec& objectiveValues_,
-                                     const arma::rowvec& differences_) {
-                                   for (arma::uword n = 0; n < populationSize_; ++n) {
-                                     if (objectiveValues_(n) < localBestObjectiveValues_(n)) {
-                                       population_.col(n) = parameters_.col(n);
-                                     }
-                                   }
+    setNextParametersFunctions(
+        {{[this](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_) {
+            for (arma::uword n = 0; n < populationSize_; ++n) {
+              if (objectiveValues_(n) < localBestObjectiveValues_(n)) {
+                population_.col(n) = parameters_.col(n);
+              }
+            }
 
-                                   arma::mat populationCandidates(arma::size(population_));
-                                   for (arma::uword n = 0; n < populationSize_; ++n) {
-                                     arma::uvec randomIndices = randomPermutationVector(populationSize_, 3);
-                                     populationCandidates.col(n) = population_.col(randomIndices(0)) + scalingFactor_ * (population_.col(randomIndices(1)) - population_.col(randomIndices(2)));
-                                   }
+            arma::mat populationCandidates(arma::size(population_));
+            for (arma::uword n = 0; n < populationSize_; ++n) {
+              arma::uvec randomIndices = randomPermutationVector(populationSize_, 3);
+              populationCandidates.col(n) = population_.col(randomIndices(0)) + getScalingFactor() * (population_.col(randomIndices(1)) - population_.col(randomIndices(2)));
+            }
 
-                                   return populationCandidates;
-                                 },
-        "Differential evolution"}});
+            return populationCandidates;
+          },
+          "Differential evolution"}});
 
     setScalingFactor(0.5);
   }
 
   void DifferentialEvolution::optimise(
       OptimisationProblem& optimisationProblem) {
-    optimise(optimisationProblem, arma::randu<arma::mat>(optimisationProblem.numberOfDimensions_, populationSize_));
+    optimise(optimisationProblem, uniformRandomNumbers(optimisationProblem.numberOfDimensions_, populationSize_));
   }
 
   void DifferentialEvolution::setScalingFactor(
       const double scalingFactor) {
-    if (scalingFactor < 0.0) {
-      throw std::domain_error("DifferentialEvolution.setScalingFactor: The scaling factor must be positive (including 0)");
-    }
-
     scalingFactor_ = scalingFactor;
   }
 
