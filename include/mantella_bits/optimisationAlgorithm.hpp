@@ -1,4 +1,5 @@
 #pragma once
+#include "mantella_bits/config.hpp" // IWYU pragma: keep
 
 // C++ standard library
 #include <chrono>
@@ -6,6 +7,11 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+// MPI
+#if defined(SUPPORT_MPI)
+#include <mpi.h> // IWYU pragma: keep
+#endif
 
 // Armadillo
 #include <armadillo>
@@ -20,93 +26,189 @@ namespace mant {
    public:
     explicit OptimisationAlgorithm();
 
+    void setInitialisingFunctions(
+        const std::vector<std::pair<
+            std::function<
+                arma::mat(
+                    const arma::uword numberOfDimensions_,
+                    const arma::mat& initialParameters_)>,
+            std::string>>& initialisingFunctions);
+
+    std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& initialParameters_)>, std::string>> getInitialisingFunctions() const;
+
+    void setNextParametersFunctions(
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& nextParametersFunctions);
+
+    std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getNextParametersFunctions() const;
+
+    void setBoundariesHandlingFunctions(
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::mat& parameters_,
+                const arma::umat& isBelowLowerBound_,
+                const arma::umat& isAboveUpperBound_)>,
+            std::string>>& boundariesHandlingFunctions);
+
+    std::vector<std::pair<std::function<arma::mat(const arma::mat& parameters_, const arma::umat& isBelowLowerBound_, const arma::umat& isAboveUpperBound_)>, std::string>> getBoundariesHandlingFunctions() const;
+
+    void setIsStagnatingFunctions(
+        const std::vector<std::pair<
+            std::function<bool(
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& isStagnatingFunctions);
+
+    std::vector<std::pair<std::function<bool(const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getIsStagnatingFunctions() const;
+
+    void setRestartingFunctions(
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& restartingFunctions);
+
+    std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getRestartingFunctions() const;
+
+    void setCommunicationFunctions(
+        const std::vector<std::pair<
+            std::function<arma::mat(
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_)>,
+            std::string>>& communicationFunctions);
+
+    std::vector<std::pair<std::function<arma::mat(const arma::uword numberOfDimensions_, const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_)>, std::string>> getCommunicationFunctions() const;
+
     void optimise(
         OptimisationProblem& optimisationProblem,
-        const arma::Mat<double>& initialParameters);
+        const arma::mat& initialParameters);
 
-    void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParameterFunction,
-        const std::string& nextParametersFunctionName);
-    void setNextParametersFunction(
-        std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParameterFunction);
-    std::string getNextParametersFunctionName() const;
-    void setBoundariesHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isBelowLowerBound_, const arma::Mat<arma::uword>& isAboveUpperBound_)> boundariesHandlingFunction,
-        const std::string& boundariesHandlingFunctionName);
-    void setBoundariesHandlingFunction(
-        std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isBelowLowerBound_, const arma::Mat<arma::uword>& isAboveUpperBound_)> boundariesHandlingFunction);
-    std::string getBoundariesHandlingFunctionName() const;
-    void setIsStagnatingFunction(
-        std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction,
-        const std::string& isStagnatingFunctionName);
-    void setIsStagnatingFunction(
-        std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction);
-    std::string getIsStagnatingFunctionName() const;
-    void setRestartingFunction(
-        std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction,
-        const std::string& restartingFunctionName);
-    void setRestartingFunction(
-        std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction);
-    std::string getRestartingFunctionName() const;
+    void setNumberOfCommunicationStalls(
+        const arma::uword numberOfCommunicationStalls);
+    arma::uword getNumberOfCommunicationStalls() const;
 
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
     double getAcceptableObjectiveValue() const;
+
     void setMaximalNumberOfIterations(
         const arma::uword maximalNumberOfIterations);
     arma::uword getMaximalNumberOfIterations() const;
+
     void setMaximalDuration(
         const std::chrono::microseconds maximalDuration);
     std::chrono::microseconds getMaximalDuration() const;
 
+    arma::uword getUsedNumberOfIterations() const;
+    std::chrono::microseconds getUsedDuration() const;
+
     bool isFinished() const;
     bool isTerminated() const;
 
-    arma::uword getNumberOfIterations() const;
-    std::chrono::microseconds getDuration() const;
+    arma::vec getBestFoundParameter() const;
+    double getBestFoundObjectiveValue() const;
 
-    double getBestObjectiveValue() const;
-    arma::Col<double> getBestParameter() const;
-
-    std::vector<std::pair<arma::Col<double>, double>> getRecordedSampling() const;
+    std::vector<std::pair<arma::vec, double>> getRecordedSampling() const;
 
     void reset();
 
-    virtual ~OptimisationAlgorithm() = default;
+   protected:
+    std::vector<std::pair<
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& initialParameters_)>,
+        std::string>>
+        initialisingFunctions_;
 
-    // The following variables are only in public scope, to be used inside lambdas
-    int nodeRank_;
-    int numberOfNodes_;
+    std::vector<std::pair<
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        nextParametersFunctions_;
+
+    std::vector<std::pair<
+        std::function<arma::mat(
+            const arma::mat& parameters_,
+            const arma::umat& isBelowLowerBound_,
+            const arma::umat& isAboveUpperBound_)>,
+        std::string>>
+        boundariesHandlingFunctions_;
+
+    std::vector<std::pair<
+        std::function<bool(
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        isStagnatingFunctions_;
+
+    std::vector<std::pair<
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        restartingFunctions_;
+
+    std::vector<std::pair<
+        std::function<arma::mat(
+            const arma::uword numberOfDimensions_,
+            const arma::mat& parameters_,
+            const arma::rowvec& objectiveValues_,
+            const arma::rowvec& differences_)>,
+        std::string>>
+        communicationFunctions_;
+
+    arma::uword numberOfCommunicationStalls_;
 
     double acceptableObjectiveValue_;
-
     arma::uword maximalNumberOfIterations_;
-    arma::uword numberOfIterations_;
     std::chrono::microseconds maximalDuration_;
-    std::chrono::microseconds duration_;
 
-    double bestObjectiveValue_;
-    arma::Col<double> bestParameter_;
+    arma::uword usedNumberOfIterations_;
+    std::chrono::microseconds usedDuration_;
 
-   protected:
-    std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> nextParametersFunction_;
-    std::string nextParametersFunctionName_;
-    std::function<arma::Mat<double>(const arma::Mat<double>& parameters_, const arma::Mat<arma::uword>& isBelowLowerBound_, const arma::Mat<arma::uword>& isAboveUpperBound_)> boundariesHandlingFunction_;
-    std::string boundariesHandlingFunctionName_;
-    std::function<bool(const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> isStagnatingFunction_;
-    std::string isStagnatingFunctionName_;
-    std::function<arma::Mat<double>(const arma::uword numberOfDimensions_, const arma::Mat<double>& parameters_, const arma::Row<double>& objectiveValues_, const arma::Row<double>& differences_)> restartingFunction_;
-    std::string restartingFunctionName_;
+    double bestFoundObjectiveValue_;
+    arma::vec bestFoundParameter_;
+
+    std::vector<std::pair<arma::vec, double>> recordedSampling_;
+
     std::chrono::time_point<std::chrono::steady_clock> initialTimePoint_;
 
-    std::vector<std::pair<arma::Col<double>, double>> recordedSampling_;
-
-    virtual void initialise(
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& initialParameters);
-
-    std::pair<arma::Row<double>, arma::Row<double>> evaluate(
+    std::pair<arma::rowvec, arma::rowvec> getObjectiveValuesAndDifferences(
         OptimisationProblem& optimisationProblem,
-        const arma::Mat<double>& parameters);
+        const arma::mat& parameters);
+
+    arma::mat normalisedParameters(
+        const OptimisationProblem& optimisationProblem,
+        const arma::mat& parameters) const;
+    arma::mat denormalisedParameters(
+        const OptimisationProblem& optimisationProblem,
+        const arma::mat& normalisedParameters) const;
+
+#if defined(SUPPORT_MPI)
+    // Declares a custom MPI_User_function (used as custom MPI_Reduce* operation).
+    // **Note:** This function will not be available without MPI support, as `MPI_Datatype` is an MPI specific type and needs to be defined.
+    // @see https://www.mpi-forum.org/docs/ for more information.
+    static void mpiOpBestSample(
+        void* firstInput,
+        void* secondInput,
+        int* size,
+        MPI_Datatype* type);
+#endif
   };
 }

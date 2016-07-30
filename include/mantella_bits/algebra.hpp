@@ -5,10 +5,10 @@
 
 namespace mant {
   arma::uword polynomialSize(
-      const arma::uword numberOfElements,
-      const arma::uword polynomialOrder);
+      const arma::uword numberOfIndeterminates,
+      const arma::uword highestDegree);
 
-  arma::Col<double> polynomial(
-      const arma::Col<double>& parameter,
-      const arma::uword polynomialOrder);
+  arma::vec polynomial(
+      const arma::vec& parameter,
+      const arma::uword highestDegree);
 }

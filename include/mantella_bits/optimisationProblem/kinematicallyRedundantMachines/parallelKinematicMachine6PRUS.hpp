@@ -13,11 +13,11 @@ namespace mant {
       explicit ParallelKinematicMachine6PRUS();
 
      protected:
-      const arma::Mat<double>::fixed<3, 6> redundantJointsPosition_;
-      const arma::Mat<double>::fixed<3, 6> redundantJointsAngles_;
-      const arma::Mat<double>::fixed<3, 6> baseJointsNormal_;
-      const arma::Mat<double>::fixed<2, 6> linkLengths_;
-      const arma::Mat<double>::fixed<3, 6> endEffectorJointsRelativePosition_;
+      const arma::mat::fixed<3, 6> redundantJointsPosition_;
+      const arma::mat::fixed<3, 6> redundantJointsAngles_;
+      const arma::mat::fixed<3, 6> baseJointsNormal_;
+      const arma::mat::fixed<2, 6> linkLengths_;
+      const arma::mat::fixed<3, 6> endEffectorJointsRelativePosition_;
     };
   }
 }

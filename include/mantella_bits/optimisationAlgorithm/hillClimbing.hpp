@@ -1,8 +1,5 @@
 #pragma once
 
-// Armadillo
-#include <armadillo>
-
 // Mantella
 #include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
@@ -14,11 +11,6 @@ namespace mant {
    public:
     explicit HillClimbing();
 
-    void initialise(
-        const arma::uword numberOfDimensions,
-        const arma::Mat<double>& initialParameters) override;
-
-    // Adds *optimise(OptimisationProblem& optimisationProblem, const arma::Mat<double>& initialParameters)*
     using OptimisationAlgorithm::optimise;
 
     void optimise(
@@ -27,11 +19,12 @@ namespace mant {
     void setMinimalStepSize(
         const double minimalStepSize);
     double getMinimalStepSize() const;
+
     void setMaximalStepSize(
         const double maximalStepSize);
     double getMaximalStepSize() const;
 
-    // The following variables are only in public scope, to be used inside lambdas
+   protected:
     double minimalStepSize_;
     double maximalStepSize_;
   };
