@@ -26,13 +26,6 @@ SCENARIO("SimulatedAnnealing.optimise", "[SimulatedAnnealing][SimulatedAnnealing
 
 SCENARIO("SimulatedAnnealing.setMinimalStepSize", "[SimulatedAnnealing][SimulatedAnnealing.setMinimalStepSize]") {
   GIVEN("A minimal step size") {
-    WHEN("The minimal step size is negative") {
-      THEN("Throw a domain error") {
-        mant::SimulatedAnnealing optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMinimalStepSize(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The minimal step size is positive or 0") {
       THEN("Throw no exception") {
         mant::SimulatedAnnealing optimisationAlgorithm;
@@ -53,13 +46,6 @@ SCENARIO("SimulatedAnnealing.getMinimalStepSize", "[SimulatedAnnealing][Simulate
 
 SCENARIO("SimulatedAnnealing.setMaximalStepSize", "[SimulatedAnnealing][SimulatedAnnealing.setMaximalStepSize]") {
   GIVEN("A maximal step size") {
-    WHEN("The maximal step size is negative") {
-      THEN("Throw a domain error") {
-        mant::SimulatedAnnealing optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMaximalStepSize(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The maximal step size is positive or 0") {
       THEN("Throw no exception") {
         mant::SimulatedAnnealing optimisationAlgorithm;

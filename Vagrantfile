@@ -5,42 +5,29 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
   config.vm.provider "virtualbox" do |vb|
-    # Increases the memory as some weird internal compiler errors occur, if the compiler runs out-of-memory.
+    # Increases the memory, avoiding that the compiler runs out-of-memory.
     vb.memory = 1536
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    # Installs Docker
+    # See https://docs.docker.com/engine/installation/linux/ubuntulinux/ for more details
     sudo apt-get update
-
-    export CC=clang
-    export CXX=clang++
+    sudo apt-get install -y apt-transport-https ca-certificates
     
-    # Mantella's dependencies and Testing
-    source /vagrant/.setup.sh
+    sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+    echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' | sudo tee /etc/apt/sources.list.d/docker.list
     
-    sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-3.8 100
-    sudo update-alternatives --set cc /usr/bin/clang-3.8
-    sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.8 100
-    sudo update-alternatives --set c++ /usr/bin/clang++-3.8
-
-    # Benchmarking
-    wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz
-    mkdir benchmark
-    tar -xzf benchmark.tar.gz -C ./benchmark --strip-components=1
-    cd benchmark || exit
-    cmake -DCMAKE_BUILD_TYPE=Release .
-    make benchmark
-    sudo make install
-    cd ..
-    rm -Rf benchmark benchmark.tar.xz
-
-    # Debugging
-    sudo apt-get install -y valgrind
-
-    # Other useful tools
-    sudo apt-get install -y git
-    sudo apt-get install -y htop
-    sudo apt-get install -y unzip
-    sudo apt-get install -y dos2unix
+    sudo apt-get update
+    sudo apt-get install -y linux-image-extra-$(uname -r)
+    sudo apt-get install -y docker-engine
+    
+    # Builds and runs Mantella's Docker image
+    cd /vagrant
+    sudo docker build -t ubuntu/mantella:latest .
+    sudo docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+    
+    ## Adds useful applications to the running Docker container
+    sudo docker exec mantella apt-get install -y vim
   SHELL
 end

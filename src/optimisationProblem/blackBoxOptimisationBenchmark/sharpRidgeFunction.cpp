@@ -4,7 +4,6 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -22,21 +21,20 @@ namespace mant {
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
           rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("SharpRidgeFunction: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "SharpRidgeFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = rotationQ_ * (parameterConditioning_ % parameter_);
-                                return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
-                              },
-          "BBOB Sharp Ridge Function (f13)"}});
+              const arma::vec& z = rotationQ_ * (parameterConditioning_ % parameter_);
+              return std::pow(z(0), 2.0) + 100.0 * arma::norm(z.tail(z.n_elem - 1));
+            },
+            "BBOB Sharp Ridge Function (f13)"}});
     }
   }
 }

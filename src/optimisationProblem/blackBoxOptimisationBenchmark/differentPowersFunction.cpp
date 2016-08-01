@@ -3,7 +3,6 @@
 // C++ standard library
 #include <cassert>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -18,21 +17,20 @@ namespace mant {
     DifferentPowersFunction::DifferentPowersFunction(
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("DifferentPowersFunction: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "DifferentPowersFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = arma::abs(parameter_);
-                                return arma::norm(z % getConditionedParameter(arma::square(z)));
-                              },
-          "BBOB Different Powers Function (f14)"}});
+              const arma::vec& z = arma::abs(parameter_);
+              return arma::norm(z % getConditionedParameter(arma::square(z)));
+            },
+            "BBOB Different Powers Function (f14)"}});
     }
   }
 }

@@ -1,8 +1,8 @@
 #include "mantella_bits/armadillo.hpp"
 
 // C++ standard library
+#include <cassert>
 #include <functional>
-#include <stdexcept>
 
 // Mantella
 #include "mantella_bits/config.hpp"
@@ -10,19 +10,15 @@
 namespace mant {
   arma::uword Hash::operator()(
       const arma::vec& key) const {
-    if (key.is_empty()) {
-      throw std::invalid_argument("Hash.operator(): The key must not be empty.");
-    } else if (key.has_nan()) {
-      throw std::domain_error("Hash.operator(): The key must not contain NaNs.");
-    }
+    assert(!key.is_empty() && "Hash.operator(): The key must not be empty.");
+    assert(!key.has_nan() && "Hash.operator(): The key must not contain NaNs.");
 
     arma::uword hashedKey = key.n_elem;
 
     // The hashing is based on the Boost library (boost::hash_combine), including the magic numbers.
     // @see http://www.boost.org/doc/libs/1_55_0/doc/html/hash/reference.html#boost.hash_combine
 
-    /**
-     * Boost Software License - Version 1.0 - August 17th, 2003
+    /** Boost Software License - Version 1.0 - August 17th, 2003
      * 
      * Permission is hereby granted, free of charge, to any person or organization
      * obtaining a copy of the software and accompanying documentation covered by

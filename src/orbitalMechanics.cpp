@@ -2,6 +2,7 @@
 
 // C++ standard library
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <functional>
 #include <limits>
@@ -21,6 +22,8 @@ namespace mant {
     double stumpffFunction(
         const double parameter,
         const arma::uword type) {
+      assert(std::isfinite(parameter) && "stumpffFunction: The parameter must be finite.");
+
       if (type == 0) {
         if (parameter > 0.0) {
           return std::cos(std::sqrt(parameter));
@@ -38,7 +41,12 @@ namespace mant {
           return 5.0 / 6.0;
         }
       } else {
-        return (1.0 / factorial(static_cast<double>(type - 2)) - stumpffFunction(parameter, type - 2)) / parameter;
+        try {
+          return (1.0 / factorial(static_cast<double>(type - 2)) - stumpffFunction(parameter, type - 2)) / parameter;
+        } catch (const std::overflow_error& exception) {
+          // As `factorial(...)` overflows, `1.0 / factorial(...)` is expected to be insignificantly small.
+          return -stumpffFunction(parameter, type - 2) / parameter;
+        }
       }
     }
 
@@ -50,6 +58,10 @@ namespace mant {
         const arma::vec::fixed<3>& departurePosition,
         const arma::vec::fixed<3>& arrivalPosition,
         const bool useProgradeTrajectory) {
+      assert(std::isfinite(universalVariable) && "timeOfFlight: The universal variable must be finite.");
+      assert(departurePosition.is_finite() && "timeOfFlight: The departure position must be finite.");
+      assert(arrivalPosition.is_finite() && "timeOfFlight: The arrival position must be finite.");
+
       if (arma::approx_equal(departurePosition, arrivalPosition, "absdiff", ::mant::machinePrecision)) {
         return 0.0;
       }
@@ -81,39 +93,45 @@ namespace mant {
     }
 
     double sphereOfInfluenceRadius(
-        const double semimajorAxis,
+        const double semiMajorAxis,
         const double mass) {
-      return std::pow(mass / ::mant::itd::solarMass, 0.4) * semimajorAxis;
+      assert(std::isfinite(semiMajorAxis) && "sphereOfInfluenceRadius: The semi major axis must be finite.");
+      assert(std::isfinite(mass) && "sphereOfInfluenceRadius: The mass must be finite.");
+      assert(mass >= 0.0 && "sphereOfInfluenceRadius: The mass must be positive (including 0).");
+
+      return std::pow(mass / ::mant::itd::solarMass, 0.4) * semiMajorAxis;
     }
 
     std::pair<arma::vec::fixed<3>, arma::vec::fixed<3>> positionAndVelocityOnOrbit(
         const double modifiedJulianDate,
         const arma::vec::fixed<7>& keplerianElements) {
+      assert(std::isfinite(modifiedJulianDate) && "positionAndVelocityOnOrbit: The modified Julian date must be finite.");
+      assert(keplerianElements.is_finite() && "positionAndVelocityOnOrbit: The Keplerian elements must be finite.");
+
       const double eccentricity = keplerianElements(1);
-      if (eccentricity >= 1.0) {
-        throw std::domain_error("positionAndVelocityOnOrbit: The eccentricity must be less than 1.");
-      }
+      assert(eccentricity < 1.0 && "positionAndVelocityOnOrbit: The eccentricity must be less than 1.");
 
       const double semiMajorAxis = keplerianElements(0);
       const double inclination = keplerianElements(2);
       const double longitudeOfTheAscendingNode = keplerianElements(3);
       const double argumentOfPeriapsis = keplerianElements(4);
+      // Calculates the mean anomaly at `modifiedJulianDate`.
       const double meanAnomaly = keplerianElements(5) + (modifiedJulianDate - keplerianElements(6)) * std::sqrt(::mant::itd::heliocentricGravitationalConstant / std::pow(semiMajorAxis, 3.0));
 
-      const double eccentricAnomaly = mant::brent([&meanAnomaly, &eccentricity](
-                                                      double parameter) {
+      // Solves KJepler's equation for the eccentric anomaly.
+      auto keplersEquation = [&meanAnomaly, &eccentricity](double parameter) {
         return parameter - eccentricity * std::sin(parameter) - meanAnomaly;
-      },
-          meanAnomaly + eccentricity * std::cos(meanAnomaly) - 1.0, meanAnomaly + eccentricity * std::cos(meanAnomaly) + 1.0, 100);
+      };
+      const double eccentricAnomaly = mant::brent(keplersEquation, meanAnomaly + eccentricity * std::cos(meanAnomaly) - 1.0, meanAnomaly + eccentricity * std::cos(meanAnomaly) + 1.0, 100);
 
       if (std::isnan(eccentricAnomaly)) {
-        throw std::runtime_error("positionAndVelocityOnOrbit: Could not solve for the eccentric anomaly.");
+        throw std::runtime_error("positionAndVelocityOnOrbit: Could not solve Kepler's equation for the eccentric anomaly.");
       }
 
       const double y = semiMajorAxis * std::sqrt(1.0 - std::pow(eccentricity, 2.0));
       const double n = std::sqrt(::mant::itd::heliocentricGravitationalConstant / std::pow(semiMajorAxis, 3.0));
 
-      const arma::mat& rotationMatrix = rotationMatrix3dExtrinsic(longitudeOfTheAscendingNode, inclination, argumentOfPeriapsis);
+      const arma::mat& rotationMatrix = rotationMatrix3d(longitudeOfTheAscendingNode, inclination, argumentOfPeriapsis);
 
       return {rotationMatrix * arma::vec({semiMajorAxis * (std::cos(eccentricAnomaly) - eccentricity), y * std::sin(eccentricAnomaly), 0.0}), rotationMatrix * arma::vec({-(semiMajorAxis * n * std::sin(eccentricAnomaly)) / (1.0 - eccentricity * std::cos(eccentricAnomaly)), (y * n * std::cos(eccentricAnomaly)) / (1.0 - eccentricity * std::cos(eccentricAnomaly)), 0.0})};
     }
@@ -124,6 +142,12 @@ namespace mant {
         const arma::vec::fixed<3>& planetVelocity,
         const double standardGravitationalParameter,
         const double periapsis) {
+      assert(satelliteVelocity.is_finite() && "positionAndVelocityOnOrbit: The Keplerian elements must be finite.");
+      assert(planetPosition.is_finite() && "positionAndVelocityOnOrbit: The Keplerian elements must be finite.");
+      assert(planetVelocity.is_finite() && "positionAndVelocityOnOrbit: The Keplerian elements must be finite.");
+      assert(std::isfinite(standardGravitationalParameter) && "positionAndVelocityOnOrbit: The Keplerian elements must be finite.");
+      assert(std::isfinite(periapsis) && "positionAndVelocityOnOrbit: The Keplerian elements must be finite.");
+
       const double satelliteVelocityMagnitude = arma::norm(satelliteVelocity);
       const double excessVelocityMagnitude = arma::norm(satelliteVelocity - planetVelocity);
       const double alpha = std::acos(arma::norm_dot(satelliteVelocity, planetVelocity));
@@ -138,9 +162,7 @@ namespace mant {
         const bool useProgradeTrajectory,
         const arma::uword numberOfRevolutions,
         const double transferTime) {
-      if (transferTime < 0.0) {
-        throw std::domain_error("lambert: The transfer time must be positive (including 0)");
-      }
+      assert(transferTime >= 0.0 && "lambert: The transfer time must be positive (including 0)");
 
       if (transferTime < ::mant::machinePrecision) {
         if (arma::approx_equal(departurePosition, arrivalPosition, "absdiff", ::mant::machinePrecision)) {
@@ -162,10 +184,12 @@ namespace mant {
         ::mant::machinePrecision = previousMachinePrecision;
       } else {
         OptimisationProblem optimisationProblem(1);
-        optimisationProblem.setObjectiveFunctions({{[&timeOfFlightFunction](const arma::vec& universalVariable) {
-                                                      return timeOfFlightFunction(universalVariable(0));
-                                                    },
-            "Time of flight difference"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[&timeOfFlightFunction](
+                  const arma::vec& universalVariable) {
+                return timeOfFlightFunction(universalVariable(0));
+              },
+              "Time of flight difference"}});
         HookeJeevesAlgorithm optimisationAlgorithm;
         optimisationAlgorithm.setMaximalNumberOfIterations(100);
         optimisationAlgorithm.setAcceptableObjectiveValue(std::min(transferTime - 2.0 * ::mant::machinePrecision, std::nexttoward(transferTime, 0.0)));

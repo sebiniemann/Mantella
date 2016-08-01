@@ -26,4 +26,7 @@ namespace mant {
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfEvaluations,
       const double minimalConfidence);
+  std::vector<arma::uvec> additiveSeparability(
+      OptimisationProblem& optimisationProblem,
+      const arma::uword numberOfEvaluations);
 }

@@ -4,7 +4,6 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -22,23 +21,22 @@ namespace mant {
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
           rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("SchaffersF7Function: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "SchaffersF7Function: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
       setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter_)));
-                                const arma::vec& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
+              const arma::vec& s = arma::square(parameterConditioning_ % (rotationQ_ * getAsymmetricParameter(0.5, parameter_)));
+              const arma::vec& z = arma::pow(s.head(s.n_elem - 1) + s.tail(s.n_elem - 1), 0.25);
 
-                                return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);
-                              },
-          "BBOB Schaffers F7 Function (f17)"}});
+              return std::pow(arma::mean(z % (1.0 + arma::square(arma::sin(50.0 * arma::pow(z, 0.4))))), 2.0);
+            },
+            "BBOB Schaffers F7 Function (f17)"}});
     }
   }
 }

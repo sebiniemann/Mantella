@@ -2,26 +2,33 @@
 
 // C++ standard library
 #include <array>
-
-int nodeRank(0);
-int numberOfNodes(1);
+#include <cassert>
 
 namespace std {
   ostream& operator<<(
       ostream& outputStream,
       const unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>& samples) {
     for (const auto& sample : samples) {
-      outputStream << "(" << accumulate(sample.first.begin() + 1, sample.first.end(), to_string(sample.first(0)), [](const string& concatenatedElements, const double nextElement) { return concatenatedElements + ", " + to_string(nextElement); }) << ") => " << sample.second << endl;
+      outputStream << "("
+                   << accumulate(sample.first.begin() + 1, sample.first.end(), to_string(sample.first(0)), [](const string& concatenatedElements, const double nextElement) {
+                        return concatenatedElements + ", " + to_string(nextElement);
+                      })
+                   << ") => " << sample.second << endl;
     }
 
     return outputStream;
   }
 
-  ostream& operator<<(
+  ostream&
+  operator<<(
       ostream& outputStream,
       const vector<arma::vec>& parameters) {
     for (const auto& parameter : parameters) {
-      outputStream << "(" << accumulate(parameter.begin() + 1, parameter.end(), to_string(parameter(0)), [](const string& concatenatedElements, const double nextValue) { return concatenatedElements + ", " + to_string(nextValue); }) << ")" << endl;
+      outputStream << "("
+                   << accumulate(parameter.begin() + 1, parameter.end(), to_string(parameter(0)), [](const string& concatenatedElements, const double nextValue) {
+                        return concatenatedElements + ", " + to_string(nextValue);
+                      })
+                   << ")" << endl;
     }
 
     return outputStream;
@@ -43,7 +50,11 @@ namespace std {
       ostream& outputStream,
       const vector<pair<arma::vec, double>>& samples) {
     for (const auto& sample : samples) {
-      outputStream << "(" << accumulate(sample.first.begin() + 1, sample.first.end(), to_string(sample.first(0)), [](const string& concatenatedElements, const double nextElement) { return concatenatedElements + ", " + to_string(nextElement); }) << ") => " << sample.second << endl;
+      outputStream << "("
+                   << accumulate(sample.first.begin() + 1, sample.first.end(), to_string(sample.first(0)), [](const string& concatenatedElements, const double nextElement) {
+                        return concatenatedElements + ", " + to_string(nextElement);
+                      })
+                   << ") => " << sample.second << endl;
     }
 
     return outputStream;
@@ -53,7 +64,11 @@ namespace std {
       ostream& outputStream,
       const vector<arma::uvec>& elements) {
     for (const auto& element : elements) {
-      outputStream << "(" << accumulate(element.begin() + 1, element.end(), to_string(element(0)), [](const string& concatenatedElements, const arma::uword nextValue) { return concatenatedElements + ", " + to_string(nextValue); }) << ")" << endl;
+      outputStream << "("
+                   << accumulate(element.begin() + 1, element.end(), to_string(element(0)), [](const string& concatenatedElements, const arma::uword nextValue) {
+                        return concatenatedElements + ", " + to_string(nextValue);
+                      })
+                   << ")" << endl;
     }
 
     return outputStream;
@@ -62,15 +77,16 @@ namespace std {
   ostream& operator<<(
       ostream& outputStream,
       const vector<pair<arma::uvec, arma::uvec>>& pairs) {
-    const auto elementsConcatenatingFunction =
-        [](
-            const string& concatenatedElements,
-            const arma::uword nextValue) {
-          return concatenatedElements + ", " + to_string(nextValue);
-        };
+    const auto elementsConcatenatingFunction = [](
+        const string& concatenatedElements,
+        const arma::uword nextValue) {
+      return concatenatedElements + ", " + to_string(nextValue);
+    };
 
     for (const auto& pair : pairs) {
-      outputStream << "(" << accumulate(pair.first.begin() + 1, pair.first.end(), to_string(pair.first(0)), elementsConcatenatingFunction) << "), (" << accumulate(pair.second.begin() + 1, pair.second.end(), to_string(pair.second(0)), elementsConcatenatingFunction) << ")" << endl;
+      outputStream << "("
+                   << accumulate(pair.first.begin() + 1, pair.first.end(), to_string(pair.first(0)), elementsConcatenatingFunction) << "), (" << accumulate(pair.second.begin() + 1, pair.second.end(), to_string(pair.second(0)), elementsConcatenatingFunction)
+                   << ")" << endl;
     }
 
     return outputStream;
@@ -128,13 +144,15 @@ namespace arma {
   bool operator==(
       const std::vector<vec::fixed<2>>& firstVector,
       const std::vector<vec::fixed<2>>& secondVector) {
-    return (std::vector<vec>(firstVector.cbegin(), firstVector.cend()) == std::vector<vec>(secondVector.cbegin(), secondVector.cend()));
+    return (
+        std::vector<vec>(firstVector.cbegin(), firstVector.cend()) == std::vector<vec>(secondVector.cbegin(), secondVector.cend()));
   }
 
   bool operator==(
       const std::vector<vec::fixed<3>>& firstVector,
       const std::vector<vec::fixed<3>>& secondVector) {
-    return (std::vector<vec>(firstVector.cbegin(), firstVector.cend()) == std::vector<vec>(secondVector.cbegin(), secondVector.cend()));
+    return (
+        std::vector<vec>(firstVector.cbegin(), firstVector.cend()) == std::vector<vec>(secondVector.cbegin(), secondVector.cend()));
   }
 
   bool operator==(
@@ -151,7 +169,8 @@ namespace arma {
         return false;
       } else if (!approx_equal(firstVector.at(n).first, secondVector.at(n).first, "absdiff", ::mant::machinePrecision)) {
         return false;
-      } else if (std::abs(firstVector.at(n).second - secondVector.at(n).second) >= ::mant::machinePrecision) {
+      } else if (
+          std::abs(firstVector.at(n).second - secondVector.at(n).second) >= ::mant::machinePrecision) {
         return false;
       }
     }
@@ -174,15 +193,13 @@ bool hasSameElements(
 
   for (arma::uword n = 0; n < actual.size(); ++n) {
     const auto expectedValues = expected.at(n);
-    const auto actualValues = std::find_if(actual.begin(), actual.end(),
-        [expectedValues](
-                                               const auto& values) {
-          if (arma::size(values) != arma::size(expectedValues)) {
-            return false;
-          }
+    const auto actualValues = std::find_if(actual.begin(), actual.end(), [expectedValues](const auto& values) {
+      if (arma::size(values) != arma::size(expectedValues)) {
+        return false;
+      }
 
-          return arma::all(values == expectedValues);
-        });
+      return arma::all(values == expectedValues);
+    });
 
     if (actualValues == actual.cend()) {
       return false;
@@ -204,15 +221,13 @@ bool hasSameElements(
 
   for (arma::uword n = 0; n < actual.size(); ++n) {
     const auto expectedValues = expected.at(n);
-    const auto actualValues = std::find_if(actual.begin(), actual.end(),
-        [expectedValues](
-                                               const auto& values) {
-          if (arma::size(values.first) != arma::size(expectedValues.first) || arma::size(values.second) != arma::size(expectedValues.second)) {
-            return false;
-          }
+    const auto actualValues = std::find_if(actual.begin(), actual.end(), [expectedValues](const auto& values) {
+      if (arma::size(values.first) != arma::size(expectedValues.first) || arma::size(values.second) != arma::size(expectedValues.second)) {
+        return false;
+      }
 
-          return arma::all(values.first == expectedValues.first) && arma::all(values.second == expectedValues.second);
-        });
+      return arma::all(values.first == expectedValues.first) && arma::all(values.second == expectedValues.second);
+    });
 
     if (actualValues == actual.cend()) {
       return false;
@@ -225,47 +240,87 @@ bool hasSameElements(
   return true;
 }
 
-bool isUniformlyDistributed(
-    const arma::mat& data,
-    const double lowerBound,
-    const double upperBound) {
-  if (upperBound <= lowerBound) {
-    throw std::logic_error("isUniformlyDistributed: The upper bound must be greater than the lower one.");
-  } else if (!mant::isRepresentableAsFloatingPoint(data.size())) {
-    throw std::overflow_error("isUniformlyDistributed: The data's number of rows must be representable as a floating point.");
-  }
+bool hasSameDistribution(
+    const arma::vec& actualDistribution,
+    const arma::vec& expectedDstribution) {
+  assert(actualDistribution.is_sorted("ascend"));
+  assert(expectedDstribution.is_sorted("ascend"));
+  assert(actualDistribution.n_elem == expectedDstribution.n_elem);
 
-  if (data.is_empty() || !std::isfinite(lowerBound) || !std::isfinite(upperBound)) {
+  if (actualDistribution.empty() != expectedDstribution.empty()) {
     return false;
+  } else if (actualDistribution.empty() && expectedDstribution.empty()) {
+    return true;
   }
 
-  // The number of bins is fixed to 10 and 0.001 is used as p-value to calculate the chi-square value for 9 degrees of freedom.
-  return arma::all(static_cast<double>(data.n_rows) * arma::rowvec(arma::sum(arma::square(arma::conv_to<arma::mat>::from(arma::umat(arma::histc(data, arma::linspace<arma::vec>(lowerBound, upperBound, 11))).head_rows(10)) / static_cast<double>(data.n_rows) - 0.1) / 0.1)) <= 27.88);
+  if (!mant::isRepresentableAsFloatingPoint(expectedDstribution.n_elem)) {
+    throw std::range_error("hasSameDistribution: The number of elements must be representable as a floating point.");
+  }
+
+  // Uses a Kolmogorov-Smirnov test with significance level 95%.
+  return arma::max(arma::abs(actualDistribution - expectedDstribution)) * std::sqrt(static_cast<double>(expectedDstribution.n_elem) / 2.0) <= std::sqrt(std::log(2.0 / 0.9) / 2.0);
 }
 
-bool isUniformlyDistributed(
-    const arma::umat& data,
-    const arma::uword lowerBound,
-    const arma::uword upperBound) {
-  if (upperBound <= lowerBound) {
-    throw std::logic_error("isUniformlyDistributed: The upper bound must be greater than the lower one.");
-  }
+bool isUniformDistributed(
+    const arma::vec& data,
+    const double lowerBound,
+    const double upperBound) {
+  assert(lowerBound <= upperBound);
 
   if (data.is_empty()) {
     return false;
   }
 
-  // Uses 0.001 as p-value for the chi-square value.
-  const std::array<double, 10> chiSquareValue = {{10.83,
-      13.82,
-      16.27,
-      18.47,
-      20.52,
-      22.46,
-      24.32,
-      26.12,
-      27.88,
-      29.59}};
+  if (!mant::isRepresentableAsFloatingPoint(data.n_elem)) {
+    throw std::range_error("isUniformDistributed: The data's number of elements must be representable as a floating point.");
+  }
 
-  return arma::all(static_cast<double>(data.n_rows) * arma::rowvec(arma::sum(arma::square(arma::conv_to<arma::mat>::from(arma::histc(data, arma::regspace<arma::uvec>(lowerBound, upperBound))) / static_cast<double>(data.n_rows) - (1.0 / (upperBound - lowerBound + 1))) / (1.0 / (upperBound - lowerBound + 1)))) <= chiSquareValue.at(upperBound - lowerBound - 1));
+  arma::vec uniformDistribtion(arma::size(data));
+  for (arma::uword n = 0; n < uniformDistribtion.n_elem; ++n) {
+    uniformDistribtion(n) = std::uniform_real_distribution<double>(lowerBound, upperBound)(mant::Rng::getGenerator());
+  }
+
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(data, 10)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(uniformDistribtion, 10)) / static_cast<double>(uniformDistribtion.n_elem)));
+}
+
+bool isNormalDistributed(
+    const arma::vec& data,
+    const double standardDeviation) {
+  assert(standardDeviation >= 0.0);
+
+  if (data.is_empty()) {
+    return false;
+  }
+
+  if (!mant::isRepresentableAsFloatingPoint(data.n_elem)) {
+    throw std::range_error("isNormalDistributed: The data's number of elements must be representable as a floating point.");
+  }
+
+  arma::vec normalDistribtion(arma::size(data));
+  for (arma::uword n = 0; n < normalDistribtion.n_elem; ++n) {
+    normalDistribtion(n) = std::normal_distribution<double>(0.0, standardDeviation)(mant::Rng::getGenerator());
+  }
+
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -100.0, 100.0), 10)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(normalDistribtion, -100.0, 100.0), 10)) / static_cast<double>(normalDistribtion.n_elem)));
+}
+
+bool isCauchyDistributed(
+    const arma::vec& data,
+    const double scale) {
+  assert(scale >= 0.0);
+
+  if (data.is_empty()) {
+    return false;
+  }
+
+  if (!mant::isRepresentableAsFloatingPoint(data.n_elem)) {
+    throw std::range_error("isCauchyDistributed: The data's number of elements must be representable as a floating point.");
+  }
+
+  arma::vec cauchyDistribtion(arma::size(data));
+  for (arma::uword n = 0; n < cauchyDistribtion.n_elem; ++n) {
+    cauchyDistribtion(n) = std::cauchy_distribution<double>(0.0, scale)(mant::Rng::getGenerator());
+  }
+
+  return hasSameDistribution(arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(data, -100.0, 100.0), 10)) / static_cast<double>(data.n_elem)), arma::cumsum(arma::conv_to<arma::vec>::from(arma::hist(arma::clamp(cauchyDistribtion, -100.0, 100.0), 10)) / static_cast<double>(cauchyDistribtion.n_elem)));
 }

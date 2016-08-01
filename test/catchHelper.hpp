@@ -3,14 +3,6 @@
 // Mantella
 #include <mantella>
 
-/** The MPI node rank (if supported and 0 otherwise)
- */
-extern int nodeRank;
-
-/** The number of MPI nodes (if supported and 1 otherwise)
- */
-extern int numberOfNodes;
-
 namespace std {
   /** Prints a human-friendly representation of the set of samples to the output stream.
    */
@@ -91,6 +83,7 @@ namespace arma {
   bool operator!(
       const uvec& vector);
 }
+
 /** Returns true when `actual` contains the same values (in any order) as `expected` and false otherwise.
  */
 bool hasSameElements(
@@ -103,16 +96,27 @@ bool hasSameElements(
     std::vector<std::pair<arma::uvec, arma::uvec>> actual,
     const std::vector<std::pair<arma::uvec, arma::uvec>>& expected);
 
-/** Returns true when `data` is uniformly drawn from [`lowerBound`, `upperBound`] and false otherwise.
+/** Returns true when `data` is drawn from a distribution similar to `distribution`.
  */
-bool isUniformlyDistributed(
-    const arma::mat& data,
+bool hasSameDistribution(
+    const arma::vec& actualDistribution,
+    const arma::vec& expectedDistribution);
+
+/** Returns true when `data` is drawn from a uniform distribution and false otherwise.
+ */
+bool isUniformDistributed(
+    const arma::vec& data,
     const double lowerBound,
     const double upperBound);
 
-/** Returns true when `data` is uniformly drawn from [`lowerBound`, `upperBound`] and false otherwise.
+/** Returns true when `data` is drawn from a normal distribution and false otherwise.
  */
-bool isUniformlyDistributed(
-    const arma::umat& data,
-    const arma::uword lowerBound,
-    const arma::uword upperBound);
+bool isNormalDistributed(
+    const arma::vec& data,
+    const double standardDeviation);
+
+/** Returns true when `data` is drawn from a Cauchy distribution and false otherwise.
+ */
+bool isCauchyDistributed(
+    const arma::vec& data,
+    const double scale);

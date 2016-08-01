@@ -4,7 +4,6 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -16,19 +15,18 @@ namespace mant {
     SphereFunction::SphereFunction(
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("SphereFunction: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "SphereFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                return std::pow(arma::norm(parameter_), 2.0);
-                              },
-          "BBOB Sphere Function (f1)"}});
+              return std::pow(arma::norm(parameter_), 2.0);
+            },
+            "BBOB Sphere Function (f1)"}});
     }
   }
 }

@@ -1,8 +1,8 @@
 #include "mantella_bits/samplesAnalysis.hpp"
-#include "mantella_bits/config.hpp"
 
 // C++ standard library
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <memory>
 #include <stdexcept>
@@ -14,16 +14,15 @@
 // Mantella
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/combinatorics.hpp"
+#include "mantella_bits/config.hpp"
 #include "mantella_bits/optimisationProblem.hpp"
+#include "mantella_bits/probability.hpp"
 
 namespace mant {
   double fitnessDistanceCorrelation(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
-    if (samples.size() < 2) {
-      throw std::invalid_argument("fitnessDistanceCorrelation: The number of samples must be greater than 2.");
-    } else if (!isDimensionallyConsistent(samples)) {
-      throw std::invalid_argument("fitnessDistanceCorrelation: The samples must be dimensionally consistent");
-    }
+    assert(samples.size() > 1 && "fitnessDistanceCorrelation: The number of samples must be greater than 1.");
+    assert(isDimensionallyConsistent(samples) && "fitnessDistanceCorrelation: The samples must be dimensionally consistent");
 
     // Converts the set of samples into a matrix of parameters (each row is a dimension and each column a parameter) and a row vector of objective values, such that we can use Armadillo C++ to manipulate them.
     arma::mat parameters(samples.cbegin()->first.n_elem, samples.size());
@@ -39,8 +38,7 @@ namespace mant {
 
     // Determines one parameter having a minimal objective value within the set of samples.
     // The best parameter is then subtracted from all other parameters, so that we can later calculated the distance towards the best one.
-    arma::uword bestParameterIndex;
-    objectiveValues.min(bestParameterIndex);
+    arma::uword bestParameterIndex = objectiveValues.index_min();
     parameters.each_col() -= parameters.col(bestParameterIndex);
 
     // Excludes the best/reference parameter from the correlation, as it will always perfectly correlate with itself and therefore bias the correlation coefficient.
@@ -53,11 +51,8 @@ namespace mant {
 
   double lipschitzContinuity(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
-    if (samples.size() < 2) {
-      throw std::invalid_argument("lipschitzContinuity: The number of samples must be greater than 1.");
-    } else if (!isDimensionallyConsistent(samples)) {
-      throw std::invalid_argument("lipschitzContinuity: The samples must be dimensionally consistent");
-    }
+    assert(samples.size() > 1 && "lipschitzContinuity: The number of samples must be greater than 1.");
+    assert(isDimensionallyConsistent(samples) && "lipschitzContinuity: The samples must be dimensionally consistent");
 
     double lipschitzContinuity = 0.0;
     for (auto firstSample = samples.cbegin(); firstSample != samples.cend();) {
@@ -73,13 +68,11 @@ namespace mant {
       OptimisationProblem& optimisationProblem,
       const arma::uword numberOfEvaluations,
       const double minimalConfidence) {
-    // Objects like `optimisationProblem` perform all validations by themselves.
-    if (numberOfEvaluations < 1) {
-      throw std::domain_error("additiveSeparability: The number of evaluations must be greater than 0.");
-    } else if (minimalConfidence < 0.0 || minimalConfidence > 1.0) {
-      throw std::domain_error("additiveSeparability: The minimal confidence must be within the interval (0, 1].");
-    } else if (!isRepresentableAsFloatingPoint(numberOfEvaluations)) {
-      throw std::overflow_error("additiveSeparability: The number of elements must be representable as a floating point.");
+    assert(numberOfEvaluations > 0 && "additiveSeparability: The number of evaluations must be greater than 0.");
+    assert(0.0 <= minimalConfidence && minimalConfidence <= 1.0 && "additiveSeparability: The minimal confidence must be within the interval (0, 1].");
+
+    if (!isRepresentableAsFloatingPoint(numberOfEvaluations)) {
+      throw std::range_error("additiveSeparability: The number of elements must be representable as a floating point.");
     }
 
     if (minimalConfidence <= 0) {
@@ -99,7 +92,7 @@ namespace mant {
      * f(x, y) - g(x) - h(y) = 0, for all x, y
      *
      * As it is practical impossible to simply guess two separations *g*, *h* of *f*, when we only got a caller to `.getObjectiveValue(...)` and no analytic form, we use a direct consequence from the equation above instead, that must also hold true for additive separable functions and uses only *f*:
-     *
+     * 
      * f(a, c) + f(b, d) - f(a, d) - f(b, c) = 0, for all a, b, c, d
      *
      */
@@ -111,8 +104,9 @@ namespace mant {
       const std::pair<arma::uvec, arma::uvec>& partitionCandidate = partitionCandidates.at(n);
 
       for (arma::uword k = 0; k < numberOfEvaluations; ++k) {
-        const arma::vec& firstFirstParamter = arma::randu<arma::vec>(optimisationProblem.numberOfDimensions_);
-        const arma::vec& secondSecondParameter = arma::randu<arma::vec>(optimisationProblem.numberOfDimensions_);
+        const arma::vec& firstFirstParamter = uniformRandomNumbers(optimisationProblem.numberOfDimensions_);
+        const arma::vec& secondSecondParameter = uniformRandomNumbers(optimisationProblem.numberOfDimensions_);
+
         arma::vec firstSecondParameter = firstFirstParamter;
         firstSecondParameter.elem(partitionCandidate.first) = secondSecondParameter.elem(partitionCandidate.first);
         arma::vec secondFirstParameter = secondSecondParameter;
@@ -142,7 +136,7 @@ namespace mant {
      *
      * For example, assume that we got 3 acceptable two-set partitions:
      *
-     * - {{1, 2, 3, 4, 5}, {6}} 
+     * - {{1, 2, 3, 4, 5}, {6}}
      * - {{1}, {2, 3, 4, 5, 6}}
      * - {{1, 2, 3}, {4, 5, 6}}
      *
@@ -202,5 +196,11 @@ namespace mant {
     } else {
       return {arma::regspace<arma::uvec>(0, optimisationProblem.numberOfDimensions_ - 1)};
     }
+  }
+
+  std::vector<arma::uvec> additiveSeparability(
+      OptimisationProblem& optimisationProblem,
+      const arma::uword numberOfEvaluations) {
+    return additiveSeparability(optimisationProblem, numberOfEvaluations, 1.0);
   }
 }

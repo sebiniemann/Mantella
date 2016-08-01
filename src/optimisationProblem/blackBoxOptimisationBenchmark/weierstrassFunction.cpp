@@ -24,30 +24,31 @@ namespace mant {
           parameterConditioning_(getParameterConditioning(std::sqrt(0.01))),
           rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))),
           rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("WeierstrassFunction: The number of dimensions must be greater than 1.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("WeierstrassFunction: The number of elements must be representable as a floating point.");
+      assert(numberOfDimensions_ > 1 && "WeierstrassFunction: The number of dimensions must be greater than 1.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("WeierstrassFunction: The number of elements must be representable as a floating point.");
       }
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getOscillatedParameter(rotationR_ * parameter_)));
+              const arma::vec& z = rotationR_ * (parameterConditioning_ % (rotationQ_ * getOscillatedParameter(rotationR_ * parameter_)));
 
-                                double sum = 0.0;
-                                for (arma::uword n = 0; n < z.n_elem; ++n) {
-                                  for (arma::uword k = 0; k < 12; ++k) {
-                                    sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z(n) + 0.5));
-                                  }
-                                }
+              double sum = 0.0;
+              for (arma::uword n = 0; n < z.n_elem; ++n) {
+                for (arma::uword k = 0; k < 12; ++k) {
+                  sum += std::pow(0.5, k) * std::cos(2.0 * arma::datum::pi * std::pow(3.0, k) * (z(n) + 0.5));
+                }
+              }
 
-                                return 10.0 * std::pow(sum / static_cast<decltype(sum)>(numberOfDimensions_) + 1.99951171875, 3.0);
-                              },
-          "BBOB Weierstrass Function (f16)"}});
+              return 10.0 * std::pow(sum / static_cast<decltype(sum)>(numberOfDimensions_) + 1.99951171875, 3.0);
+            },
+            "BBOB Weierstrass Function (f16)"}});
     }
   }
 }

@@ -1,29 +1,27 @@
 #include "mantella_bits/numericalAnalysis.hpp"
-#include "mantella_bits/config.hpp"
 
 // C++ standard library
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <limits>
-#include <stdexcept>
+
+// Mantella
+#include "mantella_bits/config.hpp"
 
 namespace mant {
   // To understand the following equations, we advise to carefully read the following paper:
   // @see R. P. Brent (1971). An algorithm with guaranteed convergence for finding a zero of a function. The Computer Journal, 14(4), pp. 422-425.
   double brent(
-      std::function<double(double)> objectiveFunction,
+      std::function<double(
+          double)> objectiveFunction,
       double lowerBound,
       double upperBound,
       arma::uword maximalNumberOfIterations) {
-    if (!static_cast<bool>(objectiveFunction)) {
-      throw std::invalid_argument("brent: The objective function must be callable.");
-    } else if (!std::isfinite(lowerBound)) {
-      throw std::domain_error("brent: The lower bound must not be finite.");
-    } else if (!std::isfinite(upperBound)) {
-      throw std::domain_error("brent: The upper bound must not be finite.");
-    } else if (lowerBound > upperBound) {
-      throw std::logic_error("brent: The lower bound must be less than or equal to the upper bound.");
-    }
+    assert(static_cast<bool>(objectiveFunction) && "brent: The objective function must be callable.");
+    assert(std::isfinite(lowerBound) && "brent: The lower bound must not be finite.");
+    assert(std::isfinite(upperBound) && "brent: The upper bound must not be finite.");
+    assert(lowerBound <= upperBound && "brent: The lower bound must be less than or equal to the upper bound.");
 
     double lowerBoundObjectiveValue = objectiveFunction(lowerBound);
 
@@ -53,9 +51,7 @@ namespace mant {
       return std::numeric_limits<double>::quiet_NaN();
     }
 
-    if (std::signbit(lowerBoundObjectiveValue) == std::signbit(upperBoundObjectiveValue)) {
-      throw std::invalid_argument("brent: The lower bound and upper bound objective value must have a different sign.");
-    }
+    assert(std::signbit(lowerBoundObjectiveValue) != std::signbit(upperBoundObjectiveValue) && "brent: The lower bound and upper bound objective value must have a different sign.");
 
     // The previous upper bound is used within the interpolation and **must** be different from the current upper bound.
     // Therefore, the initial, previous upper bound is set to the lower bound.

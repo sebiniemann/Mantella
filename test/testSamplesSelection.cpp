@@ -16,18 +16,6 @@ SCENARIO("elitists", "[samplesSelection][elitists]") {
       }
     }
 
-    WHEN("The set is dimensionally inconsistent") {
-      THEN("Throw a invalid argument error") {
-        CHECK_THROWS_AS(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{0.0}, -1.0}, {{2.0, -3.0}, 4.0}}), 2), std::invalid_argument);
-      }
-    }
-
-    WHEN("The number of samples to select is greater than the set's size") {
-      THEN("Throw a logic error") {
-        CHECK_THROWS_AS(mant::elitists(std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>({{{0.0}, -1.0}}), 2), std::logic_error);
-      }
-    }
-
     WHEN("The number of samples to select is equal to the set's size") {
       THEN("Return the set") {
         const std::unordered_map<arma::vec, double, mant::Hash, mant::IsEqual>& expectedSet = {{{0.0, -3.0}, -1.0}, {{2.0, -3.0}, 4.0}};

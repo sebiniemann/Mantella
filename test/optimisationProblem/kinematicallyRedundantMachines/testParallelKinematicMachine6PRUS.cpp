@@ -38,7 +38,7 @@ SCENARIO("krm::ParallelKinematicMachine6PRUS.getObjectiveFunctions", "[krm::Para
     optimisationProblem.setEndEffectorTrajectory(arma::vec({0.1, -0.1, 0.6, 0.05, -0.05, 0.1}));
 
     CHECK(optimisationProblem.getObjectiveFunctions().size() == 1);
-    CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({0.009376303840997, 0.091501367086860, 0.092977707039855, -0.068477383664490, 0.094118556352123, 0.091433389648589}) == Approx(113.6581320641));
+    CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({0.009376303840997, 0.091501367086860, 0.092977707039855, -0.068477383664490, 0.094118556352123, 0.091433389648589}) == Approx(89.415928964));
   }
 
   THEN("Return the objective function name") {
