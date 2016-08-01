@@ -7,33 +7,14 @@
 // Mantella
 #include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/assert.hpp"
+#include "mantella_bits/statistics.hpp"
 
 namespace mant {
-  arma::vec getOrdinaryLeastSquaresEstimate(
-      const arma::mat& parameters,
-      const arma::rowvec& objectiveValues) {
-    assert(parameters.n_cols == objectiveValues.n_elem && "");
-
-    return arma::solve(parameters * parameters.t(), parameters) * objectiveValues.t();
-  }
-
-  arma::vec getGeneralisedLeastSquaresEstimate(
-      const arma::mat& parameters,
-      const arma::rowvec& objectiveValues,
-      const arma::mat& variance) {
-    assert(parameters.n_cols == objectiveValues.n_elem && "");
-    assert(parameters.n_cols == variance.n_rows && "");
-    assert(variance.is_square() && "");
-
-    arma::mat cholesky = arma::chol(variance);
-    return getOrdinaryLeastSquaresEstimate(parameters * cholesky, objectiveValues * cholesky);
-  }
-
   Kriging::Kriging(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
-      const std::function<arma::vec(const arma::vec&)> regressionFunction,
+      const std::function<arma::vec(const arma::vec&)> polynomialFunction,
       const std::function<double(const arma::vec&)> correlationFunction)
-      : regressionFunction_(regressionFunction),
+      : polynomialFunction_(polynomialFunction),
         correlationFunction_(correlationFunction) {
   }
 
@@ -68,11 +49,11 @@ namespace mant {
         correlations(n, k) = correlationFunction_(parameters.col(k) - parameter);
       }
 
-      parameters.col(n) = regressionFunction_(parameter);
+      parameters.col(n) = polynomialFunction_(parameter);
     }
     correlations = arma::symmatu(correlations);
 
-    beta_ = getGeneralisedLeastSquaresEstimate(parameters, objectiveValues, correlations);
+    beta_ = generalisedLeastSquaresEstimate(parameters, objectiveValues, correlations);
     gamma_ = arma::solve(correlations, objectiveValues.t() - parameters * beta_);
   }
 
@@ -86,6 +67,6 @@ namespace mant {
       correlations(n++) = correlationFunction_(sample.first - normalisedParameter);
     }
 
-    return meanObjectiveValue_ + (arma::dot(beta_, regressionFunction_(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
+    return meanObjectiveValue_ + (arma::dot(beta_, polynomialFunction_(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
   }
 }

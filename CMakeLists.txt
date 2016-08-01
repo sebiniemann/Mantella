@@ -134,6 +134,7 @@ add_library(mantella SHARED
   src/numberTheory.cpp
   src/numericalAnalysis.cpp
   src/probability.cpp
+  src/statistics.cpp
 
   # Orbital Mechanics
   src/orbitalMechanics.cpp

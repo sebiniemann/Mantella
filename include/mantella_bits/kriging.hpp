@@ -14,12 +14,12 @@
 namespace mant {
   class Kriging {
    public:
-    const std::function<arma::vec(const arma::vec&)> regressionFunction_;
+    const std::function<arma::vec(const arma::vec&)> polynomialFunction_;
     const std::function<double(const arma::vec&)> correlationFunction_;
 
     Kriging(
         const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
-        const std::function<arma::vec(const arma::vec&)> regressionFunction,
+        const std::function<arma::vec(const arma::vec&)> polynomialFunction,
         const std::function<double(const arma::vec&)> correlationFunction);
 
     void train();
