@@ -51,7 +51,7 @@ RUN apt-get install -y wget xz-utils libblas-dev liblapack-dev libopenblas-dev &
 # Installs optional dependencies
 # - MPI (including missing default include path)
 RUN apt-get install -y libmpich-dev
-ENV  CPATH "$CPATH:/usr/include/mpich/"
+ENV CPATH "$CPATH:/usr/include/mpich/"
 
 # Installs testing libraries
 # - Catch
@@ -85,3 +85,6 @@ RUN apt-get install -y wget && \
     cd .. && \
     rm -Rf benchmark.tar.gz benchmark/ && \
     apt-get remove -y --purge wget
+    
+# Adds alternative library path
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib"
