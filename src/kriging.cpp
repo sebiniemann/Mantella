@@ -16,6 +16,10 @@ namespace mant {
       const std::function<double(const arma::vec&)> correlationFunction)
       : polynomialFunction_(polynomialFunction),
         correlationFunction_(correlationFunction) {
+    int sampleDimension = samples.begin().first.n_elem;
+    for (auto& sample : samples) {
+      assert(sample.n_elem == sampleDimension && "Kriging: the dimension of all samples must be consistent.");
+    }
   }
 
   void Kriging::train() {
@@ -59,6 +63,8 @@ namespace mant {
 
   double Kriging::predict(
       const arma::vec& parameter) const {
+    assert(parameters.n_elem == meanParameter_.n_elem && "Kriging.predict: the dimension of the predicted value must match that of the training data.");
+
     const arma::vec& normalisedParameter = (parameter - meanParameter_) / standardDeviationParameter_;
 
     arma::vec correlations(samples_.size());
