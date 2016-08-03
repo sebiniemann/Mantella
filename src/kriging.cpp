@@ -16,7 +16,7 @@ namespace mant {
       const std::function<double(const arma::vec&)> correlationFunction)
       : polynomialFunction_(polynomialFunction),
         correlationFunction_(correlationFunction) {
-    int sampleDimension = samples.begin().first.n_elem;
+    int sampleDimension = samples.begin()->first.n_elem;
     for (auto& sample : samples) {
       assert(sample.n_elem == sampleDimension && "Kriging: the dimension of all samples must be consistent.");
     }
