@@ -92,6 +92,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#include-html">Include HTML</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#include-math">Include math</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#include-code-block">Include code-block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-inline-math">Include inline math</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#describe-in-rst">Describe in rst</a><ul>
@@ -101,6 +102,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="yetdoesnotcomment.html">Yet does not comment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yetdoesnotcomment.html#test">TEST</a></li>
 </ul>
 
             
@@ -224,6 +226,23 @@ The generated HTML files you will see in <em>/doc/_bulid/</em> .</p>
               Any code
 
 \endverbatim
+</pre>
+</div>
+<div class="section" id="include-inline-math">
+<h3>Include inline math<a class="headerlink" href="#include-inline-math" title="Permalink to this headline">¶</a></h3>
+<pre class="literal-block">
+  * f{eqnarray*}{
+  *      g &amp;=&amp; frac{Gm_2}{r^2} \
+  *        &amp;=&amp; frac{(6.673 times 10^{-11},mbox{m}^3,mbox{kg}^{-1},
+  *            mbox{s}^{-2})(5.9736 times 10^{24},mbox{kg})}{(6371.01,mbox{km})^2} \
+  *        &amp;=&amp; 9.82066032,mbox{m/s}^2
+  * f}
+  <a href="#id5"><span class="problematic" id="id6">*</span></a>/
+
+OR
+
+  The distance between f$(x_1,y_1)f$ and f$(x_2,y_2)f$ is
+  f$sqrt{(x_2-x_1)^2+(y_2-y_1)^2}f$.
 </pre>
 </div>
 </div>

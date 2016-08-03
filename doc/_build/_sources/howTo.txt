@@ -81,6 +81,23 @@ Include code-block
   \\endverbatim
 
 	
+Include inline math
+^^^^^^^^^^^^^^^^^^	
+.. parsed-literal::
+     * \f{eqnarray*}{
+     *      g &=& \frac{Gm_2}{r^2} \\
+     *        &=& \frac{(6.673 \times 10^{-11}\,\mbox{m}^3\,\mbox{kg}^{-1}\,
+     *            \mbox{s}^{-2})(5.9736 \times 10^{24}\,\mbox{kg})}{(6371.01\,\mbox{km})^2} \\
+     *        &=& 9.82066032\,\mbox{m/s}^2
+     * \f}
+     */
+
+   OR
+
+     The distance between \f$(x_1,y_1)\f$ and \f$(x_2,y_2)\f$ is 
+     \f$\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\f$.
+
+
 Describe in rst
 ------------------
 
