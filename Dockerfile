@@ -52,7 +52,7 @@ RUN apt-get install -y wget xz-utils libblas-dev liblapack-dev libopenblas-dev &
 # - MPI (including missing default include path)
 # - Octave
 RUN apt-get install -y libmpich-dev
-ENV  CPATH "$CPATH:/usr/include/mpich/"
+ENV CPATH "$CPATH:/usr/include/mpich/"
 RUN apt-get install -y liboctave-dev less
 
 # Installs testing libraries
@@ -61,14 +61,13 @@ RUN apt-get install -y catch
 
 # Installs code analyser
 # - Clang-format
-# - Include-what-you-use (including missing default include path)
+# - Include-what-you-use
+# - Clang-tidy
 RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --remove clang-format /usr/bin/clang-format && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
 RUN apt-get install -y iwyu
-ENV CPATH "$CPATH:/usr/lib/llvm-3.7/lib/clang/3.7.1/include"
-# - Clang-tidy
 RUN apt-get install -y clang-tidy-3.8 && \
     update-alternatives --remove clang-tidy /usr/bin/clang-tidy && \
     update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-3.8 100 && \
@@ -87,3 +86,6 @@ RUN apt-get install -y wget && \
     cd .. && \
     rm -Rf benchmark.tar.gz benchmark/ && \
     apt-get remove -y --purge wget
+    
+# Adds alternative library path
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib"
