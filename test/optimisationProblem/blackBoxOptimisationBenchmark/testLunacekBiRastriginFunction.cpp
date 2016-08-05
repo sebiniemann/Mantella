@@ -7,8 +7,8 @@ class TestLunacekBiRastriginFunction : public mant::bbob::LunacekBiRastriginFunc
   using mant::bbob::LunacekBiRastriginFunction::LunacekBiRastriginFunction;
 
   // Increases the visibility of internal parameters, to make them accessible.
-  using mant::bbob::LunacekBiRastriginFunction::rotationR_;
   using mant::bbob::LunacekBiRastriginFunction::rotationQ_;
+  using mant::bbob::LunacekBiRastriginFunction::rotationR_;
 };
 
 SCENARIO("bbob::LunacekBiRastriginFunction.getObjectiveFunctions", "[bbob::LunacekBiRastriginFunction][bbob::LunacekBiRastriginFunction.getObjectiveFunctions]") {

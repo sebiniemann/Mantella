@@ -146,20 +146,6 @@ namespace mant {
     return parameterPermutation_;
   }
 
-  void OptimisationProblem::setParameterScaling(
-      const arma::vec& parameterScaling) {
-    assert(parameterScaling.n_elem == numberOfDimensions_ && "OptimisationProblem.setParameterScaling: The parameter scaling's number of elements must be equal to the optimisation problem's number of dimensions.");
-
-    parameterScaling_ = synchronise(parameterScaling);
-
-    // Resets all counters and caches, as the problem could have changed.
-    reset();
-  }
-
-  arma::vec OptimisationProblem::getParameterScaling() const {
-    return parameterScaling_;
-  }
-
   void OptimisationProblem::setParameterTranslation(
       const arma::vec& parameterTranslation) {
     assert(parameterTranslation.n_elem != numberOfDimensions_ && "OptimisationProblem.setParameterTranslation: The parameter translation's number of elements must be equal to the optimisation problem's number of dimensions.");
@@ -172,6 +158,20 @@ namespace mant {
 
   arma::vec OptimisationProblem::getParameterTranslation() const {
     return parameterTranslation_;
+  }
+
+  void OptimisationProblem::setParameterScaling(
+      const arma::vec& parameterScaling) {
+    assert(parameterScaling.n_elem == numberOfDimensions_ && "OptimisationProblem.setParameterScaling: The parameter scaling's number of elements must be equal to the optimisation problem's number of dimensions.");
+
+    parameterScaling_ = synchronise(parameterScaling);
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
+  arma::vec OptimisationProblem::getParameterScaling() const {
+    return parameterScaling_;
   }
 
   void OptimisationProblem::setParameterRotation(
@@ -201,6 +201,14 @@ namespace mant {
     return minimalParameterDistance_;
   }
 
+  void OptimisationProblem::setObjectiveValueTranslation(
+      const double objectiveValueTranslation) {
+    objectiveValueTranslation_ = synchronise(objectiveValueTranslation);
+
+    // Resets all counters and caches, as the problem could have changed.
+    reset();
+  }
+
   void OptimisationProblem::setObjectiveValueScaling(
       const double objectiveValueScaling) {
     objectiveValueScaling_ = synchronise(objectiveValueScaling);
@@ -211,14 +219,6 @@ namespace mant {
 
   double OptimisationProblem::getObjectiveValueScaling() const {
     return objectiveValueScaling_;
-  }
-
-  void OptimisationProblem::setObjectiveValueTranslation(
-      const double objectiveValueTranslation) {
-    objectiveValueTranslation_ = synchronise(objectiveValueTranslation);
-
-    // Resets all counters and caches, as the problem could have changed.
-    reset();
   }
 
   double OptimisationProblem::getObjectiveValueTranslation() const {

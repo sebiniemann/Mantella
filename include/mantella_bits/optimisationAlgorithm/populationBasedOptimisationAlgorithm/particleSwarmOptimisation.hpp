@@ -33,17 +33,16 @@ namespace mant {
         const double maximalGlobalAttraction);
     double getMaximalGlobalAttraction() const;
 
-    // Public accessible to be used in lambdas
-    arma::mat velocities_;
-
-    arma::mat localBestSolutions_;
-    arma::vec localBestObjectiveValues_;
-
    protected:
     arma::uword numberOfParticles_;
 
     double maximalAcceleration_;
     double maximalLocalAttraction_;
     double maximalGlobalAttraction_;
+
+    arma::mat velocities_;
+
+    arma::mat localBestSolutions_;
+    arma::vec localBestObjectiveValues_;
   };
 }

@@ -22,8 +22,8 @@ namespace mant {
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))),
-          rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))),
-          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))),
+          rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
       assert(numberOfDimensions_ > 1 && "RastriginFunctionRotated: The number of dimensions must be greater than 1.");
 
       if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {

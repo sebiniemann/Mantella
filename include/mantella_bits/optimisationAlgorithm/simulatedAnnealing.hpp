@@ -27,11 +27,10 @@ namespace mant {
         const double maximalStepSize);
     double getMaximalStepSize() const;
 
-    // Public accessible to be used in lambdas
-    arma::vec state_;
-
    protected:
     double minimalStepSize_;
+
     double maximalStepSize_;
+    arma::vec state_;
   };
 }

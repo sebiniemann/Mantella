@@ -7,8 +7,8 @@ class TestRastriginFunctionRotated : public mant::bbob::RastriginFunctionRotated
   using mant::bbob::RastriginFunctionRotated::RastriginFunctionRotated;
 
   // Increases the visibility of internal parameters, to make them accessible.
-  using mant::bbob::RastriginFunctionRotated::rotationR_;
   using mant::bbob::RastriginFunctionRotated::rotationQ_;
+  using mant::bbob::RastriginFunctionRotated::rotationR_;
 };
 
 SCENARIO("bbob::RastriginFunctionRotated.getObjectiveFunctions", "[bbob::RastriginFunctionRotated][bbob::RastriginFunctionRotated.getObjectiveFunctions]") {

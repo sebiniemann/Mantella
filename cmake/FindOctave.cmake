@@ -1,0 +1,61 @@
+find_program(OCTAVE_CONFIG NAMES octave-config)
+
+if (OCTAVE_CONFIG)
+  execute_process(COMMAND ${OCTAVE_CONFIG} -p OCTFILEDIR OUTPUT_VARIABLE OCTAVE_MEX_FILES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${OCTAVE_CONFIG} -v OUTPUT_VARIABLE OCTAVE_VERSION_STRING OUTPUT_STRIP_TRAILING_WHITESPACE)    
+
+  if (OCTAVE_VERSION_STRING)                 
+    string(REGEX REPLACE "([0-9]+).*" "\\1" OCTAVE_MAJOR_VERSION ${OCTAVE_VERSION_STRING})
+    string(REGEX REPLACE "[0-9]+\\.([0-9]+).*" "\\1" OCTAVE_MINOR_VERSION ${OCTAVE_VERSION_STRING})
+    string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" OCTAVE_PATCH_VERSION ${OCTAVE_VERSION_STRING})               
+  endif()                  
+endif()
+
+function(matlab_add_mex)
+  cmake_parse_arguments(MEX "" "NAME" "SRC" ${ARGN})
+  
+  if (NOT MEX_NAME)
+    message(FATAL_ERROR "The MEX target name cannot be empty")
+  elseif (NOT MEX_SRC)
+    message(FATAL_ERROR "The MEX source files cannot be empty")
+  endif()
+
+  find_program(OCTAVE_MKOCTFILE NAMES mkoctfile)
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p CPPFLAGS OUTPUT_VARIABLE OCTAVE_CPPFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  separate_arguments(OCTAVE_CPPFLAGS UNIX_COMMAND "${OCTAVE_CPPFLAGS}")
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p CXXPICFLAG OUTPUT_VARIABLE OCTAVE_CPICFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  separate_arguments(OCTAVE_CPICFLAGS UNIX_COMMAND "${OCTAVE_CPICFLAGS}")
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p ALL_CXXFLAGS OUTPUT_VARIABLE OCTAVE_ALL_CXXFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  separate_arguments(OCTAVE_ALL_CXXFLAGS UNIX_COMMAND "${OCTAVE_ALL_CXXFLAGS}")
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p DL_LDFLAGS OUTPUT_VARIABLE OCTAVE_DL_LDFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p LFLAGS OUTPUT_VARIABLE OCTAVE_LFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p OCT_LINK_OPTS OUTPUT_VARIABLE OCTAVE_OCT_LINK_OPTS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${OCTAVE_MKOCTFILE} -p OCT_LINK_DEPS OUTPUT_VARIABLE OCTAVE_OCT_LINK_DEPS OUTPUT_STRIP_TRAILING_WHITESPACE)
+  
+  # Mimics `mkoctfile`
+  # @see `mkoctfile.in.cc` within the GNU Octave repository for more details.
+  add_library(${MEX_NAME} SHARED ${MEX_SRC})
+  target_compile_options(${MEX_NAME} PRIVATE ${OCTAVE_CPPFLAGS})
+  target_compile_options(${MEX_NAME} PRIVATE ${OCTAVE_CPICFLAGS})
+  target_compile_options(${MEX_NAME} PRIVATE ${OCTAVE_ALL_CXXFLAGS})
+  target_link_libraries(${MEX_NAME} ${OCTAVE_DL_LDFLAGS})
+  target_link_libraries(${MEX_NAME} ${OCTAVE_LFLAGS})
+  target_link_libraries(${MEX_NAME} -loctinterp)
+  target_link_libraries(${MEX_NAME} -loctave)
+  target_link_libraries(${MEX_NAME} ${OCTAVE_OCT_LINK_OPTS})
+  target_link_libraries(${MEX_NAME} ${OCTAVE_OCT_LINK_DEPS})
+  set_target_properties(${MEX_NAME} PROPERTIES PREFIX "" OUTPUT_NAME ${MEX_NAME} SUFFIX ".mex")
+endfunction()
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Octave
+  REQUIRED_VARS OCTAVE_CONFIG OCTAVE_MEX_FILES_DIR
+  VERSION_VAR OCTAVE_VERSION_STRING)
+
+mark_as_advanced (
+  OCTAVE_CONFIG
+  OCTAVE_MEX_FILES_DIR
+  OCTAVE_VERSION_STRING
+  OCTAVE_MAJOR_VERSION
+  OCTAVE_MINOR_VERSION
+  OCTAVE_PATCH_VERSION)

@@ -7,7 +7,6 @@ class TestAttractiveSectorFunction : public mant::bbob::AttractiveSectorFunction
   using mant::bbob::AttractiveSectorFunction::AttractiveSectorFunction;
 
   // Increases the visibility of internal parameters, to make them accessible.
-  using mant::bbob::AttractiveSectorFunction::parameterTranslation_;
   using mant::bbob::AttractiveSectorFunction::rotationQ_;
 };
 
@@ -15,7 +14,8 @@ SCENARIO("bbob::AttractiveSectorFunction.getObjectiveFunctions", "[bbob::Attract
   GIVEN("A parameter") {
     THEN("Return its objective value") {
       TestAttractiveSectorFunction optimisationProblem(3);
-      optimisationProblem.parameterTranslation_ = arma::vec({2.0, 3.0, -1.0});
+      optimisationProblem.setParameterTranslation(arma::zeros<arma::vec>(3));
+      optimisationProblem.setParameterRotation(arma::eye<arma::mat>(3, 3));
       optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
 
       CHECK(optimisationProblem.getObjectiveFunctions().size() == 1);

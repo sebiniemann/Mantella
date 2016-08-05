@@ -23,11 +23,10 @@ namespace mant {
         const double scalingFactor);
     double getScalingFactor() const;
 
-    // Public accessible to be used in lambdas
-    arma::mat population_;
-    arma::vec localBestObjectiveValues_;
-
    protected:
     double scalingFactor_;
+
+    arma::mat population_;
+    arma::vec localBestObjectiveValues_;
   };
 }

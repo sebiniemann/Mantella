@@ -24,7 +24,7 @@ namespace mant {
     // This must be implemented within the header as we want to be able to readjust `MAXIMAL_NUMBER_OF_THREADS` simply by predefining it prior to including Mantella the first time, without the need to recompile the library.
     // Therefore, everything that depends on `MAXIMAL_NUMBER_OF_THREADS` in any way needs to be header-only.
     static std::mt19937_64& getGenerator() {
-      // **Note:** C++ guarantees under 7.1.2/4 that even if multiple threads attempt to initialize the same static local variable concurrently, the initialisation occurs exactly once.
+      // **Note:** C++ guarantees that even if multiple threads attempt to initialize the same static local variable concurrently, the initialisation occurs exactly once.
       static std::array<std::mt19937_64, MAXIMAL_NUMBER_OF_THREADS> generators_;
 
       if (threadNumber() >= generators_.size()) {

@@ -50,8 +50,10 @@ RUN apt-get install -y wget xz-utils libblas-dev liblapack-dev libopenblas-dev &
 
 # Installs optional dependencies
 # - MPI (including missing default include path)
+# - Octave
 RUN apt-get install -y libmpich-dev
 ENV  CPATH "$CPATH:/usr/include/mpich/"
+RUN apt-get install -y liboctave-dev less
 
 # Installs testing libraries
 # - Catch

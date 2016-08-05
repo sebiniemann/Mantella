@@ -15,6 +15,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
 option(SUPPORT_OPENMP "Add OpenMP support" ON)
 option(SUPPORT_MPI "Add MPI support" OFF)
+option(BUILD_MEX_FILES "Build MEX files" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
 
@@ -50,6 +51,11 @@ endif()
 message(STATUS "") 
 message(STATUS "Finding dependencies.")
 
+# Prioritises static libraries over dynamic ones for static builds.
+if (NOT BUILD_SHARED_LIBS)
+  SET(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+endif()
+
 set(REQUIRED_ARMADILLO_VERSION "7.300.0")
 find_package(Armadillo QUIET)
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
@@ -76,7 +82,7 @@ endif()
 
 if (SUPPORT_MPI)
   message(STATUS "- Adding MPI support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=Off' to exclude this.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=OFF' to exclude this.")
   find_package(MPI REQUIRED)
 else()
   message(STATUS "- Excluding MPI support.")
@@ -85,7 +91,7 @@ endif()
 
 if (SUPPORT_OPENMP)
   message(STATUS "- Trying to add OpenMP support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_OPENMP=Off' to exclude this.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_OPENMP=OFF' to exclude this.")
 
   # Makes sure that `MAXIMAL_NUMBER_OF_THREADS` contains a sane value.
   if (NOT MAXIMAL_NUMBER_OF_THREADS OR NOT MAXIMAL_NUMBER_OF_THREADS MATCHES "^[1-9][0-9]*$")
@@ -133,7 +139,7 @@ message(STATUS "Configuring library build.")
 configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
 
 # All paths must start with "src/"
-add_library(mantella SHARED
+add_library(mantella
   # Configuration
   src/config.cpp
   
@@ -210,9 +216,13 @@ add_library(mantella SHARED
 set_property(TARGET mantella PROPERTY CXX_STANDARD 14)
 set_property(TARGET mantella PROPERTY CXX_STANDARD_REQUIRED ON)
 
+if(MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 if (SUPPORT_SIMD)
   message(STATUS "- Adding SSE3, SSE4, AVX, ... support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=Off' to exclude this.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_SIMD=OFF' to exclude this.")
   target_compile_options(mantella PRIVATE -march=native)
 else()
   message(STATUS "- Excluding SSE3, SSE4, AVX, ... support.")
@@ -225,7 +235,7 @@ target_compile_options(mantella PRIVATE -O3)
 target_include_directories(mantella PUBLIC 
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-
+  
 target_include_directories(mantella SYSTEM PUBLIC ${ARMADILLO_INCLUDE_DIR})
 if (ARMADILLO_LIBRARIES)
   target_link_libraries(mantella PUBLIC ${ARMADILLO_LIBRARIES})
@@ -238,14 +248,14 @@ if (SUPPORT_MPI)
   target_link_libraries(mantella PUBLIC ${MPI_C_LIBRARIES})
 endif()
 
-# ----------------------
-# CONFIGURING UNIT TESTS
-# ----------------------
+# ----------------------------
+# CONFIGURING UNIT TESTS BUILD
+# ----------------------------
 
 if (BUILD_TESTS)
   message(STATUS "") 
-  message(STATUS "Configuring unit tests.")
-  message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
+  message(STATUS "Configuring unit tests build.")
+  message(STATUS "- Use 'cmake ... -DBUILD_TESTS=OFF' to exclude this.")
     
   # Additional requirement
   find_package(Catch REQUIRED) # Catch (header only)
@@ -354,6 +364,7 @@ if (BUILD_TESTS)
     add_compile_options(
       -Wall
       -Wextra
+      -pedantic-errors
       -Wno-unknown-pragmas)
   else()
     add_compile_options(
@@ -377,13 +388,50 @@ if (BUILD_TESTS)
   target_link_libraries(mantellaTests PUBLIC mantella)
 else()
   message(STATUS "") 
-  message(STATUS "Skipping unit tests.")
+  message(STATUS "Skipping unit tests build.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=ON' to add this.")
 endif()
 
-# -------------
-# BUILD LIBRARY
-# -------------
+# ---------------------------
+# CONFIGURING MEX FILES BUILD
+# ---------------------------
+
+if (BUILD_MEX_FILES)
+  message(STATUS "") 
+  message(STATUS "Configuring mex files build.")
+  message(STATUS "- Use 'cmake ... -DBUILD_MEX_FILES=OFF' to exclude this.")
+  
+  find_package(Matlab)
+  if (NOT Matlab_FOUND)
+    find_package(Octave REQUIRED)
+  endif()
+  
+  if (NOT INSTALL_MEX_FILES_DIR)
+    # Only one variable should be filed.
+    set(INSTALL_MEX_FILES_DIR "${MATLAB_MEX_FILES_DIR}${OCTAVE_MEX_FILES_DIR}")
+  endif()
+  
+  set_target_properties(mantella PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  
+  file(GLOB MEX_FILES "${PROJECT_SOURCE_DIR}/mex/*.cpp")
+  list(REMOVE_ITEM MEX_FILES "${PROJECT_SOURCE_DIR}/mex/mexHelper.cpp")
+  foreach(MEX_FILE ${MEX_FILES})
+    get_filename_component(MEX_FILENAME ${MEX_FILE} NAME_WE)
+    matlab_add_mex(NAME ${MEX_FILENAME} SRC ${MEX_FILE} "${PROJECT_SOURCE_DIR}/mex/mexHelper.cpp")
+    set_property(TARGET ${MEX_FILENAME} PROPERTY CXX_STANDARD 14)
+    set_property(TARGET ${MEX_FILENAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+    target_link_libraries(${MEX_FILENAME} mantella)
+    install(TARGETS ${MEX_FILENAME} DESTINATION ${INSTALL_MEX_FILES_DIR})
+  endforeach()
+else()
+  message(STATUS "") 
+  message(STATUS "Skipping mex files build.")
+  message(STATUS "- Use 'cmake ... -DBUILD_MEX_FILES=ON' to add this.")
+endif()
+
+# --------------------------------
+# CONFIGURING LIBRARY INSTALLATION
+# --------------------------------
 
 message(STATUS "")
 message(STATUS "Configuring library installation.")
@@ -415,6 +463,7 @@ message(STATUS "Noticable variables:")
 message(STATUS "- CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
 message(STATUS "- CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
 message(STATUS "- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message(STATUS "- BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message(STATUS "- CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_ARCHIVE_OUTPUT_DIRECTORY = ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_RUNTIME_OUTPUT_DIRECTORY = ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
@@ -426,4 +475,5 @@ message(STATUS "- ARMADILLO_LIBRARIES = ${ARMADILLO_LIBRARIES}")
 message(STATUS "- INSTALL_INCLUDE_DIR = ${INSTALL_INCLUDE_DIR}")
 message(STATUS "- INSTALL_LIB_DIR = ${INSTALL_LIB_DIR}")
 message(STATUS "- INSTALL_BIN_DIR = ${INSTALL_BIN_DIR}")
+message(STATUS "- INSTALL_MEX_FILES_DIR = ${INSTALL_MEX_FILES_DIR}")
 message(STATUS "")

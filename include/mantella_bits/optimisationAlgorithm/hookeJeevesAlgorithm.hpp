@@ -24,11 +24,10 @@ namespace mant {
         const double stepSizeDecrease);
     double getStepSizeDecrease() const;
 
-    // Public accessible to be used in lambdas
-    double stepSize_;
-
    protected:
     double initialStepSize_;
     double stepSizeDecrease_;
+
+    double stepSize_;
   };
 }

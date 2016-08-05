@@ -27,8 +27,8 @@ namespace mant {
           s_(1.0 - 0.5 / (std::sqrt(static_cast<decltype(s_)>(numberOfDimensions_) + 20.0) - 4.1)),
           mu_(std::sqrt(5.25 / s_)),
           parameterConditinong_(getParameterConditioning(10.0)),
-          rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))),
-          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
+          rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))),
+          rotationR_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
       assert(numberOfDimensions_ > 1 && "LunacekBiRastriginFunction: The number of dimensions must be greater than 1.");
 
       if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {

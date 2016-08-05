@@ -35,7 +35,7 @@ do_format() {
 
   echo "${MAGENTA_TEXT_COLOR}Checking format rules${RESET_TEXT_COLOR}"
   
-  FILES=$(find src include test -not \( -path test/data -prune \) -type f)
+  FILES=$(find src include mex test -not \( -path test/data -prune \) -type f)
   NUMBER_OF_FILES=$(echo "${FILES}" | wc -l)
   COUNTER=1
   

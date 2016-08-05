@@ -18,8 +18,8 @@ namespace mant {
       const double mu_;
       const arma::vec parameterConditinong_;
       // Keeps randomly set data non-`const`, to be changed within tests.
-      arma::mat rotationR_;
       arma::mat rotationQ_;
+      arma::mat rotationR_;
     };
   }
 }

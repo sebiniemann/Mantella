@@ -4,9 +4,6 @@
 #include <cassert>
 #include <functional>
 
-// Mantella
-#include "mantella_bits/config.hpp"
-
 namespace mant {
   arma::uword Hash::operator()(
       const arma::vec& key) const {
@@ -60,7 +57,7 @@ namespace mant {
       return false;
     }
 
-    // TODO Explain why this works (based on the C++ specification)
-    return arma::approx_equal(firstKey, secondKey, "absdiff", ::mant::machinePrecision);
+    // **Note:** C++ requires that equal keys have the same hash.
+    return arma::approx_equal(firstKey, secondKey, "absdiff", 0.0);
   }
 }

@@ -502,7 +502,11 @@ namespace mant {
   }
 
 #if defined(SUPPORT_MPI)
-  void OptimisationAlgorithm::mpiOpBestSample(void* firstInput, void* secondInput, int* size, MPI_Datatype* type) {
+  void OptimisationAlgorithm::mpiOpBestSample(
+      void* firstInput,
+      void* secondInput,
+      int* size,
+      MPI_Datatype* type) {
     // Casts both inputs to their actual type.
     double* firstSample = static_cast<double*>(firstInput);
     double* secondSample = static_cast<double*>(secondInput);
