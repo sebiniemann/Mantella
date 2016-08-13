@@ -14,7 +14,7 @@ namespace mant {
           const arma::uword numberOfDimensions);
 
      protected:
-      // Keeps randomly set data non-`const`, to be changed within tests.
+      // Keeps randomly set data non-`const`, to be set within tests and Mex files.
       arma::mat rotationQ_;
     };
   }

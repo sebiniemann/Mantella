@@ -1,9 +1,11 @@
-find_path(CATCH_INCLUDE_DIRS catch.hpp)
+find_path(CATCH_INCLUDE_DIR catch.hpp)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Catch 
-  DEFAULT_MSG CATCH_INCLUDE_DIRS)
+  FOUND_VAR CATCH_FOUND
+  REQUIRED_VARS CATCH_INCLUDE_DIR)
 
 mark_as_advanced(
-  CATCH_INCLUDE_DIRS)
+  CATCH_FOUND
+  CATCH_INCLUDE_DIR)
 

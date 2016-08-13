@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
   try {
     return Catch::Session().run(argc, argv);
   } catch (const std::exception& exception) {
-    std::cout << exception.what();
+    std::cout << exception.what() << std::endl;
   }
 
 #if defined(SUPPORT_MPI)

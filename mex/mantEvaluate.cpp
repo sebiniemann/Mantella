@@ -1,4 +1,4 @@
-#include "mexHelper.hpp"
+#include "mantellaMex.hpp"
 
 void mexFunction(
     const int nlhs,
@@ -6,15 +6,18 @@ void mexFunction(
     const int nrhs,
     const mxArray* prhs[]) {
   initialise();
-
+  
   std::cout << "test stream" << std::endl;
-
   if (nrhs != 2) {
-    mexErrMsgIdAndTxt("mantBbobSphereFunction", "The optimisation problem and parameter must be provided.");
+    mexErrMsgTxt("mantEvaluate: The number of input variables must be 2");
+  } else if (nlhs > 1) {
+    mexErrMsgTxt("mantEvaluate: The maximal number of output variables must be 1.");
   }
 
-  std::shared_ptr<mant::OptimisationProblem> optimisationProblem = deserialise(prhs[0]);
-
-  plhs[0] = mxCreateNumericMatrix(1, 1, mxDOUBLE_CLASS, mxREAL);
-  mxGetPr(plhs[0])[0] = optimisationProblem->getObjectiveValue(arma::vec(static_cast<double*>(mxGetData(prhs[1])), 2));
+  try {
+    std::shared_ptr<mant::OptimisationProblem> optimisationProblem = getOptimisationProblem(prhs[0]);
+    plhs[0] = getMxArray(optimisationProblem->getObjectiveValue(getRealVector(prhs[1])));
+  } catch (const std::exception& exception) {
+    std::cout << exception.what() << std::endl;
+  }
 }

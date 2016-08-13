@@ -1,4 +1,4 @@
-#include "mexHelper.hpp"
+#include "mantellaMex.hpp"
 
 void mexFunction(
     const int nlhs,
@@ -8,30 +8,14 @@ void mexFunction(
   initialise();
 
   if (nrhs != 1) {
-    mexErrMsgIdAndTxt("mantBbobSphereFunction", "The number of dimensions must be provided");
+    mexErrMsgTxt("The number of input variables must be 1");
+  } else if (nlhs > 1) {
+    mexErrMsgTxt("The maximal number of output variables must be 1.");
   }
 
-  const arma::uword numberOfDimensions = mxGetNumberOfElements(prhs[0]);
-  if (numberOfDimensions < 1) {
-    mexErrMsgIdAndTxt("mantBbobSphereFunction", "The number of dimensions must be greater than 0.");
+  try {
+    plhs[0] = getMxArray(static_cast<mant::BlackBoxOptimisationBenchmark>(mant::bbob::EllipsoidalFunctionRotated(getIntegerScalar(prhs[0]))));
+  } catch (const std::exception& exception) {
+    std::cout << exception.what() << std::endl;
   }
-
-  if (nlhs > 1) {
-    mexErrMsgIdAndTxt("mantBbobSphereFunction", "The maximal number of output variables must be 1.");
-  }
-
-  class AttractiveSectorFunction : public mant::bbob::AttractiveSectorFunction {
-   public:
-    using mant::bbob::AttractiveSectorFunction::AttractiveSectorFunction;
-    using mant::bbob::AttractiveSectorFunction::rotationQ_;
-  };
-  AttractiveSectorFunction optimisationProblem(mxGetNumberOfElements(prhs[0]));
-
-  mxArray* serialisedOptimisationProblem = serialise(static_cast<mant::BlackBoxOptimisationBenchmark>(optimisationProblem));
-  mxAddField(serialisedOptimisationProblem, "rotationQ");
-  mxArray* fieldRotationQ = mxCreateNumericMatrix(optimisationProblem.numberOfDimensions_, optimisationProblem.numberOfDimensions_, mxDOUBLE_CLASS, mxREAL);
-  std::copy(optimisationProblem.rotationQ_.begin(), optimisationProblem.rotationQ_.end(), mxGetPr(fieldRotationQ));
-  mxSetField(serialisedOptimisationProblem, 0, "rotationQ", fieldRotationQ);
-
-  plhs[0] = serialisedOptimisationProblem;
 }

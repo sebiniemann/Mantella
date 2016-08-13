@@ -2,15 +2,15 @@ cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 # Retrieves the version numbers from "include/mantella", avoiding possible inconsistency.
 file(STRINGS "./include/mantella" MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
-string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_CONTENTS}")
-string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
-string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
+string(REGEX REPLACE ".*#define MANTELLA_VERSION_MAJOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR ${MANTELLA_HEADER_CONTENTS})
+string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR ${MANTELLA_HEADER_CONTENTS})
+string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH ${MANTELLA_HEADER_CONTENTS})
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
 
-project(Mantella VERSION "${MANTELLA_VERSION}" LANGUAGES CXX C)
+project(Mantella VERSION ${MANTELLA_VERSION} LANGUAGES CXX C)
 
 # Adds additional cmake modules
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
 option(SUPPORT_OPENMP "Add OpenMP support" ON)
@@ -33,6 +33,14 @@ endif()
 
 if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+endif()
+
+if (NOT INSTALL_INCLUDE_DIR)
+  set(INSTALL_INCLUDE_DIR "include")
+endif()
+
+if (NOT INSTALL_LIB_DIR)
+  set(INSTALL_LIB_DIR "lib")
 endif()
   
 message(STATUS "") 
@@ -58,7 +66,7 @@ endif()
 
 set(REQUIRED_ARMADILLO_VERSION "7.300.0")
 find_package(Armadillo QUIET)
-    file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
+    file(STRINGS ${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
 if (NOT ARMADILLO_FOUND)
   # Unlike `find_package(Armadillo ...)` suggests, Armadillo can be used if its runtime library is missing, as long as `ARMA_USE_WRAPPER` is undefined/outcommented inside Armadillo's configuration file. In this case, we can also directly link against BLAS/LAPACK libraries instead.
   # However, we need to make sure that a missing runtime library was the only reason for `ARMADILLO_FOUND` to be unset.
@@ -68,7 +76,7 @@ if (NOT ARMADILLO_FOUND)
   elseif (ARMADILLO_VERSION_STRING VERSION_LESS REQUIRED_ARMADILLO_VERSION)
     message(FATAL_ERROR "Found unsuitable Armadillo version ${ARMADILLO_VERSION_STRING}, but required is at least ${REQUIRED_ARMADILLO_VERSION} (found at ${ARMADILLO_INCLUDE_DIR}).")
   else()
-    file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
+    file(STRINGS ${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
     if (ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
       message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if you want to link directly againt OpenBLAS instead.")
     endif()
@@ -402,25 +410,34 @@ if (BUILD_MEX_FILES)
   message(STATUS "- Use 'cmake ... -DBUILD_MEX_FILES=OFF' to exclude this.")
   
   find_package(Matlab)
-  if (NOT Matlab_FOUND)
+  if (NOT MATLAB_FOUND)
     find_package(Octave REQUIRED)
   endif()
   
   if (NOT INSTALL_MEX_FILES_DIR)
-    # Only one variable should be filed.
-    set(INSTALL_MEX_FILES_DIR "${MATLAB_MEX_FILES_DIR}${OCTAVE_MEX_FILES_DIR}")
+    set(INSTALL_MEX_FILES_DIR ${MATLAB_MEX_FILES_DIR}${OCTAVE_MEX_FILES_DIR})
   endif()
   
   set_target_properties(mantella PROPERTIES POSITION_INDEPENDENT_CODE ON)
   
-  file(GLOB MEX_FILES "${PROJECT_SOURCE_DIR}/mex/*.cpp")
-  list(REMOVE_ITEM MEX_FILES "${PROJECT_SOURCE_DIR}/mex/mexHelper.cpp")
+  add_library(mantellaMex SHARED ${PROJECT_SOURCE_DIR}/mex/mantellaMex.cpp)
+  set_property(TARGET mantellaMex PROPERTY CXX_STANDARD 14)
+  set_property(TARGET mantellaMex PROPERTY CXX_STANDARD_REQUIRED ON)
+  target_include_directories(mantellaMex PUBLIC ${MATLAB_INCLUDE_DIR}${OCTAVE_INCLUDE_DIR})
+  target_link_libraries(mantellaMex PUBLIC ${MATLAB_LIBRARIES}${OCTAVE_LIBRARIES})
+  target_link_libraries(mantellaMex PUBLIC mantella)
+  install(TARGETS mantellaMex DESTINATION ${INSTALL_LIB_DIR})
+  
+  file(GLOB MEX_FILES ${PROJECT_SOURCE_DIR}/mex/*.cpp)
+  list(REMOVE_ITEM MEX_FILES ${PROJECT_SOURCE_DIR}/mex/mantellaMex.cpp)
   foreach(MEX_FILE ${MEX_FILES})
     get_filename_component(MEX_FILENAME ${MEX_FILE} NAME_WE)
-    matlab_add_mex(NAME ${MEX_FILENAME} SRC ${MEX_FILE} "${PROJECT_SOURCE_DIR}/mex/mexHelper.cpp")
+    add_library(${MEX_FILENAME} SHARED ${MEX_FILE})
     set_property(TARGET ${MEX_FILENAME} PROPERTY CXX_STANDARD 14)
     set_property(TARGET ${MEX_FILENAME} PROPERTY CXX_STANDARD_REQUIRED ON)
-    target_link_libraries(${MEX_FILENAME} mantella)
+    target_link_libraries(${MEX_FILENAME} PRIVATE mantellaMex)
+    target_link_libraries(${MEX_FILENAME} PRIVATE ${MATLAB_LINK_OPTIONS}${OCTAVE_LINK_OPTIONS})
+    set_target_properties(${MEX_FILENAME} PROPERTIES PREFIX "" OUTPUT_NAME ${MEX_FILENAME} SUFFIX ${MATLAB_SUFFIX}${OCTAVE_SUFFIX})
     install(TARGETS ${MEX_FILENAME} DESTINATION ${INSTALL_MEX_FILES_DIR})
   endforeach()
 else()
@@ -436,27 +453,12 @@ endif()
 message(STATUS "")
 message(STATUS "Configuring library installation.")
 
-if (NOT INSTALL_INCLUDE_DIR)
-  set(INSTALL_INCLUDE_DIR "include")
-endif()
-
 set_property(TARGET mantella PROPERTY VERSION ${MANTELLA_VERSION})
 set_property(TARGET mantella PROPERTY SOVERSION ${MANTELLA_VERSION_MAJOR})
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev)
 
-if (NOT INSTALL_LIB_DIR)
-  set(INSTALL_LIB_DIR "lib")
-endif()
-
-if (NOT INSTALL_BIN_DIR)
-  set(INSTALL_BIN_DIR "bin")
-endif()
-
-install(TARGETS mantella
-  ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
-  LIBRARY DESTINATION ${INSTALL_LIB_DIR}
-  RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+install(TARGETS mantella DESTINATION ${INSTALL_LIB_DIR})
   
 message(STATUS "")
 message(STATUS "Noticable variables:")
@@ -471,9 +473,7 @@ message(STATUS "- CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "- SUPPORT_SIMD = ${SUPPORT_SIMD}")
 message(STATUS "- SUPPORT_OPENMP = ${SUPPORT_OPENMP}")
 message(STATUS "- SUPPORT_MPI = ${SUPPORT_MPI}")
-message(STATUS "- ARMADILLO_LIBRARIES = ${ARMADILLO_LIBRARIES}")
 message(STATUS "- INSTALL_INCLUDE_DIR = ${INSTALL_INCLUDE_DIR}")
 message(STATUS "- INSTALL_LIB_DIR = ${INSTALL_LIB_DIR}")
-message(STATUS "- INSTALL_BIN_DIR = ${INSTALL_BIN_DIR}")
 message(STATUS "- INSTALL_MEX_FILES_DIR = ${INSTALL_MEX_FILES_DIR}")
 message(STATUS "")
