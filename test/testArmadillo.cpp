@@ -58,8 +58,8 @@ SCENARIO("IsEqual", "[armadillo][IsEqual]") {
     }
 
     WHEN("Both parameters differ by less than the defined machine precision") {
-      THEN("Return true") {
-        CHECK(mant::IsEqual()(arma::vec({0.0}), arma::vec({std::nexttoward(::mant::machinePrecision, 0.0)})) == true);
+      THEN("Return false") {
+        CHECK(mant::IsEqual()(arma::vec({0.0}), arma::vec({std::nexttoward(::mant::machinePrecision, 0.0)})) == false);
       }
     }
 

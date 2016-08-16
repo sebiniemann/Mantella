@@ -4,22 +4,20 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
+#include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;
 }
 
 namespace mant {
-  class ParticleSwarmOptimisation : public PopulationBasedOptimisationAlgorithm {
+  class ParticleSwarmOptimisation : public OptimisationAlgorithm {
    public:
     explicit ParticleSwarmOptimisation();
 
-    using PopulationBasedOptimisationAlgorithm::optimise;
+    using OptimisationAlgorithm::optimise;
 
     void optimise(
         OptimisationProblem& optimisationProblem);
-
-    arma::uword getNumberOfParticles() const;
 
     void setMaximalAcceleration(
         const double maximalAcceleration);
@@ -34,8 +32,6 @@ namespace mant {
     double getMaximalGlobalAttraction() const;
 
    protected:
-    arma::uword numberOfParticles_;
-
     double maximalAcceleration_;
     double maximalLocalAttraction_;
     double maximalGlobalAttraction_;

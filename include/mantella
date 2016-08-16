@@ -87,11 +87,10 @@
 
 // Optimisation algorithms
 #include <mantella_bits/optimisationAlgorithm.hpp>
+#include <mantella_bits/optimisationAlgorithm/differentialEvolution.hpp>
 #include <mantella_bits/optimisationAlgorithm/hillClimbing.hpp>
 #include <mantella_bits/optimisationAlgorithm/hookeJeevesAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/differentialEvolution.hpp>
-#include <mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp>
+#include <mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp>
 #include <mantella_bits/optimisationAlgorithm/randomSearch.hpp>
 #include <mantella_bits/optimisationAlgorithm/simulatedAnnealing.hpp>
 // IWYU pragma: end_exports

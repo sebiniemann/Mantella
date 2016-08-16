@@ -14,9 +14,9 @@ void mexFunction(
   }
 
   try {
-    mxArray* serialisedOptimisationProblem = getMxArray(static_cast<mant::KinematicallyRedundantMachines>(mant::krm::ParallelKinematicMachine3PRPR()));
-    mxSetField(serialisedOptimisationProblem, 0, "functionHandle", mxCreateString("KRM Parallel Kinematic Machine 3PRPR"));
-    plhs[0] = serialisedOptimisationProblem;
+    mxArray* serialisedOptimisationAlgorithm = getMxArray(static_cast<mant::OptimisationAlgorithm>(mant::RandomSearch()));
+    mxSetField(serialisedOptimisationAlgorithm, 0, "functionHandle", mxCreateString("Random search"));
+    plhs[0] = serialisedOptimisationAlgorithm;
   } catch (const std::exception& exception) {
     std::cout << exception.what() << std::endl;
   }

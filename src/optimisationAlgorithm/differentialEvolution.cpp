@@ -1,4 +1,4 @@
-#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/differentialEvolution.hpp"
+#include "mantella_bits/optimisationAlgorithm/differentialEvolution.hpp"
 
 // C++ standard library
 #include <functional>
@@ -12,7 +12,7 @@
 
 namespace mant {
   DifferentialEvolution::DifferentialEvolution()
-      : PopulationBasedOptimisationAlgorithm() {
+      : OptimisationAlgorithm() {
     setInitialisingFunctions(
         {{[this](
               const arma::uword numberOfDimensions_,
@@ -55,6 +55,7 @@ namespace mant {
           "Differential evolution"}});
 
     setScalingFactor(0.5);
+    setPopulationSize(40);
   }
 
   void DifferentialEvolution::optimise(

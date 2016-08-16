@@ -1,4 +1,4 @@
-#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.hpp"
+#include "mantella_bits/optimisationAlgorithm/particleSwarmOptimisation.hpp"
 
 // C++ standard library
 #include <cmath>
@@ -15,7 +15,7 @@
 
 namespace mant {
   ParticleSwarmOptimisation::ParticleSwarmOptimisation()
-      : PopulationBasedOptimisationAlgorithm() {
+      : OptimisationAlgorithm() {
     setInitialisingFunctions(
         {{[this](
               const arma::uword numberOfDimensions_,
@@ -84,6 +84,8 @@ namespace mant {
          },
          "Halve velocity and revert direction"});
     setBoundariesHandlingFunctions(boundariesHandlingFunctions);
+
+    setPopulationSize(40);
 
     setMaximalAcceleration(1.0 / (2.0 * std::log(2.0)));
     setMaximalLocalAttraction(0.5 + std::log(2.0));

@@ -1,6 +1,6 @@
 // Catch
 #include <catch.hpp>
-#include "../../catchHelper.hpp"
+#include "../catchHelper.hpp"
 
 SCENARIO("ParticleSwarmOptimisation.optimise", "[ParticleSwarmOptimisation][ParticleSwarmOptimisation.optimise]") {
   GIVEN("An optimisation problem") {

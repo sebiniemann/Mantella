@@ -7,4 +7,15 @@ void mexFunction(
     const mxArray* prhs[]) {
   initialise();
 
+  if (nrhs != 1) {
+    mexErrMsgTxt("The number of input variables must be 1.");
+  } else if (nlhs > 1) {
+    mexErrMsgTxt("The maximal number of output variables must be 1.");
+  }
+
+  try {
+    plhs[0] = getMxArray(mant::randomRotationMatrix(getIntegerScalar(plhs[0])));
+  } catch (const std::exception& exception) {
+    std::cout << exception.what() << std::endl;
+  }
 }

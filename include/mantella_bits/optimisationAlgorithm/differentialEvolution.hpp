@@ -4,17 +4,17 @@
 #include <armadillo>
 
 // Mantella
-#include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
+#include "mantella_bits/optimisationAlgorithm.hpp"
 namespace mant {
   class OptimisationProblem;
 }
 
 namespace mant {
-  class DifferentialEvolution : public PopulationBasedOptimisationAlgorithm {
+  class DifferentialEvolution : public OptimisationAlgorithm {
    public:
     explicit DifferentialEvolution();
 
-    using PopulationBasedOptimisationAlgorithm::optimise;
+    using OptimisationAlgorithm::optimise;
 
     void optimise(
         OptimisationProblem& optimisationProblem);

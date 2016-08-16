@@ -6,12 +6,12 @@ void mexFunction(
     const int nrhs,
     const mxArray* prhs[]) {
   initialise();
-  
+
   std::cout << "test stream" << std::endl;
   if (nrhs != 2) {
-    mexErrMsgTxt("mantEvaluate: The number of input variables must be 2");
+    mexErrMsgTxt("The number of input variables must be 2.");
   } else if (nlhs > 1) {
-    mexErrMsgTxt("mantEvaluate: The maximal number of output variables must be 1.");
+    mexErrMsgTxt("The maximal number of output variables must be 1.");
   }
 
   try {

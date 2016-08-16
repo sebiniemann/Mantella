@@ -47,6 +47,9 @@ script:
       cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON . && \
       make -j 4 && \
       mpiexec -n 4 ./bin/mantellaTests && \
+      # Workaround for Ubuntu bug #1242300 \
+      # @see https://bugs.launchpad.net/ubuntu/+source/llvm-defaults/+bug/1242300
+      export CPATH=$CPATH:/usr/include/clang/3.7/include && \
       ./.code.sh --all"; \
     fi
   

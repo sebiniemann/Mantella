@@ -1,6 +1,6 @@
 // Catch
 #include <catch.hpp>
-#include "../../catchHelper.hpp"
+#include "../catchHelper.hpp"
 
 SCENARIO("DifferentialEvolution.optimise", "[DifferentialEvolution][DifferentialEvolution.optimise]") {
   GIVEN("An optimisation problem") {

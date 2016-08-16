@@ -8,13 +8,15 @@ void mexFunction(
   initialise();
 
   if (nrhs != 1) {
-    mexErrMsgTxt("The number of input variables must be 1");
+    mexErrMsgTxt("The number of input variables must be 1.");
   } else if (nlhs > 1) {
     mexErrMsgTxt("The maximal number of output variables must be 1.");
   }
-  
+
   try {
-    plhs[0] = getMxArray(static_cast<mant::BlackBoxOptimisationBenchmark>(mant::bbob::RosenbrockFunctionRotated(getIntegerScalar(prhs[0]))));
+    mxArray* serialisedOptimisationProblem = getMxArray(static_cast<mant::BlackBoxOptimisationBenchmark>(mant::bbob::RosenbrockFunctionRotated(getIntegerScalar(prhs[0]))));
+    mxSetField(serialisedOptimisationProblem, 0, "functionHandle", mxCreateString("BBOB Rosenbrock Function, rotated (f9)"));
+    plhs[0] = serialisedOptimisationProblem;
   } catch (const std::exception& exception) {
     std::cout << exception.what() << std::endl;
   }

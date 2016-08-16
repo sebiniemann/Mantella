@@ -213,13 +213,12 @@ add_library(mantella
 
   # Optimisation algorithms
   src/optimisationAlgorithm.cpp
+  src/optimisationAlgorithm/differentialEvolution.cpp
   src/optimisationAlgorithm/hillClimbing.cpp
   src/optimisationAlgorithm/hookeJeevesAlgorithm.cpp
+  src/optimisationAlgorithm/particleSwarmOptimisation.cpp
   src/optimisationAlgorithm/randomSearch.cpp
   src/optimisationAlgorithm/simulatedAnnealing.cpp
-  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm.cpp
-  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/differentialEvolution.cpp
-  src/optimisationAlgorithm/populationBasedOptimisationAlgorithm/particleSwarmOptimisation.cpp
 )
 set_property(TARGET mantella PROPERTY CXX_STANDARD 14)
 set_property(TARGET mantella PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -347,13 +346,12 @@ if (BUILD_TESTS)
     
     # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
+    test/optimisationAlgorithm/testDifferentialEvolution.cpp
     test/optimisationAlgorithm/testHillClimbing.cpp
     test/optimisationAlgorithm/testHookeJeevesAlgorithm.cpp
+    test/optimisationAlgorithm/testParticleSwarmOptimisation.cpp
     test/optimisationAlgorithm/testRandomSearch.cpp
     test/optimisationAlgorithm/testSimulatedAnnealing.cpp
-    test/optimisationAlgorithm/testPopulationBasedOptimisationAlgorithm.cpp
-    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testDifferentialEvolution.cpp
-    test/optimisationAlgorithm/populationBasedOptimisationAlgorithm/testParticleSwarmOptimisation.cpp
   )
   set_property(TARGET mantellaTests PROPERTY CXX_STANDARD 14)
   set_property(TARGET mantellaTests PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -382,7 +380,8 @@ if (BUILD_TESTS)
       -Wno-weak-vtables
       -Wno-exit-time-destructors
       -Wno-global-constructors
-      -Wno-unknown-warning-option)
+      -Wno-unknown-warning-option
+      -Wno-source-uses-openmp)
   endif()
   
   message(STATUS "- Handling warnings as errors (globally).")

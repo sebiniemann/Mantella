@@ -28,10 +28,11 @@ namespace mant {
   OptimisationAlgorithm::OptimisationAlgorithm() {
     reset();
 
-    setNumberOfCommunicationStalls(0);
     setAcceptableObjectiveValue(-std::numeric_limits<double>::infinity());
-    setMaximalNumberOfIterations(std::numeric_limits<arma::uword>::max());
+    setMaximalNumberOfIterations(10'000);
     setMaximalDuration(std::chrono::seconds(1));
+    setPopulationSize(1);
+    setNumberOfCommunicationStalls(0);
 
     setBoundariesHandlingFunctions(
         {{[this](
@@ -343,15 +344,6 @@ namespace mant {
     }
   }
 
-  void OptimisationAlgorithm::setNumberOfCommunicationStalls(
-      const arma::uword numberOfCommunicationStalls) {
-    numberOfCommunicationStalls_ = numberOfCommunicationStalls;
-  }
-
-  arma::uword OptimisationAlgorithm::getNumberOfCommunicationStalls() const {
-    return numberOfCommunicationStalls_;
-  }
-
   void OptimisationAlgorithm::setAcceptableObjectiveValue(
       const double acceptableObjectiveValue) {
     acceptableObjectiveValue_ = acceptableObjectiveValue;
@@ -377,6 +369,26 @@ namespace mant {
 
   std::chrono::microseconds OptimisationAlgorithm::getMaximalDuration() const {
     return maximalDuration_;
+  }
+
+  void OptimisationAlgorithm::setPopulationSize(
+      const arma::uword populationSize) {
+    assert(populationSize > 0 && "OptimisationAlgorithm.setPopulationSize: The population size must be greater than 0.");
+
+    populationSize_ = populationSize;
+  }
+
+  arma::uword OptimisationAlgorithm::getPopulationSize() const {
+    return populationSize_;
+  }
+
+  void OptimisationAlgorithm::setNumberOfCommunicationStalls(
+      const arma::uword numberOfCommunicationStalls) {
+    numberOfCommunicationStalls_ = numberOfCommunicationStalls;
+  }
+
+  arma::uword OptimisationAlgorithm::getNumberOfCommunicationStalls() const {
+    return numberOfCommunicationStalls_;
   }
 
   arma::uword OptimisationAlgorithm::getUsedNumberOfIterations() const {

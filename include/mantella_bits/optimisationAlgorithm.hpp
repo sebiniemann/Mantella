@@ -93,10 +93,6 @@ namespace mant {
         OptimisationProblem& optimisationProblem,
         const arma::mat& initialParameters);
 
-    void setNumberOfCommunicationStalls(
-        const arma::uword numberOfCommunicationStalls);
-    arma::uword getNumberOfCommunicationStalls() const;
-
     void setAcceptableObjectiveValue(
         const double acceptableObjectiveValue);
     double getAcceptableObjectiveValue() const;
@@ -108,6 +104,14 @@ namespace mant {
     void setMaximalDuration(
         const std::chrono::microseconds maximalDuration);
     std::chrono::microseconds getMaximalDuration() const;
+
+    void setPopulationSize(
+        const arma::uword populationSize);
+    arma::uword getPopulationSize() const;
+
+    void setNumberOfCommunicationStalls(
+        const arma::uword numberOfCommunicationStalls);
+    arma::uword getNumberOfCommunicationStalls() const;
 
     arma::uword getUsedNumberOfIterations() const;
     std::chrono::microseconds getUsedDuration() const;
@@ -173,11 +177,12 @@ namespace mant {
         std::string>>
         communicationFunctions_;
 
-    arma::uword numberOfCommunicationStalls_;
-
     double acceptableObjectiveValue_;
     arma::uword maximalNumberOfIterations_;
     std::chrono::microseconds maximalDuration_;
+
+    arma::uword populationSize_;
+    arma::uword numberOfCommunicationStalls_;
 
     arma::uword usedNumberOfIterations_;
     std::chrono::microseconds usedDuration_;

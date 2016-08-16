@@ -316,40 +316,6 @@ SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][Optimisation
   }
 }
 
-SCENARIO("OptimisationAlgorithm.setNumberOfCommunicationStalls", "[OptimisationAlgorithm][OptimisationAlgorithm.setNumberOfCommunicationStalls]") {
-  GIVEN("An acceptable objective value") {
-    THEN("Throw no exception and keep all counters and results intact") {
-      mant::bbob::SphereFunction optimisationProblem(2);
-      mant::RandomSearch optimisationAlgorithm;
-      optimisationAlgorithm.setMaximalNumberOfIterations(3);
-      ::mant::isCachingSamples = true;
-      ::mant::isRecordingSampling = true;
-      optimisationAlgorithm.optimise(optimisationProblem);
-      ::mant::isCachingSamples = false;
-      ::mant::isRecordingSampling = false;
-
-      CHECK_NOTHROW(optimisationAlgorithm.setNumberOfCommunicationStalls(2));
-
-      CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
-      CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
-      CHECK(optimisationAlgorithm.getBestFoundObjectiveValue() < std::numeric_limits<double>::infinity());
-      CHECK(optimisationAlgorithm.getBestFoundParameter().is_empty() == false);
-      CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
-      CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
-      CHECK(optimisationProblem.getCachedSamples().empty() == false);
-    }
-  }
-}
-
-SCENARIO("OptimisationAlgorithm.getNumberOfCommunicationStalls", "[OptimisationAlgorithm][OptimisationAlgorithm.getNumberOfCommunicationStalls]") {
-  WHEN("The default number of communication stalls is unchanged") {
-    THEN("Return 0") {
-      mant::OptimisationAlgorithm optimisationAlgorithm;
-      CHECK(optimisationAlgorithm.getNumberOfCommunicationStalls() == 0);
-    }
-  }
-}
-
 SCENARIO("OptimisationAlgorithm.setAcceptableObjectiveValue", "[OptimisationAlgorithm][OptimisationAlgorithm.setAcceptableObjectiveValue]") {
   GIVEN("An acceptable objective value") {
     THEN("Throw no exception and keep all counters and results intact") {
@@ -413,9 +379,9 @@ SCENARIO("OptimisationAlgorithm.setMaximalNumberOfIterations", "[OptimisationAlg
 
 SCENARIO("OptimisationAlgorithm.getMaximalNumberOfIterations", "[OptimisationAlgorithm][OptimisationAlgorithm.getMaximalNumberOfIterations]") {
   WHEN("The default maximal number of iterations is unchanged") {
-    THEN("Return the largest representable supported integer") {
+    THEN("Return 10000") {
       mant::OptimisationAlgorithm optimisationAlgorithm;
-      CHECK(optimisationAlgorithm.getMaximalNumberOfIterations() == std::numeric_limits<arma::uword>::max());
+      CHECK(optimisationAlgorithm.getMaximalNumberOfIterations() == 10'000);
     }
   }
 }
@@ -450,6 +416,75 @@ SCENARIO("OptimisationAlgorithm.getMaximalDuration", "[OptimisationAlgorithm][Op
     THEN("Return 1 second") {
       mant::OptimisationAlgorithm optimisationAlgorithm;
       CHECK(optimisationAlgorithm.getMaximalDuration() == std::chrono::seconds(1));
+    }
+  }
+}
+SCENARIO("OptimisationAlgorithm.setPopulationSize", "[OptimisationAlgorithm][OptimisationAlgorithm.setPopulationSize]") {
+  GIVEN("A population size") {
+    WHEN("The population size is greater than 0") {
+      THEN("Throw no exception and keep all counters and results intact") {
+        mant::bbob::SphereFunction optimisationProblem(2);
+        mant::RandomSearch optimisationAlgorithm;
+        optimisationAlgorithm.setMaximalNumberOfIterations(3);
+        ::mant::isCachingSamples = true;
+        ::mant::isRecordingSampling = true;
+        optimisationAlgorithm.optimise(optimisationProblem);
+        ::mant::isCachingSamples = false;
+        ::mant::isRecordingSampling = false;
+
+        CHECK_NOTHROW(optimisationAlgorithm.setPopulationSize(10));
+
+        CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
+        CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
+        CHECK(optimisationAlgorithm.getBestFoundObjectiveValue() < std::numeric_limits<double>::infinity());
+        CHECK(optimisationAlgorithm.getBestFoundParameter().is_empty() == false);
+        CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+        CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+        CHECK(optimisationProblem.getCachedSamples().empty() == false);
+      }
+    }
+  }
+}
+
+SCENARIO("OptimisationAlgorithm.getPopulationSize", "[OptimisationAlgorithm][OptimisationAlgorithm.getPopulationSize]") {
+  WHEN("The default population size is unchanged") {
+    THEN("Return 1") {
+      mant::OptimisationAlgorithm optimisationAlgorithm;
+      CHECK(optimisationAlgorithm.getPopulationSize() == 1);
+    }
+  }
+}
+
+SCENARIO("OptimisationAlgorithm.setNumberOfCommunicationStalls", "[OptimisationAlgorithm][OptimisationAlgorithm.setNumberOfCommunicationStalls]") {
+  GIVEN("An acceptable objective value") {
+    THEN("Throw no exception and keep all counters and results intact") {
+      mant::bbob::SphereFunction optimisationProblem(2);
+      mant::RandomSearch optimisationAlgorithm;
+      optimisationAlgorithm.setMaximalNumberOfIterations(3);
+      ::mant::isCachingSamples = true;
+      ::mant::isRecordingSampling = true;
+      optimisationAlgorithm.optimise(optimisationProblem);
+      ::mant::isCachingSamples = false;
+      ::mant::isRecordingSampling = false;
+
+      CHECK_NOTHROW(optimisationAlgorithm.setNumberOfCommunicationStalls(2));
+
+      CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
+      CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
+      CHECK(optimisationAlgorithm.getBestFoundObjectiveValue() < std::numeric_limits<double>::infinity());
+      CHECK(optimisationAlgorithm.getBestFoundParameter().is_empty() == false);
+      CHECK(optimisationProblem.getUsedNumberOfEvaluations() > 0);
+      CHECK(optimisationProblem.getUsedNumberOfDistinctEvaluations() > 0);
+      CHECK(optimisationProblem.getCachedSamples().empty() == false);
+    }
+  }
+}
+
+SCENARIO("OptimisationAlgorithm.getNumberOfCommunicationStalls", "[OptimisationAlgorithm][OptimisationAlgorithm.getNumberOfCommunicationStalls]") {
+  WHEN("The default number of communication stalls is unchanged") {
+    THEN("Return 0") {
+      mant::OptimisationAlgorithm optimisationAlgorithm;
+      CHECK(optimisationAlgorithm.getNumberOfCommunicationStalls() == 0);
     }
   }
 }

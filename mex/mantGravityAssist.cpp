@@ -8,7 +8,7 @@ void mexFunction(
   initialise();
 
   if (nrhs != 5) {
-    mexErrMsgTxt("The number of input variables must be 5");
+    mexErrMsgTxt("The number of input variables must be 5.");
   } else if (nlhs > 1) {
     mexErrMsgTxt("The maximal number of output variables must be 1.");
   }
