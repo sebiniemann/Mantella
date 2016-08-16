@@ -67,7 +67,7 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --remove clang-format /usr/bin/clang-format && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
-RUN apt-get install -y iwyu
+RUN apt-get install -y clang-3.7 iwyu
 RUN apt-get install -y clang-tidy-3.8 && \
     update-alternatives --remove clang-tidy /usr/bin/clang-tidy && \
     update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-3.8 100 && \
