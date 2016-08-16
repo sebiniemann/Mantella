@@ -59,11 +59,6 @@ endif()
 message(STATUS "") 
 message(STATUS "Finding dependencies.")
 
-# Prioritises static libraries over dynamic ones for static builds.
-if (NOT BUILD_SHARED_LIBS)
-  SET(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
-endif()
-
 set(REQUIRED_ARMADILLO_VERSION "7.300.0")
 find_package(Armadillo QUIET)
     file(STRINGS ${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
@@ -251,7 +246,7 @@ else()
 endif()
 
 if (SUPPORT_MPI)
-  target_include_directories(mantella SYSTEM PUBLIC ${MPI_INCLUDE_PATH})
+  target_include_directories(mantella SYSTEM PUBLIC ${MPI_C_INCLUDE_PATH})
   target_link_libraries(mantella PUBLIC ${MPI_C_LIBRARIES})
 endif()
 

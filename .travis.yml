@@ -44,7 +44,7 @@ script:
       ./bin/mantellaTests && \
       make install"; \
     else sudo docker exec mantella /bin/bash -c "\
-      cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON . && \
+      cmake -DBUILD_TESTS=ON -DSUPPORT_OPENMP=OFF -DSUPPORT_MPI=ON . && \
       make -j 4 && \
       mpiexec -n 4 ./bin/mantellaTests && \
       # Workaround for Ubuntu bug #1242300 \
