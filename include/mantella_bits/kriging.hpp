@@ -13,20 +13,28 @@
 
 namespace mant {
   class Kriging {
-   public:
-    const std::function<arma::vec(const arma::vec&)> polynomialFunction_;
-    const std::function<double(const arma::vec&)> correlationFunction_;
-
     Kriging(
-        const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
-        const std::function<arma::vec(const arma::vec&)> polynomialFunction,
         const std::function<double(const arma::vec&)> correlationFunction);
 
-    void train();
+    void setCorrelationFunction(
+        const std::function<double(const arma::vec&)> correlationFunction);
+
+    const std::function<double(const arma::vec&)> getCorrelationFunction() const;
+
+    void setHighestDegree(
+        arma::uword highestDegree);
+
+    arma::uword getHighestDegree() const;
+
+    void train(
+        const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples);
     double predict(
         const arma::vec& parameter) const;
 
    protected:
+    std::function<double(const arma::vec&)> correlationFunction_;
+    arma::uword highestDegree_;
+
     std::unordered_map<arma::vec, double, Hash, IsEqual> samples_;
 
     arma::vec meanParameter_;
@@ -37,5 +45,7 @@ namespace mant {
 
     arma::vec beta_;
     arma::vec gamma_;
+
+    bool trained_;
   };
 }

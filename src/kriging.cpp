@@ -11,18 +11,43 @@
 
 namespace mant {
   Kriging::Kriging(
-      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
-      const std::function<arma::vec(const arma::vec&)> polynomialFunction,
       const std::function<double(const arma::vec&)> correlationFunction)
-      : polynomialFunction_(polynomialFunction),
-        correlationFunction_(correlationFunction) {
-    int sampleDimension = samples.begin()->first.n_elem;
-    for (auto& sample : samples) {
-      assert(sample.n_elem == sampleDimension && "Kriging: the dimension of all samples must be consistent.");
-    }
+      : correlationFunction_(correlationFunction),
+        highestDegree_(1) {}
+
+  void setCorrelationFunction(
+      const std::function<double(const arma::vec&)> correlationFunction) {
+    assert(correlationFunction && "Kriging.setCorrelationFunction: The correlation function must not be empty");
+    correlationFunction_ = correlationFunction;
+    trained_ = false;
   }
 
-  void Kriging::train() {
+  const std::function<double(const arma::vec&)> getCorrelationFunction() const {
+    return correlationFunction_;
+  }
+
+  void setHighestDegree(
+      arma::uword highestDegree) {
+    assert(highestDegree > 0 && "Kriging.setHighestDegree: The highest degree of a Krigings polynomial function must be positive");
+    highestDegree_ = highestDegree;
+    trained_ = false;
+  }
+
+  arma::uword getHighestDegree() const {
+    return highestDegree_;
+  }
+
+  void Kriging::train(
+      const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples) {
+    {
+      arma::uword sampleDimension = samples.begin()->first.n_elem;
+      for (auto& sample : samples) {
+        assert(sample.n_elem == sampleDimension && "Kriging: the dimension of all samples must be consistent.");
+      }
+      trained_ = false;
+      samples_ = samples;
+    }
+
     arma::mat parameters(samples_.begin()->first.n_elem, samples_.size());
     arma::rowvec objectiveValues(samples_.size());
     arma::uword n = 0;
@@ -47,30 +72,34 @@ namespace mant {
     arma::mat correlations(parameters.n_cols, parameters.n_cols);
     correlations.diag().zeros();
 
+    arma::mat polynomials(polynomialSize(parameters.n_rows, highestDegree_), parameters.n_cols);
     for (n = 0; n < parameters.n_cols; ++n) {
       const arma::vec& parameter = parameters.col(n);
       for (arma::uword k = n + 1; k < parameters.n_cols; ++k) {
         correlations(n, k) = correlationFunction_(parameters.col(k) - parameter);
       }
 
-      parameters.col(n) = polynomialFunction_(parameter);
+      polynomials.col(n) = polynomialFunction_(parameter);
     }
     correlations = arma::symmatu(correlations);
 
-    beta_ = generalisedLeastSquaresEstimate(parameters, objectiveValues, correlations);
-    gamma_ = arma::solve(correlations, objectiveValues.t() - parameters * beta_);
+    beta_ = generalisedLeastSquaresEstimate(polynomials, objectiveValues, correlations);
+    gamma_ = arma::solve(correlations, objectiveValues.t() - polynomials * beta_);
+
+    trained_ = true;
   }
 
   double Kriging::predict(
       const arma::vec& parameter) const {
+    assert(trained_ && "Kriging.predict: Either this Kriging has never been trained on any data, or the correlation function or polynomial degree was changed since the last training. Please call `Kriging.train` first.");
     assert(parameters.n_elem == meanParameter_.n_elem && "Kriging.predict: the dimension of the predicted value must match that of the training data.");
 
-    const arma::vec& normalisedParameter = (parameter - meanParameter_) / standardDeviationParameter_;
+    const arma::vec& standardisedParameter = (parameter - meanParameter_) / standardDeviationParameter_;
 
     arma::vec correlations(samples_.size());
     arma::uword n = 0;
     for (const auto& sample : samples_) {
-      correlations(n++) = correlationFunction_(sample.first - normalisedParameter);
+      correlations(n++) = correlationFunction_(sample.first - standardisedParameter);
     }
 
     return meanObjectiveValue_ + (arma::dot(beta_, polynomialFunction_(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
