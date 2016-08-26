@@ -5,6 +5,7 @@
 #include <utility>
 
 // Mantella
+#include "mantella_bits/algebra.hpp"
 #include "mantella_bits/armadillo.hpp"
 #include "mantella_bits/assert.hpp"
 #include "mantella_bits/statistics.hpp"
@@ -15,25 +16,26 @@ namespace mant {
       : correlationFunction_(correlationFunction),
         highestDegree_(1) {}
 
-  void setCorrelationFunction(
+  void Kriging::setCorrelationFunction(
       const std::function<double(const arma::vec&)> correlationFunction) {
     assert(correlationFunction && "Kriging.setCorrelationFunction: The correlation function must not be empty");
     correlationFunction_ = correlationFunction;
     trained_ = false;
   }
 
-  const std::function<double(const arma::vec&)> getCorrelationFunction() const {
+  const std::function<double(const arma::vec&)> Kriging::getCorrelationFunction() const {
     return correlationFunction_;
   }
 
-  void setHighestDegree(
+  void Kriging::setHighestDegree(
       arma::uword highestDegree) {
-    assert(highestDegree > 0 && "Kriging.setHighestDegree: The highest degree of a Krigings polynomial function must be positive");
+    assert(highestDegree >= 0 && "Kriging.setHighestDegree: The highest degree of a Krigings polynomial function must not be negative");
+    assert(highestDegree <= 2 && "Kriging.setHighestDegree: The highest supported degree for a Kriging polynomial function is 2");
     highestDegree_ = highestDegree;
     trained_ = false;
   }
 
-  arma::uword getHighestDegree() const {
+  arma::uword Kriging::getHighestDegree() const {
     return highestDegree_;
   }
 
@@ -79,7 +81,7 @@ namespace mant {
         correlations(n, k) = correlationFunction_(parameters.col(k) - parameter);
       }
 
-      polynomials.col(n) = polynomialFunction_(parameter);
+      polynomials.col(n) = polynomialFunction(parameter);
     }
     correlations = arma::symmatu(correlations);
 
@@ -102,6 +104,47 @@ namespace mant {
       correlations(n++) = correlationFunction_(sample.first - standardisedParameter);
     }
 
-    return meanObjectiveValue_ + (arma::dot(beta_, polynomialFunction_(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
+    return meanObjectiveValue_ + (arma::dot(beta_, polynomialFunction(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
+  }
+
+
+  /**
+   * TODO: Move this to the documentation area, where users have chance to
+   * find it
+   *
+   * The result depends on the regression model:
+   *
+   * ##constant (highestDegree_ = 0)
+   *
+   *     p: R^n -> R^n,
+   *     p(x1, ..., xn) = (1, ..., 1)
+   *
+   * ##linear (highestDegree_ = 1)
+   *
+   *     p: R^n -> R^{n+1},
+   *     p(x1, ..., xn) = (1, x1, ..., xn)
+   *
+   * ##quadratic (highestDegree_ = 2)
+   *
+   *     p: R^n -> R^{(n+1)(n+2)/2},
+   *     p(x1, ..., xn) = (1, x1, ..., xn, x1*x1, ..., x1*xn, ... xn*x1, x2*x2, ..., x2*xn, ... xn*xn)
+   */
+  arma::vec Kriging::polynomialFunction(
+      const arma::vec& parameter) const {
+    switch(highestDegree_) {
+      case 0:
+        return arma::vec(parameter.n_elem, 1);
+      case 1: {
+        arma::vec result(parameter.n_elem + 1);
+        result(1) = 1;
+        for (int i = 0; i < parameter.n_elem; i++) {
+          result(i + 1) = parameter(i);
+        }
+        return result;
+      }
+      //case 2:
+      default:
+        return arma::vec();
+    }
   }
 }
