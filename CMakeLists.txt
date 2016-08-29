@@ -90,7 +90,7 @@ if (SUPPORT_OPENMP)
   # Makes sure that `MAXIMAL_NUMBER_OF_THREADS` contains a sane value.
   if (NOT MAXIMAL_NUMBER_OF_THREADS OR NOT MAXIMAL_NUMBER_OF_THREADS MATCHES "^[1-9][0-9]*$")
     message(STATUS "  - Trying to determine the number of cores.")
-  
+
     include(ProcessorCount)
     ProcessorCount(MAXIMAL_NUMBER_OF_THREADS)
     message(STATUS "    - Found ${MAXIMAL_NUMBER_OF_THREADS} core(s).")
@@ -293,6 +293,7 @@ if (BUILD_TESTS)
     test/testOrbitalMechanics.cpp
 
     # Machine learning functions
+    test/testKriging.cpp
     test/testSamplesAnalysis.cpp
     test/testSamplesSelection.cpp
 

@@ -1,4 +1,5 @@
-#include "mantella_bits/kriging.hpp"
+// Armadillo
+#include <armadillo>
 
 // C++ standard library
 #include <cassert>

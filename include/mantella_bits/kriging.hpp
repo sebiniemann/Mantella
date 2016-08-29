@@ -11,8 +11,10 @@
 // Mantella
 #include "mantella_bits/armadillo.hpp"
 
+
 namespace mant {
   class Kriging {
+   public:
     Kriging(
         const std::function<double(const arma::vec&)> correlationFunction);
 

@@ -49,6 +49,7 @@
 #include <mantella_bits/orbitalMechanics.hpp>
 
 // Machine learning functions
+#include <mantella_bits/kriging.hpp>
 #include <mantella_bits/samplesAnalysis.hpp>
 #include <mantella_bits/samplesSelection.hpp>
 
