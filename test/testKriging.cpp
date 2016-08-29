@@ -1,5 +1,6 @@
 // C++ standard library
 #include <cmath>
+#include <iostream>
 
 // Catch
 #include <catch.hpp>
@@ -87,16 +88,22 @@ SCENARIO("Kriging.predict", "[Kriging][Kriging.predict]") {
           {{96.2, 84.3}, 40.3},
           {{98.2, 58.2}, 39.5}
         };
+        // Use gaussian correlation function with theta = (10, 10)
         std::function<double(const arma::vec&)> correlation = [](const arma::vec& x) {
-          const arma::vec theta(10, 10); // TODO: what are theta, lower bound, upper bound?
-          return exp(-theta(0) * x(0) * x(0)) * exp(-theta(1) * x(1) * x(1));
+          return exp(-10 * x(0) * x(0)) * exp(-10 * x(1) * x(1));
         };
 
         mant::Kriging kriging(correlation);
         kriging.setHighestDegree(0);
         kriging.train(samples);
 
-        kriging.predict({0.7, 59.6});
+        arma::mat predictions(100, 100);
+        for (int i = 0; i < predictions.n_rows; i++) {
+          for (int j = 0; j < predictions.n_cols; j++) {
+            predictions(i, j) = kriging.predict({static_cast<double>(i), static_cast<double>(j)});
+          }
+        }
+        std::cout << predictions << std::endl;
       }
     }
   }
