@@ -59,8 +59,8 @@ namespace mant {
       ++n;
     }
 
-    meanParameter_ = arma::mean(parameters, 2);
-    standardDeviationParameter_ = arma::stddev(parameters, 2);
+    meanParameter_ = arma::mean(parameters, 1);
+    standardDeviationParameter_ = arma::stddev(parameters, 1);
 
     parameters.each_col() -= meanParameter_;
     parameters.each_col() /= standardDeviationParameter_;
