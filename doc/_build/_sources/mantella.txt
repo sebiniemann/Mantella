@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    
    howTo
-   yetdoesnotcomment
+   
    
 Indices and tables
 ==================

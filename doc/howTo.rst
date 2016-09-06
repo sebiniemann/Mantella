@@ -20,7 +20,7 @@ For other Systems please read here:
 	
 
 Generate documentation
-----------------------
+-------------------------
 
 Go in path */mantella* and execute *./generateDoc.sh* .
 The generated HTML files you will see in */doc/_bulid/* .
@@ -29,7 +29,8 @@ Describe in Code
 ------------------
 
 Normally Comment
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
+
 .. parsed-literal::
  /*! @brief Brief description.
   *    Brief description continued.
@@ -38,7 +39,7 @@ Normally Comment
   */
    
 Include image
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 .. parsed-literal::
   \\image html image.png
 	
@@ -82,7 +83,7 @@ Include code-block
 
 	
 Include inline math
-^^^^^^^^^^^^^^^^^^	
+^^^^^^^^^^^^^^^^^^^^^
 .. parsed-literal::
      * \f{eqnarray*}{
      *      g &=& \frac{Gm_2}{r^2} \\
@@ -99,22 +100,4 @@ Include inline math
 
 
 Describe in rst
-------------------
-
-Added doxygen commends 
-^^^^^^^^^^^^^^^^^^^^^^^
-.. parsed-literal::
-   \.. doxygenclass:: [Class] (mant::HillClimbing)  
-      \:project: mantella
-      \:protected-members: //If specified, the protected members of the class will be displayed.
-      \:private-members: //If specified, the private members of the class will be displayed.
-      \:undoc-members: //If specified, the undocumented members of the class will be displayed.
-      \:outline: //This displays only the names of the class members and not their documentation.
-      \:members: crack, isCracked //This displays the class documentation with only the members listed in the :members: option.1
-
-To read on `Doc_Breathe`_
-      
-For more Info about `Doc_Sphinx`_
-
-.. _Doc_Breathe: http://breathe.readthedocs.io/en/latest/directives.html
-.. _Doc_Sphinx: http://www.sphinx-doc.org/en/stable/contents.html
+----------------
