@@ -74,7 +74,8 @@ namespace mant {
     arma::mat correlations(parameters.n_cols, parameters.n_cols);
     correlations.diag().zeros();
 
-    arma::mat polynomials(polynomialSize(parameters.n_rows, highestDegree_), parameters.n_cols);
+    // arma::mat polynomials(polynomialSize(parameters.n_rows, highestDegree_), parameters.n_cols);
+    arma::mat polynomials(2, parameters.n_cols);
     for (n = 0; n < parameters.n_cols; ++n) {
       const arma::vec& parameter = parameters.col(n);
       for (arma::uword k = n + 1; k < parameters.n_cols; ++k) {
@@ -85,7 +86,7 @@ namespace mant {
     }
     correlations = arma::symmatu(correlations);
 
-    beta_ = generalisedLeastSquaresEstimate(polynomials, objectiveValues, correlations);
+    beta_ = generalisedLeastSquaresEstimate(polynomials, objectiveValues.t(), correlations);
     gamma_ = arma::solve(correlations, objectiveValues.t() - polynomials * beta_);
 
     trained_ = true;
