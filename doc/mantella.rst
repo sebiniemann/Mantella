@@ -10,8 +10,6 @@ Contents:
 
 .. toctree::
    
-   howTo
-   
    
 Indices and tables
 ==================
