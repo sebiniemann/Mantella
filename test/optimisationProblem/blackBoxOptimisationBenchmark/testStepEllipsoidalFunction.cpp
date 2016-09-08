@@ -14,9 +14,9 @@ SCENARIO("bbob::StepEllipsoidalFunction.getObjectiveFunctions", "[bbob::StepElli
   GIVEN("A parameter") {
     THEN("Return its objective value") {
       TestStepEllipsoidalFunction optimisationProblem(3);
-      optimisationProblem.rotationQ_ = mant::rotationMatrix3dIntrinsic(0.1, 0.2, 0.3);
+      optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
 
-      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(846.6655996046));
+      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(686.7543730745));
     }
   }
 

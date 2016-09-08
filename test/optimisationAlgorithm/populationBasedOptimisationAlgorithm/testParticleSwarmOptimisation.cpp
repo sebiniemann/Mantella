@@ -26,13 +26,6 @@ SCENARIO("ParticleSwarmOptimisation.optimise", "[ParticleSwarmOptimisation][Part
 
 SCENARIO("ParticleSwarmOptimisation.setMaximalAcceleration", "[ParticleSwarmOptimisation][ParticleSwarmOptimisation.setMaximalAcceleration]") {
   GIVEN("A maximal acceleration") {
-    WHEN("The maximal acceleration is negative") {
-      THEN("Throw a domain error") {
-        mant::ParticleSwarmOptimisation optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMaximalAcceleration(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The maximal acceleration is positive or 0") {
       THEN("Throw no exception") {
         mant::ParticleSwarmOptimisation optimisationAlgorithm;
@@ -53,13 +46,6 @@ SCENARIO("ParticleSwarmOptimisation.getMaximalAcceleration", "[ParticleSwarmOpti
 
 SCENARIO("ParticleSwarmOptimisation.setMaximalLocalAttraction", "[ParticleSwarmOptimisation][ParticleSwarmOptimisation.setMaximalLocalAttraction]") {
   GIVEN("A maximal local attraction") {
-    WHEN("The maximal local attraction is negative") {
-      THEN("Throw a domain error") {
-        mant::ParticleSwarmOptimisation optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMaximalLocalAttraction(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The maximal local attraction is positive or 0") {
       THEN("Throw no exception") {
         mant::ParticleSwarmOptimisation optimisationAlgorithm;
@@ -80,13 +66,6 @@ SCENARIO("ParticleSwarmOptimisation.getMaximalLocalAttraction", "[ParticleSwarmO
 
 SCENARIO("ParticleSwarmOptimisation.setMaximalGlobalAttraction", "[ParticleSwarmOptimisation][ParticleSwarmOptimisation.setMaximalGlobalAttraction]") {
   GIVEN("A maximal global attraction") {
-    WHEN("The maximal global attraction is negative") {
-      THEN("Throw a domain error") {
-        mant::ParticleSwarmOptimisation optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setMaximalGlobalAttraction(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The maximal global attraction is positive or 0") {
       THEN("Throw no exception") {
         mant::ParticleSwarmOptimisation optimisationAlgorithm;

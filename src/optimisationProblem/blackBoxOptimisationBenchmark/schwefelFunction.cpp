@@ -22,27 +22,28 @@ namespace mant {
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("SchwefelFunction: The number of dimensions must be greater than 1.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("SchwefelFunction: The number of elements must be representable as a floating point.");
+      assert(numberOfDimensions_ > 1 && "SchwefelFunction: The number of dimensions must be greater than 1.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("SchwefelFunction: The number of elements must be representable as a floating point.");
       }
 
       // A vector with all elements randomly and uniformly set to either 2 or -2.
-      setParameterScaling(arma::zeros<arma::vec>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::generator_) ? 2.0 : -2.0));
+      setParameterScaling(arma::zeros<arma::vec>(numberOfDimensions_) + (std::bernoulli_distribution(0.5)(Rng::getGenerator()) ? 2.0 : -2.0));
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                arma::vec s = parameter_;
-                                s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
+              arma::vec s = parameter_;
+              s.tail(s.n_elem - 1) += 0.25 * (s.head(s.n_elem - 1) - 4.2096874633);
 
-                                const arma::vec& z = 100.0 * (parameterConditioning_ % (s - 4.2096874633) + 4.2096874633);
+              const arma::vec& z = 100.0 * (parameterConditioning_ % (s - 4.2096874633) + 4.2096874633);
 
-                                return 0.01 * (418.9828872724339 - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<double>(numberOfDimensions_)) + 100.0 * arma::accu(arma::pow(arma::max(arma::zeros<arma::vec>(numberOfDimensions_), arma::abs(z / 100.0) - 5.0), 2.0));
-                              },
-          "BBOB Schwefel Function (f20)"}});
+              return 0.01 * (418.9828872724339 - arma::dot(z, arma::sin(arma::sqrt(arma::abs(z)))) / static_cast<double>(numberOfDimensions_)) + 100.0 * arma::accu(arma::pow(arma::max(arma::zeros<arma::vec>(numberOfDimensions_), arma::abs(z / 100.0) - 5.0), 2.0));
+            },
+            "BBOB Schwefel Function (f20)"}});
     }
   }
 }

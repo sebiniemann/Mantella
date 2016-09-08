@@ -1,7 +1,7 @@
 #include "mantella_bits/optimisationAlgorithm/populationBasedOptimisationAlgorithm.hpp"
 
 // C++ standard library
-#include <stdexcept>
+#include <cassert>
 
 namespace mant {
   PopulationBasedOptimisationAlgorithm::PopulationBasedOptimisationAlgorithm()
@@ -19,9 +19,7 @@ namespace mant {
 
   void PopulationBasedOptimisationAlgorithm::setPopulationSize(
       const arma::uword populationSize) {
-    if (populationSize == 0) {
-      throw std::domain_error("PopulationBasedOptimisationAlgorithm.setPopulationSize: The population size must be greater than 0.");
-    }
+    assert(populationSize > 0 && "PopulationBasedOptimisationAlgorithm.setPopulationSize: The population size must be greater than 0.");
 
     populationSize_ = populationSize;
   }

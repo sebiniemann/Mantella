@@ -20,22 +20,23 @@ namespace mant {
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           parameterConditioning_(getParameterConditioning(std::sqrt(10.0))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("RastriginFunction: The number of dimensions must be greater than 1.");
-      } else if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
-        throw std::overflow_error("RastriginFunction: The number of elements must be representable as a floating point.");
+      assert(numberOfDimensions_ > 1 && "RastriginFunction: The number of dimensions must be greater than 1.");
+
+      if (!isRepresentableAsFloatingPoint(numberOfDimensions_)) {
+        throw std::range_error("RastriginFunction: The number of elements must be representable as a floating point.");
       }
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = parameterConditioning_ % getAsymmetricParameter(0.2, getOscillatedParameter(parameter_));
-                                return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
-                              },
-          "BBOB Rastrigin Function (f3)"}});
+              const arma::vec& z = parameterConditioning_ % getAsymmetricParameter(0.2, getOscillatedParameter(parameter_));
+              return 10.0 * (static_cast<double>(numberOfDimensions_) - arma::accu(arma::cos(2.0 * arma::datum::pi * z))) + std::pow(arma::norm(z), 2.0);
+            },
+            "BBOB Rastrigin Function (f3)"}});
     }
   }
 }

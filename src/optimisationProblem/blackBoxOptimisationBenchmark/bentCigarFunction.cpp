@@ -3,7 +3,6 @@
 // C++ standard library
 #include <cassert>
 #include <functional>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -20,20 +19,19 @@ namespace mant {
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions),
           rotationQ_(synchronise(randomRotationMatrix(numberOfDimensions_))) {
-      if (numberOfDimensions_ < 2) {
-        throw std::domain_error("BentCigarFunction: The number of dimensions must be greater than 1.");
-      }
+      assert(numberOfDimensions_ > 1 && "BentCigarFunction: The number of dimensions must be greater than 1.");
 
       setParameterTranslation(getRandomParameterTranslation());
 
-      setObjectiveFunctions({{[this](
-                                  const arma::vec& parameter_) {
-                                assert(parameter_.n_elem == numberOfDimensions_);
+      setObjectiveFunctions(
+          {{[this](
+                const arma::vec& parameter_) {
+              assert(parameter_.n_elem == numberOfDimensions_);
 
-                                const arma::vec& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter_));
-                                return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
-                              },
-          "BBOB Bent Cigar Function (f12)"}});
+              const arma::vec& z = arma::square(rotationQ_ * getAsymmetricParameter(0.5, rotationQ_ * parameter_));
+              return z(0) + 1000000.0 * arma::accu(z.tail(z.n_elem - 1));
+            },
+            "BBOB Bent Cigar Function (f12)"}});
     }
   }
 }

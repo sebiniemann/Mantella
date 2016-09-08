@@ -5,7 +5,7 @@
 
 namespace mant {
   arma::uword polynomialSize(
-      const arma::uword numberOfElements,
+      const arma::uword numberOfIndeterminates,
       const arma::uword highestDegree);
 
   arma::vec polynomial(

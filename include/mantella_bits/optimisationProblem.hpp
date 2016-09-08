@@ -24,7 +24,11 @@ namespace mant {
         const arma::uword numberOfDimensions);
 
     void setObjectiveFunctions(
-        const std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>>& objectiveFunctions);
+        const std::vector<std::pair<
+            std::function<double(
+                const arma::vec& parameter_)>,
+            std::string>>& objectiveFunctions);
+
     std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>> getObjectiveFunctions() const;
 
     double getObjectiveValue(
@@ -76,7 +80,11 @@ namespace mant {
     void reset();
 
    protected:
-    std::vector<std::pair<std::function<double(const arma::vec& parameter_)>, std::string>> objectiveFunctions_;
+    std::vector<std::pair<
+        std::function<double(
+            const arma::vec& parameter_)>,
+        std::string>>
+        objectiveFunctions_;
 
     arma::vec lowerBounds_;
     arma::vec upperBounds_;

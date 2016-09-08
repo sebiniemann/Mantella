@@ -10,13 +10,6 @@ SCENARIO("OptimisationAlgorithm::OptimisationAlgorithm", "[OptimisationAlgorithm
 
 SCENARIO("OptimisationAlgorithm.setInitialisingFunctions", "[OptimisationAlgorithm][OptimisationAlgorithm.setInitialisingFunctions]") {
   GIVEN("A vector of functions") {
-    WHEN("A function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setInitialisingFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("All functions are callable") {
       THEN("Throw no exception and keep all counters and results intact") {
         mant::bbob::SphereFunction optimisationProblem(2);
@@ -28,12 +21,14 @@ SCENARIO("OptimisationAlgorithm.setInitialisingFunctions", "[OptimisationAlgorit
         ::mant::isCachingSamples = false;
         ::mant::isRecordingSampling = false;
 
-        CHECK_NOTHROW(optimisationAlgorithm.setInitialisingFunctions({{[](
-                                                                           const arma::uword numberOfDimensions_,
-                                                                           const arma::mat& initialParameters_) {
-                                                                         return initialParameters_;
-                                                                       },
-            "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationAlgorithm.setInitialisingFunctions(
+                {{[](
+                      const arma::uword numberOfDimensions_,
+                      const arma::mat& initialParameters_) {
+                    return initialParameters_;
+                  },
+                  "Test function"}}));
 
         CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
         CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
@@ -56,20 +51,6 @@ SCENARIO("OptimisationAlgorithm.getInitialisingFunctions", "[OptimisationAlgorit
 
 SCENARIO("OptimisationAlgorithm.setNextParametersFunctions", "[OptimisationAlgorithm][OptimisationAlgorithm.setNextParametersFunctions]") {
   GIVEN("A vector of functions") {
-    WHEN("The vector is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunctions({}), std::invalid_argument);
-      }
-    }
-
-    WHEN("A function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setNextParametersFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("All functions are callable") {
       THEN("Throw no exception and keep all counters and results intact") {
         mant::bbob::SphereFunction optimisationProblem(2);
@@ -81,14 +62,14 @@ SCENARIO("OptimisationAlgorithm.setNextParametersFunctions", "[OptimisationAlgor
         ::mant::isCachingSamples = false;
         ::mant::isRecordingSampling = false;
 
-        CHECK_NOTHROW(optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                                             const arma::uword numberOfDimensions_,
-                                                                             const arma::mat& parameters_,
-                                                                             const arma::rowvec& objectiveValues_,
-                                                                             const arma::rowvec& differences_) {
-                                                                           return parameters_;
-                                                                         },
-            "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationAlgorithm.setNextParametersFunctions(
+                {{[](
+                      const arma::uword numberOfDimensions_,
+                      const arma::mat& parameters_,
+                      const arma::rowvec& objectiveValues_,
+                      const arma::rowvec& differences_) { return parameters_; },
+                  "Test function"}}));
 
         CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
         CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
@@ -111,13 +92,6 @@ SCENARIO("OptimisationAlgorithm.getNextParametersFunctions", "[OptimisationAlgor
 
 SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunctions", "[OptimisationAlgorithm][OptimisationAlgorithm.setBoundariesHandlingFunctions]") {
   GIVEN("A vector of functions") {
-    WHEN("A function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setBoundariesHandlingFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("All functions are callable") {
       THEN("Throw no exception and keep all counters and results intact") {
         mant::bbob::SphereFunction optimisationProblem(2);
@@ -129,13 +103,15 @@ SCENARIO("OptimisationAlgorithm.setBoundariesHandlingFunctions", "[OptimisationA
         ::mant::isCachingSamples = false;
         ::mant::isRecordingSampling = false;
 
-        CHECK_NOTHROW(optimisationAlgorithm.setBoundariesHandlingFunctions({{[](
-                                                                                 const arma::mat& parameters_,
-                                                                                 const arma::umat& isBelowLowerBound_,
-                                                                                 const arma::umat& isAboveUpperBound_) {
-                                                                               return parameters_;
-                                                                             },
-            "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationAlgorithm.setBoundariesHandlingFunctions(
+                {{[](
+                      const arma::mat& parameters_,
+                      const arma::umat& isBelowLowerBound_,
+                      const arma::umat& isAboveUpperBound_) {
+                    return parameters_;
+                  },
+                  "Test function"}}));
 
         CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
         CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
@@ -158,13 +134,6 @@ SCENARIO("OptimisationAlgorithm.getBoundariesHandlingFunctions", "[OptimisationA
 
 SCENARIO("OptimisationAlgorithm.setIsStagnatingFunctions", "[OptimisationAlgorithm][OptimisationAlgorithm.setIsStagnatingFunctions]") {
   GIVEN("A vector of functions") {
-    WHEN("A function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setIsStagnatingFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("All functions are callable") {
       THEN("Throw no exception and keep all counters and results intact") {
         mant::bbob::SphereFunction optimisationProblem(2);
@@ -176,13 +145,13 @@ SCENARIO("OptimisationAlgorithm.setIsStagnatingFunctions", "[OptimisationAlgorit
         ::mant::isCachingSamples = false;
         ::mant::isRecordingSampling = false;
 
-        CHECK_NOTHROW(optimisationAlgorithm.setIsStagnatingFunctions({{[](
-                                                                           const arma::mat& parameters_,
-                                                                           const arma::rowvec& objectiveValues_,
-                                                                           const arma::rowvec& differences_) {
-                                                                         return false;
-                                                                       },
-            "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationAlgorithm.setIsStagnatingFunctions(
+                {{[](
+                      const arma::mat& parameters_,
+                      const arma::rowvec& objectiveValues_,
+                      const arma::rowvec& differences_) { return false; },
+                  "Test function"}}));
 
         CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
         CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
@@ -205,13 +174,6 @@ SCENARIO("OptimisationAlgorithm.getIsStagnatingFunctions", "[OptimisationAlgorit
 
 SCENARIO("OptimisationAlgorithm.setRestartingFunctions", "[OptimisationAlgorithm][OptimisationAlgorithm.setRestartingFunctions]") {
   GIVEN("A vector of functions") {
-    WHEN("A function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setRestartingFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("All functions are callable") {
       THEN("Throw no exception and keep all counters and results intact") {
         mant::bbob::SphereFunction optimisationProblem(2);
@@ -223,14 +185,14 @@ SCENARIO("OptimisationAlgorithm.setRestartingFunctions", "[OptimisationAlgorithm
         ::mant::isCachingSamples = false;
         ::mant::isRecordingSampling = false;
 
-        CHECK_NOTHROW(optimisationAlgorithm.setRestartingFunctions({{[](
-                                                                         const arma::uword numberOfDimensions_,
-                                                                         const arma::mat& parameters_,
-                                                                         const arma::rowvec& objectiveValues_,
-                                                                         const arma::rowvec& differences_) {
-                                                                       return parameters_;
-                                                                     },
-            "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationAlgorithm.setRestartingFunctions(
+                {{[](
+                      const arma::uword numberOfDimensions_,
+                      const arma::mat& parameters_,
+                      const arma::rowvec& objectiveValues_,
+                      const arma::rowvec& differences_) { return parameters_; },
+                  "Test function"}}));
 
         CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
         CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
@@ -253,13 +215,6 @@ SCENARIO("OptimisationAlgorithm.getRestartingFunctions", "[OptimisationAlgorithm
 
 SCENARIO("OptimisationAlgorithm.setCommunicationFunctions", "[OptimisationAlgorithm][OptimisationAlgorithm.setCommunicationFunctions]") {
   GIVEN("A vector of functions") {
-    WHEN("A function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setCommunicationFunctions({{nullptr, "Test function"}}), std::invalid_argument);
-      }
-    }
-
     WHEN("All functions are callable") {
       THEN("Throw no exception and keep all counters and results intact") {
         mant::bbob::SphereFunction optimisationProblem(2);
@@ -271,14 +226,14 @@ SCENARIO("OptimisationAlgorithm.setCommunicationFunctions", "[OptimisationAlgori
         ::mant::isCachingSamples = false;
         ::mant::isRecordingSampling = false;
 
-        CHECK_NOTHROW(optimisationAlgorithm.setCommunicationFunctions({{[](
-                                                                            const arma::uword numberOfDimensions_,
-                                                                            const arma::mat& parameters_,
-                                                                            const arma::rowvec& objectiveValues_,
-                                                                            const arma::rowvec& differences_) {
-                                                                          return parameters_;
-                                                                        },
-            "Test function"}}));
+        CHECK_NOTHROW(
+            optimisationAlgorithm.setCommunicationFunctions(
+                {{[](
+                      const arma::uword numberOfDimensions_,
+                      const arma::mat& parameters_,
+                      const arma::rowvec& objectiveValues_,
+                      const arma::rowvec& differences_) { return parameters_; },
+                  "Test function"}}));
 
         CHECK(optimisationAlgorithm.getUsedNumberOfIterations() > 0);
         CHECK(optimisationAlgorithm.getRecordedSampling().empty() == false);
@@ -301,109 +256,26 @@ SCENARIO("OptimisationAlgorithm.getCommunicationFunctions", "[OptimisationAlgori
 
 SCENARIO("OptimisationAlgorithm.optimise", "[OptimisationAlgorithm][OptimisationAlgorithm.optimise]") {
   GIVEN("An optimisation problem and initial parameters") {
-    WHEN("The optimisation problem's objective function is not callable") {
-      THEN("Throw an invalid argument error") {
-        mant::OptimisationProblem optimisationProblem(2);
-
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                               const arma::uword numberOfDimensions_,
-                                                               const arma::mat& parameters_,
-                                                               const arma::rowvec& objectiveValues_,
-                                                               const arma::rowvec& differences_) {
-                                                             return arma::randu<arma::vec>(numberOfDimensions_);
-                                                           },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}, {2.0, -3.0}})), std::invalid_argument);
-      }
-    }
-
-    WHEN("The optimisation problem's lower bound is greater than its upper one") {
-      THEN("Throw an logic error") {
-        mant::bbob::SphereFunction optimisationProblem(2);
-        optimisationProblem.setLowerBounds({2.0, 3.0});
-        optimisationProblem.setUpperBounds({-2.0, 1.0});
-
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                               const arma::uword numberOfDimensions_,
-                                                               const arma::mat& parameters_,
-                                                               const arma::rowvec& objectiveValues_,
-                                                               const arma::rowvec& differences_) {
-                                                             return arma::randu<arma::vec>(numberOfDimensions_);
-                                                           },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}, {2.0, -3.0}})), std::logic_error);
-      }
-    }
-
-    WHEN("The initial parameters are empty") {
-      THEN("Throw an invalid argument error") {
-        mant::bbob::SphereFunction optimisationProblem(2);
-
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                               const arma::uword numberOfDimensions_,
-                                                               const arma::mat& parameters_,
-                                                               const arma::rowvec& objectiveValues_,
-                                                               const arma::rowvec& differences_) {
-                                                             return arma::randu<arma::vec>(numberOfDimensions_);
-                                                           },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationAlgorithm.optimise(optimisationProblem, arma::mat()), std::invalid_argument);
-      }
-    }
-
-    WHEN("The initial parameters' number of dimensions is unequal to the optimisation problem's number of dimensions") {
-      THEN("Throw an invalid argument error") {
-        mant::bbob::SphereFunction optimisationProblem(2);
-
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-        optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                               const arma::uword numberOfDimensions_,
-                                                               const arma::mat& parameters_,
-                                                               const arma::rowvec& objectiveValues_,
-                                                               const arma::rowvec& differences_) {
-                                                             return arma::randu<arma::vec>(numberOfDimensions_);
-                                                           },
-            "Test function"}});
-
-        CHECK_THROWS_AS(optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}})), std::invalid_argument);
-        CHECK_THROWS_AS(optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}, {-2.0, -3.0}, {-4.0, 5.0}})), std::invalid_argument);
-      }
-    }
-
-    WHEN("The next parameters functions vector is empty") {
-      THEN("Throw an invalid argument error") {
-        mant::bbob::SphereFunction optimisationProblem(2);
-
-        mant::OptimisationAlgorithm optimisationAlgorithm;
-
-        CHECK_THROWS_AS(optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}, {2.0, -3.0}})), std::invalid_argument);
-      }
-    }
-
     WHEN("The initial parameters' number of dimensions is equal to the optimisation problem's number of dimensions and the next parameters functions vector is non-empty") {
       THEN("Reset the counter (excluding the optimisation problem), the results and optimise the problem afterwards") {
         mant::OptimisationProblem optimisationProblem(2);
-        optimisationProblem.setObjectiveFunctions({{[](
-                                                        const arma::vec& parameter_) {
-                                                      return arma::accu(parameter_);
-                                                    },
-            "Test function"}});
+        optimisationProblem.setObjectiveFunctions(
+            {{[](
+                  const arma::vec& parameter_) {
+                return arma::accu(parameter_);
+              },
+              "Test function"}});
 
         mant::OptimisationAlgorithm optimisationAlgorithm;
-        optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                               const arma::uword numberOfDimensions_,
-                                                               const arma::mat& parameters_,
-                                                               const arma::rowvec& objectiveValues_,
-                                                               const arma::rowvec& differences_) {
-                                                             return arma::vec({0.45, 0.45});
-                                                           },
-            "Test function"}});
+        optimisationAlgorithm.setNextParametersFunctions(
+            {{[](
+                  const arma::uword numberOfDimensions_,
+                  const arma::mat& parameters_,
+                  const arma::rowvec& objectiveValues_,
+                  const arma::rowvec& differences_) {
+                return arma::vec({0.45, 0.45});
+              },
+              "Test function"}});
         optimisationAlgorithm.setMaximalNumberOfIterations(3);
 
         ::mant::isCachingSamples = true;
@@ -678,21 +550,23 @@ SCENARIO("OptimisationAlgorithm.getBestFoundObjectiveValue", "[OptimisationAlgor
   WHEN("An optimisation was proceed") {
     THEN("Return the best found objective value") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(arma::abs(parameter_ - 2.0)) + 1.0;
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) {
+              return arma::accu(arma::abs(parameter_ - 2.0)) + 1.0;
+            },
+            "Test function"}});
 
       mant::OptimisationAlgorithm optimisationAlgorithm;
-      optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                             const arma::uword numberOfDimensions_,
-                                                             const arma::mat& parameters_,
-                                                             const arma::rowvec& objectiveValues_,
-                                                             const arma::rowvec& differences_) {
-                                                           return arma::vec({0.6, 0.6});
-                                                         },
-          "Test function"}});
+      optimisationAlgorithm.setNextParametersFunctions(
+          {{[](
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_) {
+              return arma::vec({0.6, 0.6});
+            },
+            "Test function"}});
       optimisationAlgorithm.setMaximalNumberOfIterations(3);
 
       optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}, {2.0, -3.0}}));
@@ -714,21 +588,23 @@ SCENARIO("OptimisationAlgorithm.getBestFoundParameter", "[OptimisationAlgorithm]
   WHEN("An optimisation was proceed") {
     THEN("Return the best found parameter") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(arma::abs(parameter_ - 2.0)) + 1.0;
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) {
+              return arma::accu(arma::abs(parameter_ - 2.0)) + 1.0;
+            },
+            "Test function"}});
 
       mant::OptimisationAlgorithm optimisationAlgorithm;
-      optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                             const arma::uword numberOfDimensions_,
-                                                             const arma::mat& parameters_,
-                                                             const arma::rowvec& objectiveValues_,
-                                                             const arma::rowvec& differences_) {
-                                                           return arma::vec({0.6, 0.6});
-                                                         },
-          "Test function"}});
+      optimisationAlgorithm.setNextParametersFunctions(
+          {{[](
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_) {
+              return arma::vec({0.6, 0.6});
+            },
+            "Test function"}});
       optimisationAlgorithm.setMaximalNumberOfIterations(3);
 
       optimisationAlgorithm.optimise(optimisationProblem, arma::mat({{1.0, 2.0}, {2.0, -3.0}}));
@@ -759,21 +635,21 @@ SCENARIO("OptimisationAlgorithm.getRecordedSampling", "[OptimisationAlgorithm][O
   WHEN("Recording samples is supported") {
     THEN("Return all samples") {
       mant::OptimisationProblem optimisationProblem(2);
-      optimisationProblem.setObjectiveFunctions({{[](
-                                                      const arma::vec& parameter_) {
-                                                    return arma::accu(parameter_);
-                                                  },
-          "Test function"}});
+      optimisationProblem.setObjectiveFunctions(
+          {{[](
+                const arma::vec& parameter_) { return arma::accu(parameter_); },
+            "Test function"}});
 
       mant::OptimisationAlgorithm optimisationAlgorithm;
-      optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                             const arma::uword numberOfDimensions_,
-                                                             const arma::mat& parameters_,
-                                                             const arma::rowvec& objectiveValues_,
-                                                             const arma::rowvec& differences_) {
-                                                           return arma::vec({0.45, 0.45});
-                                                         },
-          "Test function"}});
+      optimisationAlgorithm.setNextParametersFunctions(
+          {{[](
+                const arma::uword numberOfDimensions_,
+                const arma::mat& parameters_,
+                const arma::rowvec& objectiveValues_,
+                const arma::rowvec& differences_) {
+              return arma::vec({0.45, 0.45});
+            },
+            "Test function"}});
       optimisationAlgorithm.setMaximalNumberOfIterations(3);
 
       ::mant::isRecordingSampling = true;
@@ -790,50 +666,42 @@ SCENARIO("OptimisationAlgorithm.reset", "[OptimisationAlgorithm][OptimisationAlg
   THEN("Reset all counters and results while leaving everything else intact") {
     mant::bbob::SphereFunction optimisationProblem(2);
     mant::OptimisationAlgorithm optimisationAlgorithm;
-    optimisationAlgorithm.setInitialisingFunctions({{[](
-                                                         const arma::uword numberOfDimensions_,
-                                                         const arma::mat& initialParameters_) {
-                                                       return initialParameters_;
-                                                     },
-        "Test function"}});
-    optimisationAlgorithm.setNextParametersFunctions({{[](
-                                                           const arma::uword numberOfDimensions_,
-                                                           const arma::mat& parameters_,
-                                                           const arma::rowvec& objectiveValues_,
-                                                           const arma::rowvec& differences_) {
-                                                         return parameters_;
-                                                       },
-        "Test function"}});
-    optimisationAlgorithm.setBoundariesHandlingFunctions({{[](
-                                                               const arma::mat& parameters_,
-                                                               const arma::umat& isBelowLowerBound_,
-                                                               const arma::umat& isAboveUpperBound_) {
-                                                             return parameters_;
-                                                           },
-        "Test function"}});
-    optimisationAlgorithm.setIsStagnatingFunctions({{[](
-                                                         const arma::mat& parameters_,
-                                                         const arma::rowvec& objectiveValues_,
-                                                         const arma::rowvec& differences_) {
-                                                       return false;
-                                                     },
-        "Test function"}});
-    optimisationAlgorithm.setRestartingFunctions({{[](
-                                                       const arma::uword numberOfDimensions_,
-                                                       const arma::mat& parameters_,
-                                                       const arma::rowvec& objectiveValues_,
-                                                       const arma::rowvec& differences_) {
-                                                     return parameters_;
-                                                   },
-        "Test function"}});
-    optimisationAlgorithm.setCommunicationFunctions({{[](
-                                                          const arma::uword numberOfDimensions_,
-                                                          const arma::mat& parameters_,
-                                                          const arma::rowvec& objectiveValues_,
-                                                          const arma::rowvec& differences_) {
-                                                        return parameters_;
-                                                      },
-        "Test function"}});
+    optimisationAlgorithm.setInitialisingFunctions(
+        {{[](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& initialParameters_) {
+            return initialParameters_;
+          },
+          "Test function"}});
+    optimisationAlgorithm.setNextParametersFunctions(
+        {{[](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_) { return parameters_; },
+          "Test function"}});
+    optimisationAlgorithm.setBoundariesHandlingFunctions(
+        {{[](
+              const arma::mat& parameters_, const arma::umat& isBelowLowerBound_, const arma::umat& isAboveUpperBound_) { return parameters_; },
+          "Test function"}});
+    optimisationAlgorithm.setIsStagnatingFunctions(
+        {{[](
+              const arma::mat& parameters_, const arma::rowvec& objectiveValues_, const arma::rowvec& differences_) { return false; },
+          "Test function"}});
+    optimisationAlgorithm.setRestartingFunctions(
+        {{[](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_) { return parameters_; },
+          "Test function"}});
+    optimisationAlgorithm.setCommunicationFunctions(
+        {{[](
+              const arma::uword numberOfDimensions_,
+              const arma::mat& parameters_,
+              const arma::rowvec& objectiveValues_,
+              const arma::rowvec& differences_) { return parameters_; },
+          "Test function"}});
 
     optimisationAlgorithm.setMaximalNumberOfIterations(3);
     ::mant::isCachingSamples = true;

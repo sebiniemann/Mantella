@@ -14,9 +14,9 @@ SCENARIO("bbob::BentCigarFunction.getObjectiveFunctions", "[bbob::BentCigarFunct
   GIVEN("A parameter") {
     THEN("Return its objective value") {
       TestBentCigarFunction optimisationProblem(3);
-      optimisationProblem.rotationQ_ = mant::rotationMatrix3dIntrinsic(0.1, 0.2, 0.3);
+      optimisationProblem.rotationQ_ = mant::rotationMatrix3d(0.1, 0.2, 0.3);
 
-      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(81157459.6684425622));
+      CHECK(optimisationProblem.getObjectiveFunctions().at(0).first({1.0, -2.0, 3.0}) == Approx(22424232.8493554294));
     }
   }
 

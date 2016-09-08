@@ -1,6 +1,7 @@
 #include "mantella_bits/samplesSelection.hpp"
 
 // C++ standard library
+#include <cassert>
 #include <iterator>
 #include <limits>
 #include <stdexcept>
@@ -16,18 +17,15 @@ namespace mant {
   std::unordered_map<arma::vec, double, Hash, IsEqual> elitists(
       const std::unordered_map<arma::vec, double, Hash, IsEqual>& samples,
       const arma::uword numberOfSamplesToSelect) {
-    if (samples.size() < numberOfSamplesToSelect) {
-      throw std::logic_error("elitists: The number of given samples must be greater than or equal to the number of samples to select.");
-    } else if (!isDimensionallyConsistent(samples)) {
-      throw std::invalid_argument("elitists: The samples must be dimensionally consistent.");
-    }
+    assert(samples.size() >= numberOfSamplesToSelect && "elitists: The number of given samples must be greater than or equal to the number of samples to select.");
+    assert(isDimensionallyConsistent(samples) && "elitists: The samples must be dimensionally consistent.");
 
     if (samples.size() == 0) {
       return {};
     }
 
     if (samples.size() - 1 > std::numeric_limits<std::unordered_map<arma::vec, double, Hash, IsEqual>::difference_type>::max()) {
-      throw std::overflow_error("elitists: The number of samples must be less than or equal to the largest representable iterator difference type.");
+      throw std::range_error("elitists: The number of samples must be less than or equal to the largest representable iterator difference type.");
     }
 
     // Generates a list of all objective values

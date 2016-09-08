@@ -26,13 +26,6 @@ SCENARIO("DifferentialEvolution.optimise", "[DifferentialEvolution][Differential
 
 SCENARIO("DifferentialEvolution.setScalingFactor", "[DifferentialEvolution][DifferentialEvolution.setScalingFactor]") {
   GIVEN("A scaling factor") {
-    WHEN("The scaling factor is negative") {
-      THEN("Throw a domain error") {
-        mant::DifferentialEvolution optimisationAlgorithm;
-        CHECK_THROWS_AS(optimisationAlgorithm.setScalingFactor(-1.0), std::domain_error);
-      }
-    }
-
     WHEN("The scaling factor is positive or 0") {
       THEN("Throw no exception") {
         mant::DifferentialEvolution optimisationAlgorithm;

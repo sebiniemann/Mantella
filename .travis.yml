@@ -1,6 +1,7 @@
 sudo: required
-cache: false
-dist: trusty
+
+services:
+  - docker
 
 language: cpp
 
@@ -10,53 +11,52 @@ os:
 compiler:
   - clang
   - gcc
-  
+
 install:
-  - sudo chmod a+x ./.setup.sh
-  - sudo chmod a+x ./.code.sh
-  # Removes previous Clang installations, to avoid later conflicts.
-  - if [ -d /usr/local/clang-3.5.0 ]; then sudo rm -Rf /usr/local/clang-3.5.0; fi
-  # Changes the current directory during the installation process to avoid folder name clashes
-  - cd ..
-  - source ./Mantella/.setup.sh
-  # Coveralls
-  - gem install coveralls-lcov && sudo gem install coveralls-lcov
-  - sudo find / -name "coveralls-lcov"
-  - cd Mantella
+  - sudo docker build -t ubuntu/mantella:latest .
+  - sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+  - sudo docker exec mantella apt-get install -y rubygems && gem install coveralls-lcov
+  - sudo docker exec mantella chmod a+x ./.code.sh
   
 addons:
   coverity_scan:
     project:
       name: "SebastianNiemann/Mantella"
     notification_email: niemann@sra.uni-hannover.de
-    build_command_prepend: "cov-configure --compiler gcc-4.8 --template; cmake -DBUILD_TESTS=On"
-    build_command: "make -j 4"
+    build_command_prepend: "cov-configure --compiler gcc-4.8 --template; sudo docker exec cmake -DBUILD_TESTS=ON"
+    build_command: "sudo docker exec mantella make -j 4"
     branch_pattern: coverity_scan
 
 script:
   # Test matrix
   ## GCC
-  ## - Unit tests with OpenMP support
-  ## - Code coverage
-  ## - Installation
-  - if [ "$CXX" == "g++" ]; then cmake -DBUILD_TESTS=ON; fi
-  - if [ "$CXX" == "g++" ]; then make -j 4; fi
-  - if [ "$CXX" == "g++" ]; then ./bin/mantellaTests; fi
-  - if [ "$CXX" == "g++" ]; then sudo make install; fi
-  
-  # Clang
-  ## - Unit tests with MPI support
-  ## - Code format
-  ## - Include rules
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON .; fi
-  - if [ "$CXX" == "clang++" ]; then make -j 4; fi
-  - if [ "$CXX" == "clang++" ]; then mpiexec -n 4 ./bin/mantellaTests; fi
-  - if [ "$CXX" == "clang++" ]; then ./.code.sh --all; fi
+  ### - Unit tests with OpenMP support
+  ### - Code coverage
+  ### - Installation
+  ## Clang
+  ### - Unit tests with MPI support
+  ### - Code format
+  ### - Include rules
+  - | 
+    if [ "$CXX" == "g++" ]; then sudo docker exec mantella /bin/bash -c "\
+      cmake -DBUILD_TESTS=ON . && \
+      make -j 4 && \
+      ./bin/mantellaTests && \
+      make install"; \
+    else sudo docker exec mantella /bin/bash -c "\
+      cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON . && \
+      make -j 4 && \
+      mpiexec -n 4 ./bin/mantellaTests && \
+      ./.code.sh --all"; \
+    fi
   
 after_success:
-  - if [ "$CXX" == "g++" ]; then cd ./CMakeFiles/mantella.dir/src/; fi
-  - if [ "$CXX" == "g++" ]; then lcov --directory . --base-directory . --capture --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '/usr/*' --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --remove coverage.info '*.hpp' --output-file coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then lcov --list coverage.info; fi
-  - if [ "$CXX" == "g++" ]; then coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info; fi
+  - | 
+    if [ "$CXX" == "g++" ]; then sudo docker exec mantella /bin/bash -c "\
+      cd ./CMakeFiles/mantella.dir/src/ && \
+      lcov --directory . --base-directory . --capture --output-file coverage.info && \
+      lcov --remove coverage.info '/usr/*' --output-file coverage.info && \
+      lcov --remove coverage.info '*.hpp' --output-file coverage.info && \
+      lcov --list coverage.info && \
+      coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info" \
+    fi

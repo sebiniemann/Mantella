@@ -13,7 +13,7 @@ project(Mantella VERSION "${MANTELLA_VERSION}" LANGUAGES CXX C)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(SUPPORT_SIMD "Add SSE2, SSE3, SSE4, AVX, etc. support" ON)
-option(SUPPORT_OMP "Add OpenMP support" ON)
+option(SUPPORT_OPENMP "Add OpenMP support" ON)
 option(SUPPORT_MPI "Add MPI support" OFF)
 # Development build options
 option(BUILD_TESTS "Build tests" OFF)
@@ -50,7 +50,7 @@ endif()
 message(STATUS "") 
 message(STATUS "Finding dependencies.")
 
-set(REQUIRED_ARMADILLO_VERSION "6.700.0")
+set(REQUIRED_ARMADILLO_VERSION "7.300.0")
 find_package(Armadillo QUIET)
     file(STRINGS "${ARMADILLO_INCLUDE_DIR}/armadillo_bits/config.hpp" ARMA_USE_WRAPPER REGEX "^[ ]*#define ARMA_USE_WRAPPER")
 if (NOT ARMADILLO_FOUND)
@@ -83,22 +83,44 @@ else()
   message(STATUS "  - Use 'cmake ... -DSUPPORT_MPI=ON' to add this.")
 endif()
 
-if (SUPPORT_OMP)
+if (SUPPORT_OPENMP)
   message(STATUS "- Trying to add OpenMP support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=Off' to exclude this.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_OPENMP=Off' to exclude this.")
 
-  find_package(OpenMP)
-  if (OPENMP_FOUND)
-    message(STATUS "  - Added OpenMP support.")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+  # Makes sure that `MAXIMAL_NUMBER_OF_THREADS` contains a sane value.
+  if (NOT MAXIMAL_NUMBER_OF_THREADS OR NOT MAXIMAL_NUMBER_OF_THREADS MATCHES "^[1-9][0-9]*$")
+    message(STATUS "  - Trying to determine the number of cores.")
+  
+    include(ProcessorCount)
+    ProcessorCount(MAXIMAL_NUMBER_OF_THREADS)
+    message(STATUS "    - Found ${MAXIMAL_NUMBER_OF_THREADS} core(s).")
+  endif()
+
+  if (MAXIMAL_NUMBER_OF_THREADS EQUAL 0)
+    message(STATUS "- Excluding OpenMP support as the maximal number of threads to support was either not automatically determined or manually set to an integer less than 1.")
+    message(STATUS "  - Use 'cmake ... -DMAXIMAL_NUMBER_OF_THREADS=...' to specify the maximal number of threads (>= 1) to support manually.")
+    set(SUPPORT_OPENMP OFF)
   else()
-    message(STATUS "  - OpenMP is not supported by your compiler.")
-    set(SUPPORT_OMP OFF)
+    find_package(OpenMP)
+    if (OPENMP_FOUND)
+      message(STATUS "  - Adding OpenMP support (optimising for ${MAXIMAL_NUMBER_OF_THREADS} threads(s)).")
+    message(STATUS "  - Use 'cmake ... -DMAXIMAL_NUMBER_OF_THREADS=...' to specify the maximal number of threads (>= 1) manually.")
+      message(STATUS "  - Alternatively, set `#define MAXIMAL_NUMBER_OF_THREADS ...` in your source code, prior to including Mantella the first time.")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    else()
+      message(STATUS "  - OpenMP is not supported by your compiler.")
+      set(SUPPORT_OPENMP OFF)
+    endif()
   endif()
 else()
   message(STATUS "- Excluding OpenMP support.")
-  message(STATUS "  - Use 'cmake ... -DSUPPORT_OMP=ON' to add this.")
+  message(STATUS "  - Use 'cmake ... -DSUPPORT_OPENMP=ON' to add this.")
+endif()
+
+# Makes sure that `MAXIMAL_NUMBER_OF_THREADS` contains a sane value, even if OpenMP is not to be supported.
+if (NOT SUPPORT_OPENMP)
+  set(MAXIMAL_NUMBER_OF_THREADS 1)
 endif()
 
 # -------------------------
@@ -111,7 +133,7 @@ message(STATUS "Configuring library build.")
 configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
 
 # All paths must start with "src/"
-add_library(mantella
+add_library(mantella SHARED
   # Configuration
   src/config.cpp
   
@@ -393,7 +415,6 @@ message(STATUS "Noticable variables:")
 message(STATUS "- CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
 message(STATUS "- CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
 message(STATUS "- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
-message(STATUS "- BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message(STATUS "- CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_ARCHIVE_OUTPUT_DIRECTORY = ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 message(STATUS "- CMAKE_RUNTIME_OUTPUT_DIRECTORY = ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
