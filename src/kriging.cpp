@@ -74,15 +74,14 @@ namespace mant {
     arma::mat correlations(parameters.n_cols, parameters.n_cols);
     correlations.diag().zeros();
 
-    // arma::mat polynomials(polynomialSize(parameters.n_rows, highestDegree_), parameters.n_cols);
-    arma::mat polynomials(2, parameters.n_cols);
+    arma::mat polynomials(polynomialSize(parameters.n_rows, highestDegree_), parameters.n_cols);
     for (n = 0; n < parameters.n_cols; ++n) {
       const arma::vec& parameter = parameters.col(n);
       for (arma::uword k = n + 1; k < parameters.n_cols; ++k) {
         correlations(n, k) = correlationFunction_(parameters.col(k) - parameter);
       }
 
-      polynomials.col(n) = polynomialFunction(parameter);
+      polynomials.col(n) = polynomial(parameter, highestDegree_);
     }
     correlations = arma::symmatu(correlations);
 
@@ -105,47 +104,6 @@ namespace mant {
       correlations(n++) = correlationFunction_(sample.first - standardisedParameter);
     }
 
-    return meanObjectiveValue_ + (arma::dot(beta_, polynomialFunction(parameter)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
-  }
-
-
-  /**
-   * TODO: Move this to the documentation area, where users have chance to
-   * find it
-   *
-   * The result depends on the regression model:
-   *
-   * ##constant (highestDegree_ = 0)
-   *
-   *     p: R^n -> R^n,
-   *     p(x1, ..., xn) = (1, ..., 1)
-   *
-   * ##linear (highestDegree_ = 1)
-   *
-   *     p: R^n -> R^{n+1},
-   *     p(x1, ..., xn) = (1, x1, ..., xn)
-   *
-   * ##quadratic (highestDegree_ = 2)
-   *
-   *     p: R^n -> R^{(n+1)(n+2)/2},
-   *     p(x1, ..., xn) = (1, x1, ..., xn, x1*x1, ..., x1*xn, ... xn*x1, x2*x2, ..., x2*xn, ... xn*xn)
-   */
-  arma::vec Kriging::polynomialFunction(
-      const arma::vec& parameter) const {
-    switch(highestDegree_) {
-      case 0:
-        return arma::vec(parameter.n_elem, 1);
-      case 1: {
-        arma::vec result(parameter.n_elem + 1);
-        result(1) = 1;
-        for (int i = 0; i < parameter.n_elem; i++) {
-          result(i + 1) = parameter(i);
-        }
-        return result;
-      }
-      //case 2:
-      default:
-        return arma::vec();
-    }
+    return meanObjectiveValue_ + (arma::dot(beta_, polynomial(parameter, highestDegree_)) + arma::dot(gamma_, correlations)) * standardDeviationObjectiveValue_;
   }
 }

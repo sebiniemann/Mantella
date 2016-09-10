@@ -49,8 +49,5 @@ namespace mant {
     arma::vec gamma_;
 
     bool trained_;
-
-    arma::vec polynomialFunction(
-        const arma::vec&) const;
   };
 }
