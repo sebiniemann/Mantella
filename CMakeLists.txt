@@ -33,8 +33,8 @@ endif()
 if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 endif()
-  
-message(STATUS "") 
+
+message(STATUS "")
 message(STATUS "Building Mantella (version: ${MANTELLA_VERSION}).")
 
 if (NOT CMAKE_BUILD_TYPE)
@@ -47,7 +47,7 @@ endif()
 # FINDING DEPENDENCIES
 # --------------------
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Finding dependencies.")
 
 set(REQUIRED_ARMADILLO_VERSION "7.300.0")
@@ -66,7 +66,7 @@ if (NOT ARMADILLO_FOUND)
     if (ARMA_USE_WRAPPER AND NOT ARMADILLO_LIBRARY)
       message(FATAL_ERROR "Armadillo's runtime library could not be found, undefine/outcomment `ARMA_USE_WRAPPER` inside Armadillo's configuration file, if you want to link directly againt OpenBLAS instead.")
     endif()
-    
+
     message(STATUS "Found Armadillo: ${ARMADILLO_INCLUDE_DIR} (found suitable version ${ARMADILLO_VERSION_STRING}, minimum required is ${REQUIRED_ARMADILLO_VERSION}).")
     find_package(OpenBLAS REQUIRED)
   endif()
@@ -90,7 +90,7 @@ if (SUPPORT_OPENMP)
   # Makes sure that `MAXIMAL_NUMBER_OF_THREADS` contains a sane value.
   if (NOT MAXIMAL_NUMBER_OF_THREADS OR NOT MAXIMAL_NUMBER_OF_THREADS MATCHES "^[1-9][0-9]*$")
     message(STATUS "  - Trying to determine the number of cores.")
-  
+
     include(ProcessorCount)
     ProcessorCount(MAXIMAL_NUMBER_OF_THREADS)
     message(STATUS "    - Found ${MAXIMAL_NUMBER_OF_THREADS} core(s).")
@@ -127,7 +127,7 @@ endif()
 # CONFIGURING LIBRARY BUILD
 # -------------------------
 
-message(STATUS "") 
+message(STATUS "")
 message(STATUS "Configuring library build.")
 
 configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp)
@@ -136,19 +136,19 @@ configure_file(${PROJECT_SOURCE_DIR}/include/mantella_bits/config.hpp.cmake ${PR
 add_library(mantella SHARED
   # Configuration
   src/config.cpp
-  
+
   # Assertion
   src/assert.cpp
 
   # Random number generator
   src/randomNumberGenerator.cpp
-  
+
   # MPI
   src/mpi.cpp
-  
+
   # Armadillo
   src/armadillo.cpp
-  
+
   # Mathematical functions
   src/algebra.cpp
   src/combinatorics.cpp
@@ -156,14 +156,16 @@ add_library(mantella SHARED
   src/numberTheory.cpp
   src/numericalAnalysis.cpp
   src/probability.cpp
-  
+  src/statistics.cpp
+
   # Orbital Mechanics
   src/orbitalMechanics.cpp
-  
+
   # Machine learning functions
+  src/kriging.cpp
   src/samplesAnalysis.cpp
   src/samplesSelection.cpp
-  
+
   # Optimisation problems
   src/optimisationProblem.cpp
   src/optimisationProblem/blackBoxOptimisationBenchmark.cpp
@@ -222,7 +224,7 @@ endif()
 message(STATUS "- Using level 3 code optimisation.")
 target_compile_options(mantella PRIVATE -O3)
 
-target_include_directories(mantella PUBLIC 
+target_include_directories(mantella PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
@@ -243,36 +245,36 @@ endif()
 # ----------------------
 
 if (BUILD_TESTS)
-  message(STATUS "") 
+  message(STATUS "")
   message(STATUS "Configuring unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=Off' to exclude this.")
-    
+
   # Additional requirement
   find_package(Catch REQUIRED) # Catch (header only)
-  
+
   # All paths must start with "test/"
   add_executable(mantellaTests
     test/main.cpp
-    
+
     # Test framework extensions
     test/catchHelper.cpp
     test/testCatchHelper.cpp
-    
+
     # Configurations
     test/testConfig.cpp
-    
+
     # Assertions
     test/testAssert.cpp
 
     # Random number generator
     test/testRandomNumberGenerator.cpp
-    
+
     # MPI
     test/testMpi.cpp
-    
+
     # Armadillo
     test/testArmadillo.cpp
-  
+
     # Mathematical functions
     test/testAlgebra.cpp
     test/testCombinatorics.cpp
@@ -280,17 +282,18 @@ if (BUILD_TESTS)
     test/testNumberTheory.cpp
     test/testNumericalAnalysis.cpp
     test/testProbability.cpp
-    
+
     # Orbital Mechanics
     test/testOrbitalMechanics.cpp
-  
+
     # Orbital Mechanics
     test/testOrbitalMechanics.cpp
-  
+
     # Orbital Mechanics
     test/testOrbitalMechanics.cpp
-  
+
     # Machine learning functions
+    test/testKriging.cpp
     test/testSamplesAnalysis.cpp
     test/testSamplesSelection.cpp
 
@@ -326,7 +329,7 @@ if (BUILD_TESTS)
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine3PRRR.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PRUS.cpp
     test/optimisationProblem/kinematicallyRedundantMachines/testParallelKinematicMachine6PUPS.cpp
-    
+
     # Optimisation algorithms
     test/testOptimisationAlgorithm.cpp
     test/optimisationAlgorithm/testHillClimbing.cpp
@@ -339,16 +342,16 @@ if (BUILD_TESTS)
   )
   set_property(TARGET mantellaTests PROPERTY CXX_STANDARD 14)
   set_property(TARGET mantellaTests PROPERTY CXX_STANDARD_REQUIRED ON)
-  
+
   message(STATUS "- Adding debugging symbols.")
   target_compile_options(mantellaTests PRIVATE -g)
-  
+
   if (CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "- Adding code coverage measurement.")
     target_compile_options(mantella PRIVATE --coverage)
     target_link_libraries(mantella PRIVATE --coverage)
   endif()
-  
+
   message(STATUS "- Displaying compiler warnings (globally).")
   if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(
@@ -365,18 +368,18 @@ if (BUILD_TESTS)
       -Wno-global-constructors
       -Wno-unknown-warning-option)
   endif()
-  
+
   message(STATUS "- Handling warnings as errors (globally).")
   add_compile_options(
     -Wno-padded
     -Wno-unused-parameter
     -Wno-c++98-compat-pedantic
     -Werror)
-  
+
   target_include_directories(mantellaTests PRIVATE ${CATCH_INCLUDE_DIRS})
   target_link_libraries(mantellaTests PUBLIC mantella)
 else()
-  message(STATUS "") 
+  message(STATUS "")
   message(STATUS "Skipping unit tests.")
   message(STATUS "- Use 'cmake ... -DBUILD_TESTS=ON' to add this.")
 endif()
@@ -409,7 +412,7 @@ install(TARGETS mantella
   ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
   LIBRARY DESTINATION ${INSTALL_LIB_DIR}
   RUNTIME DESTINATION ${INSTALL_BIN_DIR})
-  
+
 message(STATUS "")
 message(STATUS "Noticable variables:")
 message(STATUS "- CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
