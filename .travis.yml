@@ -33,13 +33,14 @@ script:
   ### - Unit tests with OpenMP support
   ### - Code coverage
   ### - Installation
+  ### - Matlab/Octave support
   ## Clang
   ### - Unit tests with MPI support
   ### - Code format
-  ### - Include rules
+  ### - Static code analysis
   - | 
     if [ "$CXX" == "g++" ]; then sudo docker exec mantella /bin/bash -c "\
-      cmake -DBUILD_TESTS=ON . && \
+      cmake -DBUILD_TESTS=ON -DBUILD_MEX_FILES=ON . && \
       make -j 4 && \
       ./bin/mantellaTests && \
       make install"; \

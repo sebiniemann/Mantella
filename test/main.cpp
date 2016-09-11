@@ -1,15 +1,20 @@
-// Catch
+// Mantella
 #define CATCH_CONFIG_RUNNER
-#include <catch.hpp>
-#include "catchHelper.hpp"
+#define CATCH_CONFIG_COUNTER
+#include <mantella>
+
+#if !defined(MANTELLA_BUILD_TESTS)
+  #error "`MANTELLA_BUILD_TESTS` must be defined to build its test file."
+#endif
 
 int main(int argc, char** argv) {
-#if defined(SUPPORT_MPI)
+#if defined(MANTELLA_SUPPORT_MPI)
   MPI_Init(&argc, &argv);
 #endif
 
-  // Prints out the seed to reproduce the test later on.
-  std::cout << "Random seed: " << mant::Rng::setRandomSeed() << std::endl;
+  auto seed = mant::random_seed();
+  std::cout << "Seeding random number generators with: " << seed << std::endl;
+  mant::seed_random_number_generator(seed);
 
   try {
     return Catch::Session().run(argc, argv);
@@ -17,7 +22,7 @@ int main(int argc, char** argv) {
     std::cout << exception.what() << std::endl;
   }
 
-#if defined(SUPPORT_MPI)
+#if defined(MANTELLA_SUPPORT_MPI)
   MPI_Finalize();
 #endif
 }

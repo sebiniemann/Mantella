@@ -21,7 +21,6 @@ print_help() {
   echo '-h, --help                                  Shows this help.'
   echo '-f, --format [fix]                          Checks the code formatting rules.'
   echo '                                            Add "fix" to automatically fix formatting errors.'
-  echo '-i, --include                               Checks the include rules.'
   echo '-s, --static                                Performs static code analysis.'
   echo '-a, --all                                   Checks all rules.'
 }
@@ -59,41 +58,6 @@ do_format() {
   done <<< "${FILES}"
   
   if [[ ${FORMAT_ERROR_OCCURED} == 0 ]]; then
-    echo "${GREEN_TEXT_COLOR}Everything is fine.${RESET_TEXT_COLOR}"
-  fi
-  
-  echo "${MAGENTA_TEXT_COLOR}done.${RESET_TEXT_COLOR}"
-}
-
-do_include() {
-  local FILES
-  local NUMBER_OF_FILES
-  local COUNTER
-  
-  INCLUDE_ERROR_OCCURED=0
-  
-  echo "${MAGENTA_TEXT_COLOR}Checking include rules${RESET_TEXT_COLOR}"
-  
-  FILES=$(find src -type f -name \*.cpp)
-  NUMBER_OF_FILES=$(echo "${FILES}" | wc -l)
-  COUNTER=1
-  
-  while read -r FILE; do
-    printf "[%3s%%] %s" "$(( (COUNTER * 100) / NUMBER_OF_FILES ))" "${FILE}"
-    
-    OUTPUT=$(include-what-you-use -std=c++14 -Iinclude "${FILE}" 2>&1)
-    if [[ "${OUTPUT}" =~ 'full include-list for' ]]; then
-      echo " ${RED_TEXT_COLOR}did not pass the include rules.${RESET_TEXT_COLOR} Please run '${GREEN_TEXT_COLOR}include-what-you-use -std=c++14 -Iinclude ${FILE}${RESET_TEXT_COLOR}'."
-      INCLUDE_ERROR_OCCURED=1
-      ANY_ERROR_OCCURED=1
-    else
-      printf "%s" "${REPLACE_LAST_LINE}"
-    fi
-    
-    COUNTER=$((++COUNTER))
-  done <<< "${FILES}"
-  
-  if [[ ${INCLUDE_ERROR_OCCURED} == 0 ]]; then
     echo "${GREEN_TEXT_COLOR}Everything is fine.${RESET_TEXT_COLOR}"
   fi
   
@@ -157,15 +121,11 @@ else
         fi;
         do_format
       ;;
-      -i|--include)
-        do_include
-      ;;
       -s|--static)
         do_static
       ;;
       -a|--all)
         do_format
-        do_include
         do_static
       ;;
       *)

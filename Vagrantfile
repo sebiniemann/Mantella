@@ -26,8 +26,5 @@ Vagrant.configure(2) do |config|
     cd /vagrant
     sudo docker build -t ubuntu/mantella:latest .
     sudo docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
-    
-    ## Adds useful applications to the running Docker container
-    sudo docker exec mantella apt-get install -y vim
   SHELL
 end

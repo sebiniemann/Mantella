@@ -72,7 +72,6 @@ find_package_handle_standard_args(Octave
   VERSION_VAR OCTAVE_VERSION_STRING)
 
 mark_as_advanced (
-  OCTAVE_FOUND
   OCTAVE_CONFIG
   OCTAVE_MEX_FILES_DIR
   OCTAVE_VERSION_STRING

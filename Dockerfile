@@ -2,6 +2,9 @@ FROM ubuntu:16.04
 
 MAINTAINER Sebastian Niemann <niemann@sra.uni-hannover.de>
 
+ARG CI
+ENV CI ${CI:}
+
 RUN apt-get update
 
 # Installs compilers
@@ -33,31 +36,26 @@ RUN apt-get install -y clang-3.8 && \
     
 # Installs dependencies
 # - CMake
-# - Armadillo C++ (and fixes issues with IWYU (suggesting for example <armadillo_bits/Base_bones.hpp> instead of <armadillo>)
-RUN apt-get install -y cmake
-RUN apt-get install -y wget xz-utils libblas-dev liblapack-dev libopenblas-dev && \
-    wget -O armadillo.tar.xz http://downloads.sourceforge.net/arma/armadillo-7.300.0.tar.xz && \
-    mkdir armadillo && \
-    tar -xJf armadillo.tar.xz -C ./armadillo --strip-components=1 && \
-    cd armadillo && \
-    cmake . && \
-    make -j 4 && \
-    make install && \
-    find /usr/include/armadillo_bits -name *.hpp -exec sed -i -e '1i\/\/ IWYU pragma\: private\, include \<armadillo\>' {} ';' && \
-    cd .. && \
-    rm -Rf armadillo.tar.xz armadillo/ && \
-    apt-get remove -y --purge wget xz-utils
+# - CBLAS
+# - LAPACKE
+RUN apt-get install -y cmake libblas-dev liblapacke-dev
 
 # Installs optional dependencies
 # - MPI (including missing default include path)
 # - Octave
 RUN apt-get install -y libmpich-dev
 ENV CPATH "$CPATH:/usr/include/mpich/"
-RUN apt-get install -y liboctave-dev less
+RUN apt-get install -y liboctave-dev
 
 # Installs testing libraries
 # - Catch
-RUN apt-get install -y catch
+RUN apt-get install -y wget && \
+    wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
+    mkdir catch && \
+    tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
+    cp catch/single_include/catch.hpp /usr/include/ && \
+    rm -Rf catch.tar.gz catch/ && \
+    apt-get remove -y --purge wget
 
 # Installs code analyser
 # - Clang-format
@@ -67,25 +65,30 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --remove clang-format /usr/bin/clang-format && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
-RUN apt-get install -y clang-3.7 iwyu
 RUN apt-get install -y clang-tidy-3.8 && \
     update-alternatives --remove clang-tidy /usr/bin/clang-tidy && \
     update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-3.8 100 && \
     update-alternatives --set clang-tidy /usr/bin/clang-tidy-3.8
 
-# Installs benchmarker
-# - Google microbenchmark library
-RUN apt-get install -y wget && \
-    wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
-    mkdir benchmark && \
-    tar -xzf benchmark.tar.gz -C ./benchmark --strip-components=1 && \
-    cd benchmark  && \
-    cmake -DCMAKE_BUILD_TYPE=Release . && \
-    make benchmark && \
-    make install && \
-    cd .. && \
-    rm -Rf benchmark.tar.gz benchmark/ && \
-    apt-get remove -y --purge wget
+# Installs helpful development tools (skipped on CI servers)
+# - Vim
+# - htop
+# - less
+# - Google micro benchmark
+RUN if [ "$CI" ]; then \
+      apt-get install -y vim htop less && \
+      apt-get install -y wget && \
+      wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
+      mkdir benchmark && \
+      tar -xzf benchmark.tar.gz -C ./benchmark --strip-components=1 && \
+      cd benchmark  && \
+      cmake -DCMAKE_BUILD_TYPE=Release . && \
+      make benchmark && \
+      make install && \
+      cd .. && \
+      rm -Rf benchmark.tar.gz benchmark/ && \
+      apt-get remove -y --purge wget
+    fi
     
 # Adds alternative library path
 ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib"
