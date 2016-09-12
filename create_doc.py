@@ -72,5 +72,5 @@ for path, subdirs, files in os.walk("./include/mantella_bits/"):
 				
 			# Save .rst file		
 			rstfile.close()
-			print "Successful generate .rst file for: " + file
+			print "Successfully generated .rst file for: " + file
 			exit()
