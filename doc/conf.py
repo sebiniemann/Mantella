@@ -103,7 +103,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
@@ -120,7 +120,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = '_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -128,14 +128,8 @@ html_theme = 'sphinx_rtd_theme'
 #
 # html_theme_options = {}
 
-html_context = {
-    'css_files': [
-        '_static/css/theme_overrides.css',  # overrides RTD theme
-        ],
-    }
-
 # Add any paths that contain custom themes here, relative to this directory.
-# html_theme_path = []
+html_theme_path = ['.']
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
@@ -157,7 +151,7 @@ html_context = {
 #
 # html_favicon = None
 
-# Add any paths that contain custom static files (such as style sheets) here,
+# Add any paths that contain custom static files (such as sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['assets']
@@ -350,7 +344,7 @@ epub_copyright = copyright
 # The basename for the epub file. It defaults to the project name.
 # epub_basename = project
 
-# The HTML theme for the epub output. Since the default themes are not
+# The HTMLx for the epub output. Since the default themes are not
 # optimized for small screen space, using the same theme for HTML and epub
 # output is usually not wise. This defaults to 'epub', a theme designed to save
 # visual space.
