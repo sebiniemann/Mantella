@@ -3,7 +3,7 @@ import os
 import subprocess
 
 # iterate over all files at include dir './include/mantella_bits/*'
-for path, subdirs, files in os.walk("./include/mantella_bits/"):
+for path, subdirs, files in os.walk("./include/"):
 	for file in files:
 		if file.endswith(".hpp"):
 	
@@ -13,14 +13,17 @@ for path, subdirs, files in os.walk("./include/mantella_bits/"):
 			# Pase all comments from header file
 			comments = "".join(re.findall(re.compile(ur'[ ]*\/\*\*(.+?)(?=\*\/)', re.DOTALL), headerfile.read()))
 			headerfile.close()
-			
 			# Nothing todo when no comment in file
 			if (comments == ""): 
 				print "No comments in file: " + file
 				continue
+				
+			# Create folder there are not exists
+			if not os.path.exists(path.replace("./include/mantella_bits/", "./doc/", 1)):
+				os.makedirs(path.replace("./include/mantella_bits/", "./doc/", 1))
 			
-			# Open .rst file for header file and added headline
-			rstfile = open("./doc/" + file.split(".")[0] + ".rst", 'w')
+			# Open .rst file for header file and added headline	
+			rstfile = open(path.replace("./include/mantella_bits/", "./doc/", 1) + file.split(".")[0] + ".rst", 'w')
 			rstfile.write(file.split(".")[0] + "\n" + "="*len(file.split(".")[0]) + "\n")
 			
 			# Split comments
@@ -50,7 +53,9 @@ for path, subdirs, files in os.walk("./include/mantella_bits/"):
 					if (output.returncode != 0):
 						print "Failure during compilation: " + file +"\nWith exeption: \n\n" + output.stderr.read()
 						rstfile.close()
-						os.system("rm ./doc/code.cpp ./doc/"+ file.split(".")[0] + ".rst")
+						os.system("rm ./doc/code.cpp "  + path.replace("./include/mantella_bits/", "./doc/", 1) + file.split(".")[0] + ".rst")
+						if not os.listdir(path.replace("./include/mantella_bits/", "./doc/", 1)):
+							os.removedirs(path.replace("./include/mantella_bits/", "./doc/", 1))
 						exit()
 					
 					# Execute generate code file	
@@ -59,7 +64,9 @@ for path, subdirs, files in os.walk("./include/mantella_bits/"):
 					if (output.returncode != 0):
 						print "Failure during execution: " + file +"\nWith exeption: \n\n" + output.stderr.read()
 						rstfile.close()
-						os.system("rm ./doc/code.cpp ./doc/executecode ./doc/"+ file.split(".")[0] + ".rst")
+						os.system("rm ./doc/code.cpp ./doc/executecode " +  path.replace("./include/mantella_bits/", "./doc/", 1) + file.split(".")[0] + ".rst")
+						if not os.listdir(path.replace("./include/mantella_bits/", "./doc/", 1)):
+							os.removedirs(path.replace("./include/mantella_bits/", "./doc/", 1))
 						exit()
 					
 					# Remove temp files
