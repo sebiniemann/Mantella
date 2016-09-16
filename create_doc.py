@@ -34,7 +34,7 @@ for path, subdirs, files in os.walk("./include/"):
 				
 				if (selection[1] != ""): #selection[1] = code block
 					if "c++" in selection[3]: #selection[3] = codestyle
-						print "jes"
+					
 						# Create .cpp file in include
 						if (selection[4] != ""): #selection[4] = code identifier
 							cppfile = open("./doc/examples/" + selection[4]+".cpp",'w')
