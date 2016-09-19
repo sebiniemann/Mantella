@@ -27,7 +27,7 @@ for path, subdirs, files in os.walk("./include/"):
 			rstfile.write(file.split(".")[0] + "\n" + "="*len(file.split(".")[0]) + "\n")
 			
 			# Split comments
-			topic = re.findall(re.compile(ur'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: (\w+)|).*?(?=\n[ ]+[^:])(.*?)(?=(?:\n\3[^ ]|$)))', re.DOTALL), comments)  
+			topic = re.findall(re.compile(ur'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: (\w+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n)+)|)', re.DOTALL), comments)  
 			
 			for selection in topic:
 				rstfile.write(selection[0]) #selection[0] = before code block
