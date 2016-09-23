@@ -59,11 +59,6 @@
 // LAPACK
 #include <lapacke.h>
 
-// OpenMP
-#if defined(MANTELLA_SUPPORT_OPENMP)
-#include <omp.h> // IWYU pragma: keep
-#endif
-
 // MPI
 #if defined(MANTELLA_SUPPORT_MPI)
 #include <mpi.h> // IWYU pragma: keep
