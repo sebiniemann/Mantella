@@ -1,5 +1,8 @@
 #pragma once
 
+/**
+.. cpp:function:: template <T, N> qr_decomposition(matrix)
+*/
 template <typename T, std::size_t N>
 std::pair<std::array<T, N*N>, std::array<T, N*N>> qr_decomposition(
     const std::array<T, N*N>& matrix);
@@ -28,9 +31,9 @@ std::pair<std::array<T, N*N>, std::array<T, N*N>> qr_decomposition(
   int info;
 
   if (std::is_same<T, float>::value) {
-    LAPACKE_sgeqrf(N, N, q.data(), N, tau.data(), work.data(), N, &info);
+    sgeqrf_(N, N, q.data(), N, tau.data(), work.data(), N, &info);
   } else {
-    LAPACKE_dgeqrf_(N, N, q.data(), N, tau.data(), work.data(), N, &info);
+    dgeqrf_(N, N, q.data(), N, tau.data(), work.data(), N, &info);
   }
   
   if (info != 0) {
@@ -51,9 +54,9 @@ std::pair<std::array<T, N*N>, std::array<T, N*N>> qr_decomposition(
   
   // Computes the orthogonal matrix *R*.
   if (std::is_same<T, float>::value) {
-    LAPACKE_sorgqr(N, N, N, q.data(), N, tau.data(), work.data(), N, &info);
+    sorgqr_(N, N, N, q.data(), N, tau.data(), work.data(), N, &info);
   } else {
-    LAPACKE_dorgqr(N, N, N, q.data(), N, tau.data(), work.data(), N, &info);
+    dorgqr_(N, N, N, q.data(), N, tau.data(), work.data(), N, &info);
   }
 
   if (info != 0) {

@@ -1,5 +1,8 @@
 #pragma once
 
+/**
+
+*/
 template <typename T, std::size_t N>
 std::array<T, N*N> random_rotation_matrix();
 

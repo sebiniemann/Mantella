@@ -15,14 +15,14 @@ declare -i FIX_FORMATTING=0
 print_help() {
   echo 'Performs several code checks.'
   echo ' '
-  echo './.code.sh options...'
+  echo "./$(basename "$0") options..."
   echo ' '
   echo 'options:'
-  echo '-h, --help                                  Shows this help.'
-  echo '-f, --format [fix]                          Checks the code formatting rules.'
-  echo '                                            Add "fix" to automatically fix formatting errors.'
-  echo '-s, --static                                Performs static code analysis.'
-  echo '-a, --all                                   Checks all rules.'
+  echo '-h, --help                  Shows this help.'
+  echo '-f, --format [fix]          Checks the code formatting rules.'
+  echo '                            Add "fix" to automatically fix formatting errors.'
+  echo '-s, --static                Performs static code analysis.'
+  echo '-a, --all                   Checks all rules (same as -f -s).'
 }
 
 do_format() {
