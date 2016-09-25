@@ -25,6 +25,10 @@
   background-color: #555;
 }
 
+.wy-menu-vertical li span.toctree-expand {
+  color: inherit;
+}
+
 .wy-side-nav-search > div.version::before { 
   content: "Version ";
 }

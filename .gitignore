@@ -59,4 +59,11 @@ nbproject/
 *.out
 *.app
 
+## Mac Files
 *.DS_Store
+
+## Sphinx
+*.doctree
+*.buildinfo
+*.pickle
+*.nojekyll

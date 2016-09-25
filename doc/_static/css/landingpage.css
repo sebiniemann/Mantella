@@ -1199,7 +1199,7 @@ main {
 }
 
 .landing-page-first {
-  background-image: linear-gradient(rgba(58, 58, 60, 0.9), rgba(58, 58, 60, 0.9)), url(../../_assets/images/background_1.jpg);
+  background-image: linear-gradient(rgba(58, 58, 60, 0.9), rgba(58, 58, 60, 0.9)), url(../images/background_1.jpg);
   color: white;
 }
 
@@ -1223,7 +1223,7 @@ main {
 }
 
 .landing-page-third {
-  background-image: linear-gradient(rgba(56, 180, 159, 0.85), rgba(56, 180, 159, 0.85)), url(../../_assets/images/background_2.jpg);
+  background-image: linear-gradient(rgba(56, 180, 159, 0.85), rgba(56, 180, 159, 0.85)), url(../images/background_2.jpg);
 }
 
 .landing-page-third small {
@@ -1235,7 +1235,7 @@ main {
 }
 
 .landing-page-fifth {
-  background-image: linear-gradient(rgba(219, 78, 78, 0.85), rgba(219, 78, 78, 0.85)), url(../../_assets/images/background_3.jpg);
+  background-image: linear-gradient(rgba(219, 78, 78, 0.85), rgba(219, 78, 78, 0.85)), url(../images/background_3.jpg);
 }
 
 .landing-page-fifth small {
