@@ -1,23 +1,39 @@
 import re
 import os
+import sys
 import subprocess
 
-#TODO Add colour to console outputs
-#TODO Add progress indication
-#TODO Overwrite each line if no error occurred
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+error = False
+verbose = False
+if len(sys.argv) > 1 :
+	if sys.argv[1] == '-v': verbose = True
+
 #TODO Summing up the above: The output should be similar to `.code.sh -f`
-for path, subdirs, files in os.walk('./include/mantella_bits/'):
+for path, subdirs, files in os.walk('./include/'):
+  p = int(100/len(files))
   for file in files:
     if file.endswith('.hpp'):
-      print file
+      print bcolors.OKBLUE + '[%3d%%] '% (p * (files.index(file)+1)) + bcolors.HEADER + path.split('/')[-1] + ' ' + bcolors.ENDC + file,
+      sys.stdout.flush()
 
       headerfile = open(os.path.join(path, file), 'r')
       comments = ''.join(re.findall(re.compile(ur'[ ]*\/\*\*(.+?)(?=\*\/)', re.DOTALL), headerfile.read()))
       headerfile.close()
-
+      
       # Continues with the next file if no comments where found
       if not comments: 
-        print '  No comments found'
+        print bcolors.WARNING + '  No comments found' + bcolors.ENDC
+        error = True
         continue
 
       docpath = path.replace('./include/mantella_bits/', './doc/', 1)
@@ -43,21 +59,29 @@ for path, subdirs, files in os.walk('./include/mantella_bits/'):
             output = subprocess.Popen(['c++', '-std=c++14', '-march=native', '-O3', './doc/tmp/' + example.name, '-lblas', '-llapack', '-o', './doc/tmp/example'], stderr = subprocess.PIPE)
             output.wait()
             if (output.returncode != 0):
-              print '  Failure during compilation: ' + output.stderr.read()
+              print bcolors.FAIL + '  Failure during compilation: \n' + bcolors.ENDC
+              if verbose : print output.stderr.read()
+              error = True
               continue
 
             # Execute generate code file  
             output = subprocess.Popen(['./doc/tmp/example'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if (output.returncode != 0):
-              print '  Failure during execution: ' + output.stderr.read()
+              print bcolors.FAIL + '  Failure during execution: \n' + bcolors.ENDC 
+              if verbose : print output.stderr.read()
+              error = True
               continue
 
             # Write result from code file in .rst
             docfile.write('\n' + part[2] + '.. code-block:: none\n')
             for line in output.stdout.read().split('\n'):
               docfile.write('\n' + part[2] + '  ' + line)
-
+              
       docfile.close()
+      print '\x1b[2K \r',
+      sys.stdout.flush()
 
-#TODO Remove the whole `tmp` folder after everything is done (instead of removing single files one by one)
+if os.path.exists('./doc/tmp'):  os.removedirs('./doc/tmp')
+if error: sys.exit(os.EX_SOFTWARE)
+else: sys.exit(os.EX_OK)
