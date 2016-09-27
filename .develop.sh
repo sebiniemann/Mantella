@@ -33,7 +33,7 @@ print_help() {
 }
 
 finish_up() {
-  if (( ${AN_ERROR_OCCURED} == 0 )); then
+  if (( AN_ERROR_OCCURED == 0 )); then
     echo "${GREEN_TEXT_COLOR}Everything is fine.${RESET_TEXT_COLOR}"
   else
     echo "${RED_TEXT_COLOR}An error occurred (see above).${RESET_TEXT_COLOR}"
@@ -45,8 +45,10 @@ finish_up() {
 do_format() {
   echo "${MAGENTA_TEXT_COLOR}Checking format rules${RESET_TEXT_COLOR}"
   
-  local FILES=$(find ./include ./test -not \( -path ./test/build -prune \) -type f)
-  local NUMBER_OF_FILES=$(echo "${FILES}" | wc -l)
+  local FILES
+  FILES=$(find ./include ./test -not \( -path ./test/build -prune \) -type f)
+  local NUMBER_OF_FILES
+  NUMBER_OF_FILES=$(echo "${FILES}" | wc -l)
   local COUNTER=1
   
   while read -r FILE; do
@@ -77,15 +79,17 @@ do_install() {
     mkdir "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits/"
   fi
   
+  local FILES
+  FILES=$(find ./include/mantella_bits -type f)
   local DESTINATION=${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits
-  for FILE in $(find ./include/mantella_bits/ -type f); do
-    echo "${FILE} -> ${DESTINATION}/${FILE##*/}"
-    cp "$FILE" "${DESTINATION}/"
-    AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
-  done
+  while read -r FILE; do
+    echo "${FILE} -> ${DESTINATION}/$(basename ${FILE})"
+    mkdir -p "$(dirname ${FILE})"
+    if ! cp "$FILE" "${DESTINATION}/"; then AN_ERROR_OCCURED=$?; fi
+  done <<< "${FILES}"
+  
   echo "./include/mantella -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
-  cp "./include/mantella" "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
-  AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+  if ! cp "./include/mantella" "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"; then AN_ERROR_OCCURED=$?; fi
   
   finish_up
 }
@@ -93,24 +97,20 @@ do_install() {
 do_test() {
   echo "${MAGENTA_TEXT_COLOR}Building and running tests${RESET_TEXT_COLOR}"
   
-  cd ./test
+  cd ./test || exit 1
   if [ ! -d "./build" ]; then
     mkdir build
   fi
-  cd ./build
+  cd ./build || exit 1
   
-  cmake ..
-  AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+  if ! cmake ..; then AN_ERROR_OCCURED=$?; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    make clean
-    make tests
-    AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+    if ! make clean tests; then AN_ERROR_OCCURED=$?; fi
   fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    ./tests
-    AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+    if ! ./tests; then AN_ERROR_OCCURED=$?; fi
   fi
   
   finish_up
@@ -119,14 +119,12 @@ do_test() {
 do_doc() {
   echo "${MAGENTA_TEXT_COLOR}Building documentation${RESET_TEXT_COLOR}"
   
-  cd ./doc
+  cd ./doc || exit 1
   
-  python ./.prepare_doc.py
-  AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=$?; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    sphinx-build -a . ./_html
-    AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=$?; fi
   fi
   
   finish_up
@@ -155,6 +153,9 @@ else
         do_format
       ;;
       -i|--install)
+        if [[ ! "$2" =~ ^- ]]; then
+          INSTALL_DIR=$2; shift
+        fi;
         do_install
       ;;
       -t|--test)
@@ -179,6 +180,6 @@ else
   done
 fi
 
-if (( ${AN_ERROR_OCCURED} != 0 )); then
+if (( AN_ERROR_OCCURED != 0 )); then
   exit 1
 fi

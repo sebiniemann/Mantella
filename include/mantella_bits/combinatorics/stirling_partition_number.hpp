@@ -81,3 +81,13 @@ constexpr std::size_t stirling_partition_number(
   // Fixes rounding errors due to the limited precision.
   return static_cast<std::size_t>(std::round(stirling_partition_number));
 }
+
+//
+// Unit tests
+//
+
+#if defined(MANTELLA_BUILD_TESTS)
+TEST_CASE("stirling_partition_number", "[combinatorics][stirling_partition_number]") {
+  
+}
+#endif

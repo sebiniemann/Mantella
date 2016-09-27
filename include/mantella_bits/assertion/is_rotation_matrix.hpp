@@ -59,12 +59,35 @@ bool is_rotation_matrix(
   } else {
     std::array<T, N*N> symmetric_matrix;
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, N, N, N, 1.0, matrix.data(), N, matrix.data(), N, 0.0, symmetric_matrix.data(), N);
-    for () {
-      for () {
-        
+    for (decltype(N) column_index = 0; column_index < N; ++column_index) {
+        if (std::abs(matrix[column_index * (N + 1)] - 1) > std::pow(10.0, -std::numeric_limits<T>::digits10 - 3)) {
+          return false; 
+        }
+      for (decltype(N) row_index = column_index + 1; column_index < N; ++column_index) {
+        if (std::abs(matrix[column_index * N + row_index]) > std::pow(10.0, -std::numeric_limits<T>::digits10 - 3)) {
+          return false; 
+        }
       }
     }
   }
 
   return true;
 }
+
+//
+// Unit tests
+//
+
+#if defined(MANTELLA_BUILD_TESTS)
+TEST_CASE("is_rotation_matrix", "[assertion][is_rotation_matrix]") {
+  CHECK((mant::is_rotation_matrix<double, 0>({}) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 0.0}, {0.0, std::numeric_limits<double>::quiet_NaN()}})) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 0.0}, {0.0, std::numeric_limits<double>::infinity()}})) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({1.0})) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 1.0}, {1.0, 0.0}, {0.0, 0.0}})) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 0.0}, {0.0, -2.0}})) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 0.0}, {0.0, -2.0}})) == false));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 0.0, 0.0, 0.0}, {0.0, 0.0, 0.0, -1.0}, {0.0, 1.0, 0.0, 0.0}, {0.0, 0.0, -1.0, 0.0}})) == true));
+  CHECK((mant::is_rotation_matrix(arma::mat({{1.0, 0.0, 0.0, 0.0}, {0.0, 0.0, 0.0, 1.0}, {0.0, 1.0, 0.0, 0.0}, {0.0, 0.0, -1.0, 0.0}})) == true));
+}
+#endif

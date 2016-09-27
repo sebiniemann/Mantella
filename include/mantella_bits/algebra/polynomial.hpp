@@ -81,7 +81,7 @@ polynomials
     }
 */
 template <typename T, std::size_t number_of_elements, std::size_t largest_degree>
-constexpr std::array<T, number_of_coefficients<number_of_elements, largest_degree>()> polynomial(
+constexpr std::array<T, number_of_coefficients(number_of_elements, largest_degree)> polynomial(
     const std::array<T, number_of_elements>& parameter);
 
 //
@@ -89,9 +89,9 @@ constexpr std::array<T, number_of_coefficients<number_of_elements, largest_degre
 //
 
 template <typename T, std::size_t number_of_elements, std::size_t largest_degree>
-constexpr std::array<T, number_of_coefficients<number_of_elements, largest_degree>()> polynomial(
+constexpr std::array<T, number_of_coefficients(number_of_elements, largest_degree)> polynomial(
     const std::array<T, number_of_elements>& parameter) {
-  std::array<T, number_of_coefficients<number_of_elements, largest_degree>()> polynomial;
+  std::array<T, number_of_coefficients(number_of_elements, largest_degree)> polynomial;
   
   if (polynomial.empty()) {
     return polynomial;
@@ -149,7 +149,7 @@ constexpr std::array<T, number_of_coefficients<number_of_elements, largest_degre
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE("polynomial", "[polynomial]") {
+TEST_CASE("polynomial", "[algebra][polynomial]") {
   auto test = mant::polynomial<double, 2, 1>({-2.0, 3.0});
   std::copy(test.cbegin(), test.cend(), std::ostream_iterator<double>(std::cout, " "));
   CHECK((mant::polynomial<double, 0, 1>({}) == std::array<double, 1>({1.0})));

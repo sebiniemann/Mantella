@@ -110,7 +110,7 @@ constexpr std::size_t number_of_coefficients(
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-  TEST_CASE("number_of_coefficients", "[number_of_coefficients]") {
+  TEST_CASE("number_of_coefficients", "[algebra][number_of_coefficients]") {
     CHECK((number_of_coefficients<0, 0>() == 1));
     CHECK((number_of_coefficients<2, 0>() == 1));
     CHECK((number_of_coefficients<0, 2>() == 1));
