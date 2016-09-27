@@ -84,7 +84,7 @@ typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_t;
 
 // Assertions
 #include "mantella0_bits/assertion/is_permutation_vector.hpp"
-// #include "mantella0_bits/assertion/is_rotation_matrix.hpp"
+#include "mantella0_bits/assertion/is_rotation_matrix.hpp"
 
 // Mathematical functions
 //// Combinatorics

@@ -25,7 +25,7 @@ print_help() {
   echo '-f, --format [fix]          Checks the code formatting rules.'
   echo '                            Add "fix" to automatically fix formatting errors.'
   echo '-i, --install [dir]         Installs the library.'
-  echo '                            Set "dir" to specify the installation directory (default is "${INSTALL_DIR}").'
+  echo "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
   echo '-t, --test [openmp] [mpi]   Builds and runs unit tests.'
   echo '                            Add "openmp" to use OpenMP within tests.'
   echo '                            Add "mpi" to use MPI within tests.'
@@ -45,7 +45,7 @@ finish_up() {
 do_format() {
   echo "${MAGENTA_TEXT_COLOR}Checking format rules${RESET_TEXT_COLOR}"
   
-  local FILES=$(find include test -not \( -path test/build -prune \) -type f)
+  local FILES=$(find ./include ./test -not \( -path ./test/build -prune \) -type f)
   local NUMBER_OF_FILES=$(echo "${FILES}" | wc -l)
   local COUNTER=1
   
@@ -77,9 +77,14 @@ do_install() {
     mkdir "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits/"
   fi
   
-  cp --verbose -R include/mantella_bits/* "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits/"
-  AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
-  cp --verbose include/mantella "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
+  local DESTINATION=${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits
+  for FILE in $(find ./include/mantella_bits/ -type f); do
+    echo "${FILE} -> ${DESTINATION}/${FILE##*/}"
+    cp "$FILE" "${DESTINATION}/"
+    AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
+  done
+  echo "./include/mantella -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
+  cp "./include/mantella" "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
   AN_ERROR_OCCURED=$([ $? == 0 ] && echo "${AN_ERROR_OCCURED}" || echo "$?")
   
   finish_up

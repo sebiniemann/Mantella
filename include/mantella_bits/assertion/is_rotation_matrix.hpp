@@ -56,18 +56,13 @@ bool is_rotation_matrix(
   if (N < 2) {
     //  A rotation matrix must be have at least 2 dimensions, ...
     return false;
-  } else if (!rotationCandidate.is_finite()) {
-    //  ... be finite, ...
-    return false;
   } else {
-    arma::mat inverse;
-    // Uses the Moore-Penrose pseudo-inverse instead of `arma::inv(...)`, as the matrix might not be invertible.
-    if (!arma::pinv(inverse, rotationCandidate)) {
-      // ... invertible and ...
-      return false;
-    } else if (!arma::approx_equal(inverse.t(), rotationCandidate, "absdiff", ::mant::machinePrecision)) {
-      // ... its transpose must be equal to its inverse.
-      return false;
+    std::array<T, N*N> symmetric_matrix;
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, N, N, N, 1.0, matrix.data(), N, matrix.data(), N, 0.0, symmetric_matrix.data(), N);
+    for () {
+      for () {
+        
+      }
     }
   }
 

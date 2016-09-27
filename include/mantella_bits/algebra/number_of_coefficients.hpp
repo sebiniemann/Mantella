@@ -60,15 +60,19 @@ number_of_coefficients
       return 0;
     }
 */
-template <std::size_t number_of_elements, std::size_t largest_degree>
-constexpr std::size_t number_of_coefficients();
+template <typename T1, typename T2>
+constexpr std::size_t number_of_coefficients(
+    const T1 number_of_elements,
+    const T2 largest_degree);
 
 //
 // Implementation
 //
 
-template <std::size_t number_of_elements, std::size_t largest_degree>
-constexpr std::size_t number_of_coefficients() {
+template <typename T1, typename T2>
+constexpr std::size_t number_of_coefficients(
+    const T1 number_of_elements,
+    const T2 largest_degree) {
   if (number_of_elements == 0 || largest_degree == 0) {
     return 1;
   }
@@ -83,7 +87,7 @@ constexpr std::size_t number_of_coefficients() {
   std::size_t polynomial_size = number_of_elements + 1;
   
   // Sums up the number of parameter combinations for each degree > 0.
-  for (decltype(largest_degree) degree = 2; degree <= largest_degree; ++degree) {
+  for (T2 degree = 2; degree <= largest_degree; ++degree) {
     const auto number_of_combinations = n_choose_k(number_of_elements + degree - 1, degree);
     // Checks if the number of combinations overflowed.
     if (number_of_combinations == 0) {
