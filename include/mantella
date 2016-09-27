@@ -25,12 +25,11 @@
 //
 // Configuration
 //
-// The maximal number of threads to be used by Mantella.
-#if !defined(MANTELLA_MAXIMAL_NUMBER_OF_THREADS)
-  #define MANTELLA_MAXIMAL_NUMBER_OF_THREADS 1
+#if !defined(MANTELLA_NUMBER_OF_THREADS)
+  #define MANTELLA_NUMBER_OF_THREADS 1
 #endif
 
-// The random number generator engine can manually be changed by defining `MANTELLA_RANDOM_NUMBER_GENERATOR` prior to including Mantella the first time.
+// The random number generator engine to be used by Mantella
 #if !defined(MANTELLA_RANDOM_NUMBER_GENERATOR)
   #define MANTELLA_RANDOM_NUMBER_GENERATOR std::mt19937_64
 #endif
@@ -59,6 +58,11 @@
 // LAPACK
 #include <lapacke.h>
 
+// OpenMP
+#if defined(MANTELLA_SUPPORT_OPENMP)
+#include <omp.h> // IWYU pragma: keep
+#endif
+
 // MPI
 #if defined(MANTELLA_SUPPORT_MPI)
 #include <mpi.h> // IWYU pragma: keep
@@ -75,25 +79,23 @@ namespace mant {
   namespace vMANTELLA_VERSION_MAJOR {
 // Random number generator
 typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_t;
-#include "mantella0_bits/random_number_generator.hpp"
+#include "mantella0_bits/random_number_generator/random_number_generators.hpp"
+#include "mantella0_bits/random_number_generator/seed.hpp"
 
 // Assertions
-// #include "mantella0_bits/assertion/is_permutation_vector.hpp"
+#include "mantella0_bits/assertion/is_permutation_vector.hpp"
 // #include "mantella0_bits/assertion/is_rotation_matrix.hpp"
 
 // Mathematical functions
-//// Algebra
-// #include "mantella0_bits/algebra/polynomial_size.hpp"
-// #include "mantella0_bits/algebra/polynomial.hpp"
 //// Combinatorics
-// #include "mantella0_bits/combinatorics/factorial.hpp"
-// #include "mantella0_bits/combinatorics/n_choose_k.hpp"
-// #include "mantella0_bits/combinatorics/second_stirling_number.hpp"
-// #include "mantella0_bits/combinatorics/multicombinations.hpp"
-// #include "mantella0_bits/combinatorics/two_sets_partitions.hpp"
+#include "mantella0_bits/combinatorics/factorial.hpp"
+#include "mantella0_bits/combinatorics/n_choose_k.hpp"
+#include "mantella0_bits/combinatorics/stirling_partition_number.hpp"
+//// Algebra
+#include "mantella0_bits/algebra/number_of_coefficients.hpp"
+#include "mantella0_bits/algebra/polynomial.hpp"
 //// Linear algebra
 // #include "mantella0_bits/linear_algebra/qr_decomposition.hpp"
-//// Number theory
 //// Probability
 // #include "mantella0_bits/probability/random_permutation_vector.hpp"
 // #include "mantella0_bits/probability/random_rotation_matrix.hpp"

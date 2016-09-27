@@ -2,11 +2,11 @@
 Optimisation Problem
 ====================
 
-.. cpp:class:: template <T, N> optimisation_problem_t
+.. cpp:class:: template <T, N> optimisation_problem
 
   .. versionadded:: 1.x
 
-  The :cpp:class:`optimisation_problem_t` struct is the base of every `optimisation problem <https://en.wikipedia.org/wiki/Optimization_problem>`_ and stores
+  The :cpp:class:`optimisation_problem` struct is the base of every `optimisation problem <https://en.wikipedia.org/wiki/Optimization_problem>`_ and stores
 
   * a set of objective functions (:cpp:member:`objective_functions`),
   * the acceptable lower (:cpp:member:`lower_bounds`) and upper bounds (:cpp:member:`upper_bounds`)
@@ -23,7 +23,7 @@ Optimisation Problem
     
     int main() {
       constexpr std::size_t number_of_dimensions = 2;
-      mant::optimisation_problem_t<double, number_of_dimensions> optimisation_problem;
+      mant::optimisation_problem<double, number_of_dimensions> optimisation_problem;
       optimisation_problem.objective_functions = {{
         [](
             const auto begin_parameter,
@@ -73,7 +73,7 @@ Optimisation Problem
   
   .. note::
 
-    If you want to extend this struct, make sure to call its constructor :cpp:func:`optimisation_problem_t()`, ensuring that all attributes are set to their default value. Otherwise you should at least initialise the variables handling the parameter and objective value adjustments, to avoid funny results when calling :cpp:func:`evaluate`.
+    If you want to extend this struct, make sure to call its constructor :cpp:func:`optimisation_problem()`, ensuring that all attributes are set to their default value. Otherwise you should at least initialise the variables handling the parameter and objective value adjustments, to avoid funny results when calling :cpp:func:`evaluate`.
    
   .. cpp:type:: std::function<T(begin_parameter, end_parameter)> objective_function_t
      
@@ -160,7 +160,7 @@ Optimisation Problem
     
     The attribute it set to ``0.0`` as default.
 
-  .. cpp:function:: constexpr optimisation_problem_t() noexcept
+  .. cpp:function:: constexpr optimisation_problem() noexcept
 
     .. versionadded:: 1.x
 

@@ -4,22 +4,22 @@
 number_of_coefficients
 ======================
 
-.. cpp:function:: template <N1, N2> constexpr number_of_coefficients()
+.. cpp:function:: template <number_of_elements, largest_degree> constexpr number_of_coefficients()
 
   .. versionadded:: 1.x
   
   **Template parameters**
    
-    * **N1** (``std::size_t``) - A number of indeterminates.
-    * **N2** (``std::size_t``) - A largest degree.
+    * **number_of_elements** (``std::size_t``) - A number of indeterminates.
+    * **largest_degree** (``std::size_t``) - A largest degree.
 
   **Returns**
    
     ``std::size_t`` - The number of coefficients.
   
-  Calculates the number of coefficients in a polynomial with ``N1`` indeterminates and largest degree ``N2``.
+  Calculates the number of coefficients in a polynomial with ``number_of_elements`` indeterminates and largest degree ``largest_degree``.
   
-  For ``N1 = 2`` and ``N2 = 3``, such a polynomial can be written as
+  For ``number_of_elements = 2`` and ``largest_degree = 3``, such a polynomial can be written as
   
   .. math::
   
@@ -38,9 +38,9 @@ number_of_coefficients
 
   .. math::
     
-    1 + \sum_{d = 1}^\text{N2} \binom{\text{N1}}{d}
+    1 + \sum_{d = 1}^\text{largest_degree} \binom{\text{number_of_elements}}{d}
   
-  In consequence, ``1`` will be returned if either ``N1`` or ``N2`` is ``0``. 
+  In consequence, ``1`` will be returned if either ``number_of_elements`` or ``largest_degree`` is ``0``. 
   
   This is typically used together with :cpp:func:`polynomial`, to calculate the number of coefficients to be stored at compile-time.
   
@@ -60,38 +60,38 @@ number_of_coefficients
       return 0;
     }
 */
-template <std::size_t N1, std::size_t N2>
+template <std::size_t number_of_elements, std::size_t largest_degree>
 constexpr std::size_t number_of_coefficients();
 
 //
 // Implementation
 //
 
-template <std::size_t N1, std::size_t N2>
+template <std::size_t number_of_elements, std::size_t largest_degree>
 constexpr std::size_t number_of_coefficients() {
-  if (N1 == 0 || N2 == 0) {
+  if (number_of_elements == 0 || largest_degree == 0) {
     return 1;
   }
   
   // Checks if adding the constant term will result in an overflow.
-  if (N1 == std::numeric_limits<std::size_t>::max()) {
+  if (number_of_elements == std::numeric_limits<std::size_t>::max()) {
     return 0;
   }
   
   // Initialises the polynomial size for the linear and constant term.
   // Due to an earlier check, the polynomial will be at least linear from here on.
-  std::size_t polynomial_size = N1 + 1;
+  std::size_t polynomial_size = number_of_elements + 1;
   
   // Sums up the number of parameter combinations for each degree > 0.
-  for (std::size_t degree = 2; degree <= N2; ++degree) {
-    const std::size_t number_of_combinations = n_choose_k(N1 + degree - 1, degree);
+  for (decltype(largest_degree) degree = 2; degree <= largest_degree; ++degree) {
+    const auto number_of_combinations = n_choose_k(number_of_elements + degree - 1, degree);
     // Checks if the number of combinations overflowed.
     if (number_of_combinations == 0) {
       return 0;
     }
 
     // Checks if adding the number of combinations will result in an overflow.
-    if (std::numeric_limits<std::size_t>::max() - polynomial_size < number_of_combinations) {
+    if (number_of_combinations > std::numeric_limits<std::size_t>::max() - polynomial_size) {
       return 0;
     }
 
@@ -107,11 +107,11 @@ constexpr std::size_t number_of_coefficients() {
 
 #if defined(MANTELLA_BUILD_TESTS)
   TEST_CASE("number_of_coefficients", "[number_of_coefficients]") {
-    CEHCK(number_of_coefficients<0, 0> == 1);
-    CEHCK(number_of_coefficients<2, 0> == 1);
-    CEHCK(number_of_coefficients<0, 2> == 1);
-    CEHCK(number_of_coefficients<2, 1> == 3);
-    CEHCK(number_of_coefficients<2, 3> == 10);
-    CEHCK(number_of_coefficients<100, 10> == 0);
+    CHECK((number_of_coefficients<0, 0>() == 1));
+    CHECK((number_of_coefficients<2, 0>() == 1));
+    CHECK((number_of_coefficients<0, 2>() == 1));
+    CHECK((number_of_coefficients<2, 1>() == 3));
+    CHECK((number_of_coefficients<2, 3>() == 10));
+    CHECK((number_of_coefficients<10, 1000>() == 0));
   }
 #endif

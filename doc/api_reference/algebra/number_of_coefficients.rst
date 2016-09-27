@@ -2,22 +2,22 @@
 number_of_coefficients
 ======================
 
-.. cpp:function:: template <N1, N2> constexpr number_of_coefficients()
+.. cpp:function:: template <number_of_elements, largest_degree> constexpr number_of_coefficients()
 
   .. versionadded:: 1.x
   
   **Template parameters**
    
-    * **N1** (``std::size_t``) - A number of indeterminates.
-    * **N2** (``std::size_t``) - A largest degree.
+    * **number_of_elements** (``std::size_t``) - A number of indeterminates.
+    * **largest_degree** (``std::size_t``) - A largest degree.
 
   **Returns**
    
     ``std::size_t`` - The number of coefficients.
   
-  Calculates the number of coefficients in a polynomial with ``N1`` indeterminates and largest degree ``N2``.
+  Calculates the number of coefficients in a polynomial with ``number_of_elements`` indeterminates and largest degree ``largest_degree``.
   
-  For ``N1 = 2`` and ``N2 = 3``, such a polynomial can be written as
+  For ``number_of_elements = 2`` and ``largest_degree = 3``, such a polynomial can be written as
   
   .. math::
   
@@ -36,9 +36,9 @@ number_of_coefficients
 
   .. math::
     
-    1 + \sum_{d = 1}^\text{N2} \binom{\text{N1}}{d}
+    1 + \sum_{d = 1}^\text{largest_degree} \binom{\text{number_of_elements}}{d}
   
-  In consequence, ``1`` will be returned if either ``N1`` or ``N2`` is ``0``. 
+  In consequence, ``1`` will be returned if either ``number_of_elements`` or ``largest_degree`` is ``0``. 
   
   This is typically used together with :cpp:func:`polynomial`, to calculate the number of coefficients to be stored at compile-time.
   

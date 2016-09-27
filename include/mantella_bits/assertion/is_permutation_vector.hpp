@@ -4,15 +4,14 @@
 is_permutation_vector
 =====================
 
-.. cpp:function:: template <T, N1, N2> constexpr is_permutation_vector(vector)
+.. cpp:function:: template <T, N> constexpr is_permutation_vector(vector)
 
   .. versionadded:: 1.x
   
   **Template parameters**
    
-    * **T** - The parameter value type **(must be an integer type)**.
-    * **N1** (``std::size_t``) - The parameter size.
-    * **N2** (``std::size_t``) - The number of parameters.
+    * **T** - The vector value type **(must be an integer type)**.
+    * **N** (``std::size_t``) - The vector size.
 
   **Function parameters**
    
@@ -39,47 +38,44 @@ is_permutation_vector
       return 0;
     }
 */
-
-/**
-.. cpp:function:: template <T, N> constexpr is_permutation_vector(vector)
-
-  .. versionadded:: 1.x
-  
-  Short-cut for ``is_permutation_vector<T, N, 1>(vector)``.
-*/
 template <typename T, std::size_t N>
 constexpr bool is_permutation_vector(
-    const std::array<T, N>& vector);
+    std::array<T, N> vector);
 
 //
 // Implementation
 //
 
-template <typename T1, typename T2, std::size_t N>
-bool is_permutation_vector(
-    const typename std::array<T1, N>::const_iterator vector,
-    const T2 number_of_elements) {
+template <typename T, std::size_t N>
+constexpr bool is_permutation_vector(
+    std::array<T, N> vector) {
   // A permutation over elements from [0, `number_of_elements` - 1] must be non-empty, ...
-  if (vector.is_empty()) {
+  if (vector.empty()) {
     return false;
   }
   
-  // ... have only unique elements ...
-  if (std::adjacent_find(vector, std::next(vector, N)) != std::next(vector, N)) {
+  // ... has only unique elements, ...
+  std::sort(vector.begin(), vector.end());
+  if (std::adjacent_find(vector.cbegin(), vector.cend()) != vector.cend()) {
     return false;
   }
   
-  // ...  from [0, `numberOfElements` - 1].
-  const auto& minmax = std::minmax_element(vector, std::next(vector, N));
-  if (minmax.first < 0 || minmax.second > N - 1) {
+  // ... all within [0, `numberOfElements` - 1].
+  const auto& minmax = std::minmax_element(vector.cbegin(), vector.cend());
+  if (*minmax.first < 0 || *minmax.second > N - 1) {
     return false;
   }
 
   return true;
 }
 
-template <typename T, std::size_t N>
-bool is_permutation_vector(
-    const typename std::array<T, N>::const_iterator vector) {
-  return is_permutation_vector(vector, N);
+#if defined(MANTELLA_BUILD_TESTS) 
+TEST_CASE("is_permutation_vector", "[assertion][is_permutation_vector]") {
+  bool is_permutation_vector = mant::is_permutation_vector<unsigned int, 5>({4, 0, 1, 3, 2});
+  CHECK(is_permutation_vector == true);
+  is_permutation_vector = mant::is_permutation_vector<unsigned int, 5>({5, 1, 2, 3, 4});
+  CHECK(is_permutation_vector == false);
+  is_permutation_vector = mant::is_permutation_vector<unsigned int, 5>({0, 1, 2, 3, 0});
+  CHECK(is_permutation_vector == false);
 }
+#endif

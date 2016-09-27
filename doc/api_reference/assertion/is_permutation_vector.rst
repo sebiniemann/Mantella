@@ -2,15 +2,14 @@
 is_permutation_vector
 =====================
 
-.. cpp:function:: template <T, N1, N2> constexpr is_permutation_vector(vector)
+.. cpp:function:: template <T, N> constexpr is_permutation_vector(vector)
 
   .. versionadded:: 1.x
   
   **Template parameters**
    
-    * **T** - The parameter value type **(must be an integer type)**.
-    * **N1** (``std::size_t``) - The parameter size.
-    * **N2** (``std::size_t``) - The number of parameters.
+    * **T** - The vector value type **(must be an integer type)**.
+    * **N** (``std::size_t``) - The vector size.
 
   **Function parameters**
    
@@ -35,10 +34,4 @@ is_permutation_vector
       std::cout << std::endl;
       
       return 0;
-    }
-
-.. cpp:function:: template <T, N> constexpr is_permutation_vector(vector)
-
-  .. versionadded:: 1.x
-  
-  Short-cut for ``is_permutation_vector<T, N, 1>(vector)``.
+    }

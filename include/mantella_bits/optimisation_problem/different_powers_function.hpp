@@ -3,18 +3,36 @@
 /**
 
 */
-// This implementation contains a lot of *magic numbers* and behaviour, introduced by the black-box optimisation benchmark, but only partially explained in the paper.
-// So don't expect use to explain the unexplained.
-// @see N. Hansen et al., Real-Parameter Black-Box Optimization Benchmarking 2010: Experimental Setup. Research Report RR-7215, INRIA, 2010.
-namespace mant {
-  namespace bbob {
+template <typename T, std::size_t N>
+struct different_powers_function : optimisation_problem<T, N> {
+  constexpr different_powers_function() noexcept;
+}
+
+//
+// Implementation
+//
+
+template <typename T, std::size_t N>
+constexpr different_powers_function<T, N>::different_powers_function() noexcept 
+    : optimisation_problem<T, N>() {
+  objective_functions = {{
+    [this](
+        const arma::vec& parameter_) {
+      assert(parameter_.n_elem == numberOfDimensions_);
+
+      const arma::vec& z = arma::abs(parameter_);
+      return arma::norm(z % getConditionedParameter(arma::square(z)));
+    },
+    "BBOB Different Powers Function (f14)"}});
+}
+
+//
+// Unit tests
+//
     DifferentPowersFunction::DifferentPowersFunction(
         const arma::uword numberOfDimensions)
         : BlackBoxOptimisationBenchmark(numberOfDimensions) {
       assert(numberOfDimensions_ > 1 && "DifferentPowersFunction: The number of dimensions must be greater than 1.");
-
-      setParameterTranslation(getRandomParameterTranslation());
-      setParameterRotation(randomRotationMatrix(numberOfDimensions_));
 
       setObjectiveFunctions(
           {{[this](
@@ -26,5 +44,3 @@ namespace mant {
             },
             "BBOB Different Powers Function (f14)"}});
     }
-  }
-}

@@ -4,11 +4,11 @@
 Optimisation Problem
 ====================
 
-.. cpp:class:: template <T, N> optimisation_problem_t
+.. cpp:class:: template <T, N> optimisation_problem
 
   .. versionadded:: 1.x
 
-  The :cpp:class:`optimisation_problem_t` struct is the base of every `optimisation problem <https://en.wikipedia.org/wiki/Optimization_problem>`_ and stores
+  The :cpp:class:`optimisation_problem` struct is the base of every `optimisation problem <https://en.wikipedia.org/wiki/Optimization_problem>`_ and stores
 
   * a set of objective functions (:cpp:member:`objective_functions`),
   * the acceptable lower (:cpp:member:`lower_bounds`) and upper bounds (:cpp:member:`upper_bounds`)
@@ -25,7 +25,7 @@ Optimisation Problem
     
     int main() {
       constexpr std::size_t number_of_dimensions = 2;
-      mant::optimisation_problem_t<double, number_of_dimensions> optimisation_problem;
+      mant::optimisation_problem<double, number_of_dimensions> optimisation_problem;
       optimisation_problem.objective_functions = {{
         [](
             const auto begin_parameter,
@@ -75,7 +75,7 @@ Optimisation Problem
   
   .. note::
 
-    If you want to extend this struct, make sure to call its constructor :cpp:func:`optimisation_problem_t()`, ensuring that all attributes are set to their default value. Otherwise you should at least initialise the variables handling the parameter and objective value adjustments, to avoid funny results when calling :cpp:func:`evaluate`.
+    If you want to extend this struct, make sure to call its constructor :cpp:func:`optimisation_problem()`, ensuring that all attributes are set to their default value. Otherwise you should at least initialise the variables handling the parameter and objective value adjustments, to avoid funny results when calling :cpp:func:`evaluate`.
    
   .. cpp:type:: std::function<T(begin_parameter, end_parameter)> objective_function_t
      
@@ -162,14 +162,14 @@ Optimisation Problem
     
     The attribute it set to ``0.0`` as default.
 
-  .. cpp:function:: constexpr optimisation_problem_t() noexcept
+  .. cpp:function:: constexpr optimisation_problem() noexcept
 
     .. versionadded:: 1.x
 
     The only constructor defined, sets all attributes to their aforementioned default value.
 */
 template <typename T, std::size_t N>
-struct optimisation_problem_t {
+struct optimisation_problem {
   typedef std::function<T(const typename std::array<T, N>::const_iterator begin_parameter, const typename std::array<T, N>::const_iterator end_parameter)> objective_function_t;
 
   std::vector<std::pair<objective_function_t, std::string>> objective_functions;
@@ -182,7 +182,7 @@ struct optimisation_problem_t {
   T objective_value_scaling;
   T objective_value_translation;
   
-  constexpr optimisation_problem_t() noexcept;
+  constexpr optimisation_problem() noexcept;
 };
 
 //
@@ -190,7 +190,7 @@ struct optimisation_problem_t {
 //
 
 template <typename T, std::size_t N>
-constexpr optimisation_problem_t<T, N>::optimisation_problem_t() noexcept {
+constexpr optimisation_problem<T, N>::optimisation_problem() noexcept {
   static_assert(std::is_floating_point<T>::value, "The type must be a floating point");
   static_assert(N > 0, "The number of dimensions mus be greater than 0.");
   
@@ -210,28 +210,28 @@ constexpr optimisation_problem_t<T, N>::optimisation_problem_t() noexcept {
 }
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE("optimisation_problem_t", "[optimisation_problem_t]") {
-  mant::optimisation_problem_t<double, 2> optimisation_problem_t;
+TEST_CASE("optimisation_problem", "[optimisation_problem]") {
+  mant::optimisation_problem<double, 2> optimisation_problem;
   
   const std::array<double, 2> lower_bounds = {-10.0, -10.0};
-  CHECK(optimisation_problem_t.lower_bounds == lower_bounds);
+  CHECK(optimisation_problem.lower_bounds == lower_bounds);
   
   const std::array<double, 2> upper_bounds = {10.0, 10.0};
-  CHECK(optimisation_problem_t.upper_bounds == upper_bounds);
+  CHECK(optimisation_problem.upper_bounds == upper_bounds);
   
   const std::array<std::size_t, 2> parameter_permutation = {0, 1};
-  CHECK(optimisation_problem_t.parameter_permutation == parameter_permutation);
+  CHECK(optimisation_problem.parameter_permutation == parameter_permutation);
   
   const std::array<double, 2> parameter_scaling = {1.0, 1.0};
-  CHECK(optimisation_problem_t.parameter_scaling == parameter_scaling);
+  CHECK(optimisation_problem.parameter_scaling == parameter_scaling);
   
   const std::array<double, 2> parameter_translation = {0.0, 0.0};
-  CHECK(optimisation_problem_t.parameter_translation == parameter_translation);
+  CHECK(optimisation_problem.parameter_translation == parameter_translation);
   
   const std::array<double, 4> parameter_rotation = {1.0, 0.0, 0.0, 1.0};
-  CHECK(optimisation_problem_t.parameter_rotation == parameter_rotation);
+  CHECK(optimisation_problem.parameter_rotation == parameter_rotation);
   
-  CHECK(optimisation_problem_t.objective_value_scaling == Approx(1.0));
-  CHECK(optimisation_problem_t.objective_value_translation == Approx(0.0));
+  CHECK(optimisation_problem.objective_value_scaling == Approx(1.0));
+  CHECK(optimisation_problem.objective_value_translation == Approx(0.0));
 }
 #endif

@@ -34,4 +34,75 @@
   
     The result will also be ``0`` (per definition of the binomial coefficient) if ``N2 > N1`` holds true.
 */
-template <std::size_t N1, std::size_t N2> constexpr std::size_t n_choose_k();
+template <typename T1, typename T2>
+constexpr std::size_t n_choose_k(
+    T1 n,
+    const T2 k);
+
+//
+// Implementation
+//
+
+template <typename T1, typename T2>
+constexpr std::size_t n_choose_k(
+    T1 n,
+    const T2 k) {
+  if (k > n) {
+    return 0;
+  } else if (k == 0 || n == k) {
+    return 1;
+  } else if (k == 1) {
+    return n;
+  }
+
+  /* Instead of calculating
+   *
+   *      n!
+   * -------------
+   * ((n-k)! * k!)
+   * 
+   * directly, we can also write it as
+   * 
+   * /     / / / n * (n-1) \         \         \     \
+   * |     | | | --------- | * (n-2) |         |     |
+   * |     | | \     2     /         | * (n-3) |     |
+   * | ... | | --------------------- |         | ... |
+   * |     | \           3           /         |     |  * (k+1)
+   * |     | --------------------------------- |     |
+   * |     \                 4                 /     |
+   * \                         ...                   /
+   * ----------------------------------------------------------
+   *                              k
+   *
+   * This avoids temporarily storing large integers and allows us to calculate greater binomial coefficients, before hitting an overflow.
+   * In fact, the largest number we are temporarily storing by using this method is exactly `k` times larger than the resulting binomial coefficient.
+   * **Note:** The dividends are always divisible with a zeroed remainder, because by multiplying `n` consecutive numbers, one is always a multiply of `n`.
+   */
+
+  std::size_t binomial_coefficient = n;
+  for (T2 l = 2; l <= k; ++l) {
+    // **Note:** Since the results of the left term will be floored, we might be stricter than we have to be, but will not miss an overflow.
+    if (binomial_coefficient > std::numeric_limits<std::size_t>::max() / (n - 1)) {
+      return 0;
+    }
+
+    binomial_coefficient *= --n;
+    binomial_coefficient /= l;
+  }
+
+  return binomial_coefficient;
+}
+
+//
+// Tests
+//
+
+#if defined(MANTELLA_BUIL_TESTS)
+TEST_CASE("n_choose_k", "[combinatorics][n_choose_k]") {
+  CHECK(n_choose_k(0, 0) == 0);
+  CHECK(n_choose_k(1, 0) == 0);
+  CHECK(n_choose_k(3, 3) == 1);
+  CHECK(n_choose_k(6, 3) == 20);
+  CHECK(n_choose_k(100, 100) == 0);
+}
+#endif

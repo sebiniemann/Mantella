@@ -28,4 +28,43 @@
       return 0;
     }
 */
-template <std::size_t N> constexpr factorial();
+template <typename T>
+constexpr std::size_t factorial(
+    const T n);
+
+//
+// Implementation
+//
+
+template <typename T>
+constexpr std::size_t factorial(
+    const T n) {
+  if (n < 2) {
+    return 1;
+  }
+  
+  std::size_t factorial = 1;
+  for (T factor = 2; factor <= n; ++factor) {
+    if (n - 1 > std::numeric_limits<std::size_t>::max() / n) {
+      return 0;
+    }
+    
+    factorial *= factor;
+  }
+
+  return factorial;
+}
+
+//
+// Unit tests
+//
+
+#if defined(MANTELLA_BUILD_TESTS)
+TEST_CASE("factorial", "[combinatorics][factorial]") {
+  CHECK(factorial(0) == 1);
+  CHECK(factorial(1) == 1);
+  CHECK(factorial(2) == 2);
+  CHECK(factorial(3) == 6);
+  CHECK(factorial(100) == 0);
+}
+#endif

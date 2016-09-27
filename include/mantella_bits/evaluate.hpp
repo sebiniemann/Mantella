@@ -60,7 +60,7 @@
   
   **Parameters**
    
-    * **optimisation_problem** (:cpp:class:`optimisation_problem_t` ``<T, N>``) - The optimisation problem.
+    * **optimisation_problem** (:cpp:class:`optimisation_problem` ``<T, N>``) - The optimisation problem.
     * **begin_parameter** (``std::array<T, N>::const_iterator``) - An iterator referring to the first element within the parameter.
     * **end_parameter** (``std::array<T, N>::const_iterator``) - An iterator referring to the *past-the-end* element within the parameter.
 
@@ -68,11 +68,6 @@
    
     ``T`` - The computed objective value. 
 */
-template <typename T, std::size_t N>
-T evaluate(
-    const optimisation_problem_t<T, N>& optimisation_problem,
-    const typename std::array<T, N>::const_iterator begin_parameter,
-    const typename std::array<T, N>::const_iterator end_parameter);
     
 /**
 .. cpp:function:: T evaluate(optimisation_problem, parameter)
@@ -98,17 +93,17 @@ T evaluate(
   
   **Parameters**
    
-    * **optimisation_problem** (:cpp:class:`optimisation_problem_t` ``<T, N>``) - The optimisation problem.
+    * **optimisation_problem** (:cpp:class:`optimisation_problem` ``<T, N>``) - The optimisation problem.
     * **parameter** (``std::array<T, N>``) - The parameter.
 
   **Returns**
    
     ``T`` - The computed objective value. 
 */
-template <typename T1, typename T2, std::size_t N>
+template <typename T1, typename T2, std::size_t N1, std::size_t N2>
 typename std::common_type<T1, T2>::type evaluate(
-    const optimisation_problem_t<T1, N>& optimisation_problem,
-    const std::array<T2, N>& parameter);
+    const optimisation_problem<T1, N1>& optimisation_problem,
+    const std::array<T2, N2*N1>& parameter);
     
 //
 // Implementation
@@ -116,7 +111,7 @@ typename std::common_type<T1, T2>::type evaluate(
 
 template <typename T, std::size_t N>
 T evaluate(
-    const optimisation_problem_t<T, N>& optimisation_problem,
+    const optimisation_problem<T, N>& optimisation_problem,
     const typename std::array<T, N>::const_iterator parameter) {
   T objective_value = 0.0;
   // We make no guarantees about the `objective_value`'s correctness, as it depends on the order in which `optimisation_problem.objective_functions` is processed.
@@ -131,7 +126,7 @@ T evaluate(
 
 template <typename T1, typename T2, std::size_t N>
 typename std::common_type<T1, T2>::type evaluate(
-    const optimisation_problem_t<T1, N>& optimisation_problem,
+    const optimisation_problem<T1, N>& optimisation_problem,
     const std::array<T2, N>& parameter) {
   if (std::is_same<T1, T2>::value) {
     return evaluate(optimisation_problem, parameter.cbegin());

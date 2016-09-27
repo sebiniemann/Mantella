@@ -1,10 +1,11 @@
 // Catch
 #define CATCH_CONFIG_COUNTER
+#define CATCH_CONFIG_RUNNER
 #include <catch.hpp>
 
 // Mantella
 #define MANTELLA_BUILD_TESTS
-#include <mantella>
+#include <mantella0>
 
 int main(int argc, char** argv) {
 #if defined(MANTELLA_SUPPORT_MPI)

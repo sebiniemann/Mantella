@@ -10,4 +10,4 @@
 
   **Returns**
    
-    ``std::array<std::size_t, N2*mant::n_choose_k(N1+N2-1, N2)>`` - The `multicombinations <https://en.wikipedia.org/wiki/Combination#Number_of_combinations_with_repetition>`_ or an empty array if the number of multicombinations overflows.
+    ``std::array<std::size_t, N2*`` :cpp:any:`n_choose_k` ``<N1+N2-1, N2>()>`` - The `multicombinations <https://en.wikipedia.org/wiki/Combination#Number_of_combinations_with_repetition>`_ or an empty array if the number of multicombinations overflows.

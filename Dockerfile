@@ -49,7 +49,6 @@ ENV CPATH "$CPATH:/usr/include/mpich/"
 # - CMake
 # - Catch (unit tests)
 # - Clang-format (formatting test)
-# - Clang-tidy (static code analyser)
 RUN apt-get install -y cmake
 RUN apt-get install -y wget && \
     wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
@@ -63,10 +62,6 @@ RUN apt-get install -y clang-format-3.8 && \
     update-alternatives --remove clang-format /usr/bin/clang-format && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
     update-alternatives --set clang-format /usr/bin/clang-format-3.8
-RUN apt-get install -y clang-tidy-3.8 && \
-    update-alternatives --remove clang-tidy /usr/bin/clang-tidy && \
-    update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-3.8 100 && \
-    update-alternatives --set clang-tidy /usr/bin/clang-tidy-3.8
 
 # Installs documentation dependencies
 # - Sphinx, with read-the-document theme (documentation generation)
@@ -78,9 +73,9 @@ RUN apt-get install -y python-pip && \
     apt-get autoremove -y --purge
 RUN apt-get install -y liboctave-dev
 
-# Installs helpful development tools (skipped on CI servers)
+# Installs development libraries not used on CI servers
 # - Google micro benchmark
-RUN if [ "$CI" == 'true' ]; then \
+RUN if [ "$CI" == 'false' ]; then \
       apt-get install -y wget && \
       wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
       mkdir benchmark && \
