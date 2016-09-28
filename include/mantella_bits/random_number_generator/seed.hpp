@@ -30,7 +30,7 @@ inline void seed(
 }
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE() {
+TEST_CASE("seed", "[random_number_generator][seed]") {
   mockup_rng::use_mockup = true;
   
   mant::seed(123456);

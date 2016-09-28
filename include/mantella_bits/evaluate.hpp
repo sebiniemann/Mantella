@@ -54,10 +54,6 @@
       return 0;
     }
   
-  .. note::
-
-    The summation will follow the ordering in ``optimisation_problem.objective_functions``. In case objective functions with widely different co-domain spaces are used together (especially if their results differ by more than ``std::numeric_limits<T>::digits10`` digits), rounding errors can be minimised by ordering the objective functions, such that their results are ascending.
-  
   **Parameters**
    
     * **optimisation_problem** (:cpp:class:`optimisation_problem` ``<T, N>``) - The optimisation problem.
@@ -100,40 +96,63 @@
    
     ``T`` - The computed objective value. 
 */
-template <typename T1, typename T2, std::size_t N1, std::size_t N2>
-typename std::common_type<T1, T2>::type evaluate(
-    const optimisation_problem<T1, N1>& optimisation_problem,
-    const std::array<T2, N2*N1>& parameter);
+template <typename T, std::size_t number_of_dimensions>
+T evaluate(
+    const optimisation_problem_t<T, number_of_dimensions>& optimisation_problem,
+    const std::array<T, number_of_dimensions>& parameter);
     
 //
 // Implementation
 //  
 
-template <typename T, std::size_t N>
+template <typename T, std::size_t number_of_dimensions>
 T evaluate(
-    const optimisation_problem<T, N>& optimisation_problem,
-    const typename std::array<T, N>::const_iterator parameter) {
-  T objective_value = 0.0;
-  // We make no guarantees about *objective_value*'s correctness, as it depends on the order in which *optimisation_problem.objective_functions* is processed.
-  // Adding ascending values with (closely) representable immediate results can be expected to lead to more precise results.
-  // However, without relying on heavy computational effort to enforce the above statement, user-given domain-knowledge is required (by filling *optimisation_problem.objective_functions* in an *optimal* order).
-  for (const auto& objective_function : optimisation_problem.objective_functions) {
-    objective_value += objective_function.first(parameter);
+    const optimisation_problem_t<T, number_of_dimensions>& optimisation_problem,
+    const std::array<T, number_of_dimensions>& parameter) {
+  std::array<T, number_of_dimensions> permuted_parameter;
+  for (std::size_t n = 0; n < number_of_dimensions; ++n) {
+    permuted_parameter[n] = parameter[optimisation_problem.parameter_permutation[n]];
   }
   
-  return objective_value;
+  std::array<T, number_of_dimensions> adjusted_parameter;
+	cblas_dgemv(CblasColMajor, CblasNoTrans, number_of_dimensions, number_of_dimensions, T(1.0), optimisation_problem.parameter_rotation.data(), number_of_dimensions, permuted_parameter.data(), 1, T(0.0), adjusted_parameter.data(), 1);
+  
+  for (std::size_t n = 0; n < number_of_dimensions; ++n) {
+    adjusted_parameter[n] = optimisation_problem.parameter_scaling[n] * adjusted_parameter[n] + optimisation_problem.parameter_translation[n];
+  }
+  
+  return optimisation_problem.objective_value_scaling * std::accumulate(optimisation_problem.objective_functions.cbegin(), optimisation_problem.objective_functions.cend(), T(0.0), [&adjusted_parameter](const T sum, const auto objective_function) {return sum + objective_function.first(adjusted_parameter);}) + optimisation_problem.objective_value_translation;
 }
 
-template <typename T1, typename T2, std::size_t N>
-typename std::common_type<T1, T2>::type evaluate(
-    const optimisation_problem<T1, N>& optimisation_problem,
-    const std::array<T2, N>& parameter) {
-  if (std::is_same<T1, T2>::value) {
-    return evaluate(optimisation_problem, parameter.cbegin());
-  } else {
-    std::array<typename std::common_type<T1, T2>::type, N> commonTypedParameter;
-    std::copy_n(parameter.cbegin(), N, commonTypedParameter.begin());
-    return evaluate(optimisation_problem, commonTypedParameter.cbegin());
-  }
+//
+// Unit tests
+//
+
+#if defined(MANTELLA_BUILD_TESTS)
+TEST_CASE("evaluate", "[evaluate]") {
+  mant::optimisation_problem<double, 3> optimisation_problem;
+  optimisation_problem.lower_bounds = {10.0, 10.0, 10.0};
+  optimisation_problem.upper_bounds = {-10.0, -10.0, -10.0};
+  optimisation_problem.objective_functions = {{
+    [](
+        const auto& parameter) {
+      return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
+    },
+    "My objective function"
+  }, {
+    [](
+        const auto& parameter) {
+      return std::accumulate(parameter.cbegin(), parameter.cend(), 1.0, std::multiplies<double>());
+    },
+    "My other objective function"
+  }};
+  optimisation_problem.parameter_permutation = {2, 1, 0};
+  optimisation_problem.parameter_scaling = {2.0, 3.0, 4.0};
+  optimisation_problem.parameter_translation = {2.0, 2.0, 3.0};
+  optimisation_problem.parameter_rotation = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0};
+  optimisation_problem.objective_value_scaling = 3.0;
+  optimisation_problem.objective_value_translation = 1.0;
   
+  CHECK(mant::evaluate(optimisation_problem, {1.0, 2.0, 3.0}) == Approx(-209.0));
 }
+#endif

@@ -42,21 +42,21 @@ is_rotation_matrix
       return 0;
     }
 */
-template <typename T, std::size_t number_of_rows>
+template <typename T, std::size_t number_of_columns>
 bool is_rotation_matrix(
-    const std::array<T, number_of_rows*number_of_rows>& matrix);
+    const std::array<T, number_of_columns*number_of_columns>& matrix);
     
 //
 // Implementation
 //
 
-template <typename T, std::size_t number_of_rows>
+template <typename T, std::size_t number_of_columns>
 bool is_rotation_matrix(
-    const std::array<T, number_of_rows*number_of_rows>& matrix) {
+    const std::array<T, number_of_columns*number_of_columns>& matrix) {
   static_assert(std::is_same<T, double>::value, "The type for the matrix's elements must be *double*.");
-  // *Note:* The matrix is guaranteed to be squared by compile time checks, as it must hold exactly *number_of_rows*^2 elements.
+  // *Note:* The matrix is guaranteed to be squared by compile time checks, as it must hold exactly *number_of_columns*^2 elements.
   
-  if (number_of_rows < 2) {
+  if (number_of_columns < 2) {
     //  A rotation matrix must be have at least 2 dimensions, ...
     return false;
   }
@@ -70,16 +70,17 @@ bool is_rotation_matrix(
   
   // ... its transpose must be equal to its inverse.
   // *Note:* Since A^-1 must be equal to A^T, this also means that A*A^T = I must hold true (which is faster and less error prone to compute, as no matrix inversion is needed).
-  std::array<T, number_of_rows*number_of_rows> identity_matrix;
-  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, number_of_rows, number_of_rows, number_of_rows, 1.0, matrix.data(), number_of_rows, matrix.data(), number_of_rows, 0.0, identity_matrix.data(), number_of_rows);
+  std::array<T, number_of_columns*number_of_columns> identity_matrix;
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, number_of_columns, number_of_columns, number_of_columns, T(1.0), matrix.data(), number_of_columns, matrix.data(), number_of_columns, T(0.0), identity_matrix.data(), number_of_columns);
   
   // *Note:* The result of A*A^T is always symmetric.
-  for (std::size_t column_index = 0; column_index < number_of_rows; ++column_index) {
-    if (std::fabs(identity_matrix[column_index * (number_of_rows + 1)] - 1) > std::pow(10.0, -std::numeric_limits<T>::digits10 - 3)) {
+  for (std::size_t j = 0; j < number_of_columns; ++j) {
+    if (std::fabs(identity_matrix[j * (number_of_columns + 1)] - 1) > std::pow(T(10.0), -std::numeric_limits<T>::digits10 - 3)) {
       return false; 
     }
-    for (std::size_t row_index = column_index + 1; row_index < number_of_rows; ++row_index) {
-      if (std::fabs(identity_matrix[column_index * number_of_rows + row_index]) > std::pow(10.0, -std::numeric_limits<T>::digits10 - 3)) {
+    
+    for (std::size_t i = j + 1; i < number_of_columns; ++i) {
+      if (std::fabs(identity_matrix[j * number_of_columns + i]) > std::pow(T(10.0), -std::numeric_limits<T>::digits10 - 3)) {
         return false; 
       }
     }

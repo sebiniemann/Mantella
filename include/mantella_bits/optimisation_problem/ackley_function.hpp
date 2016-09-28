@@ -3,29 +3,33 @@
 /**
 
 */
-namespace bbob {
-// This implementation contains a lot of *magic numbers* and behaviour, introduced by the black-box optimisation benchmark, but only partially explained in the paper.
-// So don't expect use to explain the unexplained.
-// @see N. Hansen et al., Real-Parameter Black-Box Optimization Benchmarking 2010: Experimental Setup. Research Report RR-7215, INRIA, 2010.
-  CompositeGriewankRosenbrockFunctionF8F2::
-      CompositeGriewankRosenbrockFunctionF8F2(
-          const arma::uword numberOfDimensions)
-      : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        max_(std::fmax(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
-    assert(numberOfDimensions_ > 1 && "CompositeGriewankRosenbrockFunctionF8F2: The number of dimensions must be greater than 1.");
+template <typename T, std::size_t number_of_dimensions>
+struct ackley_function_t : optimisation_problem<T, number_of_dimensions> {
+  constexpr ackley_function_t() noexcept;
+};
 
-    setParameterRotation(randomRotationMatrix(numberOfDimensions_));
+//
+// Implementation
+//
 
-    setObjectiveFunctions(
-        {{[this](
-              const arma::vec& parameter_) {
-            assert(parameter_.n_elem == numberOfDimensions_);
-
-            const arma::vec& s = max_ * parameter_ + 0.5;
-            const arma::vec& z = 100.0 * arma::square(arma::square(s.head(s.n_elem - 1)) - s.tail(s.n_elem - 1)) + arma::square(s.head(s.n_elem - 1) - 1.0);
-
-            return 10.0 * (arma::mean(z / 4000.0 - arma::cos(z)) + 1.0);
-          },
-          "BBOB Composite Griewank Rosenbrock Function F8F2 (f19)"}});
-  }
+template <typename T, std::size_t number_of_dimensions>
+constexpr ackley_function_t<T, number_of_dimensions>::ackley_function_t() noexcept 
+    : optimisation_problem<T, number_of_dimensions>() {
+  this->objective_functions = {{
+    [](
+        const auto& parameter) {
+      return T(20.0) * (-std::exp(T(-0.2) * cblas_dnrm2(number_of_dimensions, parameter.data(), 1) / std::sqrt(number_of_dimensions)) + T(1.0)) - std::exp(std::accumulate(parameter.cbegin(), parameter.cend(), T(0.0), [](const T sum, const T element) {return sum + std::cos(T(2.0) * std::acos(T(-1.0)) * element);}) / static_cast<T>(number_of_dimensions)) + std::exp(T(1.0));
+    },
+    "ackley function"
+  }};
 }
+
+//
+// Unit tests
+//
+
+#if defined(MANTELLA_BUILD_TESTS)
+TEST_CASE("ackley_function", "[optimisation_problem][ackley_function]") {
+  CHECK((mant::ackley_function_t<double, 3>().objective_functions[0].first({1.0, -2.0, 3.0}) == Approx(7.016453608269399)));
+}
+#endif

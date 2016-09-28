@@ -19,12 +19,12 @@
     #include <mantella0>
     
     int main() {
-      std::cout << "0 over 0 = " << n_choose_k<0, 0>() << "\n";
-      std::cout << "0 over 1 = " << n_choose_k<0, 1>() << "\n";
-      std::cout << "1 over 0 = " << n_choose_k<1, 0>() << "\n";
-      std::cout << "3 over 3 = " << n_choose_k<3, 3>() << "\n";
-      std::cout << "6 over 3 = " << n_choose_k<6, 3>() << "\n";
-      std::cout << "100 over 10 = " << n_choose_k<100, 10>() << "\n";
+      std::cout << "0 choose 0 = " << n_choose_k<0, 0>() << "\n";
+      std::cout << "0 choose 1 = " << n_choose_k<0, 1>() << "\n";
+      std::cout << "1 choose 0 = " << n_choose_k<1, 0>() << "\n";
+      std::cout << "3 choose 3 = " << n_choose_k<3, 3>() << "\n";
+      std::cout << "6 choose 3 = " << n_choose_k<6, 3>() << "\n";
+      std::cout << "1000 choose 10 = " << n_choose_k<1000, 10>() << "\n";
       std::cout << std::endl;
       
       return 0;
@@ -43,12 +43,11 @@ constexpr std::size_t n_choose_k(
 // Implementation
 //
 
-template <typename T1, typename T2>
+template <typename T>
 constexpr std::size_t n_choose_k(
-    T1 n,
-    const T2 k) {
-  static_assert(std::is_integral<T1>::value, "The type for 'n' must be an integer.");
-  static_assert(std::is_integral<T2>::value, "The type for 'k' must be an integer.");
+    T n,
+    const T k) {
+  static_assert(std::is_integral<T>::value, "The type for 'n' and 'k' must be an integer.");
   
   if (k > n) {
     return 0;
@@ -83,7 +82,7 @@ constexpr std::size_t n_choose_k(
    */
 
   std::size_t binomial_coefficient = n;
-  for (T2 l = 2; l <= k; ++l) {
+  for (T l = 2; l <= k; ++l) {
     // **Note:** Since the results of the left term will be floored, we might be stricter than we have to be, but will not miss an overflow.
     if (binomial_coefficient > std::numeric_limits<std::size_t>::max() / (n - 1)) {
       return 0;
@@ -100,12 +99,13 @@ constexpr std::size_t n_choose_k(
 // Tests
 //
 
-#if defined(MANTELLA_BUIL_TESTS)
+#if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("n_choose_k", "[combinatorics][n_choose_k]") {
-  CHECK(n_choose_k(0, 0) == 0);
-  CHECK(n_choose_k(1, 0) == 0);
+  CHECK(n_choose_k(0, 0) == 1);
+  CHECK(n_choose_k(0, 1) == 0);
+  CHECK(n_choose_k(1, 0) == 1);
   CHECK(n_choose_k(3, 3) == 1);
   CHECK(n_choose_k(6, 3) == 20);
-  CHECK(n_choose_k(100, 100) == 0);
+  CHECK(n_choose_k(1000, 10) == 0);
 }
 #endif

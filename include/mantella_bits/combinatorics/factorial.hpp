@@ -46,12 +46,12 @@ constexpr std::size_t factorial(
   }
   
   std::size_t factorial = 1;
-  for (T factor = 2; factor <= n; ++factor) {
+  for (T k = 2; k <= n; ++k) {
     if (n - 1 > std::numeric_limits<std::size_t>::max() / n) {
       return 0;
     }
     
-    factorial *= factor;
+    factorial *= k;
   }
 
   return factorial;

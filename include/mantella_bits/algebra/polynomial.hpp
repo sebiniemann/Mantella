@@ -107,7 +107,7 @@ constexpr std::array<T, number_of_coefficients(number_of_elements, largest_degre
   // Generates all terms for degree > 1
   std::array<std::size_t, largest_degree> parameter_indicies;
   std::size_t polynomial_index = 0;
-  for (auto degree = largest_degree; degree > 1; --degree) {
+  for (auto d = largest_degree; d > 1; --d) {
     /* Iterates through all *number_of_elements*-adic numbers having *degree* digits, skipping all number whose values are not monotonically decreasing from the less to the most significant digit.
      * If *number_of_elements* was set to 3 and *degree* to 4, we would get:
      *
@@ -122,14 +122,14 @@ constexpr std::array<T, number_of_coefficients(number_of_elements, largest_degre
      * (2, 2, 2, 2)
      */
     parameter_indicies.fill(0);
-    for (std::size_t n = 0; n < n_choose_k(number_of_elements + degree - 1, degree); ++n) {
-      polynomial[polynomial_index++] = std::accumulate(parameter_indicies.cbegin(), parameter_indicies.cbegin() + degree, 1.0, [&parameter](const T product, const std::size_t parameter_index) {return product * parameter[parameter_index];});
+    for (std::size_t n = 0; n < n_choose_k(number_of_elements + d - 1, d); ++n) {
+      polynomial[polynomial_index++] = std::accumulate(parameter_indicies.cbegin(), parameter_indicies.cbegin() + d, T(1.0), [&parameter](const T product, const std::size_t parameter_index) {return product * parameter[parameter_index];});
       
       ++parameter_indicies[0];
 
       // Increments the next (more significant) digit by 1 if we overshoot the maximal value for a *numberOfElements*-adic number.
       // All less significant digits are set to the same value, as we are skipping numbers whose values are not monotonically decreasing from the less to the most significant digit.
-      for (std::size_t k = 0; k < degree - 1; ++k) {
+      for (std::size_t k = 0; k < d - 1; ++k) {
         if (parameter_indicies[k] == number_of_elements) {
           std::fill_n(parameter_indicies.begin(), k + 1, ++parameter_indicies[k + 1]);
         } else {
@@ -141,7 +141,7 @@ constexpr std::array<T, number_of_coefficients(number_of_elements, largest_degre
   // Linear term
   std::copy(parameter.cbegin(), parameter.cend(), polynomial.begin() + polynomial_index);
   // Constant term
-  polynomial[polynomial.size() - 1] = 1.0;
+  polynomial[polynomial.size() - 1] = T(1.0);
   
   return polynomial;
 }

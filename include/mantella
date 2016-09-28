@@ -79,6 +79,7 @@ namespace mant {
   namespace v0 {
     // Random number generator
     typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_t;
+    inline std::array<random_number_generator_t, MANTELLA_NUMBER_OF_THREADS> random_number_generators;
 #include "mantella0_bits/random_number_generator/random_number_generators.hpp"
 #include "mantella0_bits/random_number_generator/seed.hpp"
 
@@ -96,16 +97,15 @@ namespace mant {
     //// Randomisation
 #include "mantella0_bits/randomisation/random_neighbour.hpp"
 #include "mantella0_bits/randomisation/random_permutation_vector.hpp"
-// #include "mantella0_bits/randomisation/random_rotation_matrix.hpp"
+#include "mantella0_bits/randomisation/random_rotation_matrix.hpp"
 
     // Optimisation problems
-// #include "mantella0_bits/optimisation_problem.hpp"
-// #include "mantella0_bits/optimisation_problem/ackley_function.hpp"
-// #include "mantella0_bits/optimisation_problem/different_powers_function.hpp"
-// #include "mantella0_bits/optimisation_problem/linear_slope.hpp"
+#include "mantella0_bits/optimisation_problem.hpp"
+#include "mantella0_bits/optimisation_problem/ackley_function.hpp"
 // #include "mantella0_bits/optimisation_problem/rastrigin_function.hpp"
 // #include "mantella0_bits/optimisation_problem/rosenbrock_function.hpp"
-// #include "mantella0_bits/optimisation_problem/sphere_function.hpp"
+#include "mantella0_bits/optimisation_problem/sphere_function.hpp"
+#include "mantella0_bits/optimisation_problem/sum_of_different_powers_function.hpp"
     //// Properties analysis
 // #include "mantella0_bits/properties_analysis/additive_separability.hpp"
 
@@ -118,7 +118,7 @@ namespace mant {
 // #include "mantella0_bits/samples_selection/elitists.hpp"
 
     // Optimisation procedures
-// #include "mantella0_bits/evaluate.hpp"
+#include "mantella0_bits/evaluate.hpp"
 // #include "mantella0_bits/optimise.hpp"
 // #include "mantella0_bits/analyse.hpp"
   }
