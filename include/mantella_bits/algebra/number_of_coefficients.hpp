@@ -73,6 +73,9 @@ template <typename T1, typename T2>
 constexpr std::size_t number_of_coefficients(
     const T1 number_of_elements,
     const T2 largest_degree) {
+  static_assert(std::is_integral<T1>::value, "The type for the number of elements must be an integer.");
+  static_assert(std::is_integral<T2>::value, "The type for the largest degree must be an integer.");
+      
   if (number_of_elements == 0 || largest_degree == 0) {
     return 1;
   }
@@ -111,11 +114,11 @@ constexpr std::size_t number_of_coefficients(
 
 #if defined(MANTELLA_BUILD_TESTS)
   TEST_CASE("number_of_coefficients", "[algebra][number_of_coefficients]") {
-    CHECK((number_of_coefficients<0, 0>() == 1));
-    CHECK((number_of_coefficients<2, 0>() == 1));
-    CHECK((number_of_coefficients<0, 2>() == 1));
-    CHECK((number_of_coefficients<2, 1>() == 3));
-    CHECK((number_of_coefficients<2, 3>() == 10));
-    CHECK((number_of_coefficients<10, 1000>() == 0));
+    CHECK((number_of_coefficients(0, 0) == 1));
+    CHECK((number_of_coefficients(2, 0) == 1));
+    CHECK((number_of_coefficients(0, 2) == 1));
+    CHECK((number_of_coefficients(2, 1) == 3));
+    CHECK((number_of_coefficients(2, 3) == 10));
+    CHECK((number_of_coefficients(10, 1000) == 0));
   }
 #endif

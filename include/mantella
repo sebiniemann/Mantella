@@ -59,7 +59,7 @@
 #include <lapacke.h>
 
 // OpenMP
-#if defined(MANTELLA_SUPPORT_OPENMP)
+#if MANTELLA_NUMBER_OF_THREADS > 1
 #include <omp.h> // IWYU pragma: keep
 #endif
 
@@ -76,32 +76,29 @@ namespace mant {
 # if MANTELLA_SYMBOL_VERSION == MANTELLA_VERSION_MAJOR
   inline 
 #endif
-  namespace vMANTELLA_VERSION_MAJOR {
-// Random number generator
-typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_t;
+  namespace v0 {
+    // Random number generator
+    typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_t;
 #include "mantella0_bits/random_number_generator/random_number_generators.hpp"
 #include "mantella0_bits/random_number_generator/seed.hpp"
 
-// Assertions
+    // Assertions
 #include "mantella0_bits/assertion/is_permutation_vector.hpp"
 #include "mantella0_bits/assertion/is_rotation_matrix.hpp"
 
-// Mathematical functions
-//// Combinatorics
+    // Mathematical functions
+    //// Combinatorics
 #include "mantella0_bits/combinatorics/factorial.hpp"
 #include "mantella0_bits/combinatorics/n_choose_k.hpp"
-#include "mantella0_bits/combinatorics/stirling_partition_number.hpp"
-//// Algebra
+    //// Algebra
 #include "mantella0_bits/algebra/number_of_coefficients.hpp"
 #include "mantella0_bits/algebra/polynomial.hpp"
-//// Linear algebra
-// #include "mantella0_bits/linear_algebra/qr_decomposition.hpp"
-//// Probability
-// #include "mantella0_bits/probability/random_permutation_vector.hpp"
-// #include "mantella0_bits/probability/random_rotation_matrix.hpp"
-// #include "mantella0_bits/probability/random_neighbour.hpp"
+    //// Randomisation
+#include "mantella0_bits/randomisation/random_neighbour.hpp"
+#include "mantella0_bits/randomisation/random_permutation_vector.hpp"
+// #include "mantella0_bits/randomisation/random_rotation_matrix.hpp"
 
-// Optimisation problems
+    // Optimisation problems
 // #include "mantella0_bits/optimisation_problem.hpp"
 // #include "mantella0_bits/optimisation_problem/ackley_function.hpp"
 // #include "mantella0_bits/optimisation_problem/different_powers_function.hpp"
@@ -109,18 +106,18 @@ typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_t;
 // #include "mantella0_bits/optimisation_problem/rastrigin_function.hpp"
 // #include "mantella0_bits/optimisation_problem/rosenbrock_function.hpp"
 // #include "mantella0_bits/optimisation_problem/sphere_function.hpp"
-//// Properties analysis
+    //// Properties analysis
 // #include "mantella0_bits/properties_analysis/additive_separability.hpp"
 
-// Optimisation algorithms
+    // Optimisation algorithms
 // #include "mantella0_bits/optimisation_algorithm.hpp"
 // #include "mantella0_bits/optimisation_algorithm/van_der_corput_sequence.hpp"
 // #include "mantella0_bits/optimisation_algorithm/halton_sequence.hpp"
 // #include "mantella0_bits/optimisation_algorithm/hammersley_set.hpp"
-//// Samples selection
+    //// Samples selection
 // #include "mantella0_bits/samples_selection/elitists.hpp"
 
-// Optimisation procedures
+    // Optimisation procedures
 // #include "mantella0_bits/evaluate.hpp"
 // #include "mantella0_bits/optimise.hpp"
 // #include "mantella0_bits/analyse.hpp"

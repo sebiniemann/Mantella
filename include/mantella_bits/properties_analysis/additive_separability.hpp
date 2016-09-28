@@ -1,5 +1,47 @@
 #pragma once
 
+
+
+
+template <typename T1, typename T2>
+constexpr std::size_t stirling_partition_number(
+    const T1 number_of_elements,
+    const T2 number_of_parts) {
+  if (number_of_elements == 0 || number_of_parts == 0 || number_of_elements < number_of_parts) {
+    return 0;
+  } else if (number_of_parts == 1 || number_of_elements == number_of_parts) {
+    return 1;
+  }
+
+  /* Instead of calculating the second Stirling number directly based on its explicit formula
+   *
+   *  1     k               / k \
+   * --- * sum (-1)^(k-l) * |   | * l^n
+   *  k!   l=1              \ l /
+   *
+   * we wrote it as
+   *
+   *  k                   l^(n-1)
+   * sum (-1)^(k-l) * ---------------
+   * l=1              (l-1)! * (k-l)!
+   *
+   * This avoids temporarily storing large integers and allows us to calculate greater Stirling numbers, before hitting an overflow.
+   * However, the fractions are not representable as an integer in most cases, wherefore we perform the whole computation based with floating point types.
+   */
+
+  long double stirling_partition_number = 0;
+  for (T2 l = 1; l <= number_of_parts; ++l) {
+    stirling_partition_number += (number_of_parts % 2 == l % 2 ? 1.0 : -1.0) * std::pow(l, static_cast<long double>(number_of_elements - 1)) / static_cast<long double>(factorial(l - 1) * factorial(number_of_parts - l));
+  
+    if (stirling_partition_number > std::numeric_limits<std::size_t>::max()) {
+      return 0;
+    }
+  }
+  
+  // Fixes rounding errors due to the limited precision.
+  return static_cast<std::size_t>(std::round(stirling_partition_number));
+}
+
 /**
 
 */
@@ -8,12 +50,12 @@ std::vector<> twoSetsPartitions(
   assert(numberOfElements > 1 && "twoSetsPartitions: The number of elements must be greater than 1.");
 
   if (numberOfElements == 2) {
-    // Added `std::initializer_list<...>` to resolve constructor ambiguity.
+    // Added *std::initializer_list<...>* to resolve constructor ambiguity.
     return {std::initializer_list<arma::uvec>({{0}}), {{1}}};
   }
 
-  /* Generates all partitions with two sets by permuting a bit mask of the same length as `numberOfElements`, having *k* 1's for each index being part of the first part and 0's for the second one. *k* denotes the amount of elements that is distributed to each part and iterated up to `numberOfElements` / 2, as we would add duplicates (since there is no order between being the first or second part of a partition) of previously added permutations for greater values.
-   * If `numberOfElements` was set to 4, we would get:
+  /* Generates all partitions with two sets by permuting a bit mask of the same length as *numberOfElements*, having *k* 1's for each index being part of the first part and 0's for the second one. *k* denotes the amount of elements that is distributed to each part and iterated up to *numberOfElements* / 2, as we would add duplicates (since there is no order between being the first or second part of a partition) of previously added permutations for greater values.
+   * If *numberOfElements* was set to 4, we would get:
    * 
    * k = 1:
    *   (1, 0, 0, 0) Bit mask (initial)
@@ -48,7 +90,7 @@ std::vector<> twoSetsPartitions(
    *   ...
    */
 
-  // Checks that the later `static_cast<decltype(bitmask)::difference_type>(k)` cast is safe for all given `k`.
+  // Checks that the later *static_cast<decltype(bitmask)::difference_type>(k)* cast is safe for all given *k*.
   if (numberOfElements / 2 > std::numeric_limits<std::vector<arma::uword>::difference_type>::max()) {
     throw std::range_error("twoSetsPartitions: The halved number of elements must be less than or equal to the largest representable iterator difference.");
   }
@@ -57,13 +99,13 @@ std::vector<> twoSetsPartitions(
   const arma::uvec& elements = arma::regspace<arma::uvec>(0, numberOfElements - 1);
   // **Note:** The implicit integer flooring is the wanted behaviour.
   for (arma::uword n = 0, k = 1; k <= numberOfElements / 2; ++k) {
-    // **Note:** The C++ standard guarantees that the vector initialises all its elements to 0, wherefore we are only setting the first `k` elements to 1.
+    // **Note:** The C++ standard guarantees that the vector initialises all its elements to 0, wherefore we are only setting the first *k* elements to 1.
     std::vector<arma::uword> bitmask(numberOfElements);
     std::fill(bitmask.begin(), std::next(bitmask.begin(), static_cast<decltype(bitmask)::difference_type>(k)), 1);
     do {
       /* Avoids adding duplicates when we split the elements in equally sized
        * parts, skipping the second half of permutations in this case.
-       * If `numberOfElements` was set to 4, we would get:
+       * If *numberOfElements* was set to 4, we would get:
        *
        * k = 2
        *   (1, 1, 0, 0) (Bit mask)
@@ -77,7 +119,7 @@ std::vector<> twoSetsPartitions(
         break;
       }
 
-      // Uses `bitmask`'s memory directly without copying it.
+      // Uses *bitmask*'s memory directly without copying it.
       partitions(1, n) = elements.elem(arma::find(arma::uvec(&bitmask[0], numberOfElements, false) == 1));
       partitions(2, n) = elements.elem(arma::find(arma::uvec(&bitmask[0], numberOfElements, false) == 0));
       ++n;
@@ -112,7 +154,7 @@ std::vector<> twoSetsPartitions(
      *
      * f(x, y) - g(x) - h(y) = 0, for all x, y
      *
-     * As it is practical impossible to simply guess two separations *g*, *h* of *f*, when we only got a caller to `.getObjectiveValue(...)` and no analytic form, we use a direct consequence from the equation above instead, that must also hold true for additive separable functions and uses only *f*:
+     * As it is practical impossible to simply guess two separations *g*, *h* of *f*, when we only got a caller to *.getObjectiveValue(...)* and no analytic form, we use a direct consequence from the equation above instead, that must also hold true for additive separable functions and uses only *f*:
      * 
      * f(a, c) + f(b, d) - f(a, d) - f(b, c) = 0, for all a, b, c, d
      *
@@ -129,7 +171,7 @@ std::vector<> twoSetsPartitions(
         const arma::vec& parameterBD = uniformRandomNumbers(optimisationProblem.numberOfDimensions_);
         
         // **Note:** The summation of not-a-number values results in a not-a-number value and comparing it with another value returns false, so everything will work out just fine.
-        if (std::abs(optimisationProblem.getObjectiveValueOfNormalisedParameter(parameterAC) + optimisationProblem.getObjectiveValueOfNormalisedParameter(parameterBD) - optimisationProblem.getObjectiveValueOfNormalisedParameter(arma::join_cols(parameterAC.elem(firstPart), parameterBD.elem(secondPart))) - optimisationProblem.getObjectiveValueOfNormalisedParameter(arma::join_cols(parameterBD.elem(firstPart), parameterAC.elem(secondPart)))) < ::mant::machinePrecision) {
+        if (std::fabs(optimisationProblem.getObjectiveValueOfNormalisedParameter(parameterAC) + optimisationProblem.getObjectiveValueOfNormalisedParameter(parameterBD) - optimisationProblem.getObjectiveValueOfNormalisedParameter(arma::join_cols(parameterAC.elem(firstPart), parameterBD.elem(secondPart))) - optimisationProblem.getObjectiveValueOfNormalisedParameter(arma::join_cols(parameterBD.elem(firstPart), parameterAC.elem(secondPart)))) < ::mant::machinePrecision) {
           confidences(n) += 1.0 / static_cast<double>(numberOfEvaluations);
           if (confidences(n) >= minimalConfidence) {
             // Proceeds with the next partition candidate, as we already reached the confidence threshold.
@@ -187,7 +229,7 @@ std::vector<> twoSetsPartitions(
           if (part.n_elem == 1) {
             nextPartition.push_back(part);
           } else {
-            // **Note:** `std::set_intersection` requires that all parts are ordered at this point.
+            // **Note:** *std::set_intersection* requires that all parts are ordered at this point.
             std::vector<arma::uword> intersection;
             std::set_intersection(part.begin(), part.end(), acceptablePartition(0).begin(), acceptablePartition(0).end(), intersection.begin());
             if (intersection.size() > 0) {

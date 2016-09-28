@@ -18,10 +18,10 @@
      * follows:
      *
      * infinity
-     *   sum    d_i * `base`^(-i)
+     *   sum    d_i * base^(-i)
      *  i = 1
      * 
-     * with *d_i* being the *i*-th digit of the *n*-th `base`-adic number.
+     * with *d_i* being the *i*-th digit of the *n*-th *base*-adic number.
      */
 
     if (std::numeric_limits<arma::uword>::max() - numberOfElements < seed) {

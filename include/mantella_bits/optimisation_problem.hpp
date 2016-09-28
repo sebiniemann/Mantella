@@ -198,7 +198,7 @@ constexpr optimisation_problem<T, N>::optimisation_problem() noexcept {
   upper_bounds.fill(10.0);
   
   parameter_rotation.fill(0.0);
-  for (decltype(N) n = 0; n < N; n++) {
+  for (std::size_t n = 0; n < N; n++) {
     parameter_permutation[n] = n;
     parameter_rotation[n * N + n] = 1.0;
   }

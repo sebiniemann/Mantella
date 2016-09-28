@@ -47,6 +47,9 @@ template <typename T1, typename T2>
 constexpr std::size_t n_choose_k(
     T1 n,
     const T2 k) {
+  static_assert(std::is_integral<T1>::value, "The type for 'n' must be an integer.");
+  static_assert(std::is_integral<T2>::value, "The type for 'k' must be an integer.");
+  
   if (k > n) {
     return 0;
   } else if (k == 0 || n == k) {
@@ -75,8 +78,8 @@ constexpr std::size_t n_choose_k(
    *                              k
    *
    * This avoids temporarily storing large integers and allows us to calculate greater binomial coefficients, before hitting an overflow.
-   * In fact, the largest number we are temporarily storing by using this method is exactly `k` times larger than the resulting binomial coefficient.
-   * **Note:** The dividends are always divisible with a zeroed remainder, because by multiplying `n` consecutive numbers, one is always a multiply of `n`.
+   * In fact, the largest number we are temporarily storing by using this method is exactly *k* times larger than the resulting binomial coefficient.
+   * **Note:** The dividends are always divisible with a zeroed remainder, because by multiplying *n* consecutive numbers, one is always a multiply of *n*.
    */
 
   std::size_t binomial_coefficient = n;

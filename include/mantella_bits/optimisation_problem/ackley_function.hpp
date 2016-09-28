@@ -11,7 +11,7 @@ namespace bbob {
       CompositeGriewankRosenbrockFunctionF8F2(
           const arma::uword numberOfDimensions)
       : BlackBoxOptimisationBenchmark(numberOfDimensions),
-        max_(std::max(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
+        max_(std::fmax(1.0, std::sqrt(numberOfDimensions_) / 8.0)) {
     assert(numberOfDimensions_ > 1 && "CompositeGriewankRosenbrockFunctionF8F2: The number of dimensions must be greater than 1.");
 
     setParameterRotation(randomRotationMatrix(numberOfDimensions_));

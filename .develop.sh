@@ -54,8 +54,8 @@ do_format() {
   while read -r FILE; do
     printf "[%3s%%] %s" "$(( (COUNTER * 100) / NUMBER_OF_FILES ))" "${FILE}"
     
-    if [[ $(clang-format -output-replacements-xml "${FILE}" | grep -c "<replacement ") -ne 0 ]]; then
-      if [[ ${FIX_FORMATTING} == 1 ]]; then
+    if (( $(clang-format -output-replacements-xml "${FILE}" | grep -c "<replacement ") > 0 )); then
+      if (( FIX_FORMATTING == 1 )); then
         clang-format "${FILE}" > '/tmp/.formatted'; cat '/tmp/.formatted' > "${FILE}"
         echo " ${RED_TEXT_COLOR}was automatically formatted.${RESET_TEXT_COLOR}"
       else
@@ -75,21 +75,13 @@ do_format() {
 do_install() {
   echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\"${RESET_TEXT_COLOR}"
   
-  if [ ! -d "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits/" ]; then
-    mkdir "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits/"
-  fi
+  if [ ! -d "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits" ]; then mkdir "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"; fi
   
-  local FILES
-  FILES=$(find ./include/mantella_bits -type f)
-  local DESTINATION=${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits
-  while read -r FILE; do
-    echo "${FILE} -> ${DESTINATION}/$(basename ${FILE})"
-    mkdir -p "$(dirname ${FILE})"
-    if ! cp "$FILE" "${DESTINATION}/"; then AN_ERROR_OCCURED=$?; fi
-  done <<< "${FILES}"
+  echo "./include/mantella_bits -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"
+  if ! cp -R ./include/mantella_bits/* "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"; then AN_ERROR_OCCURED=$?; fi
   
   echo "./include/mantella -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
-  if ! cp "./include/mantella" "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"; then AN_ERROR_OCCURED=$?; fi
+  if ! cp ./include/mantella "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"; then AN_ERROR_OCCURED=$?; fi
   
   finish_up
 }
@@ -98,9 +90,7 @@ do_test() {
   echo "${MAGENTA_TEXT_COLOR}Building and running tests${RESET_TEXT_COLOR}"
   
   cd ./test || exit 1
-  if [ ! -d "./build" ]; then
-    mkdir build
-  fi
+  if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
   if ! cmake ..; then AN_ERROR_OCCURED=$?; fi
@@ -153,7 +143,7 @@ else
         do_format
       ;;
       -i|--install)
-        if [[ ! "$2" =~ ^- ]]; then
+        if [[ "$2" && ! "$2" =~ ^- ]]; then
           INSTALL_DIR=$2; shift
         fi;
         do_install

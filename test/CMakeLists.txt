@@ -17,9 +17,14 @@ message(STATUS "Configuring tests for Mantella (version: ${MANTELLA_VERSION}).")
 
 find_path(MANTELLA_INCLUDE_DIR mantella${MANTELLA_VERSION_MAJOR})
 find_path(CATCH_INCLUDE_DIR catch.hpp)
+
+find_package(BLAS REQUIRED)
+find_package(LAPACK REQUIRED)
+
 if (USE_OPENMP)
   find_package(OpenMP REQUIRED)
 endif()
+
 if (USE_MPI)
   find_package(MPI REQUIRED)
 endif()

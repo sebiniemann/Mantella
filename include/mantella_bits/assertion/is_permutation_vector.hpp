@@ -38,18 +38,20 @@ is_permutation_vector
       return 0;
     }
 */
-template <typename T, std::size_t N>
+template <typename T, std::size_t number_of_elements>
 constexpr bool is_permutation_vector(
-    std::array<T, N> vector);
+    std::array<T, number_of_elements> vector);
 
 //
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, std::size_t number_of_elements>
 constexpr bool is_permutation_vector(
-    std::array<T, N> vector) {
-  // A permutation over elements from [0, `number_of_elements` - 1] must be non-empty, ...
+    std::array<T, number_of_elements> vector) {
+  static_assert(std::is_integral<T>::value, "The type for the vector's elements must be an integer.");
+  
+  // A permutation over elements from [0, *number_of_elements* - 1] must be non-empty, ...
   if (vector.empty()) {
     return false;
   }
@@ -60,9 +62,9 @@ constexpr bool is_permutation_vector(
     return false;
   }
   
-  // ... all within [0, `numberOfElements` - 1].
+  // ... all within [0, *numberOfElements* - 1].
   const auto& minmax = std::minmax_element(vector.cbegin(), vector.cend());
-  if (*minmax.first < 0 || *minmax.second > N - 1) {
+  if (*minmax.first < 0 || *minmax.second > number_of_elements - 1) {
     return false;
   }
 
@@ -71,11 +73,8 @@ constexpr bool is_permutation_vector(
 
 #if defined(MANTELLA_BUILD_TESTS) 
 TEST_CASE("is_permutation_vector", "[assertion][is_permutation_vector]") {
-  bool is_permutation_vector = mant::is_permutation_vector<unsigned int, 5>({4, 0, 1, 3, 2});
-  CHECK(is_permutation_vector == true);
-  is_permutation_vector = mant::is_permutation_vector<unsigned int, 5>({5, 1, 2, 3, 4});
-  CHECK(is_permutation_vector == false);
-  is_permutation_vector = mant::is_permutation_vector<unsigned int, 5>({0, 1, 2, 3, 0});
-  CHECK(is_permutation_vector == false);
+  CHECK((mant::is_permutation_vector<unsigned int, 5>({4, 0, 1, 3, 2}) == true));
+  CHECK((mant::is_permutation_vector<unsigned int, 5>({5, 1, 2, 3, 4}) == false));
+  CHECK((mant::is_permutation_vector<unsigned int, 5>({0, 1, 2, 3, 0}) == false));
 }
 #endif

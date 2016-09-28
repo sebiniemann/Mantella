@@ -114,9 +114,9 @@ T evaluate(
     const optimisation_problem<T, N>& optimisation_problem,
     const typename std::array<T, N>::const_iterator parameter) {
   T objective_value = 0.0;
-  // We make no guarantees about the `objective_value`'s correctness, as it depends on the order in which `optimisation_problem.objective_functions` is processed.
+  // We make no guarantees about *objective_value*'s correctness, as it depends on the order in which *optimisation_problem.objective_functions* is processed.
   // Adding ascending values with (closely) representable immediate results can be expected to lead to more precise results.
-  // However, without relying on heavy computational effort to enforce the above statement, user-given domain-knowledge is required (by filling `optimisation_problem.objective_functions` in an *optimal* order).
+  // However, without relying on heavy computational effort to enforce the above statement, user-given domain-knowledge is required (by filling *optimisation_problem.objective_functions* in an *optimal* order).
   for (const auto& objective_function : optimisation_problem.objective_functions) {
     objective_value += objective_function.first(parameter);
   }

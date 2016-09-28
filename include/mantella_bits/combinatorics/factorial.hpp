@@ -39,6 +39,8 @@ constexpr std::size_t factorial(
 template <typename T>
 constexpr std::size_t factorial(
     const T n) {
+  static_assert(std::is_integral<T>::value, "The type for 'n' must be an integer.");
+  
   if (n < 2) {
     return 1;
   }
