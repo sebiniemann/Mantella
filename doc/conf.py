@@ -10,6 +10,8 @@ release = u'0.50.0'
 
 pygments_style = 'sphinx'
 
+add_function_parentheses = False
+
 # General configuration
 nitpicky = True
 nitpick_ignore = [
@@ -51,8 +53,8 @@ html_theme_options = {
 
 html_logo = '_static/images/logo_with_white_name.png'
 
-html_extra_path = ['index.html']
 html_static_path = ['_static']
+html_extra_path = ['index.html']
 html_context = {
   'display_github': True,
   'css_files': [
