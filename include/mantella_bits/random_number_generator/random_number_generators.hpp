@@ -10,6 +10,7 @@ inline random_number_generator_t& random_number_generator();
 //
 
 inline random_number_generator_t& random_number_generator() {
+  static std::array<random_number_generator_t, MANTELLA_NUMBER_OF_THREADS> random_number_generators;
 #if MANTELLA_NUMBER_OF_THREADS > 1
   return random_number_generators[omp_get_thread_num()];
 #else

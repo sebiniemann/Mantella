@@ -130,7 +130,7 @@ T evaluate(
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("evaluate", "[evaluate]") {
-  mant::optimisation_problem<double, 3> optimisation_problem;
+  mant::optimisation_problem_t<double, 3> optimisation_problem;
   optimisation_problem.lower_bounds = {10.0, 10.0, 10.0};
   optimisation_problem.upper_bounds = {-10.0, -10.0, -10.0};
   optimisation_problem.objective_functions = {{

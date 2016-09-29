@@ -4,7 +4,7 @@
 
 */
 template <typename T, std::size_t number_of_dimensions>
-struct ackley_function_t : optimisation_problem<T, number_of_dimensions> {
+struct ackley_function_t : optimisation_problem_t<T, number_of_dimensions> {
   constexpr ackley_function_t() noexcept;
 };
 
@@ -14,7 +14,7 @@ struct ackley_function_t : optimisation_problem<T, number_of_dimensions> {
 
 template <typename T, std::size_t number_of_dimensions>
 constexpr ackley_function_t<T, number_of_dimensions>::ackley_function_t() noexcept 
-    : optimisation_problem<T, number_of_dimensions>() {
+    : optimisation_problem_t<T, number_of_dimensions>() {
   this->objective_functions = {{
     [](
         const auto& parameter) {

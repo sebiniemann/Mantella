@@ -19,10 +19,10 @@ find_path(MANTELLA_INCLUDE_DIR mantella${MANTELLA_VERSION_MAJOR})
 find_path(CATCH_INCLUDE_DIR catch.hpp)
 
 find_path(CBLAS_INCLUDE_DIR cblas.h)
-find_library(CBLAS_LIBRARY openblas)
+find_library(CBLAS_LIBRARY blas)
 
 find_path(LAPACKE_INCLUDE_DIR lapacke.h)
-find_library(LAPACKE_LIBRARY openblas)
+find_library(LAPACKE_LIBRARY lapacke)
 
 if (USE_OPENMP)
   find_package(OpenMP REQUIRED)

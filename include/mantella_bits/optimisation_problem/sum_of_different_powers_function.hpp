@@ -4,7 +4,7 @@
 
 */
 template <typename T, std::size_t number_of_dimensions>
-struct sum_of_different_powers_function_t : optimisation_problem<T, number_of_dimensions> {
+struct sum_of_different_powers_function_t : optimisation_problem_t<T, number_of_dimensions> {
   constexpr sum_of_different_powers_function_t() noexcept;
 };
 
@@ -14,7 +14,7 @@ struct sum_of_different_powers_function_t : optimisation_problem<T, number_of_di
 
 template <typename T, std::size_t number_of_dimensions>
 constexpr sum_of_different_powers_function_t<T, number_of_dimensions>::sum_of_different_powers_function_t() noexcept 
-    : optimisation_problem<T, number_of_dimensions>() {
+    : optimisation_problem_t<T, number_of_dimensions>() {
   this->lower_bounds.fill(-30.0);
   this->upper_bounds.fill(30.0);
   this->objective_functions = {{
