@@ -68,6 +68,7 @@ constexpr optimisation_algorithm_state<T, number_of_dimensions>::optimisation_al
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
+  parameters.resize(1);
   best_found_objective_value = std::numeric_limits<T>::infinity();
   used_number_of_iterations = 0;
   stagnating_number_of_iterations = 0;
@@ -80,7 +81,7 @@ template <
 constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_algorithm() noexcept {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(number_of_dimensions > 0, "");
-  static_assert(std::is_base_of<optimisation_algorithm_state, T2>::value, "");
+  static_assert(std::is_base_of<optimisation_algorithm_state<T1, number_of_dimensions>, T2<T1, number_of_dimensions>>::value, "");
   
   boundaries_handling_functions = {{
     [](
@@ -101,7 +102,7 @@ constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_alg
   }};
   
   is_stagnating_functions = {{
-    [](
+    [this](
         const auto& state) {
       return state.stagnating_number_of_iterations > maximal_stagnating_number_of_iterations;
     },
@@ -146,7 +147,7 @@ constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_alg
 TEST_CASE("optimisation_algorithm_state", "[optimisation_algorithm][optimisation_algorithm_state]") {
   typedef double value_type;
   constexpr std::size_t number_of_dimensions = 2;
-  mant::optimisation_algorithm_state<value_type, value_type> optimisation_algorithm_state;
+  mant::optimisation_algorithm_state<value_type, number_of_dimensions> optimisation_algorithm_state;
   
   // Checks that the parameters contain initially one parameter.
   CHECK(optimisation_algorithm_state.parameters.size() == 1);

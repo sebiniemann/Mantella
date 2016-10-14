@@ -53,7 +53,7 @@
 //
 // IWYU pragma: begin_exports
 namespace mant {
-# if MANTELLA_SYMBOL_VERSION == MANTELLA_VERSION_MAJOR
+#if MANTELLA_SYMBOL_VERSION == MANTELLA_VERSION_MAJOR
   inline 
 #endif
   namespace v0 {
@@ -68,19 +68,19 @@ namespace mant {
 
     // Mathematical functions
     //// Randomisation
-#include "mantella0_bits/randomisation/random_neighbour.hpp"
+    #include "mantella0_bits/randomisation/random_neighbour.hpp"
 
     // Optimisation problems
-#include "mantella0_bits/optimisation_problem.hpp"
-#include "mantella0_bits/optimisation_problem/ackley_function.hpp"
-#include "mantella0_bits/optimisation_problem/rastrigin_function.hpp"
-#include "mantella0_bits/optimisation_problem/rosenbrock_function.hpp"
-#include "mantella0_bits/optimisation_problem/sphere_function.hpp"
-#include "mantella0_bits/optimisation_problem/sum_of_different_powers_function.hpp"
-#include "mantella0_bits/evaluate.hpp"
+    #include "mantella0_bits/optimisation_problem.hpp"
+    #include "mantella0_bits/optimisation_problem/ackley_function.hpp"
+    #include "mantella0_bits/optimisation_problem/rastrigin_function.hpp"
+    #include "mantella0_bits/optimisation_problem/rosenbrock_function.hpp"
+    #include "mantella0_bits/optimisation_problem/sphere_function.hpp"
+    #include "mantella0_bits/optimisation_problem/sum_of_different_powers_function.hpp"
+    #include "mantella0_bits/evaluate.hpp"
 
-    // // Optimisation algorithms
-// #include "mantella0_bits/optimisation_algorithm.hpp"
+    // Optimisation algorithms
+    #include "mantella0_bits/optimisation_algorithm.hpp"
 // #include "mantella0_bits/optimisation_algorithm/hill_climbing.hpp"
 // #include "mantella0_bits/optimisation_algorithm/hooke_jeeves_algorithm.hpp"
 // #include "mantella0_bits/optimisation_algorithm/particle_swarm_optimisation.hpp"
@@ -88,7 +88,7 @@ namespace mant {
 // #include "mantella0_bits/optimise.hpp"
 
     // Properties analysis
-#include "mantella0_bits/property_analysis/additive_separability.hpp"
+    #include "mantella0_bits/property_analysis/additive_separability.hpp"
 // #include "mantella0_bits/analyse.hpp"
   }
 }
