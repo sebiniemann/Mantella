@@ -13,7 +13,6 @@ readonly REPLACE_LAST_LINE=$(echo ''; tput cuu1; tput el)
 declare -i FIX_FORMATTING=0
 declare INSTALL_DIR="/usr/include"
 declare -i USE_OPENMP=0
-declare -i USE_MPI=0
 
 print_help() {
   echo 'Performs several code checks.'
@@ -26,9 +25,7 @@ print_help() {
   echo '                            Add "fix" to automatically fix formatting errors.'
   echo '-i, --install [dir]         Installs the library.'
   echo "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
-  echo '-t, --test [openmp] [mpi]   Builds and runs unit tests.'
-  echo '                            Add "openmp" to use OpenMP within tests.'
-  echo '                            Add "mpi" to use MPI within tests.'
+  echo '-t, --test                  Builds and runs unit tests.'
   echo '-d, --doc                   Builds the documentation.'
 }
 
@@ -93,6 +90,7 @@ do_test() {
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
+  # TODO Use OpenMP if requested
   if ! cmake ..; then AN_ERROR_OCCURED=$?; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
@@ -150,12 +148,6 @@ else
       ;;
       -t|--test)
         do_test
-        if [ "$2" == 'openmp' ]; then
-          USE_OPENMP=1; shift
-        fi;
-        if [ "$2" == 'mpi' ]; then
-          USE_MPI=1; shift
-        fi;
       ;;
       -d|--doc)
         do_doc

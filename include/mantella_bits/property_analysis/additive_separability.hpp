@@ -1,113 +1,65 @@
 #pragma once
 
-
-
-
-template <typename T1, typename T2>
-constexpr std::size_t stirling_partition_number(
-    const T1 number_of_elements,
-    const T2 number_of_parts) {
-  if (number_of_elements == 0 || number_of_parts == 0 || number_of_elements < number_of_parts) {
-    return 0;
-  } else if (number_of_parts == 1 || number_of_elements == number_of_parts) {
-    return 1;
-  }
-
-  /* Instead of calculating the second Stirling number directly based on its explicit formula
-   *
-   *  1     k               / k \
-   * --- * sum (-1)^(k-l) * |   | * l^n
-   *  k!   l=1              \ l /
-   *
-   * we wrote it as
-   *
-   *  k                   l^(n-1)
-   * sum (-1)^(k-l) * ---------------
-   * l=1              (l-1)! * (k-l)!
-   *
-   * This avoids temporarily storing large integers and allows us to calculate greater Stirling numbers, before hitting an overflow.
-   * However, the fractions are not representable as an integer in most cases, wherefore we perform the whole computation based with floating point types.
-   */
-
-  long double stirling_partition_number = 0;
-  for (T2 l = 1; l <= number_of_parts; ++l) {
-    stirling_partition_number += (number_of_parts % 2 == l % 2 ? 1.0 : -1.0) * std::pow(l, static_cast<long double>(number_of_elements - 1)) / static_cast<long double>(factorial(l - 1) * factorial(number_of_parts - l));
-  
-    if (stirling_partition_number > std::numeric_limits<std::size_t>::max()) {
-      return 0;
-    }
-  }
-  
-  // Fixes rounding errors due to the limited precision.
-  return static_cast<std::size_t>(std::round(stirling_partition_number));
-}
-
 /**
 
 */
-std::vector<> twoSetsPartitions(
-    const arma::uword numberOfElements) {
-  assert(numberOfElements > 1 && "twoSetsPartitions: The number of elements must be greater than 1.");
+template <typename T1, std::size_t number_of_dimensions, template <class, std::size_t> class T2>
+std::array<std::size_t, number_of_dimensions> additive_separability(
+    const T2<T1, number_of_dimensions>& optimisation_problem,
+    const std::size_t number_of_evaluations,
+    const T1 acceptable_deviation);
 
-  if (numberOfElements == 2) {
-    // Added *std::initializer_list<...>* to resolve constructor ambiguity.
-    return {std::initializer_list<arma::uvec>({{0}}), {{1}}};
-  }
+//
+// Implementation
+// 
 
-  /* Generates all partitions with two sets by permuting a bit mask of the same length as *numberOfElements*, having *k* 1's for each index being part of the first part and 0's for the second one. *k* denotes the amount of elements that is distributed to each part and iterated up to *numberOfElements* / 2, as we would add duplicates (since there is no order between being the first or second part of a partition) of previously added permutations for greater values.
-   * If *numberOfElements* was set to 4, we would get:
-   * 
-   * k = 1:
-   *   (1, 0, 0, 0) Bit mask (initial)
-   *    |
-   *   (0         ) First part  \
-   *       |  |  |               |- First partition
-   *   (   1  2  3) Second part /
-   *
-   *
-   *   (1, 0, 0, 0) Bit mask (permuted in reverse lexicographic)
-   *       |
-   *   (   1      ) First part  \
-   *    |     |  |               |- Second partition
-   *   (0     2  3) Second part /
-   *
-   *   ...
-   * 
-   * k = 2:
-   *   (1, 1, 0, 0) Bit mask (initial)
-   *    |  |
-   *   (0, 1      ) First part  \
-   *          |  |               |- Fifth partition
-   *   (      2  3) Second part /
-   *
-   *
-   *   (1, 0, 1, 0) Bit mask (permuted in reverse lexicographic)
-   *    |     |
-   *   (0,    2   ) First part  \
-   *       |     |               |- Sixth partition
-   *   (   1     3) Second part /
-   *
-   *   ...
-   */
-
-  // Checks that the later *static_cast<decltype(bitmask)::difference_type>(k)* cast is safe for all given *k*.
-  if (numberOfElements / 2 > std::numeric_limits<std::vector<arma::uword>::difference_type>::max()) {
-    throw std::range_error("twoSetsPartitions: The halved number of elements must be less than or equal to the largest representable iterator difference.");
-  }
-
-  arma::field<arma::uvec> partitions(2, secondStirlingNumber(numberOfElements, 2));
-  const arma::uvec& elements = arma::regspace<arma::uvec>(0, numberOfElements - 1);
-  // **Note:** The implicit integer flooring is the wanted behaviour.
-  for (arma::uword n = 0, k = 1; k <= numberOfElements / 2; ++k) {
-    // **Note:** The C++ standard guarantees that the vector initialises all its elements to 0, wherefore we are only setting the first *k* elements to 1.
-    std::vector<arma::uword> bitmask(numberOfElements);
-    std::fill(bitmask.begin(), std::next(bitmask.begin(), static_cast<decltype(bitmask)::difference_type>(k)), 1);
+template <typename T1, std::size_t number_of_dimensions, template <class, std::size_t> class T2>
+std::array<std::size_t, number_of_dimensions> additive_separability(
+    const T2<T1, number_of_dimensions>& optimisation_problem,
+    const std::size_t number_of_evaluations,
+    const T1 acceptable_deviation) {
+  static_assert(std::is_floating_point<T1>::value, "");
+  static_assert(number_of_dimensions > 1, "");
+  // Each lower bound is less than or equal to its corresponding upper one.
+  assert(std::equal(
+    optimisation_problem.lower_bounds.cbegin(), optimisation_problem.lower_bounds.cend(),
+    optimisation_problem.upper_bounds.cbegin(), optimisation_problem.upper_bounds.cend(),
+    [](const auto lower_bound, const auto upper_bound) {return lower_bound <= upper_bound;})); 
+  assert(number_of_evaluations > 0);
+  assert(acceptable_deviation >= 0);
+      
+  // Initialises *partition* with 0, indicating that all dimensions are in the same group and none is separable.
+  std::array<std::size_t, number_of_dimensions> partition;
+  partition.fill(0);
+  
+  // Iterates through all partitions with two parts.
+  // The parts are ordered, such that the first one will not contain more elements than the second one.
+  // *k* stands for the number of elements in the first part (and is therefore limited by floor
+  // (*number_of_dimensions* / 2)).
+  for (std::size_t n = 0, k = 1; k <= number_of_dimensions / 2; ++k) {
+    /* Each partition is represented by a bitmask, whereby *true* marks elements in the first part and *false* marks 
+     * elements in the second part.
+     * By iterating over all permutation of *bitmask*, all possible partitions are proceeded.
+     *
+     *   (1, 0, 0, 0) Bit mask (example)
+     *    |
+     *   (0         ) First part  \
+     *       |  |  |               |- Partition
+     *   (   1  2  3) Second part /
+     */
+    
+    // Sets the first *k* values inside *bitmask* to true ...
+    std::array<bool, number_of_dimensions> bitmask;
+    std::fill(bitmask.begin(), std::next(bitmask.begin(), k), true);
+    // ... and all others to *false*.
+    std::fill(std::next(bitmask.begin(), k), bitmask.end(), false);
+      
     do {
-      /* Avoids adding duplicates when we split the elements in equally sized
-       * parts, skipping the second half of permutations in this case.
-       * If *numberOfElements* was set to 4, we would get:
+      /* Avoids adding duplicates when we split the elements in equally sized parts, skipping the second half of 
+       * permutations.
        *
-       * k = 2
+       * If *number_of_dimensions* was 4 and *k* was 2, we would get:
+       *
        *   (1, 1, 0, 0) (Bit mask)
        *   (1, 0, 1, 0) (Bit mask)
        *   (1, 0, 0, 1) (Bit mask)
@@ -115,151 +67,152 @@ std::vector<> twoSetsPartitions(
        *   (0, 1, 0, 1) (Bit mask) Invert of the second bit mask
        *   (0, 0, 1, 1) (Bit mask) Invert of the first bit mask
        */
-      if (2 * k == numberOfElements && bitmask.at(0) != 1) {
+      if (2 * k == number_of_dimensions && !std::get<0>(bitmask)) {
         break;
       }
 
-      // Uses *bitmask*'s memory directly without copying it.
-      partitions(1, n) = elements.elem(arma::find(arma::uvec(&bitmask[0], numberOfElements, false) == 1));
-      partitions(2, n) = elements.elem(arma::find(arma::uvec(&bitmask[0], numberOfElements, false) == 0));
+      for (std::size_t k = 0; k < number_of_evaluations; ++k) {
+        /* Tests whether the function is separable into the two parts or not.
+         * A function *f* is additive separable into two other function *g*, *h* if the following holds:
+         *
+         * f(x, y) - g(x) - h(y) = 0, for all x, y
+         *
+         * As it is practical impossible to get two separations *g*, *h* of *f*, when we only got a caller to *f* and no
+         * analytic/symbolic form, we use a direct consequence from the above equation instead, that must also hold true
+         * for additive separable functions and uses only *f*:
+         * 
+         * f(a, c) + f(b, d) - f(a, d) - f(b, c) = 0, for all a, b, c, d
+         *
+         */
+        
+        // Fills (a, c) with randomly and uniformly values, drawn from [0, 1].
+        std::array<T1, number_of_dimensions> parameter_ac;
+        std::generate(
+          parameter_ac.begin(), parameter_ac.end(),
+          std::bind(
+            std::uniform_real_distribution<T1>(T1(0.0), T1(1.0)),
+            std::ref(mant::random_number_generator())));
+            
+        // Fills (b, d) with randomly and uniformly values, drawn from [0, 1].
+        std::array<T1, number_of_dimensions> parameter_bd;
+        std::generate(
+          parameter_bd.begin(), parameter_bd.end(),
+          std::bind(
+            std::uniform_real_distribution<T1>(T1(0.0), T1(1.0)),
+            std::ref(mant::random_number_generator())));
+        
+        std::array<T1, number_of_dimensions> parameter_ad;
+        std::array<T1, number_of_dimensions> parameter_bc;
+        for (std::size_t k = 0; k < number_of_dimensions; ++k) {
+          // Maps [0, 1] linear to [*optimisation_problem.lower_bounds*, *optimisation_problem.upper_bounds*], 
+          // addressing the actual bounds per dimension.
+          parameter_ac.at(k) = 
+            optimisation_problem.lower_bounds.at(k) + 
+            parameter_ac.at(k) * (optimisation_problem.upper_bounds.at(k) - optimisation_problem.lower_bounds.at(k));
+          parameter_bd.at(k) = 
+            optimisation_problem.lower_bounds.at(k) +
+            parameter_bd.at(k) * (optimisation_problem.upper_bounds.at(k) - optimisation_problem.lower_bounds.at(k));
+          
+          // Fills (a, d) and (b, d), based on (a, c) and (b, d).
+          if (bitmask.at(k)) {
+            parameter_ad.at(k) = parameter_ac.at(k);
+            parameter_bc.at(k) = parameter_bd.at(k);
+          } else {
+            parameter_ad.at(k) = parameter_bd.at(k);
+            parameter_bc.at(k) = parameter_ac.at(k);
+          }
+        }
+      
+        // Tests whether the above condition for separable functions holds true or not.
+        if (std::fabs(
+              evaluate(optimisation_problem, parameter_ac) +
+              evaluate(optimisation_problem, parameter_bd) -
+              evaluate(optimisation_problem, parameter_ad) -
+              evaluate(optimisation_problem, parameter_bc)
+            ) > 
+            acceptable_deviation) {
+          break;
+        }
+        
+        /* Aggregates the partition into multiple parts by combining all acceptable partitions with two parts.
+         * If we would write all bit masks of acceptable partitions with two parts below each other ...
+         *
+         *   (1, 1, 1, 0) (Bit mask #1)
+         *   (1, 0, 0, 0) (Bit mask #2)
+         *   (1, 1, 1, 0) (Bit mask #3)
+         *
+         * ... dimensions with the same sequence along the column axis are not separable and in the same part.
+         * For the given example, the resulting partition would therefore be (0, 1, 1, 2), separating the function into 
+         * three parts.
+         *
+         * In order to avoid storing all bit masks and doing it incrementally instead, we compare the current bit mask 
+         * with the current *partition* instead.
+         *
+         *   (1, 1, 1, 0) (Current bit mask)
+         *   (0, 1, 1, 2) (Current *partition*)
+         *
+         * Analogous to the statement above, two dimensions remain in the same part, if the sequence along their column 
+         * axis is equal.
+         */
+        
+        std::array<bool, number_of_dimensions> is_remaining_dimension;
+        is_remaining_dimension.fill(true);
+        for (std::size_t k = 0; k < number_of_dimensions; ++k) {
+          if (is_remaining_dimension.at(k)) {
+            // Compares the sequence for all following, remaining dimensions to the current one.
+            // If the sequence matches, both get the same part number (*k*) and the dimension is marked as 
+            // non-remaining.
+            for (std::size_t l = k + 1; l < number_of_dimensions; ++l) {
+              if (is_remaining_dimension.at(l) && bitmask.at(k) == bitmask.at(l) && partition.at(k) == partition.at(l)) {
+                partition.at(l) = k;
+                is_remaining_dimension.at(l) = false;
+              }
+            }
+            
+            partition.at(k) = k;
+            
+            // We are already finished, as there is no better partition as having one part per dimensions.
+            if (k == number_of_dimensions - 1) {
+              return partition;
+            }
+          }
+        }
+      }
+      
       ++n;
     } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
   }
-
-  return partitions;
+  
+  return partition;
 }
 
+//
+// Unit tests
+//
 
-  arma::field<arma::uvec> additiveSeparability(
-      OptimisationProblem& optimisationProblem,
-      const arma::uword numberOfEvaluations,
-      const double minimalConfidence) {
-    assert(numberOfEvaluations > 0 && "additiveSeparability: The number of evaluations must be greater than 0.");
-    assert(0.0 <= minimalConfidence && minimalConfidence <= 1.0 && "additiveSeparability: The minimal confidence must be within the interval (0, 1].");
-
-    if (!isRepresentableAsFloatingPoint(numberOfEvaluations)) {
-      throw std::range_error("additiveSeparability: The number of elements must be representable as a floating point.");
-    }
-
-    if (minimalConfidence <= 0) {
-      arma::field<arma::uvec> partition(1, numberOfEvaluations);
-      for (arma::uword n = 0; n < partition.n_elem; ++n) {
-        partition(n) = {n};
-      }
-      return partition;
-    }
-
-    /* The first of two steps to analyse the additive separability of a function is to estimate all two-set separations that fulfil the deviation and confidence requirements.
-     * A function *f* is additive separable into two other function *g*, *h* if the following holds:
-     *
-     * f(x, y) - g(x) - h(y) = 0, for all x, y
-     *
-     * As it is practical impossible to simply guess two separations *g*, *h* of *f*, when we only got a caller to *.getObjectiveValue(...)* and no analytic form, we use a direct consequence from the equation above instead, that must also hold true for additive separable functions and uses only *f*:
-     * 
-     * f(a, c) + f(b, d) - f(a, d) - f(b, c) = 0, for all a, b, c, d
-     *
-     */
-
-    const arma::field<arma::uvec>& partitionCandidates = twoSetsPartitions(optimisationProblem.numberOfDimensions_);
-    arma::rowvec confidences(partitionCandidates.n_cols, arma::fill::zeros);
-    for (arma::uword n = 0; n < partitionCandidates.n_cols; ++n) {
-      const arma::uvec& firstPart = partitionCandidates(0, n);
-      const arma::uvec& secondPart = partitionCandidates(1, n);
-      
-      for (arma::uword k = 0; k < numberOfEvaluations; ++k) {
-        const arma::vec& parameterAC = uniformRandomNumbers(optimisationProblem.numberOfDimensions_);
-        const arma::vec& parameterBD = uniformRandomNumbers(optimisationProblem.numberOfDimensions_);
-        
-        // **Note:** The summation of not-a-number values results in a not-a-number value and comparing it with another value returns false, so everything will work out just fine.
-        if (std::fabs(optimisationProblem.getObjectiveValueOfNormalisedParameter(parameterAC) + optimisationProblem.getObjectiveValueOfNormalisedParameter(parameterBD) - optimisationProblem.getObjectiveValueOfNormalisedParameter(arma::join_cols(parameterAC.elem(firstPart), parameterBD.elem(secondPart))) - optimisationProblem.getObjectiveValueOfNormalisedParameter(arma::join_cols(parameterBD.elem(firstPart), parameterAC.elem(secondPart)))) < ::mant::machinePrecision) {
-          confidences(n) += 1.0 / static_cast<double>(numberOfEvaluations);
-          if (confidences(n) >= minimalConfidence) {
-            // Proceeds with the next partition candidate, as we already reached the confidence threshold.
-            break;
-          }
-        }
-      }
-    }
-
-    const arma::uvec& acceptablePartitionsIndices = arma::find(confidences >= minimalConfidence);
-    arma::field<arma::uvec> acceptablePartitions(partitionCandidates.n_rows, acceptablePartitionsIndices.n_elem);
-    for (arma::uword n = 0; n < acceptablePartitionsIndices.n_elem; ++n) {
-      acceptablePartitions.col(n) = partitionCandidates.col(n);
-    }
-    /* The last of the two steps is to calculate the partition with the maximal number of parts, from all acceptable two-set partitions.
-     * If we now weaken our observation and assume that each accepted two-set partition holds true for **all** inputs, the partition with the maximal number of parts can be calculated by combining all intersections between one part and an other.
-     *
-     * For example, assume that we got 3 acceptable two-set partitions:
-     *
-     * - {{1, 2, 3, 4, 5}, {6}}
-     * - {{1}, {2, 3, 4, 5, 6}}
-     * - {{1, 2, 3}, {4, 5, 6}}
-     *
-     * We would then calculate the intersection between the first two partitions:
-     *
-     * {{1, 2, 3, 4, 5}, {6}} intersect {{1}, {2, 3, 4, 5, 6}} = 
-     *   {{1, 2, 3, 4, 5} intersect {1}}             union
-     *   {{1, 2, 3, 4, 5} intersect {2, 3, 4, 5, 6}} union
-     *   {{6} intersect {1}}                         union \
-     *   {{6} intersect {2, 3, 4, 5, 6}}                   / skipped and directly replaced by {{6}}
-     *   = {{1}, {2, 3, 4, 5}, {6}}
-     *
-     * And intersect the resulting partitions with the remaining one:
-     *
-     * {{1}, {2, 3, 4, 5}, {6}} intersect {{1, 2, 3}, {4, 5, 6}} = 
-     *   {{1} intersect {1, 2, 3}}          union \
-     *   {{1} intersect {4, 5, 6}}          union / skipped and directly replaced by {{1}}
-     *   {{2, 3, 4, 5} intersect {1, 2, 3}} union
-     *   {{2, 3, 4, 5} intersect {4, 5, 6}} union
-     *   {{6} intersect {1, 2, 3}}          union \
-     *   {{6} intersect {4, 5, 6}}                / skipped and directly replaced by {{6}}
-     *   = {{1}, {2, 3}, {4, 5}, {6}}
-     *
-     * And get {{1}, {2, 3}, {4, 5}, {6}} as partition with the maximal number of parts.
-     */
-
-    if (acceptablePartitions.n_cols > 1) {
-      std::vector<arma::uvec> partition({acceptablePartitions(0, 0), acceptablePartitions(1, 0)});
-      for (arma::uword n = 1; n < acceptablePartitions.n_cols; ++n) {
-        const arma::field<arma::uvec>& acceptablePartition = acceptablePartitions.col(n);
-        
-        std::vector<arma::uvec> nextPartition;
-        nextPartition.reserve(2 * partition.size());
-        for (const auto& part : partition) {
-          if (part.n_elem == 1) {
-            nextPartition.push_back(part);
-          } else {
-            // **Note:** *std::set_intersection* requires that all parts are ordered at this point.
-            std::vector<arma::uword> intersection;
-            std::set_intersection(part.begin(), part.end(), acceptablePartition(0).begin(), acceptablePartition(0).end(), intersection.begin());
-            if (intersection.size() > 0) {
-              nextPartition.push_back(arma::uvec(&intersection[0], intersection.size(), false));
-            }
-            
-            intersection.clear();
-            std::set_intersection(part.begin(), part.end(), acceptablePartition(1).begin(), acceptablePartition(1).end(), intersection.begin());
-            if (intersection.size() > 0) {
-              nextPartition.push_back(arma::uvec(&intersection[0], intersection.size(), false));
-            }
-          }
-        }
-        partition = nextPartition;
-
-        // We are already finished, as there is no finer partition as having one part for each dimensions.
-        if (partition.size() == optimisationProblem.numberOfDimensions_) {
-          break;
-        }
-      }
-
-      arma::field<arma::uvec> separation(partition.size(), 1);
-      for (arma::uword n = 0; n < partition.size(); ++n) {
-        separation(n) = partition.at(n);
-      }
-      
-      return separation;
-    } else if (acceptablePartitions.n_cols == 1) {
-      return {acceptablePartitions(0), acceptablePartitions(1)};
-    } else {
-      return {arma::regspace<arma::uvec>(0, optimisationProblem.numberOfDimensions_ - 1)};
-    }
-  }
+#if defined(MANTELLA_BUILD_TESTS)
+TEST_CASE("additive_separability", "[property_analysis][additive_separability]") {
+  typedef double value_type;
+  constexpr std::size_t number_of_dimensions = 5;
+  
+  // Checks that fully-separable functions are supported.
+  mant::sphere_function<value_type, number_of_dimensions> sphere_function;
+  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<std::size_t, number_of_dimensions>({0, 1, 2, 3, 4})));
+  
+  // Checks that partly-separable functions are supported.
+  sphere_function.objective_functions.push_back({
+    [](
+        const auto& parameter) {
+      return std::get<0>(parameter) * std::get<4>(parameter) + std::get<2>(parameter) * std::get<3>(parameter);
+    },
+    "A partly separable function"});
+  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<std::size_t, number_of_dimensions>({0, 1, 2, 2, 0})));
+  
+  // Checks that non-separable functions are supported.
+  const mant::ackley_function<value_type, number_of_dimensions> ackley_function;
+  CHECK((additive_separability(ackley_function, 100, 1e-12) == std::array<std::size_t, number_of_dimensions>({0, 0, 0, 0, 0})));
+  
+  // Checks that increasing the acceptable deviation can increase the number of separable dimensions.
+  CHECK((additive_separability(ackley_function, 100, std::numeric_limits<double>::infinity()) == std::array<std::size_t, number_of_dimensions>({0, 1, 2, 3, 4})));
+}
+#endif

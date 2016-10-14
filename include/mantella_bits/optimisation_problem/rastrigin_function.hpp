@@ -3,25 +3,51 @@
 /**
 
 */
-template <typename T, std::size_t number_of_dimensions>
-struct rastrigin_function_t : optimisation_problem_t<T, number_of_dimensions> {
-  constexpr rastrigin_function_t() noexcept;
+template <
+  typename T,
+  std::size_t number_of_dimensions>
+struct rastrigin_function : optimisation_problem<T, number_of_dimensions> {
+  constexpr rastrigin_function() noexcept;
 };
 
 //
 // Implementation
 //
 
-template <typename T, std::size_t number_of_dimensions>
-constexpr rastrigin_function_t<T, number_of_dimensions>::rastrigin_function_t() noexcept 
-    : optimisation_problem_t<T, number_of_dimensions>() {
+template <
+  typename T,
+  std::size_t number_of_dimensions>
+constexpr rastrigin_function<T, number_of_dimensions>::rastrigin_function() noexcept 
+    : optimisation_problem<T, number_of_dimensions>() {
+  /* Original, 2-dimensional:  @see L. A. Rastrigin (1974). Systems of Extremal Control.
+   * Generalised, n-dimensional: @see H. Mühlenbein, D. Schomisch and J. Born (1991). The Parallel Genetic Algorithm as 
+   * Function Optimizer. Parallel Computing, 17(6-7), pp. 619–632.
+   *
+   *            n   /                                                  \
+   * 10 * N +  sum  | parameter(i)^2 - 10 * cos(2 * pi * parameter(i)) |
+   *          i = 1 \                                                  /
+   */
   this->objective_functions = {{
     [](
         const auto& parameter) {
-      return T(10.0) * static_cast<T>(number_of_dimensions) + std::accumulate(parameter.cbegin(), parameter.cend(), T(0.0), [](const T sum, const T element) {return sum + std::pow(element, T(2.0)) - T(10.0) * std::cos(T(2.0) * std::acos(T(-1.0)) * element);});
+      return 
+        T(10.0) *
+        static_cast<T>(number_of_dimensions) +
+        std::accumulate(
+          parameter.cbegin(),
+          parameter.cend(),
+          T(0.0),
+          [](
+              const T sum,
+              const T element) {
+            return 
+              sum +
+              std::pow(element, T(2.0)) - 
+              T(10.0) * std::cos(T(2.0) * std::acos(T(-1.0)) * element);
+          }
+        );
     },
-    "rastrigin function"
-  }};
+    "Rastrigin function"}};
 }
 
 //
@@ -30,6 +56,15 @@ constexpr rastrigin_function_t<T, number_of_dimensions>::rastrigin_function_t() 
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("rastrigin_function", "[optimisation_problem][rastrigin_function]") {
-  CHECK((mant::rastrigin_function_t<double, 3>().objective_functions[0].first({1.0, -2.0, 3.0}) == Approx(14.0)));
+  typedef double value_type;
+  constexpr std::size_t number_of_dimensions = 3;
+  const mant::rastrigin_function<value_type, number_of_dimensions> rastrigin_function;
+  
+  // Checks that there is only one objective function as default.
+  CHECK(rastrigin_function.objective_functions.size() == 1);
+  // Checks that the objective function returns the expected objective value.
+  CHECK(std::get<0>(rastrigin_function.objective_functions.at(0))({1.0, -2.0, 3.0}) == Approx(14.0));
+  // Checks that the objective function is named "Rastrigin function".
+  CHECK(std::get<1>(rastrigin_function.objective_functions.at(0)) == "Rastrigin function");
 }
 #endif

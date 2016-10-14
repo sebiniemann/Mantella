@@ -35,15 +35,10 @@ RUN apt-get install -y clang-3.8 && \
     update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set c++ /usr/bin/clang++-3.8
 
-# Installs user dependencies
+# Installs dependencies
 # - CBLAS
 # - LAPACKE
 RUN apt-get install -y libblas-dev liblapacke-dev
-
-# Installs optional user dependencies
-# - MPI, including missing default include path
-RUN apt-get install -y libmpich-dev
-ENV CPATH "$CPATH:/usr/include/mpich/"
 
 # Installs test dependencies
 # - CMake
@@ -75,7 +70,7 @@ RUN apt-get install -y liboctave-dev
 
 # Installs development libraries not used on CI servers
 # - Google micro benchmark
-RUN if [ "$CI" == 'false' ]; then \
+RUN if [ ! "$CI" == 'true' ]; then \
       apt-get install -y wget && \
       wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
       mkdir benchmark && \
