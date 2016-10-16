@@ -52,11 +52,12 @@ TEST_CASE("random_search", "[random_search]") {
     CHECK(random_search.next_parameters_functions.size() == 1);
     CHECK(std::get<1>(random_search.next_parameters_functions.at(0)) == "Draws all parameters randomly and uniformly from [0, 1].");
     
-    random_search.active_dimensions = {0, 1};
+    random_search.active_dimensions = {0, 2};
     random_search_state.parameters.resize(2);
     
     std::get<0>(random_search.next_parameters_functions.at(0))(random_search_state);
     
+    CHECK(random_search_state.parameters.size() == 2);
     // Checks that all elements are within [0, 1].
     for (const auto& parameter : random_search_state.parameters) {
       CHECK(std::all_of(

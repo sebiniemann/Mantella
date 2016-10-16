@@ -140,7 +140,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
     SECTION("Second function") {
       CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(1)) == "Generates all parameters, such that for each one only a single dimension differs from *best_found_parameter*, with distance *stepsize*.");
       
-      hooke_jeeves_algorithm.active_dimensions = {0, 1};
+      hooke_jeeves_algorithm.active_dimensions = {0, 2};
       hooke_jeeves_algorithm_state.stepsize = 0.25;
       hooke_jeeves_algorithm_state.best_found_parameter = {1.0, 0.5, 0.3};
       

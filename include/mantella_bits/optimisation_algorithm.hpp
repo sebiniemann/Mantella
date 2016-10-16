@@ -82,7 +82,7 @@ template <
 constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_algorithm() noexcept {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(number_of_dimensions > 0, "");
-  static_assert(std::is_base_of<optimisation_algorithm_state<T1, number_of_dimensions>, T2<T1, number_of_dimensions>>::value, "");
+  static_assert(std::is_base_of<state_type, T2<T1, number_of_dimensions>>::value, "");
   
   boundary_handling_functions = {{
     [this](
@@ -173,16 +173,17 @@ TEST_CASE("optimisation_algorithm", "[optimisation_algorithm]") {
     CHECK(optimisation_algorithm.boundary_handling_functions.size() == 1);
     CHECK(std::get<1>(optimisation_algorithm.boundary_handling_functions.at(0)) == "Clamps all elements to be between [0, 1].");
     
-    optimisation_algorithm.active_dimensions = {0, 1};
+    optimisation_algorithm.active_dimensions = {0, 2};
     optimisation_algorithm_state.parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
     
     std::get<0>(optimisation_algorithm.boundary_handling_functions.at(0))(optimisation_algorithm_state);
+    
     CHECK((optimisation_algorithm_state.parameters == std::vector<std::array<value_type, number_of_dimensions>>({{0.0, 0.2, 3.2}, {0.8, 1.0, -2.4}})));
   }
   
   
   SECTION("Is-stagnating functions") {
-    optimisation_algorithm.active_dimensions = {0, 1};
+    optimisation_algorithm.active_dimensions = {0, 2};
   
     CHECK(optimisation_algorithm.is_stagnating_functions.size() == 1);
     CHECK(std::get<1>(optimisation_algorithm.is_stagnating_functions.at(0)) == "Returns true if *state.stagnating_number_of_iterations* is greater than *maximal_stagnating_number_of_iterations*.");
@@ -204,11 +205,12 @@ TEST_CASE("optimisation_algorithm", "[optimisation_algorithm]") {
     CHECK(optimisation_algorithm.restarting_functions.size() == 1);
     CHECK(std::get<1>(optimisation_algorithm.restarting_functions.at(0)) == "Redraws all parameters randomly and uniformly from [0, 1].");
     
-    optimisation_algorithm.active_dimensions = {0, 1};
+    optimisation_algorithm.active_dimensions = {0, 2};
     optimisation_algorithm_state.parameters.resize(2);
     
     std::get<0>(optimisation_algorithm.restarting_functions.at(0))(optimisation_algorithm_state);
     
+    CHECK(optimisation_algorithm_state.parameters.size() == 2);
     // Checks that all elements are within [0, 1].
     for (const auto& parameter : optimisation_algorithm_state.parameters) {
       CHECK(std::all_of(
