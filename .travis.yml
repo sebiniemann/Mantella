@@ -16,7 +16,7 @@ install:
   - sudo docker build -t ubuntu/mantella:latest .
   - sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
   - sudo docker exec mantella apt-get install -y rubygems && gem install coveralls-lcov
-  - sudo docker exec mantella chmod a+x ./.code.sh
+  - sudo docker exec mantella chmod a+x ./.develop.sh
   
 addons:
   coverity_scan:
@@ -28,35 +28,4 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  # Test matrix
-  ## GCC
-  ### - Unit tests with OpenMP support
-  ### - Code coverage
-  ### - Installation
-  ## Clang
-  ### - Unit tests with MPI support
-  ### - Code format
-  ### - Include rules
-  - | 
-    if [ "$CXX" == "g++" ]; then sudo docker exec mantella /bin/bash -c "\
-      cmake -DBUILD_TESTS=ON . && \
-      make -j 4 && \
-      ./bin/mantellaTests && \
-      make install"; \
-    else sudo docker exec mantella /bin/bash -c "\
-      cmake -DBUILD_TESTS=ON -DSUPPORT_MPI=ON . && \
-      make -j 4 && \
-      mpiexec -n 4 ./bin/mantellaTests && \
-      ./.code.sh --all"; \
-    fi
-  
-after_success:
-  - | 
-    if [ "$CXX" == "g++" ]; then sudo docker exec mantella /bin/bash -c "\
-      cd ./CMakeFiles/mantella.dir/src/ && \
-      lcov --directory . --base-directory . --capture --output-file coverage.info && \
-      lcov --remove coverage.info '/usr/*' --output-file coverage.info && \
-      lcov --remove coverage.info '*.hpp' --output-file coverage.info && \
-      lcov --list coverage.info && \
-      coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info" \
-    fi
+  - sudo docker exec mantella /bin/bash -c "./.develop.sh --install --test"
