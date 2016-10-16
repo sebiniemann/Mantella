@@ -15,6 +15,7 @@ message(STATUS "Configuring tests for Mantella (version: ${MANTELLA_VERSION}).")
 find_path(MANTELLA_INCLUDE_DIR mantella${MANTELLA_VERSION_MAJOR})
 find_path(CATCH_INCLUDE_DIR catch.hpp)
 
+configure_file(${PROJECT_SOURCE_DIR}/main.cpp.cmake ${PROJECT_SOURCE_DIR}/main.cpp)
 add_executable(tests main.cpp)
 set_property(TARGET tests PROPERTY CXX_STANDARD 14)
 set_property(TARGET tests PROPERTY CXX_STANDARD_REQUIRED ON)
