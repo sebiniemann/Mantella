@@ -19,6 +19,9 @@ template <
   std::size_t number_of_dimensions>
 constexpr sum_of_different_powers_function<T, number_of_dimensions>::sum_of_different_powers_function() noexcept 
     : optimisation_problem<T, number_of_dimensions>() {
+  static_assert(std::is_floating_point<T>::value, "");
+  static_assert(number_of_dimensions > 0, "");
+  
   /*   n   /                           \
    *  sum  | abs(parameter(i))^(i + 1) |
    * i = 1 \                           /
@@ -45,11 +48,8 @@ TEST_CASE("sum_of_different_powers_function", "[optimisation_problem][sum_of_dif
   constexpr std::size_t number_of_dimensions = 3;
   const mant::sum_of_different_powers_function<value_type, number_of_dimensions> sum_of_different_powers_function;
   
-  // Checks that there is only one objective function as default.
   CHECK(sum_of_different_powers_function.objective_functions.size() == 1);
-  // Checks that the objective function returns the expected objective value.
   CHECK(std::get<0>(sum_of_different_powers_function.objective_functions.at(0))({1.0, -2.0, 3.0}) == Approx(90.0));
-  // Checks that the objective function is named "sum of different powers function".
   CHECK(std::get<1>(sum_of_different_powers_function.objective_functions.at(0)) == "sum of different powers function");
 }
 #endif

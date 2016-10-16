@@ -30,7 +30,9 @@ T1 evaluate(
   return std::accumulate(
     optimisation_problem.objective_functions.cbegin(), optimisation_problem.objective_functions.cend(),
     T1(0.0),
-    [&parameter](const T1 sum, const auto objective_function) {return sum + objective_function.first(parameter);});
+    [&parameter](const T1 sum, const auto objective_function) {
+      return sum + objective_function.first(parameter);
+    });
 }
     
 //
@@ -43,14 +45,14 @@ TEST_CASE("evaluate", "[evaluate]") {
   constexpr std::size_t number_of_dimensions = 3;
   mant::sphere_function<value_type, number_of_dimensions> sphere_function;
   
-  // Checks that all objective functions are summed up.
+  // Adds another objective function, testing that all objectives are summed up.
   sphere_function.objective_functions.push_back({
-    [](
-        const auto& parameter) {
+    [](const auto& parameter) {
       return std::accumulate(parameter.cbegin(), parameter.cend(), 1.0, std::multiplies<double>());
     },
     "My other objective function"
   });
+  
   CHECK(mant::evaluate(sphere_function, {2.0, -3.0, 4.0}) == Approx(5.0));
 }
 #endif

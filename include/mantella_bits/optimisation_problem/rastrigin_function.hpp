@@ -19,6 +19,9 @@ template <
   std::size_t number_of_dimensions>
 constexpr rastrigin_function<T, number_of_dimensions>::rastrigin_function() noexcept 
     : optimisation_problem<T, number_of_dimensions>() {
+  static_assert(std::is_floating_point<T>::value, "");
+  static_assert(number_of_dimensions > 0, "");
+  
   /* Original, 2-dimensional:  @see L. A. Rastrigin (1974). Systems of Extremal Control.
    * Generalised, n-dimensional: @see H. Mühlenbein, D. Schomisch and J. Born (1991). The Parallel Genetic Algorithm as 
    * Function Optimizer. Parallel Computing, 17(6-7), pp. 619–632.
@@ -34,8 +37,7 @@ constexpr rastrigin_function<T, number_of_dimensions>::rastrigin_function() noex
         T(10.0) *
         static_cast<T>(number_of_dimensions) +
         std::accumulate(
-          parameter.cbegin(),
-          parameter.cend(),
+          parameter.cbegin(), parameter.cend(),
           T(0.0),
           [](
               const T sum,
@@ -44,8 +46,7 @@ constexpr rastrigin_function<T, number_of_dimensions>::rastrigin_function() noex
               sum +
               std::pow(element, T(2.0)) - 
               T(10.0) * std::cos(T(2.0) * std::acos(T(-1.0)) * element);
-          }
-        );
+          });
     },
     "Rastrigin function"}};
 }
@@ -60,11 +61,8 @@ TEST_CASE("rastrigin_function", "[optimisation_problem][rastrigin_function]") {
   constexpr std::size_t number_of_dimensions = 3;
   const mant::rastrigin_function<value_type, number_of_dimensions> rastrigin_function;
   
-  // Checks that there is only one objective function as default.
   CHECK(rastrigin_function.objective_functions.size() == 1);
-  // Checks that the objective function returns the expected objective value.
   CHECK(std::get<0>(rastrigin_function.objective_functions.at(0))({1.0, -2.0, 3.0}) == Approx(14.0));
-  // Checks that the objective function is named "Rastrigin function".
   CHECK(std::get<1>(rastrigin_function.objective_functions.at(0)) == "Rastrigin function");
 }
 #endif

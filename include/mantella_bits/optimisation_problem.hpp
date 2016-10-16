@@ -31,8 +31,9 @@ constexpr optimisation_problem<T, number_of_dimensions>::optimisation_problem() 
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
-  // These bounds could be anything as default, as they are context-dependent.
-  // However, since we map the bounds later on internally to [0, 1] to ease maintainability in our optimisation algorithms, we also use [0, 1] as default.
+  // These bounds could be anything as default, as they need user-given, context-dependent knowledge to be useful.
+  // However, since we map the bounds later on internally to [0, 1] to ease maintainability in our optimisation 
+  // algorithms, we use [0, 1] as default.
   lower_bounds.fill(T(0.0));
   upper_bounds.fill(T(1.0));
 }
@@ -47,11 +48,13 @@ TEST_CASE("optimisation_problem", "[optimisation_problem]") {
   constexpr std::size_t number_of_dimensions = 2;
   const mant::optimisation_problem<value_type, number_of_dimensions> optimisation_problem;
   
-  // Checks that there is no objective function set as default.
-  CHECK(optimisation_problem.objective_functions.empty() == true);
-  // Checks that the default lower bound is 0 for any dimension.
-  CHECK((optimisation_problem.lower_bounds == std::array<value_type, number_of_dimensions>({0.0, 0.0})));
-  // Checks that the default upper bound is 1 for any dimension.
-  CHECK((optimisation_problem.upper_bounds == std::array<value_type, number_of_dimensions>({1.0, 1.0})));
+  SECTION("Default values") {
+    CHECK((optimisation_problem.lower_bounds == std::array<value_type, number_of_dimensions>({0.0, 0.0})));
+    CHECK((optimisation_problem.upper_bounds == std::array<value_type, number_of_dimensions>({1.0, 1.0})));
+  }
+  
+  SECTION("Objective functions") {
+    CHECK(optimisation_problem.objective_functions.empty() == true);
+  }
 }
 #endif

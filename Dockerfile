@@ -35,15 +35,9 @@ RUN apt-get install -y clang-3.8 && \
     update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set c++ /usr/bin/clang++-3.8
 
-# Installs dependencies
-# - CBLAS
-# - LAPACKE
-RUN apt-get install -y libblas-dev liblapacke-dev
-
 # Installs test dependencies
 # - CMake
 # - Catch (unit tests)
-# - Clang-format (formatting test)
 RUN apt-get install -y cmake
 RUN apt-get install -y wget && \
     wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
@@ -53,10 +47,6 @@ RUN apt-get install -y wget && \
     rm -Rf catch.tar.gz catch/ && \
     apt-get remove -y --purge wget && \
     apt-get autoremove -y --purge
-RUN apt-get install -y clang-format-3.8 && \
-    update-alternatives --remove clang-format /usr/bin/clang-format && \
-    update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-3.8 100 && \
-    update-alternatives --set clang-format /usr/bin/clang-format-3.8
 
 # Installs documentation dependencies
 # - Sphinx, with read-the-document theme (documentation generation)

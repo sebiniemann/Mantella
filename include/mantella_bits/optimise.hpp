@@ -38,8 +38,8 @@ optimise_result<T1, number_of_dimensions> optimise(
   );
 
   state = std::accumulate(
-    optimisation_algorithm.boundaries_handling_functions.cbegin(),
-    optimisation_algorithm.boundaries_handling_functions.cend(),
+    optimisation_algorithm.boundary_handling_functions.cbegin(),
+    optimisation_algorithm.boundary_handling_functions.cend(),
     std::accumulate(
       optimisation_algorithm.initialising_functions.cbegin(),
       optimisation_algorithm.initialising_functions.cend(),
@@ -52,8 +52,8 @@ optimise_result<T1, number_of_dimensions> optimise(
     ),
     [](
         const auto& state,
-        const auto boundaries_handling_function) {
-      return boundaries_handling_function.first(state);
+        const auto boundary_handling_function) {
+      return boundary_handling_function.first(state);
     }
   );
 
@@ -86,8 +86,8 @@ optimise_result<T1, number_of_dimensions> optimise(
   
   for (state.used_number_of_iterations = 1; state.used_number_of_iterations < optimisation_algorithm.maximal_number_of_iterations && optimisation_algorithm.acceptable_objective_value < state.best_found_objective_value; ++state.used_number_of_iterations) {
     state = std::accumulate(
-      optimisation_algorithm.boundaries_handling_functions.cbegin(),
-      optimisation_algorithm.boundaries_handling_functions.cend(),
+      optimisation_algorithm.boundary_handling_functions.cbegin(),
+      optimisation_algorithm.boundary_handling_functions.cend(),
       std::any_of(
         optimisation_algorithm.is_stagnating_functions.cbegin(),
         optimisation_algorithm.is_stagnating_functions.cend(),
@@ -116,8 +116,8 @@ optimise_result<T1, number_of_dimensions> optimise(
       ),
       [](
           const auto& state,
-          const auto boundaries_handling_function) {
-        return boundaries_handling_function.first(state);
+          const auto boundary_handling_function) {
+        return boundary_handling_function.first(state);
     });
 
     std::transform(
