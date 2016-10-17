@@ -71,7 +71,7 @@ Coding guidelines
 
 ### Adding new headers
 
-When adding new files, put your headers under `include/mantella_bits/`. To include them into the library, add your headers into `include/mantella`.
+When adding new files, put your headers under `include/mantella_bits/`. To include them into the library, add your headers to `include/mantella`.
 
 ### Comments
 
