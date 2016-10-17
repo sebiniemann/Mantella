@@ -130,7 +130,7 @@ In case the subject does not fully covers your changes, fell free to describe th
 ### Licence statement
 End the commit message of your pull request adding a clear statement under which your licence your contribution is licensed.
 
-Note that we cannot accept contributions that are either missing a licence statement or have chosen a licence incompatible to the MIT licence.
+Note that we cannot accept contributions that are either missing a licence statement or have chosen a license incompatible to the MIT licence.
 
 ``` text
 My contribution is licensed under the MIT license.
