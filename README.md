@@ -1,4 +1,4 @@
-[![Mantella](http://sebastianniemann.github.io/Mantella/assets/images/logo_with_name.png)](http://mantella.info/)
+[![Mantella](http://mantella.info/assets/images/logo_with_name.png)](http://mantella.info/)
 
 Version 0.50.2
 ==============
