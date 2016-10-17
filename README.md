@@ -1,6 +1,6 @@
 [![Mantella](http://sebastianniemann.github.io/Mantella/assets/images/logo_with_name.png)](http://mantella.info/)
 
-Version 0.50.1
+Version 0.50.2
 ==============
 
 [![Travis CI Build Status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Coverity Scan Build Status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) [![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella)
@@ -8,6 +8,35 @@ Version 0.50.1
 [Mantella](http://mantella.info/) is an efficiency-focused C++ header-only library for analysing and solving optimisation problems.
 
 It is written in C++14 and only depends on the C++ standard library, supporting Linux, Windows and Mac OS X.
+
+Our goal is to make optimisation as easy as writing
+
+```
+#include <mantella>
+
+int main() {
+  // ... company code.
+
+  // Add your own optimisation problem.
+  constexpr std::size_t number_of_dimensions = 2;
+  mant::optimisation_problem<double, number_of_dimensions> my_problem;
+  my_problem.objective_functions.push_back({
+    [](const auto parameter) {
+      return my_objective_value_computaton(parameter);
+    }
+    "My problem"
+  });
+  
+  // Optimise the problem, selecting and parametrising an appropriate algorithm automatically.
+  auto result = mant::optimise(my_problem);
+
+  // ... continuing company code.
+  
+  return 0;
+}
+```
+
+while (automatically) analysing and learning the problems properties over time, in order to select the most efficient solver to do the job.
 
 Getting started
 ---------------
