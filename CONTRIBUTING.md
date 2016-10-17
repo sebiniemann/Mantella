@@ -1,11 +1,11 @@
 Contributing to Mantella
-=======================
+========================
 
 This guide will accompany you on your first contribution to Mantella, covering everything from setting up a development system to committing your changes.
 
 In case you only want to submit a pull request, go directly to **Filing a pull request** (at the end of the document).
 
-**If you are in a hurry**, feel free to skip any part at your own account, but be aware that this might delay accepting your pull request (as someone needs to invest the time to finish it up :wink:), especially if the implementation is not yet working.
+**If you are in a hurry**, feel free to skip any part at your own account, but be aware that this might delay accepting your pull request (as someone needs to invest the time to finish it up :wink:), especially if the implementation is not yet completed and/or working.
 
 Let us know what you are planning
 ---------------------------------
@@ -127,7 +127,7 @@ Add a description about the content of your commit.
 ### Body (optional)
 In case the subject does not fully covers your changes, fell free to describe the details of your changes as specific as as you can/want. Do not be afraid to add multiple lines.
 
-### Licence statement
+### License statement
 End the commit message of your pull request adding a clear statement under which your licence your contribution is licensed.
 
 Note that we cannot accept contributions that are either missing a licence statement or have chosen a license incompatible to the MIT licence.
