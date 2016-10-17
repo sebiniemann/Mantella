@@ -1,18 +1,18 @@
 Contributing to Mantella
-=======================
+========================
 
 This guide will accompany you on your first contribution to Mantella, covering everything from setting up a development system to committing your changes.
 
 In case you only want to submit a pull request, go directly to **Filing a pull request** (at the end of the document).
 
-**If you are in a hurry**, feel free to skip any part at your own account, but be aware that this might delay accepting your pull request (as someone needs to invest the time to finish it up :wink:), especially if the implementation is not yet working.
+**If you are in a hurry**, feel free to skip any part at your own account, but be aware that this might delay accepting your pull request (as someone needs to invest the time to finish it up :wink:), especially if the implementation is not yet completed and/or working.
 
 Let us know what you are planning
 ---------------------------------
 
 If you found a bug in the source code, a mistake in any kind of documentation or you are missing some features within Mantella and want to implement/fix it yourself, please let us know in advance, so we can discuss the implementation or handle the bug beforehand. This way, we can also give you early support and advices.
 
-To do this, simply add an issue to the [GitHub issue tracker](https://github.com/SebastianNiemann/Mantella/issues), describing what you plan to do and make clear whether you are already working on it or not. You can also contact us directly on [Gitter](https://gitter.im/SebastianNiemann/Mantella) at any point of your contribution.
+To do this, simply add an issue to the [GitHub issue tracker](https://github.com/Mantella/Mantella/issues), describing what you plan to do and make clear whether you are already working on it or not. You can also contact us directly on [Gitter](https://gitter.im/Mantella/Mantella) at any point of your contribution.
 
 In case you found a bug and want to fix it, please give us informations on what got wrong and how to reproduce it.
 
@@ -40,7 +40,7 @@ Setting up a development system
 [Docker](https://www.docker.com) and run:
 
 ```
-git clone http://github.com/SebastianNiemann/Mantella.git
+git clone http://github.com/Mantella/Mantella.git
 cd Mantella
 sudo docker build -t ubuntu/mantella:latest .
 sudo docker run -v .:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
@@ -71,7 +71,7 @@ Coding guidelines
 
 ### Adding new headers
 
-When adding new files, put your headers under `include/mantella_bits/`. To include them into the library and your headers into `include/mantella`.
+When adding new files, put your headers under `include/mantella_bits/`. To include them into the library, add your headers to `include/mantella`.
 
 ### Comments
 
@@ -114,12 +114,12 @@ Pull request messages should then be organised as followed:
 ### Tag
 Add one of the following tags, that describe your changes the best.
 
-- `api break`: Your change will break the existing API in any way.
+- `api`: Your change will break the existing API in any way.
 - `feature`: You added a new feature, without breaking the existing API.
 - `fix`: You fixed a bug.
 - `test`: You changed or added a test.
-- `documentation`: You extended or corrected the documentation.
-- `maintenance`: For anything else.
+- `doc`: You extended or corrected the documentation.
+- `misc`: For anything else.
 
 ### Subject
 Add a description about the content of your commit.
@@ -127,10 +127,10 @@ Add a description about the content of your commit.
 ### Body (optional)
 In case the subject does not fully covers your changes, fell free to describe the details of your changes as specific as as you can/want. Do not be afraid to add multiple lines.
 
-### Licence statement
+### License statement
 End the commit message of your pull request adding a clear statement under which your licence your contribution is licensed.
 
-Note that we cannot accept contributions that are either missing a licence statement or have chosen a licence incompatible to the MIT licence.
+Note that we cannot accept contributions that are either missing a licence statement or have chosen a license incompatible to the MIT licence.
 
 ``` text
 My contribution is licensed under the MIT license.
