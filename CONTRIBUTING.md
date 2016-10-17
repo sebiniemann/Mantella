@@ -114,12 +114,12 @@ Pull request messages should then be organised as followed:
 ### Tag
 Add one of the following tags, that describe your changes the best.
 
-- `api break`: Your change will break the existing API in any way.
+- `api`: Your change will break the existing API in any way.
 - `feature`: You added a new feature, without breaking the existing API.
 - `fix`: You fixed a bug.
 - `test`: You changed or added a test.
-- `documentation`: You extended or corrected the documentation.
-- `maintenance`: For anything else.
+- `doc`: You extended or corrected the documentation.
+- `misc`: For anything else.
 
 ### Subject
 Add a description about the content of your commit.
