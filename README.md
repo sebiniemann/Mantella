@@ -23,7 +23,7 @@ int main() {
   my_problem.objective_functions.push_back({
     [](const auto& parameter) {
       return my_objective_value_computaton(parameter);
-    }
+    },
     "My problem"
   });
   
