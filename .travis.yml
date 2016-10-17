@@ -23,8 +23,8 @@ addons:
     project:
       name: "SebastianNiemann/Mantella"
     notification_email: niemann@sra.uni-hannover.de
-    build_command_prepend: "cov-configure --compiler gcc-4.8 --template; sudo docker exec cmake -DBUILD_TESTS=ON"
-    build_command: "sudo docker exec mantella make -j 4"
+    build_command_prepend: cov-configure --compiler gcc-5 --template
+    build_command: sudo docker exec mantella /bin/bash -c "./.develop.sh --install --test"
     branch_pattern: coverity_scan
 
 script:
