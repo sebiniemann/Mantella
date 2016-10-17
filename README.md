@@ -9,7 +9,7 @@ Version 0.50.2
 
 It is written in C++14 and only depends on the C++ standard library, supporting Linux, Windows and Mac OS X.
 
-Our goal is to make an optimisation process as easy as writing
+Our goal is to make optimisation processes as easy as writing
 
 ``` cpp
 #include <mantella>
