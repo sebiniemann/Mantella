@@ -11,7 +11,7 @@ It is written in C++14 and only depends on the C++ standard library, supporting 
 
 Our goal is to make optimisation as easy as writing
 
-```
+``` cpp
 #include <mantella>
 
 int main() {
