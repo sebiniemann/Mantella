@@ -17,7 +17,7 @@ Our goal is to make optimisation processes as easy as writing
 int main() {
   // ... company code.
 
-  // Add your own optimisation problem.
+  // Adds your own optimisation problem.
   constexpr std::size_t number_of_dimensions = 2;
   mant::optimisation_problem<double, number_of_dimensions> my_problem;
   my_problem.objective_functions.push_back({
@@ -27,7 +27,7 @@ int main() {
     "My problem"
   });
   
-  // Optimise the problem, selecting and parametrising an appropriate algorithm automatically.
+  // Optimises the problem. Selects and parametrises an efficient optimiser automatically.
   auto result = mant::optimise(my_problem);
 
   // ... continuing company code.
