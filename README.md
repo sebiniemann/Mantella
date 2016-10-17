@@ -21,7 +21,7 @@ int main() {
   constexpr std::size_t number_of_dimensions = 2;
   mant::optimisation_problem<double, number_of_dimensions> my_problem;
   my_problem.objective_functions.push_back({
-    [](const auto parameter) {
+    [](const std::array<double, number_of_dimensions>& parameter) {
       return my_objective_value_computaton(parameter);
     }
     "My problem"
