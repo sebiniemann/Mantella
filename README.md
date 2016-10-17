@@ -22,7 +22,7 @@ int main() {
   mant::optimisation_problem<double, number_of_dimensions> my_problem;
   my_problem.objective_functions.push_back({
     [](const auto& parameter) {
-      return my_objective_value_computaton(parameter);
+      return my_objective_value_computation(parameter);
     },
     "My problem"
   });
