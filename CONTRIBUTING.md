@@ -12,7 +12,7 @@ Let us know what you are planning
 
 If you found a bug in the source code, a mistake in any kind of documentation or you are missing some features within Mantella and want to implement/fix it yourself, please let us know in advance, so we can discuss the implementation or handle the bug beforehand. This way, we can also give you early support and advices.
 
-To do this, simply add an issue to the [GitHub issue tracker](https://github.com/SebastianNiemann/Mantella/issues), describing what you plan to do and make clear whether you are already working on it or not. You can also contact us directly on [Gitter](https://gitter.im/SebastianNiemann/Mantella) at any point of your contribution.
+To do this, simply add an issue to the [GitHub issue tracker](https://github.com/Mantella/Mantella/issues), describing what you plan to do and make clear whether you are already working on it or not. You can also contact us directly on [Gitter](https://gitter.im/Mantella/Mantella) at any point of your contribution.
 
 In case you found a bug and want to fix it, please give us informations on what got wrong and how to reproduce it.
 
@@ -40,7 +40,7 @@ Setting up a development system
 [Docker](https://www.docker.com) and run:
 
 ```
-git clone http://github.com/SebastianNiemann/Mantella.git
+git clone http://github.com/Mantella/Mantella.git
 cd Mantella
 sudo docker build -t ubuntu/mantella:latest .
 sudo docker run -v .:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
