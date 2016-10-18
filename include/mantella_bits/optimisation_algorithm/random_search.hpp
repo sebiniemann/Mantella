@@ -7,6 +7,9 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct random_search : optimisation_algorithm<T, number_of_dimensions> {
+  using typename optimisation_algorithm<T, number_of_dimensions>::state_type;
+  using typename optimisation_algorithm<T, number_of_dimensions>::value_type;
+  
   constexpr random_search() noexcept;
 };
 
@@ -23,8 +26,7 @@ constexpr random_search<T, number_of_dimensions>::random_search() noexcept
   static_assert(number_of_dimensions > 0, "");
   
   this->next_parameters_functions = {{
-    [this](
-        auto& state) {
+    [this](auto& state) {
       for (auto& parameter : state.parameters) {
         std::generate(
           parameter.begin(), std::next(parameter.begin(), this->active_dimensions.size()),

@@ -14,11 +14,17 @@ struct particle_swarm_optimisation_state : optimisation_algorithm_state<T, numbe
   constexpr particle_swarm_optimisation_state() noexcept;
 };
 
+/**
+
+*/
 template <
   typename T1,
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2 = particle_swarm_optimisation_state>
 struct particle_swarm_optimisation : optimisation_algorithm<T1, number_of_dimensions, T2> {
+  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::state_type;
+  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::value_type;
+  
   T1 initial_velocity;
   T1 maximal_acceleration;
   T1 maximal_local_attraction;
@@ -58,8 +64,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
   static_assert(std::is_base_of<particle_swarm_optimisation_state<T1, number_of_dimensions>, T2<T1, number_of_dimensions>>::value, "");
   
   this->initialising_functions = {{
-    [this](
-        auto& state) {
+    [this](auto& state) {
       state.velocities.resize(state.parameters.size());
       for (auto& velocity : state.velocities) {
         std::generate(
@@ -70,14 +75,12 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
     },
     "Draws randomly and uniformly one velocity vector per parameter from [-*initial_velocity*, *initial_velocity*]"
   }, {
-    [this](
-        auto& state) {
+    [this](auto& state) {
       state.local_best_found_parameters = state.parameters;
     },
     "Sets *local_best_found_parameters* to equal the initial parameters."
   }, {
-    [this](
-        auto& state) {
+    [this](auto& state) {
       state.local_best_found_objective_values.resize(state.local_best_found_parameters.size());
       std::fill(
         state.local_best_found_objective_values.begin(), state.local_best_found_objective_values.end(),
@@ -87,8 +90,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
   }};
   
   this->boundary_handling_functions.insert(this->boundary_handling_functions.begin(), {
-    [this](
-        auto& state) {
+    [this](auto& state) {
       for (std::size_t n = 0; n < state.parameters.size(); ++n) {
         auto& velocity = state.velocities.at(n);
         const auto& parameter = state.parameters.at(n);
@@ -109,8 +111,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
   });
   
   this->next_parameters_functions = {{
-    [this](
-        auto& state) {
+    [this](auto& state) {
       for (std::size_t n = 0; n < state.objective_values.size(); ++n) {
         if (state.objective_values.at(n) < state.local_best_found_objective_values.at(n)) {
           state.local_best_found_parameters.at(n) = state.parameters.at(n);
@@ -120,8 +121,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
     },
     "Updates the local best parameter and objective value, if the parameter's objective value improved in the previous iteration."
   }, {
-    [this](
-        auto& state) {
+    [this](auto& state) {
       for (std::size_t n = 0; n < state.parameters.size(); ++n) {
         const auto& parameter = state.parameters.at(n);
         const auto& local_best_found_parameter = state.local_best_found_parameters.at(n);
@@ -158,8 +158,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
     },
     "Draws each velocity randomly and uniformly from its attraction center and adds the previous velocity, weighted by a factor drawn randomly and uniformly from [0, *maximal_acceleration*]."
   }, {
-    [this](
-        auto& state) {
+    [this](auto& state) {
       for (std::size_t n = 0; n < state.parameters.size(); ++n) {
         const auto& velocity = state.velocities.at(n);
         auto& parameter = state.parameters.at(n);

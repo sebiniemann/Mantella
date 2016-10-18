@@ -7,6 +7,9 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct hill_climbing : optimisation_algorithm<T, number_of_dimensions> {
+  using typename optimisation_algorithm<T, number_of_dimensions>::state_type;
+  using typename optimisation_algorithm<T, number_of_dimensions>::value_type;
+  
   T minimal_stepsize;
   T maximal_stepsize;
   
@@ -26,8 +29,7 @@ constexpr hill_climbing<T, number_of_dimensions>::hill_climbing() noexcept
   static_assert(number_of_dimensions > 0, "");
   
   this->next_parameters_functions = {{
-    [this](
-        auto& state) {
+    [this](auto& state) {
       assert(minimal_stepsize <= maximal_stepsize);
        
       std::generate(

@@ -3,7 +3,6 @@
 /**
 
 */
-
 template <
   typename T,
   std::size_t number_of_dimensions>
@@ -13,11 +12,17 @@ struct hooke_jeeves_algorithm_state : optimisation_algorithm_state<T, number_of_
   constexpr hooke_jeeves_algorithm_state() noexcept;
 };
 
+/**
+
+*/
 template <
   typename T1,
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2 = hooke_jeeves_algorithm_state>
 struct hooke_jeeves_algorithm : optimisation_algorithm<T1, number_of_dimensions, T2> {
+  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::state_type;
+  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::value_type;
+  
   T1 initial_stepsize;
   T1 stepsize_decrease;
   
@@ -50,8 +55,7 @@ constexpr hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_alg
   static_assert(std::is_base_of<hooke_jeeves_algorithm_state<T1, number_of_dimensions>, T2<T1, number_of_dimensions>>::value, "");
   
   this->initialising_functions = {{
-    [this](
-        auto& state) {
+    [this](auto& state) {
       state.stepsize = initial_stepsize;
     },
     "Sets *stepsize* to *initial_stepsize*."
@@ -66,8 +70,7 @@ constexpr hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_alg
     },
     "Divides *stepsize* by *stepsize_decrease*, if *best_found_objective_value* did not improved in the previous iteration."
   }, {
-    [this](
-        auto& state) {
+    [this](auto& state) {
       state.parameters.resize(2 * this->active_dimensions.size());
       std::fill(
         state.parameters.begin(), state.parameters.end(),

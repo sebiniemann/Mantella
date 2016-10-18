@@ -84,6 +84,7 @@ namespace mant {
     #include "mantella0_bits/optimisation_algorithm.hpp"
     #include "mantella0_bits/optimisation_algorithm/hill_climbing.hpp"
     #include "mantella0_bits/optimisation_algorithm/hooke_jeeves_algorithm.hpp"
+    #include "mantella0_bits/optimisation_algorithm/nelder_mead_method.hpp"
     #include "mantella0_bits/optimisation_algorithm/particle_swarm_optimisation.hpp"
     #include "mantella0_bits/optimisation_algorithm/random_search.hpp"
     #include "mantella0_bits/optimise.hpp"

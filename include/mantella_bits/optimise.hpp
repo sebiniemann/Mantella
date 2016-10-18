@@ -193,7 +193,7 @@ TEST_CASE("optimise", "[optimise]") {
   sphere_function.upper_bounds = {5.0, 5.0};
   mant::hooke_jeeves_algorithm<value_type, number_of_dimensions> hooke_jeeves_algorithm;
   hooke_jeeves_algorithm.acceptable_objective_value = 1e-12;
-  hooke_jeeves_algorithm_state<value_type, number_of_dimensions> hooke_jeeves_algorithm_state;
+  typename mant::hooke_jeeves_algorithm<value_type, number_of_dimensions>::state_type hooke_jeeves_algorithm_state;
   hooke_jeeves_algorithm_state.parameters = {{-3.2, 4.1}, {6.0, -4.1}};
   
   const auto&& result = mant::optimise(sphere_function, hooke_jeeves_algorithm, hooke_jeeves_algorithm_state);
