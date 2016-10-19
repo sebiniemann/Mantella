@@ -1,5 +1,3 @@
-#pragma once
-
 template <
   typename T,
   std::size_t number_of_dimensions>
