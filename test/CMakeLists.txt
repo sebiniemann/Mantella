@@ -12,9 +12,6 @@ project(Mantella VERSION ${MANTELLA_VERSION} LANGUAGES CXX)
 message(STATUS "") 
 message(STATUS "Configuring tests for Mantella (version: ${MANTELLA_VERSION}).")
 
-find_path(MANTELLA_INCLUDE_DIR mantella${MANTELLA_VERSION_MAJOR})
-find_path(CATCH_INCLUDE_DIR catch.hpp)
-
 configure_file(${PROJECT_SOURCE_DIR}/main.cpp.cmake ${PROJECT_SOURCE_DIR}/main.cpp)
 add_executable(tests main.cpp)
 set_property(TARGET tests PROPERTY CXX_STANDARD 14)
@@ -50,7 +47,9 @@ message(STATUS "- Handling warnings as errors.")
 add_compile_options(
   -Werror)
 
-target_include_directories(tests PRIVATE ${MANTELLA_INCLUDE_DIR})
+target_include_directories(tests PRIVATE "../include")
+
+find_path(CATCH_INCLUDE_DIR catch.hpp)
 target_include_directories(tests SYSTEM PRIVATE ${CATCH_INCLUDE_DIR})
 
 #
