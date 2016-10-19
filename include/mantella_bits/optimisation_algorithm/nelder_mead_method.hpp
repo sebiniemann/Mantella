@@ -8,6 +8,7 @@ template <
   std::size_t number_of_dimensions>
 struct nelder_mead_method_state : optimisation_algorithm_state<T, number_of_dimensions> {
   enum class phase_type {
+    CENTROID,
     REFLECTION,
     EXPANSION,
     CONTRACTION
@@ -54,7 +55,7 @@ constexpr nelder_mead_method_state<T, number_of_dimensions>::nelder_mead_method_
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
-  phase = state_type::phase_type::REFLECTION;
+  phase = state_type::phase_type::CENTROID;
 }
 
 template <
@@ -67,29 +68,17 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
   static_assert(number_of_dimensions > 0, "");
   static_assert(std::is_base_of<nelder_mead_method_state<T1, number_of_dimensions>, T2<T1, number_of_dimensions>>::value, "");
   
-  this->next_parameters_functions = {{
-    [this](auto& state) {
-      // Ensure that there are enough sample points for the simplex
-    },
-    ""
-  }};
+  // this->next_parameters_functions = {{
+    // [this](auto& state) {
+      // // Ensure that there are enough sample points for the simplex
+    // },
+    // ""
+  // }};
   
   this->next_parameters_functions = {{
     [this](auto& state) {
       if (state.used_number_of_iterations > 1) {
         assert(state.parameters.size() == 1);
-        
-        switch (state.phase) {
-          case state_type::phase_type::REFLECTION: {
-            state.phase = state_type::phase_type::REFLECTION;
-          } break;
-          case state_type::phase_type::EXPANSION: {
-            
-          } break;
-          case state_type::phase_type::CONTRACTION: {
-            state.phase = state_type::phase_type::REFLECTION;
-          }
-        }
       } else {
         assert(state.parameters.size() == number_of_dimensions + 1);
         
@@ -109,27 +98,54 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
           [](const auto& simplex, const auto& other_simplex){
             return std::get<1>(simplex) < std::get<1>(other_simplex);
           });
+      }
+      
+      switch (state.phase) {
+        case state_type::phase_type::CENTROID: {
+          // Calculates the simplex's centroid, excluding the worst sample.
+          state.centroid.fill(T1(0.0));
+          std::for_each(
+            state.simplex.cbegin(), std::prev(state.simplex.cend()),
+            [this, &state](const auto& sample) {
+              for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
+                state.centroid.at(n) += std::get<0>(sample).at(n) / number_of_dimensions;
+              }
+            });
+            
+          // Calculates the reflected point.
+          std::transform(
+            state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
+            std::get<0>(std::get<number_of_dimensions>(state.simplex)).cbegin(),
+            state.reflected_point.begin(),
+            [this](const auto centroid_element, const auto sample_element) {
+              return centroid_element + reflection_weight * (centroid_element - sample_element);
+            });
+            
+          state.phase = state_type::phase_type::REFLECTION;
+        } break;
+        case state_type::phase_type::REFLECTION: {
+          if (state.objective_value.at(0) < std::get<1>(std::get<0>(state.simplex))) {
+            
+            state.phase = state_type::phase_type::EXPANSION;
+          } else if (state.objective_value.at(0) < std::get<1>(std::get<number_of_dimensions - 1>(state.simplex))) { 
+            auto position = std::find_if(
+              std::next(state.simplex.cbegin()), std::prev(state.simplex.cend()),
+              [&state](const auto& sample) {
+                return state.objective_value.at(0) < std::get<1>(sample);
+              });
+            std::copy_backward(position, std::prev(simplex.cend()), simplex.cend());
+            *position = std::make_pair(state.parameters.at(0), state.objective_value.at(0));
+          } else {
+            
+            state.phase = state_type::phase_type::CONTRACTION;
+          }
+        } break;
+        case state_type::phase_type::EXPANSION: {
           
-        // Calculates the simplex's centroid, excluding the worst sample.
-        state.centroid.fill(T1(0.0));
-        std::for_each(
-          state.simplex.cbegin(), std::prev(state.simplex.cend()),
-          [this, &state](const auto& sample) {
-            for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
-              state.centroid.at(n) += std::get<0>(sample).at(n) / number_of_dimensions;
-            }
-          });
-          
-        // Calculates the reflected point.
-        std::transform(
-          state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
-          std::get<0>(std::get<number_of_dimensions>(state.simplex)).cbegin(),
-          state.reflected_point.begin(),
-          [this](const auto centroid_element, const auto sample_element) {
-            return centroid_element + reflection_weight * (centroid_element - sample_element);
-          });
-          
-        state.phase = state_type::phase_type::REFLECTION;
+        } break;
+        case state_type::phase_type::CONTRACTION: {
+          state.phase = state_type::phase_type::REFLECTION;
+        }
       }
     },
     "downhill simplex method"
