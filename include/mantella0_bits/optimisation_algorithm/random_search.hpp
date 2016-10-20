@@ -31,7 +31,7 @@ constexpr random_search<T, number_of_dimensions>::random_search() noexcept
             std::ref(random_number_generator())));
       }
     },
-    "Draws all parameters randomly and uniformly from [0, 1]."
+    "Random search next parameters"
   }};
 }
 
@@ -48,7 +48,7 @@ TEST_CASE("random_search", "[random_search]") {
   
   SECTION("Next parameters functions") {
     CHECK(random_search.next_parameters_functions.size() == 1);
-    CHECK(std::get<1>(random_search.next_parameters_functions.at(0)) == "Draws all parameters randomly and uniformly from [0, 1].");
+    CHECK(std::get<1>(random_search.next_parameters_functions.at(0)) == "Random search next parameters");
     
     random_search.active_dimensions = {0, 2};
     random_search_state.parameters.resize(2);
