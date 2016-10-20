@@ -2,7 +2,7 @@
 
 # Global variables
 declare -i AN_ERROR_OCCURED=0
-readonly MANTELLA_MAJOR_VERSION=$(expr "$(grep "#define MANTELLA_VERSION_MAJOR" $(find include -name "mantella*" -type f))" : '.*\#define MANTELLA_VERSION_MAJOR \([0-9]*\)')
+readonly MANTELLA_MAJOR_VERSION=$(expr "$(grep "#define MANTELLA_VERSION_MAJOR" "$(find include -name "mantella*" -type f)")" : '.*\#define MANTELLA_VERSION_MAJOR \([0-9]*\)')
 ## Formatting
 readonly RED_TEXT_COLOR=$(tput setaf 1)
 readonly GREEN_TEXT_COLOR=$(tput setaf 2)
