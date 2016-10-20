@@ -38,13 +38,8 @@ finish_up() {
 do_install() {
   echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\"${RESET_TEXT_COLOR}"
   
-  if [ ! -d "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits" ]; then mkdir "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"; fi
-  
-  echo "./include/mantella_bits -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"
-  if ! cp -R ./include/mantella_bits/* "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"; then AN_ERROR_OCCURED=$?; fi
-  
-  echo "./include/mantella -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
-  if ! cp ./include/mantella "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"; then AN_ERROR_OCCURED=$?; fi
+  echo "copy ./include/mantella* -> ${INSTALL_DIR}"
+  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=$?; fi
   
   finish_up
 }
