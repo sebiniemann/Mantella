@@ -74,6 +74,3 @@ RUN if [ ! "$CI" == 'true' ]; then \
       apt-get remove -y --purge wget && \
       apt-get autoremove -y --purge \
     ; fi
-
-# Adds local library path
-ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib"

@@ -86,10 +86,10 @@ Testing your work
 
 ### Running tests
 
-To install your changes, build and execute the text, run
+To test your changes (including building and executing all tests), simply run
 
 ``` bash
-./.develop --install --test
+./.develop --test
 ```
 
 Executing the tests can also be further configured by using [Catch's commandline options](https://github.com/philsquared/Catch/blob/master/docs/command-line.md). For example, running just a subset of tests

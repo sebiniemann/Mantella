@@ -56,7 +56,6 @@ do_test() {
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
-  # TODO Use OpenMP if requested
   if ! cmake ..; then AN_ERROR_OCCURED=$?; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
