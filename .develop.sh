@@ -39,7 +39,7 @@ do_install() {
   echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\"${RESET_TEXT_COLOR}"
   
   echo "copy ./include/mantella* -> ${INSTALL_DIR}"
-  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; fi
+  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=$?; fi
   
   finish_up
 }
@@ -51,14 +51,14 @@ do_test() {
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
-  if ! cmake ..; then AN_ERROR_OCCURED=1; fi
+  if ! cmake ..; then AN_ERROR_OCCURED=$?; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! make clean tests; then AN_ERROR_OCCURED=1; fi
+    if ! make clean tests; then AN_ERROR_OCCURED=$?; fi
   fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! ./tests; then AN_ERROR_OCCURED=1; fi
+    if ! ./tests; then AN_ERROR_OCCURED=$?; fi
   fi
   
   cd ../../ || exit 1
@@ -71,10 +71,10 @@ do_doc() {
   
   cd ./doc || exit 1
   
-  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=1; fi
+  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=$?; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; fi
+    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=$?; fi
   fi
   
   finish_up
