@@ -68,13 +68,13 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
         );
       }
     },
-    "Draws randomly and uniformly one velocity vector per parameter from [-*initial_velocity*, *initial_velocity*]"
+    "Particle swarm optimisation initialising #1"
   }, {
     [this](
         auto& state) {
       state.local_best_found_parameters = state.parameters;
     },
-    "Sets *local_best_found_parameters* to equal the initial parameters."
+    "Particle swarm optimisation initialising #2"
   }, {
     [this](
         auto& state) {
@@ -83,7 +83,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
         state.local_best_found_objective_values.begin(), state.local_best_found_objective_values.end(),
         std::numeric_limits<T1>::infinity());
     },
-    "Sets *local_best_found_objective_values* to infinity."
+    "Particle swarm optimisation initialising #3"
   }};
   
   this->boundary_handling_functions.insert(this->boundary_handling_functions.begin(), {
@@ -105,7 +105,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
           });
       }
     },
-    "Halves and negates a velocity (dimension-wise), if its corresponding parameter is out-of-bound."
+    "Particle swarm optimisation boundary handling"
   });
   
   this->next_parameters_functions = {{
@@ -118,7 +118,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
         }
       }
     },
-    "Updates the local best parameter and objective value, if the parameter's objective value improved in the previous iteration."
+    "Particle swarm optimisation next parameters #1"
   }, {
     [this](
         auto& state) {
@@ -156,7 +156,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
         );
       }
     },
-    "Draws each velocity randomly and uniformly from its attraction center and adds the previous velocity, weighted by a factor drawn randomly and uniformly from [0, *maximal_acceleration*]."
+    "Particle swarm optimisation next parameters #2"
   }, {
     [this](
         auto& state) {
@@ -173,7 +173,7 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
           });
       }
     },
-    "Adds each velocity to its corresponding parameter."
+    "Particle swarm optimisation next parameters #3"
   }};
   
   initial_velocity = T1(0.5);
@@ -219,7 +219,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     CHECK(particle_swarm_optimisation.initialising_functions.size() == 3);
     
     SECTION("First function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(0)) == "Draws randomly and uniformly one velocity vector per parameter from [-*initial_velocity*, *initial_velocity*]");
+      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(0)) == "Particle swarm optimisation initialising #1");
       
       particle_swarm_optimisation.active_dimensions = {0, 2};
       particle_swarm_optimisation.initial_velocity = 0.2;
@@ -239,7 +239,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     }
     
     SECTION("Second function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(1)) == "Sets *local_best_found_parameters* to equal the initial parameters.");
+      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(1)) == "Particle swarm optimisation initialising #2");
       
       particle_swarm_optimisation.active_dimensions = {0, 2};
       particle_swarm_optimisation_state.parameters = {{1.25, 0.5, 0.3}, {0.75, 0.5, 0.3}};
@@ -249,7 +249,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     }
     
     SECTION("Third function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(2)) == "Sets *local_best_found_objective_values* to infinity.");
+      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(2)) == "Particle swarm optimisation initialising #3");
       
       particle_swarm_optimisation_state.local_best_found_parameters.resize(2);
       
@@ -266,7 +266,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
   SECTION("Boundary handling functions") {
     // The second boundary handling functions is derived from the the base struct.
     CHECK(particle_swarm_optimisation.boundary_handling_functions.size() == 2);
-    CHECK(std::get<1>(particle_swarm_optimisation.boundary_handling_functions.at(0)) == "Halves and negates a velocity (dimension-wise), if its corresponding parameter is out-of-bound.");
+    CHECK(std::get<1>(particle_swarm_optimisation.boundary_handling_functions.at(0)) == "Particle swarm optimisation boundary handling");
     
     particle_swarm_optimisation.active_dimensions = {0, 2};
     particle_swarm_optimisation_state.parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
@@ -281,7 +281,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     CHECK(particle_swarm_optimisation.next_parameters_functions.size() == 3);
     
     SECTION("First function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(0)) == "Updates the local best parameter and objective value, if the parameter's objective value improved in the previous iteration.");
+      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(0)) == "Particle swarm optimisation next parameters #1");
       
       particle_swarm_optimisation_state.local_best_found_parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
       particle_swarm_optimisation_state.local_best_found_objective_values = {-0.1, 0.2};
@@ -295,7 +295,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     }
     
     SECTION("Second function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(1)) == "Draws each velocity randomly and uniformly from its attraction center and adds the previous velocity, weighted by a factor drawn randomly and uniformly from [0, *maximal_acceleration*].");
+      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(1)) == "Particle swarm optimisation next parameters #2");
       
       particle_swarm_optimisation_state.velocities.resize(2);
       particle_swarm_optimisation_state.local_best_found_parameters.resize(2);
@@ -311,7 +311,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     }
     
     SECTION("Third function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(2)) == "Adds each velocity to its corresponding parameter.");
+      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(2)) == "Particle swarm optimisation next parameters #3");
       
       particle_swarm_optimisation.active_dimensions = {0, 2};
       particle_swarm_optimisation_state.velocities = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};

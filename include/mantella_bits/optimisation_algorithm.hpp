@@ -102,7 +102,7 @@ constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_alg
           });
       }
     },
-    "Clamps all elements to be between [0, 1]."
+    "Default boundary handling"
   }};
   
   is_stagnating_functions = {{
@@ -110,7 +110,7 @@ constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_alg
         const auto& state) {
       return state.stagnating_number_of_iterations > maximal_stagnating_number_of_iterations;
     },
-    "Returns true if *state.stagnating_number_of_iterations* is greater than *maximal_stagnating_number_of_iterations*."
+    "Default is-stagnating"
   }};
   
   restarting_functions = {{
@@ -124,7 +124,7 @@ constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_alg
             std::ref(random_number_generator())));
       }
     },
-    "Redraws all parameters randomly and uniformly from [0, 1]."
+    "Default restarting"
   }};
   
   acceptable_objective_value = -std::numeric_limits<T1>::infinity();
@@ -171,7 +171,7 @@ TEST_CASE("optimisation_algorithm", "[optimisation_algorithm]") {
   
   SECTION("Boundary handling functions") {
     CHECK(optimisation_algorithm.boundary_handling_functions.size() == 1);
-    CHECK(std::get<1>(optimisation_algorithm.boundary_handling_functions.at(0)) == "Clamps all elements to be between [0, 1].");
+    CHECK(std::get<1>(optimisation_algorithm.boundary_handling_functions.at(0)) == "Default boundary handling");
     
     optimisation_algorithm.active_dimensions = {0, 2};
     optimisation_algorithm_state.parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
@@ -186,7 +186,7 @@ TEST_CASE("optimisation_algorithm", "[optimisation_algorithm]") {
     optimisation_algorithm.active_dimensions = {0, 2};
   
     CHECK(optimisation_algorithm.is_stagnating_functions.size() == 1);
-    CHECK(std::get<1>(optimisation_algorithm.is_stagnating_functions.at(0)) == "Returns true if *state.stagnating_number_of_iterations* is greater than *maximal_stagnating_number_of_iterations*.");
+    CHECK(std::get<1>(optimisation_algorithm.is_stagnating_functions.at(0)) == "Default is-stagnating");
     
     optimisation_algorithm_state.stagnating_number_of_iterations = 0;
     
@@ -203,7 +203,7 @@ TEST_CASE("optimisation_algorithm", "[optimisation_algorithm]") {
   
   SECTION("Restarting functions") {
     CHECK(optimisation_algorithm.restarting_functions.size() == 1);
-    CHECK(std::get<1>(optimisation_algorithm.restarting_functions.at(0)) == "Redraws all parameters randomly and uniformly from [0, 1].");
+    CHECK(std::get<1>(optimisation_algorithm.restarting_functions.at(0)) == "Default restarting");
     
     optimisation_algorithm.active_dimensions = {0, 2};
     optimisation_algorithm_state.parameters.resize(2);

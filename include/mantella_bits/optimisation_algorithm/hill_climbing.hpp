@@ -40,7 +40,7 @@ constexpr hill_climbing<T, number_of_dimensions>::hill_climbing() noexcept
         }
       );
     },
-    "Draws all parameters randomly and uniformly from a hyper-sphere (with hollow center), centred at *best_found_paramter*, with outer radius *maximal_stepsize* and inner radius *minimal_stepsize*."
+    "Hill climbing next parameters"
   }};
   
   this->minimal_stepsize = T(0.0);

@@ -54,7 +54,7 @@ constexpr hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_alg
         auto& state) {
       state.stepsize = initial_stepsize;
     },
-    "Sets *stepsize* to *initial_stepsize*."
+    "Hooke-Jeeves initialising"
   }};
   
   this->next_parameters_functions = {{
@@ -64,7 +64,7 @@ constexpr hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_alg
         state.stepsize /= stepsize_decrease;
       }
     },
-    "Divides *stepsize* by *stepsize_decrease*, if *best_found_objective_value* did not improved in the previous iteration."
+    "Hooke-Jeeves next parameters #1"
   }, {
     [this](
         auto& state) {
@@ -78,7 +78,7 @@ constexpr hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_alg
         state.parameters.at(2 * n + 1).at(n) -= state.stepsize;
       }
     },
-    "Generates all parameters, such that for each one only a single dimension differs from *best_found_parameter*, with distance *stepsize*."
+    "Hooke-Jeeves next parameters #2"
   }};
   
   this->initial_stepsize = T1(1.0);
@@ -111,7 +111,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
   
   SECTION("Initialising functions") {
     CHECK(hooke_jeeves_algorithm.initialising_functions.size() == 1);
-    CHECK(std::get<1>(hooke_jeeves_algorithm.initialising_functions.at(0)) == "Sets *stepsize* to *initial_stepsize*.");
+    CHECK(std::get<1>(hooke_jeeves_algorithm.initialising_functions.at(0)) == "Hooke-Jeeves initialising");
     
     hooke_jeeves_algorithm.initial_stepsize = 0.5;
     std::get<0>(hooke_jeeves_algorithm.initialising_functions.at(0))(hooke_jeeves_algorithm_state);
@@ -122,7 +122,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
     CHECK(hooke_jeeves_algorithm.next_parameters_functions.size() == 2);
     
     SECTION("First function") {
-      CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(0)) == "Divides *stepsize* by *stepsize_decrease*, if *best_found_objective_value* did not improved in the previous iteration.");
+      CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(0)) == "Hooke-Jeeves next parameters #1");
       
       hooke_jeeves_algorithm.stepsize_decrease = 4.0;
       hooke_jeeves_algorithm_state.stepsize = 8.0;
@@ -138,7 +138,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
     }
     
     SECTION("Second function") {
-      CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(1)) == "Generates all parameters, such that for each one only a single dimension differs from *best_found_parameter*, with distance *stepsize*.");
+      CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(1)) == "Hooke-Jeeves next parameters #2");
       
       hooke_jeeves_algorithm.active_dimensions = {0, 2};
       hooke_jeeves_algorithm_state.stepsize = 0.25;
