@@ -61,6 +61,8 @@ do_test() {
     if ! ./tests; then AN_ERROR_OCCURED=$?; fi
   fi
   
+  cd ../../ || exit 1
+  
   finish_up
 }
 
