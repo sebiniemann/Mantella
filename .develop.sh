@@ -2,7 +2,7 @@
 
 # Global variables
 declare -i AN_ERROR_OCCURED=0
-readonly MANTELLA_MAJOR_VERSION=$(expr "$(cat ./include/mantella)" : '.*\#define MANTELLA_VERSION_MAJOR \([0-9]*\)')
+readonly MANTELLA_MAJOR_VERSION=$(expr "$(grep "#define MANTELLA_VERSION_MAJOR" $(find include -name "mantella*" -type f))" : '.*\#define MANTELLA_VERSION_MAJOR \([0-9]*\)')
 ## Formatting
 readonly RED_TEXT_COLOR=$(tput setaf 1)
 readonly GREEN_TEXT_COLOR=$(tput setaf 2)
@@ -78,7 +78,7 @@ do_doc() {
   finish_up
 }
 
-if [ ! -f './include/mantella' ]; then
+if [ ! -f "./include/mantella${MANTELLA_MAJOR_VERSION}" ]; then
   echo "${RED_TEXT_COLOR}Could not find Mantella. Make sure to start this script within Mantella's root path.${RESET_TEXT_COLOR}"
   exit 1
 fi
