@@ -38,7 +38,7 @@ constexpr hill_climbing<T, number_of_dimensions>::hill_climbing() noexcept
         }
       );
     },
-    "Draws all parameters randomly and uniformly from a hyper-sphere (with hollow center), centred at *best_found_paramter*, with outer radius *maximal_stepsize* and inner radius *minimal_stepsize*."
+    "Hill climbing next parameters"
   }};
   
   this->minimal_stepsize = T(0.0);
@@ -63,7 +63,7 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
   
   SECTION("Next parameters functions") {
     CHECK(hill_climbing.next_parameters_functions.size() == 1);
-    CHECK(std::get<1>(hill_climbing.next_parameters_functions.at(0)) == "Draws all parameters randomly and uniformly from a hyper-sphere (with hollow center), centred at *best_found_paramter*, with outer radius *maximal_stepsize* and inner radius *minimal_stepsize*.");
+    CHECK(std::get<1>(hill_climbing.next_parameters_functions.at(0)) == "Hill climbing next parameters");
     
     hill_climbing.active_dimensions = {0, 2};
     hill_climbing.minimal_stepsize = 0.2;
