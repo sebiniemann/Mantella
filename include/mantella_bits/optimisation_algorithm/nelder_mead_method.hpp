@@ -75,6 +75,21 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
     // ""
   // }};
   
+  /*
+  1. Sort (x_i, f(x_i)) pairs, such that f(x_1) < ... < f(x_n+1)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  */
+  
+  
   this->next_parameters_functions = {{
     [this](auto& state) {
       if (state.used_number_of_iterations > 1) {
