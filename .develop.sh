@@ -2,7 +2,7 @@
 
 # Global variables
 declare -i AN_ERROR_OCCURED=0
-readonly MANTELLA_MAJOR_VERSION=$(expr "$(cat ./include/mantella)" : '.*\#define MANTELLA_VERSION_MAJOR \([0-9]*\)')
+readonly MANTELLA_MAJOR_VERSION=$(expr "$(grep "#define MANTELLA_VERSION_MAJOR" "$(find include -name "mantella*" -type f)")" : '.*\#define MANTELLA_VERSION_MAJOR \([0-9]*\)')
 ## Formatting
 readonly RED_TEXT_COLOR=$(tput setaf 1)
 readonly GREEN_TEXT_COLOR=$(tput setaf 2)
@@ -38,13 +38,8 @@ finish_up() {
 do_install() {
   echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\"${RESET_TEXT_COLOR}"
   
-  if [ ! -d "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits" ]; then mkdir "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"; fi
-  
-  echo "./include/mantella_bits -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"
-  if ! cp -R ./include/mantella_bits/* "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}_bits"; then AN_ERROR_OCCURED=$?; fi
-  
-  echo "./include/mantella -> ${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"
-  if ! cp ./include/mantella "${INSTALL_DIR}/mantella${MANTELLA_MAJOR_VERSION}"; then AN_ERROR_OCCURED=$?; fi
+  echo "copy ./include/mantella* -> ${INSTALL_DIR}"
+  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; fi
   
   finish_up
 }
@@ -56,15 +51,17 @@ do_test() {
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
-  if ! cmake ..; then AN_ERROR_OCCURED=$?; fi
+  if ! cmake ..; then AN_ERROR_OCCURED=1; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! make clean tests; then AN_ERROR_OCCURED=$?; fi
+    if ! make clean tests; then AN_ERROR_OCCURED=1; fi
   fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! ./tests; then AN_ERROR_OCCURED=$?; fi
+    if ! ./tests; then AN_ERROR_OCCURED=1; fi
   fi
+  
+  cd ../../ || exit 1
   
   finish_up
 }
@@ -74,16 +71,16 @@ do_doc() {
   
   cd ./doc || exit 1
   
-  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=$?; fi
+  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=1; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=$?; fi
+    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; fi
   fi
   
   finish_up
 }
 
-if [ ! -f './include/mantella' ]; then
+if [ ! -f "./include/mantella${MANTELLA_MAJOR_VERSION}" ]; then
   echo "${RED_TEXT_COLOR}Could not find Mantella. Make sure to start this script within Mantella's root path.${RESET_TEXT_COLOR}"
   exit 1
 fi
