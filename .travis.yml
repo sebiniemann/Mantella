@@ -7,15 +7,16 @@ language: cpp
 
 os:
   - linux
+  - osx
 
 compiler:
   - clang
   - gcc
 
 install:
-  - sudo docker build -t ubuntu/mantella:latest .
-  - sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
-  - sudo docker exec mantella chmod a+x ./.develop.sh
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker build -t ubuntu/mantella:latest .; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella chmod a+x ./.develop.sh; fi
   
 addons:
   coverity_scan:
@@ -27,4 +28,5 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  - sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install; fi
