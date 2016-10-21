@@ -18,8 +18,10 @@ add_executable(tests main.cpp)
 set_property(TARGET tests PROPERTY CXX_STANDARD 14)
 set_property(TARGET tests PROPERTY CXX_STANDARD_REQUIRED ON)
 
-message(STATUS "- Adding debugging symbols.")
-target_compile_options(tests PRIVATE -g)
+if (NOT MSVC)
+  message(STATUS "- Adding debugging symbols.")
+  target_compile_options(tests PRIVATE -g)
+endif()
 
 message(STATUS "- Displaying compiler warnings.")
 if (CMAKE_COMPILER_IS_GNUCXX)
