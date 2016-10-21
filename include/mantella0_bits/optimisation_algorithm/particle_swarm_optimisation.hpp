@@ -37,6 +37,15 @@ constexpr particle_swarm_optimisation_state<T, number_of_dimensions>::particle_s
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
+  this->parameters.resize(40);
+  for (auto& parameter : this->parameters) {
+    std::generate(
+      parameter.begin(), parameter.end(),
+      std::bind(
+        std::uniform_real_distribution<T>(0.0, 1.0),
+        std::ref(random_number_generator())));
+  }
+  
   velocities.resize(this->parameters.size());
   local_best_found_parameters = this->parameters;
   local_best_found_objective_values.resize(this->parameters.size());

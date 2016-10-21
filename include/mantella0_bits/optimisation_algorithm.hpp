@@ -66,8 +66,13 @@ constexpr optimisation_algorithm_state<T, number_of_dimensions>::optimisation_al
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
-  // Only the default number of parameters is important, as their content will be overwritten later on.
   parameters.resize(1);
+  std::generate(
+    parameter.begin(), parameter.end(),
+    std::bind(
+      std::uniform_real_distribution<T>(0.0, 1.0),
+      std::ref(random_number_generator())));
+  
   best_found_objective_value = std::numeric_limits<T>::infinity();
   used_number_of_iterations = 0;
   stagnating_number_of_iterations = 0;
@@ -144,7 +149,14 @@ TEST_CASE("optimisation_algorithm_state", "[optimisation_algorithm][optimisation
   
   CHECK(optimisation_algorithm_state.parameters.size() == 1);
   CHECK(optimisation_algorithm_state.objective_values.empty() == true);
-  // The best found parameter is untested, as it might be anything initially.
+  // Checks that all elements are within [0, 1].
+  for (const auto& parameter : optimisation_algorithm_state.parameters) {
+    CHECK(std::all_of(
+      parameter.cbegin(), parameter.end(),
+      [](const auto element) {
+        return (0.0 <= element && element <= 1.0);
+      }) == true);
+  }
   CHECK(optimisation_algorithm_state.best_found_objective_value == std::numeric_limits<value_type>::infinity());
   CHECK(optimisation_algorithm_state.used_number_of_iterations == 0);
   CHECK(optimisation_algorithm_state.stagnating_number_of_iterations == 0);
