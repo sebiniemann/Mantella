@@ -67,7 +67,7 @@ constexpr optimisation_algorithm_state<T, number_of_dimensions>::optimisation_al
   static_assert(number_of_dimensions > 0, "");
   
   parameters.resize(1);
-  for (auto& parameter : this->parameters) {
+  for (auto& parameter : parameters) {
     std::generate(
       parameter.begin(), parameter.end(),
       std::bind(
