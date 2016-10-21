@@ -67,11 +67,13 @@ constexpr optimisation_algorithm_state<T, number_of_dimensions>::optimisation_al
   static_assert(number_of_dimensions > 0, "");
   
   parameters.resize(1);
-  std::generate(
-    parameter.begin(), parameter.end(),
-    std::bind(
-      std::uniform_real_distribution<T>(0.0, 1.0),
-      std::ref(random_number_generator())));
+  for (auto& parameter : this->parameters) {
+    std::generate(
+      parameter.begin(), parameter.end(),
+      std::bind(
+        std::uniform_real_distribution<T>(0.0, 1.0),
+        std::ref(random_number_generator())));
+  }
   
   best_found_objective_value = std::numeric_limits<T>::infinity();
   used_number_of_iterations = 0;
