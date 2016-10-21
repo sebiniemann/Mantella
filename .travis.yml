@@ -22,13 +22,7 @@ install:
     fi
   - | 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
-      brew install cmake wget && \
-      wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
-      mkdir catch && \
-      tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
-      cp catch/single_include/catch.hpp /usr/include/ && \
-      rm -Rf catch.tar.gz catch/ && \
-      chmod a+x ./.develop.sh \
+      brew install cmake wget \
     fi
   
 addons:
