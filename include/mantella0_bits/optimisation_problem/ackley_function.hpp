@@ -5,7 +5,7 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct ackley_function : optimisation_problem<T, number_of_dimensions> {
-  constexpr ackley_function() noexcept;
+  ackley_function() noexcept;
 };
 
 //
@@ -15,7 +15,7 @@ struct ackley_function : optimisation_problem<T, number_of_dimensions> {
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr ackley_function<T, number_of_dimensions>::ackley_function() noexcept 
+ackley_function<T, number_of_dimensions>::ackley_function() noexcept 
     : optimisation_problem<T, number_of_dimensions>() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");

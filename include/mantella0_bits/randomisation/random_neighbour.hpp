@@ -25,7 +25,7 @@ std::array<T, number_of_dimensions> random_neighbour(
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   assert(T(0.0) <= minimal_distance && minimal_distance <= maximal_distance);
-  assert(0 < active_number_of_dimensions <= number_of_dimensions);
+  assert(0 < active_number_of_dimensions && active_number_of_dimensions <= number_of_dimensions);
 
   /* @see J. S. Hicks and R. F. Wheeling (1959). An efficient method for generating uniformly distributed points on the 
    * surface of an n-dimensional sphere. Communications of the ACM, 2(4), pp. 17-19.
