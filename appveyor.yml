@@ -18,5 +18,5 @@ test_script:
   - cd test
   - cmake -DCMAKE_INCLUDE_PATH=C:\Catch-1.5.0\single_include . 
   - cmake --build .
-  - sh: ls .
-  - sh: tests.exe
+  - ps: ls .
+  - ps: tests.exe
