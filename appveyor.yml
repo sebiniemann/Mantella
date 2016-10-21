@@ -13,6 +13,6 @@ install:
   
 test_script:
   - cd test
-  - cmake -CMAKE_INCLUDE_PATH=C:\catch\single_include . 
-  - make
-  - tests
+  - ps: cmake -CMAKE_INCLUDE_PATH=C:\catch\single_include . 
+  - ps: make
+  - ps: tests
