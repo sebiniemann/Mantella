@@ -42,4 +42,4 @@ addons:
 
 script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
