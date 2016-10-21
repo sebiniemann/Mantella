@@ -133,31 +133,13 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
         const auto& parameter = state.parameters.at(n);
         const auto& local_best_found_parameter = state.local_best_found_parameters.at(n);
         
-        std::cout << "local_best_found_parameter: ";
-        std::copy(local_best_found_parameter.begin(), local_best_found_parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
-        std::cout << std::endl;
-        std::cout << "state.best_found_parameter: ";
-        std::copy(state.best_found_parameter.begin(), state.best_found_parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
-        std::cout << std::endl;
-        
         std::array<T1, number_of_dimensions> attraction_center;
         for (std::size_t k = 0; k < this->active_dimensions.size(); ++k) {
-          std::cout << "parameter: ";
-          std::copy(parameter.begin(), parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
-          std::cout << std::endl;
-          
           attraction_center.at(k) = (
               maximal_local_attraction * (local_best_found_parameter.at(k) - parameter.at(k)) + 
               maximal_global_attraction * (state.best_found_parameter.at(k) - parameter.at(k))) / 
             T1(3.0);
         }
-        
-        std::cout << std::inner_product(
-            attraction_center.cbegin(), attraction_center.cend(),
-            attraction_center.cbegin(),
-            T1(0.0)) << std::endl;
-        std::copy(attraction_center.begin(), attraction_center.end(), std::ostream_iterator<T1>(std::cout, " "));
-        std::cout << std::endl;
         
         auto&& random_velocity = random_neighbour(
           attraction_center,
@@ -323,10 +305,11 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
       CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(1)) == "Particle swarm optimisation next parameters #2");
       
       particle_swarm_optimisation_state.velocities.resize(2);
-      particle_swarm_optimisation_state.local_best_found_parameters.resize(2);
+      particle_swarm_optimisation_state.local_best_found_parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
       particle_swarm_optimisation_state.local_best_found_objective_values.resize(2);
-      particle_swarm_optimisation_state.parameters.resize(2);
+      particle_swarm_optimisation_state.parameters = {{1.25, 0.5, -0.7}, {0.75, -0.5, 0.3}};
       particle_swarm_optimisation_state.objective_values.resize(2);
+      particle_swarm_optimisation_state.best_found_parameter = {-0.625, 0.5, -0.7};
       
       std::get<0>(particle_swarm_optimisation.next_parameters_functions.at(1))(particle_swarm_optimisation_state);
       

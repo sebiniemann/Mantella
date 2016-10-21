@@ -40,11 +40,6 @@ optimise_result<T1, number_of_dimensions> optimise(
   // Maps the parameter's bounds from [*lower_bounds*, *upper_bounds*] to [0, 1] and places all active dimensions 
   // (in-order) upfront.
   for (auto& parameter : state.parameters) {
-    
-        std::cout << "parameter: ";
-        std::copy(parameter.begin(), parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
-        std::cout << std::endl;
-    
     for (std::size_t n = 0; n < optimisation_algorithm.active_dimensions.size(); ++n) {
       parameter.at(n) = (
           parameter.at(optimisation_algorithm.active_dimensions.at(n)) - 
@@ -53,10 +48,6 @@ optimise_result<T1, number_of_dimensions> optimise(
           optimisation_problem.upper_bounds.at(n) - optimisation_problem.lower_bounds.at(n)
         );
     }
-    
-        std::cout << "parameter: ";
-        std::copy(parameter.begin(), parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
-        std::cout << std::endl;
   }
 
   for(const auto boundary_handling_function : optimisation_algorithm.boundary_handling_functions) {
@@ -99,10 +90,6 @@ optimise_result<T1, number_of_dimensions> optimise(
   );
   state.best_found_parameter = state.parameters.at(std::distance(state.objective_values.cbegin(), best_found_objective_value));
   state.best_found_objective_value = *best_found_objective_value;
- 
-        std::cout << "state.best_found_parameter: ";
-        std::copy(state.best_found_parameter.begin(), state.best_found_parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
-        std::cout << std::endl;
   
   state.stagnating_number_of_iterations = 0;
   for (state.used_number_of_iterations = 1; state.used_number_of_iterations < optimisation_algorithm.maximal_number_of_iterations && optimisation_algorithm.acceptable_objective_value < state.best_found_objective_value; ++state.used_number_of_iterations) {
