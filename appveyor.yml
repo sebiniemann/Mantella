@@ -10,15 +10,14 @@ matrix:
 
 install:
   - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.zip' -OutFile 'catch.zip'
-  - ps: 7z.exe x catch.zip -oC:\catch
+  - ps: 7z.exe x catch.zip -oC:\
 
 build: off
 
 test_script:
   - cd test
-  - ps: ls C:\
-  - ps: ls C:\catch
-  - ps: ls C:\catch\single_include
-  - cmake -DCMAKE_INCLUDE_PATH=C:\catch\single_include . 
+  - ps: ls C:\Catch-1.5.0
+  - ps: ls C:\Catch-1.5.0\single_include
+  - cmake -DCMAKE_INCLUDE_PATH=C:\Catch-1.5.0\single_include . 
   - ps: make
   - ps: tests
