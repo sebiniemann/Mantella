@@ -9,8 +9,8 @@ matrix:
   fast_finish: true
 
 install:
-  - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz' -OutFile 'catch.tar.gz'
-  - ps: 7z.exe x catch.tar.gz -oC:\catch
+  - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.zip' -OutFile 'catch.zip'
+  - ps: 7z.exe x catch.zip -oC:\catch
 
 build: off
 
