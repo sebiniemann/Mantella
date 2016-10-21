@@ -132,6 +132,13 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
             T1(3.0);
         }
         
+        std::cout << std::inner_product(
+            attraction_center.cbegin(), attraction_center.cend(),
+            attraction_center.cbegin(),
+            T1(0.0)) << std::endl;
+        std::copy(attraction_center.begin(), attraction_center.end(), std::ostream_iterator<T1>(std::cout, " "));
+        std::cout << std::endl;
+        
         auto&& random_velocity = random_neighbour(
           attraction_center,
           T1(0.0),
