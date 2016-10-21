@@ -7,15 +7,29 @@ language: cpp
 
 os:
   - linux
+  - osx
 
 compiler:
   - clang
   - gcc
 
 install:
-  - sudo docker build -t ubuntu/mantella:latest .
-  - sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
-  - sudo docker exec mantella chmod a+x ./.develop.sh
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then \
+      sudo docker build -t ubuntu/mantella:latest . && \
+      sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella && \
+      sudo docker exec mantella chmod a+x ./.develop.sh \
+    ; fi
+  - | 
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
+      brew install cmake wget && \
+      wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
+      mkdir catch && \
+      tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
+      sudo cp catch/single_include/catch.hpp /usr/local/include/ && \
+      rm -Rf catch.tar.gz catch/ && \
+      chmod a+x ./.develop.sh \
+    ; fi
   
 addons:
   coverity_scan:
@@ -27,4 +41,5 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-  - sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi

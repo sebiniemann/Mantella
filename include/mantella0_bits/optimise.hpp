@@ -88,14 +88,10 @@ optimise_result<T1, number_of_dimensions> optimise(
       return objective_value < other_objective_value;
     }
   );
-  if (*best_found_objective_value < state.best_found_objective_value) {
-    state.best_found_parameter = state.parameters.at(std::distance(state.objective_values.cbegin(), best_found_objective_value));
-    state.best_found_objective_value = *best_found_objective_value;
-    state.stagnating_number_of_iterations = 0;
-  } else {
-    ++state.stagnating_number_of_iterations;
-  }
+  state.best_found_parameter = state.parameters.at(std::distance(state.objective_values.cbegin(), best_found_objective_value));
+  state.best_found_objective_value = *best_found_objective_value;
   
+  state.stagnating_number_of_iterations = 0;
   for (state.used_number_of_iterations = 1; state.used_number_of_iterations < optimisation_algorithm.maximal_number_of_iterations && optimisation_algorithm.acceptable_objective_value < state.best_found_objective_value; ++state.used_number_of_iterations) {
     for(const auto boundary_handling_function : optimisation_algorithm.boundary_handling_functions) {
       // Tests if the optimisation algorithm is stagnating and either restarts it or proceeds with the next parameters.
