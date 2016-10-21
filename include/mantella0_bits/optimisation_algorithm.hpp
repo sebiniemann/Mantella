@@ -13,7 +13,7 @@ struct optimisation_algorithm_state {
   std::size_t used_number_of_iterations;
   std::size_t stagnating_number_of_iterations;
   
-  constexpr optimisation_algorithm_state() noexcept;
+  optimisation_algorithm_state() noexcept;
 };
 
 template <
@@ -52,7 +52,7 @@ struct optimisation_algorithm {
   
   std::vector<std::size_t> active_dimensions;
   
-  constexpr optimisation_algorithm() noexcept;
+  optimisation_algorithm() noexcept;
 };
 
 //
@@ -62,7 +62,7 @@ struct optimisation_algorithm {
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr optimisation_algorithm_state<T, number_of_dimensions>::optimisation_algorithm_state() noexcept {
+optimisation_algorithm_state<T, number_of_dimensions>::optimisation_algorithm_state() noexcept {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
@@ -84,7 +84,7 @@ template <
   typename T1,
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2>
-constexpr optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_algorithm() noexcept {
+optimisation_algorithm<T1, number_of_dimensions, T2>::optimisation_algorithm() noexcept {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(number_of_dimensions > 0, "");
   static_assert(std::is_base_of<state_type, T2<T1, number_of_dimensions>>::value, "");

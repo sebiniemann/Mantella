@@ -5,7 +5,7 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct rosenbrock_function : optimisation_problem<T, number_of_dimensions> {
-  constexpr rosenbrock_function() noexcept;
+  rosenbrock_function() noexcept;
 };
 
 //
@@ -15,7 +15,7 @@ struct rosenbrock_function : optimisation_problem<T, number_of_dimensions> {
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr rosenbrock_function<T, number_of_dimensions>::rosenbrock_function() noexcept 
+rosenbrock_function<T, number_of_dimensions>::rosenbrock_function() noexcept 
     : optimisation_problem<T, number_of_dimensions>() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");

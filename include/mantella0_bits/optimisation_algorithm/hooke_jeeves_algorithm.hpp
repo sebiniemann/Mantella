@@ -8,7 +8,7 @@ template <
 struct hooke_jeeves_algorithm_state : optimisation_algorithm_state<T, number_of_dimensions> {
   T stepsize;
   
-  constexpr hooke_jeeves_algorithm_state() noexcept;
+  hooke_jeeves_algorithm_state() noexcept;
 };
 
 template <
@@ -19,7 +19,7 @@ struct hooke_jeeves_algorithm : optimisation_algorithm<T1, number_of_dimensions,
   T1 initial_stepsize;
   T1 stepsize_decrease;
   
-  constexpr hooke_jeeves_algorithm() noexcept;
+  hooke_jeeves_algorithm() noexcept;
 };
 
 //
@@ -29,7 +29,7 @@ struct hooke_jeeves_algorithm : optimisation_algorithm<T1, number_of_dimensions,
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr hooke_jeeves_algorithm_state<T, number_of_dimensions>::hooke_jeeves_algorithm_state() noexcept
+hooke_jeeves_algorithm_state<T, number_of_dimensions>::hooke_jeeves_algorithm_state() noexcept
     : optimisation_algorithm_state<T, number_of_dimensions>::optimisation_algorithm_state() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
@@ -41,7 +41,7 @@ template <
   typename T1,
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2>
-constexpr hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_algorithm() noexcept 
+hooke_jeeves_algorithm<T1, number_of_dimensions, T2>::hooke_jeeves_algorithm() noexcept 
     : optimisation_algorithm<T1, number_of_dimensions, T2>() {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(number_of_dimensions > 0, "");

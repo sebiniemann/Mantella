@@ -8,7 +8,7 @@ struct hill_climbing : optimisation_algorithm<T, number_of_dimensions> {
   T minimal_stepsize;
   T maximal_stepsize;
   
-  constexpr hill_climbing() noexcept;
+  hill_climbing() noexcept;
 };
 
 //
@@ -18,7 +18,7 @@ struct hill_climbing : optimisation_algorithm<T, number_of_dimensions> {
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr hill_climbing<T, number_of_dimensions>::hill_climbing() noexcept 
+hill_climbing<T, number_of_dimensions>::hill_climbing() noexcept 
     : optimisation_algorithm<T, number_of_dimensions>() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
