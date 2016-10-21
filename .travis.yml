@@ -14,9 +14,12 @@ compiler:
   - gcc
 
 install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker build -t ubuntu/mantella:latest .; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella chmod a+x ./.develop.sh; fi
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then \
+      sudo docker build -t ubuntu/mantella:latest . && \
+      sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella && \
+      sudo docker exec mantella chmod a+x ./.develop.sh \
+    fi
   - | 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
       brew install cmake wget && \
@@ -24,9 +27,9 @@ install:
       mkdir catch && \
       tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
       cp catch/single_include/catch.hpp /usr/include/ && \
-      rm -Rf catch.tar.gz catch/ \
+      rm -Rf catch.tar.gz catch/ && \
+      chmod a+x ./.develop.sh \
     fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then chmod a+x ./.develop.sh; fi
   
 addons:
   coverity_scan:
