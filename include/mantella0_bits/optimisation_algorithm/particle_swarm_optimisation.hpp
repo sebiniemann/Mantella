@@ -305,10 +305,11 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
       CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(1)) == "Particle swarm optimisation next parameters #2");
       
       particle_swarm_optimisation_state.velocities.resize(2);
-      particle_swarm_optimisation_state.local_best_found_parameters.resize(2);
+      particle_swarm_optimisation_state.local_best_found_parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
       particle_swarm_optimisation_state.local_best_found_objective_values.resize(2);
-      particle_swarm_optimisation_state.parameters.resize(2);
+      particle_swarm_optimisation_state.parameters = {{1.25, 0.5, -0.7}, {0.75, -0.5, 0.3}};
       particle_swarm_optimisation_state.objective_values.resize(2);
+      particle_swarm_optimisation_state.best_found_parameter = {-0.625, 0.5, -0.7};
       
       std::get<0>(particle_swarm_optimisation.next_parameters_functions.at(1))(particle_swarm_optimisation_state);
       
