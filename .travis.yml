@@ -19,11 +19,11 @@ install:
       sudo docker build -t ubuntu/mantella:latest . && \
       sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella && \
       sudo docker exec mantella chmod a+x ./.develop.sh \
-    fi
+    ; fi
   - | 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
       brew install cmake wget \
-    fi
+    ; fi
   
 addons:
   coverity_scan:
