@@ -16,6 +16,9 @@ build: off
 
 test_script:
   - cd test
+  - ps: ls C:\
+  - ps: ls C:\catch
+  - ps: ls C:\catch\single_include
   - cmake -DCMAKE_INCLUDE_PATH=C:\catch\single_include . 
   - ps: make
   - ps: tests
