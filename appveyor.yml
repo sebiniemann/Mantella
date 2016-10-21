@@ -1,0 +1,18 @@
+platform:
+  - x86
+  - x64
+  
+build: off
+matrix:
+  fast_finish: true
+  
+install:
+  - choco install -y cmake
+  - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz' -OutFile 'catch.tar.gz'
+  - ps: 7z.exe x catch.tar.gz -oC:\catch
+  
+test_script:
+  - cd test
+  - cmake -CMAKE_INCLUDE_PATH=C:\catch\single_include . 
+  - make
+  - tests
