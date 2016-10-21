@@ -12,6 +12,11 @@ install:
   - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.zip' -OutFile 'catch.zip'
   - ps: 7z.exe x catch.zip -oC:\
 
+# Workaround for Xamarin messages
+# @see https://ci.appveyor.com/project/SebastianNiemann/mantella/build/31/job/ceykpl2iubh4lq55
+before_build:
+- del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
+  
 build: off
 
 test_script:
@@ -19,4 +24,4 @@ test_script:
   - cmake -DCMAKE_INCLUDE_PATH=C:\Catch-1.5.0\single_include . 
   - cmake --build .
   - ps: ls .
-  - ps: tests.exe
+  - ps: ls Debug
