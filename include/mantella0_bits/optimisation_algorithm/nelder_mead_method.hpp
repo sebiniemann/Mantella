@@ -9,6 +9,7 @@ template <
 struct nelder_mead_method_state : optimisation_algorithm_state<T, number_of_dimensions> {
   std::array<std::pair<std::array<T, number_of_dimensions>, T>, number_of_dimensions + 1> simplex;
   std::array<T, number_of_dimensions> centroid;
+  bool update_simplex;
   
   constexpr nelder_mead_method_state() noexcept;
 };
@@ -66,15 +67,7 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
   
   this->next_parameters_functions = {{
     [this](auto& state) {
-      if (state.used_number_of_iterations > 1) {
-        auto position = std::find_if(
-          std::next(state.simplex.cbegin()), std::prev(state.simplex.cend()),
-          [&state](const auto& sample) {
-            return state.objective_value.at(0) < std::get<1>(sample);
-          });
-        std::copy_backward(position, std::prev(simplex.cend()), simplex.cend());
-        *position = std::make_pair(state.parameters.at(0), state.objective_value.at(0));
-      } else {
+      if (update_simplex) {
         // Fills the simplex
         std::transform(
           state.parameters.cbegin(), state.parameters.cend(),
@@ -91,6 +84,17 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
           [](const auto& simplex, const auto& other_simplex){
             return std::get<1>(simplex) < std::get<1>(other_simplex);
           });
+      } else {
+        // Which is the new best one?
+        // In critical case, i.e. nothing is better than worse, update_simplex.
+        
+        auto position = std::find_if(
+          std::next(state.simplex.cbegin()), std::prev(state.simplex.cend()),
+          [&state](const auto& sample) {
+            return state.objective_value.at(0) < std::get<1>(sample);
+          });
+        std::copy_backward(position, std::prev(simplex.cend()), simplex.cend());
+        *position = std::make_pair(state.parameters.at(0), state.objective_value.at(0));
       }
         
       state.parameters.resize(3);
