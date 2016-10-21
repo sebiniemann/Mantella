@@ -124,8 +124,19 @@ constexpr particle_swarm_optimisation<T1, number_of_dimensions, T2>::particle_sw
         const auto& parameter = state.parameters.at(n);
         const auto& local_best_found_parameter = state.local_best_found_parameters.at(n);
         
+        std::cout << "local_best_found_parameter: ";
+        std::copy(local_best_found_parameter.begin(), local_best_found_parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
+        std::cout << std::endl;
+        std::cout << "state.best_found_parameter: ";
+        std::copy(state.best_found_parameter.begin(), state.best_found_parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
+        std::cout << std::endl;
+        
         std::array<T1, number_of_dimensions> attraction_center;
         for (std::size_t k = 0; k < this->active_dimensions.size(); ++k) {
+          std::cout << "parameter: ";
+          std::copy(parameter.begin(), parameter.end(), std::ostream_iterator<T1>(std::cout, " "));
+          std::cout << std::endl;
+          
           attraction_center.at(k) = (
               maximal_local_attraction * (local_best_found_parameter.at(k) - parameter.at(k)) + 
               maximal_global_attraction * (state.best_found_parameter.at(k) - parameter.at(k))) / 
