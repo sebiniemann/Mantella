@@ -4,18 +4,13 @@ platform:
   - x64
 
 version: '{build}'
-clone_depth: 1
+shallow_clone: true
 matrix:
   fast_finish: true
 
 install:
   - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.zip' -OutFile 'catch.zip'
   - ps: 7z.exe x catch.zip -oC:\
-
-# Workaround for way to verbose Xamarin messages 
-# @see http://help.appveyor.com/discussions/problems/4569-the-target-_convertpdbfiles-listed-in-a-beforetargets-attribute-at-c-does-not-exist-in-the-project-and-will-be-ignored
-before_build:
-- del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
 
 build: off
 
