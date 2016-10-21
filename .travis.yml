@@ -17,6 +17,7 @@ install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker build -t ubuntu/mantella:latest .; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella chmod a+x ./.develop.sh; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then chmod a+x ./.develop.sh; fi
   
 addons:
   coverity_scan:
