@@ -2,14 +2,14 @@ image: Visual Studio 2015
 platform:
   - x86
   - x64
-  
+
 matrix:
   fast_finish: true
-  
+
 install:
   - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz' -OutFile 'catch.tar.gz'
   - ps: 7z.exe x catch.tar.gz -oC:\catch
-  
+
 build: off
 
 test_script:
