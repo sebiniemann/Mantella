@@ -2,7 +2,6 @@ platform:
   - x86
   - x64
   
-build: off
 matrix:
   fast_finish: true
   
