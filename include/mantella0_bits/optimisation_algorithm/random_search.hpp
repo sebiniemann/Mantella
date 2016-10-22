@@ -5,9 +5,6 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct random_search : optimisation_algorithm<T, number_of_dimensions> {
-  using typename optimisation_algorithm<T, number_of_dimensions>::state_type;
-  using typename optimisation_algorithm<T, number_of_dimensions>::value_type;
-  
   random_search() noexcept;
 };
 

@@ -5,9 +5,6 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct hooke_jeeves_algorithm_state : optimisation_algorithm_state<T, number_of_dimensions> {
-  using typename optimisation_algorithm_state<T, number_of_dimensions>::state_type;
-  using typename optimisation_algorithm_state<T, number_of_dimensions>::value_type;
-  
   T stepsize;
   
   hooke_jeeves_algorithm_state() noexcept;
@@ -21,9 +18,6 @@ template <
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2 = hooke_jeeves_algorithm_state>
 struct hooke_jeeves_algorithm : optimisation_algorithm<T1, number_of_dimensions, T2> {
-  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::state_type;
-  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::value_type;
-  
   T1 initial_stepsize;
   T1 stepsize_decrease;
   

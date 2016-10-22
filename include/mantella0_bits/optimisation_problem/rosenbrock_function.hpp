@@ -5,6 +5,9 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct rosenbrock_function : optimisation_problem<T, number_of_dimensions> {
+  using typename optimisation_problem<T, number_of_dimensions>::value_type;
+  using typename optimisation_problem<T, number_of_dimensions>::size_type;
+  
   rosenbrock_function() noexcept;
 };
 

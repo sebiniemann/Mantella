@@ -3,17 +3,17 @@
 */
 template <
   typename T,
-  std::size_t N>
+  std::size_t number_of_dimensions>
 struct optimisation_problem {
   typedef T value_type;
-  typedef decltype(N) size_type;
+  typedef decltype(number_of_dimensions) size_type;
   
   typedef std::function<T(
-      const std::array<T, N>& parameter)> objective_function_type;
+      const std::array<T, number_of_dimensions>& parameter)> objective_function_type;
 
   std::vector<std::pair<objective_function_type, std::string>> objective_functions;
-  std::array<T, N> lower_bounds;
-  std::array<T, N> upper_bounds;
+  std::array<T, number_of_dimensions> lower_bounds;
+  std::array<T, number_of_dimensions> upper_bounds;
   
   optimisation_problem() noexcept;
 };

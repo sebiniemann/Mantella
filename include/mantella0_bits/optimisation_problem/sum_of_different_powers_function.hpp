@@ -5,6 +5,9 @@ template <
   typename T, 
   std::size_t number_of_dimensions>
 struct sum_of_different_powers_function : optimisation_problem<T, number_of_dimensions> {
+  using typename optimisation_problem<T, number_of_dimensions>::value_type;
+  using typename optimisation_problem<T, number_of_dimensions>::size_type;
+  
   sum_of_different_powers_function() noexcept;
 };
 

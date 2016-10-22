@@ -5,6 +5,9 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct optimisation_algorithm_state {
+  typedef T value_type;
+  typedef decltype(number_of_dimensions) size_type;
+  
   std::vector<std::array<T, number_of_dimensions>> parameters;
   std::vector<T> objective_values;
   
@@ -22,7 +25,7 @@ template <
   template <class, std::size_t> class T2 = optimisation_algorithm_state>
 struct optimisation_algorithm {
   typedef T1 value_type;
-  
+  typedef decltype(number_of_dimensions) size_type;
   typedef T2<T1, number_of_dimensions> state_type;
   
   typedef std::function<void(

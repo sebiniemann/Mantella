@@ -7,9 +7,6 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct nelder_mead_method_state : optimisation_algorithm_state<T, number_of_dimensions> {
-  using typename optimisation_algorithm_state<T, number_of_dimensions>::state_type;
-  using typename optimisation_algorithm_state<T, number_of_dimensions>::value_type;
-  
   std::array<std::pair<std::array<T, number_of_dimensions>, T>, number_of_dimensions + 1> simplex;
   std::array<T, number_of_dimensions> centroid;
   bool update_simplex;
@@ -25,9 +22,6 @@ template <
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2 = nelder_mead_method_state>
 struct nelder_mead_method : optimisation_algorithm<T1, number_of_dimensions, T2> {
-  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::state_type;
-  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::value_type;
-  
   T1 reflection_weight;
   T1 expansion_weight;
   T1 contraction_weight;
@@ -47,8 +41,6 @@ constexpr nelder_mead_method_state<T, number_of_dimensions>::nelder_mead_method_
     : optimisation_algorithm_state<T, number_of_dimensions>::optimisation_algorithm_state() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
-  
-  phase = state_type::phase_type::CENTROID;
 }
 
 template <
@@ -70,7 +62,7 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
   
   this->next_parameters_functions = {{
     [this](auto& state) {
-      if (update_simplex) {
+      if (state.update_simplex) {
         // Fills the simplex
         std::transform(
           state.parameters.cbegin(), state.parameters.cend(),
@@ -94,10 +86,10 @@ constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method()
         auto position = std::find_if(
           std::next(state.simplex.cbegin()), std::prev(state.simplex.cend()),
           [&state](const auto& sample) {
-            return state.objective_value.at(0) < std::get<1>(sample);
+            return state.objective_values.at(0) < std::get<1>(sample);
           });
-        std::copy_backward(position, std::prev(simplex.cend()), simplex.cend());
-        *position = std::make_pair(state.parameters.at(0), state.objective_value.at(0));
+        std::copy_backward(position, std::prev(state.simplex.cend()), state.simplex.end());
+        // *position = std::make_pair(state.parameters.at(0), state.objective_values.at(0));
       }
         
       state.parameters.resize(3);

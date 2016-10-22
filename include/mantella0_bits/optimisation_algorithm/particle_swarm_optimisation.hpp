@@ -5,9 +5,6 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct particle_swarm_optimisation_state : optimisation_algorithm_state<T, number_of_dimensions> {
-  using typename optimisation_algorithm_state<T, number_of_dimensions>::state_type;
-  using typename optimisation_algorithm_state<T, number_of_dimensions>::value_type;
-  
   std::vector<std::array<T, number_of_dimensions>> velocities;
   std::vector<std::array<T, number_of_dimensions>> local_best_found_parameters;
   std::vector<T> local_best_found_objective_values;
@@ -23,9 +20,6 @@ template <
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2 = particle_swarm_optimisation_state>
 struct particle_swarm_optimisation : optimisation_algorithm<T1, number_of_dimensions, T2> {
-  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::state_type;
-  using typename optimisation_algorithm<T1, number_of_dimensions, T2>::value_type;
-  
   T1 initial_velocity;
   T1 maximal_acceleration;
   T1 maximal_local_attraction;
