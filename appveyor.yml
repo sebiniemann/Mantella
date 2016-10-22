@@ -9,7 +9,7 @@ matrix:
   fast_finish: true
 
 install:
-  - ps: wget 'https://github.com/philsquared/Catch/archive/V1.5.0.zip' -OutFile 'catch.zip'
+  - ps: wget https://github.com/philsquared/Catch/archive/V1.5.0.zip -OutFile catch.zip
   - ps: 7z.exe x catch.zip -oC:\
   # Workaround for Xamarin messages
   # @see https://ci.appveyor.com/project/SebastianNiemann/mantella/build/31/job/ceykpl2iubh4lq55
