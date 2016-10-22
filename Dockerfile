@@ -12,25 +12,13 @@ RUN apt-get update
 # - GCC
 # - Clang (set as default)
 RUN apt-get install -y g++-5 && \
-    update-alternatives --remove g++ /usr/bin/gcc && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
-    update-alternatives --set gcc /usr/bin/gcc-5 && \
     update-alternatives --remove g++ /usr/bin/g++ && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100 && \
-    update-alternatives --set g++ /usr/bin/g++-5 && \
-    update-alternatives --remove gcov /usr/bin/gcov && \
-    update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 100 && \
-    update-alternatives --set gcov /usr/bin/gcov-5
+    update-alternatives --set g++ /usr/bin/g++-5
 RUN apt-get install -y clang-3.8 && \
-    update-alternatives --remove clang /usr/bin/clang && \
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100 && \
-    update-alternatives --set clang /usr/bin/clang-3.8 && \
     update-alternatives --remove clang++ /usr/bin/clang++ && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set clang++ /usr/bin/clang++-3.8 && \
-    update-alternatives --remove cc /usr/bin/cc && \
-    update-alternatives --install /usr/bin/cc cc /usr/bin/clang-3.8 100 && \
-    update-alternatives --set cc /usr/bin/clang-3.8 && \
     update-alternatives --remove c++ /usr/bin/c++ && \
     update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set c++ /usr/bin/clang++-3.8
