@@ -11,7 +11,7 @@ struct nelder_mead_method_state : optimisation_algorithm_state<T, number_of_dime
   std::array<T, number_of_dimensions> centroid;
   bool update_simplex;
   
-  constexpr nelder_mead_method_state() noexcept;
+  nelder_mead_method_state() noexcept;
 };
 
 /**
@@ -27,7 +27,7 @@ struct nelder_mead_method : optimisation_algorithm<T1, number_of_dimensions, T2>
   T1 contraction_weight;
   T1 shrinking_weight;
 
-  constexpr nelder_mead_method() noexcept;
+  nelder_mead_method() noexcept;
 };
 
 //
@@ -37,7 +37,7 @@ struct nelder_mead_method : optimisation_algorithm<T1, number_of_dimensions, T2>
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr nelder_mead_method_state<T, number_of_dimensions>::nelder_mead_method_state() noexcept
+nelder_mead_method_state<T, number_of_dimensions>::nelder_mead_method_state() noexcept
     : optimisation_algorithm_state<T, number_of_dimensions>::optimisation_algorithm_state() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
@@ -47,7 +47,7 @@ template <
   typename T1,
   std::size_t number_of_dimensions,
   template <class, std::size_t> class T2>
-constexpr nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method() noexcept 
+nelder_mead_method<T1, number_of_dimensions, T2>::nelder_mead_method() noexcept 
     : optimisation_algorithm<T1, number_of_dimensions, T2>() {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(number_of_dimensions > 0, "");
