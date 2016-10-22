@@ -19,6 +19,22 @@ optimise_result<T1, number_of_dimensions> optimise(
     const T3& optimisation_algorithm,
     typename T3::state_type initial_state);
 
+template <
+  typename T1,
+  std::size_t number_of_dimensions,
+  template <class, std::size_t> class T2,
+  typename T3>
+optimise_result<T1, number_of_dimensions> optimise(
+    const T2<T1, number_of_dimensions>& optimisation_problem,
+    const T3& optimisation_algorithm);
+
+template <
+  typename T1,
+  std::size_t number_of_dimensions,
+  template <class, std::size_t> class T2>
+optimise_result<T1, number_of_dimensions> optimise(
+    const T2<T1, number_of_dimensions>& optimisation_problem);
+
 //
 // Implementation
 //
@@ -173,6 +189,27 @@ optimise_result<T1, number_of_dimensions> optimise(
   };
 }
 
+template <
+  typename T1,
+  std::size_t number_of_dimensions,
+  template <class, std::size_t> class T2,
+  typename T3>
+optimise_result<T1, number_of_dimensions> optimise(
+    const T2<T1, number_of_dimensions>& optimisation_problem,
+    const T3& optimisation_algorithm) {
+  optimise(optimisation_problem, optimisation_algorithm, typename optimisation_algorithm::state_type{});
+}
+
+template <
+  typename T1,
+  std::size_t number_of_dimensions,
+  template <class, std::size_t> class T2,
+  typename T3>
+optimise_result<T1, number_of_dimensions> optimise(
+    const T2<T1, number_of_dimensions>& optimisation_problem) {
+  optimise(optimisation_problem, hooke_jeeves_algorithm<T1, number_of_dimensions>{}, typename hooke_jeeves_algorithm<T1, number_of_dimensions>::state_type{});
+}
+
 //
 // Unit tests
 //
@@ -187,7 +224,7 @@ TEST_CASE("optimise", "[optimise]") {
   sphere_function.upper_bounds = {5.0, 5.0};
   mant::hooke_jeeves_algorithm<value_type, number_of_dimensions> hooke_jeeves_algorithm;
   hooke_jeeves_algorithm.acceptable_objective_value = 1e-12;
-  hooke_jeeves_algorithm_state<value_type, number_of_dimensions> hooke_jeeves_algorithm_state;
+  typename hooke_jeeves_algorithm<value_type, number_of_dimensions>::state_type hooke_jeeves_algorithm_state;
   hooke_jeeves_algorithm_state.parameters = {{-3.2, 4.1}, {6.0, -4.1}};
   
   const auto&& result = mant::optimise(sphere_function, hooke_jeeves_algorithm, hooke_jeeves_algorithm_state);
