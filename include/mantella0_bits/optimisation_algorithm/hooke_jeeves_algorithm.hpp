@@ -99,52 +99,10 @@ TEST_CASE("hooke_jeeves_algorithm_state", "[hooke_jeeves_algorithm][hooke_jeeves
 TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
   typedef double value_type;
   constexpr std::size_t number_of_dimensions = 3;
-  mant::hooke_jeeves_algorithm<value_type, number_of_dimensions> hooke_jeeves_algorithm;
-  mant::hooke_jeeves_algorithm_state<value_type, number_of_dimensions> hooke_jeeves_algorithm_state;
+  const mant::hooke_jeeves_algorithm<value_type, number_of_dimensions> hooke_jeeves_algorithm;
+  const mant::hooke_jeeves_algorithm_state<value_type, number_of_dimensions> hooke_jeeves_algorithm_state;
   
-  SECTION("Default values") {
-    CHECK(hooke_jeeves_algorithm.initial_stepsize == 1.0);
-    CHECK(hooke_jeeves_algorithm.stepsize_decrease == 2.0);
-  }
-  
-  SECTION("Initialising functions") {
-    CHECK(hooke_jeeves_algorithm.initialising_functions.size() == 1);
-    CHECK(std::get<1>(hooke_jeeves_algorithm.initialising_functions.at(0)) == "Hooke-Jeeves initialising");
-    
-    hooke_jeeves_algorithm.initial_stepsize = 0.5;
-    std::get<0>(hooke_jeeves_algorithm.initialising_functions.at(0))(hooke_jeeves_algorithm_state);
-    CHECK(hooke_jeeves_algorithm_state.stepsize == hooke_jeeves_algorithm.initial_stepsize);
-  }
-  
-  SECTION("Next parameters functions") {
-    CHECK(hooke_jeeves_algorithm.next_parameters_functions.size() == 2);
-    
-    SECTION("First function") {
-      CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(0)) == "Hooke-Jeeves next parameters #1");
-      
-      hooke_jeeves_algorithm.stepsize_decrease = 4.0;
-      hooke_jeeves_algorithm_state.stepsize = 8.0;
-      hooke_jeeves_algorithm_state.stagnating_number_of_iterations = 0;
-      
-      std::get<0>(hooke_jeeves_algorithm.next_parameters_functions.at(0))(hooke_jeeves_algorithm_state);
-      CHECK(hooke_jeeves_algorithm_state.stepsize == 8.0);
-      
-      hooke_jeeves_algorithm_state.stagnating_number_of_iterations = 1;
-      
-      std::get<0>(hooke_jeeves_algorithm.next_parameters_functions.at(0))(hooke_jeeves_algorithm_state);
-      CHECK(hooke_jeeves_algorithm_state.stepsize == 2.0);
-    }
-    
-    SECTION("Second function") {
-      CHECK(std::get<1>(hooke_jeeves_algorithm.next_parameters_functions.at(1)) == "Hooke-Jeeves next parameters #2");
-      
-      hooke_jeeves_algorithm.active_dimensions = {0, 2};
-      hooke_jeeves_algorithm_state.stepsize = 0.25;
-      hooke_jeeves_algorithm_state.best_found_parameter = {1.0, 0.5, 0.3};
-      
-      std::get<0>(hooke_jeeves_algorithm.next_parameters_functions.at(1))(hooke_jeeves_algorithm_state);
-      CHECK((hooke_jeeves_algorithm_state.parameters == std::vector<std::array<value_type, number_of_dimensions>>({{1.25, 0.5, 0.3}, {0.75, 0.5, 0.3}, {1.0, 0.75, 0.3}, {1.0, 0.25, 0.3}})));
-    }
-  }
+  CHECK(hooke_jeeves_algorithm.initial_stepsize == 1.0);
+  CHECK(hooke_jeeves_algorithm.stepsize_decrease == 2.0);
 }
 #endif

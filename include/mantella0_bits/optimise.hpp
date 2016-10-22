@@ -64,8 +64,7 @@ optimise_result<T1, number_of_dimensions> optimise(
   std::transform(
     state.parameters.cbegin(), state.parameters.cend(),
     state.objective_values.begin(),
-    [&optimisation_problem, &optimisation_algorithm](
-        auto parameter) {
+    [&optimisation_problem, &optimisation_algorithm](auto parameter) {
       std::array<T1, number_of_dimensions> mapped_parameter;
       for (std::size_t n = optimisation_algorithm.active_dimensions.size(); n > 0; --n) {
         mapped_parameter.at(optimisation_algorithm.active_dimensions.at(n - 1)) = 
@@ -80,11 +79,8 @@ optimise_result<T1, number_of_dimensions> optimise(
   
   // Updates *best_found_parameter* and *best_found_objective_value*.
   const auto best_found_objective_value = std::min_element(
-    state.objective_values.cbegin(),
-    state.objective_values.cend(),
-    [](
-        const auto& objective_value,
-        const auto& other_objective_value) {
+    state.objective_values.cbegin(), state.objective_values.cend(),
+    [](const auto& objective_value, const auto& other_objective_value) {
       return objective_value < other_objective_value;
     }
   );
@@ -96,10 +92,8 @@ optimise_result<T1, number_of_dimensions> optimise(
     for(const auto boundary_handling_function : optimisation_algorithm.boundary_handling_functions) {
       // Tests if the optimisation algorithm is stagnating and either restarts it or proceeds with the next parameters.
       if(std::any_of(
-        optimisation_algorithm.is_stagnating_functions.cbegin(),
-        optimisation_algorithm.is_stagnating_functions.cend(),
-        [&state](
-            const auto is_stagnating_function) {
+        optimisation_algorithm.is_stagnating_functions.cbegin(), optimisation_algorithm.is_stagnating_functions.cend(),
+        [&state](const auto is_stagnating_function) {
           return std::get<0>(is_stagnating_function)(state);
         }
       )) {
@@ -137,11 +131,8 @@ optimise_result<T1, number_of_dimensions> optimise(
     
     // Updates *best_found_parameter* and *best_found_objective_value*.
     const auto best_found_objective_value = std::min_element(
-      state.objective_values.cbegin(),
-      state.objective_values.cend(),
-      [](
-          const auto& objective_value,
-          const auto& other_objective_value) {
+      state.objective_values.cbegin(), state.objective_values.cend(),
+      [](const auto& objective_value, const auto& other_objective_value) {
         return objective_value < other_objective_value;
       }
     );

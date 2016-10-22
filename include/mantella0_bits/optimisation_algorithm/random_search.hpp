@@ -42,27 +42,9 @@ random_search<T, number_of_dimensions>::random_search() noexcept
 TEST_CASE("random_search", "[random_search]") {
   typedef double value_type;
   constexpr std::size_t number_of_dimensions = 3;
-  mant::random_search<value_type, number_of_dimensions> random_search;
-  mant::optimisation_algorithm_state<value_type, number_of_dimensions> random_search_state;
+  const mant::random_search<value_type, number_of_dimensions> random_search;
+  const mant::optimisation_algorithm_state<value_type, number_of_dimensions> random_search_state;
   
-  SECTION("Next parameters functions") {
-    CHECK(random_search.next_parameters_functions.size() == 1);
-    CHECK(std::get<1>(random_search.next_parameters_functions.at(0)) == "Random search next parameters");
-    
-    random_search.active_dimensions = {0, 2};
-    random_search_state.parameters.resize(2);
-    
-    std::get<0>(random_search.next_parameters_functions.at(0))(random_search_state);
-    
-    CHECK(random_search_state.parameters.size() == 2);
-    // Checks that all elements are within [0, 1].
-    for (const auto& parameter : random_search_state.parameters) {
-      CHECK(std::all_of(
-        parameter.cbegin(), std::next(parameter.begin(), random_search.active_dimensions.size()),
-        [](const auto element) {
-          return (0.0 <= element && element <= 1.0);
-        }) == true);
-    }
-  }
+  // Nothing to test here.
 }
 #endif

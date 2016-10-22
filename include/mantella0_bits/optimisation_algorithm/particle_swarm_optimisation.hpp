@@ -208,123 +208,12 @@ TEST_CASE("particle_swarm_optimisation_state", "[particle_swarm_optimisation][pa
 TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
   typedef double value_type;
   constexpr std::size_t number_of_dimensions = 3;
-  mant::particle_swarm_optimisation<value_type, number_of_dimensions> particle_swarm_optimisation;
-  mant::particle_swarm_optimisation_state<value_type, number_of_dimensions> particle_swarm_optimisation_state;
+  const mant::particle_swarm_optimisation<value_type, number_of_dimensions> particle_swarm_optimisation;
+  const mant::particle_swarm_optimisation_state<value_type, number_of_dimensions> particle_swarm_optimisation_state;
   
-  SECTION("Default values") {
-    CHECK(particle_swarm_optimisation.initial_velocity == Approx(0.5));
-    CHECK(particle_swarm_optimisation.maximal_acceleration == Approx(1.0 / (2.0 * std::log(2.0))));
-    CHECK(particle_swarm_optimisation.maximal_local_attraction == Approx(0.5 + std::log(2.0)));
-    CHECK(particle_swarm_optimisation.maximal_global_attraction == Approx(0.5 + std::log(2.0)));
-  }
-  
-  SECTION("Initialising functions") {
-    CHECK(particle_swarm_optimisation.initialising_functions.size() == 3);
-    
-    SECTION("First function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(0)) == "Particle swarm optimisation initialising #1");
-      
-      particle_swarm_optimisation.active_dimensions = {0, 2};
-      particle_swarm_optimisation.initial_velocity = 0.2;
-      particle_swarm_optimisation_state.parameters.resize(2);
-      
-      std::get<0>(particle_swarm_optimisation.initialising_functions.at(0))(particle_swarm_optimisation_state);
-      
-      CHECK(particle_swarm_optimisation_state.velocities.size() == 2);
-      // Checks that all elements are within [-*initial_velocity*, *initial_velocity*].
-      for (const auto& velocity : particle_swarm_optimisation_state.velocities) {
-        CHECK(std::all_of(
-          velocity.cbegin(), std::next(velocity.begin(), particle_swarm_optimisation.active_dimensions.size()),
-          [particle_swarm_optimisation](const auto element) {
-            return (-particle_swarm_optimisation.initial_velocity <= element && element <= particle_swarm_optimisation.initial_velocity);
-          }) == true);
-      }
-    }
-    
-    SECTION("Second function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(1)) == "Particle swarm optimisation initialising #2");
-      
-      particle_swarm_optimisation.active_dimensions = {0, 2};
-      particle_swarm_optimisation_state.parameters = {{1.25, 0.5, 0.3}, {0.75, 0.5, 0.3}};
-      
-      std::get<0>(particle_swarm_optimisation.initialising_functions.at(1))(particle_swarm_optimisation_state);
-      CHECK(particle_swarm_optimisation_state.local_best_found_parameters == particle_swarm_optimisation_state.parameters);
-    }
-    
-    SECTION("Third function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.initialising_functions.at(2)) == "Particle swarm optimisation initialising #3");
-      
-      particle_swarm_optimisation_state.local_best_found_parameters.resize(2);
-      
-      std::get<0>(particle_swarm_optimisation.initialising_functions.at(2))(particle_swarm_optimisation_state);
-      
-      CHECK(std::all_of(
-        particle_swarm_optimisation_state.local_best_found_objective_values.cbegin(), particle_swarm_optimisation_state.local_best_found_objective_values.cend(),
-        [](const auto local_best_found_objective_value) {
-          return local_best_found_objective_value == std::numeric_limits<value_type>::infinity();
-        }) == true);
-    }
-  }
-  
-  SECTION("Boundary handling functions") {
-    // The second boundary handling functions is derived from the the base struct.
-    CHECK(particle_swarm_optimisation.boundary_handling_functions.size() == 2);
-    CHECK(std::get<1>(particle_swarm_optimisation.boundary_handling_functions.at(0)) == "Particle swarm optimisation boundary handling");
-    
-    particle_swarm_optimisation.active_dimensions = {0, 2};
-    particle_swarm_optimisation_state.parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
-    particle_swarm_optimisation_state.velocities = {{1.25, 0.5, -0.7}, {0.75, -0.5, 0.3}};
-    
-    std::get<0>(particle_swarm_optimisation.boundary_handling_functions.at(0))(particle_swarm_optimisation_state);
-    
-    CHECK((particle_swarm_optimisation_state.velocities == std::vector<std::array<value_type, number_of_dimensions>>({{-0.625, 0.5, -0.7}, {0.75, 0.25, 0.3}})));
-  }
-  
-  SECTION("Next parameters function") {
-    CHECK(particle_swarm_optimisation.next_parameters_functions.size() == 3);
-    
-    SECTION("First function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(0)) == "Particle swarm optimisation next parameters #1");
-      
-      particle_swarm_optimisation_state.local_best_found_parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
-      particle_swarm_optimisation_state.local_best_found_objective_values = {-0.1, 0.2};
-      particle_swarm_optimisation_state.parameters = {{1.25, 0.5, -0.7}, {0.75, -0.5, 0.3}};
-      particle_swarm_optimisation_state.objective_values = {-0.2, 0.5};
-      
-      std::get<0>(particle_swarm_optimisation.next_parameters_functions.at(0))(particle_swarm_optimisation_state);
-      
-      CHECK((particle_swarm_optimisation_state.local_best_found_parameters == std::vector<std::array<value_type, number_of_dimensions>>({{1.25, 0.5, -0.7}, {0.8, 1.2, -2.4}})));
-      CHECK((particle_swarm_optimisation_state.local_best_found_objective_values == std::vector<value_type>({-0.2, 0.2})));
-    }
-    
-    SECTION("Second function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(1)) == "Particle swarm optimisation next parameters #2");
-      
-      particle_swarm_optimisation_state.velocities.resize(2);
-      particle_swarm_optimisation_state.local_best_found_parameters = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
-      particle_swarm_optimisation_state.local_best_found_objective_values.resize(2);
-      particle_swarm_optimisation_state.parameters = {{1.25, 0.5, -0.7}, {0.75, -0.5, 0.3}};
-      particle_swarm_optimisation_state.objective_values.resize(2);
-      particle_swarm_optimisation_state.best_found_parameter = {-0.625, 0.5, -0.7};
-      
-      std::get<0>(particle_swarm_optimisation.next_parameters_functions.at(1))(particle_swarm_optimisation_state);
-      
-      CHECK(particle_swarm_optimisation_state.velocities.size() == 2);
-      // As there are no general guarantees (without setting some weights to 0, efficiently excluding parts of the 
-      // computation), there are no further tests for this functions behaviour.
-    }
-    
-    SECTION("Third function") {
-      CHECK(std::get<1>(particle_swarm_optimisation.next_parameters_functions.at(2)) == "Particle swarm optimisation next parameters #3");
-      
-      particle_swarm_optimisation.active_dimensions = {0, 2};
-      particle_swarm_optimisation_state.velocities = {{-0.1, 0.2, 3.2}, {0.8, 1.2, -2.4}};
-      particle_swarm_optimisation_state.parameters = {{1.25, 0.5, -0.7}, {0.75, -0.5, 0.3}};
-      
-      std::get<0>(particle_swarm_optimisation.next_parameters_functions.at(2))(particle_swarm_optimisation_state);
-      
-      CHECK((particle_swarm_optimisation_state.parameters == std::vector<std::array<value_type, number_of_dimensions>>({{1.15, 0.7, -0.7}, {1.55, 0.7, 0.3}})));
-    }
-  }
+  CHECK(particle_swarm_optimisation.initial_velocity == Approx(0.5));
+  CHECK(particle_swarm_optimisation.maximal_acceleration == Approx(1.0 / (2.0 * std::log(2.0))));
+  CHECK(particle_swarm_optimisation.maximal_local_attraction == Approx(0.5 + std::log(2.0)));
+  CHECK(particle_swarm_optimisation.maximal_global_attraction == Approx(0.5 + std::log(2.0)));
 }
 #endif
