@@ -2,10 +2,6 @@ FROM ubuntu:16.04
 
 MAINTAINER Sebastian Niemann <sebiniemann@gmail.com>
 
-# Used to differentiate between continuous integration server and developer builds.
-ARG CI
-ENV CI ${CI:-false}
-
 RUN apt-get update
 
 # Installs compilers
@@ -57,20 +53,3 @@ RUN apt-get install -y python-pip && \
     apt-get remove -y --purge python-pip && \
     apt-get autoremove -y --purge
 RUN apt-get install -y liboctave-dev
-
-# Installs development libraries not used on CI servers
-# - Google micro benchmark
-RUN if [ ! "$CI" == 'true' ]; then \
-      apt-get install -y wget && \
-      wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
-      mkdir benchmark && \
-      tar -xzf benchmark.tar.gz -C ./benchmark --strip-components=1 && \
-      cd benchmark  && \
-      cmake -DCMAKE_BUILD_TYPE=Release . && \
-      make benchmark && \
-      make install && \
-      cd .. && \
-      rm -Rf benchmark.tar.gz benchmark/ && \
-      apt-get remove -y --purge wget && \
-      apt-get autoremove -y --purge \
-    ; fi

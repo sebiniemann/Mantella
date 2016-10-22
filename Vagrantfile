@@ -25,6 +25,6 @@ Vagrant.configure(2) do |config|
     # Builds and runs Mantella's Docker image
     cd /vagrant
     sudo docker build -t ubuntu/mantella:latest .
-    sudo docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+    sudo docker run -privileged -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
   SHELL
 end
