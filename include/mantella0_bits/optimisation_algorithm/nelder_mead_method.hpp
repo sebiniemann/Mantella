@@ -7,6 +7,9 @@ template <
   typename T,
   std::size_t number_of_dimensions>
 struct nelder_mead_method_state : optimisation_algorithm_state<T, number_of_dimensions> {
+  using typename optimisation_algorithm_state<T, number_of_dimensions>::state_type;
+  using typename optimisation_algorithm_state<T, number_of_dimensions>::value_type;
+  
   std::array<std::pair<std::array<T, number_of_dimensions>, T>, number_of_dimensions + 1> simplex;
   std::array<T, number_of_dimensions> centroid;
   bool update_simplex;

@@ -8,7 +8,7 @@ struct random_search : optimisation_algorithm<T, number_of_dimensions> {
   using typename optimisation_algorithm<T, number_of_dimensions>::state_type;
   using typename optimisation_algorithm<T, number_of_dimensions>::value_type;
   
-  constexpr random_search() noexcept;
+  random_search() noexcept;
 };
 
 //
@@ -18,7 +18,7 @@ struct random_search : optimisation_algorithm<T, number_of_dimensions> {
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr random_search<T, number_of_dimensions>::random_search() noexcept 
+random_search<T, number_of_dimensions>::random_search() noexcept 
     : optimisation_algorithm<T, number_of_dimensions>() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");

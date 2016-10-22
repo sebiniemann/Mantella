@@ -5,7 +5,7 @@ template <
   typename T, 
   std::size_t number_of_dimensions>
 struct sum_of_different_powers_function : optimisation_problem<T, number_of_dimensions> {
-  constexpr sum_of_different_powers_function() noexcept;
+  sum_of_different_powers_function() noexcept;
 };
 
 //
@@ -15,7 +15,7 @@ struct sum_of_different_powers_function : optimisation_problem<T, number_of_dime
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr sum_of_different_powers_function<T, number_of_dimensions>::sum_of_different_powers_function() noexcept 
+sum_of_different_powers_function<T, number_of_dimensions>::sum_of_different_powers_function() noexcept 
     : optimisation_problem<T, number_of_dimensions>() {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");

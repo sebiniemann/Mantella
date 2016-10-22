@@ -15,7 +15,7 @@ struct optimisation_problem {
   std::array<T, N> lower_bounds;
   std::array<T, N> upper_bounds;
   
-  constexpr optimisation_problem() noexcept;
+  optimisation_problem() noexcept;
 };
 
 //
@@ -25,7 +25,7 @@ struct optimisation_problem {
 template <
   typename T,
   std::size_t number_of_dimensions>
-constexpr optimisation_problem<T, number_of_dimensions>::optimisation_problem() noexcept {
+optimisation_problem<T, number_of_dimensions>::optimisation_problem() noexcept {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(number_of_dimensions > 0, "");
   
