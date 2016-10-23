@@ -5,11 +5,9 @@ Version 0.60.0
 
 [![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) 
 
-[Mantella](http://mantella.info/) is an efficiency-focused C++ header-only library for analysing and solving optimisation problems.
+[Mantella](http://mantella.info/) is an efficiency-focused C++14 header-only library for analysing and solving optimisation problems. As it only depends on the C++ standard library, Linux, Windows and Mac OS X support is a given.
 
-It is written in C++14 and only depends on the C++ standard library, supporting Linux, Windows and Mac OS X.
-
-**Our goal for version 1.0 is to provide a high-performance, self-accelerating optimisation experience with an easy to use API.**
+**Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
 
 ``` cpp
 #include <mantella>
@@ -33,12 +31,6 @@ int main() {
   return 0;
 }
 ```
-
-Getting started
----------------
-Please see our [official website](http://mantella.info/getting-started/), to get started with Mantella.
-
-You will also find **detailed API information** under http://mantella.info/overview/.
 
 Got a Problem or Question?
 --------------------------
