@@ -1,6 +1,6 @@
 [![Mantella](http://mantella.info/assets/images/logo_with_name.png)](http://mantella.info/)
 
-Version 0.50.2
+Version 0.60.0
 ==============
 
 [![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) 
@@ -9,7 +9,7 @@ Version 0.50.2
 
 It is written in C++14 and only depends on the C++ standard library, supporting Linux, Windows and Mac OS X.
 
-**Our goal is to make optimisation processes as easy as writing**
+**Our goal is to let you solve a problem with just**
 
 ``` cpp
 #include <mantella>
@@ -18,17 +18,17 @@ int main() {
   // ... company code.
 
   // Adds your own optimisation problem.
-  constexpr std::size_t number_of_dimensions = 2;
-  mant::optimisation_problem<double, number_of_dimensions> my_problem;
-  my_problem.objective_functions.push_back({
-    [](const auto& parameter) {
-      return my_objective_value_computation(parameter);
-    },
-    "My problem"
-  });
+  mant::problem<double, 2> my_problem;
+  my_problem.objective_function = [](cont std::array<double, 2>& parameter) {
+    
   
-  // Optimises the problem. Selects and parametrises an efficient optimiser automatically.
-  auto result = mant::optimise(my_problem);
+    return my_objective_function(parameter);
+  };
+  
+  // Optimises your problem. Optimiser selection and tuning is handled automatically.
+  mant::optimise_result result = mant::optimise(my_problem);
+  std::cout << result.best_parameter << std::endl;
+  std::cout << result.best_objective_value << std::endl;
 
   // ... continuing company code.
   
@@ -36,7 +36,7 @@ int main() {
 }
 ```
 
-**while (automatically) analysing and learning the problems properties over time, in order to select the most efficient solver to do the job.**
+**while (automatically) analysing and learning a problem's properties, selecting the most efficient optimiser to do the job.**
 
 Getting started
 ---------------

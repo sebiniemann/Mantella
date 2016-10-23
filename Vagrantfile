@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     # Installs Docker
-    # See https://docs.docker.com/engine/installation/linux/ubuntulinux/ for more details
+    # @see https://docs.docker.com/engine/installation/linux/ubuntulinux/ for more details
     sudo apt-get update
     sudo apt-get install -y apt-transport-https ca-certificates
     

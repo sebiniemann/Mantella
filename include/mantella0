@@ -15,8 +15,8 @@
 #pragma once
 
 #define MANTELLA_VERSION_MAJOR 0
-#define MANTELLA_VERSION_MINOR 50
-#define MANTELLA_VERSION_PATCH 2
+#define MANTELLA_VERSION_MINOR 60
+#define MANTELLA_VERSION_PATCH 0
 
 #if !defined(MANTELLA_SYMBOL_VERSION)
   #define MANTELLA_SYMBOL_VERSION MANTELLA_VERSION_MAJOR
@@ -56,11 +56,10 @@ namespace mant {
 #endif
   namespace v0 {
     // Random number generator
-    typedef MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator_type;
     // Provides global access to a one-time constructed random number generator.
     // *Note:* If *random_number_generator_type* was not thread-safe in the first place, it still wont be.
-    inline random_number_generator_type& random_number_generator() {
-      static random_number_generator_type random_number_generator;
+    inline MANTELLA_RANDOM_NUMBER_GENERATOR& random_number_generator() {
+      static MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator;
       return random_number_generator;
     }
     
@@ -68,25 +67,24 @@ namespace mant {
     //// Randomisation
     #include "mantella0_bits/randomisation/random_neighbour.hpp"
 
-    // Optimisation problems
-    #include "mantella0_bits/optimisation_problem.hpp"
-    #include "mantella0_bits/optimisation_problem/ackley_function.hpp"
-    #include "mantella0_bits/optimisation_problem/rastrigin_function.hpp"
-    #include "mantella0_bits/optimisation_problem/rosenbrock_function.hpp"
-    #include "mantella0_bits/optimisation_problem/sphere_function.hpp"
-    #include "mantella0_bits/optimisation_problem/sum_of_different_powers_function.hpp"
-    #include "mantella0_bits/evaluate.hpp"
-
-    // Properties analysis
-    #include "mantella0_bits/property_analysis/additive_separability.hpp"
+    // Problems
+    #include "mantella0_bits/problem.hpp"
+    #include "mantella0_bits/problem/ackley_function.hpp"
+    #include "mantella0_bits/problem/rastrigin_function.hpp"
+    #include "mantella0_bits/problem/rosenbrock_function.hpp"
+    #include "mantella0_bits/problem/sphere_function.hpp"
+    #include "mantella0_bits/problem/sum_of_different_powers_function.hpp"
+    
+    // Analyser
+    #include "mantella0_bits/analyser/additive_separability.hpp"
     #include "mantella0_bits/analyse.hpp"
 
-    // Optimisation algorithms
-    #include "mantella0_bits/optimisation_algorithm.hpp"
-    #include "mantella0_bits/optimisation_algorithm/hill_climbing.hpp"
-    #include "mantella0_bits/optimisation_algorithm/hooke_jeeves_algorithm.hpp"
-    #include "mantella0_bits/optimisation_algorithm/particle_swarm_optimisation.hpp"
-    #include "mantella0_bits/optimisation_algorithm/random_search.hpp"
+    // Optimiser
+    #include "mantella0_bits/optimiser.hpp"
+    #include "mantella0_bits/optimiser/hill_climbing.hpp"
+    #include "mantella0_bits/optimiser/hooke_jeeves_algorithm.hpp"
+    #include "mantella0_bits/optimiser/particle_swarm_optimisation.hpp"
+    #include "mantella0_bits/optimiser/random_search.hpp"
     #include "mantella0_bits/optimise.hpp"
   }
 }
