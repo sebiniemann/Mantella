@@ -23,7 +23,6 @@ print_help() {
   echo "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
   echo '-t, --test                  Compiles and runs unit tests.'
   echo '-d, --doc                   Builds the documentation.'
-  echo '-b, --benchmark             Compiles and runs benchmarks.'
 }
 
 finish_up() {
@@ -81,17 +80,6 @@ do_doc() {
   finish_up
 }
 
-do_benchmark() {
-  echo "${MAGENTA_TEXT_COLOR}Compiling and running benchmarks${RESET_TEXT_COLOR}"
-  
-  cd ./benchmark || exit 1
-  
-  if ! sudo docker build -f Mantella.Docker -t benchmark/mantella:latest .; then AN_ERROR_OCCURED=1; fi
-  if ! sudo docker run -v /vagrant/benchmark:/benchmark -w /benchmark --name benchmark_mantella -t -d benchmark/mantella; then AN_ERROR_OCCURED=1; fi
-  
-  finish_up
-}
-
 if [ ! -f "./include/mantella${MANTELLA_MAJOR_VERSION}" ]; then
   echo "${RED_TEXT_COLOR}Could not find Mantella. Make sure to start this script within Mantella's root path.${RESET_TEXT_COLOR}"
   exit 1
@@ -119,9 +107,6 @@ else
       ;;
       -d|--doc)
         do_doc
-      ;;
-      -b|--benchmark)
-        do_benchmark
       ;;
       *)
         error "Unexpected option ${OPTION}"
