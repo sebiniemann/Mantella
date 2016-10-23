@@ -4,6 +4,14 @@ optimise_result<T1, N> optimise(
     const T3& optimiser,
     std::vector<std::array<T1, N>> initial_parameters);
 
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, typename T3>
+optimise_result<T1, N> optimise(
+    const T2<T1, N>& problem,
+    const T3& optimiser);
+    
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, typename T3>
+optimise_result<T1, N> optimise(
+    const T2<T1, N>& problem);
 //
 // Implementation
 //
@@ -60,6 +68,28 @@ optimise_result<T1, N> optimise(
   return result;
 }
 
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, typename T3>
+optimise_result<T1, N> optimise(
+    const T2<T1, N>& problem,
+    const T3& optimiser) {
+  std::vector<std::array<T1, N>> initial_parameters(40);
+  for (auto& parameter : initial_parameters) {
+    std::generate(
+      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+      std::bind(
+        std::uniform_real_distribution<T1>(0.0, 1.0),
+        std::ref(random_number_generator())));
+  }
+  
+  return optimise(problem, optimiser, initial_parameters);
+}
+
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+optimise_result<T1, N> optimise(
+    const T2<T1, N>& problem) {
+  return optimise(problem, hooke_jeeves_algorithm<T1, N, mant::problem>());
+}
+
 //
 // Unit tests
 //
@@ -77,5 +107,8 @@ TEST_CASE("optimise", "[optimise]") {
   CHECK((result.best_parameter == std::array<double, 2>({5.245208729576234e-07, 3.3378601038691613e-07})));
   CHECK(result.best_objective_value == Approx(5.57065506021764692e-13));
   CHECK(result.number_of_evaluations == 40);
+  
+  CHECK_NOTHROW(mant::optimise(problem, optimiser));
+  CHECK_NOTHROW(mant::optimise(problem));
 }
 #endif
