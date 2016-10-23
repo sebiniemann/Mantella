@@ -84,7 +84,10 @@ do_doc() {
 do_benchmark() {
   echo "${MAGENTA_TEXT_COLOR}Compiling and running benchmarks${RESET_TEXT_COLOR}"
   
+  cd ./benchmark || exit 1
   
+  if ! sudo docker build -f Mantella.Docker -t benchmark/mantella:latest .; then AN_ERROR_OCCURED=1; fi
+  if ! sudo docker run -v /vagrant/benchmark:/benchmark -w /benchmark --name benchmark_mantella -t -d benchmark/mantella; then AN_ERROR_OCCURED=1; fi
   
   finish_up
 }

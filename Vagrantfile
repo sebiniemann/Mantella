@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     # Installs Docker
-    # See https://docs.docker.com/engine/installation/linux/ubuntulinux/ for more details
+    # @see https://docs.docker.com/engine/installation/linux/ubuntulinux/ for more details
     sudo apt-get update
     sudo apt-get install -y apt-transport-https ca-certificates
     
@@ -25,6 +25,6 @@ Vagrant.configure(2) do |config|
     # Builds and runs Mantella's Docker image
     cd /vagrant
     sudo docker build -t ubuntu/mantella:latest .
-    sudo docker run -privileged -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+    sudo docker run -v /vagrant:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
   SHELL
 end

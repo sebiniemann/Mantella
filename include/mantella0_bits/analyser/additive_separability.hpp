@@ -1,12 +1,9 @@
 /**
 
 */
-template <
-  typename T1,
-  std::size_t number_of_dimensions,
-  template <class, std::size_t> class T2>
-std::array<std::size_t, number_of_dimensions> additive_separability(
-    const T2<T1, number_of_dimensions>& optimisation_problem,
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+std::array<std::size_t, N> additive_separability(
+    const T2<T1, N>& problem,
     const std::size_t number_of_evaluations,
     const T1 acceptable_deviation);
 
@@ -14,20 +11,17 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
 // Implementation
 // 
 
-template <
-  typename T1,
-  std::size_t number_of_dimensions,
-  template <class, std::size_t> class T2>
-std::array<std::size_t, number_of_dimensions> additive_separability(
-    const T2<T1, number_of_dimensions>& optimisation_problem,
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+std::array<std::size_t, N> additive_separability(
+    const T2<T1, N>& problem,
     const std::size_t number_of_evaluations,
     const T1 acceptable_deviation) {
   static_assert(std::is_floating_point<T1>::value, "");
-  static_assert(number_of_dimensions > 1, "");
-  // Each lower bound is less than or equal to its corresponding upper one.
+  static_assert(N > 1, "");
+  
   assert(std::equal(
-    optimisation_problem.lower_bounds.cbegin(), optimisation_problem.lower_bounds.cend(),
-    optimisation_problem.upper_bounds.cbegin(), optimisation_problem.upper_bounds.cend(),
+    problem.lower_bounds.cbegin(), problem.lower_bounds.cend(),
+    problem.upper_bounds.cbegin(), problem.upper_bounds.cend(),
     [](const auto lower_bound, const auto upper_bound) {
       return lower_bound <= upper_bound;
     })); 
@@ -35,14 +29,14 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
   assert(acceptable_deviation >= 0);
       
   // Initialises *partition* with 0, indicating that all dimensions are in the same group and none is separable.
-  std::array<std::size_t, number_of_dimensions> partition;
+  std::array<std::size_t, N> partition;
   partition.fill(0);
   
   // Iterates through all partitions with two parts.
   // The parts are ordered, such that the first one will not contain more elements than the second one.
   // *n* stands for the number of elements in the first part (and is therefore limited by floor
-  // (*number_of_dimensions* / 2)).
-  for (std::size_t n = 1; n <= number_of_dimensions / 2; ++n) {
+  // (*N* / 2)).
+  for (std::size_t n = 1; n <= N / 2; ++n) {
     /* Each partition is represented by a bitmask, whereby *true* marks elements in the first part and *false* marks 
      * elements in the second part.
      * By iterating over all permutation of *bitmask*, all possible partitions are proceeded.
@@ -54,17 +48,16 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
      *   (   1  2  3) Second part /
      */
     
-    // Sets the first *n* values inside *bitmask* to true ...
-    std::array<bool, number_of_dimensions> bitmask;
+    // Sets the first *n* values inside *bitmask* to true and all others to *false*.
+    std::array<bool, N> bitmask;
     std::fill(bitmask.begin(), std::next(bitmask.begin(), n), true);
-    // ... and all others to *false*.
     std::fill(std::next(bitmask.begin(), n), bitmask.end(), false);
       
     do {
       /* Avoids adding duplicates when we split the elements in equally sized parts, skipping the second half of 
        * permutations.
        *
-       * If *number_of_dimensions* was 4 and *n* was 2, we would get:
+       * If *N* was 4 and *n* was 2, we would get:
        *
        *   (1, 1, 0, 0) (Bit mask)
        *   (1, 0, 1, 0) (Bit mask)
@@ -73,7 +66,7 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
        *   (0, 1, 0, 1) (Bit mask) Invert of the second bit mask
        *   (0, 0, 1, 1) (Bit mask) Invert of the first bit mask
        */
-      if (2 * n == number_of_dimensions && !std::get<0>(bitmask)) {
+      if (2 * n == N && !std::get<0>(bitmask)) {
         break;
       }
 
@@ -92,7 +85,7 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
          */
         
         // Fills (a, c) with randomly and uniformly values, drawn from [0, 1].
-        std::array<T1, number_of_dimensions> parameter_ac;
+        std::array<T1, N> parameter_ac;
         std::generate(
           parameter_ac.begin(), parameter_ac.end(),
           std::bind(
@@ -100,27 +93,27 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
             std::ref(mant::random_number_generator())));
             
         // Fills (b, d) with randomly and uniformly values, drawn from [0, 1].
-        std::array<T1, number_of_dimensions> parameter_bd;
+        std::array<T1, N> parameter_bd;
         std::generate(
           parameter_bd.begin(), parameter_bd.end(),
           std::bind(
             std::uniform_real_distribution<T1>(T1(0.0), T1(1.0)),
             std::ref(mant::random_number_generator())));
         
-        std::array<T1, number_of_dimensions> parameter_ad;
-        std::array<T1, number_of_dimensions> parameter_bc;
-        for (std::size_t l = 0; l < number_of_dimensions; ++l) {
-          // Maps [0, 1] linear to [*optimisation_problem.lower_bounds*, *optimisation_problem.upper_bounds*], 
+        std::array<T1, N> parameter_ad;
+        std::array<T1, N> parameter_bc;
+        for (std::size_t l = 0; l < N; ++l) {
+          // Maps [0, 1] linear to [*problem.lower_bounds*, *problem.upper_bounds*], 
           // addressing the actual bounds per dimension.
           parameter_ac.at(l) = 
-            optimisation_problem.lower_bounds.at(l) + 
+            problem.lower_bounds.at(l) + 
             parameter_ac.at(l) * (
-              optimisation_problem.upper_bounds.at(l) - optimisation_problem.lower_bounds.at(l)
+              problem.upper_bounds.at(l) - problem.lower_bounds.at(l)
             );
           parameter_bd.at(l) = 
-            optimisation_problem.lower_bounds.at(l) +
+            problem.lower_bounds.at(l) +
             parameter_bd.at(l) * (
-              optimisation_problem.upper_bounds.at(l) - optimisation_problem.lower_bounds.at(l)
+              problem.upper_bounds.at(l) - problem.lower_bounds.at(l)
             );
           
           // Fills (a, d) and (b, d), based on (a, c) and (b, d).
@@ -135,10 +128,10 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
       
         // Tests whether the above condition for separable functions holds true or not.
         if (std::fabs(
-              evaluate(optimisation_problem, parameter_ac) +
-              evaluate(optimisation_problem, parameter_bd) -
-              evaluate(optimisation_problem, parameter_ad) -
-              evaluate(optimisation_problem, parameter_bc)
+              problem.objective_function(parameter_ac) +
+              problem.objective_function(parameter_bd) -
+              problem.objective_function(parameter_ad) -
+              problem.objective_function(parameter_bc)
             ) > 
             acceptable_deviation) {
           break;
@@ -165,14 +158,14 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
          * axis is equal.
          */
         
-        std::array<bool, number_of_dimensions> is_remaining_dimension;
+        std::array<bool, N> is_remaining_dimension;
         is_remaining_dimension.fill(true);
-        for (std::size_t l = 0; l < number_of_dimensions; ++l) {
+        for (std::size_t l = 0; l < N; ++l) {
           if (is_remaining_dimension.at(l)) {
             // Compares the sequence for all following, remaining dimensions to the current one.
             // If the sequence matches, both get the same part number (*l*) and the dimension is marked as 
             // non-remaining.
-            for (std::size_t m = l + 1; m < number_of_dimensions; ++m) {
+            for (std::size_t m = l + 1; m < N; ++m) {
               if (is_remaining_dimension.at(m) && 
                   bitmask.at(l) == bitmask.at(m) && 
                   partition.at(l) == partition.at(m)) {
@@ -184,7 +177,7 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
             partition.at(l) = l;
             
             // We are already finished, as there is no better partition as having one part per dimensions.
-            if (l == number_of_dimensions - 1) {
+            if (l == N - 1) {
               return partition;
             }
           }
@@ -202,26 +195,22 @@ std::array<std::size_t, number_of_dimensions> additive_separability(
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("additive_separability", "[property_analysis][additive_separability]") {
-  typedef double value_type;
-  constexpr std::size_t number_of_dimensions = 5;
-  
   // Fully-separable
-  mant::sphere_function<value_type, number_of_dimensions> sphere_function;
-  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<std::size_t, number_of_dimensions>({0, 1, 2, 3, 4})));
+  const mant::sphere_function<double, 5> sphere_function;
+  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<std::size_t, 5>({0, 1, 2, 3, 4})));
   
   // Partly-separable
-  sphere_function.objective_functions.push_back({
-    [](const auto& parameter) {
-      return std::get<0>(parameter) * std::get<4>(parameter) + std::get<2>(parameter) * std::get<3>(parameter);
-    },
-    "A partly separable function"});
-  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<std::size_t, number_of_dimensions>({0, 1, 2, 2, 0})));
+  mant::problem<double, 5> problem;
+  problem.objective_function = [](const auto& parameter) {
+    return std::get<0>(parameter) * std::get<4>(parameter) + std::get<2>(parameter) * std::get<3>(parameter);
+  };
+  CHECK((additive_separability(problem, 100, 1e-12) == std::array<std::size_t, 5>({0, 1, 2, 2, 0})));
   
   // Non-separable
-  const mant::ackley_function<value_type, number_of_dimensions> ackley_function;
-  CHECK((additive_separability(ackley_function, 100, 1e-12) == std::array<std::size_t, number_of_dimensions>({0, 0, 0, 0, 0})));
+  const mant::ackley_function<double, 5> ackley_function;
+  CHECK((additive_separability(ackley_function, 100, 1e-12) == std::array<std::size_t, 5>({0, 0, 0, 0, 0})));
   
   // Non-separable with a permissive, acceptable deviation
-  CHECK((additive_separability(ackley_function, 100, std::numeric_limits<double>::infinity()) == std::array<std::size_t, number_of_dimensions>({0, 1, 2, 3, 4})));
+  CHECK((additive_separability(ackley_function, 100, 100.0) == std::array<std::size_t, 5>({0, 1, 2, 3, 4})));
 }
 #endif

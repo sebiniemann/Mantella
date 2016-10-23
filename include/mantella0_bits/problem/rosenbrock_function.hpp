@@ -1,10 +1,8 @@
 /**
 
 */
-template <
-  typename T,
-  std::size_t number_of_dimensions>
-struct rosenbrock_function : optimisation_problem<T, number_of_dimensions> {
+template <typename T, std::size_t N>
+struct rosenbrock_function : problem<T, N> {
   rosenbrock_function() noexcept;
 };
 
@@ -12,13 +10,10 @@ struct rosenbrock_function : optimisation_problem<T, number_of_dimensions> {
 // Implementation
 //
 
-template <
-  typename T,
-  std::size_t number_of_dimensions>
-rosenbrock_function<T, number_of_dimensions>::rosenbrock_function() noexcept 
-    : optimisation_problem<T, number_of_dimensions>() {
-  static_assert(std::is_floating_point<T>::value, "");
-  static_assert(number_of_dimensions > 0, "");
+template <typename T, std::size_t N>
+rosenbrock_function<T, N>::rosenbrock_function() noexcept 
+    : problem<T, N>() {
+  static_assert(N > 1, "");
 
   /* @see Howard H. Rosenbrock (1960). An automatic method for finding the greatest or least value of a function. The 
    * Computer Journal, 3(3), pp. 175–184.
@@ -29,10 +24,9 @@ rosenbrock_function<T, number_of_dimensions>::rosenbrock_function() noexcept
    * i = 1 |       \                                             /                    |
    *       \                                                                          /
    */
-  this->objective_functions = {{
-    [](
-        const auto& parameter) {
-      return std::inner_product(
+  this->objective_function = [](const auto& parameter) {
+    return 
+      std::inner_product(
         parameter.cbegin(), std::prev(parameter.cend(), 1),
         std::next(parameter.cbegin(), 1),
         T(0.0),
@@ -45,8 +39,7 @@ rosenbrock_function<T, number_of_dimensions>::rosenbrock_function() noexcept
             ) + 
             std::pow(element, T(2.0));
         });
-    },
-    "Rosenbrock function"}};
+  };
 }
 
 //
@@ -54,13 +47,9 @@ rosenbrock_function<T, number_of_dimensions>::rosenbrock_function() noexcept
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE("rosenbrock_function", "[optimisation_problem][rosenbrock_function]") {
-  typedef double value_type;
-  constexpr std::size_t number_of_dimensions = 3;
-  const mant::rosenbrock_function<value_type, number_of_dimensions> rosenbrock_function;
+TEST_CASE("rosenbrock_function", "[problem][rosenbrock_function]") {
+  const mant::rosenbrock_function<double, 3> rosenbrock_function;
   
-  CHECK(rosenbrock_function.objective_functions.size() == 1);
-  CHECK(std::get<0>(rosenbrock_function.objective_functions.at(0))({1.0, -2.0, 3.0}) == Approx(3405.0));
-  CHECK(std::get<1>(rosenbrock_function.objective_functions.at(0)) == "Rosenbrock function");
+  CHECK(rosenbrock_function.objective_function({1.0, -2.0, 3.0}) == Approx(3405.0));
 }
 #endif

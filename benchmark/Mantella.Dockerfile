@@ -15,7 +15,9 @@ RUN apt-get install -y clang-3.8 && \
     update-alternatives --set c++ /usr/bin/clang++-3.8
 
 # Installs benchmark library
+# - CMake
 # - Google micro benchmark
+RUN apt-get install -y cmake
 RUN apt-get install -y wget && \
     wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
     mkdir benchmark && \
