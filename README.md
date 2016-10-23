@@ -9,7 +9,7 @@ Version 0.60.0
 
 It is written in C++14 and only depends on the C++ standard library, supporting Linux, Windows and Mac OS X.
 
-**Our goal is to let you solve a problem with just**
+**Our goal for version 1.0 is to provide a high-performance, self-accelerating optimisation experience with an easy to use API.**
 
 ``` cpp
 #include <mantella>
@@ -19,24 +19,20 @@ int main() {
 
   // Adds your own optimisation problem.
   mant::problem<double, 2> my_problem;
-  my_problem.objective_function = [](cont std::array<double, 2>& parameter) {
-    
-  
-    return my_objective_function(parameter);
+  my_problem.objective_function = [](const std::array<double, 2>& parameter) {
+    return /* Your objective value calculation */;
   };
   
-  // Optimises your problem. Optimiser selection and tuning is handled automatically.
+  // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
   mant::optimise_result result = mant::optimise(my_problem);
-  std::cout << result.best_parameter << std::endl;
-  std::cout << result.best_objective_value << std::endl;
+  std::cout << result.best_parameter
+            << result.best_objective_value << std::endl;
 
   // ... continuing company code.
   
   return 0;
 }
 ```
-
-**while (automatically) analysing and learning a problem's properties, selecting the most efficient optimiser to do the job.**
 
 Getting started
 ---------------
