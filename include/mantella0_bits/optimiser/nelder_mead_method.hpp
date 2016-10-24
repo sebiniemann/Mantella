@@ -33,6 +33,10 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
     
     result.best_parameter = initial_parameters.at(0);
     result.best_objective_value = problem.objective_function(initial_parameters.at(0));
+        
+    if (result.best_objective_value <= this->acceptable_objective_value) {
+      return result;
+    }
 
     std::array<std::pair<std::array<T1, N>, T1>, N> simplex;
     for (std::size_t n = 1; n < initial_parameters.size(); ++n) {
@@ -44,6 +48,10 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
+        
+        if (result.best_objective_value <= this->acceptable_objective_value) {
+          return result;
+        }
       }
     }
     
@@ -84,9 +92,9 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         result.best_objective_value = objective_value;
         
         if (result.best_objective_value <= this->acceptable_objective_value) {
-          break;
+          return result;
         } else if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
-          break;
+          return result;
         }
         
         std::array<T1, N> expanded_point;
@@ -114,7 +122,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
       }
       
       if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
-        break;
+        return result;
       }
       
       if (objective_value < std::get<1>(std::get<N-1>(simplex))) {
@@ -172,6 +180,8 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
               [this](const auto best_parameter, const auto point) {
                 return best_parameter + shrinking_weight * (point - best_parameter);
               });
+              
+            point = {std::get<0>(point), problem.objective_function(std::get<0>(point))};
           }
           
           std::sort(

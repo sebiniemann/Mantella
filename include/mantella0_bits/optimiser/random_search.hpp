@@ -22,6 +22,10 @@ random_search<T1, N, T2>::random_search() noexcept
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
+        
+        if (result.best_objective_value <= this->acceptable_objective_value) {
+          return result;
+        }
       }
     }
     

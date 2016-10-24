@@ -29,6 +29,10 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
+        
+        if (result.best_objective_value <= this->acceptable_objective_value) {
+          return result;
+        }
       }
     }
     
@@ -49,14 +53,14 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
           result.best_objective_value = objective_value;
           
           if (result.best_objective_value <= this->acceptable_objective_value) {
-            break;
+            return result;
           }
           
           is_improving = true;
         }
         
         if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
-          break;
+          return result;
         }
         
         parameter.at(n) -= T1(2.0) * stepsize;

@@ -50,6 +50,10 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
+        
+        if (result.best_objective_value <= this->acceptable_objective_value) {
+          return result;
+        }
       }
     }
     
