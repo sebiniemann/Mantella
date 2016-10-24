@@ -19,7 +19,7 @@ template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept 
     : optimiser<T1, N, T2>(),
       reflection_weight(T1(1.0)),
-      expansion_weight(T1(1.0)),
+      expansion_weight(T1(2.0)),
       contraction_weight(T1(0.5)),
       shrinking_weight(T1(0.5)) {
   this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
@@ -164,32 +164,30 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
           std::copy_backward(position, std::prev(simplex.end()), simplex.end());
           *position = {contracted_point, objective_value};
         } else {
-          // std::for_each(
-            // state.simplex.cbegin(), std::prev(state.simplex.cend()),
-            // [this, &state](const auto& point) {
-              // std::transform(
-                // state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
-                // std::get<0>(std::get<N>(state.simplex)).cbegin(),
-                // state.parameters.at(0).begin(),
-                // [this](const auto centroid_element, const auto sample_element) {
-                  // return centroid_element + reflection_weight * (centroid_element - sample_element);
-                // });
-            // });
+          for (auto& point : simplex) {
+            std::transform(
+              result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), this->active_dimensions.size()),
+              std::get<0>(point).cbegin(),
+              std::get<0>(point).begin(),
+              [this](const auto best_parameter, const auto point) {
+                return best_parameter + shrinking_weight * (point - best_parameter);
+              });
+          }
           
-          // std::sort(
-            // simplex.begin(), simplex.end(),
-            // [](const auto& simplex, const auto& other_simplex){
-              // return std::get<1>(simplex) < std::get<1>(other_simplex);
-            // });
+          std::sort(
+            simplex.begin(), simplex.end(),
+            [](const auto& simplex, const auto& other_simplex){
+              return std::get<1>(simplex) < std::get<1>(other_simplex);
+            });
           
-          // std::array<T1, N> centroid = result.best_parameter;
-          // std::for_each(
-            // simplex.cbegin(), std::prev(simplex.cend()),
-            // [&centroid](const auto& point) {
-              // for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
-                // centroid.at(n) += std::get<0>(point).at(n) / static_cast<T1>(N);
-              // }
-            // });
+          std::array<T1, N> centroid = result.best_parameter;
+          std::for_each(
+            simplex.cbegin(), std::prev(simplex.cend()),
+            [this, &centroid](const auto& point) {
+              for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
+                centroid.at(n) += std::get<0>(point).at(n) / static_cast<T1>(N);
+              }
+            });
         }
       }
     }
@@ -207,7 +205,7 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
   const mant::nelder_mead_method<double, 3, mant::problem> optimiser;
   
   CHECK(optimiser.reflection_weight == Approx(1.0));
-  CHECK(optimiser.expansion_weight == Approx(1.0));
+  CHECK(optimiser.expansion_weight == Approx(2.0));
   CHECK(optimiser.contraction_weight == Approx(0.5));
   CHECK(optimiser.shrinking_weight == Approx(0.5));
   
