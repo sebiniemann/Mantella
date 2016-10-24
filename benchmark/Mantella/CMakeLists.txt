@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 # Retrieves the version numbers from "include/mantella", avoiding possible inconsistency.
-file(GLOB MANTELLA_HEADER_FILE "../include/mantella*")
+file(GLOB MANTELLA_HEADER_FILE "../../include/mantella*")
 string(REGEX REPLACE ".*/include/mantella([0-9]+).*" "\\1" MANTELLA_VERSION_MAJOR "${MANTELLA_HEADER_FILE}")
-file(STRINGS ../include/mantella${MANTELLA_VERSION_MAJOR} MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
+file(STRINGS ../../include/mantella${MANTELLA_VERSION_MAJOR} MANTELLA_HEADER_CONTENTS REGEX "#define MANTELLA_VERSION_[A-Z]+ ")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_MINOR ([0-9]+).*" "\\1" MANTELLA_VERSION_MINOR "${MANTELLA_HEADER_CONTENTS}")
 string(REGEX REPLACE ".*#define MANTELLA_VERSION_PATCH ([0-9]+).*" "\\1" MANTELLA_VERSION_PATCH "${MANTELLA_HEADER_CONTENTS}")
 set(MANTELLA_VERSION "${MANTELLA_VERSION_MAJOR}.${MANTELLA_VERSION_MINOR}.${MANTELLA_VERSION_PATCH}")
@@ -13,12 +13,12 @@ project(BenchmarkMantella VERSION ${MANTELLA_VERSION} LANGUAGES CXX)
 message(STATUS "") 
 message(STATUS "Configuring benchmark for Mantella (version: ${MANTELLA_VERSION}).")
 
-configure_file(${PROJECT_SOURCE_DIR}/main.cpp.cmake ${PROJECT_SOURCE_DIR}/main.cpp)
-add_executable(tests main.cpp)
-set_property(TARGET tests PROPERTY CXX_STANDARD 14)
-set_property(TARGET tests PROPERTY CXX_STANDARD_REQUIRED ON)
+configure_file(${PROJECT_SOURCE_DIR}/benchmark.cpp.cmake ${PROJECT_SOURCE_DIR}/benchmark.cpp)
+add_executable(benchmark benchmark.cpp)
+set_property(TARGET benchmark PROPERTY CXX_STANDARD 14)
+set_property(TARGET benchmark PROPERTY CXX_STANDARD_REQUIRED ON)
 
-target_include_directories(tests PRIVATE "../include")
+target_include_directories(benchmark PRIVATE "../../include")
 
 #
 # Prints noticeable variables

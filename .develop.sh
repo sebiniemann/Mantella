@@ -23,6 +23,7 @@ print_help() {
   echo "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
   echo '-t, --test                  Compiles and runs unit tests.'
   echo '-d, --doc                   Builds the documentation.'
+  echo '-b, --benchmark             Compiles and runs benchmarks.'
 }
 
 finish_up() {
@@ -36,7 +37,7 @@ finish_up() {
 }
 
 do_install() {
-  echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\"${RESET_TEXT_COLOR}"
+  echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\".${RESET_TEXT_COLOR}"
   
   echo "copy ./include/mantella* -> ${INSTALL_DIR}"
   if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; fi
@@ -45,37 +46,55 @@ do_install() {
 }
 
 do_test() {
-  echo "${MAGENTA_TEXT_COLOR}Compiling and running tests${RESET_TEXT_COLOR}"
+  echo "${MAGENTA_TEXT_COLOR}Compiling and running tests.${RESET_TEXT_COLOR}"
   
   cd ./test || exit 1
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
   if ! cmake ..; then AN_ERROR_OCCURED=1; fi
+  if ! make clean tests; then AN_ERROR_OCCURED=1; fi
+  if ! ./tests; then AN_ERROR_OCCURED=1; fi
   
-  if (( AN_ERROR_OCCURED == 0)); then
-    if ! make clean tests; then AN_ERROR_OCCURED=1; fi
-  fi
-  
-  if (( AN_ERROR_OCCURED == 0)); then
-    if ! ./tests; then AN_ERROR_OCCURED=1; fi
-  fi
-  
-  cd ../../ || exit 1
+  cd ../.. || exit 1
   
   finish_up
 }
 
 do_doc() {
-  echo "${MAGENTA_TEXT_COLOR}Building documentation${RESET_TEXT_COLOR}"
+  echo "${MAGENTA_TEXT_COLOR}Building documentation.${RESET_TEXT_COLOR}"
   
   cd ./doc || exit 1
   
   if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=1; fi
+  if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; fi
   
-  if (( AN_ERROR_OCCURED == 0)); then
-    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; fi
-  fi
+  cd .. || exit 1
+  
+  finish_up
+}
+
+do_benchmark() {
+  echo "${MAGENTA_TEXT_COLOR}Compiling and running benchmarks.${RESET_TEXT_COLOR}"
+  
+  cd ./benchmark || exit 1
+  
+  cd ./Mantella || exit 1
+  
+  if ! sudo docker build -t benchmark/mantella:latest .; then AN_ERROR_OCCURED=1; fi
+  if ! sudo docker run -v .:/mantella -w /mantella --name benchmark_mantella -t -d benchmark/mantella; then AN_ERROR_OCCURED=1; fi
+  
+  sudo docker exec benchmark_mantella /bin/bash -c " \
+    if [ ! -d "./build" ]; then mkdir build; fi && \
+    (cd ./build || exit) && \
+    cmake .. && \
+    make clean benchmark && \
+    ./benchmark
+  "
+
+  cd .. || exit 1
+  
+  cd .. || exit 1
   
   finish_up
 }
@@ -107,6 +126,9 @@ else
       ;;
       -d|--doc)
         do_doc
+      ;;
+      -b|--benchmark)
+        do_benchmark
       ;;
       *)
         error "Unexpected option ${OPTION}"

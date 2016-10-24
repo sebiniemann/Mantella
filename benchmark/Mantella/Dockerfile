@@ -13,3 +13,7 @@ RUN apt-get install -y clang-3.8 && \
     update-alternatives --remove c++ /usr/bin/c++ && \
     update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set c++ /usr/bin/clang++-3.8
+
+# Installs benchmark dependencies
+# - CMake
+RUN apt-get install -y cmake
