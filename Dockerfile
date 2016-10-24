@@ -2,35 +2,19 @@ FROM ubuntu:16.04
 
 MAINTAINER Sebastian Niemann <sebiniemann@gmail.com>
 
-# Used to differentiate between continuous integration server and developer builds.
-ARG CI
-ENV CI ${CI:-false}
-
 RUN apt-get update
 
 # Installs compilers
 # - GCC
 # - Clang (set as default)
 RUN apt-get install -y g++-5 && \
-    update-alternatives --remove g++ /usr/bin/gcc && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
-    update-alternatives --set gcc /usr/bin/gcc-5 && \
     update-alternatives --remove g++ /usr/bin/g++ && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100 && \
-    update-alternatives --set g++ /usr/bin/g++-5 && \
-    update-alternatives --remove gcov /usr/bin/gcov && \
-    update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 100 && \
-    update-alternatives --set gcov /usr/bin/gcov-5
+    update-alternatives --set g++ /usr/bin/g++-5
 RUN apt-get install -y clang-3.8 && \
-    update-alternatives --remove clang /usr/bin/clang && \
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100 && \
-    update-alternatives --set clang /usr/bin/clang-3.8 && \
     update-alternatives --remove clang++ /usr/bin/clang++ && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set clang++ /usr/bin/clang++-3.8 && \
-    update-alternatives --remove cc /usr/bin/cc && \
-    update-alternatives --install /usr/bin/cc cc /usr/bin/clang-3.8 100 && \
-    update-alternatives --set cc /usr/bin/clang-3.8 && \
     update-alternatives --remove c++ /usr/bin/c++ && \
     update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.8 100 && \
     update-alternatives --set c++ /usr/bin/clang++-3.8
@@ -57,20 +41,3 @@ RUN apt-get install -y python-pip && \
     apt-get remove -y --purge python-pip && \
     apt-get autoremove -y --purge
 RUN apt-get install -y liboctave-dev
-
-# Installs development libraries not used on CI servers
-# - Google micro benchmark
-RUN if [ ! "$CI" == 'true' ]; then \
-      apt-get install -y wget && \
-      wget -O benchmark.tar.gz https://github.com/google/benchmark/archive/master.tar.gz && \
-      mkdir benchmark && \
-      tar -xzf benchmark.tar.gz -C ./benchmark --strip-components=1 && \
-      cd benchmark  && \
-      cmake -DCMAKE_BUILD_TYPE=Release . && \
-      make benchmark && \
-      make install && \
-      cd .. && \
-      rm -Rf benchmark.tar.gz benchmark/ && \
-      apt-get remove -y --purge wget && \
-      apt-get autoremove -y --purge \
-    ; fi

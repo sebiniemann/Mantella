@@ -21,7 +21,7 @@ print_help() {
   echo '-h, --help                  Shows this help.'
   echo '-i, --install [dir]         Installs the library.'
   echo "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
-  echo '-t, --test                  Builds and runs unit tests.'
+  echo '-t, --test                  Compiles and runs unit tests.'
   echo '-d, --doc                   Builds the documentation.'
 }
 
@@ -45,7 +45,7 @@ do_install() {
 }
 
 do_test() {
-  echo "${MAGENTA_TEXT_COLOR}Building and running tests${RESET_TEXT_COLOR}"
+  echo "${MAGENTA_TEXT_COLOR}Compiling and running tests${RESET_TEXT_COLOR}"
   
   cd ./test || exit 1
   if [ ! -d "./build" ]; then mkdir build; fi
