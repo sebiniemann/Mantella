@@ -2,7 +2,7 @@
 #include <iostream>
 
 // Mantella
-#include <mantella@MANTELLA_VERSION_MAJOR@>
+#include <mantella0>
 
 int main() {
   std::cout << "Hello World" << std::endl;

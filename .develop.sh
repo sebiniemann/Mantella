@@ -86,7 +86,7 @@ do_benchmark() {
   
   sudo docker exec benchmark_mantella /bin/bash -c " \
     if [ ! -d "./build" ]; then mkdir build; fi && \
-    (cd ./build || exit) && \
+    cd ./build && \
     cmake .. && \
     make clean benchmark && \
     ./benchmark
