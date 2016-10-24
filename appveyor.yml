@@ -1,0 +1,24 @@
+os: Visual Studio 2015
+platform:
+  - x86
+  - x64
+
+version: '{build}'
+shallow_clone: true
+matrix:
+  fast_finish: true
+
+install:
+  - ps: wget https://github.com/philsquared/Catch/archive/V1.5.0.zip -OutFile catch.zip
+  - ps: 7z.exe x catch.zip -oC:\
+  # Workaround for Xamarin messages
+  # @see https://ci.appveyor.com/project/SebastianNiemann/mantella/build/31/job/ceykpl2iubh4lq55
+  - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
+  
+build: off
+
+test_script:
+  - cd test
+  - cmake -DCMAKE_INCLUDE_PATH=C:\Catch-1.5.0\single_include . 
+  - cmake --build .
+  - Debug\tests.exe
