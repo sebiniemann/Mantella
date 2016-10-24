@@ -33,9 +33,10 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
       }
     }
     
-    for (; result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value; ++result.number_of_evaluations) {
+    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       const auto& parameter = random_neighbour(result.best_parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
       const auto objective_value = problem.objective_function(parameter);
+       ++result.number_of_evaluations;
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;

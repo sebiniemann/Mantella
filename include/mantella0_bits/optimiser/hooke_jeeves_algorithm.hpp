@@ -35,22 +35,33 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
     T1 stepsize = initial_stepsize;
     
     
-    for (; result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value; ++result.number_of_evaluations) {
+    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       bool is_improving = false;
 
       for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
         auto parameter = result.best_parameter;
         parameter.at(n) += stepsize;
         auto objective_value = problem.objective_function(parameter);
+        ++result.number_of_evaluations;
         
         if (objective_value < result.best_objective_value) {
           result.best_parameter = parameter;
           result.best_objective_value = objective_value;
+          
+          if (result.best_objective_value <= this->acceptable_objective_value) {
+            break;
+          }
+          
           is_improving = true;
+        }
+        
+        if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+          break;
         }
         
         parameter.at(n) -= T1(2.0) * stepsize;
         objective_value = problem.objective_function(parameter);
+        ++result.number_of_evaluations;
         
         if (objective_value < result.best_objective_value) {
           result.best_parameter = parameter;

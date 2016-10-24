@@ -22,7 +22,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
       expansion_weight(T1(1.0)),
       contraction_weight(T1(0.5)),
       shrinking_weight(T1(0.5)) {
-  this->optimisation_function = [this](const T2<T1, N>& problem, std::vector<std::array<T1, N>> initial_parameters) {
+  this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
     assert(initial_parameters.size() == N + 1);
     assert(reflection_weight > T1(0.0));
     assert(expansion_weight > T1(0.0));
@@ -31,11 +31,15 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
     
     optimise_result<T1, N> result;
     
-    std::array<std::pair<std::array<T1, N>, T1>, N + 1> simplex;
-    for (const auto& parameter : initial_parameters) {
+    result.best_parameter = initial_parameters.at(0);
+    result.best_objective_value = problem.objective_function(initial_parameters.at(0));
+
+    std::array<std::pair<std::array<T1, N>, T1>, N> simplex;
+    for (std::size_t n = 1; n < initial_parameters.size(); ++n) {
+      const auto& parameter = initial_parameters.at(n);
       const auto objective_value = problem.objective_function(parameter);
       
-      simplex.at() = {parameter, objective_value};
+      simplex.at(n - 1) = {parameter, objective_value};
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
@@ -49,90 +53,148 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         return std::get<1>(simplex) < std::get<1>(other_simplex);
       });
     
-    std::array<T1, N> centroid;
-    centroid.fill(T1(0.0));
+    std::array<T1, N> centroid = result.best_parameter;
     std::for_each(
       simplex.cbegin(), std::prev(simplex.cend()),
-      [&centroid](const auto& point) {
+      [this, &centroid](const auto& point) {
         for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
           centroid.at(n) += std::get<0>(point).at(n) / static_cast<T1>(N);
         }
       });
     
-    for (; result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value; ++result.number_of_evaluations) {
-      
-
-    
-    if (state.update_whole_simplex) {
-      // Calculates the centroid of all simplex point, excepts the worst one.
-      
-    }
-    
-    } else {
-      // Selects the best previously evaluated parameter.
-      const auto best_found_objective_value = std::min_element(
-        state.objective_values.cbegin(), state.objective_values.cend(),
-        [](const auto& objective_value, const auto& other_objective_value) {
-          return objective_value < other_objective_value;
+    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+      std::array<T1, N> reflected_point;
+      std::transform(
+        centroid.cbegin(), std::next(centroid.cbegin(), this->active_dimensions.size()),
+        result.best_parameter.cbegin(),
+        reflected_point.begin(),
+        [this](const auto centroid, const auto best_parameter) {
+          return centroid + reflection_weight * (centroid - best_parameter);
         });
       
-      if (*best_found_objective_value < std::get<1>(std::get<N>(simplex))) {
-        // Update the simplex and centroid
-        auto position = std::find_if(
-          state.simplex.cbegin(), std::prev(state.simplex.cend()),
-          [best_found_objective_value](const auto& point) {
-            return *best_found_objective_value < std::get<1>(point);
-          });
-          
-        std::copy_backward(position, std::prev(state.simplex.cend()), state.simplex.end());
-        *position = std::make_pair(state.parameters.at(0), state.objective_values.at(0));
+      auto objective_value = problem.objective_function(reflected_point);
+      ++result.number_of_evaluations;
       
-        // *Nots:* The centroid is based on all points except the worst one, so we will only update it the parameter
-        // is at least better than the second worst one.
-        if () {
-          
+      if (objective_value < result.best_objective_value) {
+        for (std::size_t n = 0; n < N; ++n) {
+          centroid.at(n) += (reflected_point.at(n) - result.best_parameter.at(n)) / static_cast<T1>(N);
         }
-      } else {
-        // Shrinks the simplex.
-        std::for_each(
-          state.simplex.cbegin(), std::prev(state.simplex.cend()),
-          [this, &state](const auto& point) {
-            std::transform(
-              state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
-              std::get<0>(std::get<N>(state.simplex)).cbegin(),
-              state.parameters.at(0).begin(),
-              [this](const auto centroid_element, const auto sample_element) {
-                return centroid_element + reflection_weight * (centroid_element - sample_element);
-              });
+        
+        result.best_parameter = reflected_point;
+        result.best_objective_value = objective_value;
+        
+        if (result.best_objective_value <= this->acceptable_objective_value) {
+          break;
+        } else if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+          break;
+        }
+        
+        std::array<T1, N> expanded_point;
+        std::transform(
+          centroid.cbegin(), std::next(centroid.cbegin(), this->active_dimensions.size()),
+          reflected_point.cbegin(),
+          expanded_point.begin(),
+          [this](const auto centroid, const auto reflected_point) {
+            return centroid + expansion_weight * (reflected_point - centroid);
           });
+          
+        objective_value = problem.objective_function(expanded_point);
+        ++result.number_of_evaluations;
+        
+        if (objective_value < result.best_objective_value) {
+          for (std::size_t n = 0; n < N; ++n) {
+            centroid.at(n) += (expanded_point.at(n) - result.best_parameter.at(n)) / static_cast<T1>(N);
+          }
+        
+          result.best_parameter = expanded_point;
+          result.best_objective_value = objective_value;
+        }
+      
+        continue;
+      }
+      
+      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        break;
+      }
+      
+      if (objective_value < std::get<1>(std::get<N-1>(simplex))) {
+        auto position = std::find_if(
+          simplex.begin(), std::prev(simplex.end()),
+          [objective_value](const auto& point) {
+            return objective_value < std::get<1>(point);
+          });
+          
+        for (std::size_t n = 0; n < N; ++n) {
+          centroid.at(n) += (reflected_point.at(n) - std::get<0>(*position).at(n)) / static_cast<T1>(N);
+        }
+          
+        std::copy_backward(position, std::prev(simplex.end()), simplex.end());
+        *position = {reflected_point, objective_value};
+      } else {
+        std::array<T1, N> contracted_point;
+        std::transform(
+          centroid.cbegin(), std::next(centroid.cbegin(), this->active_dimensions.size()),
+          std::get<0>(std::get<N-1>(simplex)).cbegin(),
+          contracted_point.begin(),
+          [this](const auto centroid, const auto worst_parameter) {
+            return centroid + contraction_weight * (worst_parameter - centroid);
+          });
+        
+        auto objective_value = problem.objective_function(contracted_point);
+        ++result.number_of_evaluations;
+        
+        if (objective_value < result.best_objective_value) {
+          for (std::size_t n = 0; n < N; ++n) {
+            centroid.at(n) += (contracted_point.at(n) - result.best_parameter.at(n)) / static_cast<T1>(N);
+          }
+        
+          result.best_parameter = contracted_point;
+          result.best_objective_value = objective_value;
+        } else if (objective_value < std::get<1>(std::get<N-1>(simplex))) {
+          auto position = std::find_if(
+            simplex.begin(), std::prev(simplex.end()),
+            [objective_value](const auto& point) {
+              return objective_value < std::get<1>(point);
+            });
+            
+          for (std::size_t n = 0; n < N; ++n) {
+            centroid.at(n) += (contracted_point.at(n) - std::get<0>(*position).at(n)) / static_cast<T1>(N);
+          }
+            
+          std::copy_backward(position, std::prev(simplex.end()), simplex.end());
+          *position = {contracted_point, objective_value};
+        } else {
+          // std::for_each(
+            // state.simplex.cbegin(), std::prev(state.simplex.cend()),
+            // [this, &state](const auto& point) {
+              // std::transform(
+                // state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
+                // std::get<0>(std::get<N>(state.simplex)).cbegin(),
+                // state.parameters.at(0).begin(),
+                // [this](const auto centroid_element, const auto sample_element) {
+                  // return centroid_element + reflection_weight * (centroid_element - sample_element);
+                // });
+            // });
+          
+          // std::sort(
+            // simplex.begin(), simplex.end(),
+            // [](const auto& simplex, const auto& other_simplex){
+              // return std::get<1>(simplex) < std::get<1>(other_simplex);
+            // });
+          
+          // std::array<T1, N> centroid = result.best_parameter;
+          // std::for_each(
+            // simplex.cbegin(), std::prev(simplex.cend()),
+            // [&centroid](const auto& point) {
+              // for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
+                // centroid.at(n) += std::get<0>(point).at(n) / static_cast<T1>(N);
+              // }
+            // });
+        }
       }
     }
-      
-    state.parameters.resize(3);
-    // Computes the reflected point.
-    std::transform(
-      state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
-      std::get<0>(std::get<N>(state.simplex)).cbegin(),
-      state.parameters.at(0).begin(),
-      [this](const auto centroid_element, const auto sample_element) {
-        return centroid_element + reflection_weight * (centroid_element - sample_element);
-      });
-    // Computes the expanded point.
-    std::transform(
-      state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
-      std::get<0>(std::get<N>(state.simplex)).cbegin(),
-      state.parameters.at(0).begin(),
-      [this, &state](const auto centroid_element, const auto sample_element) {
-        return centroid_element + reflection_weight * (state.parameters - centroid_element - sample_element);
-      });
-    // Computes the contracted point.
-    std::transform(
-      state.centroid.cbegin(), std::next(state.centroid.cbegin(), this->active_dimensions.size()),
-      std::get<0>(std::get<N>(state.simplex)).cbegin(),
-      state.parameters.at(0).begin(),
-      [this](const auto centroid_element, const auto sample_element) {
-        return centroid_element + reflection_weight * (centroid_element - sample_element);
-      });
+    
+    return result;
   };
 }
 

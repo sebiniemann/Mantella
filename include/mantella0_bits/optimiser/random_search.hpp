@@ -25,7 +25,7 @@ random_search<T1, N, T2>::random_search() noexcept
       }
     }
     
-    for (; result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value; ++result.number_of_evaluations) {
+    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       std::array<T1, N> parameter;
       std::generate(
         parameter.begin(), std::next(parameter.begin(), this->active_dimensions.size()),
@@ -34,6 +34,7 @@ random_search<T1, N, T2>::random_search() noexcept
           std::ref(random_number_generator())));
           
       const auto objective_value = problem.objective_function(parameter);
+       ++result.number_of_evaluations;
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
