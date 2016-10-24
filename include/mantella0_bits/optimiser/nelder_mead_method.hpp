@@ -219,12 +219,21 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
     std::unique_ptr<mant::problem<double, 3>>(new mant::sum_of_different_powers_function<double, 3>)
   };
   
+  std::vector<std::array<double, 3>> parameters(4);
+  for (auto& parameter : parameters) {
+    std::generate(
+      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+      std::bind(
+        std::uniform_real_distribution<double>(0.0, 1.0),
+        std::ref(random_number_generator())));
+  }
+  
   std::array<mant::optimise_result<double, 3>, problems.size()> results;
   std::transform(
     problems.cbegin(), problems.cend(),
     results.begin(),
-    [&optimiser](auto&& problem) {
-      return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
+    [&optimiser, &parameters](auto&& problem) {
+      return optimiser.optimisation_function(*problem, parameters);
     }
   );
   
