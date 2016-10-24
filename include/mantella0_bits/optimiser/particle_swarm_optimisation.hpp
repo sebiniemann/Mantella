@@ -133,12 +133,21 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     std::unique_ptr<mant::problem<double, 3>>(new mant::sum_of_different_powers_function<double, 3>)
   };
   
+  std::vector<std::array<double, 3>> parameters(10);
+  for (auto& parameter : parameters) {
+    std::generate(
+      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+      std::bind(
+        std::uniform_real_distribution<double>(0.0, 1.0),
+        std::ref(random_number_generator())));
+  }
+  
   std::array<mant::optimise_result<double, 3>, problems.size()> results;
   std::transform(
     problems.cbegin(), problems.cend(),
     results.begin(),
-    [&optimiser](auto&& problem) {
-      return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
+    [&optimiser, &parameters](auto&& problem) {
+      return optimiser.optimisation_function(*problem, parameters);
     }
   );
   
