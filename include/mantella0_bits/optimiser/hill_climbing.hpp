@@ -20,7 +20,7 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
       maximal_stepsize(T1(0.1)) {
   this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
     assert(T1(0.0) <= minimal_stepsize && minimal_stepsize <= maximal_stepsize && minimal_stepsize <= T1(1.0));
-    assert(T1(0.0) < maximal_stepsize);
+    assert(maximal_stepsize > T1(0.0));
     
     optimise_result<T1, N> result;
     
@@ -58,7 +58,7 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
   CHECK(optimiser.minimal_stepsize == 0.0);
   CHECK(optimiser.maximal_stepsize == 0.1);
   
-    const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
+  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
     std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),

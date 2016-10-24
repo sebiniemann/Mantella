@@ -79,7 +79,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
   CHECK(optimiser.initial_stepsize == 1.0);
   CHECK(optimiser.stepsize_decrease == 2.0);
   
-    const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
+  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
     std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),

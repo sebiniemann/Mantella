@@ -45,12 +45,12 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
       const auto& parameter = parameters.at(n);
       const auto objective_value = problem.objective_function(parameter);
       
+      local_best_objective_values.at(n) = objective_value;
+      
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
       }
-      
-      local_best_objective_values.at(n) = objective_value;
     }
     
     for (; result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value; ++result.number_of_evaluations) {
