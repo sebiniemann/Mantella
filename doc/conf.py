@@ -12,6 +12,10 @@ pygments_style = 'sphinx'
 
 add_function_parentheses = False
 
+# Added markdown support
+from recommonmark.parser import CommonMarkParser
+source_parsers = {'.md': CommonMarkParser}
+
 # General configuration
 nitpicky = True
 nitpick_ignore = [
@@ -33,7 +37,7 @@ nitpick_ignore = [
 ]
 
 master_doc = 'mantella'
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
 
 extensions = [
   'sphinx.ext.mathjax',
@@ -54,7 +58,7 @@ html_theme_options = {
 html_logo = '_static/images/logo_with_white_name.png'
 
 html_static_path = ['_static']
-html_extra_path = ['index.html']
+# html_extra_path = ['index.html']
 html_context = {
   'display_github': True,
   'css_files': [

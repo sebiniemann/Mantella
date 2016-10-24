@@ -29,10 +29,10 @@ if not os.path.exists('./assert/examples'):
 an_error_occured=False
 
 hppfiles = []
-for path, subdirs, files in os.walk('../include/mantella_bits/'):
+for path, subdirs, files in os.walk('../include/mantella0_bits/'):
   for file in files:
     if file.endswith('.hpp'):
-       hppfiles = hppfiles + [(os.path.join(path, file), os.path.join(path.replace('../include/mantella_bits', './api_reference', 1), file.split('.')[0] + '.rst'))]
+       hppfiles = hppfiles + [(os.path.join(path, file), os.path.join(path.replace('../include/mantella0_bits', './api_reference', 1), file.split('.')[0] + '.rst'))]
 
 # file[0] = source file; file[1] = destination file
 for file in hppfiles:
