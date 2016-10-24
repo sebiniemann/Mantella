@@ -72,8 +72,7 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
     results.begin(),
     [&optimiser](auto&& problem) {
       return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
-    }
-  );
+    });
   
   std::cout << "Hill climbing" << std::endl;
   for (auto&& result : results) {

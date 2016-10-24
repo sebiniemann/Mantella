@@ -148,8 +148,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     results.begin(),
     [&optimiser, &parameters](auto&& problem) {
       return optimiser.optimisation_function(*problem, parameters);
-    }
-  );
+    });
   
   std::cout << "Particle swarm optimisation" << std::endl;
   for (auto&& result : results) {

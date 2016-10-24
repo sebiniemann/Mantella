@@ -40,7 +40,7 @@ do_install() {
   echo "${MAGENTA_TEXT_COLOR}Installing Mantella to \"${INSTALL_DIR}\".${RESET_TEXT_COLOR}"
   
   echo "copy ./include/mantella* -> ${INSTALL_DIR}"
-  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; fi
+  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
   finish_up
 }
@@ -52,9 +52,9 @@ do_test() {
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
-  if ! cmake ..; then AN_ERROR_OCCURED=1; fi
-  if ! make clean tests; then AN_ERROR_OCCURED=1; fi
-  if ! ./tests; then AN_ERROR_OCCURED=1; fi
+  if ! cmake ..; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! make clean tests; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! ./tests; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
   cd ../.. || exit 1
   
@@ -66,8 +66,8 @@ do_doc() {
   
   cd ./doc || exit 1
   
-  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=1; fi
-  if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; fi
+  if ! python ./.prepare_doc.py; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
   cd .. || exit 1
   
@@ -79,20 +79,27 @@ do_benchmark() {
   
   cd ./benchmark || exit 1
   
-  cd ./Mantella || exit 1
-  
-  if ! sudo docker build -t benchmark/mantella:latest .; then AN_ERROR_OCCURED=1; fi
-  if ! sudo docker run -v .:/mantella -w /mantella --name benchmark_mantella -t -d benchmark/mantella; then AN_ERROR_OCCURED=1; fi
-  
-  sudo docker exec benchmark_mantella /bin/bash -c " \
-    if [ ! -d "./build" ]; then mkdir build; fi && \
-    cd ./build && \
-    cmake .. && \
-    make clean benchmark && \
-    ./benchmark
-  "
+  local -a LIBRARIES=('mantella')
+  for LIBRARY in "${LIBRARIES[@]}"; do
+    cd "./${LIBRARY}" || exit 1
+    
+    if [ -z $(docker images -q "benchmark/${LIBRARY}") ]; then
+      if ! docker build -t "benchmark/${LIBRARY}":latest .; then AN_ERROR_OCCURED=1; finish_up; return; fi
+    fi
+    if [ -z $(docker ps -q -f name="benchmark_${LIBRARY}") ]; then
+      if ! docker run -v "$(pwd):/${LIBRARY}" -w "/${LIBRARY}" --name "benchmark_${LIBRARY}" -t -d "benchmark/${LIBRARY}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
+    fi
+    
+    docker exec "benchmark_${LIBRARY}" /bin/bash -c " \
+      if [ ! -d './build' ]; then mkdir build; fi && \
+      cd ./build && \
+      cmake .. && \
+      make clean benchmark && \
+      ./benchmark
+    "
 
-  cd .. || exit 1
+    cd .. || exit 1
+  done
   
   cd .. || exit 1
   

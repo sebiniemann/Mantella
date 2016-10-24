@@ -67,8 +67,7 @@ TEST_CASE("random_search", "[random_search]") {
     results.begin(),
     [&optimiser](auto&& problem) {
       return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
-    }
-  );
+    });
   
   std::cout << "Random search" << std::endl;
   for (auto&& result : results) {

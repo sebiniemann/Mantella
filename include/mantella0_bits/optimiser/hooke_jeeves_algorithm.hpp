@@ -93,8 +93,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
     results.begin(),
     [&optimiser](auto&& problem) {
       return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
-    }
-  );
+    });
   
   std::cout << "Hooke-Jeeves algorithm" << std::endl;
   for (auto&& result : results) {
