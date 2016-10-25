@@ -5,16 +5,12 @@ copyright = u'2016, Sebastian Niemann, Oskar Pusz, Daniel Kiechle, Wolf Bock von
 author = u'Mantella team and contributors'
 github_url = 'https://github.com/SebastianNiemann/Mantella'
 
-version = u'0.50'
-release = u'0.50.0'
+version = u'0.61'
+release = version + '.0'
 
 pygments_style = 'sphinx'
 
 add_function_parentheses = False
-
-# Added markdown support
-from recommonmark.parser import CommonMarkParser
-source_parsers = {'.md': CommonMarkParser}
 
 # General configuration
 nitpicky = True
@@ -28,16 +24,11 @@ nitpick_ignore = [
   ('cpp:type', 'std::array'),
   ('cpp:type', 'std::vector'),
   ('cpp:type', 'std::function'),
-  ('cpp:type', 'std::pair'),
-  ('cpp:type', 'std::string'),
-  ('cpp:type', 'optimisation_problem'),
-  ('cpp:type', 'begin_parameter'),
-  ('cpp:type', 'end_parameter'),
   ('cpp:type', 'parameter'),
 ]
 
 master_doc = 'mantella'
-source_suffix = ['.rst', '.md']
+source_suffix = ['.rst']
 
 extensions = [
   'sphinx.ext.mathjax',
@@ -58,7 +49,6 @@ html_theme_options = {
 html_logo = '_static/images/logo_with_white_name.png'
 
 html_static_path = ['_static']
-# html_extra_path = ['index.html']
 html_context = {
   'display_github': True,
   'css_files': [

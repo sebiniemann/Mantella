@@ -34,7 +34,6 @@ for path, subdirs, files in os.walk('../include/mantella0_bits/'):
     if file.endswith('.hpp'):
        hppfiles = hppfiles + [(os.path.join(path, file), os.path.join(path.replace('../include/mantella0_bits', './api_reference', 1), file.split('.')[0] + '.rst'))]
 
-# file[0] = source file; file[1] = destination file
 for file in hppfiles:
   print bcolors.OKBLUE + '[%3d%%] '% (100.0/len(hppfiles) * (hppfiles.index(file) + 1)) + bcolors.ENDC + os.path.basename(file[1]),
   sys.stdout.flush()
@@ -93,8 +92,7 @@ for file in hppfiles:
           docfile.write('\n' + part[2] + '  ' + line)
         docfile.write('\n')
           
-      if 'image' in part[3]:
-        
+      if 'image' in part[3]:        
         image = re.findall(re.compile(ur'^(.*)\n[ ]*:octave:\n[ ]*(.*)$', re.DOTALL), part[5])
         example = open('./tmp/example.cpp', 'w+')
         example.write(image[0][0])
@@ -136,8 +134,11 @@ for file in hppfiles:
         docfile.write('\n' + part[2] + '.. image:: ../assert/images/' + part[4] + '\n')
       
     docfile.close()
-    print '\x1b[2K \r',
+    print '\x1b[2K \r', #clear line
 
-if os.path.exists('./tmp'): shutil.rmtree('./tmp')
-if an_error_occured: sys.exit(1)
-else: sys.exit(0)
+if os.path.exists('./tmp'):
+  shutil.rmtree('./tmp')
+if an_error_occured:
+  sys.exit(1)
+else: 
+  sys.exit(0)

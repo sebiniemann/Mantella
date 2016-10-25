@@ -8,59 +8,6 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 
-<<<<<<< HEAD
-## Jekyll (introduced by the gh-pages branch)
-_site/
-.sass-cache/
-
-## IDEs
-### Qt Designer
-*.autosave
-*.user*
-*.cbp
-### Netbeans
-nbproject/
-
-### CLion
-*.iml
-.idea/
-
-## Language specific
-### C++
-#### Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-#### Precompiled Headers
-*.gch
-*.pch
-#### Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-#### Fortran module files
-*.mod
-#### Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-#### Executables
-*.exe
-*.out
-*.app
-
-## Mac Files
-*.DS_Store
-
-## Sphinx
-*.doctree
-*.buildinfo
-*.pickle
-*.nojekyll
-=======
 # Development tools
 ## Vagrant
 .vagrant/
->>>>>>> master
