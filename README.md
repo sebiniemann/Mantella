@@ -20,7 +20,8 @@ int main() {
   // Adds your own optimisation problem.
   mant::problem<double, 2> my_problem;
   my_problem.objective_function = [](const std::array<double, 2>& parameter) {
-    return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0); // Or your own objective value calculation ;)
+    // Or your own objective value calculation ;)
+    return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
   };
 
   // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
