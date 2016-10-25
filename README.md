@@ -26,7 +26,7 @@ int main() {
   // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
   const mant::optimise_result<double, 2>&& result = mant::optimise(my_problem);
 
-  // Prints best parameters and objective value
+  // Prints out the best parameter and its objective value
   std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
   std::cout << "-> " << result.best_objective_value << std::endl;
 
