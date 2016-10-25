@@ -8,6 +8,10 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 
+## Documentation
+doc/_html/
+doc/api_reference/
+
 # Development tools
 ## Vagrant
 .vagrant/
