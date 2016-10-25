@@ -10,7 +10,9 @@ Version 0.61.0
 **Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
 
 ``` cpp
-#include <mantella>
+#include <mantella0>
+#include <iostream> // Used for std::cout
+#include <iterator> // Used for std::ostream_iterator
 
 int main() {
   // ... company code.
@@ -18,18 +20,18 @@ int main() {
   // Adds your own optimisation problem.
   mant::problem<double, 2> my_problem;
   my_problem.objective_function = [](const std::array<double, 2>& parameter) {
-    return /* Your objective value calculation */;
+    return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0); // Or your own objective value calculation ;)
   };
-  
+
   // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
-  mant::optimise_result<double, 2> result = mant::optimise(my_problem);
-  
+  const mant::optimise_result<double, 2>&& result = mant::optimise(my_problem);
+
   // Prints best parameters and objective value
   std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
-  std::cout << " -> " << result.best_objective_value << std::endl;
+  std::cout << "-> " << result.best_objective_value << std::endl;
 
   // ... continuing company code.
-  
+
   return 0;
 }
 ```
