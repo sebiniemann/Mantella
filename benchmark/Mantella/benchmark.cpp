@@ -5,6 +5,7 @@
 #include <mantella0>
 
 int main() {  
+  // TODO Also loop over the number of dimensions
   const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
     std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
@@ -30,7 +31,7 @@ int main() {
     for (std::size_t k = 0; k < repetitions.size(); ++k) {
       auto& results = repetitions.at(k);
       
-      // Why 10 parameters, should this be the same number for each algorithm?
+      // TODO Why 10 parameters, should this be the same number for each algorithm?
       std::vector<std::array<double, 3>> parameters(10);
       for (auto& parameter : parameters) {
         std::generate(
@@ -41,19 +42,19 @@ int main() {
       }
           
       for (std::size_t l = 0; l < results.size(); ++l) {
-        // Why 1e-5? Should this be the same value for each problem?
+        // TODO Why 1e-5? Should this be the same value for each problem?
         optimiser.acceptable_objective_value(1e-5);
         results.at(2 * l) = optimiser.optimisation_function(problems.at(l), parameters);
         optimiser.acceptable_objective_value(-std::numeric_limits<double>::infinity());
-        // Why 1000? Should this be the same number for each problem?
+        // TODO Why 1000? Should this be the same number for each problem?
         optimiser.maximal_number_of_evaluations(1000);
         results.at(2 * l + 1) = optimiser.optimisation_function(problems.at(l), parameters);
       }
     }
   }
 
-  // Save everything (hdf5?, cube?) 
-  // Analyse everything using Matlab or Octave
+  // TODO Save everything (hdf5?, cube?) 
+  // TODO Analyse everything using Matlab or Octave
   
   return 0;
 }

@@ -77,6 +77,10 @@ do_doc() {
 do_benchmark() {
   echo "${MAGENTA_TEXT_COLOR}Compiling and running benchmarks.${RESET_TEXT_COLOR}"
   
+  if [ -z $(pidof dockerd) ]; then
+    if ! service docker start; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  fi
+  
   cd ./benchmark || exit 1
   
   local -a LIBRARIES=('mantella')
@@ -100,6 +104,8 @@ do_benchmark() {
 
     cd .. || exit 1
   done
+  
+  # TODO Post-processing with Octave
   
   cd .. || exit 1
   
