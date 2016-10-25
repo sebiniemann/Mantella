@@ -29,28 +29,43 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
+        
+        if (result.best_objective_value <= this->acceptable_objective_value) {
+          return result;
+        }
       }
     }
     
     T1 stepsize = initial_stepsize;
     
     
-    for (; result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value; ++result.number_of_evaluations) {
+    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       bool is_improving = false;
 
       for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
         auto parameter = result.best_parameter;
         parameter.at(n) += stepsize;
         auto objective_value = problem.objective_function(parameter);
+        ++result.number_of_evaluations;
         
         if (objective_value < result.best_objective_value) {
           result.best_parameter = parameter;
           result.best_objective_value = objective_value;
+          
+          if (result.best_objective_value <= this->acceptable_objective_value) {
+            return result;
+          }
+          
           is_improving = true;
+        }
+        
+        if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+          return result;
         }
         
         parameter.at(n) -= T1(2.0) * stepsize;
         objective_value = problem.objective_function(parameter);
+        ++result.number_of_evaluations;
         
         if (objective_value < result.best_objective_value) {
           result.best_parameter = parameter;
@@ -79,7 +94,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
   CHECK(optimiser.initial_stepsize == 1.0);
   CHECK(optimiser.stepsize_decrease == 2.0);
   
-    const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
+  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
     std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
     std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),

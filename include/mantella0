@@ -15,7 +15,7 @@
 #pragma once
 
 #define MANTELLA_VERSION_MAJOR 0
-#define MANTELLA_VERSION_MINOR 60
+#define MANTELLA_VERSION_MINOR 61
 #define MANTELLA_VERSION_PATCH 0
 
 #if !defined(MANTELLA_SYMBOL_VERSION)
@@ -82,6 +82,7 @@ namespace mant {
     #include "mantella0_bits/optimiser.hpp"
     #include "mantella0_bits/optimiser/hill_climbing.hpp"
     #include "mantella0_bits/optimiser/hooke_jeeves_algorithm.hpp"
+    #include "mantella0_bits/optimiser/nelder_mead_method.hpp"
     #include "mantella0_bits/optimiser/particle_swarm_optimisation.hpp"
     #include "mantella0_bits/optimiser/random_search.hpp"
     #include "mantella0_bits/optimise.hpp"

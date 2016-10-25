@@ -1,6 +1,6 @@
 [![Mantella](http://mantella.info/assets/images/logo_with_name.png)](http://mantella.info/)
 
-Version 0.60.0
+Version 0.61.0
 ==============
 
 [![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) 
@@ -10,24 +10,28 @@ Version 0.60.0
 **Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
 
 ``` cpp
-#include <mantella>
+#include <mantella0>
+#include <iostream> // Used for std::cout
+#include <iterator> // Used for std::ostream_iterator
 
 int main() {
-  // ... company code.
+  // ... Company code.
 
   // Adds your own optimisation problem.
   mant::problem<double, 2> my_problem;
   my_problem.objective_function = [](const std::array<double, 2>& parameter) {
-    return /* Your objective value calculation */;
+    return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0); // Or your own objective value calculation ;)
   };
-  
-  // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
-  mant::optimise_result result = mant::optimise(my_problem);
-  std::cout << result.best_parameter
-            << result.best_objective_value << std::endl;
 
-  // ... continuing company code.
-  
+  // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
+  const mant::optimise_result<double, 2>&& result = mant::optimise(my_problem);
+
+  // Prints out the best parameter and its objective value
+  std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
+  std::cout << "-> " << result.best_objective_value << std::endl;
+
+  // Continuing company code ...
+
   return 0;
 }
 ```
