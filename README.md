@@ -22,9 +22,13 @@ int main() {
   };
   
   // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
-  mant::optimise_result result = mant::optimise(my_problem);
-  std::cout << result.best_parameter
-            << result.best_objective_value << std::endl;
+  mant::optimise_result<double, 2> result = mant::optimise(my_problem);
+  
+  // Print best parameters and objective value
+  for(const auto element : res.best_parameter){
+    std::cout << element << " ";
+  }
+  std::cout << " -> " << res.best_objective_value << std::endl;
 
   // ... continuing company code.
   
