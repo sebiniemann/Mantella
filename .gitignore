@@ -11,6 +11,7 @@ install_manifest.txt
 ## Documentation
 doc/_html/
 doc/api_reference/
+doc/assert/
 
 # Development tools
 ## Vagrant
