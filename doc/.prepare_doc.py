@@ -59,7 +59,6 @@ for file in hppfiles:
      docfile.write(part[0])
      
      if part[1]:
-      #TODO Add plots (see the discussion about combining Mantella with a plotting library - maybe in another language)
       if 'c++' in part[3]:
         docfile.write(part[1])
         if part[4]:
@@ -138,6 +137,7 @@ for file in hppfiles:
 
 if os.path.exists('./tmp'):
   shutil.rmtree('./tmp')
+  
 if an_error_occured:
   sys.exit(1)
 else: 
