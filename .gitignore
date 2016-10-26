@@ -1,6 +1,8 @@
+# Global
+build/
+
 # Tests
 test/main.cpp
-test/build
 ## CMake
 CMakeCache.txt
 CMakeFiles/
