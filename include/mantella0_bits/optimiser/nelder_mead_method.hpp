@@ -29,12 +29,19 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
     assert(contraction_weight > T1(0.0));
     assert(shrinking_weight > T1(0.0));
     
+    auto&& start_time  = std::chrono::steady_clock::now();
     optimise_result<T1, N> result;
     
     result.best_parameter = initial_parameters.at(0);
     result.best_objective_value = problem.objective_function(initial_parameters.at(0));
+    ++result.number_of_evaluations;
+    result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
     if (result.best_objective_value <= this->acceptable_objective_value) {
+      return result;
+    } else if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+      return result;
+    } else if (result.duration >= this->maximal_duration) {
       return result;
     }
 
@@ -42,6 +49,8 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
     for (std::size_t n = 1; n < initial_parameters.size(); ++n) {
       const auto& parameter = initial_parameters.at(n);
       const auto objective_value = problem.objective_function(parameter);
+      ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       simplex.at(n - 1) = {parameter, objective_value};
       
@@ -52,6 +61,12 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         if (result.best_objective_value <= this->acceptable_objective_value) {
           return result;
         }
+      }
+      
+      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        return result;
+      } else if (result.duration >= this->maximal_duration) {
+        return result;
       }
     }
     
@@ -70,7 +85,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         }
       });
     
-    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       std::array<T1, N> reflected_point;
       std::transform(
         centroid.cbegin(), std::next(centroid.cbegin(), this->active_dimensions.size()),
@@ -82,6 +97,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
       
       auto objective_value = problem.objective_function(reflected_point);
       ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
         for (std::size_t n = 0; n < N; ++n) {
@@ -94,6 +110,8 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         if (result.best_objective_value <= this->acceptable_objective_value) {
           return result;
         } else if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+          return result;
+        } else if (result.duration >= this->maximal_duration) {
           return result;
         }
         
@@ -108,6 +126,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
           
         objective_value = problem.objective_function(expanded_point);
         ++result.number_of_evaluations;
+        result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
         if (objective_value < result.best_objective_value) {
           for (std::size_t n = 0; n < N; ++n) {
@@ -122,6 +141,8 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
       }
       
       if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        return result;
+      } else if (result.duration >= this->maximal_duration) {
         return result;
       }
       
@@ -150,6 +171,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         
         auto objective_value = problem.objective_function(contracted_point);
         ++result.number_of_evaluations;
+        result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
         if (objective_value < result.best_objective_value) {
           for (std::size_t n = 0; n < N; ++n) {
@@ -182,6 +204,13 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
               });
               
             point = {std::get<0>(point), problem.objective_function(std::get<0>(point))};
+            ++result.number_of_evaluations;
+      
+            if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+              return result;
+            } else if (result.duration >= this->maximal_duration) {
+              return result;
+            }
           }
           
           std::sort(
@@ -252,7 +281,8 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
       std::cout << element << " ";
     }
     std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations << std::endl;
+              << ", number_of_evaluations: " << result.number_of_evaluations
+              << ", duration: " << result.duration.count() << "ns" << std::endl;
   }
 }
 #endif
