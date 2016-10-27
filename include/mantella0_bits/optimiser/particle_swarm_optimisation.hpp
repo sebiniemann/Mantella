@@ -173,9 +173,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     std::cout << "Particle swarm optimisation" << std::endl;
     for (auto&& result : results) {
       std::cout << "best_parameter: [ ";
-      for (auto&& element : result.best_parameter) {
-        std::cout << element << " ";
-      }
+      std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
       std::cout << "], best_objective_value: " << result.best_objective_value
                 << ", number_of_evaluations: " << result.number_of_evaluations
                 << ", duration: " << result.duration.count() << "ns" << std::endl;
@@ -183,14 +181,16 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
   }
   
   SECTION("Boundary handling") {
-    mant::sphere_function<double, number_of_dimensions> problem;
-    problem.lower_bounds.fill(0.5);
+    mant::problem<double, number_of_dimensions> problem;
+    problem.objective_function = [](const auto& parameter) {
+      return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
+    };
     
     const auto&& result = optimiser.optimisation_function(problem, {problem.lower_bounds});
     CHECK(std::all_of(
       result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto elem){ 
-        return elem >= 0.5;
+      [](const auto element) { 
+        return element >= 0.0;
       }
     ) == true);
   }

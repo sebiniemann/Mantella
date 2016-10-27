@@ -95,13 +95,7 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
           parameter.cbegin(), parameter.cend(),
           parameter.begin(),
           [](const auto element) {
-            if (element < T1(0.0)) {
-              return T1(0.0);
-            } else if(element > T1(1.0)) {
-              return T1(1.0);
-            }
-          
-            return element;
+            return std::fmin(std::fmax(element, T1(0.0)), T1(1.0));
           });
         
         objective_value = problem.objective_function(parameter);
@@ -159,9 +153,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
     std::cout << "Hooke-Jeeves algorithm" << std::endl;
     for (auto&& result : results) {
       std::cout << "best_parameter: [ ";
-      for (auto&& element : result.best_parameter) {
-        std::cout << element << " ";
-      }
+      std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
       std::cout << "], best_objective_value: " << result.best_objective_value
                 << ", number_of_evaluations: " << result.number_of_evaluations
                 << ", duration: " << result.duration.count() << "ns" << std::endl;
@@ -169,14 +161,16 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
   }
   
   SECTION("Boundary handling") {
-    mant::sphere_function<double, number_of_dimensions> problem;
-    problem.lower_bounds.fill(0.5);
+    mant::problem<double, number_of_dimensions> problem;
+    problem.objective_function = [](const auto& parameter) {
+      return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
+    };
     
     const auto&& result = optimiser.optimisation_function(problem, {problem.lower_bounds});
     CHECK(std::all_of(
       result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto elem){ 
-        return elem >= 0.5;
+      [](const auto element) { 
+        return element >= 0.0;
       }
     ) == true);
   }
