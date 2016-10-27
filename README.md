@@ -15,7 +15,7 @@ Version 0.61.0
 #include <iterator> // Used for std::ostream_iterator
 
 int main() {
-  // ... Company code.
+  // ... Your company code.
 
   // Adds your own optimisation problem.
   mant::problem<double, 2> my_problem;
@@ -31,7 +31,7 @@ int main() {
   std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
   std::cout << "-> " << result.best_objective_value << std::endl;
 
-  // Continuing company code ...
+  // Continuing your company code ...
 
   return 0;
 }
