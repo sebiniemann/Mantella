@@ -22,10 +22,13 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
     assert(T1(0.0) <= minimal_stepsize && minimal_stepsize <= maximal_stepsize && minimal_stepsize <= T1(1.0));
     assert(maximal_stepsize > T1(0.0));
     
+    auto&& start_time  = std::chrono::steady_clock::now();
     optimise_result<T1, N> result;
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
+      ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
@@ -35,12 +38,19 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
           return result;
         }
       }
+      
+      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        return result;
+      } else if (result.duration >= this->maximal_duration) {
+        return result;
+      }
     }
     
-    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       const auto& parameter = random_neighbour(result.best_parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
       const auto objective_value = problem.objective_function(parameter);
-       ++result.number_of_evaluations;
+      ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
@@ -87,7 +97,8 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
       std::cout << element << " ";
     }
     std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations << std::endl;
+              << ", number_of_evaluations: " << result.number_of_evaluations
+              << ", duration: " << result.duration.count() << "ns" << std::endl;
   }
 }
 #endif
