@@ -24,7 +24,14 @@ rosenbrock_function<T, N>::rosenbrock_function() noexcept
    * i = 1 |       \                                             /                    |
    *       \                                                                          /
    */
-  this->objective_function = [](const auto& parameter) {
+  this->objective_function = [](auto parameter) {
+    std::transform(
+      parameter.cbegin(), parameter.cend(),
+      parameter.begin(),
+      [](const auto element) {
+        return element * T(15.0) - T(5.0);
+      });
+      
     return 
       std::inner_product(
         parameter.cbegin(), std::prev(parameter.cend(), 1),
@@ -50,6 +57,6 @@ rosenbrock_function<T, N>::rosenbrock_function() noexcept
 TEST_CASE("rosenbrock_function", "[problem][rosenbrock_function]") {
   const mant::rosenbrock_function<double, 3> rosenbrock_function;
   
-  CHECK(rosenbrock_function.objective_function({1.0, -2.0, 3.0}) == Approx(3405.0));
+  CHECK(rosenbrock_function.objective_function({1.0, -2.0, 3.0}) == Approx(126726325.0));
 }
 #endif

@@ -28,7 +28,9 @@ rastrigin_function<T, N>::rastrigin_function() noexcept
       std::accumulate(
         parameter.cbegin(), parameter.cend(),
         T(0.0),
-        [](const T sum, const T element) {
+        [](const T sum, T element) {
+          element = element * T(10.24) - T(5.12);
+          
           return 
             sum +
             std::pow(element, T(2.0)) - 
@@ -45,6 +47,6 @@ rastrigin_function<T, N>::rastrigin_function() noexcept
 TEST_CASE("rastrigin_function", "[problem][rastrigin_function]") {
   const mant::rastrigin_function<double, 3> rastrigin_function;
   
-  CHECK(rastrigin_function.objective_function({1.0, -2.0, 3.0}) == Approx(14.0));
+  CHECK(rastrigin_function.objective_function({1.0, -2.0, 3.0}) == Approx(1375.8250536133));
 }
 #endif
