@@ -133,48 +133,66 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
-  const mant::particle_swarm_optimisation<double, 3, mant::problem> optimiser;
+  constexpr std::size_t number_of_dimensions = 3;
+  const mant::particle_swarm_optimisation<double, number_of_dimensions, mant::problem> optimiser;
   
-  CHECK(optimiser.initial_velocity == Approx(0.5));
-  CHECK(optimiser.maximal_acceleration == Approx(1.0 / (2.0 * std::log(2.0))));
-  CHECK(optimiser.maximal_local_attraction == Approx(0.5 + std::log(2.0)));
-  CHECK(optimiser.maximal_global_attraction == Approx(0.5 + std::log(2.0)));
-  
-  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
-    std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sphere_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sum_of_different_powers_function<double, 3>)
-  };
-  
-  std::vector<std::array<double, 3>> parameters(10);
-  for (auto& parameter : parameters) {
-    std::generate(
-      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
-      std::bind(
-        std::uniform_real_distribution<double>(0.0, 1.0),
-        std::ref(random_number_generator())));
+  SECTION("Default configuration") {
+    CHECK(optimiser.initial_velocity == Approx(0.5));
+    CHECK(optimiser.maximal_acceleration == Approx(1.0 / (2.0 * std::log(2.0))));
+    CHECK(optimiser.maximal_local_attraction == Approx(0.5 + std::log(2.0)));
+    CHECK(optimiser.maximal_global_attraction == Approx(0.5 + std::log(2.0)));
   }
   
-  std::array<mant::optimise_result<double, 3>, problems.size()> results;
-  std::transform(
-    problems.cbegin(), problems.cend(),
-    results.begin(),
-    [&optimiser, &parameters](auto&& problem) {
-      return optimiser.optimisation_function(*problem, parameters);
+  SECTION("Benchmarking") {
+    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
+    };
+    
+    std::vector<std::array<double, number_of_dimensions>> parameters(10);
+    for (auto& parameter : parameters) {
+      std::generate(
+        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+        std::bind(
+          std::uniform_real_distribution<double>(0.0, 1.0),
+          std::ref(random_number_generator())));
     }
-  );
+    
+    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
+    std::transform(
+      problems.cbegin(), problems.cend(),
+      results.begin(),
+      [&optimiser, &parameters](auto&& problem) {
+        return optimiser.optimisation_function(*problem, parameters);
+      }
+    );
+    
+    std::cout << "Particle swarm optimisation" << std::endl;
+    for (auto&& result : results) {
+      std::cout << "best_parameter: [ ";
+      std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
+      std::cout << "], best_objective_value: " << result.best_objective_value
+                << ", number_of_evaluations: " << result.number_of_evaluations
+                << ", duration: " << result.duration.count() << "ns" << std::endl;
+    }
+  }
   
-  std::cout << "Particle swarm optimisation" << std::endl;
-  for (auto&& result : results) {
-    std::cout << "best_parameter: [ ";
-    for (auto&& element : result.best_parameter) {
-      std::cout << element << " ";
-    }
-    std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations
-              << ", duration: " << result.duration.count() << "ns" << std::endl;
+  SECTION("Boundary handling") {
+    mant::problem<double, number_of_dimensions> problem;
+    problem.objective_function = [](const auto& parameter) {
+      return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
+    };
+    
+    const auto&& result = optimiser.optimisation_function(problem, {problem.lower_bounds});
+    CHECK(std::all_of(
+      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      [](const auto element) { 
+        return element >= 0.0;
+      }
+    ) == true);
   }
 }
 #endif

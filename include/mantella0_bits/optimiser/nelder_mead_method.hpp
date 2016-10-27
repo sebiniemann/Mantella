@@ -92,7 +92,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         result.best_parameter.cbegin(),
         reflected_point.begin(),
         [this](const auto centroid, const auto best_parameter) {
-          return centroid + reflection_weight * (centroid - best_parameter);
+          return std::fmin(std::fmax(centroid + reflection_weight * (centroid - best_parameter), T1(0.0)), T1(1.0));
         });
       
       auto objective_value = problem.objective_function(reflected_point);
@@ -121,7 +121,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
           reflected_point.cbegin(),
           expanded_point.begin(),
           [this](const auto centroid, const auto reflected_point) {
-            return centroid + expansion_weight * (reflected_point - centroid);
+            return std::fmin(std::fmax(centroid + expansion_weight * (reflected_point - centroid), T1(0.0)), T1(1.0));
           });
           
         objective_value = problem.objective_function(expanded_point);
@@ -241,48 +241,75 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
-  const mant::nelder_mead_method<double, 3, mant::problem> optimiser;
+  constexpr std::size_t number_of_dimensions = 3;
+  const mant::nelder_mead_method<double, number_of_dimensions, mant::problem> optimiser; 
   
-  CHECK(optimiser.reflection_weight == Approx(1.0));
-  CHECK(optimiser.expansion_weight == Approx(2.0));
-  CHECK(optimiser.contraction_weight == Approx(0.5));
-  CHECK(optimiser.shrinking_weight == Approx(0.5));
-  
-  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
-    std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sphere_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sum_of_different_powers_function<double, 3>)
-  };
-  
-  std::vector<std::array<double, 3>> parameters(4);
-  for (auto& parameter : parameters) {
-    std::generate(
-      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
-      std::bind(
-        std::uniform_real_distribution<double>(0.0, 1.0),
-        std::ref(random_number_generator())));
+  SECTION("Default configuration") {
+    CHECK(optimiser.reflection_weight == Approx(1.0));
+    CHECK(optimiser.expansion_weight == Approx(2.0));
+    CHECK(optimiser.contraction_weight == Approx(0.5));
+    CHECK(optimiser.shrinking_weight == Approx(0.5));
   }
   
-  std::array<mant::optimise_result<double, 3>, problems.size()> results;
-  std::transform(
-    problems.cbegin(), problems.cend(),
-    results.begin(),
-    [&optimiser, &parameters](auto&& problem) {
-      return optimiser.optimisation_function(*problem, parameters);
+  SECTION("Benchmarking") {
+    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
+    };
+    
+    std::vector<std::array<double, number_of_dimensions>> initial_parameters(number_of_dimensions + 1);
+    for (auto& parameter : initial_parameters) {
+      std::generate(
+        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+        std::bind(
+          std::uniform_real_distribution<double>(0.0, 1.0),
+          std::ref(random_number_generator())));
     }
-  );
+    
+    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
+    std::transform(
+      problems.cbegin(), problems.cend(),
+      results.begin(),
+      [&optimiser, &initial_parameters](auto&& problem) {
+        return optimiser.optimisation_function(*problem, initial_parameters);
+      }
+    );
+    
+    std::cout << "Nelder-Mead method" << std::endl;
+    for (auto&& result : results) {
+      std::cout << "best_parameter: [ ";
+      std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
+      std::cout << "], best_objective_value: " << result.best_objective_value
+                << ", number_of_evaluations: " << result.number_of_evaluations
+                << ", duration: " << result.duration.count() << "ns" << std::endl;
+    }
+  }
   
-  std::cout << "Nelder-Mead method" << std::endl;
-  for (auto&& result : results) {
-    std::cout << "best_parameter: [ ";
-    for (auto&& element : result.best_parameter) {
-      std::cout << element << " ";
+  SECTION("Boundary handling") {
+    mant::problem<double, number_of_dimensions> problem;
+    problem.objective_function = [](const auto& parameter) {
+      return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
+    };
+    
+    std::vector<std::array<double, number_of_dimensions>> initial_parameters(number_of_dimensions + 1);
+    for (auto& parameter : initial_parameters) {
+      std::generate(
+        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+        std::bind(
+          std::uniform_real_distribution<double>(0.0, 1.0),
+          std::ref(random_number_generator())));
     }
-    std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations
-              << ", duration: " << result.duration.count() << "ns" << std::endl;
+    
+    const auto&& result = optimiser.optimisation_function(problem, initial_parameters);
+    CHECK(std::all_of(
+      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      [](const auto element) { 
+        return element >= 0.0;
+      }
+    ) == true);
   }
 }
 #endif
