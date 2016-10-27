@@ -241,48 +241,74 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
-  const mant::nelder_mead_method<double, 3, mant::problem> optimiser;
   
-  CHECK(optimiser.reflection_weight == Approx(1.0));
-  CHECK(optimiser.expansion_weight == Approx(2.0));
-  CHECK(optimiser.contraction_weight == Approx(0.5));
-  CHECK(optimiser.shrinking_weight == Approx(0.5));
+  constexpr std::size_t dimensions = 3;
+  const mant::nelder_mead_method<double, dimensions, mant::problem> optimiser; 
   
-  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
-    std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sphere_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sum_of_different_powers_function<double, 3>)
-  };
+  SECTION("Benchmarking"){
   
-  std::vector<std::array<double, 3>> parameters(4);
-  for (auto& parameter : parameters) {
-    std::generate(
-      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
-      std::bind(
-        std::uniform_real_distribution<double>(0.0, 1.0),
-        std::ref(random_number_generator())));
+    CHECK(optimiser.reflection_weight == Approx(1.0));
+    CHECK(optimiser.expansion_weight == Approx(2.0));
+    CHECK(optimiser.contraction_weight == Approx(0.5));
+    CHECK(optimiser.shrinking_weight == Approx(0.5));
+    
+    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
+    };
+    
+    std::vector<std::array<double, dimensions>> parameters(4);
+    for (auto& parameter : parameters) {
+      std::generate(
+        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+        std::bind(
+          std::uniform_real_distribution<double>(0.0, 1.0),
+          std::ref(random_number_generator())));
+    }
+    
+    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
+    std::transform(
+      problems.cbegin(), problems.cend(),
+      results.begin(),
+      [&optimiser, &parameters](auto&& problem) {
+        return optimiser.optimisation_function(*problem, parameters);
+      }
+    );
+    
+    std::cout << "Nelder-Mead method" << std::endl;
+    for (auto&& result : results) {
+      std::cout << "best_parameter: [ ";
+      for (auto&& element : result.best_parameter) {
+        std::cout << element << " ";
+      }
+      std::cout << "], best_objective_value: " << result.best_objective_value
+                << ", number_of_evaluations: " << result.number_of_evaluations
+                << ", duration: " << result.duration.count() << "ns" << std::endl;
+    }
   }
   
-  std::array<mant::optimise_result<double, 3>, problems.size()> results;
-  std::transform(
-    problems.cbegin(), problems.cend(),
-    results.begin(),
-    [&optimiser, &parameters](auto&& problem) {
-      return optimiser.optimisation_function(*problem, parameters);
+  SECTION("Testing boundary condition"){
+    mant::sphere_function<double, dimensions> sphereProblem;
+    sphereProblem.lower_bounds.fill(0.5);
+    
+    std::vector<std::array<double, dimensions>> initialParameters;  
+    for(int i = 0; i < dimensions + 1; i++){
+      initialParameters.push_back(sphereProblem.lower_bounds);
     }
-  );
-  
-  std::cout << "Nelder-Mead method" << std::endl;
-  for (auto&& result : results) {
-    std::cout << "best_parameter: [ ";
-    for (auto&& element : result.best_parameter) {
-      std::cout << element << " ";
-    }
-    std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations
-              << ", duration: " << result.duration.count() << "ns" << std::endl;
+    
+    mant::optimise_result<double, dimensions> result = optimiser.optimisation_function(sphereProblem, initialParameters);
+    
+    CHECK(
+      std::all_of(
+        result.best_parameter.cbegin(), 
+        result.best_parameter.cend(),
+        [](const auto elem){ 
+          return elem >= 0.5;
+        }
+      ) == true);
   }
 }
 #endif

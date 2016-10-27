@@ -6,6 +6,7 @@ struct sphere_function : problem<T, N> {
   sphere_function() noexcept;
 };
 
+
 //
 // Implementation
 //

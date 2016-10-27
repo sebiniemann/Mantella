@@ -62,43 +62,65 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
   };
 }
 
+
 //
 // Unit tests
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hill_climbing", "[hill_climbing]") {
-  const mant::hill_climbing<double, 3, mant::problem> optimiser;
   
-  CHECK(optimiser.minimal_stepsize == 0.0);
-  CHECK(optimiser.maximal_stepsize == 0.1);
+  constexpr std::size_t dimensions = 3;
+  const mant::hill_climbing<double, dimensions, mant::problem> optimiser;
   
-  const std::array<std::unique_ptr<mant::problem<double, 3>>, 5> problems = {
-    std::unique_ptr<mant::problem<double, 3>>(new mant::ackley_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rastrigin_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::rosenbrock_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sphere_function<double, 3>),
-    std::unique_ptr<mant::problem<double, 3>>(new mant::sum_of_different_powers_function<double, 3>)
-  };
+  SECTION("Benchmarking"){
   
-  std::array<mant::optimise_result<double, 3>, problems.size()> results;
-  std::transform(
-    problems.cbegin(), problems.cend(),
-    results.begin(),
-    [&optimiser](auto&& problem) {
-      return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
+    CHECK(optimiser.minimal_stepsize == 0.0);
+    CHECK(optimiser.maximal_stepsize == 0.1);
+    
+    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
+    };
+    
+    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
+    std::transform(
+      problems.cbegin(), problems.cend(),
+      results.begin(),
+      [&optimiser](auto&& problem) {
+        return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
+      }
+    );
+    
+    std::cout << "Hill climbing" << std::endl;
+    for (auto&& result : results) {
+      std::cout << "best_parameter: [ ";
+      for (auto&& element : result.best_parameter) {
+        std::cout << element << " ";
+      }
+      std::cout << "], best_objective_value: " << result.best_objective_value
+                << ", number_of_evaluations: " << result.number_of_evaluations
+                << ", duration: " << result.duration.count() << "ns" << std::endl;
     }
-  );
+  }
   
-  std::cout << "Hill climbing" << std::endl;
-  for (auto&& result : results) {
-    std::cout << "best_parameter: [ ";
-    for (auto&& element : result.best_parameter) {
-      std::cout << element << " ";
-    }
-    std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations
-              << ", duration: " << result.duration.count() << "ns" << std::endl;
+  SECTION("Testing boundary condition"){
+    mant::sphere_function<double, dimensions> sphereProblem;
+    sphereProblem.lower_bounds.fill(0.5);
+    
+    mant::optimise_result<double, dimensions> result = optimiser.optimisation_function(sphereProblem, {sphereProblem.lower_bounds});
+    
+    CHECK(
+      std::all_of(
+        result.best_parameter.cbegin(), 
+        result.best_parameter.cend(),
+        [](const auto elem){ 
+          return elem >= 0.5;
+        }
+      ) == true);
   }
 }
 #endif
