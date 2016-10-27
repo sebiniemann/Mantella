@@ -23,7 +23,7 @@ sphere_function<T, N>::sphere_function() noexcept
         parameter.cbegin(), parameter.cend(),
         T(0.0),
         [](const double length, const double element) {
-          return length + std::pow(element, T(2.0));
+          return length + std::pow(element * T(10.24) - T(5.12), T(2.0));
         });
   };
 }
@@ -36,6 +36,6 @@ sphere_function<T, N>::sphere_function() noexcept
 TEST_CASE("sphere_function", "[problem][sphere_function]") {
   const mant::sphere_function<double, 3> sphere_function;
   
-  CHECK(sphere_function.objective_function({1.0, -2.0, 3.0}) == Approx(14.0));
+  CHECK(sphere_function.objective_function({1.0, -2.0, 3.0}) == Approx(1336.9344));
 }
 #endif

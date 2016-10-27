@@ -28,6 +28,7 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
     assert(maximal_local_attraction >= T1(0.0));
     assert(maximal_global_attraction >= T1(0.0));
     
+    auto&& start_time  = std::chrono::steady_clock::now();
     optimise_result<T1, N> result;
     
     std::vector<std::array<T1, N>> velocities(parameters.size());
@@ -44,6 +45,8 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
     for (std::size_t n = 0; n < parameters.size(); ++n) {
       const auto& parameter = parameters.at(n);
       const auto objective_value = problem.objective_function(parameter);
+      ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       local_best_objective_values.at(n) = objective_value;
       
@@ -55,9 +58,15 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
           return result;
         }
       }
+      
+      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        return result;
+      } else if (result.duration >= this->maximal_duration) {
+        return result;
+      }
     }
     
-    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       const auto n = result.number_of_evaluations % parameters.size();
       auto& parameter = parameters.at(n);
       const auto& local_best_parameter = local_best_parameters.at(n);
@@ -101,6 +110,7 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
         
       const auto objective_value = problem.objective_function(parameter);
       ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
@@ -162,7 +172,8 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
       std::cout << element << " ";
     }
     std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations << std::endl;
+              << ", number_of_evaluations: " << result.number_of_evaluations
+              << ", duration: " << result.duration.count() << "ns" << std::endl;
   }
 }
 #endif

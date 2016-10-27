@@ -14,10 +14,13 @@ template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 random_search<T1, N, T2>::random_search() noexcept 
     : optimiser<T1, N, T2>() {
   this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
+    auto&& start_time  = std::chrono::steady_clock::now();
     optimise_result<T1, N> result;
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
+      ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
@@ -27,9 +30,15 @@ random_search<T1, N, T2>::random_search() noexcept
           return result;
         }
       }
+      
+      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        return result;
+      } else if (result.duration >= this->maximal_duration) {
+        return result;
+      }
     }
     
-    while (result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       std::array<T1, N> parameter;
       std::generate(
         parameter.begin(), std::next(parameter.begin(), this->active_dimensions.size()),
@@ -38,12 +47,14 @@ random_search<T1, N, T2>::random_search() noexcept
           std::ref(random_number_generator())));
           
       const auto objective_value = problem.objective_function(parameter);
-       ++result.number_of_evaluations;
+      ++result.number_of_evaluations;
+      result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
         result.best_parameter = parameter;
         result.best_objective_value = objective_value;
       }
+      
     }
     
     return result;
@@ -81,7 +92,8 @@ TEST_CASE("random_search", "[random_search]") {
       std::cout << element << " ";
     }
     std::cout << "], best_objective_value: " << result.best_objective_value
-              << ", number_of_evaluations: " << result.number_of_evaluations << std::endl;
+              << ", number_of_evaluations: " << result.number_of_evaluations
+              << ", duration: " << result.duration.count() << "ns" << std::endl;
   }
 }
 #endif

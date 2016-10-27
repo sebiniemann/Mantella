@@ -10,7 +10,7 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 
-## Documentation
+# Documentation
 doc/_html/
 doc/api_reference/
 doc/assert/
