@@ -66,22 +66,20 @@ random_search<T1, N, T2>::random_search() noexcept
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE("random_search", "[random_search]") { 
+TEST_CASE("random_search", "[random_search]") {
+  constexpr std::size_t number_of_dimensions = 3;
+  const mant::random_search<double, number_of_dimensions, mant::problem> optimiser; 
 
-  constexpr std::size_t dimensions = 3;
-  const mant::random_search<double, dimensions, mant::problem> optimiser; 
-
-  SECTION("Benchmarking"){
-    
-    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
+  SECTION("Benchmarking") {
+    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
     };
     
-    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
+    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
@@ -102,20 +100,17 @@ TEST_CASE("random_search", "[random_search]") {
     }
   }
   
-  SECTION("Testing boundary condition"){
-    mant::sphere_function<double, dimensions> sphereProblem;
-    sphereProblem.lower_bounds.fill(0.5);
+  SECTION("Boundary handling") {
+    mant::sphere_function<double, number_of_dimensions> problem;
+    problem.lower_bounds.fill(0.5);
     
-    mant::optimise_result<double, dimensions> result = optimiser.optimisation_function(sphereProblem, {sphereProblem.lower_bounds});
-    
-    CHECK(
-      std::all_of(
-        result.best_parameter.cbegin(), 
-        result.best_parameter.cend(),
-        [](const auto elem){ 
-          return elem >= 0.5;
-        }
-      ) == true);
+    const auto&& result = optimiser.optimisation_function(problem, {problem.lower_bounds});
+    CHECK(std::all_of(
+      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      [](const auto elem){ 
+        return elem >= 0.5;
+      }
+    ) == true);
   }
 }
 #endif

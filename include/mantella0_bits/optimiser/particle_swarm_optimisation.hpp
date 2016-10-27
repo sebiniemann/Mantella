@@ -133,26 +133,26 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
+  constexpr std::size_t number_of_dimensions = 3;
+  const mant::particle_swarm_optimisation<double, number_of_dimensions, mant::problem> optimiser;
   
-  constexpr std::size_t dimensions = 3;
-  const mant::particle_swarm_optimisation<double, dimensions, mant::problem> optimiser;
-  
-  SECTION("Benchmarking"){
-  
+  SECTION("Default configuration") {
     CHECK(optimiser.initial_velocity == Approx(0.5));
     CHECK(optimiser.maximal_acceleration == Approx(1.0 / (2.0 * std::log(2.0))));
     CHECK(optimiser.maximal_local_attraction == Approx(0.5 + std::log(2.0)));
     CHECK(optimiser.maximal_global_attraction == Approx(0.5 + std::log(2.0)));
-    
-    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
+  }
+  
+  SECTION("Benchmarking") {
+    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
     };
     
-    std::vector<std::array<double, dimensions>> parameters(10);
+    std::vector<std::array<double, number_of_dimensions>> parameters(10);
     for (auto& parameter : parameters) {
       std::generate(
         parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
@@ -161,7 +161,7 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
           std::ref(random_number_generator())));
     }
     
-    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
+    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
@@ -182,20 +182,17 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     }
   }
   
-  SECTION("Testing boundary condition"){
-    mant::sphere_function<double, dimensions> sphereProblem;
-    sphereProblem.lower_bounds.fill(0.5);
+  SECTION("Boundary handling") {
+    mant::sphere_function<double, number_of_dimensions> problem;
+    problem.lower_bounds.fill(0.5);
     
-    mant::optimise_result<double, dimensions> result = optimiser.optimisation_function(sphereProblem, {sphereProblem.lower_bounds});
-    
-    CHECK(
-      std::all_of(
-        result.best_parameter.cbegin(), 
-        result.best_parameter.cend(),
-        [](const auto elem){ 
-          return elem >= 0.5;
-        }
-      ) == true);
+    const auto&& result = optimiser.optimisation_function(problem, {problem.lower_bounds});
+    CHECK(std::all_of(
+      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      [](const auto elem){ 
+        return elem >= 0.5;
+      }
+    ) == true);
   }
 }
 #endif

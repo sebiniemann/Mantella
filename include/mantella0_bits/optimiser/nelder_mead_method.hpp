@@ -241,27 +241,27 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
+  constexpr std::size_t number_of_dimensions = 3;
+  const mant::nelder_mead_method<double, number_of_dimensions, mant::problem> optimiser; 
   
-  constexpr std::size_t dimensions = 3;
-  const mant::nelder_mead_method<double, dimensions, mant::problem> optimiser; 
-  
-  SECTION("Benchmarking"){
-  
+  SECTION("Default configuration") {
     CHECK(optimiser.reflection_weight == Approx(1.0));
     CHECK(optimiser.expansion_weight == Approx(2.0));
     CHECK(optimiser.contraction_weight == Approx(0.5));
     CHECK(optimiser.shrinking_weight == Approx(0.5));
-    
-    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
+  }
+  
+  SECTION("Benchmarking") {
+    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
+      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
     };
     
-    std::vector<std::array<double, dimensions>> parameters(4);
-    for (auto& parameter : parameters) {
+    std::vector<std::array<double, number_of_dimensions>> initial_parameters(number_of_dimensions + 1);
+    for (auto& parameter : initial_parameters) {
       std::generate(
         parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
         std::bind(
@@ -269,12 +269,12 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
           std::ref(random_number_generator())));
     }
     
-    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
+    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
-      [&optimiser, &parameters](auto&& problem) {
-        return optimiser.optimisation_function(*problem, parameters);
+      [&optimiser, &initial_parameters](auto&& problem) {
+        return optimiser.optimisation_function(*problem, initial_parameters);
       }
     );
     
@@ -290,25 +290,26 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
     }
   }
   
-  SECTION("Testing boundary condition"){
-    mant::sphere_function<double, dimensions> sphereProblem;
-    sphereProblem.lower_bounds.fill(0.5);
+  SECTION("Boundary handling") {
+    mant::sphere_function<double, number_of_dimensions> problem;
+    problem.lower_bounds.fill(0.5);
     
-    std::vector<std::array<double, dimensions>> initialParameters;  
-    for(int i = 0; i < dimensions + 1; i++){
-      initialParameters.push_back(sphereProblem.lower_bounds);
+    std::vector<std::array<double, number_of_dimensions>> initial_parameters(number_of_dimensions + 1);
+    for (auto& parameter : initial_parameters) {
+      std::generate(
+        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+        std::bind(
+          std::uniform_real_distribution<double>(0.0, 1.0),
+          std::ref(random_number_generator())));
     }
     
-    mant::optimise_result<double, dimensions> result = optimiser.optimisation_function(sphereProblem, initialParameters);
-    
-    CHECK(
-      std::all_of(
-        result.best_parameter.cbegin(), 
-        result.best_parameter.cend(),
-        [](const auto elem){ 
-          return elem >= 0.5;
-        }
-      ) == true);
+    const auto&& result = optimiser.optimisation_function(problem, initial_parameters);
+    CHECK(std::all_of(
+      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      [](const auto elem){ 
+        return elem >= 0.5;
+      }
+    ) == true);
   }
 }
 #endif
