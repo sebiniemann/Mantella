@@ -3,7 +3,7 @@
 Version 0.61.0
 ==============
 
-[![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) 
+[![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai/branch/master?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) 
 
 [Mantella](http://mantella.info/) is an efficiency-focused C++14 header-only library for analysing and solving optimisation problems. As it only depends on the C++ standard library, Linux, Windows and Mac OS X support is a given.
 
@@ -15,7 +15,7 @@ Version 0.61.0
 #include <iterator> // Used for std::ostream_iterator
 
 int main() {
-  // ... Company code.
+  // ... Your company code.
 
   // Adds your own optimisation problem.
   mant::problem<double, 2> my_problem;
@@ -31,7 +31,7 @@ int main() {
   std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
   std::cout << "-> " << result.best_objective_value << std::endl;
 
-  // Continuing company code ...
+  // Continuing your company code ...
 
   return 0;
 }
