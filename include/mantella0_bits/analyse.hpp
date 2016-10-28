@@ -6,7 +6,7 @@ struct analyse_result {
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,
-    const std::size_t number_of_evaluations,
+    const unsigned evaluations,
     const T1 acceptable_deviation);
 
 //
@@ -16,17 +16,17 @@ analyse_result<T1, N> analyse(
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,
-    const std::size_t number_of_evaluations,
+    const unsigned evaluations,
     const T1 acceptable_deviation) {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(N > 0, "");
   static_assert(std::is_base_of<mant::problem<T1, N>, T2<T1, N>>::value, "");
   
-  assert(number_of_evaluations > 0);
+  assert(evaluations > 0);
   assert(acceptable_deviation >= 0);
 
   return {
-    additive_separability(problem, number_of_evaluations, acceptable_deviation)
+    additive_separability(problem, evaluations, acceptable_deviation)
   };
 }
 

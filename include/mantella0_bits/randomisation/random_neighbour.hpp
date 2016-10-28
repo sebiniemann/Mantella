@@ -6,7 +6,7 @@ std::array<T, N> random_neighbour(
     const std::array<T, N>& parameter,
     const T minimal_distance,
     const T maximal_distance,
-    const unsigned number_of_active_dimensions);
+    const unsigned active_dimensions);
 
 //
 // Implementation
@@ -17,12 +17,12 @@ std::array<T, N> random_neighbour(
     const std::array<T, N>& parameter,
     const T minimal_distance,
     const T maximal_distance,
-    const unsigned number_of_active_dimensions) {
+    const unsigned active_dimensions) {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(N > 0, "");
   
   assert(T(0.0) <= minimal_distance && minimal_distance <= maximal_distance);
-  assert(0 < number_of_active_dimensions && number_of_active_dimensions <= N);
+  assert(0 < active_dimensions && active_dimensions <= N);
 
   /* @see J. S. Hicks and R. F. Wheeling (1959). An efficient method for generating uniformly distributed points on the 
    * surface of an n-dimensional sphere. Communications of the ACM, 2(4), pp. 17-19.
@@ -34,7 +34,7 @@ std::array<T, N> random_neighbour(
    */
   std::array<T, N> neighbour;
   std::generate(
-    neighbour.begin(), std::next(neighbour.begin(), number_of_active_dimensions),
+    neighbour.begin(), std::next(neighbour.begin(), active_dimensions),
     std::bind(std::normal_distribution<T>(), std::ref(random_number_generator())));
 
   // Instead of iterating twice through the vector (normalising it first and scaling it afterwards), we do everything in
@@ -46,13 +46,13 @@ std::array<T, N> random_neighbour(
       )
     ) / 
     std::sqrt(std::inner_product(
-      neighbour.cbegin(), std::next(neighbour.cbegin(), number_of_active_dimensions),
+      neighbour.cbegin(), std::next(neighbour.cbegin(), active_dimensions),
       neighbour.cbegin(),
       T(0.0)
     ));
 
   std::transform(
-    neighbour.cbegin(), std::next(neighbour.cbegin(), number_of_active_dimensions),
+    neighbour.cbegin(), std::next(neighbour.cbegin(), active_dimensions),
     parameter.cbegin(), 
     neighbour.begin(), 
     [length](const auto neighbour_element, const auto parameter_element) {

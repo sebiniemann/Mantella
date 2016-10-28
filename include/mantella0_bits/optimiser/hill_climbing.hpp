@@ -27,7 +27,7 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
-      ++result.number_of_evaluations;
+      ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
@@ -39,14 +39,14 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
         }
       }
       
-      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+      if (result.evaluations >= this->maximal_evaluations) {
         return result;
       } else if (result.duration >= this->maximal_duration) {
         return result;
       }
     }
     
-    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       auto&& parameter = random_neighbour(result.best_parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
       
       std::transform(
@@ -57,7 +57,7 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
         });
         
       const auto objective_value = problem.objective_function(parameter);
-      ++result.number_of_evaluations;
+      ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
@@ -77,8 +77,8 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hill_climbing", "[hill_climbing]") {
-  constexpr unsigned number_of_dimensions = 3;
-  mant::hill_climbing<double, number_of_dimensions, mant::problem> optimiser;
+  constexpr unsigned dimensions = 3;
+  mant::hill_climbing<double, dimensions, mant::problem> optimiser;
   
   SECTION("Default configuration") {
     CHECK(optimiser.minimal_stepsize == 0.0);
@@ -86,15 +86,15 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
   }
   
   SECTION("Benchmarking") {
-    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
+    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
     };
     
-    std::vector<std::array<double, number_of_dimensions>> initial_parameters(1);
+    std::vector<std::array<double, dimensions>> initial_parameters(1);
     for (auto& parameter : initial_parameters) {
       std::generate(
         parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
@@ -103,9 +103,9 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
           std::ref(random_number_generator())));
     }
     
-    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
+    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
     optimiser.maximal_duration = std::chrono::seconds(10);
-    optimiser.maximal_number_of_evaluations = 10'000'000;
+    optimiser.maximal_evaluations = 10'000'000;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
@@ -119,13 +119,13 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
       std::cout << "best_parameter: [ ";
       std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
       std::cout << "], best_objective_value: " << result.best_objective_value
-                << ", number_of_evaluations: " << result.number_of_evaluations
+                << ", evaluations: " << result.evaluations
                 << ", duration: " << result.duration.count() << "ns" << std::endl;
     }
   }
   
   SECTION("Boundary handling") {
-    mant::problem<double, number_of_dimensions> problem;
+    mant::problem<double, dimensions> problem;
     problem.objective_function = [](const auto& parameter) {
       return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
     };

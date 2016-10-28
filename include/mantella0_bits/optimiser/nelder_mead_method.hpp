@@ -34,12 +34,12 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
     
     result.best_parameter = initial_parameters.at(0);
     result.best_objective_value = problem.objective_function(initial_parameters.at(0));
-    ++result.number_of_evaluations;
+    ++result.evaluations;
     result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
     if (result.best_objective_value <= this->acceptable_objective_value) {
       return result;
-    } else if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+    } else if (result.evaluations >= this->maximal_evaluations) {
       return result;
     } else if (result.duration >= this->maximal_duration) {
       return result;
@@ -49,7 +49,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
     for (std::size_t n = 1; n < initial_parameters.size(); ++n) {
       const auto& parameter = initial_parameters.at(n);
       const auto objective_value = problem.objective_function(parameter);
-      ++result.number_of_evaluations;
+      ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       simplex.at(n - 1) = {parameter, objective_value};
@@ -63,7 +63,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         }
       }
       
-      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+      if (result.evaluations >= this->maximal_evaluations) {
         return result;
       } else if (result.duration >= this->maximal_duration) {
         return result;
@@ -85,7 +85,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         }
       });
     
-    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       std::array<T1, N> reflected_point;
       std::transform(
         centroid.cbegin(), std::next(centroid.cbegin(), this->active_dimensions.size()),
@@ -96,7 +96,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         });
       
       auto objective_value = problem.objective_function(reflected_point);
-      ++result.number_of_evaluations;
+      ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
@@ -109,7 +109,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         
         if (result.best_objective_value <= this->acceptable_objective_value) {
           return result;
-        } else if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        } else if (result.evaluations >= this->maximal_evaluations) {
           return result;
         } else if (result.duration >= this->maximal_duration) {
           return result;
@@ -125,7 +125,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
           });
           
         objective_value = problem.objective_function(expanded_point);
-        ++result.number_of_evaluations;
+        ++result.evaluations;
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
         if (objective_value < result.best_objective_value) {
@@ -140,7 +140,7 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
         continue;
       }
       
-      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+      if (result.evaluations >= this->maximal_evaluations) {
         return result;
       } else if (result.duration >= this->maximal_duration) {
         return result;
@@ -170,10 +170,10 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
           });
         
         auto objective_value = problem.objective_function(contracted_point);
-        ++result.number_of_evaluations;
+        ++result.evaluations;
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-        if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+        if (result.evaluations >= this->maximal_evaluations) {
           return result;
         } else if (result.duration >= this->maximal_duration) {
           return result;
@@ -210,9 +210,9 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
               });
               
             point = {std::get<0>(point), problem.objective_function(std::get<0>(point))};
-            ++result.number_of_evaluations;
+            ++result.evaluations;
       
-            if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+            if (result.evaluations >= this->maximal_evaluations) {
               return result;
             } else if (result.duration >= this->maximal_duration) {
               return result;
@@ -247,8 +247,8 @@ nelder_mead_method<T1, N, T2>::nelder_mead_method() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
-  constexpr unsigned number_of_dimensions = 3;
-  mant::nelder_mead_method<double, number_of_dimensions, mant::problem> optimiser; 
+  constexpr unsigned dimensions = 3;
+  mant::nelder_mead_method<double, dimensions, mant::problem> optimiser; 
   
   SECTION("Default configuration") {
     CHECK(optimiser.reflection_weight == Approx(1.0));
@@ -258,15 +258,15 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
   }
   
   SECTION("Benchmarking") {
-    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
+    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
     };
     
-    std::vector<std::array<double, number_of_dimensions>> initial_parameters(number_of_dimensions + 1);
+    std::vector<std::array<double, dimensions>> initial_parameters(dimensions + 1);
     for (auto& parameter : initial_parameters) {
       std::generate(
         parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
@@ -275,9 +275,9 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
           std::ref(random_number_generator())));
     }
     
-    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
+    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
     optimiser.maximal_duration = std::chrono::seconds(10);
-    optimiser.maximal_number_of_evaluations = 10'000'000;
+    optimiser.maximal_evaluations = 10'000'000;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
@@ -291,18 +291,18 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
       std::cout << "best_parameter: [ ";
       std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
       std::cout << "], best_objective_value: " << result.best_objective_value
-                << ", number_of_evaluations: " << result.number_of_evaluations
+                << ", evaluations: " << result.evaluations
                 << ", duration: " << result.duration.count() << "ns" << std::endl;
     }
   }
   
   SECTION("Boundary handling") {
-    mant::problem<double, number_of_dimensions> problem;
+    mant::problem<double, dimensions> problem;
     problem.objective_function = [](const auto& parameter) {
       return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
     };
     
-    std::vector<std::array<double, number_of_dimensions>> initial_parameters(number_of_dimensions + 1);
+    std::vector<std::array<double, dimensions>> initial_parameters(dimensions + 1);
     for (auto& parameter : initial_parameters) {
       std::generate(
         parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),

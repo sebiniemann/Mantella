@@ -4,7 +4,7 @@
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 std::array<unsigned, N> additive_separability(
     const T2<T1, N>& problem,
-    const std::size_t number_of_evaluations,
+    const unsigned evaluations,
     const T1 acceptable_deviation);
 
 //
@@ -14,7 +14,7 @@ std::array<unsigned, N> additive_separability(
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 std::array<unsigned, N> additive_separability(
     const T2<T1, N>& problem,
-    const std::size_t number_of_evaluations,
+    const unsigned evaluations,
     const T1 acceptable_deviation) {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(N > 1, "");
@@ -25,7 +25,7 @@ std::array<unsigned, N> additive_separability(
     [](const auto lower_bound, const auto upper_bound) {
       return lower_bound <= upper_bound;
     })); 
-  assert(number_of_evaluations > 0);
+  assert(evaluations > 0);
   assert(acceptable_deviation >= 0);
       
   // Initialises *partition* with 0, indicating that all dimensions are in the same group and none is separable.
@@ -70,7 +70,7 @@ std::array<unsigned, N> additive_separability(
         break;
       }
 
-      for (std::size_t k = 0; k < number_of_evaluations; ++k) {
+      for (unsigned k = 0; k < evaluations; ++k) {
         /* Tests whether the function is separable into the two parts or not.
          * A function *f* is additive separable into two other function *g*, *h* if the following holds:
          *
