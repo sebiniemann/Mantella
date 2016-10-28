@@ -11,6 +11,11 @@ class bcolors:
     FAIL = '\033[91m'
     ENDC = '\033[0m'
 
+class changelogstate:
+    versionadd = 0
+    versionchanged = 1
+    deprecated = 2
+    
 #TODO Summing up the above: The output should be similar to `.code.sh -f`
 
 if not os.path.isfile('./conf.py'):
@@ -28,6 +33,7 @@ if not os.path.exists('./assert/examples'):
 
 an_error_occured=False
 
+changelog = []
 hppfiles = []
 for path, subdirs, files in os.walk('../include/mantella0_bits/'):
   for file in files:
@@ -54,10 +60,15 @@ for file in hppfiles:
   #TODO Add comments to the regex below and add a large comment block describing the structure returned by `re.findall` (this will be done by Sebastian)
   with open(file[1], 'w') as docfile:
     for part in re.findall(re.compile(ur'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ ]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', re.DOTALL), comments):
+    
+     # Search for change commits and save it
+     changes = re.findall(re.compile('[\s\S]+ (\w*)\([\w\d]*\)\n[\s\S]+(?<=versionadded:: )(\d.\d+)'), part[0])
+     if changes:
+       changelog = changelog + [(changes[0][1], changelogstate.versionadd, changes[0][0])]
+       docfile.write('.. _' + changes[0][0] + '_changeLabel:\n' + part[0])
+     else:
+       docfile.write(part[0])
 
-
-     docfile.write(part[0])
-     
      if part[1]:
       if 'c++' in part[3]:
         docfile.write(part[1])
@@ -131,10 +142,23 @@ for file in hppfiles:
           continue
         
         docfile.write('\n' + part[2] + '.. image:: ../assert/images/' + part[4] + '\n')
-      
     docfile.close()
     print '\x1b[2K \r', #clear line
-
+    
+#Ganerate Changelog
+changelog.sort()
+with open('./api_reference/changelog.rst', 'w') as changelogfile:
+  changelogfile.write('Changelog\n=========\n')
+  actualVersion = 0.0
+  for change in changelog:
+    if actualVersion != float(change[0]):
+      actualVersion = float(change[0])
+      changelogfile.write('\nVersion ' + change[0] + '\n' + '-'*(8+len(change[0])) + '\n\n')
+    
+    if float(change[1]) == changelogstate.versionadd:
+      changelogfile.write('  - **Added** :ref:`' + change[2] + '<' +change[2] + '_changeLabel>' '`\n')
+  changelogfile.close()
+  
 if os.path.exists('./tmp'):
   shutil.rmtree('./tmp')
   
