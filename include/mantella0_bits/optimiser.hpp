@@ -35,7 +35,7 @@ constexpr optimise_result<T, N>::optimise_result() noexcept
   : best_parameter{},
     best_objective_value(std::numeric_limits<T>::infinity()),
     number_of_evaluations(0),
-    duration(std::chrono::nanoseconds(0)) {
+    duration(0ns) {
 
 };
 
@@ -43,7 +43,7 @@ template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 optimiser<T1, N, T2>::optimiser() noexcept 
   : acceptable_objective_value(-std::numeric_limits<T1>::infinity()),
     maximal_number_of_evaluations(1000 * N),
-    maximal_duration(std::chrono::seconds(10)) {
+    maximal_duration(10s) {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(N > 0, "");
   static_assert(std::is_base_of<problem<T1, N>, T2<T1, N>>::value, "");
@@ -62,7 +62,7 @@ TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
   
   CHECK(result.best_objective_value == std::numeric_limits<double>::infinity());
   CHECK(result.number_of_evaluations == 0);
-  CHECK(result.duration == std::chrono::nanoseconds(0));
+  CHECK(result.duration == 0ns);
 }
 
 TEST_CASE("optimiser", "[optimiser]") {
@@ -70,7 +70,7 @@ TEST_CASE("optimiser", "[optimiser]") {
   
   CHECK(optimiser.acceptable_objective_value == -std::numeric_limits<double>::infinity());
   CHECK(optimiser.maximal_number_of_evaluations == 3000);
-  CHECK(optimiser.maximal_duration == std::chrono::seconds(10));
+  CHECK(optimiser.maximal_duration == 10s);
   CHECK(optimiser.active_dimensions == std::vector<std::size_t>({0, 1, 2}));
 }
 #endif
