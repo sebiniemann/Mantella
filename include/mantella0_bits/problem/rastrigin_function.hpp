@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct rastrigin_function : problem<T, N> {
   rastrigin_function() noexcept;
 };
@@ -10,7 +10,7 @@ struct rastrigin_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 rastrigin_function<T, N>::rastrigin_function() noexcept 
     : problem<T, N>() {
   /* Original, 2-dimensional:  @see L. A. Rastrigin (1974). Systems of Extremal Control.

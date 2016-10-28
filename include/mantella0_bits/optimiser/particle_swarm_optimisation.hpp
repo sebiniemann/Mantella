@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+template <typename T1, unsigned N, template <class, unsigned> class T2>
 struct particle_swarm_optimisation : optimiser<T1, N, T2> {
   T1 initial_velocity;
   T1 maximal_acceleration;
@@ -15,7 +15,7 @@ struct particle_swarm_optimisation : optimiser<T1, N, T2> {
 // Implementation
 //
 
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+template <typename T1, unsigned N, template <class, unsigned> class T2>
 particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept 
     : optimiser<T1, N, T2>(),
       initial_velocity(T1(0.5)),
@@ -74,7 +74,7 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
       std::array<T1, N> attraction_center;
       const auto weigthed_local_attraction = maximal_local_attraction * std::uniform_real_distribution<T1>(0, 1)(random_number_generator());
       const auto weigthed_global_attraction = maximal_global_attraction * std::uniform_real_distribution<T1>(0, 1)(random_number_generator());
-      for (std::size_t k = 0; k < this->active_dimensions.size(); ++k) {
+      for (unsigned k = 0; k < this->active_dimensions.size(); ++k) {
         attraction_center.at(k) = (
             weigthed_local_attraction * (local_best_parameter.at(k) - parameter.at(k)) + 
             weigthed_global_attraction * (result.best_parameter.at(k) - parameter.at(k))) / 
@@ -92,7 +92,7 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
       
       auto& velocity = velocities.at(n);
       const auto weigthed_acceleration = maximal_acceleration * std::uniform_real_distribution<T1>(0, 1)(random_number_generator());
-      for (std::size_t k = 0; k < this->active_dimensions.size(); ++k) {
+      for (unsigned k = 0; k < this->active_dimensions.size(); ++k) {
         auto& parameter_element = parameter.at(k);
         auto& velocity_element = velocity.at(k);
         
@@ -133,8 +133,8 @@ particle_swarm_optimisation<T1, N, T2>::particle_swarm_optimisation() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
-  constexpr std::size_t number_of_dimensions = 3;
-  const mant::particle_swarm_optimisation<double, number_of_dimensions, mant::problem> optimiser;
+  constexpr unsigned number_of_dimensions = 3;
+  mant::particle_swarm_optimisation<double, number_of_dimensions, mant::problem> optimiser;
   
   SECTION("Default configuration") {
     CHECK(optimiser.initial_velocity == Approx(0.5));
@@ -152,8 +152,8 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
       std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
     };
     
-    std::vector<std::array<double, number_of_dimensions>> parameters(10);
-    for (auto& parameter : parameters) {
+    std::vector<std::array<double, number_of_dimensions>> initial_parameters(10);
+    for (auto& parameter : initial_parameters) {
       std::generate(
         parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
         std::bind(
@@ -162,11 +162,13 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     }
     
     std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
+    optimiser.maximal_duration = std::chrono::seconds(10);
+    optimiser.maximal_number_of_evaluations = 10'000'000;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
-      [&optimiser, &parameters](auto&& problem) {
-        return optimiser.optimisation_function(*problem, parameters);
+      [&optimiser, &initial_parameters](auto&& problem) {
+        return optimiser.optimisation_function(*problem, initial_parameters);
       }
     );
     

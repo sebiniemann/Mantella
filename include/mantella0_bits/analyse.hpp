@@ -1,9 +1,9 @@
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct analyse_result {
-  std::array<std::size_t, N> additive_separability;
+  std::array<unsigned, N> additive_separability;
 };
 
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+template <typename T1, unsigned N, template <class, unsigned> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,
     const std::size_t number_of_evaluations,
@@ -13,7 +13,7 @@ analyse_result<T1, N> analyse(
 // Implementation
 //
 
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+template <typename T1, unsigned N, template <class, unsigned> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,
     const std::size_t number_of_evaluations,
@@ -39,6 +39,6 @@ TEST_CASE("analyse", "[analyse]") {
   const mant::sphere_function<double, 5> sphere_function;
 
   const auto&& result = mant::analyse(sphere_function, 100, 1e-12);
-  CHECK((result.additive_separability == std::array<std::size_t, 5>({0, 1, 2, 3, 4})));
+  CHECK((result.additive_separability == std::array<unsigned, 5>({0, 1, 2, 3, 4})));
 }
 #endif

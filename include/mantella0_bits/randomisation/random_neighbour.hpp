@@ -6,7 +6,7 @@ std::array<T, N> random_neighbour(
     const std::array<T, N>& parameter,
     const T minimal_distance,
     const T maximal_distance,
-    const std::size_t number_of_active_dimensions);
+    const unsigned number_of_active_dimensions);
 
 //
 // Implementation
@@ -17,7 +17,7 @@ std::array<T, N> random_neighbour(
     const std::array<T, N>& parameter,
     const T minimal_distance,
     const T maximal_distance,
-    const std::size_t number_of_active_dimensions) {
+    const unsigned number_of_active_dimensions) {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(N > 0, "");
   

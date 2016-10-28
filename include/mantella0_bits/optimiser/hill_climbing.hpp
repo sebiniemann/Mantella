@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+template <typename T1, unsigned N, template <class, unsigned> class T2>
 struct hill_climbing : optimiser<T1, N, T2> {
   T1 minimal_stepsize;
   T1 maximal_stepsize;
@@ -13,7 +13,7 @@ struct hill_climbing : optimiser<T1, N, T2> {
 // Implementation
 //
 
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+template <typename T1, unsigned N, template <class, unsigned> class T2>
 hill_climbing<T1, N, T2>::hill_climbing() noexcept 
     : optimiser<T1, N, T2>(),
       minimal_stepsize(T1(0.0)),
@@ -77,8 +77,8 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hill_climbing", "[hill_climbing]") {
-  constexpr std::size_t number_of_dimensions = 3;
-  const mant::hill_climbing<double, number_of_dimensions, mant::problem> optimiser;
+  constexpr unsigned number_of_dimensions = 3;
+  mant::hill_climbing<double, number_of_dimensions, mant::problem> optimiser;
   
   SECTION("Default configuration") {
     CHECK(optimiser.minimal_stepsize == 0.0);
@@ -94,12 +94,23 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
       std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
     };
     
+    std::vector<std::array<double, number_of_dimensions>> initial_parameters(1);
+    for (auto& parameter : initial_parameters) {
+      std::generate(
+        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+        std::bind(
+          std::uniform_real_distribution<double>(0.0, 1.0),
+          std::ref(random_number_generator())));
+    }
+    
     std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
+    optimiser.maximal_duration = std::chrono::seconds(10);
+    optimiser.maximal_number_of_evaluations = 10'000'000;
     std::transform(
       problems.cbegin(), problems.cend(),
       results.begin(),
-      [&optimiser](auto&& problem) {
-        return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
+      [&optimiser, &initial_parameters](auto&& problem) {
+        return optimiser.optimisation_function(*problem, initial_parameters);
       }
     );
     
