@@ -1,5 +1,40 @@
 /**
+additive_separability
+=====================
 
+.. cpp:function:: template<T1, N, T2> additive_separability(problem, number_of_evaluations, acceptable_deviation)
+
+  **Template parameters**
+  
+    - **T1** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``std::size_t``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **T2** (derived from ``mant::problem<T1, N>``)
+
+      - Lorem ipsum dolor sit amet
+  
+  **Function parameters**
+  
+    - **problem** (``T2``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **number_of_evaluations** (``unsigned``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **acceptable_deviation** (``T1``)
+    
+      - Lorem ipsum dolor sit amet
+    
+  **Return**
+    
+      - Lorem ipsum dolor sit amet
 */
 template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 std::array<std::size_t, N> additive_separability(
