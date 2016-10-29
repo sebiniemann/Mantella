@@ -250,6 +250,15 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
   constexpr unsigned dimensions = 3;
   mant::nelder_mead_method<double, dimensions> optimiser; 
   
+  std::vector<std::array<double, dimensions>> initial_parameters(dimensions + 1);
+  for (auto& parameter : initial_parameters) {
+    std::generate(
+      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
+      std::bind(
+        std::uniform_real_distribution<double>(0.0, 1.0),
+        std::ref(random_number_generator())));
+  }
+          
   SECTION("Default configuration") {
     CHECK(optimiser.reflection_weight == Approx(1.0));
     CHECK(optimiser.expansion_weight == Approx(2.0));
@@ -263,15 +272,6 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
       return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
     };
     
-    std::vector<std::array<double, dimensions>> initial_parameters(dimensions + 1);
-    for (auto& parameter : initial_parameters) {
-      std::generate(
-        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
-        std::bind(
-          std::uniform_real_distribution<double>(0.0, 1.0),
-          std::ref(random_number_generator())));
-    }
-    
     const auto&& result = optimiser.optimisation_function(problem, initial_parameters);
     CHECK(std::all_of(
       result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
@@ -279,6 +279,17 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
         return element >= 0.0;
       }
     ) == true);
+  }
+  
+  SECTION("Stopping criteria") {
+    optimiser.maximal_duration = std::chrono::seconds(10);
+    optimiser.maximal_evaluations = 1000;
+    auto&& result = optimiser.optimisation_function(mant::sphere_function<double, dimensions>(), initial_parameters);
+    CHECK(result.evaluations == 1000);
+    optimiser.maximal_duration = std::chrono::microseconds(1);
+    result = optimiser.optimisation_function(mant::sphere_function<double, dimensions>(), initial_parameters);
+    CHECK(result.duration > std::chrono::microseconds(1));
+    CHECK(result.duration < std::chrono::milliseconds(1));
   }
 }
 #endif
