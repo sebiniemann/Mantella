@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct random_search : optimiser<T, N> {
   random_search() noexcept;
 };
@@ -10,7 +10,7 @@ struct random_search : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 random_search<T, N>::random_search() noexcept 
     : optimiser<T, N>() {
   this->optimisation_function = [this](const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters) {
@@ -19,7 +19,7 @@ random_search<T, N>::random_search() noexcept
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
-      ++result.number_of_evaluations;
+      ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
@@ -31,14 +31,14 @@ random_search<T, N>::random_search() noexcept
         }
       }
       
-      if (result.number_of_evaluations >= this->maximal_number_of_evaluations) {
+      if (result.evaluations >= this->maximal_evaluations) {
         return result;
       } else if (result.duration >= this->maximal_duration) {
         return result;
       }
     }
     
-    while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
       std::array<T, N> parameter;
       std::generate(
         parameter.begin(), std::next(parameter.begin(), this->active_dimensions.size()),
@@ -47,7 +47,7 @@ random_search<T, N>::random_search() noexcept
           std::ref(random_number_generator())));
           
       const auto objective_value = problem.objective_function(parameter);
-      ++result.number_of_evaluations;
+      ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.best_objective_value) {
@@ -67,39 +67,11 @@ random_search<T, N>::random_search() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("random_search", "[random_search]") {
-  constexpr std::size_t number_of_dimensions = 3;
-  const mant::random_search<double, number_of_dimensions> optimiser; 
-
-  SECTION("Benchmarking") {
-    const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::ackley_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rastrigin_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::rosenbrock_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sphere_function<double, number_of_dimensions>),
-      std::unique_ptr<mant::problem<double, number_of_dimensions>>(new mant::sum_of_different_powers_function<double, number_of_dimensions>)
-    };
-    
-    std::array<mant::optimise_result<double, number_of_dimensions>, problems.size()> results;
-    std::transform(
-      problems.cbegin(), problems.cend(),
-      results.begin(),
-      [&optimiser](auto&& problem) {
-        return optimiser.optimisation_function(*problem, {{5.0, 5.0, 5.0}});
-      }
-    );
-    
-    std::cout << "Random search" << std::endl;
-    for (auto&& result : results) {
-      std::cout << "best_parameter: [ ";
-      std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
-      std::cout << "], best_objective_value: " << result.best_objective_value
-                << ", number_of_evaluations: " << result.number_of_evaluations
-                << ", duration: " << result.duration.count() << "ns" << std::endl;
-    }
-  }
+  constexpr unsigned dimensions = 3;
+  mant::random_search<double, dimensions> optimiser;
   
   SECTION("Boundary handling") {
-    mant::problem<double, number_of_dimensions> problem;
+    mant::problem<double, dimensions> problem;
     problem.objective_function = [](const auto& parameter) {
       return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
     };

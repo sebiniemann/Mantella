@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct sphere_function : problem<T, N> {
   sphere_function() noexcept;
 };
@@ -10,7 +10,7 @@ struct sphere_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 sphere_function<T, N>::sphere_function() noexcept 
     : problem<T, N>() {
   /*   n   /                \

@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct problem {
   std::function<T(
       const std::array<T, N>& parameter)> objective_function;
@@ -16,7 +16,7 @@ struct problem {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 constexpr problem<T, N>::problem() noexcept {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(N > 0, "");
