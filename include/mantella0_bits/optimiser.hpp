@@ -11,13 +11,13 @@ struct optimise_result {
   constexpr optimise_result() noexcept;
 };
 
-template <typename T1, unsigned N, template <class, unsigned> class T2>
+template <typename T, unsigned N>
 struct optimiser {
-  std::function<optimise_result<T1, N>(
-      const T2<T1, N>& problem,
-      const std::vector<std::array<T1, N>>& initial_parameters)> optimisation_function;
+  std::function<optimise_result<T, N>(
+      const mant::problem<T, N>& problem,
+      const std::vector<std::array<T, N>>& initial_parameters)> optimisation_function;
   
-  T1 acceptable_objective_value;
+  T acceptable_objective_value;
   unsigned maximal_evaluations;
   std::chrono::nanoseconds maximal_duration;
   
@@ -39,14 +39,13 @@ constexpr optimise_result<T, N>::optimise_result() noexcept
 
 };
 
-template <typename T1, unsigned N, template <class, unsigned> class T2>
-optimiser<T1, N, T2>::optimiser() noexcept 
-  : acceptable_objective_value(-std::numeric_limits<T1>::infinity()),
+template <typename T, unsigned N>
+optimiser<T, N>::optimiser() noexcept 
+  : acceptable_objective_value(-std::numeric_limits<T>::infinity()),
     maximal_evaluations(1'000 * N),
     maximal_duration(std::chrono::seconds(10)) {
-  static_assert(std::is_floating_point<T1>::value, "");
+  static_assert(std::is_floating_point<T>::value, "");
   static_assert(N > 0, "");
-  static_assert(std::is_base_of<problem<T1, N>, T2<T1, N>>::value, "");
   
   active_dimensions.resize(N);
   std::iota(active_dimensions.begin(), active_dimensions.end(), 0);
@@ -66,7 +65,7 @@ TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
 }
 
 TEST_CASE("optimiser", "[optimiser]") {
-  const mant::optimiser<double, 3, mant::problem> optimiser;
+  const mant::optimiser<double, 3> optimiser;
   
   CHECK(optimiser.acceptable_objective_value == -std::numeric_limits<double>::infinity());
   CHECK(optimiser.maximal_evaluations == 3000);

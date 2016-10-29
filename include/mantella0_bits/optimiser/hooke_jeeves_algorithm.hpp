@@ -1,10 +1,10 @@
 /**
 
 */
-template <typename T1, unsigned N, template <class, unsigned> class T2>
-struct hooke_jeeves_algorithm : optimiser<T1, N, T2> {
-  T1 initial_stepsize;
-  T1 stepsize_decrease;
+template <typename T, unsigned N>
+struct hooke_jeeves_algorithm : optimiser<T, N> {
+  T initial_stepsize;
+  T stepsize_decrease;
   
   hooke_jeeves_algorithm() noexcept;
 };
@@ -13,16 +13,16 @@ struct hooke_jeeves_algorithm : optimiser<T1, N, T2> {
 // Implementation
 //
 
-template <typename T1, unsigned N, template <class, unsigned> class T2>
-hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept 
-    : optimiser<T1, N, T2>(),
-      initial_stepsize(T1(1.0)), 
-      stepsize_decrease(T1(2.0)) {
-  this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
-    assert(stepsize_decrease > T1(1.0));
+template <typename T, unsigned N>
+hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept 
+    : optimiser<T, N>(),
+      initial_stepsize(T(1.0)), 
+      stepsize_decrease(T(2.0)) {
+  this->optimisation_function = [this](const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters) {
+    assert(stepsize_decrease > T(1.0));
     
     auto&& start_time  = std::chrono::steady_clock::now();
-    optimise_result<T1, N> result;
+    optimise_result<T, N> result;
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
@@ -45,7 +45,7 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
       }
     }
     
-    T1 stepsize = initial_stepsize;
+    T stepsize = initial_stepsize;
     
     
     while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
@@ -59,10 +59,10 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
           parameter.cbegin(), parameter.cend(),
           parameter.begin(),
           [](const auto element) {
-            if (element < T1(0.0)) {
-              return T1(0.0);
-            } else if(element > T1(1.0)) {
-              return T1(1.0);
+            if (element < T(0.0)) {
+              return T(0.0);
+            } else if(element > T(1.0)) {
+              return T(1.0);
             }
           
             return element;
@@ -89,13 +89,13 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
           return result;
         }
         
-        parameter.at(n) -= T1(2.0) * stepsize;
+        parameter.at(n) -= T(2.0) * stepsize;
         
         std::transform(
           parameter.cbegin(), parameter.cend(),
           parameter.begin(),
           [](const auto element) {
-            return std::fmin(std::fmax(element, T1(0.0)), T1(1.0));
+            return std::fmin(std::fmax(element, T(0.0)), T(1.0));
           });
         
         objective_value = problem.objective_function(parameter);
@@ -125,7 +125,7 @@ hooke_jeeves_algorithm<T1, N, T2>::hooke_jeeves_algorithm() noexcept
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
   constexpr unsigned dimensions = 3;
-  mant::hooke_jeeves_algorithm<double, dimensions, mant::problem> optimiser;
+  mant::hooke_jeeves_algorithm<double, dimensions> optimiser;
   
   SECTION("Default configuration") {
     CHECK(optimiser.initial_stepsize == 1.0);
