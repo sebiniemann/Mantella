@@ -74,7 +74,7 @@ do_doc() {
   if ! python3 ./.pre_processing.py; then AN_ERROR_OCCURED=1; fi
   
   if (( AN_ERROR_OCCURED == 0)); then
-    if ! sphinx-build -a . ./_html; then AN_ERROR_OCCURED=1; fi
+    if ! sphinx-build -E -a . ./_html; then AN_ERROR_OCCURED=1; fi
   fi
   
   finish_up
