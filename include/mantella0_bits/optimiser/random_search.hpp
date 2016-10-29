@@ -1,8 +1,8 @@
 /**
 
 */
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
-struct random_search : optimiser<T1, N, T2> {
+template <typename T, std::size_t N>
+struct random_search : optimiser<T, N> {
   random_search() noexcept;
 };
 
@@ -10,12 +10,12 @@ struct random_search : optimiser<T1, N, T2> {
 // Implementation
 //
 
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
-random_search<T1, N, T2>::random_search() noexcept 
-    : optimiser<T1, N, T2>() {
-  this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
+template <typename T, std::size_t N>
+random_search<T, N>::random_search() noexcept 
+    : optimiser<T, N>() {
+  this->optimisation_function = [this](const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters) {
     auto&& start_time  = std::chrono::steady_clock::now();
-    optimise_result<T1, N> result;
+    optimise_result<T, N> result;
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
@@ -39,11 +39,11 @@ random_search<T1, N, T2>::random_search() noexcept
     }
     
     while (result.duration < this->maximal_duration && result.number_of_evaluations < this->maximal_number_of_evaluations && result.best_objective_value > this->acceptable_objective_value) {
-      std::array<T1, N> parameter;
+      std::array<T, N> parameter;
       std::generate(
         parameter.begin(), std::next(parameter.begin(), this->active_dimensions.size()),
         std::bind(
-          std::uniform_real_distribution<T1>(0.0, 1.0),
+          std::uniform_real_distribution<T>(0.0, 1.0),
           std::ref(random_number_generator())));
           
       const auto objective_value = problem.objective_function(parameter);
@@ -68,7 +68,7 @@ random_search<T1, N, T2>::random_search() noexcept
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("random_search", "[random_search]") {
   constexpr std::size_t number_of_dimensions = 3;
-  const mant::random_search<double, number_of_dimensions, mant::problem> optimiser; 
+  const mant::random_search<double, number_of_dimensions> optimiser; 
 
   SECTION("Benchmarking") {
     const std::array<std::unique_ptr<mant::problem<double, number_of_dimensions>>, 5> problems = {

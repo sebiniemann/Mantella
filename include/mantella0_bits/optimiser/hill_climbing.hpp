@@ -1,10 +1,10 @@
 /**
 
 */
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
-struct hill_climbing : optimiser<T1, N, T2> {
-  T1 minimal_stepsize;
-  T1 maximal_stepsize;
+template <typename T, std::size_t N>
+struct hill_climbing : optimiser<T, N> {
+  T minimal_stepsize;
+  T maximal_stepsize;
   
   hill_climbing() noexcept;
 };
@@ -13,17 +13,17 @@ struct hill_climbing : optimiser<T1, N, T2> {
 // Implementation
 //
 
-template <typename T1, std::size_t N, template <class, std::size_t> class T2>
-hill_climbing<T1, N, T2>::hill_climbing() noexcept 
-    : optimiser<T1, N, T2>(),
-      minimal_stepsize(T1(0.0)),
-      maximal_stepsize(T1(0.1)) {
-  this->optimisation_function = [this](const T2<T1, N>& problem, const std::vector<std::array<T1, N>>& initial_parameters) {
-    assert(T1(0.0) <= minimal_stepsize && minimal_stepsize <= maximal_stepsize && minimal_stepsize <= T1(1.0));
-    assert(maximal_stepsize > T1(0.0));
+template <typename T, std::size_t N>
+hill_climbing<T, N>::hill_climbing() noexcept 
+    : optimiser<T, N>(),
+      minimal_stepsize(T(0.0)),
+      maximal_stepsize(T(0.1)) {
+  this->optimisation_function = [this](const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters) {
+    assert(T(0.0) <= minimal_stepsize && minimal_stepsize <= maximal_stepsize && minimal_stepsize <= T(1.0));
+    assert(maximal_stepsize > T(0.0));
     
     auto&& start_time  = std::chrono::steady_clock::now();
-    optimise_result<T1, N> result;
+    optimise_result<T, N> result;
     
     for (const auto& parameter : initial_parameters) {
       const auto objective_value = problem.objective_function(parameter);
@@ -53,7 +53,7 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
         parameter.cbegin(), parameter.cend(),
         parameter.begin(),
         [](const auto element) {
-          return std::fmin(std::fmax(element, T1(0.0)), T1(1.0));
+          return std::fmin(std::fmax(element, T(0.0)), T(1.0));
         });
         
       const auto objective_value = problem.objective_function(parameter);
@@ -78,7 +78,7 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hill_climbing", "[hill_climbing]") {
   constexpr std::size_t number_of_dimensions = 3;
-  const mant::hill_climbing<double, number_of_dimensions, mant::problem> optimiser;
+  const mant::hill_climbing<double, number_of_dimensions> optimiser;
   
   SECTION("Default configuration") {
     CHECK(optimiser.minimal_stepsize == 0.0);
