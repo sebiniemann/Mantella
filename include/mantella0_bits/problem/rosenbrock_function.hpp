@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct rosenbrock_function : problem<T, N> {
   rosenbrock_function() noexcept;
 };
@@ -10,7 +10,7 @@ struct rosenbrock_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 rosenbrock_function<T, N>::rosenbrock_function() noexcept 
     : problem<T, N>() {
   static_assert(N > 1, "");

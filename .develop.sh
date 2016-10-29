@@ -23,6 +23,7 @@ print_help() {
   echo -e "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
   echo -e '-t, --test                  Compiles and runs unit tests.'
   echo -e '-d, --doc                   Builds the documentation.'
+  echo -e '-b, --benchmark             Compiles and runs benchmarks.'
 }
 
 finish_up() {
@@ -36,46 +37,78 @@ finish_up() {
 }
 
 do_install() {
-  echo -e "${NOTICE_COLOR}Installing Mantella to \"${INSTALL_DIR}\"${RESET_COLOR}"
+  echo -e "${NOTICE_COLOR}Installing Mantella to \"${INSTALL_DIR}\".${RESET_COLOR}"
   
   echo -e "copy ./include/mantella* -> ${INSTALL_DIR}"
-  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; fi
+  if ! cp -R ./include/mantella* "${INSTALL_DIR}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
   finish_up
 }
 
 do_test() {
-  echo -e "${NOTICE_COLOR}Compiling and running tests${RESET_COLOR}"
+  echo -e "${NOTICE_COLOR}Compiling and running tests.${RESET_COLOR}"
   
   cd ./test || exit 1
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
-  if ! cmake ..; then AN_ERROR_OCCURED=1; fi
+  if ! cmake -DCMAKE_BUILD_TYPE=Debug ..; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! make clean tests; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! ./tests; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
-  if (( AN_ERROR_OCCURED == 0)); then
-    if ! make clean tests; then AN_ERROR_OCCURED=1; fi
-  fi
-  
-  if (( AN_ERROR_OCCURED == 0)); then
-    if ! ./tests; then AN_ERROR_OCCURED=1; fi
-  fi
-  
-  cd ../../ || exit 1
+  cd ../.. || exit 1
   
   finish_up
 }
 
 do_doc() {
-  echo -e "${NOTICE_COLOR}Building documentation${RESET_COLOR}"
+  echo -e "${NOTICE_COLOR}Building documentation.${RESET_COLOR}"
   
   cd ./doc || exit 1
   
-  if ! python3 ./.pre_processing.py; then AN_ERROR_OCCURED=1; fi
+  if ! python3 ./.pre_processing.py; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! sphinx-build -E -a . ./_html; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
-  if (( AN_ERROR_OCCURED == 0)); then
-    if ! sphinx-build -E -a . ./_html; then AN_ERROR_OCCURED=1; fi
+  cd .. || exit 1
+  
+  finish_up
+}
+
+do_benchmark() {
+  echo -e "${NOTICE_COLOR}Compiling and running benchmarks.${RESET_COLOR}"
+  
+  if [ -z $(pidof dockerd) ]; then
+    if ! service docker start; then AN_ERROR_OCCURED=1; finish_up; return; fi
   fi
+  
+  cd ./benchmark || exit 1
+  
+  local -a LIBRARIES=('mantella')
+  for LIBRARY in "${LIBRARIES[@]}"; do
+    cd "./${LIBRARY}" || exit 1
+    
+    if [ -z $(docker images -q "benchmark/${LIBRARY}") ]; then
+      if ! docker build -t "benchmark/${LIBRARY}":latest .; then AN_ERROR_OCCURED=1; finish_up; return; fi
+    fi
+    if [ -z $(docker ps -q -f name="benchmark_${LIBRARY}") ]; then
+      if ! docker run -v "$(pwd):/${LIBRARY}" -w "/${LIBRARY}" --name "benchmark_${LIBRARY}" -t -d "benchmark/${LIBRARY}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
+    fi
+    
+    docker exec "benchmark_${LIBRARY}" /bin/bash -c " \
+      if [ ! -d './build' ]; then mkdir build; fi && \
+      cd ./build && \
+      cmake .. && \
+      make clean benchmark && \
+      ./benchmark && \
+      cp benchmark.mat ..
+    "
+
+    cd .. || exit 1
+  done
+  
+  octave benchmark.m
+  
+  cd .. || exit 1
   
   finish_up
 }
@@ -107,6 +140,9 @@ else
       ;;
       -d|--doc)
         do_doc
+      ;;
+      -b|--benchmark)
+        do_benchmark
       ;;
       *)
         error "Unexpected option ${OPTION}"
