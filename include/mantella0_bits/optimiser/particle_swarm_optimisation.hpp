@@ -143,45 +143,6 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     CHECK(optimiser.maximal_global_attraction == Approx(0.5 + std::log(2.0)));
   }
   
-  SECTION("Benchmarking") {
-    const std::array<std::unique_ptr<mant::problem<double, dimensions>>, 5> problems = {
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::ackley_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
-    };
-    
-    std::vector<std::array<double, dimensions>> initial_parameters(10);
-    for (auto& parameter : initial_parameters) {
-      std::generate(
-        parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
-        std::bind(
-          std::uniform_real_distribution<double>(0.0, 1.0),
-          std::ref(random_number_generator())));
-    }
-    
-    std::array<mant::optimise_result<double, dimensions>, problems.size()> results;
-    optimiser.maximal_duration = std::chrono::seconds(10);
-    optimiser.maximal_evaluations = 10'000'000;
-    std::transform(
-      problems.cbegin(), problems.cend(),
-      results.begin(),
-      [&optimiser, &initial_parameters](auto&& problem) {
-        return optimiser.optimisation_function(*problem, initial_parameters);
-      }
-    );
-    
-    std::cout << "Particle swarm optimisation" << std::endl;
-    for (auto&& result : results) {
-      std::cout << "best_parameter: [ ";
-      std::copy(result.best_parameter.cbegin(), result.best_parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
-      std::cout << "], best_objective_value: " << result.best_objective_value
-                << ", evaluations: " << result.evaluations
-                << ", duration: " << result.duration.count() << "ns" << std::endl;
-    }
-  }
-  
   SECTION("Boundary handling") {
     mant::problem<double, dimensions> problem;
     problem.objective_function = [](const auto& parameter) {
