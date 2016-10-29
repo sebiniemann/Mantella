@@ -17,10 +17,8 @@ RUN apt-get install -y clang-3.8 && \
 # Installs Mantella
 RUN apt-get install -y wget && \
     wget -O mantella.tar.gz https://github.com/Mantella/Mantella/archive/master.tar.gz && \
-    mkdir mantella && \
-    tar -xzf mantella.tar.gz -C ./mantella --strip-components=1 && \
-    cp -R mantella/include/mantella* /usr/include/ && \
-    rm -Rf mantella.tar.gz mantella/ && \
+    tar -xzf mantella.tar.gz -C /usr/include --strip-components=2 --wildcards Mantella-master/include/mantella* && \
+    rm -Rf mantella.tar.gz && \
     apt-get remove -y --purge wget && \
     apt-get autoremove -y --purge
     

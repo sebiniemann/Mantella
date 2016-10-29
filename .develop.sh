@@ -52,7 +52,7 @@ do_test() {
   if [ ! -d "./build" ]; then mkdir build; fi
   cd ./build || exit 1
   
-  if ! cmake ..; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! cmake -DCMAKE_BUILD_TYPE=Debug ..; then AN_ERROR_OCCURED=1; finish_up; return; fi
   if ! make clean tests; then AN_ERROR_OCCURED=1; finish_up; return; fi
   if ! ./tests; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
@@ -62,7 +62,7 @@ do_test() {
 }
 
 do_doc() {
-  echo "${NOTICE_COLOR}Building documentation.${RESET_COLOR}"
+  echo -e "${NOTICE_COLOR}Building documentation.${RESET_COLOR}"
   
   cd ./doc || exit 1
   
@@ -75,7 +75,7 @@ do_doc() {
 }
 
 do_benchmark() {
-  echo "${NOTICE_COLOR}Compiling and running benchmarks.${RESET_COLOR}"
+  echo -e "${NOTICE_COLOR}Compiling and running benchmarks.${RESET_COLOR}"
   
   if [ -z $(pidof dockerd) ]; then
     if ! service docker start; then AN_ERROR_OCCURED=1; finish_up; return; fi
@@ -99,13 +99,14 @@ do_benchmark() {
       cd ./build && \
       cmake .. && \
       make clean benchmark && \
-      ./benchmark
+      ./benchmark && \
+      cp benchmark.mat ..
     "
 
     cd .. || exit 1
   done
   
-  # TODO Post-processing with Octave
+  octave benchmark.m
   
   cd .. || exit 1
   

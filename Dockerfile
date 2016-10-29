@@ -29,9 +29,7 @@ RUN apt-get install -y clang-3.8 && \
 RUN apt-get install -y cmake
 RUN apt-get install -y wget && \
     wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
-    mkdir catch && \
-    tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
-    cp catch/single_include/catch.hpp /usr/include/ && \
+    tar -xzf catch.tar.gz -C /usr/include --strip-components=2 Catch-1.5.0/single_include/catch.hpp && \
     rm -Rf catch.tar.gz catch/ && \
     apt-get remove -y --purge wget && \
     apt-get autoremove -y --purge

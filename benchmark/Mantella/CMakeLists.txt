@@ -9,6 +9,11 @@ add_executable(benchmark benchmark.cpp)
 set_property(TARGET benchmark PROPERTY CXX_STANDARD 14)
 set_property(TARGET benchmark PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_compile_options(
+  -O3
+  -march=native
+  -ffast-math)
+
 find_path(MANTELLA_INCLUDE_DIR mantella0)
 target_include_directories(benchmark SYSTEM PRIVATE ${MANTELLA_INCLUDE_DIR})
 
