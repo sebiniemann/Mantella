@@ -70,7 +70,6 @@ hill_climbing<T1, N, T2>::hill_climbing() noexcept
   };
 }
 
-
 //
 // Unit tests
 //
