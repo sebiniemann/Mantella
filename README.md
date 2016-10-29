@@ -9,6 +9,15 @@ Version 0.61.0
 
 **Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
 
+**Installation**
+
+Download Mantella and copy the include folder's content into the system's default search path for header files.
+``` bash
+wget -O mantella.tar.gz https://github.com/Mantella/Mantella/archive/master.tar.gz
+tar -xzf mantella.tar.gz -C /usr/include --strip-components=2 --wildcards Mantella-master/include/mantella*
+```
+
+**Usage**
 ``` cpp
 #include <mantella0>
 #include <iostream> // Used for std::cout
