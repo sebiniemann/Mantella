@@ -138,13 +138,24 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
       return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
     };
     
-    const auto&& result = optimiser.optimisation_function(problem, {problem.lower_bounds});
+    const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
       result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
       [](const auto element) { 
         return element >= 0.0;
       }
     ) == true);
+  }
+  
+  SECTION("Stopping criteria") {
+    optimiser.maximal_duration = std::chrono::seconds(10);
+    optimiser.maximal_evaluations = 1000;
+    auto&& result = optimiser.optimisation_function(mant::sphere_function<double, dimensions>(), {{0.0, 0.0, 0.0}});
+    CHECK(result.evaluations == 1000);
+    optimiser.maximal_duration = std::chrono::microseconds(1);
+    result = optimiser.optimisation_function(mant::sphere_function<double, dimensions>(), {{0.0, 0.0, 0.0}});
+    CHECK(result.duration > std::chrono::microseconds(1));
+    CHECK(result.duration < std::chrono::milliseconds(1));
   }
 }
 #endif
