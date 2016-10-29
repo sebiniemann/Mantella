@@ -3,7 +3,7 @@
 Version 0.61.0
 ==============
 
-[![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai/branch/master?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/3285/badge.svg)](https://scan.coverity.com/projects/3285) 
+[![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/2haeycl3xl1n66ai/branch/master?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/10668/badge.svg)](https://scan.coverity.com/projects/10668) 
 
 [Mantella](http://mantella.info/) is an efficiency-focused C++14 header-only library for analysing and solving optimisation problems. As it only depends on the C++ standard library, Linux, Windows and Mac OS X support is a given.
 
