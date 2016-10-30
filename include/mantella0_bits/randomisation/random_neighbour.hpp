@@ -1,5 +1,5 @@
 /**
-random_neighbour
+Random neighbour
 ================
 
 .. cpp:function:: template<T, N> random_neighbour(parameter, minimal_distance, maximal_distance, active_dimensions)
@@ -7,12 +7,7 @@ random_neighbour
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``std::size_t``)
-
-      - Lorem ipsum dolor sit amet
   
   **Function parameters**
   

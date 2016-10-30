@@ -1,18 +1,13 @@
 /**
-hill_climbing
-=============
+Hill climbing
+-------------
 
 .. cpp:class:: template<T, N> hill_climbing
 
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
   
   .. cpp:member:: T minimal_stepsize
   
@@ -55,11 +50,11 @@ hill_climbing<T, N>::hill_climbing() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         }
       }
@@ -71,8 +66,8 @@ hill_climbing<T, N>::hill_climbing() noexcept
       }
     }
     
-    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
-      auto&& parameter = random_neighbour(result.best_parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
+      auto&& parameter = random_neighbour(result.parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
       
       std::transform(
         parameter.cbegin(), parameter.cend(),
@@ -85,9 +80,9 @@ hill_climbing<T, N>::hill_climbing() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
       }
     }
     
@@ -117,7 +112,7 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
     
     const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
-      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
       [](const auto element) { 
         return element >= 0.0;
       }

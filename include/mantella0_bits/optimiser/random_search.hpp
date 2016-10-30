@@ -1,5 +1,5 @@
 /**
-random_search
+Random search
 =============
 
 .. cpp:class:: template<T, N> random_search
@@ -7,12 +7,7 @@ random_search
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
       
   .. cpp:function:: random_search()
   
@@ -39,11 +34,11 @@ random_search<T, N>::random_search() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         }
       }
@@ -55,7 +50,7 @@ random_search<T, N>::random_search() noexcept
       }
     }
     
-    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
       std::array<T, N> parameter;
       std::generate(
         parameter.begin(), std::next(parameter.begin(), this->active_dimensions.size()),
@@ -67,9 +62,9 @@ random_search<T, N>::random_search() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
       }
       
     }
@@ -95,7 +90,7 @@ TEST_CASE("random_search", "[random_search]") {
     
     const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
-      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
       [](const auto element) { 
         return element >= 0.0;
       }

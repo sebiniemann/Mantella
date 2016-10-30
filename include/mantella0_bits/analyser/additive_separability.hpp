@@ -1,5 +1,5 @@
 /**
-additive_separability
+Additive separability
 =====================
 
 .. cpp:function:: template<T1, N, T2> additive_separability(problem, evaluations, acceptable_deviation)
@@ -7,16 +7,8 @@ additive_separability
   **Template parameters**
   
     - **T1** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **T2** (derived from ``mant::problem<T1, N>``)
-
-      - Lorem ipsum dolor sit amet
   
   **Function parameters**
   

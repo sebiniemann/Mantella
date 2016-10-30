@@ -1,5 +1,5 @@
 /**
-sphere_function
+Sphere function
 ===============
 
 .. cpp:class:: template<T, N> sphere_function
@@ -7,12 +7,7 @@ sphere_function
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
       
   .. cpp:function:: sphere_function()
   

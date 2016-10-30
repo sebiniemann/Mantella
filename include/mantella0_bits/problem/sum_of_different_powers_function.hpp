@@ -1,5 +1,5 @@
 /**
-sum_of_different_powers_function
+Sum of different powers function
 ================================
 
 .. cpp:class:: template<T, N> sum_of_different_powers_function
@@ -7,12 +7,7 @@ sum_of_different_powers_function
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
       
   .. cpp:function:: sum_of_different_powers_function()
   

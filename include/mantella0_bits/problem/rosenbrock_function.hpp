@@ -1,5 +1,5 @@
 /**
-rosenbrock_function
+Rosenbrock function
 ===================
 
 .. cpp:class:: template<T, N> rosenbrock_function
@@ -7,12 +7,7 @@ rosenbrock_function
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
       
   .. cpp:function:: rosenbrock_function()
   

@@ -18,6 +18,7 @@ nitpick_ignore = [
   ('cpp:type', 'T'),
   ('cpp:type', 'T1'),
   ('cpp:type', 'T2'),
+  ('cpp:type', 'T3'),
   ('cpp:type', 'N'),
   ('cpp:type', 'std'),
   ('cpp:type', 'std::size_t'),
@@ -25,6 +26,14 @@ nitpick_ignore = [
   ('cpp:type', 'std::vector'),
   ('cpp:type', 'std::function'),
   ('cpp:type', 'parameter'),
+  ('cpp:type', 'evaluations'),
+  ('cpp:type', 'acceptable_deviation'),
+  ('cpp:type', 'std::chrono'),
+  ('cpp:type', 'std::chrono::nanoseconds'),
+  ('cpp:type', 'initial_parameters'),
+  ('cpp:type', 'maximal_distance'),
+  ('cpp:type', 'minimal_distance'),
+  ('cpp:type', 'active_dimensions'),
 ]
 
 master_doc = 'mantella'

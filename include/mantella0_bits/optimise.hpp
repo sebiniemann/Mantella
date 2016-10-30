@@ -1,26 +1,15 @@
 /**
-optimise
-========
+Optimisation
+============
 
-.. cpp:function:: template<T1, N, T2, T3> optimise(problem[, optimiser[, initial_parameters]])
+.. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser, initial_parameters)
 
   **Template parameters**
   
-    - **T1** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
-    - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
-    
-    - **T2** (derived from ``mant::problem<T1, N>``)
-
-      - Lorem ipsum dolor sit amet
-    
-    - **T3** (derived from ``mant::optimiser<T1, N>``)
-
-      - Lorem ipsum dolor sit amet
+    - **T1** (A floating point type)
+    - **N** (An ``unsigned`` number)
+    - **T2** (A type derived from ``problem<T1, N>``)
+    - **T3** (A type derived from ``optimiser<T1, N>``)
   
   **Function parameters**
   
@@ -100,9 +89,9 @@ optimise_result<T1, N> optimise(
   // Maps the parameter's bounds back from [0, 1] to [*lower_bounds*, *upper_bounds*], permutes the parameter to match 
   // the active dimensions.
   for (unsigned n = optimiser.active_dimensions.size(); n > 0; --n) {
-    result.best_parameter.at(optimiser.active_dimensions.at(n - 1)) = 
+    result.parameter.at(optimiser.active_dimensions.at(n - 1)) = 
       problem.lower_bounds.at(n - 1) +
-      result.best_parameter.at(n - 1) * (
+      result.parameter.at(n - 1) * (
         problem.upper_bounds.at(n - 1) - problem.lower_bounds.at(n - 1)
       );
   }
@@ -154,8 +143,8 @@ TEST_CASE("optimise", "[optimise]") {
   optimiser.acceptable_objective_value = 1e-12;
   
   const auto&& result = mant::optimise(problem, optimiser, {{-3.2, 4.1}});
-  CHECK((result.best_parameter == std::array<double, 2>({0.50000004768371475, 0.49999997019767761})));
-  CHECK(result.best_objective_value == Approx(5.57065506021764692e-13));
+  CHECK((result.parameter == std::array<double, 2>({0.50000004768371475, 0.49999997019767761})));
+  CHECK(result.objective_value == Approx(5.57065506021764692e-13));
   CHECK(result.evaluations == 189);
   
   CHECK_NOTHROW(mant::optimise(problem, optimiser));

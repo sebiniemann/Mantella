@@ -1,24 +1,20 @@
 /**
-optimise_result
-===============
+
+Optimisation result
+===================
 
 .. cpp:class:: template<T, N> optimise_result
 
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: std::array<T, N> best_parameter
+  .. cpp:member:: std::array<T, N> parameter
   
     Lorem ipsum dolor sit amet
   
-  .. cpp:member:: T best_objective_value
+  .. cpp:member:: T objective_value
   
     Lorem ipsum dolor sit amet
   
@@ -32,14 +28,14 @@ optimise_result
 */
 template <typename T, unsigned N>
 struct optimise_result {
-  std::array<T, N> best_parameter{};
-  T best_objective_value = std::numeric_limits<T>::infinity();
+  std::array<T, N> parameter{};
+  T objective_value = std::numeric_limits<T>::infinity();
   unsigned evaluations = 0;
   std::chrono::nanoseconds duration = std::chrono::nanoseconds(0);
 };
 
 /**
-optimiser
+Optimiser
 =========
 
 .. cpp:class:: template<T, N> optimiser
@@ -54,7 +50,7 @@ optimiser
 
       - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: std::function<optimise_result<T, N>(const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters)> optimisation_function
+  .. cpp:member:: std::function optimisation_function
   
     Lorem ipsum dolor sit amet
   
@@ -77,6 +73,14 @@ optimiser
   .. cpp:function:: optimiser()
   
     Lorem ipsum dolor sit amet
+    
+.. toctree::
+  
+  optimiser/hill_climbing
+  optimiser/hooke_jeeves_algorithm
+  optimiser/nelder_mead_method
+  optimiser/particle_swarm_optimisation
+  optimiser/random_search
 */
 template <typename T, unsigned N>
 struct optimiser {
@@ -117,7 +121,7 @@ optimiser<T, N>::optimiser() noexcept
 TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
   constexpr mant::optimise_result<double, 3> result{};
   
-  CHECK(result.best_objective_value == std::numeric_limits<double>::infinity());
+  CHECK(result.objective_value == std::numeric_limits<double>::infinity());
   CHECK(result.evaluations == 0);
   CHECK(result.duration == std::chrono::nanoseconds(0));
 }

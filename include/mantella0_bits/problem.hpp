@@ -1,20 +1,15 @@
 /**
-problem
-=======
+Problems
+========
 
 .. cpp:class:: template<T, N> problem
 
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: std::function<T(const std::array<T, N>& parameter)> objective_function
+  .. cpp:member:: std::function objective_function
   
     Lorem ipsum dolor sit amet
   
@@ -29,6 +24,14 @@ problem
   .. cpp:function:: problem()
   
     Lorem ipsum dolor sit amet
+    
+.. toctree::
+  
+  problem/ackley_function
+  problem/rastrigin_function
+  problem/rosenbrock_function
+  problem/sphere_function
+  problem/sum_of_different_powers_function
 */
 template <typename T, unsigned N>
 struct problem {

@@ -1,5 +1,5 @@
 /**
-rastrigin_function
+Rastrigin function
 ==================
 
 .. cpp:class:: template<T, N> rastrigin_function
@@ -7,12 +7,7 @@ rastrigin_function
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
       
   .. cpp:function:: rastrigin_function()
   

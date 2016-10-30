@@ -1,10 +1,10 @@
-Welcome to Mantella's documentation!
-====================================
+Welcome to Mantella's API documentation!
+========================================
 
 Contents:
 
 .. toctree::
-  :maxdepth: 3
+  :numbered:
   
   api_reference/problem
   api_reference/optimiser

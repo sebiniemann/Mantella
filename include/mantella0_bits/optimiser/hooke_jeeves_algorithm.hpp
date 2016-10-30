@@ -1,5 +1,5 @@
 /**
-hooke_jeeves_algorithm
+Hooke-Jeeves algorithm
 ======================
 
 .. cpp:class:: template<T, N> hooke_jeeves_algorithm
@@ -7,12 +7,7 @@ hooke_jeeves_algorithm
   **Template parameters**
   
     - **T** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
     - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
   
   .. cpp:member:: T initial_stepsize
   
@@ -54,11 +49,11 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         }
       }
@@ -73,11 +68,11 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
     T stepsize = initial_stepsize;
     
     
-    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
       bool is_improving = false;
 
       for (unsigned n = 0; n < this->active_dimensions.size(); ++n) {
-        auto parameter = result.best_parameter;
+        auto parameter = result.parameter;
         parameter.at(n) += stepsize;
         
         std::transform(
@@ -97,11 +92,11 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
         ++result.evaluations;
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
-        if (objective_value < result.best_objective_value) {
-          result.best_parameter = parameter;
-          result.best_objective_value = objective_value;
+        if (objective_value < result.objective_value) {
+          result.parameter = parameter;
+          result.objective_value = objective_value;
           
-          if (result.best_objective_value <= this->acceptable_objective_value) {
+          if (result.objective_value <= this->acceptable_objective_value) {
             return result;
           }
           
@@ -127,9 +122,9 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
         ++result.evaluations;
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
-        if (objective_value < result.best_objective_value) {
-          result.best_parameter = parameter;
-          result.best_objective_value = objective_value;
+        if (objective_value < result.objective_value) {
+          result.parameter = parameter;
+          result.objective_value = objective_value;
           is_improving = true;
         }
       }
@@ -165,7 +160,7 @@ TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
     
     const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
-      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
+      result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
       [](const auto element) { 
         return element >= 0.0;
       }
