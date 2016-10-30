@@ -1,5 +1,22 @@
 /**
+rosenbrock_function
+===================
 
+.. cpp:class:: template<T, N> rosenbrock_function
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: rosenbrock_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct rosenbrock_function : problem<T, N> {

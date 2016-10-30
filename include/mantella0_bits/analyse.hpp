@@ -1,8 +1,66 @@
+/**
+analyse_result
+==============
+
+.. cpp:class:: template<T, N> analyse_result
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::array<unsigned, N> additive_separability
+  
+    Lorem ipsum dolor sit amet
+*/
 template <typename T, unsigned N>
 struct analyse_result {
   std::array<unsigned, N> additive_separability;
 };
 
+/**
+analyse
+=======
+
+.. cpp:function:: template<T1, N, T2> analyse(problem, evaluations, acceptable_deviation)
+
+  **Template parameters**
+  
+    - **T1** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **T2** (derived from ``mant::problem<T1, N>``)
+
+      - Lorem ipsum dolor sit amet
+  
+  **Function parameters**
+  
+    - **problem** (``T2``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **evaluations** (``unsigned``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **acceptable_deviation** (``T1``)
+    
+      - Lorem ipsum dolor sit amet
+    
+  **Return** (``analyse_result``)
+    
+      - Lorem ipsum dolor sit amet
+*/
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,

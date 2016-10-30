@@ -1,16 +1,83 @@
 /**
+optimise_result
+===============
 
+.. cpp:class:: template<T, N> optimise_result
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::array<T, N> best_parameter
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T best_objective_value
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: unsigned evaluations
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::chrono::nanoseconds duration
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct optimise_result {
-  std::array<T, N> best_parameter;
-  T best_objective_value;
-  unsigned evaluations;
-  std::chrono::nanoseconds duration;
-  
-  constexpr optimise_result() noexcept;
+  std::array<T, N> best_parameter{};
+  T best_objective_value = std::numeric_limits<T>::infinity();
+  unsigned evaluations = 0;
+  std::chrono::nanoseconds duration = std::chrono::nanoseconds(0);
 };
 
+/**
+optimiser
+=========
+
+.. cpp:class:: template<T, N> optimiser
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::function<optimise_result<T, N>(const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters)> optimisation_function
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T acceptable_objective_value
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: unsigned maximal_evaluations
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::chrono::nanoseconds maximal_duration
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::vector<unsigned> active_dimensions
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: optimiser()
+  
+    Lorem ipsum dolor sit amet
+*/
 template <typename T, unsigned N>
 struct optimiser {
   std::function<optimise_result<T, N>(
@@ -31,15 +98,6 @@ struct optimiser {
 //
 
 template <typename T, unsigned N>
-constexpr optimise_result<T, N>::optimise_result() noexcept
-  : best_parameter{},
-    best_objective_value(std::numeric_limits<T>::infinity()),
-    evaluations(0),
-    duration(std::chrono::nanoseconds(0)) {
-
-};
-
-template <typename T, unsigned N>
 optimiser<T, N>::optimiser() noexcept 
   : acceptable_objective_value(-std::numeric_limits<T>::infinity()),
     maximal_evaluations(1'000 * N),
@@ -57,7 +115,7 @@ optimiser<T, N>::optimiser() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
-  constexpr mant::optimise_result<double, 3> result;
+  constexpr mant::optimise_result<double, 3> result{};
   
   CHECK(result.best_objective_value == std::numeric_limits<double>::infinity());
   CHECK(result.evaluations == 0);

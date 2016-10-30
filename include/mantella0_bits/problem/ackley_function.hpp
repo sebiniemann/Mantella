@@ -1,5 +1,22 @@
 /**
+ackley_function
+===============
 
+.. cpp:class:: template<T, N> ackley_function
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: ackley_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct ackley_function : problem<T, N> {

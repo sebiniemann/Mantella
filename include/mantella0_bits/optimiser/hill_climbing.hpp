@@ -1,5 +1,30 @@
 /**
+hill_climbing
+=============
 
+.. cpp:class:: template<T, N> hill_climbing
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T minimal_stepsize
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_stepsize
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: hill_climbing()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct hill_climbing : optimiser<T, N> {

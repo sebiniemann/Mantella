@@ -2,7 +2,7 @@
 additive_separability
 =====================
 
-.. cpp:function:: template<T1, N, T2> additive_separability(problem, number_of_evaluations, acceptable_deviation)
+.. cpp:function:: template<T1, N, T2> additive_separability(problem, evaluations, acceptable_deviation)
 
   **Template parameters**
   
@@ -10,7 +10,7 @@ additive_separability
 
       - Lorem ipsum dolor sit amet
     
-    - **N** (``std::size_t``)
+    - **N** (``unsigned``)
 
       - Lorem ipsum dolor sit amet
     
@@ -24,7 +24,7 @@ additive_separability
     
       - Lorem ipsum dolor sit amet
   
-    - **number_of_evaluations** (``unsigned``)
+    - **evaluations** (``unsigned``)
     
       - Lorem ipsum dolor sit amet
   
@@ -32,7 +32,7 @@ additive_separability
     
       - Lorem ipsum dolor sit amet
     
-  **Return**
+  **Return** (``std::array<unsigned, N>``)
     
       - Lorem ipsum dolor sit amet
 */

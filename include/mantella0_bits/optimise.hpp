@@ -1,3 +1,45 @@
+/**
+optimise
+========
+
+.. cpp:function:: template<T1, N, T2, T3> optimise(problem[, optimiser[, initial_parameters]])
+
+  **Template parameters**
+  
+    - **T1** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **T2** (derived from ``mant::problem<T1, N>``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **T3** (derived from ``mant::optimiser<T1, N>``)
+
+      - Lorem ipsum dolor sit amet
+  
+  **Function parameters**
+  
+    - **problem** (``T2``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **optimiser** (``T3``, **optional**)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **initial_parameters** (``T1``, **optional**)
+    
+      - Lorem ipsum dolor sit amet
+    
+  **Return** (``optimise_result``)
+    
+      - Lorem ipsum dolor sit amet
+*/
 template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem,

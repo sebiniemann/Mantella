@@ -1,5 +1,38 @@
 /**
+nelder_mead_method
+==================
 
+.. cpp:class:: template<T, N> nelder_mead_method
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T reflection_weight
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T expansion_weight
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T contraction_weight
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T shrinking_weight
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: nelder_mead_method()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct nelder_mead_method : optimiser<T, N> {

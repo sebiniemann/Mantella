@@ -1,5 +1,34 @@
 /**
+problem
+=======
 
+.. cpp:class:: template<T, N> problem
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::function<T(const std::array<T, N>& parameter)> objective_function
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::array<T, N> lower_bounds
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::array<T, N> upper_bounds
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: problem()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct problem {

@@ -1,5 +1,22 @@
 /**
+random_search
+=============
 
+.. cpp:class:: template<T, N> random_search
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: random_search()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct random_search : optimiser<T, N> {

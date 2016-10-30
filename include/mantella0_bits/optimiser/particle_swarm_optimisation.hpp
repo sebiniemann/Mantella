@@ -1,5 +1,38 @@
 /**
+particle_swarm_optimisation
+===========================
 
+.. cpp:class:: template<T, N> particle_swarm_optimisation
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T initial_velocity
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_acceleration
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_local_attraction
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_global_attraction
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: particle_swarm_optimisation()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct particle_swarm_optimisation : optimiser<T, N> {

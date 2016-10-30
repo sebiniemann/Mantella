@@ -1,5 +1,22 @@
 /**
+rastrigin_function
+==================
 
+.. cpp:class:: template<T, N> rastrigin_function
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: rastrigin_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct rastrigin_function : problem<T, N> {

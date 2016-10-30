@@ -1,5 +1,30 @@
 /**
+hooke_jeeves_algorithm
+======================
 
+.. cpp:class:: template<T, N> hooke_jeeves_algorithm
+
+  **Template parameters**
+  
+    - **T** (``floating point``)
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** (``unsigned``)
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T initial_stepsize
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T stepsize_decrease
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: hooke_jeeves_algorithm()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct hooke_jeeves_algorithm : optimiser<T, N> {
