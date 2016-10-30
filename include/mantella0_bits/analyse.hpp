@@ -6,8 +6,8 @@ Analysing result
 
   **Template parameters**
   
-    - **T** (``floating point``)
-    - **N** (``unsigned``)
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
   
   .. cpp:member:: std::array<unsigned, N> additive_separability
   
@@ -26,17 +26,9 @@ Analysing
 
   **Template parameters**
   
-    - **T1** (``floating point``)
-
-      - Lorem ipsum dolor sit amet
-    
-    - **N** (``unsigned``)
-
-      - Lorem ipsum dolor sit amet
-    
-    - **T2** (derived from ``problem<T1, N>``)
-
-      - Lorem ipsum dolor sit amet
+    - **T1** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+    - **T2** - A type derived from :cpp:any:`problem` ``<T1, N>``
   
   **Function parameters**
   
@@ -44,7 +36,7 @@ Analysing
     
       - Lorem ipsum dolor sit amet
   
-    - **evaluations** (``unsigned``)
+    - **evaluations** - The (``unsigned``) number of dimensions 
     
       - Lorem ipsum dolor sit amet
   

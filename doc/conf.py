@@ -5,7 +5,7 @@ copyright = u'2016, Sebastian Niemann, Oskar Pusz, Daniel Kiechle, Wolf Bock von
 author = u'Mantella team and contributors'
 github_url = 'https://github.com/SebastianNiemann/Mantella'
 
-version = u'0.61'
+version = u'0.70'
 release = version + '.0'
 
 pygments_style = 'sphinx'

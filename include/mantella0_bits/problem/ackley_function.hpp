@@ -6,8 +6,8 @@ Ackley function
 
   **Template parameters**
   
-    - **T** (``floating point``)
-    - **N** (``unsigned``)
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
       
   .. cpp:function:: ackley_function()
   

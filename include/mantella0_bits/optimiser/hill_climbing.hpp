@@ -6,8 +6,8 @@ Hill climbing
 
   **Template parameters**
   
-    - **T** (``floating point``)
-    - **N** (``unsigned``)
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
   
   .. cpp:member:: T minimal_stepsize
   
@@ -113,9 +113,7 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
     const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
       result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto element) { 
-        return element >= 0.0;
-      }
+      std::bind(std::greater_equal<double>{}, std::placeholders::_1, 0.0)
     ) == true);
   }
   

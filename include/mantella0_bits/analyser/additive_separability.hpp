@@ -6,9 +6,9 @@ Additive separability
 
   **Template parameters**
   
-    - **T1** (``floating point``)
-    - **N** (``unsigned``)
-    - **T2** (derived from ``mant::problem<T1, N>``)
+    - **T1** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+    - **T2** - A type derived from :cpp:any:`problem` ``<T1, N>``
   
   **Function parameters**
   
@@ -16,7 +16,7 @@ Additive separability
     
       - Lorem ipsum dolor sit amet
   
-    - **evaluations** (``unsigned``)
+    - **evaluations** - The (``unsigned``) number of dimensions 
     
       - Lorem ipsum dolor sit amet
   

@@ -7,8 +7,8 @@ Optimisation result
 
   **Template parameters**
   
-    - **T** (``floating point``)
-    - **N** (``unsigned``)
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
   
   .. cpp:member:: std::array<T, N> parameter
   
@@ -42,11 +42,11 @@ Optimiser
 
   **Template parameters**
   
-    - **T** (``floating point``)
+    - **T** - A floating point type
 
       - Lorem ipsum dolor sit amet
     
-    - **N** (``unsigned``)
+    - **N** - The (``unsigned``) number of dimensions 
 
       - Lorem ipsum dolor sit amet
   

@@ -6,8 +6,8 @@ Sum of different powers function
 
   **Template parameters**
   
-    - **T** (``floating point``)
-    - **N** (``unsigned``)
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
       
   .. cpp:function:: sum_of_different_powers_function()
   

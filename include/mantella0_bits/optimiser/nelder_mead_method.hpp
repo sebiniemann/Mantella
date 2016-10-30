@@ -6,8 +6,8 @@ Nelder-Mead method
 
   **Template parameters**
   
-    - **T** (``floating point``)
-    - **N** (``unsigned``)
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
   
   .. cpp:member:: T reflection_weight
   
@@ -303,9 +303,7 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
     const auto&& result = optimiser.optimisation_function(problem, initial_parameters);
     CHECK(std::all_of(
       result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto element) { 
-        return element >= 0.0;
-      }
+      std::bind(std::greater_equal<double>{}, std::placeholders::_1, 0.0)
     ) == true);
   }
   

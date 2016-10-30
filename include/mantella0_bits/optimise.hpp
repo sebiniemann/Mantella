@@ -4,26 +4,46 @@ Optimisation
 
 .. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser, initial_parameters)
 
+  **Shortcuts**
+  
+    .. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser)
+    
+      - Calls :cpp:any:`optimise` ``(problem, optimiser, initial_parameters)``.
+      - The number of initial parameters will be
+      
+        - ... ``N + 1`` if the optimiser is :cpp:any:`nelder_mead_method` ...
+        - ... ``10 * N`` if the optimiser is :cpp:any:`particle_swarm_optimisation` ...
+        - ... ``1`` for all other optimisers.
+        
+      - Each parameter is randomly drawn from ``[0, 1]``.
+    
+    .. cpp:function:: template<T1, N, T2> optimise(problem)
+    
+      - Calls :cpp:any:`optimise` ``(problem, optimiser)``.
+      - Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
+
   **Template parameters**
   
-    - **T1** (A floating point type)
-    - **N** (An ``unsigned`` number)
-    - **T2** (A type derived from ``problem<T1, N>``)
-    - **T3** (A type derived from ``optimiser<T1, N>``)
+    - **T1** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+    - **T2** - A type derived from ``problem<T1, N>``
+    - **T3** - A type derived from ``optimiser<T1, N>``
   
   **Function parameters**
   
     - **problem** (``T2``)
     
-      - Lorem ipsum dolor sit amet
+      - The problem to be optimised.
+      - The problem's boundaries will be remapped to ``[0, 1]``. However, the provided problem remains unchanged.
   
-    - **optimiser** (``T3``, **optional**)
+    - **optimiser** (``T3``)
     
-      - Lorem ipsum dolor sit amet
+      - The optimiser to be used to solve the problem.
+      - The optimiser is assumed to 
   
-    - **initial_parameters** (``T1``, **optional**)
+    - **initial_parameters** (``T1``)
     
-      - Lorem ipsum dolor sit amet
+      - The initial parameters
     
   **Return** (``optimise_result``)
     
@@ -83,6 +103,14 @@ optimise_result<T1, N> optimise(
     
     return problem.objective_function(mapped_parameter);
   };
+  assert(std::all_of(
+    mapped_problem.lower_bounds.cbegin(), std::next(mapped_problem.lower_bounds.cbegin(), optimiser.active_dimensions.size()),
+    std::bind(std::equal_to<T1>{}, std::placeholders::_1, T1(0.0))
+  ));
+  assert(std::all_of(
+    mapped_problem.upper_bounds.cbegin(), std::next(mapped_problem.upper_bounds.cbegin(), optimiser.active_dimensions.size()),
+    std::bind(std::equal_to<T1>{}, std::placeholders::_1, T1(1.0))
+  ));
   
   auto&& result = optimiser.optimisation_function(mapped_problem, initial_parameters);
   
