@@ -24,6 +24,8 @@ os.makedirs('./assert/images', exist_ok=True)
 
 an_error_occured = False
 
+# Container for change commits
+changelog = []
 # Finds all header files inside `../include`
 # *Note:* This is only done separately to extract the provide a progress bar, wherefore the number of files needs to be
 # known beforehand.
@@ -53,6 +55,25 @@ for file in files:
     print(' ' + Colors.ERROR + 'No comments found' + Colors.END)
     continue
 
+  # Added column widths to list-table tag
+  first_column  = 27
+  comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
+  
+  # Search for change commits and save it
+  for changes in re.findall(r'\.\. cpp:[a-z]+::.*?([a-z_]+)(?:\(.*?\)|)\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
+    if not changes or not 'versionadded' in changes[1]:
+        print(' ' + Colors.ERROR + 'No change comments found' + Colors.END)
+        break
+    else:
+        changelog = changelog + [(float(re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])] # versionadded tag
+    
+    if 'deprecated' in changes[1]:
+        changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),2,changes[0])] # deprecated tag
+    
+    if 'versionchanged' in changes[1]:
+        for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
+          changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
+    
   # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
@@ -87,7 +108,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
            # Execute generate code file  
@@ -95,12 +116,12 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           # Write result from code file in .rst
           docfile.write('\n' + part[2] + '.. code-block:: none\n')
-          for line in str(output.stdout.read()).split('\n'):
+          for line in str(output.stdout.read(), encoding='utf-8').split('\n'):
             docfile.write('\n' + part[2] + '  ' + line)
           docfile.write('\n')
 
@@ -118,7 +139,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           # Execute generate code file  
@@ -126,7 +147,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           example = open('./tmp/generate', mode='w+')
@@ -141,13 +162,34 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(olors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read()))
+            print(olors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           docfile.write('\n' + part[2] + '.. image:: ../assert/images/' + part[4] + '\n')
 
     docfile.close()
     print('\x1b[2K \r', end="")
+    
+#Ganerate Changelog
+changelog.sort(reverse=True)
+with open('./api_reference/changelog.rst', 'w') as changelogfile:
+  changelogfile.write('Changelog\n=========\n')
+  actualVersion = 0.0
+  for change in changelog:
+    if actualVersion != float(change[0]):
+      actualVersion = float(change[0])
+      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n' + '  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n\n')
+    
+    if change[1] == 0:
+      changelogfile.write('  * - **Added**\n    - :cpp:any:`' + change[2] + '`\n')
+      
+    if change[1] == 1:
+      changelogfile.write('  * - **Changed**\n    - :cpp:any:`' + change[2] + '`\n\n      ' + change[3] + '\n')
+      
+    if change[1] == 2:
+      changelogfile.write('  * - **Deprecated**\n    - :cpp:any:`' + change[2] + '`\n')
+      
+  changelogfile.close()
 
 if os.path.exists('./tmp'):
   shutil.rmtree('./tmp')
