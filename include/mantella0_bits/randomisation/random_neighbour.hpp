@@ -1,5 +1,35 @@
 /**
+Random neighbour
+----------------
 
+.. cpp:function:: template<T, N> random_neighbour(parameter, minimal_distance, maximal_distance, active_dimensions)
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** (``std::size_t``)
+  
+  **Function parameters**
+  
+    - **parameter** (``std::array<T, N>``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **minimal_distance** (``T``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **maximal_distance** (``T``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **active_dimensions** - The (``unsigned``) number of dimensions 
+    
+      - Lorem ipsum dolor sit amet
+    
+  **Return** (``std::array<T, N>``)
+    
+      - Lorem ipsum dolor sit amet
 */
 template <typename T, std::size_t N>
 std::array<T, N> random_neighbour(

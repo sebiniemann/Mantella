@@ -1,5 +1,17 @@
 /**
+Sphere function
+===============
 
+.. cpp:class:: template<T, N> sphere_function
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+      
+  .. cpp:function:: sphere_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct sphere_function : problem<T, N> {

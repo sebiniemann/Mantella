@@ -60,6 +60,10 @@
   margin-bottom: 12px;
 }
 
+.rst-content dl p {
+  margin-bottom: 8px !important;
+}
+
 .rst-content div[class^='highlight'] {
   background: #292926;
   border: none;
@@ -106,6 +110,70 @@
 
 .rst-content .warning .admonition-title {
   background-color: #c7254e;
+}
+.rst-content dl:not(.docutils) dt {
+  font-size: 110%;
+  width: 100%;
+  padding-left: 12px;
+}
+
+.rst-content dl:not(.docutils) dt em {
+  font-style: normal;
+}
+
+.rst-content table.docutils {
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.rst-content table.docutils tr {
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.rst-content table.docutils,
+.rst-content table.docutils td {
+  border: none;
+  font-size: inherit;
+}
+
+.rst-content table.docutils td {
+  vertical-align: inherit;
+  white-space: inherit;
+}
+
+.rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td {
+  background: none;
+}
+
+.rst-content table.docutils tr td:first-child {
+  text-align: right;
+}
+
+.rst-content table.docutils tr td:first-child {
+  font-weight: bold;
+}
+
+.rst-content table.docutils tr td:first-child p.last,
+.rst-content table.docutils tr td:first-child p.last code:not(.xref).literal {
+  color: #808080;
+  font-size: 90%;
+  font-weight: normal;
+}
+
+.rst-content table.docutils caption {
+  font: inherit;
+  text-align: left;
+  border-bottom: 2px solid #e3e3e3;
+  font-weight: bold;
+  color: #b3b3b3;
+}
+
+.rst-content table.docutils caption .headerlink {
+  display: none;
+}
+
+.rst-content table.docutils td p {
+  line-height: 24px;
 }
 
 .rst-content code.literal {

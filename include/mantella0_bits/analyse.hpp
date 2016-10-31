@@ -1,8 +1,57 @@
+/**
+Analysing result
+================
+
+.. cpp:class:: template<T, N> analyse_result
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+  
+  .. cpp:member:: std::array<unsigned, N> additive_separability
+  
+    Lorem ipsum dolor sit amet
+*/
 template <typename T, unsigned N>
 struct analyse_result {
   std::array<unsigned, N> additive_separability;
 };
 
+/**
+Analysing
+=========
+
+.. cpp:function:: template<T1, N, T2> analyse(problem, evaluations, acceptable_deviation)
+
+  **Template parameters**
+  
+    - **T1** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+    - **T2** - A type derived from :cpp:any:`problem` ``<T1, N>``
+  
+  **Function parameters**
+  
+    - **problem** (``T2``)
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **evaluations** - The (``unsigned``) number of dimensions 
+    
+      - Lorem ipsum dolor sit amet
+  
+    - **acceptable_deviation** (``T1``)
+    
+      - Lorem ipsum dolor sit amet
+    
+  **Return** (``analyse_result``)
+    
+      - Lorem ipsum dolor sit amet
+    
+.. toctree::
+  
+  analyser/additive_separability
+*/
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,

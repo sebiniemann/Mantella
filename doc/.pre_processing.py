@@ -57,14 +57,15 @@ for file in files:
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
   with open(file[1], 'w') as docfile:
-    for part in re.findall(r''
-      '(.*?)(?=(?:[ ]*\.\. code-block::|$))' # Matches anything until a `.. code-block::` occurs.
-      '('
-        '([ ]*)\.\. code-block:: ([^ ]+)' # Matches the type of `.. code-block::` (`c++`, `image` or anything else).
-        '(?:.*?(?=:name:):name: ([^ ]+)|)' # Skips anything before `:name:` occurs and matches the name.
-        '(?:\n\3  :[^\n]+)*' # Skips all further lines that have `.. code-block::` indentation but start with ':'.
-        '((?:\n\3  [^\n]+|\n[ ]*)+)\n|' # Matches all lines having `.. code-block::` indentation and empty lines.
-      ')', comments, re.DOTALL):
+    # for part in re.findall(r''
+      # '(.*?)(?=(?:[ ]*\.\. code-block::|$))' # Matches anything until a `.. code-block::` occurs.
+      # '('
+        # '([ ]*)\.\. code-block:: ([^ ]+)' # Matches the type of `.. code-block::` (`c++`, `image` or anything else).
+        # '(?:.*?(?=:name:):name: ([^ ]+)|)' # Skips anything before `:name:` occurs and matches the name.
+        # '(?:\n\3  :[^\n]+)*' # Skips all further lines that have `.. code-block::` indentation but start with ':'.
+        # '((?:\n\3  [^\n]+|\n[ ]*)+)\n|' # Matches all lines having `.. code-block::` indentation and empty lines.
+      # ')', comments, re.DOTALL):
+    for part in re.findall(r'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ ]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', comments, re.DOTALL):
       docfile.write(part[0])
 
       if part[1]:
@@ -75,17 +76,18 @@ for file in files:
           if part[4]:
             example = open('./assert/examples/' + part[4], mode='w+')
             example.write(part[5].replace('\n' + part[2] + '  ','\n').strip(' \t\n\r'))
-          else:
-            example = open('./tmp/example.cpp', mode='w+')
-            example.write(part[5])
+            example.close()
+          
+          example = open('./tmp/example.cpp', mode='w+')
+          example.write(part[5])
           example.close()
-
+          
           # Compile generate code file
-          output = subprocess.Popen(['c++', '-std=c++14', '-march=native', '-O3', example.name, '-lblas', '-llapack', '-o', './tmp/example'], stderr = subprocess.PIPE)
+          output = subprocess.Popen(['c++', '-std=c++14', '-I../include', example.name, '-o', './tmp/example'], stderr = subprocess.PIPE)
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + output.stderr.read())
+            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read()))
             continue
 
            # Execute generate code file  
@@ -93,12 +95,12 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + output.stderr.read())
+            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read()))
             continue
 
           # Write result from code file in .rst
           docfile.write('\n' + part[2] + '.. code-block:: none\n')
-          for line in output.stdout.read().split('\n'):
+          for line in str(output.stdout.read()).split('\n'):
             docfile.write('\n' + part[2] + '  ' + line)
           docfile.write('\n')
 
@@ -112,11 +114,11 @@ for file in files:
           docfile.write('\n' + part[2] + '.. code-block:: c++' + image[0][0])
 
           # Compile generate code file
-          output = subprocess.Popen(['c++', '-std=c++14', '-march=native', '-O3', example.name, '-lblas', '-llapack', '-o', './tmp/example'], stderr = subprocess.PIPE)
+          output = subprocess.Popen(['c++', '-std=c++14', example.name, '-o', './tmp/example'], stderr = subprocess.PIPE)
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + output.stderr.read())
+            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read()))
             continue
 
           # Execute generate code file  
@@ -124,7 +126,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + output.stderr.read())
+            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read()))
             continue
 
           example = open('./tmp/generate', mode='w+')
@@ -139,7 +141,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(olors.ERROR + '  Failure during genarate image: \n' + Colors.END + output.stderr.read())
+            print(olors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read()))
             continue
 
           docfile.write('\n' + part[2] + '.. image:: ../assert/images/' + part[4] + '\n')

@@ -1,16 +1,87 @@
 /**
 
+Optimisation result
+===================
+
+.. cpp:class:: template<T, N> optimise_result
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+  
+  .. cpp:member:: std::array<T, N> parameter
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T objective_value
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: unsigned evaluations
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::chrono::nanoseconds duration
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct optimise_result {
-  std::array<T, N> best_parameter;
-  T best_objective_value;
-  unsigned evaluations;
-  std::chrono::nanoseconds duration;
-  
-  constexpr optimise_result() noexcept;
+  std::array<T, N> parameter{};
+  T objective_value = std::numeric_limits<T>::infinity();
+  unsigned evaluations = 0;
+  std::chrono::nanoseconds duration = std::chrono::nanoseconds(0);
 };
 
+/**
+Optimiser
+=========
+
+.. cpp:class:: template<T, N> optimiser
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+
+      - Lorem ipsum dolor sit amet
+    
+    - **N** - The (``unsigned``) number of dimensions 
+
+      - Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::function optimisation_function
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T acceptable_objective_value
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: unsigned maximal_evaluations
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::chrono::nanoseconds maximal_duration
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: std::vector<unsigned> active_dimensions
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: optimiser()
+  
+    Lorem ipsum dolor sit amet
+    
+.. toctree::
+  
+  optimiser/hill_climbing
+  optimiser/hooke_jeeves_algorithm
+  optimiser/nelder_mead_method
+  optimiser/particle_swarm_optimisation
+  optimiser/random_search
+*/
 template <typename T, unsigned N>
 struct optimiser {
   std::function<optimise_result<T, N>(
@@ -31,15 +102,6 @@ struct optimiser {
 //
 
 template <typename T, unsigned N>
-constexpr optimise_result<T, N>::optimise_result() noexcept
-  : best_parameter{},
-    best_objective_value(std::numeric_limits<T>::infinity()),
-    evaluations(0),
-    duration(std::chrono::nanoseconds(0)) {
-
-};
-
-template <typename T, unsigned N>
 optimiser<T, N>::optimiser() noexcept 
   : acceptable_objective_value(-std::numeric_limits<T>::infinity()),
     maximal_evaluations(1'000 * N),
@@ -57,9 +119,9 @@ optimiser<T, N>::optimiser() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
-  constexpr mant::optimise_result<double, 3> result;
+  constexpr mant::optimise_result<double, 3> result{};
   
-  CHECK(result.best_objective_value == std::numeric_limits<double>::infinity());
+  CHECK(result.objective_value == std::numeric_limits<double>::infinity());
   CHECK(result.evaluations == 0);
   CHECK(result.duration == std::chrono::nanoseconds(0));
 }

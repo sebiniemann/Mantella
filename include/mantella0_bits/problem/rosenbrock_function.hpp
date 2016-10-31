@@ -1,5 +1,17 @@
 /**
+Rosenbrock function
+===================
 
+.. cpp:class:: template<T, N> rosenbrock_function
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+      
+  .. cpp:function:: rosenbrock_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct rosenbrock_function : problem<T, N> {

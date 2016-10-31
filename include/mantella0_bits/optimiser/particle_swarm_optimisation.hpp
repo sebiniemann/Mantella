@@ -1,5 +1,33 @@
 /**
+Particle swarm optimisation
+===========================
 
+.. cpp:class:: template<T, N> particle_swarm_optimisation
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+  
+  .. cpp:member:: T initial_velocity
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_acceleration
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_local_attraction
+  
+    Lorem ipsum dolor sit amet
+  
+  .. cpp:member:: T maximal_global_attraction
+  
+    Lorem ipsum dolor sit amet
+      
+  .. cpp:function:: particle_swarm_optimisation()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct particle_swarm_optimisation : optimiser<T, N> {
@@ -39,8 +67,8 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       );
     }
     
-    std::vector<std::array<T, N>> local_best_parameters = parameters;
-    std::vector<T> local_best_objective_values(local_best_parameters.size());
+    std::vector<std::array<T, N>> local_parameters = parameters;
+    std::vector<T> local_objective_values(local_parameters.size());
 
     for (std::size_t n = 0; n < parameters.size(); ++n) {
       const auto& parameter = parameters.at(n);
@@ -48,13 +76,13 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      local_best_objective_values.at(n) = objective_value;
+      local_objective_values.at(n) = objective_value;
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         }
       }
@@ -66,18 +94,18 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       }
     }
     
-    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
       const auto n = result.evaluations % parameters.size();
       auto& parameter = parameters.at(n);
-      const auto& local_best_parameter = local_best_parameters.at(n);
+      const auto& local_parameter = local_parameters.at(n);
       
       std::array<T, N> attraction_center;
       const auto weigthed_local_attraction = maximal_local_attraction * std::uniform_real_distribution<T>(0, 1)(random_number_generator());
       const auto weigthed_global_attraction = maximal_global_attraction * std::uniform_real_distribution<T>(0, 1)(random_number_generator());
       for (unsigned k = 0; k < this->active_dimensions.size(); ++k) {
         attraction_center.at(k) = (
-            weigthed_local_attraction * (local_best_parameter.at(k) - parameter.at(k)) + 
-            weigthed_global_attraction * (result.best_parameter.at(k) - parameter.at(k))) / 
+            weigthed_local_attraction * (local_parameter.at(k) - parameter.at(k)) + 
+            weigthed_global_attraction * (result.parameter.at(k) - parameter.at(k))) / 
           T(3.0);
       }
       
@@ -112,14 +140,14 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
-        local_best_parameters.at(n) = parameter;
-        local_best_objective_values.at(n) = objective_value;
-      } else if (objective_value < local_best_objective_values.at(n)) {
-        local_best_parameters.at(n) = parameter;
-        local_best_objective_values.at(n) = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
+        local_parameters.at(n) = parameter;
+        local_objective_values.at(n) = objective_value;
+      } else if (objective_value < local_objective_values.at(n)) {
+        local_parameters.at(n) = parameter;
+        local_objective_values.at(n) = objective_value;
       }
     }
       
@@ -151,10 +179,8 @@ TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
     
     const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
-      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto element) { 
-        return element >= 0.0;
-      }
+      result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
+      std::bind(std::greater_equal<double>{}, std::placeholders::_1, 0.0)
     ) == true);
   }
   

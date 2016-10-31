@@ -1,5 +1,17 @@
 /**
+Rastrigin function
+==================
 
+.. cpp:class:: template<T, N> rastrigin_function
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+      
+  .. cpp:function:: rastrigin_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct rastrigin_function : problem<T, N> {

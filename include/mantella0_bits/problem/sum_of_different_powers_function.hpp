@@ -1,5 +1,17 @@
 /**
+Sum of different powers function
+================================
 
+.. cpp:class:: template<T, N> sum_of_different_powers_function
+
+  **Template parameters**
+  
+    - **T** - A floating point type
+    - **N** - The (``unsigned``) number of dimensions 
+      
+  .. cpp:function:: sum_of_different_powers_function()
+  
+    Lorem ipsum dolor sit amet
 */
 template <typename T,  unsigned N>
 struct sum_of_different_powers_function : problem<T, N> {
