@@ -2,7 +2,7 @@
 Optimisation
 ============
 
-.. cpp:function:: random_neighbour(parameter, minimal_distance, maximal_distance, active_dimensions)
+.. cpp:function:: optimise(problem, optimiser, initial_parameters)
 
   .. versionadded:: 1.0.0 
 
