@@ -4,23 +4,27 @@ Optimisation
 
 .. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser, initial_parameters)
 
-  **Shortcuts**
-  
-    .. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser)
+  .. list-table:: Shortcuts
+    :widths: 27 73
     
+    * - optimise(problem, optimiser)
+        
+        
       - Calls :cpp:any:`optimise` ``(problem, optimiser, initial_parameters)``.
-      - The number of initial parameters will be
+      
+        The number of initial parameters will be
       
         - ... ``N + 1`` if the optimiser is :cpp:any:`nelder_mead_method` ...
         - ... ``10 * N`` if the optimiser is :cpp:any:`particle_swarm_optimisation` ...
         - ... ``1`` for all other optimisers.
         
-      - Each parameter is randomly drawn from ``[0, 1]``.
-    
-    .. cpp:function:: template<T1, N, T2> optimise(problem)
-    
+        Each parameter is randomly drawn from ``[0, 1]``.
+    * - optimise(problem)
+        
+        
       - Calls :cpp:any:`optimise` ``(problem, optimiser)``.
-      - Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
+      
+        Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
 
   **Template parameters**
   
@@ -77,6 +81,8 @@ optimise_result<T1, N> optimise(
   static_assert(std::is_base_of<mant::problem<T1, N>, T2<T1, N>>::value, "");
   static_assert(std::is_base_of<mant::optimiser<T1, N>, T3<T1, N>>::value, "");
   
+  assert(static_cast<bool>(problem.objective_function));
+  assert(static_cast<bool>(optimiser.optimisation_function));
   assert(initial_parameters.size() > 0);
   
   // Maps the parameter's bounds from [*problem.lower_bounds*, *problem.upper_bounds*] to [0, 1] and places all active 
