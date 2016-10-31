@@ -87,23 +87,16 @@
 .rst-content .admonition-title .highlighted {
   color: #000;
 }
-
-.rst-content .versionmodified {
-  background: #999;
-  padding: 4px 6px;
-  color: white;
-  border-radius: 4px;
-  font-size: 75%;
-  float: right;
-  line-height: initial;
+.rst-content .versionadded {
+  display: none;
 }
 
-.rst-content .versionchanged .versionmodified {
-  background: #6ab0de;
+.rst-content .versionchanged {
+  display: none;
 }
 
-.rst-content .deprecated .versionmodified {
-  background: #d13e4e;
+.rst-content .deprecated {
+  display: none;
 }
 
 .rst-content .warning {
