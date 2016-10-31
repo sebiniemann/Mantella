@@ -2,16 +2,33 @@
 Sphere function
 ===============
 
-.. cpp:class:: template<T, N> sphere_function
+.. cpp:class:: sphere_function : public problem
 
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
+  .. versionadded:: 1.0.0 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
       
-  .. cpp:function:: sphere_function()
-  
-    Lorem ipsum dolor sit amet
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - sphere_function
+    
+        (Constructor)
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
 */
 template <typename T, unsigned N>
 struct sphere_function : problem<T, N> {

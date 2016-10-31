@@ -2,24 +2,46 @@
 Hooke-Jeeves algorithm
 ======================
 
-.. cpp:class:: template<T, N> hooke_jeeves_algorithm
+.. cpp:class:: hooke_jeeves_algorithm : public optimiser
 
-  **Template parameters**
+  .. versionadded:: 1.0.0 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+
+  .. list-table:: Member variables
+    :widths: 27 73
   
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
+    * - initial_stepsize
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: T initial_stepsize
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T stepsize_decrease
-  
-    Lorem ipsum dolor sit amet
+    * - stepsize_decrease
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
       
-  .. cpp:function:: hooke_jeeves_algorithm()
-  
-    Lorem ipsum dolor sit amet
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - hooke_jeeves_algorithm
+    
+        (Constructor)
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
 */
 template <typename T, unsigned N>
 struct hooke_jeeves_algorithm : optimiser<T, N> {

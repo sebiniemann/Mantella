@@ -1,5 +1,5 @@
-Welcome to Mantella's API documentation!
-========================================
+Welcome to Mantella's API reference!
+====================================
 
 Contents:
 

@@ -2,16 +2,31 @@
 Analysing result
 ================
 
-.. cpp:class:: template<T, N> analyse_result
+.. cpp:class:: analyse_result
 
-  **Template parameters**
+  .. versionadded:: 1.0.0 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+      
+  .. list-table:: Member variables
+    :widths: 27 73
   
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-  
-  .. cpp:member:: std::array<unsigned, N> additive_separability
-  
-    Lorem ipsum dolor sit amet
+    * - additive_separability
+    
+        ``std::array<unsigned, N>``
+      - Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct analyse_result {
@@ -22,30 +37,44 @@ struct analyse_result {
 Analysing
 =========
 
-.. cpp:function:: template<T1, N, T2> analyse(problem, evaluations, acceptable_deviation)
+.. cpp:function:: analyse(problem, evaluations, acceptable_deviation)
 
-  **Template parameters**
+  .. versionadded:: 1.0.0 
   
-    - **T1** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-    - **T2** - A type derived from :cpp:any:`problem` ``<T1, N>``
-  
-  **Function parameters**
-  
-    - **problem** (``T2``)
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
     
+    * - problem
+    
+        ``T2``
+      - The problem's boundaries will be remapped to ``[0, 1]``. However, the provided problem remains unchanged.
+    * - evaluations
+    
+        ``unsigned``
       - Lorem ipsum dolor sit amet
-  
-    - **evaluations** - The (``unsigned``) number of dimensions 
+    * - acceptable_deviation
     
+        ``T1``
       - Lorem ipsum dolor sit amet
-  
-    - **acceptable_deviation** (``T1``)
+
+  .. list-table:: Returns
+    :widths: 27 73
     
-      - Lorem ipsum dolor sit amet
-    
-  **Return** (``analyse_result``)
-    
+    * - ``analyse_result``
       - Lorem ipsum dolor sit amet
     
 .. toctree::

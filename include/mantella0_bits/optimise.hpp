@@ -2,7 +2,9 @@
 Optimisation
 ============
 
-.. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser, initial_parameters)
+.. cpp:function:: random_neighbour(parameter, minimal_distance, maximal_distance, active_dimensions)
+
+  .. versionadded:: 1.0.0 
 
   .. list-table:: Shortcuts
     :widths: 27 73
@@ -10,7 +12,7 @@ Optimisation
     * - optimise(problem, optimiser)
         
         
-      - Calls :cpp:any:`optimise` ``(problem, optimiser, initial_parameters)``.
+      - Calls ``optimise(problem, optimiser, initial_parameters)``.
       
         The number of initial parameters will be
       
@@ -18,39 +20,48 @@ Optimisation
         - ... ``10 * N`` if the optimiser is :cpp:any:`particle_swarm_optimisation` ...
         - ... ``1`` for all other optimisers.
         
-        Each parameter is randomly drawn from ``[0, 1]``.
+        Each parameter is randomly drawn from ``[problem.lower_bounds, problem.upper_bounds]``.
     * - optimise(problem)
         
         
-      - Calls :cpp:any:`optimise` ``(problem, optimiser)``.
+      - Calls ``optimise(problem, optimiser)``.
       
         Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
+  
+  .. list-table:: Template parameters
+    :widths: 27 73
 
-  **Template parameters**
-  
-    - **T1** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-    - **T2** - A type derived from ``problem<T1, N>``
-    - **T3** - A type derived from ``optimiser<T1, N>``
-  
-  **Function parameters**
-  
-    - **problem** (``T2``)
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
     
-      - The problem to be optimised.
+    * - problem
+    
+        ``T2``
       - The problem's boundaries will be remapped to ``[0, 1]``. However, the provided problem remains unchanged.
-  
-    - **optimiser** (``T3``)
+    * - optimiser
     
-      - The optimiser to be used to solve the problem.
-      - The optimiser is assumed to 
-  
-    - **initial_parameters** (``T1``)
+        ``T3``
+      - Lorem ipsum dolor sit amet
+    * - initial_parameters
     
-      - The initial parameters
+        ``std::vector<std::array<T1, N>>``
+      - Lorem ipsum dolor sit amet
+
+  .. list-table:: Returns
+    :widths: 27 73
     
-  **Return** (``optimise_result``)
-    
+    * - ``optimise_result``
       - Lorem ipsum dolor sit amet
 */
 template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>

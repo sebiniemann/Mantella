@@ -72,7 +72,7 @@ namespace mant {
     #include "mantella0_bits/problem/rastrigin_function.hpp"
     #include "mantella0_bits/problem/rosenbrock_function.hpp"
     #include "mantella0_bits/problem/sphere_function.hpp"
-    #include "mantella0_bits/problem/sum_of_different_powers_function.hpp"
+    #include "mantella0_bits/problem/sum_of_different_powers.hpp"
     
     // Randomisation
     #include "mantella0_bits/randomisation/random_neighbour.hpp"

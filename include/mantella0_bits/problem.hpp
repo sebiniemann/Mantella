@@ -122,6 +122,8 @@ Problems
     
         (Constructor)
       - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
     
 .. toctree::
   
@@ -129,7 +131,7 @@ Problems
   problem/rastrigin_function
   problem/rosenbrock_function
   problem/sphere_function
-  problem/sum_of_different_powers_function
+  problem/sum_of_different_powers
 */
 template <typename T, unsigned N>
 struct problem {

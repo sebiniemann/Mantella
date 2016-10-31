@@ -106,10 +106,15 @@
 .rst-content .warning .admonition-title {
   background-color: #c7254e;
 }
-.rst-content dl:not(.docutils) dt {
-  font-size: 110%;
+
+.rst-content .section dl:not(.docutils) dt {
+  font-size: 105%;
   width: 100%;
   padding-left: 12px;
+}
+
+.rst-content dl:not(.docutils) dt code {
+  font-family: inherit;
 }
 
 .rst-content dl:not(.docutils) dt em {
@@ -149,7 +154,7 @@
 }
 
 .rst-content table.docutils tr td:first-child p.last,
-.rst-content table.docutils tr td:first-child p.last code:not(.xref).literal {
+.rst-content table.docutils tr td:first-child code:not(.xref).literal {
   color: #808080;
   font-size: 90%;
   font-weight: normal;

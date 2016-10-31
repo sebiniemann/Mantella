@@ -3,28 +3,46 @@
 Optimisation result
 ===================
 
-.. cpp:class:: template<T, N> optimise_result
+.. cpp:class:: optimise_result
 
-  **Template parameters**
+  .. versionadded:: 1.0.0 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+
+  .. list-table:: Member variables
+    :widths: 27 73
   
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
+    * - parameter
+    
+        ``std::array<T, N>``
+      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: std::array<T, N> parameter
+    * - objective_value
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
   
-    Lorem ipsum dolor sit amet
+    * - evaluations
+    
+        ``unsigned``
+      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: T objective_value
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: unsigned evaluations
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::chrono::nanoseconds duration
-  
-    Lorem ipsum dolor sit amet
+    * - duration
+    
+        ``std::chrono::nanoseconds``
+      - Lorem ipsum dolor sit amet
 */
 template <typename T, unsigned N>
 struct optimise_result {
@@ -38,41 +56,54 @@ struct optimise_result {
 Optimiser
 =========
 
-.. cpp:class:: template<T, N> optimiser
+.. cpp:class:: optimiser
 
-  **Template parameters**
-  
-    - **T** - A floating point type
+  .. versionadded:: 1.0.0 
 
-      - Lorem ipsum dolor sit amet
+  .. list-table:: Template parameters
+    :widths: 27 73
     
-    - **N** - The (``unsigned``) number of dimensions 
-
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
       - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: std::function optimisation_function
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T acceptable_objective_value
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: unsigned maximal_evaluations
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::chrono::nanoseconds maximal_duration
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::vector<unsigned> active_dimensions
-  
-    Lorem ipsum dolor sit amet
+  .. list-table:: Member variables
+    :widths: 27 73
+    
+    * - optimisation_function
+        
+        ``std::function``
+      - Lorem ipsum dolor sit amet
+          
+    * - maximal_evaluations
+        
+        ``unsigned``
+      - Lorem ipsum dolor sit amet
+        
+    * - maximal_duration
+        
+        ``std::chrono::nanoseconds``
+      - Lorem ipsum dolor sit amet
+        
+    * - active_dimensions
+        
+        ``std::vector<unsigned>``
+      - Lorem ipsum dolor sit amet
+
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - optimiser
+    
+        (Constructor)
+      - Initialises all member variables to their default value.
       
-  .. cpp:function:: optimiser()
-  
-    Lorem ipsum dolor sit amet
+        Will never throw an exception.
     
 .. toctree::
   

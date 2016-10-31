@@ -2,32 +2,56 @@
 Nelder-Mead method
 ==================
 
-.. cpp:class:: template<T, N> nelder_mead_method
+.. cpp:class:: nelder_mead_method : public optimiser
 
-  **Template parameters**
+  .. versionadded:: 1.0.0 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+
+  .. list-table:: Member variables
+    :widths: 27 73
   
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
+    * - reflection_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: T reflection_weight
+    * - expansion_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
   
-    Lorem ipsum dolor sit amet
+    * - contraction_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
   
-  .. cpp:member:: T expansion_weight
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T contraction_weight
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T shrinking_weight
-  
-    Lorem ipsum dolor sit amet
+    * - shrinking_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
       
-  .. cpp:function:: nelder_mead_method()
-  
-    Lorem ipsum dolor sit amet
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - nelder_mead_method
+    
+        (Constructor)
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
 */
 template <typename T, unsigned N>
 struct nelder_mead_method : optimiser<T, N> {

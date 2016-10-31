@@ -1,17 +1,33 @@
 /**
 Random search
 =============
+.. cpp:class:: random_search : public optimiser
 
-.. cpp:class:: template<T, N> random_search
+  .. versionadded:: 1.0.0 
 
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
       
-  .. cpp:function:: random_search()
-  
-    Lorem ipsum dolor sit amet
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - random_search
+    
+        (Constructor)
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
 */
 template <typename T, unsigned N>
 struct random_search : optimiser<T, N> {

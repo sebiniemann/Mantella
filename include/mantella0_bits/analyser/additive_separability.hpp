@@ -2,30 +2,44 @@
 Additive separability
 =====================
 
-.. cpp:function:: template<T1, N, T2> additive_separability(problem, evaluations, acceptable_deviation)
+.. cpp:function:: additive_separability(problem, evaluations, acceptable_deviation)
 
-  **Template parameters**
-  
-    - **T1** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-    - **T2** - A type derived from :cpp:any:`problem` ``<T1, N>``
-  
-  **Function parameters**
-  
-    - **problem** (``T2``)
+  .. versionadded:: 1.0.0 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
     
+    * - problem
+    
+        ``T2``
       - Lorem ipsum dolor sit amet
-  
-    - **evaluations** - The (``unsigned``) number of dimensions 
+    * - evaluations
     
+        ``unsigned``
       - Lorem ipsum dolor sit amet
-  
-    - **acceptable_deviation** (``T1``)
+    * - acceptable_deviation
     
+        ``T1``
       - Lorem ipsum dolor sit amet
+
+  .. list-table:: Returns
+    :widths: 27 73
     
-  **Return** (``std::array<unsigned, N>``)
-    
+    * - ``std::array<unsigned, N>``
       - Lorem ipsum dolor sit amet
 */
 template <typename T1, unsigned N, template <class, unsigned> class T2>
