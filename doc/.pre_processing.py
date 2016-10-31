@@ -87,7 +87,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
            # Execute generate code file  
@@ -95,12 +95,12 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           # Write result from code file in .rst
           docfile.write('\n' + part[2] + '.. code-block:: none\n')
-          for line in str(output.stdout.read()).split('\n'):
+          for line in str(output.stdout.read(), encoding='utf-8').split('\n'):
             docfile.write('\n' + part[2] + '  ' + line)
           docfile.write('\n')
 
@@ -118,7 +118,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           # Execute generate code file  
@@ -126,7 +126,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read()))
+            print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           example = open('./tmp/generate', mode='w+')
@@ -141,7 +141,7 @@ for file in files:
           output.wait()
           if output.returncode != 0:
             an_error_occured = True
-            print(olors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read()))
+            print(olors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
             continue
 
           docfile.write('\n' + part[2] + '.. image:: ../assert/images/' + part[4] + '\n')

@@ -74,6 +74,8 @@
 
 .rst-content div[class^='highlight'] pre {
   font-size: 13.5px;
+  color: #f8f8f2;
+  white-space: pre-wrap;
 }
 
 .rst-content .highlighted {

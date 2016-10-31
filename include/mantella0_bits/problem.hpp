@@ -37,7 +37,7 @@ Problems
             my_problem.objective_function = [&active_dimensions](const auto& parameter) {
               double objective_value = 0.0;
               for (unsigned n = 0; n < active_dimensions.size(); ++n) {
-                // Make sure this computation is actually a heavy-weight. Otherwise, the additional memory lookups and 
+                // Make sure this computation is actually a heavy-weight. Otherwise, the additional memory lookup and 
                 // code complexity might not be worth it.
                 // How can you ensure this? Benchmarking, benchmarking and benchmarking ;)
                 objective_value += std::pow(parameter.at(active_dimensions.at(n)), 2.0);
@@ -45,10 +45,7 @@ Problems
               return objective_value;
             };
 
-            // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
             const auto&& result = mant::optimise(my_problem);
-
-            // Prints out the best parameter and its objective value
             std::copy(result.parameter.cbegin(), result.parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
             std::cout << "-> " << result.objective_value << std::endl;
             
@@ -60,7 +57,7 @@ Problems
     
     * - objective_function
         
-        ``std::function<T(parameter)>``
+        ``std::function``
       - This is the function under optimisation.
         
         This variable is empty as default.

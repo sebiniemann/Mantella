@@ -25,6 +25,7 @@
 //
 // Configuration
 //
+
 // The random number generator engine to be used by Mantella
 #if !defined(MANTELLA_RANDOM_NUMBER_GENERATOR)
   #define MANTELLA_RANDOM_NUMBER_GENERATOR std::mt19937_64
@@ -33,6 +34,7 @@
 //
 // Dependencies
 //
+
 // C++ standard library
 #include <algorithm>
 #include <array>
@@ -49,6 +51,7 @@
 //
 // Mantella
 //
+
 // IWYU pragma: begin_exports
 namespace mant {
 #if MANTELLA_SYMBOL_VERSION == MANTELLA_VERSION_MAJOR
