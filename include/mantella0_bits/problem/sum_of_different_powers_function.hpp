@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T,  std::size_t N>
+template <typename T,  unsigned N>
 struct sum_of_different_powers_function : problem<T, N> {
   sum_of_different_powers_function() noexcept;
 };
@@ -10,7 +10,7 @@ struct sum_of_different_powers_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 sum_of_different_powers_function<T, N>::sum_of_different_powers_function() noexcept 
     : problem<T, N>() {
   /*   n   /                           \
@@ -19,7 +19,7 @@ sum_of_different_powers_function<T, N>::sum_of_different_powers_function() noexc
    */
   this->objective_function = [](const auto& parameter) {
     T sum = T(0.0);
-    for (std::size_t n = 0; n < N; ++n) {
+    for (unsigned n = 0; n < N; ++n) {
       sum += std::pow(std::fabs(parameter.at(n) * T(2.0) - T(1.0)), static_cast<T>(n + 2));
     }
     

@@ -16,7 +16,7 @@ compiler:
 install:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then \
-      sudo docker build -t ubuntu/mantella:latest . && \
+      sudo docker build --build-arg CI=true -t ubuntu/mantella:latest . && \
       sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella && \
       sudo docker exec mantella chmod a+x ./.develop.sh \
     ; fi

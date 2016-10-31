@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct rastrigin_function : problem<T, N> {
   rastrigin_function() noexcept;
 };
@@ -10,10 +10,10 @@ struct rastrigin_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 rastrigin_function<T, N>::rastrigin_function() noexcept 
     : problem<T, N>() {
-  /* Original, 2-dimensional:  @see L. A. Rastrigin (1974). Systems of Extremal Control.
+  /* Original, 2-dimensional: @see L. A. Rastrigin (1974). Systems of Extremal Control.
    * Generalised, n-dimensional: @see H. Mühlenbein, D. Schomisch and J. Born (1991). The Parallel Genetic Algorithm as 
    * Function Optimizer. Parallel Computing, 17(6-7), pp. 619–632.
    *

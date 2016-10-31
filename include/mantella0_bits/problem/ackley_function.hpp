@@ -1,7 +1,7 @@
 /**
 
 */
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 struct ackley_function : problem<T, N> {
   ackley_function() noexcept;
 };
@@ -10,7 +10,7 @@ struct ackley_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, std::size_t N>
+template <typename T, unsigned N>
 ackley_function<T, N>::ackley_function() noexcept 
     : problem<T, N>() {
   /* @see David H. Ackley (1987). A Connectionist Machine for Genetic Hillclimbing. Kluwer Academic Publishers.
