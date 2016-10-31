@@ -149,8 +149,8 @@ for file in files:
     docfile.close()
     print('\x1b[2K \r', end="")
 
-# if os.path.exists('./tmp'):
-  # shutil.rmtree('./tmp')
+if os.path.exists('./tmp'):
+  shutil.rmtree('./tmp')
 
 if an_error_occured:
   sys.exit(1)
