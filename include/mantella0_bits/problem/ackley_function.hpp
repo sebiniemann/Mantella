@@ -6,6 +6,51 @@ Ackley function
 
   .. versionadded:: 1.0.0 
 
+  The Ackley function is a common *toy* problem with a very small computational cost, used for testing and benchmarking algorithms. It is named after David H. Ackley and was first published 1987 in *A Connectionist Machine for Genetic Hillclimbing. Kluwer Academic Publishers*.
+  
+  Its analytic form can be denoted as
+  
+  .. math::
+  
+    f(\text{parameter}) = 20 \cdot \exp\bigg(\frac{-0.2 \cdot \text{norm}_2(\text{parameter})}{\sqrt{N}} + 1\bigg) - \exp\Bigg(\frac{1}{N} \cdot \sum_{i = 1}^{N} \cos\big(2\pi \cdot \text{parameter}(i)\big) \Bigg) + \exp(1)
+
+  The problem's default search space is bounded to ``[-32.768, 32.768]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
+    
+  .. code-block:: image
+    :name: ackley_function.png
+    
+    #include <mantella0>
+    #include <fstream> // Used for std::ofstream
+    
+    int main() {
+      mant::ackley_function<double, 2> problem;
+      
+      std::ofstream output;
+      output.open("data.mat");
+      for (double y = std::get<1>(problem.lower_bounds); y <= std::get<1>(problem.upper_bounds); y += (std::get<1>(problem.upper_bounds) - std::get<1>(problem.lower_bounds)) / 100.0) {
+        for (double x = std::get<0>(problem.lower_bounds); x <= std::get<0>(problem.upper_bounds); x += (std::get<0>(problem.upper_bounds) - std::get<0>(problem.lower_bounds)) / 100.0) {
+          output << problem.objective_function({x, y}) << "  ";
+        }
+        output << "\n";
+      }
+      output.close();
+      
+      return 0;
+    }
+  
+    :octave:
+    
+    data = dlmread('data.mat');
+    [X, Y] = meshgrid(linspace(-32.768, 32.768, size(data, 1)), linspace(-32.768, 32.768, size(data, 2)));
+    surfc(X, Y, data)
+    xlabel('x_1')
+    ylabel('x_2')
+    zlabel('f(x_1, x_2)')
+    box off % Hide box outline
+    axis tight % Fits the axis
+    set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours
+    saveas(gcf, name)
+    
   .. list-table:: Template parameters
     :widths: 27 73
 
@@ -23,10 +68,12 @@ Ackley function
   .. list-table:: Member functions
     :widths: 27 73
     
-    * - ackley_function
+    * - ackley_function()
     
-        (Constructor)
+        Constructor
       - Initialises all member variables to their default value.
+      
+        This will especially set `objective_function` and fill the lower and bounds.
       
         Will never throw an exception.
 */
@@ -51,13 +98,6 @@ ackley_function<T, N>::ackley_function() noexcept
    *      \                                     /       \                 N                /
    */
   this->objective_function = [](auto parameter) {
-    std::transform(
-      parameter.cbegin(), parameter.cend(),
-      parameter.begin(),
-      [](const auto element) {
-        return element * T(65.536) - T(32.768);
-      });
-    
     return
       T(20.0) * (
         -std::exp(
@@ -84,6 +124,9 @@ ackley_function<T, N>::ackley_function() noexcept
       ) + 
       std::exp(T(1.0));
   };
+  
+  this->lower_bounds.fill(T(-32.768));
+  this->upper_bounds.fill(T(32.768));
 }
 
 //

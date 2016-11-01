@@ -74,7 +74,6 @@
 
 .rst-content div[class^='highlight'] pre {
   font-size: 13.5px;
-  color: #f8f8f2;
   white-space: pre-wrap;
 }
 
@@ -87,6 +86,7 @@
 .rst-content .admonition-title .highlighted {
   color: #000;
 }
+
 .rst-content .versionadded {
   display: none;
 }
@@ -274,3 +274,106 @@
 .vg { color: #f8f8f2; font-weight: normal; background: none; } /* Name.Variable.Global */
 .vi { color: #f8f8f2; font-weight: normal; background: none; } /* Name.Variable.Instance */
 .il { color: #ae81ff; font-weight: normal; background: none; } /* Literal.Number.Integer.Long */
+
+.mant-example .mant-button,
+.mant-image .mant-button {
+  padding: 17px;
+  background: #292926;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.mant-example .mant-button.mant-active,
+.mant-image .mant-button.mant-active {
+  border-radius: 3px 3px 0 0;
+}
+
+.example .mant-button:before {
+  content: '► Show code example';
+}
+
+.mant-example .mant-button.mant-active:before {
+  content: '▼ Hide code example';
+}
+
+.mant-image > .mant-button:before {
+  content: '► Show code to draw image';
+}
+
+.mant-image > .mant-button.mant-active:before {
+  content: '▼ Hide code to draw image';
+}
+
+.mant-example > div:nth-child(3),
+.mant-image > div:nth-child(3) {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.mant-example > div:nth-child(3) {
+  background-color: white;
+}
+
+.mant-image > div:last-child {
+  background-color: #343131;
+}
+
+.mant-example > div:last-child,
+.mant-image > div:last-child {
+  color: black;
+  border: 1px solid #292926;
+  border-top: none;
+  margin-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+
+.mant-example > div:not(:first-child),
+.mant-image > div:not(:first-child) {
+  display: none;
+}
+
+.mant-cpp,
+.mant-octave,
+.mant-none {
+  position: relative;
+}
+
+.mant-cpp span,
+.mant-octave span,
+.mant-none span {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  display: block;
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 0 0 0 4px;
+}
+
+.mant-cpp span,
+.mant-octave span {
+  color: #767676;
+  background-color: #fff;
+  border: 1px solid #e1e1e8;
+}
+
+.mant-none span {
+  color: #ffffff;
+  background-color: #343131;
+  border: 1px solid #292926;
+}
+
+.mant-cpp span:before {
+  content: 'C++';
+}
+
+.mant-octave span:before {
+  content: 'Octave';
+}
+
+.mant-none span:before {
+  content: 'Output';
+}

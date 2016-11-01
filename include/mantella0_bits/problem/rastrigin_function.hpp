@@ -6,6 +6,55 @@ Rastrigin function
 
   .. versionadded:: 1.0.0 
 
+  The Rastrigin function is a common *toy* problem with a very small computational cost, used for testing and benchmarking algorithms. It is named after L. A. Rastrigin and was first published 1974 in *Systems of Extremal Control* as 2-dimensional problem and 1991 generalised for n dimensions by H. Mühlenbein, D. Schomisch and J. Born in *The Parallel Genetic Algorithm as Function Optimizer. Parallel Computing*.
+  
+  Its analytic form can be denotes as
+  
+  .. math::
+   
+    f(\text{parameter}) = 10 \cdot N + \sum_{i = 1}^{N} \bigg( \text{parameter}(i)^2 - 10 \cdot \cos\big(2\pi \cdot \text{parameter}(i)\big)\bigg)
+    
+  The problem's default search space is bounded to ``[-5.12, 5.12]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
+
+  .. code-block:: image
+    :name: rastrigin_function.png
+    
+    #include <mantella0>
+    #include <fstream> // Used for std::ofstream
+    
+    int main() {
+      mant::rastrigin_function<double, 2> problem;
+      
+      std::ofstream output;
+      output.open("data.mat");
+      for (double y = std::get<1>(problem.lower_bounds); y <= std::get<1>(problem.upper_bounds); y += (std::get<1>(problem.upper_bounds) - std::get<1>(problem.lower_bounds)) / 100.0) {
+        for (double x = std::get<0>(problem.lower_bounds); x <= std::get<0>(problem.upper_bounds); x += (std::get<0>(problem.upper_bounds) - std::get<0>(problem.lower_bounds)) / 100.0) {
+          output << problem.objective_function({x, y}) << "  ";
+        }
+        output << "\n";
+      }
+      output.close();
+      
+      return 0;
+    }
+  
+    :octave:
+    
+    data = dlmread('data.mat');
+    [X, Y] = meshgrid(linspace(-5.12, 5.12, size(data, 1)), linspace(-5.12, 5.12, size(data, 2)));
+    surfc(X, Y, data)
+    set(gcf, 'defaultAxesFontName', 'Helvetica')
+    set(gcf, 'defaultAxesFontSize', 10.0)
+    set(gcf, 'defaultTextFontName', 'Helvetica')
+    set(gcf, 'defaultAxesFontSize', 10.0)
+    xlabel('x_1')
+    ylabel('x_2')
+    zlabel('f(x_1, x_2)')
+    box off % Hide box outline
+    axis tight % Fits the axis
+    set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours
+    saveas(gcf, name)
+
   .. list-table:: Template parameters
     :widths: 27 73
 
@@ -23,10 +72,12 @@ Rastrigin function
   .. list-table:: Member functions
     :widths: 27 73
     
-    * - rastrigin_function
+    * - rastrigin_function()
     
-        (Constructor)
+        Constructor
       - Initialises all member variables to their default value.
+      
+        This will especially set `objective_function` and fill the lower and bounds.
       
         Will never throw an exception.
 */
@@ -57,15 +108,16 @@ rastrigin_function<T, N>::rastrigin_function() noexcept
       std::accumulate(
         parameter.cbegin(), parameter.cend(),
         T(0.0),
-        [](const T sum, T element) {
-          element = element * T(10.24) - T(5.12);
-          
+        [](const T sum, const T element) {
           return 
             sum +
             std::pow(element, T(2.0)) - 
             T(10.0) * std::cos(T(2.0) * std::acos(T(-1.0)) * element);
         });
   };
+  
+  this->lower_bounds.fill(T(-5.12));
+  this->upper_bounds.fill(T(5.12));
 }
 
 //

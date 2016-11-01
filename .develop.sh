@@ -11,6 +11,7 @@ readonly RESET_COLOR='\033[0m'
 readonly REPLACE_LAST_LINE=$(echo ''; tput cuu1; tput el)
 ## Sub-options
 declare INSTALL_DIR="/usr/include"
+declare REBUILD_DOC
 
 print_help() {
   echo -e 'Performs several code checks.'
@@ -22,7 +23,8 @@ print_help() {
   echo -e '-i, --install [dir]         Installs the library.'
   echo -e "                            Set \"dir\" to specify the installation directory (default is \"${INSTALL_DIR}\")."
   echo -e '-t, --test                  Compiles and runs unit tests.'
-  echo -e '-d, --doc                   Builds the documentation.'
+  echo -e '-d, --doc [file]            Builds the documentation.'
+  echo -e "                            Set \"file\" to specify a single document to be updated."
   echo -e '-b, --benchmark             Compiles and runs benchmarks.'
 }
 
@@ -66,7 +68,7 @@ do_doc() {
   
   cd ./doc || exit 1
   
-  if ! python3 ./.pre_processing.py; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! python3 ./.pre_processing.py "${REBUILD_DOC}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
   if ! sphinx-build -E -a . ./_html; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
   cd .. || exit 1
@@ -139,6 +141,9 @@ else
         do_test
       ;;
       -d|--doc)
+        if [[ "$2" && ! "$2" =~ ^- ]]; then
+          REBUILD_DOC=$2; shift
+        fi;
         do_doc
       ;;
       -b|--benchmark)
