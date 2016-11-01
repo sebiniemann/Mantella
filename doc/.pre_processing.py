@@ -23,7 +23,6 @@ os.makedirs('./assert/examples', exist_ok=True)
 os.makedirs('./assert/images', exist_ok=True)
 
 an_error_occured = False
-
 # Container for change commits
 changelog = []
 # Finds all header files inside `../include`
@@ -54,25 +53,22 @@ for file in files:
   if not comments: 
     print(' ' + Colors.ERROR + 'No comments found' + Colors.END)
     continue
-
-  # Added column widths to list-table tag
-  first_column  = 27
-  comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
   
   # Search for change commits and save it
-  for changes in re.findall(r'\.\. cpp:[a-z]+::.*?([a-z_]+)(?:\(.*?\)|)\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
+  for changes in re.findall(r'\.\. cpp:[function|class]+::.*?([a-z_]+)(?:\(.*?\)|)\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
     if not changes or not 'versionadded' in changes[1]:
+        an_error_occured = True
         print(' ' + Colors.ERROR + 'No change comments found' + Colors.END)
         break
     else:
-        changelog = changelog + [(float(re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])] # versionadded tag
+        changelog = changelog + [(float(re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)),2,changes[0])] # versionadded tag
+        
+    if 'versionchanged' in changes[1]:
+      for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments): #versionchanged tag
+        changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
     
     if 'deprecated' in changes[1]:
-        changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),2,changes[0])] # deprecated tag
-    
-    if 'versionchanged' in changes[1]:
-        for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
-          changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
+        changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])] # deprecated tag
     
   # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
@@ -170,26 +166,27 @@ for file in files:
     docfile.close()
     print('\x1b[2K \r', end="")
     
-#Ganerate Changelog
-changelog.sort(reverse=True)
-with open('./api_reference/changelog.rst', 'w') as changelogfile:
+# Generate Changelog
+changelog.sort(reverse=True) # sort reverse for actual version on top
+with open('./api_reference/changelog.rst', mode='w+') as changelogfile:
   changelogfile.write('Changelog\n=========\n')
   actualVersion = 0.0
+  
   for change in changelog:
-    if actualVersion != float(change[0]):
-      actualVersion = float(change[0])
+    if actualVersion != change[0]:
+      actualVersion = change[0]
       changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n' + '  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n\n')
     
-    if change[1] == 0:
+    if change[1] == 2: # Versionadded tag
       changelogfile.write('  * - **Added**\n    - :cpp:any:`' + change[2] + '`\n')
       
-    if change[1] == 1:
+    if change[1] == 1: # Versionchange tag
       changelogfile.write('  * - **Changed**\n    - :cpp:any:`' + change[2] + '`\n\n      ' + change[3] + '\n')
       
-    if change[1] == 2:
+    if change[1] == 0: # Deprecated tag
       changelogfile.write('  * - **Deprecated**\n    - :cpp:any:`' + change[2] + '`\n')
-      
-  changelogfile.close()
+    
+    changelogfile.close()
 
 if os.path.exists('./tmp'):
   shutil.rmtree('./tmp')
