@@ -6,9 +6,27 @@ Problems
 
   .. versionadded:: 1.0.0 
 
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  Defining an optimisation problem is usually the first of two step done when working with Mantella (the second one will be calling `:cpp:any:`optimise`, to *solve* the problem).
   
-  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+  As we are focused on optimising black-box/derivative-free problems (.i.e. problems without a known/primitive first- or second-order derivative), 
+  
+  This ``struct`` contains 
+  
+  .. code-block:: c++
+  
+    #include <mantella0>
+    
+    double some_function() {
+      return 0.0;
+    }
+    
+    int main() {
+      
+      mant::problem<double, 3> problem;
+      
+      return 0;
+    }
+  
 
   .. list-table:: Template parameters
     :widths: 27 73
