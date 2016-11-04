@@ -125,6 +125,6 @@ rastrigin_function<T, N>::rastrigin_function() noexcept
 TEST_CASE("rastrigin_function", "[problem][rastrigin_function]") {
   const mant::rastrigin_function<double, 3> rastrigin_function;
   
-  CHECK(rastrigin_function.objective_function({1.0, -2.0, 3.0}) == Approx(1375.8250536133));
+  CHECK(rastrigin_function.objective_function({1.0, -2.0, 3.0}) == Approx(14.0));
 }
 #endif

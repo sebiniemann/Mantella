@@ -9,7 +9,7 @@
 static constexpr std::array<unsigned, 15> dimensions = {2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40};
 static constexpr std::size_t repetitions = 100;
 static constexpr double acceptable_objective_value = 1e-5;
-static constexpr double maximal_number_of_evaluations = std::numeric_limits<unsigned>::max();
+static constexpr double maximal_evaluations = std::numeric_limits<unsigned>::max();
 static constexpr std::chrono::nanoseconds maximal_duration = std::chrono::milliseconds(10);
 
 /* +------------+------------+--------------+----------+-------------+
@@ -47,7 +47,7 @@ struct benchmark {
       for (unsigned l = 0; l < optimisers.size(); ++l) {
         auto& optimiser = *optimisers.at(l);
         optimiser.acceptable_objective_value = acceptable_objective_value;
-        optimiser.maximal_number_of_evaluations = maximal_number_of_evaluations;
+        optimiser.maximal_evaluations = maximal_evaluations;
         optimiser.maximal_duration = maximal_duration;
         
         std::vector<std::array<double, dimensions>> initial_parameters;
@@ -73,7 +73,7 @@ struct benchmark {
         
         for (unsigned m = 0; m < repetitions; ++m) {
           const auto&& result = mant::optimise(problem, optimiser, initial_parameters);
-          results.at(n++) = std::make_tuple(dimensions, k, l, result.duration, result.best_objective_value <= acceptable_objective_value);
+          results.at(n++) = std::make_tuple(dimensions, k, l, result.duration, result.objective_value <= acceptable_objective_value);
         }
       }
     }

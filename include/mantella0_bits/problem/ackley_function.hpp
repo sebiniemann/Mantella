@@ -138,6 +138,6 @@ ackley_function<T, N>::ackley_function() noexcept
 TEST_CASE("ackley_function", "[problem][ackley_function]") {
   const mant::ackley_function<double, 3> ackley_function;
   
-  CHECK(ackley_function.objective_function({1.0, -2.0, 3.0}) == Approx(21.2341400796));
+  CHECK(ackley_function.objective_function({1.0, -2.0, 3.0}) == Approx(7.0164536083));
 }
 #endif

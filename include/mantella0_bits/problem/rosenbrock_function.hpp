@@ -130,6 +130,6 @@ rosenbrock_function<T, N>::rosenbrock_function() noexcept
 TEST_CASE("rosenbrock_function", "[problem][rosenbrock_function]") {
   const mant::rosenbrock_function<double, 3> rosenbrock_function;
   
-  CHECK(rosenbrock_function.objective_function({1.0, -2.0, 3.0}) == Approx(126726325.0));
+  CHECK(rosenbrock_function.objective_function({1.0, -2.0, 3.0}) == Approx(1009.0));
 }
 #endif

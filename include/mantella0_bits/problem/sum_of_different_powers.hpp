@@ -115,6 +115,6 @@ sum_of_different_powers<T, N>::sum_of_different_powers() noexcept
 TEST_CASE("sum_of_different_powers", "[problem][sum_of_different_powers]") {
   const mant::sum_of_different_powers<double, 3> sum_of_different_powers;
   
-  CHECK(sum_of_different_powers.objective_function({1.0, -2.0, 3.0}) == Approx(751.0));
+  CHECK(sum_of_different_powers.objective_function({1.0, -2.0, 3.0}) == Approx(90.0));
 }
 #endif

@@ -91,22 +91,33 @@ do_benchmark() {
   for LIBRARY in "${LIBRARIES[@]}"; do
     cd "./${LIBRARY}" || exit 1
     
-    if [ -z $(docker images -q "benchmark/${LIBRARY}") ]; then
-      if ! docker build -t "benchmark/${LIBRARY}":latest .; then AN_ERROR_OCCURED=1; finish_up; return; fi
-    fi
-    if [ -z $(docker ps -q -f name="benchmark_${LIBRARY}") ]; then
-      if ! docker run -v "$(pwd):/${LIBRARY}" -w "/${LIBRARY}" --name "benchmark_${LIBRARY}" -t -d "benchmark/${LIBRARY}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
-    fi
-    
-    docker exec "benchmark_${LIBRARY}" /bin/bash -c " \
-      if [ ! -d './build' ]; then mkdir build; fi && \
-      cd ./build && \
-      cmake .. && \
-      make clean benchmark && \
-      ./benchmark && \
+    if [ "${LIBRARY}" != 'mantella' ]; then
+      if [ -z $(docker images -q "benchmark/${LIBRARY}") ]; then
+        if ! docker build -t "benchmark/${LIBRARY}":latest .; then AN_ERROR_OCCURED=1; finish_up; return; fi
+      fi
+      if [ -z $(docker ps -q -f name="benchmark_${LIBRARY}") ]; then
+        if ! docker run -v "$(pwd):/${LIBRARY}" -w "/${LIBRARY}" --name "benchmark_${LIBRARY}" -t -d "benchmark/${LIBRARY}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
+      fi
+      
+      docker exec "benchmark_${LIBRARY}" /bin/bash -c " \
+        if [ ! -d './build' ]; then mkdir build; fi && \
+        cd ./build && \
+        cmake .. && \
+        make clean benchmark && \
+        ./benchmark && \
+        cp benchmark.mat ..
+      "
+    else
+      if [ ! -d './build' ]; then
+        mkdir build;
+      fi
+      cd ./build
+      cmake ..
+      make clean benchmark 
+      ./benchmark
       cp benchmark.mat ..
-    "
-
+    fi
+      
     cd .. || exit 1
   done
   

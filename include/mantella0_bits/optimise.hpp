@@ -192,9 +192,9 @@ TEST_CASE("optimise", "[optimise]") {
   optimiser.acceptable_objective_value = 1e-12;
   
   const auto&& result = mant::optimise(problem, optimiser, {{-3.2, 4.1}});
-  CHECK((result.parameter == std::array<double, 2>({0.50000004768371475, 0.49999997019767761})));
+  CHECK((result.parameter == std::array<double, 2>({-6.675720225501891e-07, 0.0})));
   CHECK(result.objective_value == Approx(5.57065506021764692e-13));
-  CHECK(result.evaluations == 189);
+  CHECK(result.evaluations == 137);
   
   CHECK_NOTHROW(mant::optimise(problem, optimiser));
   CHECK_NOTHROW(mant::optimise(problem));
