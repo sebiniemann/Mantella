@@ -12,6 +12,7 @@ install_manifest.txt
 
 # Documentation
 doc/_html/
+doc/.tmp/
 doc/api_reference/
 doc/assert/
 

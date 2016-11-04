@@ -1,5 +1,54 @@
 /**
+Random neighbour
+----------------
 
+.. cpp:function:: random_neighbour(parameter, minimal_distance, maximal_distance, active_dimensions)
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
+    
+    * - parameter
+    
+        ``std::array<T, N>``
+      - Lorem ipsum dolor sit amet
+    * - minimal_distance
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+    * - maximal_distance
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+    * - active_dimensions
+    
+        ``unsigned``
+      - Lorem ipsum dolor sit amet
+
+  .. list-table:: Returns
+    :widths: 27 73
+    
+    * - ``std::array<T, N>``
+      - Lorem ipsum dolor sit amet
 */
 template <typename T, std::size_t N>
 std::array<T, N> random_neighbour(

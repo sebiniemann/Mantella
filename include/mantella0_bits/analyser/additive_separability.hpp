@@ -1,5 +1,67 @@
 /**
+Additive separability
+---------------------
 
+.. cpp:function:: additive_separability(problem, evaluations, acceptable_deviation)
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+  
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T1
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+    * - T2
+        
+        Derived from :cpp:any:`problem`
+      - The problem type to be analysed.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
+    
+    * - problem
+    
+        ``T2``
+      - The problem to be analysed for additive separation.
+      
+        Make sure that the problems objective function (``.objective_function``) is set and its lower bounds
+        (``.lower_bounds``) are less than or equal to their upper bounds (``.upper_bounds``).
+    * - evaluations
+    
+        ``unsigned``
+      - The maximal number of evaluations per tried out separation. If an evaluation is found that exceeds ``acceptable_deviation``, the separation candidate is discarded and the next one is tried.
+      
+        Instead of trying out each possible separation, which will be a `Bell number <https://en.wikipedia.org/wiki/Bell_number>`_ and grows very quickly (2, 5, 15, 52, 203, 877, 4140, 21147, ... `A000110 in OEIS <https://oeis.org/A000110>`_), only the separations into two parts are explicitly tested and reasoning is applied to check for further separations.
+        
+        Therefore, the number of tested separations is at most a `Mersenne number <https://en.wikipedia.org/wiki/Mersenne_prime>`_, which will still grow exponentially (1, 3, 7, 15, 31, 63, 127, 255, 511, ... `A000225 in OEIS <https://oeis.org/A000225>`_), but grows more slowly.
+        
+        In summary
+        
+        .. math::
+        
+          \text{Overall evaluations} \leq \text{evaluations} \cdot \underbrace{(2^n - 1)}_{\llap{\text{Mersenn}\rlap{\text{e number}}}}
+    * - acceptable_deviation
+    
+        ``T1``
+      - The maximal acceptable deviation from ``0``.
+
+  .. list-table:: Returns
+    :widths: 27 73
+    
+    * - ``std::array<unsigned, N>``
+      - Lorem ipsum dolor sit amet
 */
 template <typename T1, unsigned N, template <class, unsigned> class T2>
 std::array<unsigned, N> additive_separability(
@@ -17,8 +79,7 @@ std::array<unsigned, N> additive_separability(
     const unsigned evaluations,
     const T1 acceptable_deviation) {
   static_assert(std::is_floating_point<T1>::value, "");
-  static_assert(N > 1, "");
-  
+  static_assert(N > 0, "");
   assert(std::equal(
     problem.lower_bounds.cbegin(), problem.lower_bounds.cend(),
     problem.upper_bounds.cbegin(), problem.upper_bounds.cend(),
@@ -31,6 +92,10 @@ std::array<unsigned, N> additive_separability(
   // Initialises *partition* with 0, indicating that all dimensions are in the same group and none is separable.
   std::array<unsigned, N> partition;
   partition.fill(0);
+  
+  if (N == 1) {
+    return partition;
+  }
   
   // Iterates through all partitions with two parts.
   // The parts are ordered, such that the first one will not contain more elements than the second one.

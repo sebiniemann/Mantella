@@ -30,7 +30,7 @@ struct benchmark {
       std::unique_ptr<mant::problem<double, dimensions>>(new mant::rastrigin_function<double, dimensions>),
       std::unique_ptr<mant::problem<double, dimensions>>(new mant::rosenbrock_function<double, dimensions>),
       std::unique_ptr<mant::problem<double, dimensions>>(new mant::sphere_function<double, dimensions>),
-      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers_function<double, dimensions>)
+      std::unique_ptr<mant::problem<double, dimensions>>(new mant::sum_of_different_powers<double, dimensions>)
     };
 
     const std::array<std::unique_ptr<mant::optimiser<double, dimensions>>, 5> optimisers = {
@@ -73,7 +73,7 @@ struct benchmark {
         
         for (unsigned m = 0; m < repetitions; ++m) {
           const auto&& result = mant::optimise(problem, optimiser, initial_parameters);
-          results.at(n++) = std::make_tuple(dimensions, k, l, result.duration, result.best_objective_value <= acceptable_objective_value);
+          results.at(n++) = std::make_tuple(dimensions, k, l, result.duration, result.objective_value <= acceptable_objective_value);
         }
       }
     }

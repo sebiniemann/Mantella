@@ -1,5 +1,51 @@
 /**
+Hill climbing
+-------------
 
+.. cpp:class:: hill_climbing : public optimiser
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+
+  .. list-table:: Member variables
+    :widths: 27 73
+  
+    * - minimal_stepsize
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - maximal_stepsize
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+      
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - hill_climbing
+    
+        Constructor
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
 */
 template <typename T, unsigned N>
 struct hill_climbing : optimiser<T, N> {
@@ -30,11 +76,11 @@ hill_climbing<T, N>::hill_climbing() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         }
       }
@@ -46,8 +92,8 @@ hill_climbing<T, N>::hill_climbing() noexcept
       }
     }
     
-    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
-      auto&& parameter = random_neighbour(result.best_parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
+      auto&& parameter = random_neighbour(result.parameter, minimal_stepsize, maximal_stepsize, this->active_dimensions.size());
       
       std::transform(
         parameter.cbegin(), parameter.cend(),
@@ -60,9 +106,9 @@ hill_climbing<T, N>::hill_climbing() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
       }
     }
     
@@ -92,10 +138,8 @@ TEST_CASE("hill_climbing", "[hill_climbing]") {
     
     const auto&& result = optimiser.optimisation_function(problem, {{0.0, 0.0, 0.0}});
     CHECK(std::all_of(
-      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto element) { 
-        return element >= 0.0;
-      }
+      result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
+      std::bind(std::greater_equal<double>{}, std::placeholders::_1, 0.0)
     ) == true);
   }
   

@@ -1,16 +1,66 @@
 /**
+Optimiser
+=========
 
-*/
-template <typename T, unsigned N>
-struct optimise_result {
-  std::array<T, N> best_parameter;
-  T best_objective_value;
-  unsigned evaluations;
-  std::chrono::nanoseconds duration;
+.. cpp:class:: optimiser
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
   
-  constexpr optimise_result() noexcept;
-};
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
 
+  .. list-table:: Template parameters
+    :widths: 27 73
+    
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - Lorem ipsum dolor sit amet
+  
+  .. list-table:: Member variables
+    :widths: 27 73
+    
+    * - optimisation_function
+        
+        ``std::function``
+      - Lorem ipsum dolor sit amet
+          
+    * - maximal_evaluations
+        
+        ``unsigned``
+      - Lorem ipsum dolor sit amet
+        
+    * - maximal_duration
+        
+        ``std::chrono::nanoseconds``
+      - Lorem ipsum dolor sit amet
+        
+    * - active_dimensions
+        
+        ``std::vector<unsigned>``
+      - Lorem ipsum dolor sit amet
+
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - optimiser
+    
+        Constructor
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
+    
+.. include:: optimiser/hill_climbing.include
+.. include:: optimiser/hooke_jeeves_algorithm.include
+.. include:: optimiser/nelder_mead_method.include
+.. include:: optimiser/particle_swarm_optimisation.include
+.. include:: optimiser/random_search.include
+*/
 template <typename T, unsigned N>
 struct optimiser {
   std::function<optimise_result<T, N>(
@@ -31,15 +81,6 @@ struct optimiser {
 //
 
 template <typename T, unsigned N>
-constexpr optimise_result<T, N>::optimise_result() noexcept
-  : best_parameter{},
-    best_objective_value(std::numeric_limits<T>::infinity()),
-    evaluations(0),
-    duration(std::chrono::nanoseconds(0)) {
-
-};
-
-template <typename T, unsigned N>
 optimiser<T, N>::optimiser() noexcept 
   : acceptable_objective_value(-std::numeric_limits<T>::infinity()),
     maximal_evaluations(1'000 * N),
@@ -56,14 +97,6 @@ optimiser<T, N>::optimiser() noexcept
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
-  constexpr mant::optimise_result<double, 3> result;
-  
-  CHECK(result.best_objective_value == std::numeric_limits<double>::infinity());
-  CHECK(result.evaluations == 0);
-  CHECK(result.duration == std::chrono::nanoseconds(0));
-}
-
 TEST_CASE("optimiser", "[optimiser]") {
   const mant::optimiser<double, 3> optimiser;
   
