@@ -117,11 +117,9 @@ main h2 {
 }
 
 main dt {
-  margin-bottom: 12px;
-  background: #292929;
-  padding: 12px;
-  color: #fcfcfc;
-  border-radius: 4px;
+  margin-bottom: 18px;
+  padding: 6px;
+  border-bottom: 2px solid #e3e3e3;
 }
 
 main dt,
