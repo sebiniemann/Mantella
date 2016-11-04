@@ -1,6 +1,6 @@
 /**
 Ackley function
-===============
+---------------
 
 .. cpp:class:: ackley_function : public problem
 
@@ -12,7 +12,7 @@ Ackley function
   
   .. math::
   
-    f(\text{parameter}) = 20 \cdot \exp\bigg(\frac{-0.2 \cdot \text{norm}_2(\text{parameter})}{\sqrt{N}} + 1\bigg) - \exp\Bigg(\frac{1}{N} \cdot \sum_{i = 1}^{N} \cos\big(2\pi \cdot \text{parameter}(i)\big) \Bigg) + \exp(1)
+    f(\text{parameter}) = 20 \cdot \exp\bigg(\frac{-0.2 \cdot \text{norm}_2(\text{parameter})}{\sqrt{N}} + 1\bigg) - \exp\Bigg(\frac{1}{N} \cdot \sum_{i = 1}^{N} \cos\big(2\pi \cdot \text{parameter}_i\big) \Bigg) + \exp(1)
 
   The problem's default search space is bounded to ``[-32.768, 32.768]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
     
@@ -46,6 +46,7 @@ Ackley function
     xlabel('x_1')
     ylabel('x_2')
     zlabel('f(x_1, x_2)')
+    set(gcf, 'Color', [0.99, 0.99, 0.99]) % Matches to the documentation's background colour
     box off % Hide box outline
     axis tight % Fits the axis
     set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours

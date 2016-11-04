@@ -1,16 +1,21 @@
-Welcome to Mantella's API reference!
-====================================
+Welcome to Mantella
+===================
 
 Contents:
 
 .. toctree::
-  :numbered:
+   :maxdepth: 0
+
+   self
+   
+.. toctree::
   
   api_reference/problem
-  api_reference/randomisation/random_neighbour
   api_reference/optimiser
   api_reference/optimise
+  api_reference/optimise_result
   api_reference/analyse  
+  api_reference/analyse_result
   
 Indices and tables
 ==================

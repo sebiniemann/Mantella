@@ -1,6 +1,6 @@
 /**
 Hooke-Jeeves algorithm
-======================
+----------------------
 
 .. cpp:class:: hooke_jeeves_algorithm : public optimiser
 

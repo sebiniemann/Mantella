@@ -1,6 +1,6 @@
 /**
 Additive separability
-=====================
+---------------------
 
 .. cpp:function:: additive_separability(problem, evaluations, acceptable_deviation)
 

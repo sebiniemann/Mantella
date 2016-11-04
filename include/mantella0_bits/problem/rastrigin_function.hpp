@@ -1,6 +1,6 @@
 /**
 Rastrigin function
-==================
+------------------
 
 .. cpp:class:: rastrigin_function : public problem
 
@@ -12,7 +12,7 @@ Rastrigin function
   
   .. math::
    
-    f(\text{parameter}) = 10 \cdot N + \sum_{i = 1}^{N} \bigg( \text{parameter}(i)^2 - 10 \cdot \cos\big(2\pi \cdot \text{parameter}(i)\big)\bigg)
+    f(\text{parameter}) = 10 \cdot N + \sum_{i = 1}^{N} \bigg( \text{parameter}_i^2 - 10 \cdot \cos\big(2\pi \cdot \text{parameter}_i\big)\bigg)
     
   The problem's default search space is bounded to ``[-5.12, 5.12]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
 
@@ -43,13 +43,10 @@ Rastrigin function
     data = dlmread('data.mat');
     [X, Y] = meshgrid(linspace(-5.12, 5.12, size(data, 1)), linspace(-5.12, 5.12, size(data, 2)));
     surfc(X, Y, data)
-    set(gcf, 'defaultAxesFontName', 'Helvetica')
-    set(gcf, 'defaultAxesFontSize', 10.0)
-    set(gcf, 'defaultTextFontName', 'Helvetica')
-    set(gcf, 'defaultAxesFontSize', 10.0)
     xlabel('x_1')
     ylabel('x_2')
     zlabel('f(x_1, x_2)')
+    set(gcf, 'Color', [0.99, 0.99, 0.99]) % Matches to the documentation's background colour
     box off % Hide box outline
     axis tight % Fits the axis
     set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours

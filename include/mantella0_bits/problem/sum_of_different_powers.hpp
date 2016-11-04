@@ -1,6 +1,6 @@
 /**
 Sum of different powers
-=======================
+-----------------------
 
 .. cpp:class:: sum_of_different_powers : public problem
 
@@ -12,7 +12,7 @@ Sum of different powers
   
   .. math::
   
-    f(\text{parameter}) = \sum_{i = 1}^{n} \text{parameter}(i)^{i + 1}
+    f(\text{parameter}) = \sum_{i = 1}^{n} \text{parameter}_i^{i + 1}
     
   The problem's default search space is bounded to ``[-1, 1]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
 
@@ -46,6 +46,7 @@ Sum of different powers
     xlabel('x_1')
     ylabel('x_2')
     zlabel('f(x_1, x_2)')
+    set(gcf, 'Color', [0.99, 0.99, 0.99]) % Matches to the documentation's background colour
     box off % Hide box outline
     axis tight % Fits the axis
     set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours

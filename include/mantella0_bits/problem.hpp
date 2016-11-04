@@ -130,14 +130,12 @@ Problems
         Will never throw an exception.
     
 Below is a list of common problems we implemented, to quickly get a feeling for the library, without the need to implement your own problem yet. These problems are also used in our benchmarks to compare against other optimisation libraries.
-    
-.. toctree::
-  
-  problem/ackley_function
-  problem/rastrigin_function
-  problem/rosenbrock_function
-  problem/sphere_function
-  problem/sum_of_different_powers
+
+.. include:: problem/ackley_function.include
+.. include:: problem/rastrigin_function.include
+.. include:: problem/rosenbrock_function.include
+.. include:: problem/sphere_function.include
+.. include:: problem/sum_of_different_powers.include
 */
 template <typename T, unsigned N>
 struct problem {

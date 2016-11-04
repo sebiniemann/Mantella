@@ -1,6 +1,6 @@
 /**
 Nelder-Mead method
-==================
+------------------
 
 .. cpp:class:: nelder_mead_method : public optimiser
 

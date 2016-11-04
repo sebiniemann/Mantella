@@ -1,6 +1,6 @@
 /**
 Particle swarm optimisation
-===========================
+---------------------------
 
 .. cpp:class:: particle_swarm_optimisation : public optimiser
 

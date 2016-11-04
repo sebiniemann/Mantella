@@ -1,6 +1,6 @@
 /**
 Rosenbrock function
-===================
+-------------------
 
 .. cpp:class:: rosenbrock_function : public problem
 
@@ -12,7 +12,7 @@ Rosenbrock function
   
   .. math::
 
-    \sum_{i = 1}^{N} 100 \cdot \big(\text{parameter}(i + 1) - \text{parameter}(i)^2\big)^2 + \big(\text{parameter}(i) - 1\big)^2
+    \sum_{i = 1}^{N} 100 \cdot \big(\text{parameter}_{i + 1} - \text{parameter}_i^2\big)^2 + \big(\text{parameter}_i - 1\big)^2
     
   The problem's default search space is bounded to ``[-10, 10]``, with optimal parameter ``(1, 1, ..., 1)`` and optimal function value ``0``.
 
@@ -46,6 +46,7 @@ Rosenbrock function
     xlabel('x_1')
     ylabel('x_2')
     zlabel('f(x_1, x_2)')
+    set(gcf, 'Color', [0.99, 0.99, 0.99]) % Matches to the documentation's background colour
     box off % Hide box outline
     axis tight % Fits the axis
     set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours

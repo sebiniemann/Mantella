@@ -1,6 +1,7 @@
 /**
 Random search
-=============
+-------------
+
 .. cpp:class:: random_search : public optimiser
 
   .. versionadded:: 1.0.0 

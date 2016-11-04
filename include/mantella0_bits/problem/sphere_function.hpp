@@ -1,6 +1,6 @@
 /**
 Sphere function
-===============
+---------------
 
 .. cpp:class:: sphere_function : public problem
 
@@ -12,7 +12,7 @@ Sphere function
   
   .. math::
   
-    f(\text{parameter}) = \sum_{i = 1}^{n} \text{parameter}(i)^2
+    f(\text{parameter}) = \sum_{i = 1}^{n} \text{parameter}_i^2
 
   The problem's default search space is bounded to ``[-5.12, 5.12]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
   
@@ -46,6 +46,7 @@ Sphere function
     xlabel('x_1')
     ylabel('x_2')
     zlabel('f(x_1, x_2)')
+    set(gcf, 'Color', [0.99, 0.99, 0.99]) % Matches to the documentation's background colour
     box off % Hide box outline
     axis tight % Fits the axis
     set(findall(gcf, 'Type', 'patch'), 'LineWidth', 2) % Thicker contours

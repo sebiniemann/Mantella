@@ -79,9 +79,11 @@ namespace mant {
     
     // Analyser
     #include "mantella0_bits/analyser/additive_separability.hpp"
+    #include "mantella0_bits/analyse_result.hpp"
     #include "mantella0_bits/analyse.hpp"
 
     // Optimiser
+    #include "mantella0_bits/optimise_result.hpp"
     #include "mantella0_bits/optimiser.hpp"
     #include "mantella0_bits/optimiser/hill_climbing.hpp"
     #include "mantella0_bits/optimiser/hooke_jeeves_algorithm.hpp"
