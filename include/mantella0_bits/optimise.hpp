@@ -1,3 +1,73 @@
+/**
+Optimisation
+============
+
+.. cpp:function:: optimise(problem, optimiser, initial_parameters)
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+
+  .. list-table:: Shortcuts
+    :widths: 27 73
+    
+    * - optimise(problem, optimiser)
+        
+        
+      - Calls ``optimise(problem, optimiser, initial_parameters)``.
+      
+        The number of initial parameters will be
+      
+        - ... ``N + 1`` if the optimiser is :cpp:any:`nelder_mead_method` ...
+        - ... ``10 * N`` if the optimiser is :cpp:any:`particle_swarm_optimisation` ...
+        - ... ``1`` for all other optimisers.
+        
+        Each parameter is randomly drawn from ``[problem.lower_bounds, problem.upper_bounds]``.
+    * - optimise(problem)
+        
+        
+      - Calls ``optimise(problem, optimiser)``.
+      
+        Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
+  
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
+    
+    * - problem
+    
+        ``T2``
+      - The problem's boundaries will be remapped to ``[0, 1]``. However, the provided problem remains unchanged.
+    * - optimiser
+    
+        ``T3``
+      - Lorem ipsum dolor sit amet
+    * - initial_parameters
+    
+        ``std::vector<std::array<T1, N>>``
+      - Lorem ipsum dolor sit amet
+
+  .. list-table:: Returns
+    :widths: 27 73
+    
+    * - ``optimise_result``
+      - Lorem ipsum dolor sit amet
+*/
 template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem,
@@ -26,6 +96,8 @@ optimise_result<T1, N> optimise(
   static_assert(std::is_base_of<mant::problem<T1, N>, T2<T1, N>>::value, "");
   static_assert(std::is_base_of<mant::optimiser<T1, N>, T3<T1, N>>::value, "");
   
+  assert(static_cast<bool>(problem.objective_function));
+  assert(static_cast<bool>(optimiser.optimisation_function));
   assert(initial_parameters.size() > 0);
   
   // Maps the parameter's bounds from [*problem.lower_bounds*, *problem.upper_bounds*] to [0, 1] and places all active 
@@ -52,15 +124,23 @@ optimise_result<T1, N> optimise(
     
     return problem.objective_function(mapped_parameter);
   };
+  assert(std::all_of(
+    mapped_problem.lower_bounds.cbegin(), std::next(mapped_problem.lower_bounds.cbegin(), optimiser.active_dimensions.size()),
+    std::bind(std::equal_to<T1>{}, std::placeholders::_1, T1(0.0))
+  ));
+  assert(std::all_of(
+    mapped_problem.upper_bounds.cbegin(), std::next(mapped_problem.upper_bounds.cbegin(), optimiser.active_dimensions.size()),
+    std::bind(std::equal_to<T1>{}, std::placeholders::_1, T1(1.0))
+  ));
   
   auto&& result = optimiser.optimisation_function(mapped_problem, initial_parameters);
   
   // Maps the parameter's bounds back from [0, 1] to [*lower_bounds*, *upper_bounds*], permutes the parameter to match 
   // the active dimensions.
   for (unsigned n = optimiser.active_dimensions.size(); n > 0; --n) {
-    result.best_parameter.at(optimiser.active_dimensions.at(n - 1)) = 
+    result.parameter.at(optimiser.active_dimensions.at(n - 1)) = 
       problem.lower_bounds.at(n - 1) +
-      result.best_parameter.at(n - 1) * (
+      result.parameter.at(n - 1) * (
         problem.upper_bounds.at(n - 1) - problem.lower_bounds.at(n - 1)
       );
   }
@@ -112,9 +192,9 @@ TEST_CASE("optimise", "[optimise]") {
   optimiser.acceptable_objective_value = 1e-12;
   
   const auto&& result = mant::optimise(problem, optimiser, {{-3.2, 4.1}});
-  CHECK((result.best_parameter == std::array<double, 2>({0.50000004768371475, 0.49999997019767761})));
-  CHECK(result.best_objective_value == Approx(5.57065506021764692e-13));
-  CHECK(result.evaluations == 189);
+  CHECK((result.parameter == std::array<double, 2>({-6.675720225501891e-07, 0.0})));
+  CHECK(result.objective_value == Approx(5.57065506021764692e-13));
+  CHECK(result.evaluations == 137);
   
   CHECK_NOTHROW(mant::optimise(problem, optimiser));
   CHECK_NOTHROW(mant::optimise(problem));

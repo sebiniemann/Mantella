@@ -1,5 +1,61 @@
 /**
+Nelder-Mead method
+------------------
 
+.. cpp:class:: nelder_mead_method : public optimiser
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``unsigned``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+
+  .. list-table:: Member variables
+    :widths: 27 73
+  
+    * - reflection_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - expansion_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - contraction_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - shrinking_weight
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+      
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - nelder_mead_method
+    
+        Constructor
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
 */
 template <typename T, unsigned N>
 struct nelder_mead_method : optimiser<T, N> {
@@ -32,12 +88,12 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
     auto&& start_time  = std::chrono::steady_clock::now();
     optimise_result<T, N> result;
     
-    result.best_parameter = initial_parameters.at(0);
-    result.best_objective_value = problem.objective_function(initial_parameters.at(0));
+    result.parameter = initial_parameters.at(0);
+    result.objective_value = problem.objective_function(initial_parameters.at(0));
     ++result.evaluations;
     result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
-    if (result.best_objective_value <= this->acceptable_objective_value) {
+    if (result.objective_value <= this->acceptable_objective_value) {
       return result;
     } else if (result.evaluations >= this->maximal_evaluations) {
       return result;
@@ -54,11 +110,11 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
       
       simplex.at(n - 1) = {parameter, objective_value};
       
-      if (objective_value < result.best_objective_value) {
-        result.best_parameter = parameter;
-        result.best_objective_value = objective_value;
+      if (objective_value < result.objective_value) {
+        result.parameter = parameter;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         }
       }
@@ -76,7 +132,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         return std::get<1>(simplex) < std::get<1>(other_simplex);
       });
     
-    std::array<T, N> centroid = result.best_parameter;
+    std::array<T, N> centroid = result.parameter;
     std::for_each(
       simplex.cbegin(), std::prev(simplex.cend()),
       [this, &centroid](const auto& point) {
@@ -85,29 +141,29 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         }
       });
     
-    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.best_objective_value > this->acceptable_objective_value) {
+    while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
       std::array<T, N> reflected_point;
       std::transform(
         centroid.cbegin(), std::next(centroid.cbegin(), this->active_dimensions.size()),
-        result.best_parameter.cbegin(),
+        result.parameter.cbegin(),
         reflected_point.begin(),
-        [this](const auto centroid, const auto best_parameter) {
-          return std::fmin(std::fmax(centroid + reflection_weight * (centroid - best_parameter), T(0.0)), T(1.0));
+        [this](const auto centroid, const auto parameter) {
+          return std::fmin(std::fmax(centroid + reflection_weight * (centroid - parameter), T(0.0)), T(1.0));
         });
       
       auto objective_value = problem.objective_function(reflected_point);
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.best_objective_value) {
+      if (objective_value < result.objective_value) {
         for (unsigned n = 0; n < N; ++n) {
-          centroid.at(n) += (reflected_point.at(n) - result.best_parameter.at(n)) / static_cast<T>(N);
+          centroid.at(n) += (reflected_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
         }
         
-        result.best_parameter = reflected_point;
-        result.best_objective_value = objective_value;
+        result.parameter = reflected_point;
+        result.objective_value = objective_value;
         
-        if (result.best_objective_value <= this->acceptable_objective_value) {
+        if (result.objective_value <= this->acceptable_objective_value) {
           return result;
         } else if (result.evaluations >= this->maximal_evaluations) {
           return result;
@@ -128,13 +184,13 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         ++result.evaluations;
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
-        if (objective_value < result.best_objective_value) {
+        if (objective_value < result.objective_value) {
           for (unsigned n = 0; n < N; ++n) {
-            centroid.at(n) += (expanded_point.at(n) - result.best_parameter.at(n)) / static_cast<T>(N);
+            centroid.at(n) += (expanded_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
           }
         
-          result.best_parameter = expanded_point;
-          result.best_objective_value = objective_value;
+          result.parameter = expanded_point;
+          result.objective_value = objective_value;
         }
       
         continue;
@@ -179,13 +235,13 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
           return result;
         }
         
-        if (objective_value < result.best_objective_value) {
+        if (objective_value < result.objective_value) {
           for (unsigned n = 0; n < N; ++n) {
-            centroid.at(n) += (contracted_point.at(n) - result.best_parameter.at(n)) / static_cast<T>(N);
+            centroid.at(n) += (contracted_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
           }
         
-          result.best_parameter = contracted_point;
-          result.best_objective_value = objective_value;
+          result.parameter = contracted_point;
+          result.objective_value = objective_value;
         } else if (objective_value < std::get<1>(std::get<N-1>(simplex))) {
           auto position = std::find_if(
             simplex.begin(), std::prev(simplex.end()),
@@ -202,11 +258,11 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         } else {
           for (auto& point : simplex) {
             std::transform(
-              result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), this->active_dimensions.size()),
+              result.parameter.cbegin(), std::next(result.parameter.cbegin(), this->active_dimensions.size()),
               std::get<0>(point).cbegin(),
               std::get<0>(point).begin(),
-              [this](const auto best_parameter, const auto point) {
-                return best_parameter + shrinking_weight * (point - best_parameter);
+              [this](const auto parameter, const auto point) {
+                return parameter + shrinking_weight * (point - parameter);
               });
               
             point = {std::get<0>(point), problem.objective_function(std::get<0>(point))};
@@ -225,7 +281,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
               return std::get<1>(simplex) < std::get<1>(other_simplex);
             });
           
-          std::array<T, N> centroid = result.best_parameter;
+          std::array<T, N> centroid = result.parameter;
           std::for_each(
             simplex.cbegin(), std::prev(simplex.cend()),
             [this, &centroid](const auto& point) {
@@ -274,10 +330,8 @@ TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
     
     const auto&& result = optimiser.optimisation_function(problem, initial_parameters);
     CHECK(std::all_of(
-      result.best_parameter.cbegin(), std::next(result.best_parameter.cbegin(), optimiser.active_dimensions.size()),
-      [](const auto element) { 
-        return element >= 0.0;
-      }
+      result.parameter.cbegin(), std::next(result.parameter.cbegin(), optimiser.active_dimensions.size()),
+      std::bind(std::greater_equal<double>{}, std::placeholders::_1, 0.0)
     ) == true);
   }
   

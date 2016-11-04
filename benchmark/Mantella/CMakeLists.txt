@@ -14,8 +14,7 @@ add_compile_options(
   -march=native
   -ffast-math)
 
-find_path(MANTELLA_INCLUDE_DIR mantella0)
-target_include_directories(benchmark SYSTEM PRIVATE ${MANTELLA_INCLUDE_DIR})
+target_include_directories(benchmark SYSTEM PRIVATE "../../include")
 
 #
 # Prints noticeable variables
