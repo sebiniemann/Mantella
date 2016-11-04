@@ -81,7 +81,7 @@ do_doc() {
 do_benchmark() {
   echo -e "${NOTICE_COLOR}Compiling and running benchmarks.${RESET_COLOR}"
   
-  if [ -z $(pidof dockerd) ]; then
+  if [ -z "$(pidof dockerd)" ]; then
     if ! service docker start; then AN_ERROR_OCCURED=1; finish_up; return; fi
   fi
   
@@ -92,10 +92,10 @@ do_benchmark() {
     cd "./${LIBRARY}" || exit 1
     
     if [ "${LIBRARY}" != 'mantella' ]; then
-      if [ -z $(docker images -q "benchmark/${LIBRARY}") ]; then
+      if [ -z "$(docker images -q "benchmark/${LIBRARY}")" ]; then
         if ! docker build -t "benchmark/${LIBRARY}":latest .; then AN_ERROR_OCCURED=1; finish_up; return; fi
       fi
-      if [ -z $(docker ps -q -f name="benchmark_${LIBRARY}") ]; then
+      if [ -z "$(docker ps -q -f name="benchmark_${LIBRARY}")" ]; then
         if ! docker run -v "$(pwd):/${LIBRARY}" -w "/${LIBRARY}" --name "benchmark_${LIBRARY}" -t -d "benchmark/${LIBRARY}"; then AN_ERROR_OCCURED=1; finish_up; return; fi
       fi
       
@@ -111,11 +111,12 @@ do_benchmark() {
       if [ ! -d './build' ]; then
         mkdir build;
       fi
-      cd ./build
+      cd ./build || exit 1
       cmake ..
       make clean benchmark 
       ./benchmark
       cp benchmark.mat ..
+      cd .. || exit 1
     fi
       
     cd .. || exit 1

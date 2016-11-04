@@ -23,15 +23,6 @@
 #endif
 
 //
-// Configuration
-//
-
-// The random number generator engine to be used by Mantella
-#if !defined(MANTELLA_RANDOM_NUMBER_GENERATOR)
-  #define MANTELLA_RANDOM_NUMBER_GENERATOR std::mt19937_64
-#endif
-
-//
 // Dependencies
 //
 
@@ -61,8 +52,8 @@ namespace mant {
     // Random number generator
     // Provides global access to a one-time constructed random number generator.
     // *Note:* If *random_number_generator_type* was not thread-safe in the first place, it still wont be.
-    inline MANTELLA_RANDOM_NUMBER_GENERATOR& random_number_generator() {
-      static MANTELLA_RANDOM_NUMBER_GENERATOR random_number_generator;
+    inline std::mt19937_64& random_number_generator() {
+      static std::mt19937_64 random_number_generator;
       return random_number_generator;
     }
 
