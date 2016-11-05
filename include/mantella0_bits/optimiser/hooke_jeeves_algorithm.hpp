@@ -19,10 +19,10 @@ Hooke-Jeeves algorithm
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
 
   .. list-table:: Member variables
     :widths: 27 73
@@ -47,7 +47,7 @@ Hooke-Jeeves algorithm
       
         Will never throw an exception.
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct hooke_jeeves_algorithm : optimiser<T, N> {
   T initial_stepsize;
   T stepsize_decrease;
@@ -59,7 +59,7 @@ struct hooke_jeeves_algorithm : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept 
     : optimiser<T, N>(),
       initial_stepsize(T(1.0)), 
@@ -97,7 +97,7 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
     while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
       bool is_improving = false;
 
-      for (unsigned n = 0; n < this->active_dimensions.size(); ++n) {
+      for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
         auto parameter = result.parameter;
         parameter.at(n) += stepsize;
         
@@ -170,7 +170,7 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hooke_jeeves_algorithm", "[hooke_jeeves_algorithm]") {
-  constexpr unsigned dimensions = 3;
+  constexpr std::size_t dimensions = 3;
   mant::hooke_jeeves_algorithm<double, dimensions> optimiser;
   
   SECTION("Default configuration") {

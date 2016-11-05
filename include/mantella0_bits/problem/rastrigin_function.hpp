@@ -61,10 +61,10 @@ Rastrigin function
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member functions
     :widths: 27 73
@@ -78,7 +78,7 @@ Rastrigin function
       
         Will never throw an exception.
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct rastrigin_function : problem<T, N> {
   rastrigin_function() noexcept;
 };
@@ -87,7 +87,7 @@ struct rastrigin_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 rastrigin_function<T, N>::rastrigin_function() noexcept 
     : problem<T, N>() {
   /* Original, 2-dimensional: @see L. A. Rastrigin (1974). Systems of Extremal Control.

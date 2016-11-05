@@ -61,10 +61,10 @@ Rosenbrock function
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[2, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[2, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member functions
     :widths: 27 73
@@ -78,7 +78,7 @@ Rosenbrock function
       
         Will never throw an exception.
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct rosenbrock_function : problem<T, N> {
   rosenbrock_function() noexcept;
 };
@@ -87,7 +87,7 @@ struct rosenbrock_function : problem<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 rosenbrock_function<T, N>::rosenbrock_function() noexcept 
     : problem<T, N>() {
   static_assert(N > 1, "");

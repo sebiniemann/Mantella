@@ -19,10 +19,10 @@ Nelder-Mead method
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
 
   .. list-table:: Member variables
     :widths: 27 73
@@ -57,7 +57,7 @@ Nelder-Mead method
       
         Will never throw an exception.
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct nelder_mead_method : optimiser<T, N> {
   T reflection_weight;
   T expansion_weight;
@@ -71,7 +71,7 @@ struct nelder_mead_method : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 nelder_mead_method<T, N>::nelder_mead_method() noexcept 
     : optimiser<T, N>(),
       reflection_weight(T(1.0)),
@@ -136,7 +136,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
     std::for_each(
       simplex.cbegin(), std::prev(simplex.cend()),
       [this, &centroid](const auto& point) {
-        for (unsigned n = 0; n < this->active_dimensions.size(); ++n) {
+        for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
           centroid.at(n) += std::get<0>(point).at(n) / static_cast<T>(N);
         }
       });
@@ -156,7 +156,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.objective_value) {
-        for (unsigned n = 0; n < N; ++n) {
+        for (std::size_t n = 0; n < N; ++n) {
           centroid.at(n) += (reflected_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
         }
         
@@ -185,7 +185,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
         if (objective_value < result.objective_value) {
-          for (unsigned n = 0; n < N; ++n) {
+          for (std::size_t n = 0; n < N; ++n) {
             centroid.at(n) += (expanded_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
           }
         
@@ -209,7 +209,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
             return objective_value < std::get<1>(point);
           });
           
-        for (unsigned n = 0; n < N; ++n) {
+        for (std::size_t n = 0; n < N; ++n) {
           centroid.at(n) += (reflected_point.at(n) - std::get<0>(*position).at(n)) / static_cast<T>(N);
         }
           
@@ -236,7 +236,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         }
         
         if (objective_value < result.objective_value) {
-          for (unsigned n = 0; n < N; ++n) {
+          for (std::size_t n = 0; n < N; ++n) {
             centroid.at(n) += (contracted_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
           }
         
@@ -249,7 +249,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
               return objective_value < std::get<1>(point);
             });
             
-          for (unsigned n = 0; n < N; ++n) {
+          for (std::size_t n = 0; n < N; ++n) {
             centroid.at(n) += (contracted_point.at(n) - std::get<0>(*position).at(n)) / static_cast<T>(N);
           }
             
@@ -285,7 +285,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
           std::for_each(
             simplex.cbegin(), std::prev(simplex.cend()),
             [this, &centroid](const auto& point) {
-              for (unsigned n = 0; n < this->active_dimensions.size(); ++n) {
+              for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
                 centroid.at(n) += std::get<0>(point).at(n) / static_cast<T>(N);
               }
             });
@@ -303,7 +303,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("nelder_mead_method", "[nelder_mead_method]") {
-  constexpr unsigned dimensions = 3;
+  constexpr std::size_t dimensions = 3;
   mant::nelder_mead_method<double, dimensions> optimiser; 
   
   std::vector<std::array<double, dimensions>> initial_parameters(dimensions + 1);

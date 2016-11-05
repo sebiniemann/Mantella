@@ -19,10 +19,10 @@ Hill climbing
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
 
   .. list-table:: Member variables
     :widths: 27 73
@@ -47,7 +47,7 @@ Hill climbing
       
         Will never throw an exception.
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct hill_climbing : optimiser<T, N> {
   T minimal_stepsize;
   T maximal_stepsize;
@@ -59,7 +59,7 @@ struct hill_climbing : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 hill_climbing<T, N>::hill_climbing() noexcept 
     : optimiser<T, N>(),
       minimal_stepsize(T(0.0)),
@@ -122,7 +122,7 @@ hill_climbing<T, N>::hill_climbing() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("hill_climbing", "[hill_climbing]") {
-  constexpr unsigned dimensions = 3;
+  constexpr std::size_t dimensions = 3;
   mant::hill_climbing<double, dimensions> optimiser;
   
   SECTION("Default configuration") {

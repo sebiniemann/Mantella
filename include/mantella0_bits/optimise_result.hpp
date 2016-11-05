@@ -20,10 +20,10 @@ Optimisation result
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
 
   .. list-table:: Member variables
     :widths: 27 73
@@ -40,7 +40,7 @@ Optimisation result
   
     * - evaluations
     
-        ``unsigned``
+        ``std::size_t``
       - Lorem ipsum dolor sit amet
   
     * - duration
@@ -48,11 +48,11 @@ Optimisation result
         ``std::chrono::nanoseconds``
       - Lorem ipsum dolor sit amet
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct optimise_result {
   std::array<T, N> parameter{};
   T objective_value = std::numeric_limits<T>::infinity();
-  unsigned evaluations = 0;
+  std::size_t evaluations = 0;
   std::chrono::nanoseconds duration = std::chrono::nanoseconds(0);
 };
 

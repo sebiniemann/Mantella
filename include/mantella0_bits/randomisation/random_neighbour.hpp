@@ -41,7 +41,7 @@ Random neighbour
       - Lorem ipsum dolor sit amet
     * - active_dimensions
     
-        ``unsigned``
+        ``std::size_t``
       - Lorem ipsum dolor sit amet
 
   .. list-table:: Returns
@@ -55,7 +55,7 @@ std::array<T, N> random_neighbour(
     const std::array<T, N>& parameter,
     const T minimal_distance,
     const T maximal_distance,
-    const unsigned active_dimensions);
+    const std::size_t active_dimensions);
 
 //
 // Implementation
@@ -66,7 +66,7 @@ std::array<T, N> random_neighbour(
     const std::array<T, N>& parameter,
     const T minimal_distance,
     const T maximal_distance,
-    const unsigned active_dimensions) {
+    const std::size_t active_dimensions) {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(N > 0, "");
   

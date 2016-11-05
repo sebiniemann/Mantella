@@ -42,13 +42,13 @@ Problems
       // Assumes more than one output parameter.
       struct your_results {
         double objective_value;
-        unsigned other_information;
+        std::size_t other_information;
       };
       
       // Also assumes multiple input parameter, with the parameters under optimisation being different
       // from std::array<T, N>.
       your_results your_function(
-          unsigned other_information,
+          std::size_t other_information,
           std::vector<double> first_parameter,
           double second_parameter) {
         your_results results;
@@ -62,7 +62,7 @@ Problems
       
       int main() {
         // The additional input information.
-        unsigned other_information = 100;
+        std::size_t other_information = 100;
         
         mant::problem<double, 3> problem;
         
@@ -137,10 +137,10 @@ Problems
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
         
         For cases where the number of dimensions can be lowered during run-time (for example separable problems), the
         :cpp:any:`optimiser` can be told to focus on specific domains by specifying ``.active_dimensions``.
@@ -155,15 +155,15 @@ Problems
           #include <iterator> // Used for std::ostream_iterator
           
           int main() {
-            constexpr unsigned number_of_dimensions = 3;
-            const std::vector<unsigned> active_dimensions = {0, 2};
+            constexpr std::size_t number_of_dimensions = 3;
+            const std::vector<std::size_t> active_dimensions = {0, 2};
             
             mant::problem<double, number_of_dimensions> problem;
             // Only the first and third dimension are active.
             // Captures *active_dimensions*.
             problem.objective_function = [&active_dimensions](const auto& parameter) {
               double objective_value = 0.0;
-              for (unsigned n = 0; n < active_dimensions.size(); ++n) {
+              for (std::size_t n = 0; n < active_dimensions.size(); ++n) {
                 // Make sure this computation is actually a heavy-weight. Otherwise, the additional memory 
                 // lookup and code complexity might not be worth it.
                 // How to ensure this? Benchmarking, benchmarking and benchmarking ;)
@@ -255,7 +255,7 @@ Below is a list of common problems we implemented, to quickly get a feeling for 
 .. include:: problem/sphere_function.include
 .. include:: problem/sum_of_different_powers.include
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct problem {
   std::function<T(
       const std::array<T, N>& parameter)> objective_function;
@@ -270,7 +270,7 @@ struct problem {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 constexpr problem<T, N>::problem() noexcept {
   static_assert(std::is_floating_point<T>::value, "");
   static_assert(N > 0, "");

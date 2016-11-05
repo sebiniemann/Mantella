@@ -61,10 +61,10 @@ Sum of different powers
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member functions
     :widths: 27 73
@@ -78,7 +78,7 @@ Sum of different powers
       
         Will never throw an exception.
 */
-template <typename T,  unsigned N>
+template <typename T,  std::size_t N>
 struct sum_of_different_powers : problem<T, N> {
   sum_of_different_powers() noexcept;
 };
@@ -87,7 +87,7 @@ struct sum_of_different_powers : problem<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 sum_of_different_powers<T, N>::sum_of_different_powers() noexcept 
     : problem<T, N>() {
   /*   n   /                           \
@@ -96,7 +96,7 @@ sum_of_different_powers<T, N>::sum_of_different_powers() noexcept
    */
   this->objective_function = [](const auto& parameter) {
     T sum = T(0.0);
-    for (unsigned n = 0; n < N; ++n) {
+    for (std::size_t n = 0; n < N; ++n) {
       sum += std::pow(std::fabs(parameter.at(n)), static_cast<T>(n + 2));
     }
     
