@@ -33,7 +33,7 @@ Analysing
       - The problem's boundaries will be remapped to ``[0, 1]``. However, the provided problem remains unchanged.
     * - evaluations
     
-        ``unsigned``
+        ``std::size_t``
       - Lorem ipsum dolor sit amet
     * - acceptable_deviation
     
@@ -48,20 +48,20 @@ Analysing
     
 .. include:: analyser/additive_separability.include
 */
-template <typename T1, unsigned N, template <class, unsigned> class T2>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,
-    const unsigned evaluations,
+    const std::size_t evaluations,
     const T1 acceptable_deviation);
 
 //
 // Implementation
 //
 
-template <typename T1, unsigned N, template <class, unsigned> class T2>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 analyse_result<T1, N> analyse(
     const T2<T1, N>& problem,
-    const unsigned evaluations,
+    const std::size_t evaluations,
     const T1 acceptable_deviation) {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(N > 0, "");
@@ -84,6 +84,6 @@ TEST_CASE("analyse", "[analyse]") {
   const mant::sphere_function<double, 5> sphere_function;
 
   const auto&& result = mant::analyse(sphere_function, 100, 1e-12);
-  CHECK((result.additive_separability == std::array<unsigned, 5>({0, 1, 2, 3, 4})));
+  CHECK((result.additive_separability == std::array<std::size_t, 5>({0, 1, 2, 3, 4})));
 }
 #endif

@@ -19,7 +19,7 @@ Optimiser
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - Lorem ipsum dolor sit amet
   
   .. list-table:: Member variables
@@ -32,7 +32,7 @@ Optimiser
           
     * - maximal_evaluations
         
-        ``unsigned``
+        ``std::size_t``
       - Lorem ipsum dolor sit amet
         
     * - maximal_duration
@@ -42,7 +42,7 @@ Optimiser
         
     * - active_dimensions
         
-        ``std::vector<unsigned>``
+        ``std::vector<std::size_t>``
       - Lorem ipsum dolor sit amet
 
   .. list-table:: Member functions
@@ -61,17 +61,17 @@ Optimiser
 .. include:: optimiser/particle_swarm_optimisation.include
 .. include:: optimiser/random_search.include
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct optimiser {
   std::function<optimise_result<T, N>(
       const mant::problem<T, N>& problem,
       const std::vector<std::array<T, N>>& initial_parameters)> optimisation_function;
   
   T acceptable_objective_value;
-  unsigned maximal_evaluations;
+  std::size_t maximal_evaluations;
   std::chrono::nanoseconds maximal_duration;
   
-  std::vector<unsigned> active_dimensions;
+  std::vector<std::size_t> active_dimensions;
   
   optimiser() noexcept;
 };
@@ -80,7 +80,7 @@ struct optimiser {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 optimiser<T, N>::optimiser() noexcept 
   : acceptable_objective_value(-std::numeric_limits<T>::infinity()),
     maximal_evaluations(1'000 * N),
@@ -103,6 +103,6 @@ TEST_CASE("optimiser", "[optimiser]") {
   CHECK(optimiser.acceptable_objective_value == -std::numeric_limits<double>::infinity());
   CHECK(optimiser.maximal_evaluations == 3000);
   CHECK(optimiser.maximal_duration == std::chrono::seconds(10));
-  CHECK(optimiser.active_dimensions == std::vector<unsigned>({0, 1, 2}));
+  CHECK(optimiser.active_dimensions == std::vector<std::size_t>({0, 1, 2}));
 }
 #endif

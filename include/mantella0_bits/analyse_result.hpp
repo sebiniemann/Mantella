@@ -19,22 +19,22 @@ Analysing result
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member variables
     :widths: 27 73
   
     * - additive_separability
     
-        ``std::array<unsigned, N>``
+        ``std::array<std::size_t, N>``
       - Lorem ipsum dolor sit amet
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct analyse_result {
-  std::array<unsigned, N> additive_separability;
+  std::array<std::size_t, N> additive_separability;
 };
 
 //

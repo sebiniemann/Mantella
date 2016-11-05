@@ -19,10 +19,10 @@ Additive separability
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
     * - T2
         
         Derived from :cpp:any:`problem`
@@ -40,7 +40,7 @@ Additive separability
         (``.lower_bounds``) are less than or equal to their upper bounds (``.upper_bounds``).
     * - evaluations
     
-        ``unsigned``
+        ``std::size_t``
       - The maximal number of evaluations per tried out separation. If an evaluation is found that exceeds ``acceptable_deviation``, the separation candidate is discarded and the next one is tried.
       
         Instead of trying out each possible separation, which will be a `Bell number <https://en.wikipedia.org/wiki/Bell_number>`_ and grows very quickly (2, 5, 15, 52, 203, 877, 4140, 21147, ... `A000110 in OEIS <https://oeis.org/A000110>`_), only the separations into two parts are explicitly tested and reasoning is applied to check for further separations.
@@ -60,23 +60,23 @@ Additive separability
   .. list-table:: Returns
     :widths: 27 73
     
-    * - ``std::array<unsigned, N>``
+    * - ``std::array<std::size_t, N>``
       - Lorem ipsum dolor sit amet
 */
-template <typename T1, unsigned N, template <class, unsigned> class T2>
-std::array<unsigned, N> additive_separability(
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+std::array<std::size_t, N> additive_separability(
     const T2<T1, N>& problem,
-    const unsigned evaluations,
+    const std::size_t evaluations,
     const T1 acceptable_deviation);
 
 //
 // Implementation
 // 
 
-template <typename T1, unsigned N, template <class, unsigned> class T2>
-std::array<unsigned, N> additive_separability(
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
+std::array<std::size_t, N> additive_separability(
     const T2<T1, N>& problem,
-    const unsigned evaluations,
+    const std::size_t evaluations,
     const T1 acceptable_deviation) {
   static_assert(std::is_floating_point<T1>::value, "");
   static_assert(N > 0, "");
@@ -90,7 +90,7 @@ std::array<unsigned, N> additive_separability(
   assert(acceptable_deviation >= 0);
       
   // Initialises *partition* with 0, indicating that all dimensions are in the same group and none is separable.
-  std::array<unsigned, N> partition;
+  std::array<std::size_t, N> partition;
   partition.fill(0);
   
   if (N == 1) {
@@ -101,7 +101,7 @@ std::array<unsigned, N> additive_separability(
   // The parts are ordered, such that the first one will not contain more elements than the second one.
   // *n* stands for the number of elements in the first part (and is therefore limited by floor
   // (*N* / 2)).
-  for (unsigned n = 1; n <= N / 2; ++n) {
+  for (std::size_t n = 1; n <= N / 2; ++n) {
     /* Each partition is represented by a bitmask, whereby *true* marks elements in the first part and *false* marks 
      * elements in the second part.
      * By iterating over all permutation of *bitmask*, all possible partitions are proceeded.
@@ -135,7 +135,7 @@ std::array<unsigned, N> additive_separability(
         break;
       }
 
-      for (unsigned k = 0; k < evaluations; ++k) {
+      for (std::size_t k = 0; k < evaluations; ++k) {
         /* Tests whether the function is separable into the two parts or not.
          * A function *f* is additive separable into two other function *g*, *h* if the following holds:
          *
@@ -167,7 +167,7 @@ std::array<unsigned, N> additive_separability(
         
         std::array<T1, N> parameter_ad;
         std::array<T1, N> parameter_bc;
-        for (unsigned l = 0; l < N; ++l) {
+        for (std::size_t l = 0; l < N; ++l) {
           // Maps [0, 1] linear to [*problem.lower_bounds*, *problem.upper_bounds*], 
           // addressing the actual bounds per dimension.
           parameter_ac.at(l) = 
@@ -225,12 +225,12 @@ std::array<unsigned, N> additive_separability(
         
         std::array<bool, N> is_remaining_dimension;
         is_remaining_dimension.fill(true);
-        for (unsigned l = 0; l < N; ++l) {
+        for (std::size_t l = 0; l < N; ++l) {
           if (is_remaining_dimension.at(l)) {
             // Compares the sequence for all following, remaining dimensions to the current one.
             // If the sequence matches, both get the same part number (*l*) and the dimension is marked as 
             // non-remaining.
-            for (unsigned m = l + 1; m < N; ++m) {
+            for (std::size_t m = l + 1; m < N; ++m) {
               if (is_remaining_dimension.at(m) && 
                   bitmask.at(l) == bitmask.at(m) && 
                   partition.at(l) == partition.at(m)) {
@@ -262,20 +262,20 @@ std::array<unsigned, N> additive_separability(
 TEST_CASE("additive_separability", "[property_analysis][additive_separability]") {
   // Fully-separable
   const mant::sphere_function<double, 5> sphere_function;
-  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<unsigned, 5>({0, 1, 2, 3, 4})));
+  CHECK((additive_separability(sphere_function, 100, 1e-12) == std::array<std::size_t, 5>({0, 1, 2, 3, 4})));
   
   // Partly-separable
   mant::problem<double, 5> problem;
   problem.objective_function = [](const auto& parameter) {
     return std::get<0>(parameter) * std::get<4>(parameter) + std::get<2>(parameter) * std::get<3>(parameter);
   };
-  CHECK((additive_separability(problem, 100, 1e-12) == std::array<unsigned, 5>({0, 1, 2, 2, 0})));
+  CHECK((additive_separability(problem, 100, 1e-12) == std::array<std::size_t, 5>({0, 1, 2, 2, 0})));
   
   // Non-separable
   const mant::ackley_function<double, 5> ackley_function;
-  CHECK((additive_separability(ackley_function, 100, 1e-12) == std::array<unsigned, 5>({0, 0, 0, 0, 0})));
+  CHECK((additive_separability(ackley_function, 100, 1e-12) == std::array<std::size_t, 5>({0, 0, 0, 0, 0})));
   
   // Non-separable with a permissive, acceptable deviation
-  CHECK((additive_separability(ackley_function, 100, 100.0) == std::array<unsigned, 5>({0, 1, 2, 3, 4})));
+  CHECK((additive_separability(ackley_function, 100, 100.0) == std::array<std::size_t, 5>({0, 1, 2, 3, 4})));
 }
 #endif

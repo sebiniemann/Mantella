@@ -6,20 +6,20 @@
 // Mantella
 #include <mantella0>
 
-static constexpr std::array<unsigned, 15> dimensions = {2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40};
+static constexpr std::array<std::size_t, 15> dimensions = {2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40};
 static constexpr std::size_t repetitions = 100;
 static constexpr double acceptable_objective_value = 1e-5;
-static constexpr double maximal_evaluations = std::numeric_limits<unsigned>::max();
+static constexpr double maximal_evaluations = std::numeric_limits<std::size_t>::max();
 static constexpr std::chrono::nanoseconds maximal_duration = std::chrono::milliseconds(10);
 
 /* +------------+------------+--------------+----------+-------------+
  * | Dimensions | Problem ID | Optimiser ID | Duration | Successful? |
  * +------------+------------+--------------+----------+-------------+
  */
-static std::array<std::tuple<unsigned, unsigned, unsigned, std::chrono::nanoseconds, bool>, dimensions.size() * 5 * 5 * repetitions> results;
+static std::array<std::tuple<std::size_t, std::size_t, std::size_t, std::chrono::nanoseconds, bool>, dimensions.size() * 5 * 5 * repetitions> results;
 static std::size_t n = 0;
 
-template <unsigned N>
+template <std::size_t N>
 struct benchmark {
   static constexpr void loop() {
     static_assert(0 < N && N <= dimensions.size(), "");
@@ -41,10 +41,10 @@ struct benchmark {
       std::unique_ptr<mant::optimiser<double, dimensions>>(new mant::random_search<double, dimensions>)
     };
     
-    for (unsigned k = 0; k < problems.size(); ++k) {
+    for (std::size_t k = 0; k < problems.size(); ++k) {
       const auto& problem = *problems.at(k);
       
-      for (unsigned l = 0; l < optimisers.size(); ++l) {
+      for (std::size_t l = 0; l < optimisers.size(); ++l) {
         auto& optimiser = *optimisers.at(l);
         optimiser.acceptable_objective_value = acceptable_objective_value;
         optimiser.maximal_evaluations = maximal_evaluations;
@@ -71,7 +71,7 @@ struct benchmark {
               std::ref(mant::random_number_generator())));
         }
         
-        for (unsigned m = 0; m < repetitions; ++m) {
+        for (std::size_t m = 0; m < repetitions; ++m) {
           const auto&& result = mant::optimise(problem, optimiser, initial_parameters);
           results.at(n++) = std::make_tuple(dimensions, k, l, result.duration, result.objective_value <= acceptable_objective_value);
         }

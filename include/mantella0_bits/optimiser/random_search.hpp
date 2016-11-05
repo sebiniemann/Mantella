@@ -19,10 +19,10 @@ Random search
       - The value type of the parameter and objective value.
     * - N
         
-        ``unsigned``
+        ``std::size_t``
       - The number of dimensions.
         
-        Must be within ``[1, std::numeric_limits<unsigned>::max()]``.
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member functions
     :widths: 27 73
@@ -34,7 +34,7 @@ Random search
       
         Will never throw an exception.
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct random_search : optimiser<T, N> {
   random_search() noexcept;
 };
@@ -43,7 +43,7 @@ struct random_search : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 random_search<T, N>::random_search() noexcept 
     : optimiser<T, N>() {
   this->optimisation_function = [this](const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters) {
@@ -100,7 +100,7 @@ random_search<T, N>::random_search() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("random_search", "[random_search]") {
-  constexpr unsigned dimensions = 3;
+  constexpr std::size_t dimensions = 3;
   mant::random_search<double, dimensions> optimiser;
   
   SECTION("Boundary handling") {
