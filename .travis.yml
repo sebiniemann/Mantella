@@ -23,7 +23,9 @@ install:
   - | 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
       wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
-      sudo tar -xzf catch.tar.gz -C /usr/include --strip-components=2 Catch-1.5.0/single_include/catch.hpp && \
+      mkdir catch && \
+      tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
+      sudo cp catch/single_include/catch.hpp /usr/local/include/ && \
       rm -Rf catch.tar.gz catch/ && \
       chmod a+x ./.develop.sh \
     ; fi
