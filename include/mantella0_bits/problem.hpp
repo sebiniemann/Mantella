@@ -6,28 +6,128 @@ Problems
 
   .. versionadded:: 1.0.0 
 
-  Defining an optimisation problem is usually the first of two step done when working with Mantella (the second one will be calling `:cpp:any:`optimise`, to *solve* the problem).
+  Defining an optimisation problem is the first of two step necessary to solve a problem using Mantella (the second one is calling :cpp:any:`optimise` to *solve* the problem).
   
-  As we are focused on optimising black-box/derivative-free problems (.i.e. problems without a known/primitive first- or second-order derivative), 
+  Recall that a continuous black-box/derivative-free optimisation problem can be denoted as
   
-  This ``struct`` contains 
+  .. math::
   
-  .. code-block:: c++
-  
-    #include <mantella0>
+    \begin{align}
+      \underset{x \in R^N}{\text{minimise}} & \ f(x)                  \\
+      \text{subject to}                     & \ l_i \leq x_i \leq u_i
+    \end{align}
     
-    double some_function() {
-      return 0.0;
-    }
-    
-    int main() {
-      
-      mant::problem<double, 3> problem;
-      
-      return 0;
-    }
+  , where ``f(x)`` is the objective function to be optimised over the ``N``-dimensional parameter ``x`` and ``l_i, u_i`` the ``i``-th lower/upper bound.
   
+  Similar to this, :cpp:any:`problem` requires you to define
+  
+  - the objective function ``f(x)`` to be minimised (``.objective_function``) and
+  - the lower (``.lower_bounds``) and upper bounds (``.upper_bounds``)
+  
+  The lower and upper bounds are set to ``[0, 1]^n`` as default, while the objective function is initially unset.
 
+  .. container:: topic
+  
+    Using existing functions from your code base
+  
+    The most common case is to start from a pre-existing code base, having already some function to be minimised.
+    
+    There are many reasons that simply setting ``.objective_function = your_function`` might not work. While simpler cases may be solved by ``.objective_function = std::bind(your_function, ..., std::placeholders::_1, ...)``, you can use a lamdba function as wrapper around ``your_function`` for more difficult cases.
+  
+    .. code-block:: c++
+    
+      #include <mantella0>
+      #include <iostream> // Used for std::cout
+      
+      // Assumes more than one output parameter.
+      struct your_results {
+        double objective_value;
+        unsigned other_information;
+      };
+      
+      // Also assumes multiple input parameter, with the parameters under optimisation being different
+      // from std::array<T, N>.
+      your_results your_function(
+          unsigned other_information,
+          std::vector<double> first_parameter,
+          double second_parameter) {
+        your_results results;
+        results.objective_value = 
+          std::accumulate(first_parameter.cbegin(), first_parameter.cend(), 0.0) * 
+          second_parameter;
+        results.other_information = other_information;
+        
+        return results;
+      }
+      
+      int main() {
+        // The additional input information.
+        unsigned other_information = 100;
+        
+        mant::problem<double, 3> problem;
+        
+        // Additional information is captured, the parameter is split into two parts, one being converted
+        // to *std::vector* and one of the results is returned as objective value.
+        problem.objective_function = [&other_information](const std::array<double, 3>& parameter) {
+          return your_function(
+            other_information,
+            std::vector<double>(parameter.cbegin(), std::prev(parameter.cend())), 
+            std::get<2>(parameter)
+          ).objective_value;
+        };
+        
+        std::cout << "f(1.0, 2.0, 3.0) = " << problem.objective_function({1.0, 2.0, 3.0}) << std::endl;
+        
+        return 0;
+      }
+
+  .. container:: topic
+  
+    Adding more (non-linear) constraints
+  
+    Another common case is having more constraints than just bounded ones (sometimes also called box- or interval-constraints).
+
+    Picking up the above problem denotion, we can extend it for arbitrary constraints as
+    
+    .. math::
+    
+      \begin{align}
+        \underset{x \in R^N}{\text{minimise}} & \ f(x) + \underset{x \in R^N}{\max}(f(x)) g(x) \\
+        \text{subject to}                     & \ l_i \leq x_i \leq u_i
+      \end{align}
+    
+    , where ``g(x)`` is the sum of all additional constraints. Note that ``g(x)`` is weighted by the maximal objective value (``f(x)``) within the bounds (larger values will also be sufficient, it must not be the actual supremum). This ensures that non-satisfying parameters will have a worse objective value then satisfying ones.
+    
+    By reducing the constraint value, as the parameter comes closer to the satisfying parameter space, the optimiser can be guided to quicker solve the `constraint satisfaction problem <https://en.wikipedia.org/wiki/Constraint_satisfaction_problem>`_.
+    
+    Note that ``g(x)`` should be minimal (if not simply be ``0``) for satisfying parameter.
+    
+    .. code-block:: c++
+    
+      #include <mantella0>
+      #include <iostream> // Used for std::cout
+      
+      int main() {
+        // A optimisation problem with soft-constraints
+        mant::problem<double, 3> problem;
+        problem.objective_function = [](const std::array<double, 3>& parameter) {
+          // The actual objective value.
+          double objective_value = std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
+          // An additional constraint, x_1 must be greater than or equal to x_2 * x_3.
+          // The added value will become smaller as the first parameter elements come closer to satisfy the 
+          // constraint and be 0 for all satisfying parameters.
+          objective_value += std::max(
+            0.0,
+            10.0 * std::get<1>(parameter) * std::get<2>(parameter) - std::get<0>(parameter));
+        
+          return objective_value;
+        };
+        
+        std::cout << "f(1.0, 2.0, 3.0) = " << problem.objective_function({1.0, 2.0, 3.0}) << std::endl;
+        
+        return 0;
+      }
+    
   .. list-table:: Template parameters
     :widths: 27 73
     

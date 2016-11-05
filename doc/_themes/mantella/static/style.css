@@ -10,7 +10,8 @@ a {
   color: #2980B9;
 }
 
-a[href^="http:"]:after {
+a[href^="http:"]:after,
+a[href^="https:"]:after {
   content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABJQTFRF////ZmZmf39/mZmZzMzM////uFQy2wAAAAF0Uk5TAEDm2GYAAAA9SURBVAjXY2BgUFJSYmBgMg0NYgCygaSgoAqQFA1ydQKSKiFKRgyizk4CCgyiIaoCDAyioaFAUlBQUIABAOraB5b0DpEbAAAAAElFTkSuQmCC);
 }
 
@@ -139,6 +140,17 @@ main .deprecated {
   display: none;
 }
 
+main .topic > :first-child {
+  font-family: 'Roboto Slab', serif;
+  margin: 24px 0 16px;
+  font-weight: bold;
+  font-size: 110%;
+}
+
+main .topic > :not(:first-child) {
+  padding-left: 24px;
+}
+
 main p {
   margin: 0 0 8px 0;
 }
@@ -166,6 +178,10 @@ main .xref {
 
 main .note .xref {
   background-color: #fff;
+}
+
+main details {
+  margin: 12px 0;
 }
 
 main summary {
