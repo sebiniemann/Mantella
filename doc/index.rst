@@ -2,14 +2,11 @@ Welcome to Mantella
 ===================
 
 Contents:
-
-.. toctree::
-   :maxdepth: 0
-
-   self
-   
-.. toctree::
   
+.. toctree::
+  :maxdepth: 2
+  
+  self
   api_reference/problem
   api_reference/optimiser
   api_reference/optimise
