@@ -216,7 +216,7 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
   for change in changelog:
     if actualVersion != change[0]:
       actualVersion = change[0]
-      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n' + '  :widths: 27 73\n\n')
+      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n' + '  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n\n')
     
     if change[1] == 2: # Versionadded tag
       changelogfile.write('  * - **Added**\n    - :cpp:any:`' + change[2] + '`\n')
