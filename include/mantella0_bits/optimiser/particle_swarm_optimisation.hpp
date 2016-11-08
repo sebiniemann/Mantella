@@ -1,5 +1,6 @@
 /**
 Particle swarm optimisation
+<<<<<<< HEAD
 ===========================
 
 .. cpp:class:: template<T, N> particle_swarm_optimisation
@@ -28,8 +29,66 @@ Particle swarm optimisation
   .. cpp:function:: particle_swarm_optimisation()
   
     Lorem ipsum dolor sit amet
+=======
+---------------------------
+
+.. cpp:class:: particle_swarm_optimisation : public optimiser
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+
+  .. list-table:: Member variables
+    :widths: 27 73
+  
+    * - initial_velocity
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - maximal_acceleration
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - maximal_local_attraction
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+  
+    * - maximal_global_attraction
+    
+        ``T``
+      - Lorem ipsum dolor sit amet
+      
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - particle_swarm_optimisation
+    
+        Constructor
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
+>>>>>>> master
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct particle_swarm_optimisation : optimiser<T, N> {
   T initial_velocity;
   T maximal_acceleration;
@@ -43,7 +102,7 @@ struct particle_swarm_optimisation : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept 
     : optimiser<T, N>(),
       initial_velocity(T(0.5)),
@@ -102,7 +161,7 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       std::array<T, N> attraction_center;
       const auto weigthed_local_attraction = maximal_local_attraction * std::uniform_real_distribution<T>(0, 1)(random_number_generator());
       const auto weigthed_global_attraction = maximal_global_attraction * std::uniform_real_distribution<T>(0, 1)(random_number_generator());
-      for (unsigned k = 0; k < this->active_dimensions.size(); ++k) {
+      for (std::size_t k = 0; k < this->active_dimensions.size(); ++k) {
         attraction_center.at(k) = (
             weigthed_local_attraction * (local_parameter.at(k) - parameter.at(k)) + 
             weigthed_global_attraction * (result.parameter.at(k) - parameter.at(k))) / 
@@ -120,7 +179,7 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       
       auto& velocity = velocities.at(n);
       const auto weigthed_acceleration = maximal_acceleration * std::uniform_real_distribution<T>(0, 1)(random_number_generator());
-      for (unsigned k = 0; k < this->active_dimensions.size(); ++k) {
+      for (std::size_t k = 0; k < this->active_dimensions.size(); ++k) {
         auto& parameter_element = parameter.at(k);
         auto& velocity_element = velocity.at(k);
         
@@ -161,7 +220,7 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("particle_swarm_optimisation", "[particle_swarm_optimisation]") {
-  constexpr unsigned dimensions = 3;
+  constexpr std::size_t dimensions = 3;
   mant::particle_swarm_optimisation<double, dimensions> optimiser;
   
   SECTION("Default configuration") {

@@ -2,7 +2,17 @@
 Optimisation
 ============
 
+<<<<<<< HEAD
 .. cpp:function:: template<T1, N, T2, T3> optimise(problem, optimiser, initial_parameters)
+=======
+.. cpp:function:: optimise(problem, optimiser, initial_parameters)
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+>>>>>>> master
 
   .. list-table:: Shortcuts
     :widths: 27 73
@@ -10,7 +20,11 @@ Optimisation
     * - optimise(problem, optimiser)
         
         
+<<<<<<< HEAD
       - Calls :cpp:any:`optimise` ``(problem, optimiser, initial_parameters)``.
+=======
+      - Calls ``optimise(problem, optimiser, initial_parameters)``.
+>>>>>>> master
       
         The number of initial parameters will be
       
@@ -18,6 +32,7 @@ Optimisation
         - ... ``10 * N`` if the optimiser is :cpp:any:`particle_swarm_optimisation` ...
         - ... ``1`` for all other optimisers.
         
+<<<<<<< HEAD
         Each parameter is randomly drawn from ``[0, 1]``.
     * - optimise(problem)
         
@@ -54,24 +69,71 @@ Optimisation
       - Lorem ipsum dolor sit amet
 */
 template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>
+=======
+        Each parameter is randomly drawn from ``[problem.lower_bounds, problem.upper_bounds]``.
+    * - optimise(problem)
+        
+        
+      - Calls ``optimise(problem, optimiser)``.
+      
+        Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
+  
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+      
+  .. list-table:: Function functions
+    :widths: 27 73
+    
+    * - problem
+    
+        ``T2``
+      - The problem's boundaries will be remapped to ``[0, 1]``. However, the provided problem remains unchanged.
+    * - optimiser
+    
+        ``T3``
+      - Lorem ipsum dolor sit amet
+    * - initial_parameters
+    
+        ``std::vector<std::array<T1, N>>``
+      - Lorem ipsum dolor sit amet
+
+  .. list-table:: Returns
+    :widths: 27 73
+    
+    * - ``optimise_result``
+      - Lorem ipsum dolor sit amet
+*/
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, template <class, std::size_t> class T3>
+>>>>>>> master
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem,
     const T3<T1, N>& optimiser,
     std::vector<std::array<T1, N>> initial_parameters);
 
-template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, template <class, std::size_t> class T3>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem,
     const T3<T1, N>& optimiser);
     
-template <typename T1, unsigned N, template <class, unsigned> class T2>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem);
 //
 // Implementation
 //
 
-template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, template <class, std::size_t> class T3>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem,
     const T3<T1, N>& optimiser,
@@ -88,7 +150,7 @@ optimise_result<T1, N> optimise(
   // Maps the parameter's bounds from [*problem.lower_bounds*, *problem.upper_bounds*] to [0, 1] and places all active 
   // dimensions (in-order) upfront.
   for (auto& parameter : initial_parameters) {
-    for (unsigned n = 0; n < optimiser.active_dimensions.size(); ++n) {
+    for (std::size_t n = 0; n < optimiser.active_dimensions.size(); ++n) {
       parameter.at(n) = (
           parameter.at(optimiser.active_dimensions.at(n)) - 
           problem.lower_bounds.at(n)
@@ -99,7 +161,7 @@ optimise_result<T1, N> optimise(
   mant::problem<T1, N> mapped_problem;
   mapped_problem.objective_function = [&problem, &optimiser](const auto& parameter) {
     std::array<T1, N> mapped_parameter = problem.lower_bounds;
-    for (unsigned n = optimiser.active_dimensions.size(); n > 0; --n) {
+    for (std::size_t n = optimiser.active_dimensions.size(); n > 0; --n) {
       mapped_parameter.at(optimiser.active_dimensions.at(n - 1)) = 
         problem.lower_bounds.at(n - 1) +
         parameter.at(n - 1) * (
@@ -122,7 +184,11 @@ optimise_result<T1, N> optimise(
   
   // Maps the parameter's bounds back from [0, 1] to [*lower_bounds*, *upper_bounds*], permutes the parameter to match 
   // the active dimensions.
+<<<<<<< HEAD
   for (unsigned n = optimiser.active_dimensions.size(); n > 0; --n) {
+=======
+  for (std::size_t n = optimiser.active_dimensions.size(); n > 0; --n) {
+>>>>>>> master
     result.parameter.at(optimiser.active_dimensions.at(n - 1)) = 
       problem.lower_bounds.at(n - 1) +
       result.parameter.at(n - 1) * (
@@ -133,7 +199,7 @@ optimise_result<T1, N> optimise(
   return result;
 }
 
-template <typename T1, unsigned N, template <class, unsigned> class T2, template <class, unsigned> class T3>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2, template <class, std::size_t> class T3>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem,
     const T3<T1, N>& optimiser) {
@@ -157,7 +223,7 @@ optimise_result<T1, N> optimise(
   return optimise(problem, optimiser, initial_parameters);
 }
 
-template <typename T1, unsigned N, template <class, unsigned> class T2>
+template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem) {
   return optimise(problem, hooke_jeeves_algorithm<T1, N>());
@@ -169,17 +235,23 @@ optimise_result<T1, N> optimise(
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("optimise", "[optimise]") {
-  mant::sphere_function<double, 2> problem;
+  mant::sphere_function<double, 2u> problem;
   problem.lower_bounds = {-5.0, -5.0};
   problem.upper_bounds = {5.0, 5.0};
   
-  mant::hooke_jeeves_algorithm<double, 2> optimiser;
+  mant::hooke_jeeves_algorithm<double, 2u> optimiser;
   optimiser.acceptable_objective_value = 1e-12;
   
   const auto&& result = mant::optimise(problem, optimiser, {{-3.2, 4.1}});
+<<<<<<< HEAD
   CHECK((result.parameter == std::array<double, 2>({0.50000004768371475, 0.49999997019767761})));
   CHECK(result.objective_value == Approx(5.57065506021764692e-13));
   CHECK(result.evaluations == 189);
+=======
+  CHECK((result.parameter == std::array<double, 2u>({-6.675720225501891e-07, 0.0})));
+  CHECK(result.objective_value == Approx(5.57065506021764692e-13));
+  CHECK(result.evaluations == 137);
+>>>>>>> master
   
   CHECK_NOTHROW(mant::optimise(problem, optimiser));
   CHECK_NOTHROW(mant::optimise(problem));

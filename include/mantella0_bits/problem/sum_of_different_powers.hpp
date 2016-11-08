@@ -1,43 +1,29 @@
 /**
-Sphere function
-<<<<<<< HEAD
-===============
+Sum of different powers
+-----------------------
 
-.. cpp:class:: template<T, N> sphere_function
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-      
-  .. cpp:function:: sphere_function()
-  
-    Lorem ipsum dolor sit amet
-=======
----------------
-
-.. cpp:class:: sphere_function : public problem
+.. cpp:class:: sum_of_different_powers : public problem
 
   .. versionadded:: 1.0.0 
 
-  The sphere function is a common *toy* problem with a very small computational cost, used for testing and benchmarking algorithms.
+  The sum of different powers function is a common *toy* problem with a very small computational cost, used for testing and benchmarking algorithms.
   
-  Its analytic form can be denotes as
+  Its original, analytic form can be denotes as
   
   .. math::
   
-    f(\text{parameter}) = \sum_{i = 1}^{n} \text{parameter}_i^2
+    f(\text{parameter}) = \sum_{i = 1}^{n} \text{parameter}_i^{i + 1}
+    
+  The problem's default search space is bounded to ``[-1, 1]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
 
-  The problem's default search space is bounded to ``[-5.12, 5.12]``, with optimal parameter ``(0, 0, ..., 0)`` and optimal function value ``0``.
-  
   .. code-block:: image
-    :name: sphere_function.png
+    :name: sum_of_different_powers.png
     
     #include <mantella0>
     #include <fstream> // Used for std::ofstream
     
     int main() {
-      mant::sphere_function<double, 2> problem;
+      mant::sum_of_different_powers<double, 2> problem;
       
       std::ofstream output;
       output.open("data.mat");
@@ -53,9 +39,9 @@ Sphere function
     }
   
     :octave:
-    
+
     data = dlmread('data.mat');
-    [X, Y] = meshgrid(linspace(-5.12, 5.12, size(data, 1)), linspace(-5.12, 5.12, size(data, 2)));
+    [X, Y] = meshgrid(linspace(-1, 1, size(data, 1)), linspace(-1, 1, size(data, 2)));
     surfc(X, Y, data)
     xlabel('x_1')
     ylabel('x_2')
@@ -83,7 +69,7 @@ Sphere function
   .. list-table:: Member functions
     :widths: 27 73
     
-    * - sphere_function()
+    * - sum_of_different_powers()
     
         Constructor
       - Initialises all member variables to their default value.
@@ -91,11 +77,10 @@ Sphere function
         This will especially set `objective_function` and fill the lower and bounds.
       
         Will never throw an exception.
->>>>>>> master
 */
-template <typename T, std::size_t N>
-struct sphere_function : problem<T, N> {
-  sphere_function() noexcept;
+template <typename T,  std::size_t N>
+struct sum_of_different_powers : problem<T, N> {
+  sum_of_different_powers() noexcept;
 };
 
 //
@@ -103,24 +88,23 @@ struct sphere_function : problem<T, N> {
 //
 
 template <typename T, std::size_t N>
-sphere_function<T, N>::sphere_function() noexcept 
+sum_of_different_powers<T, N>::sum_of_different_powers() noexcept 
     : problem<T, N>() {
-  /*   n   /                \
-   *  sum  | parameter(i)^2 |
-   * i = 1 \                /
+  /*   n   /                           \
+   *  sum  | abs(parameter(i))^(i + 1) |
+   * i = 1 \                           /
    */
   this->objective_function = [](const auto& parameter) {
-    return 
-      std::accumulate(
-        parameter.cbegin(), parameter.cend(),
-        T(0.0),
-        [](const auto length, const auto element) {
-          return length + std::pow(element, T(2.0));
-        });
+    T sum = T(0.0);
+    for (std::size_t n = 0; n < N; ++n) {
+      sum += std::pow(std::fabs(parameter.at(n)), static_cast<T>(n + 2));
+    }
+    
+    return sum;
   };
   
-  this->lower_bounds.fill(T(-5.12));
-  this->upper_bounds.fill(T(5.12));
+  this->lower_bounds.fill(T(-1.0));
+  this->upper_bounds.fill(T(1.0));
 }
 
 //
@@ -128,9 +112,9 @@ sphere_function<T, N>::sphere_function() noexcept
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-TEST_CASE("sphere_function", "[problem][sphere_function]") {
-  const mant::sphere_function<double, 3> sphere_function;
+TEST_CASE("sum_of_different_powers", "[problem][sum_of_different_powers]") {
+  const mant::sum_of_different_powers<double, 3> sum_of_different_powers;
   
-  CHECK(sphere_function.objective_function({1.0, -2.0, 3.0}) == Approx(14.0));
+  CHECK(sum_of_different_powers.objective_function({1.0, -2.0, 3.0}) == Approx(90.0));
 }
 #endif

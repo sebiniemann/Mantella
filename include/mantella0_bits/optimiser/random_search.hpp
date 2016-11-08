@@ -1,5 +1,6 @@
 /**
 Random search
+<<<<<<< HEAD
 =============
 
 .. cpp:class:: template<T, N> random_search
@@ -12,8 +13,43 @@ Random search
   .. cpp:function:: random_search()
   
     Lorem ipsum dolor sit amet
+=======
+-------------
+
+.. cpp:class:: random_search : public optimiser
+
+  .. versionadded:: 1.0.0 
+
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  
+  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+
+  .. list-table:: Template parameters
+    :widths: 27 73
+
+    * - T
+        
+        Any floating point type
+      - The value type of the parameter and objective value.
+    * - N
+        
+        ``std::size_t``
+      - The number of dimensions.
+        
+        Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
+      
+  .. list-table:: Member functions
+    :widths: 27 73
+    
+    * - random_search
+    
+        Constructor
+      - Initialises all member variables to their default value.
+      
+        Will never throw an exception.
+>>>>>>> master
 */
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 struct random_search : optimiser<T, N> {
   random_search() noexcept;
 };
@@ -22,7 +58,7 @@ struct random_search : optimiser<T, N> {
 // Implementation
 //
 
-template <typename T, unsigned N>
+template <typename T, std::size_t N>
 random_search<T, N>::random_search() noexcept 
     : optimiser<T, N>() {
   this->optimisation_function = [this](const mant::problem<T, N>& problem, const std::vector<std::array<T, N>>& initial_parameters) {
@@ -79,7 +115,7 @@ random_search<T, N>::random_search() noexcept
 
 #if defined(MANTELLA_BUILD_TESTS)
 TEST_CASE("random_search", "[random_search]") {
-  constexpr unsigned dimensions = 3;
+  constexpr std::size_t dimensions = 3;
   mant::random_search<double, dimensions> optimiser;
   
   SECTION("Boundary handling") {

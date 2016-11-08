@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title | striptags | escape }} &ndash; {{ project | escape }} v{{ version | escape }}</title>
+  <link rel="shortcut icon" href="{{ pathto('_static/favicon.ico', 1) }}"/>
+  <link rel="stylesheet" href="{{ pathto('_static/style.css', 1) }}" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Slab" rel="stylesheet">
+</head>
+<body>
+  <div>
+    <nav>
+      <div>
+        <a href="{{ pathto(master_doc + '.html', 1) }}">
+          <p>
+            Mantella
+          </p>
+          <img src="{{ pathto('_static/logo.png', 1) }}" alt="Mantella" />
+          <p>
+            Version {{ version | escape }}
+          </p>
+        </a>
+      </div>
+    
+      {{ toctree() }}
+    </nav>
+    <main>
+      <aside>
+        <a href="{{ pathto(master_doc) }}">Docs</a> &raquo;
+        {% for doc in parents %}
+          <a href="{{ doc.link|e }}">{{ doc.title }}</a> &raquo;</li>
+        {% endfor %}
+        {{ title }}
+      </aside>
+    
+      <section>
+        {% block document %}{% endblock %}
+      </section>
+      
+      {% block footer %}{% endblock %}
+      <footer>
+        <p>
+          Our code is licensed under the <a href="http://opensource.org/licenses/MIT" target="_blank">MIT license</a>, the documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>. Created using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.
+        </p>
+      </footer>
+    </main>
+  </div>
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</body>
+</html>

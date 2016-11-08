@@ -26,7 +26,7 @@ for problem_id = 1:length(problems)
   set(gcf, 'defaultAxesFontSize', 10.0);
   title(problem{1});
   xlabel('Number of dimensions');
-  ylabel('Duration [ms]');
+  ylabel('Duration [us]');
   hold on;
 
   if ~isempty(mantella)
