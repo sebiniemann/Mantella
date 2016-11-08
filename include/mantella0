@@ -68,9 +68,6 @@ namespace mant {
     // Randomisation
     #include "mantella0_bits/randomisation/random_neighbour.hpp"
     
-    // Randomisation
-    #include "mantella0_bits/randomisation/random_neighbour.hpp"
-    
     // Analyser
     #include "mantella0_bits/analyser/additive_separability.hpp"
     #include "mantella0_bits/analyse_result.hpp"

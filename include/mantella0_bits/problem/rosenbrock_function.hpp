@@ -1,19 +1,5 @@
 /**
 Rosenbrock function
-<<<<<<< HEAD
-===================
-
-.. cpp:class:: template<T, N> rosenbrock_function
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-      
-  .. cpp:function:: rosenbrock_function()
-  
-    Lorem ipsum dolor sit amet
-=======
 -------------------
 
 .. cpp:class:: rosenbrock_function : public problem
@@ -91,7 +77,6 @@ Rosenbrock function
         This will especially set `objective_function` and fill the lower and bounds.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct rosenbrock_function : problem<T, N> {

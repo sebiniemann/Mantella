@@ -1,35 +1,5 @@
 /**
 Particle swarm optimisation
-<<<<<<< HEAD
-===========================
-
-.. cpp:class:: template<T, N> particle_swarm_optimisation
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-  
-  .. cpp:member:: T initial_velocity
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T maximal_acceleration
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T maximal_local_attraction
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T maximal_global_attraction
-  
-    Lorem ipsum dolor sit amet
-      
-  .. cpp:function:: particle_swarm_optimisation()
-  
-    Lorem ipsum dolor sit amet
-=======
 ---------------------------
 
 .. cpp:class:: particle_swarm_optimisation : public optimiser
@@ -86,7 +56,6 @@ Particle swarm optimisation
       - Initialises all member variables to their default value.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct particle_swarm_optimisation : optimiser<T, N> {

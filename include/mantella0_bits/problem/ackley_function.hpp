@@ -1,19 +1,5 @@
 /**
 Ackley function
-<<<<<<< HEAD
-===============
-
-.. cpp:class:: template<T, N> ackley_function
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-      
-  .. cpp:function:: ackley_function()
-  
-    Lorem ipsum dolor sit amet
-=======
 ---------------
 
 .. cpp:class:: ackley_function : public problem
@@ -91,7 +77,6 @@ Ackley function
         This will especially set `objective_function` and fill the lower and bounds.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct ackley_function : problem<T, N> {

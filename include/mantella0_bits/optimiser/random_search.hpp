@@ -1,19 +1,5 @@
 /**
 Random search
-<<<<<<< HEAD
-=============
-
-.. cpp:class:: template<T, N> random_search
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-      
-  .. cpp:function:: random_search()
-  
-    Lorem ipsum dolor sit amet
-=======
 -------------
 
 .. cpp:class:: random_search : public optimiser
@@ -47,7 +33,6 @@ Random search
       - Initialises all member variables to their default value.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct random_search : optimiser<T, N> {

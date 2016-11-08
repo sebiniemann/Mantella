@@ -2,26 +2,6 @@
 Hill climbing
 -------------
 
-<<<<<<< HEAD
-.. cpp:class:: template<T, N> hill_climbing
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-  
-  .. cpp:member:: T minimal_stepsize
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T maximal_stepsize
-  
-    Lorem ipsum dolor sit amet
-      
-  .. cpp:function:: hill_climbing()
-  
-    Lorem ipsum dolor sit amet
-=======
 .. cpp:class:: hill_climbing : public optimiser
 
   .. versionadded:: 1.0.0 
@@ -66,7 +46,6 @@ Hill climbing
       - Initialises all member variables to their default value.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct hill_climbing : optimiser<T, N> {

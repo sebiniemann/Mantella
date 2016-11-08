@@ -1,19 +1,5 @@
 /**
 Sphere function
-<<<<<<< HEAD
-===============
-
-.. cpp:class:: template<T, N> sphere_function
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-      
-  .. cpp:function:: sphere_function()
-  
-    Lorem ipsum dolor sit amet
-=======
 ---------------
 
 .. cpp:class:: sphere_function : public problem
@@ -91,7 +77,6 @@ Sphere function
         This will especially set `objective_function` and fill the lower and bounds.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct sphere_function : problem<T, N> {

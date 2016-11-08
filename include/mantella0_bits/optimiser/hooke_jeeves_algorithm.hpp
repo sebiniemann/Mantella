@@ -1,27 +1,5 @@
 /**
 Hooke-Jeeves algorithm
-<<<<<<< HEAD
-======================
-
-.. cpp:class:: template<T, N> hooke_jeeves_algorithm
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-  
-  .. cpp:member:: T initial_stepsize
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T stepsize_decrease
-  
-    Lorem ipsum dolor sit amet
-      
-  .. cpp:function:: hooke_jeeves_algorithm()
-  
-    Lorem ipsum dolor sit amet
-=======
 ----------------------
 
 .. cpp:class:: hooke_jeeves_algorithm : public optimiser
@@ -68,7 +46,6 @@ Hooke-Jeeves algorithm
       - Initialises all member variables to their default value.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct hooke_jeeves_algorithm : optimiser<T, N> {
@@ -120,11 +97,7 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
     while (result.duration < this->maximal_duration && result.evaluations < this->maximal_evaluations && result.objective_value > this->acceptable_objective_value) {
       bool is_improving = false;
 
-<<<<<<< HEAD
-      for (unsigned n = 0; n < this->active_dimensions.size(); ++n) {
-=======
       for (std::size_t n = 0; n < this->active_dimensions.size(); ++n) {
->>>>>>> master
         auto parameter = result.parameter;
         parameter.at(n) += stepsize;
         

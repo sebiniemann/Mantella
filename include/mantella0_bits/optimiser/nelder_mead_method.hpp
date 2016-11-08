@@ -1,35 +1,5 @@
 /**
 Nelder-Mead method
-<<<<<<< HEAD
-==================
-
-.. cpp:class:: template<T, N> nelder_mead_method
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-  
-  .. cpp:member:: T reflection_weight
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T expansion_weight
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T contraction_weight
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T shrinking_weight
-  
-    Lorem ipsum dolor sit amet
-      
-  .. cpp:function:: nelder_mead_method()
-  
-    Lorem ipsum dolor sit amet
-=======
 ------------------
 
 .. cpp:class:: nelder_mead_method : public optimiser
@@ -86,7 +56,6 @@ Nelder-Mead method
       - Initialises all member variables to their default value.
       
         Will never throw an exception.
->>>>>>> master
 */
 template <typename T, std::size_t N>
 struct nelder_mead_method : optimiser<T, N> {
@@ -187,11 +156,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
       if (objective_value < result.objective_value) {
-<<<<<<< HEAD
-        for (unsigned n = 0; n < N; ++n) {
-=======
         for (std::size_t n = 0; n < N; ++n) {
->>>>>>> master
           centroid.at(n) += (reflected_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
         }
         
@@ -220,11 +185,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
         
         if (objective_value < result.objective_value) {
-<<<<<<< HEAD
-          for (unsigned n = 0; n < N; ++n) {
-=======
           for (std::size_t n = 0; n < N; ++n) {
->>>>>>> master
             centroid.at(n) += (expanded_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
           }
         
@@ -275,11 +236,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
         }
         
         if (objective_value < result.objective_value) {
-<<<<<<< HEAD
-          for (unsigned n = 0; n < N; ++n) {
-=======
           for (std::size_t n = 0; n < N; ++n) {
->>>>>>> master
             centroid.at(n) += (contracted_point.at(n) - result.parameter.at(n)) / static_cast<T>(N);
           }
         

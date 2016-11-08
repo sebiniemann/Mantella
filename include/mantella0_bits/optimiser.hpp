@@ -2,91 +2,6 @@
 Optimiser
 =========
 
-<<<<<<< HEAD
-Optimisation result
-===================
-
-.. cpp:class:: template<T, N> optimise_result
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-    - **N** - The (``unsigned``) number of dimensions 
-  
-  .. cpp:member:: std::array<T, N> parameter
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T objective_value
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: unsigned evaluations
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::chrono::nanoseconds duration
-  
-    Lorem ipsum dolor sit amet
-*/
-template <typename T, unsigned N>
-struct optimise_result {
-  std::array<T, N> parameter{};
-  T objective_value = std::numeric_limits<T>::infinity();
-  unsigned evaluations = 0;
-  std::chrono::nanoseconds duration = std::chrono::nanoseconds(0);
-};
-
-/**
-Optimiser
-=========
-
-.. cpp:class:: template<T, N> optimiser
-
-  **Template parameters**
-  
-    - **T** - A floating point type
-
-      - Lorem ipsum dolor sit amet
-    
-    - **N** - The (``unsigned``) number of dimensions 
-
-      - Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::function optimisation_function
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: T acceptable_objective_value
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: unsigned maximal_evaluations
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::chrono::nanoseconds maximal_duration
-  
-    Lorem ipsum dolor sit amet
-  
-  .. cpp:member:: std::vector<unsigned> active_dimensions
-  
-    Lorem ipsum dolor sit amet
-      
-  .. cpp:function:: optimiser()
-  
-    Lorem ipsum dolor sit amet
-    
-.. toctree::
-  
-  optimiser/hill_climbing
-  optimiser/hooke_jeeves_algorithm
-  optimiser/nelder_mead_method
-  optimiser/particle_swarm_optimisation
-  optimiser/random_search
-*/
-template <typename T, unsigned N>
-=======
 .. cpp:class:: optimiser
 
   .. versionadded:: 1.0.0 
@@ -147,7 +62,6 @@ template <typename T, unsigned N>
 .. include:: optimiser/random_search.include
 */
 template <typename T, std::size_t N>
->>>>>>> master
 struct optimiser {
   std::function<optimise_result<T, N>(
       const mant::problem<T, N>& problem,
@@ -166,11 +80,7 @@ struct optimiser {
 // Implementation
 //
 
-<<<<<<< HEAD
-template <typename T, unsigned N>
-=======
 template <typename T, std::size_t N>
->>>>>>> master
 optimiser<T, N>::optimiser() noexcept 
   : acceptable_objective_value(-std::numeric_limits<T>::infinity()),
     maximal_evaluations(1'000 * N),
@@ -187,17 +97,6 @@ optimiser<T, N>::optimiser() noexcept
 //
 
 #if defined(MANTELLA_BUILD_TESTS)
-<<<<<<< HEAD
-TEST_CASE("optimise_result", "[optimiser][optimise_result]") {
-  constexpr mant::optimise_result<double, 3> result{};
-  
-  CHECK(result.objective_value == std::numeric_limits<double>::infinity());
-  CHECK(result.evaluations == 0);
-  CHECK(result.duration == std::chrono::nanoseconds(0));
-}
-
-=======
->>>>>>> master
 TEST_CASE("optimiser", "[optimiser]") {
   const mant::optimiser<double, 3> optimiser;
   
