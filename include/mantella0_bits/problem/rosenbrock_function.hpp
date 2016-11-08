@@ -53,7 +53,6 @@ Rosenbrock function
     saveas(gcf, name)
 
   .. list-table:: Template parameters
-    :widths: 27 73
 
     * - T
         
@@ -67,7 +66,7 @@ Rosenbrock function
         Must be within ``[2, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member functions
-    :widths: 27 73
+
     
     * - rosenbrock_function()
     

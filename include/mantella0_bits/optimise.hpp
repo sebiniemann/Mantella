@@ -11,7 +11,7 @@ Optimisation
   Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
 
   .. list-table:: Shortcuts
-    :widths: 27 73
+
     
     * - optimise(problem, optimiser)
         
@@ -33,7 +33,6 @@ Optimisation
         Uses :cpp:any:`hooke_jeeves_algorithm` as optimiser.
   
   .. list-table:: Template parameters
-    :widths: 27 73
 
     * - T
         
@@ -47,7 +46,7 @@ Optimisation
         Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Function functions
-    :widths: 27 73
+
     
     * - problem
     
@@ -63,7 +62,7 @@ Optimisation
       - Lorem ipsum dolor sit amet
 
   .. list-table:: Returns
-    :widths: 27 73
+
     
     * - ``optimise_result``
       - Lorem ipsum dolor sit amet
