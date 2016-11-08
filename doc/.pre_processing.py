@@ -67,7 +67,7 @@ for file in files:
     continue
   
   # Search for change commits and save it
-  for changes in re.findall(r'\.\. cpp:[function|class]+::.*?([a-z_]+)(?:\(.*?\)|)\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
+  for changes in re.findall(r'\.\. cpp:[function|class]+::[ ]+([a-z_]+).*?\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
     if not changes or not 'versionadded' in changes[1]:
         an_error_occured = True
         print(' ' + Colors.ERROR + 'No change comments found' + Colors.END)
@@ -209,14 +209,14 @@ for file in files:
     
 # Generate Changelog
 changelog.sort(reverse=True) # sort reverse for actual version on top
-with open('./api_reference/changelog.rst', mode='w+') as changelogfile:
+with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
   changelogfile.write('Changelog\n=========\n')
   actualVersion = 0.0
   
   for change in changelog:
     if actualVersion != change[0]:
       actualVersion = change[0]
-      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n' + '  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n\n')
+      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n' + '  :widths: 27 73\n\n')
     
     if change[1] == 2: # Versionadded tag
       changelogfile.write('  * - **Added**\n    - :cpp:any:`' + change[2] + '`\n')
@@ -227,7 +227,7 @@ with open('./api_reference/changelog.rst', mode='w+') as changelogfile:
     if change[1] == 0: # Deprecated tag
       changelogfile.write('  * - **Deprecated**\n    - :cpp:any:`' + change[2] + '`\n')
     
-    changelogfile.close()
+  changelogfile.close()
 
 if os.path.exists('./.tmp'):
   shutil.rmtree('./.tmp')
