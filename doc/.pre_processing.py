@@ -31,6 +31,7 @@ os.makedirs('./.tmp', exist_ok=True)
 os.makedirs('./static', exist_ok=True)
 os.makedirs('./static/examples', exist_ok=True)
 os.makedirs('./static/images', exist_ok=True)
+os.makedirs('./static/animations', exist_ok=True)
 
 an_error_occured = False
 
@@ -180,6 +181,77 @@ for file in files:
               docfile.write('  ' + line + '\n')
             docfile.write(part[2] + '  .. code-block:: octave')
             for line in image[0][1].split('\n'):
+              docfile.write('\n' + '  ' + line)
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    </details>')
+            docfile.write('\n\n')
+            
+        # Processes animation blocks
+        if 'animation' in part[3]:        
+          animation = re.findall(r'^(.*)\n[ ]*:octave:\n[ ]*(.*)$', part[5], re.DOTALL)
+          
+          with cd("./.tmp"):
+            example = open('./example.cpp', mode='w+')
+            example.write(animation[0][0])
+            example.close()
+
+            # Compile generate code file
+            output = subprocess.Popen(['c++', '-std=c++14', '-I../../include', example.name, '-o', './example'], stderr = subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+
+            # Execute generate code file  
+            output = subprocess.Popen(['./example'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+
+            example = open('./generate.m', mode='w+')
+            example.write('name ="'+ part[4].split('.')[0] + '_";')
+            example.write(animation[0][1])
+            example.close()
+
+            # Execute generate octave file 
+            output = subprocess.Popen(['octave', './generate.m'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+              
+            # Execute generate animations file 
+            output = subprocess.Popen(['ffmpeg', '-an', '-i', part[4].split('.')[0] + '_%d.png', '-framerate', '3', '-pix_fmt', 'yuv420p', '-movflags', 'faststart', '../static/animations/' + part[4]], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during genarate animations: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+            
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    <video width="320" height="240" controls>')
+            docfile.write('\n' + part[2] + '      <source src="../_animations/' + part[4] + '" type="video/mp4">')
+            docfile.write('\n' + part[2] + '    </video>')
+            docfile.write('\n')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '.. container:: image')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    <details>')
+            docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            for line in animation[0][0].split('\n'):
+              docfile.write('  ' + line + '\n')
+            docfile.write(part[2] + '  .. code-block:: octave')
+            for line in animation[0][1].split('\n'):
               docfile.write('\n' + '  ' + line)
             docfile.write('\n' + part[2] + '  .. raw:: html')
             docfile.write('\n')
