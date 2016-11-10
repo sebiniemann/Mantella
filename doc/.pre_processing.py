@@ -187,7 +187,8 @@ for file in files:
             docfile.write('\n\n')
 
     docfile.close()
-    print('\x1b[2K \r', end="") #Clear line
+    #cleared current line at terminal
+    print('\x1b[2K \r', end="")
 
 if os.path.exists('./.tmp'):
   shutil.rmtree('./.tmp')
