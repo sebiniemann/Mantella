@@ -187,7 +187,7 @@ for file in files:
             docfile.write('\n\n')
 
     docfile.close()
-    #cleared current line at terminal
+    # Clears the last written output (the whole line)
     print('\x1b[2K \r', end="")
 
 if os.path.exists('./.tmp'):
