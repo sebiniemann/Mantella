@@ -64,7 +64,7 @@ for file in files:
     print(' ' + Colors.ERROR + 'No comments found' + Colors.END)
     continue
 
-  # Added column widths to list-table tag
+  # Adds column widths to list-table tags
   first_column  = 27
   comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
 
