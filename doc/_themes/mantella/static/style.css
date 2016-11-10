@@ -290,6 +290,11 @@ main img {
   width: 95%;
 }
 
+main video {
+  width: 95%;
+  height: 95%;
+}
+
 main caption {
   margin-top: 36px;
   text-align: left;
