@@ -6,7 +6,6 @@
 
 project = u'Mantella'
 version = u'0.70'
-release = version + '.0'
 
 master_doc = 'index'
 source_suffix = ['.rst']
