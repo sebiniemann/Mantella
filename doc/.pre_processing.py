@@ -240,7 +240,7 @@ for file in files:
             docfile.write('\n' + part[2] + '    </video>')
             docfile.write('\n')
             docfile.write('\n')
-            docfile.write('\n' + part[2] + '.. container:: image')
+            docfile.write('\n' + part[2] + '.. container:: animation')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. raw:: html')
             docfile.write('\n')
