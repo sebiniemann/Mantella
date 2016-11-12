@@ -2,7 +2,7 @@
   font-family: 'Lato', sans-serif;
   margin: 0;
   color: #292929;
-  background: rgd(253, 253, 253);
+  background: rgb(253, 253, 253);
 }
 
 a {
@@ -157,7 +157,7 @@ main p {
 }
 
 main .literal {
-  font-weight: normal; 
+  font-weight: normal;
   padding: 2px 4px;
   font-size: 90%;
   border: none;
@@ -318,7 +318,6 @@ main tr:not(:last-child) {
 }
 
 main td {
-  vertical-align: inherit;
   white-space: inherit;
   padding: 12px;
 }
@@ -341,7 +340,7 @@ main .next {
   font-size: 90%;
   padding: 6px 12px 8px 12px;
   border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0px 1px 2px -1px rgba(255,255,255,0.5) inset,0px -2px 0px 0px rgba(0,0,0,0.1) inset;
+  box-shadow: 0 1px 2px -1px rgba(255,255,255,0.5) inset, 0 -2px 0 0 rgba(0,0,0,0.1) inset;
   background: #f6f6f6;
   color: #292929;
 }
@@ -353,7 +352,7 @@ main .next:hover {
 
 main .prev:active,
 main .next:active {
-  box-shadow: 0px -1px 0px 0px rgba(0,0,0,0.05) inset,0px 2px 0px 0px rgba(0,0,0,0.1) inset;
+  box-shadow: 0 -1px 0 0 rgba(0,0,0,0.05) inset, 0 2px 0 0 rgba(0,0,0,0.1) inset;
   padding: 8px 12px 6px 12px;
 }
 
