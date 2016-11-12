@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-MAINTAINER Sebastian Niemann <sebiniemann@gmail.com>
-
 # Used to differentiate between continuous integration server and developer builds.
 ARG CI
 ENV CI ${CI:-false}
