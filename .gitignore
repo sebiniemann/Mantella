@@ -14,7 +14,7 @@ install_manifest.txt
 doc/_html/
 doc/.tmp/
 doc/api_reference/
-doc/assert/
+doc/static/
 
 # Benchmark
 benchmark/**/*.mat
