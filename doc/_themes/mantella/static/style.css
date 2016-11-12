@@ -92,6 +92,7 @@ nav > ul > li.current li a {
 main {
   float: left;
   margin-left: 300px;
+  max-width: 1200px;
 }
 
 main > * {
