@@ -54,7 +54,6 @@ for file in glob.glob('../include/*/*/*.hpp'):
 #       appended by its data generation and visualisation (each in its own `.. code-block::` block).
 for file in files:
   print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.basename(file[1]), end="", flush=True)
-  
 
   headerfile = open(file[0], mode='r', encoding='utf-8')
   comments = ''.join(re.findall(r'[ ]*\/\*\*(.+?)(?=\*\/)', headerfile.read(), re.DOTALL))
@@ -80,8 +79,12 @@ for file in files:
     
     if 'deprecated' in changes[1]:
         changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
-    
-  # Created subdirectory if missing
+
+  # Adds column widths to list-table tags
+  first_column  = 27
+  comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
+
+  # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
 
@@ -204,6 +207,7 @@ for file in files:
             docfile.write('\n\n')
 
     docfile.close()
+    # Clears the last written output (the whole line)
     print('\x1b[2K \r', end="")
     
 # Generate changelog
