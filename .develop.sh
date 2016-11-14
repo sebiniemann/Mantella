@@ -72,6 +72,9 @@ do_doc() {
     if ! python3 ./.pre_processing.py; then AN_ERROR_OCCURED=1; finish_up; return; fi
   fi
   if ! sphinx-build -E -a . ./_html; then AN_ERROR_OCCURED=1; finish_up; return; fi
+
+  if [ ! -d "./_html/_animations" ]; then mkdir ./_html/_animations; fi
+  if ! cp ./.animations/* ./_html/_animations/; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
   cd .. || exit 1
   
