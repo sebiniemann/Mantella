@@ -25,7 +25,7 @@ Your first step will be to fork Mantella on GitHub, for example by hitting `Fork
 
 ### Team members
 
-If you are a long-time contributor to Mantella and got write permissions for the repository, you don't need to fork Mantella to your account, but can directly add a new branch to Mantella 
+If you are a long-time contributor to Mantella and got write permissions for the repository, you don't need to fork Mantella to your account, but can directly add a new branch to Mantella
 
 ``` bash
 git checkout master
@@ -36,7 +36,7 @@ git checkout -b YourUsername/YourAwesomeBranch
 Setting up a development system
 -------------------------------
 
-**The recommended and most easiest way** to set up a Mantella development system (including all dependencies), is to install 
+**The recommended and most easiest way** to set up a Mantella development system (including all dependencies), is to install
 [Docker](https://www.docker.com) and run:
 
 ```
@@ -96,7 +96,7 @@ Executing the tests can also be further configured by using [Catch's commandline
 
 ``` bash
 ./test/build/tests [myNewFunction]
-``` 
+```
 
 Filing a pull request
 ---------------------
@@ -114,12 +114,12 @@ Pull request messages should then be organised as followed:
 ### Tag
 Add one of the following tags, that describe your changes the best.
 
-- `api`: Your change will break the existing API in any way.
-- `feature`: You added a new feature, without breaking the existing API.
-- `fix`: You fixed a bug.
-- `test`: You changed or added a test.
-- `doc`: You extended or corrected the documentation.
-- `misc`: For anything else.
+-   `api`: Your change will break the existing API in any way.
+-   `feature`: You added a new feature, without breaking the existing API.
+-   `fix`: You fixed a bug.
+-   `test`: You changed or added a test.
+-   `doc`: You extended or corrected the documentation.
+-   `misc`: For anything else.
 
 ### Subject
 Add a description about the content of your commit.
