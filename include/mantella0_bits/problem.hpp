@@ -129,7 +129,7 @@ Problems
       }
     
   .. list-table:: Template parameters
-    :widths: 27 73
+
     
     * - T
         
@@ -190,7 +190,7 @@ Problems
           }
   
   .. list-table:: Member variables
-    :widths: 27 73
+
     
     * - objective_function
         
@@ -238,7 +238,7 @@ Problems
         The default upper bound is ``(1, 1, ..., 1)``.
 
   .. list-table:: Member functions
-    :widths: 27 73
+
     
     * - problem
     

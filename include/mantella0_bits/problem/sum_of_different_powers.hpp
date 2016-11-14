@@ -53,7 +53,6 @@ Sum of different powers
     saveas(gcf, name)
 
   .. list-table:: Template parameters
-    :widths: 27 73
 
     * - T
         
@@ -67,7 +66,7 @@ Sum of different powers
         Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
       
   .. list-table:: Member functions
-    :widths: 27 73
+
     
     * - sum_of_different_powers()
     
