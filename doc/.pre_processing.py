@@ -214,8 +214,8 @@ for file in files:
     # Clears the last written output (the whole line)
     print('\x1b[2K \r', end="")
     
-#Generates the changelog
-##Traverses the changes in reverse order, to list the latest changes on top
+# Generates the changelog
+## Traverses the changes in reverse order, to list the latest changes on top
 changelog.sort(reverse=True)
 with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
   changelogfile.write('Changelog\n')
