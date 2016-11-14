@@ -13,8 +13,10 @@ install_manifest.txt
 # Documentation
 doc/_html/
 doc/.tmp/
+doc/.examples/
+doc/.images/
+doc/.animations/
 doc/api_reference/
-doc/static/
 
 # Benchmark
 benchmark/**/*.mat
