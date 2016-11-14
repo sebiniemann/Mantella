@@ -13,6 +13,7 @@ Contents:
   api_reference/optimise_result
   api_reference/analyse  
   api_reference/analyse_result
+  api_reference/changelog
   
 Indices and tables
 ==================
