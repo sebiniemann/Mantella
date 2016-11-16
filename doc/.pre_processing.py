@@ -81,11 +81,7 @@ for file in files:
         changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
 
   # Adds column widths to list-table tags
-  first_column  = 27
-  comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
-
-  # Adds column widths to list-table tags
-  first_column  = 27
+  first_column = 27
   comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
 
   # Create subdirectory if missing
