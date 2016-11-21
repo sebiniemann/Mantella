@@ -10,6 +10,7 @@ version = u'0.70'
 master_doc = 'index'
 source_suffix = ['.rst']
 
+
 pygments_style = 'sphinx'
 extensions = [
   'sphinx.ext.mathjax',

@@ -28,12 +28,12 @@ if not os.path.isfile('./conf.py'):
   exit(1)
 
 os.makedirs('./.tmp', exist_ok=True)
-os.makedirs('./static', exist_ok=True)
-os.makedirs('./static/examples', exist_ok=True)
-os.makedirs('./static/images', exist_ok=True)
+os.makedirs('./.examples', exist_ok=True)
+os.makedirs('./.images', exist_ok=True)
+os.makedirs('./.animations', exist_ok=True)
 
 an_error_occured = False
-
+changelog = []
 # Finds all header files inside `../include`
 # *Note:* This is only done separately to extract the provide a progress bar, wherefore the number of files needs to be
 # known beforehand.
@@ -63,13 +63,30 @@ for file in files:
     an_error_occured = True
     print(' ' + Colors.ERROR + 'No comments found' + Colors.END)
     continue
+  
+  # Searched changelog tags in comments
+  for changes in re.findall(r'\.\. cpp:[function|class]+::[ ]+([a-z_]+).*?\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
+    if not changes or not 'versionadded' in changes[1]:
+      an_error_occured = True
+      print(' ' + Colors.ERROR + 'No versionadded tag found' + Colors.END)
+      break
+    else:
+      changelog = changelog + [(float(re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)),2,changes[0])]
+        
+    if 'versionchanged' in changes[1]:
+      for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
+        changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
+    
+    if 'deprecated' in changes[1]:
+        changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
 
   # Adds column widths to list-table tags
-  first_column  = 27
+  first_column = 27
   comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
 
   # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
+
 
   with open(file[1], mode='w', encoding='utf-8') as docfile:
     # for part in re.findall(r''
@@ -87,7 +104,7 @@ for file in files:
         # Processes C++ blocks
         if 'c++' in part[3]:
           if part[4]:
-            example = open('./static/examples/' + part[4], mode='w+')
+            example = open('./examples/' + part[4], mode='w+')
             example.write(part[5].replace('\n' + part[2] + '  ', '\n').strip(' \t\n\r'))
             example.close()
           
@@ -157,7 +174,7 @@ for file in files:
               continue
 
             example = open('./generate.m', mode='w+')
-            example.write('name = "../static/images/' + part[4] + '";')
+            example.write('name = "../.images/' + part[4] + '";')
             example.write(image[0][1])
             example.close()
 
@@ -169,7 +186,7 @@ for file in files:
               print(Colors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
             
-            docfile.write(part[2] + '.. image:: ../static/images/' + part[4])
+            docfile.write(part[2] + '.. image:: ../.images/' + part[4])
             docfile.write('\n')
             docfile.write('\n' + part[2] + '.. container:: image')
             docfile.write('\n')
@@ -188,10 +205,112 @@ for file in files:
             docfile.write('\n')
             docfile.write('\n' + part[2] + '    </details>')
             docfile.write('\n\n')
+            
+        # Processes animation blocks
+        if 'animation' in part[3]:        
+          animation = re.findall(r'^(.*)\n[ ]*:octave:\n[ ]*(.*)$', part[5], re.DOTALL)
+          
+          with cd("./.tmp"):
+            example = open('./example.cpp', mode='w+')
+            example.write(animation[0][0])
+            example.close()
+
+            # Compile generate code file
+            output = subprocess.Popen(['c++', '-std=c++14', '-I../../include', example.name, '-o', './example'], stderr = subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+
+            # Execute generate code file  
+            output = subprocess.Popen(['./example'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during execution: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+
+            example = open('./generate.m', mode='w+')
+            example.write('name ="'+ part[4].split('.')[0] + '_";')
+            example.write(animation[0][1])
+            example.close()
+
+            # Execute generate octave file 
+            output = subprocess.Popen(['octave', './generate.m'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+              
+            # Execute generate animations file 
+            output = subprocess.Popen(['ffmpeg', '-an', '-i', part[4].split('.')[0] + '_%d.png', '-framerate', '3', '-pix_fmt', 'yuv420p', '-movflags', 'faststart', '../.animations/' + part[4]], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output.wait()
+            if output.returncode != 0:
+              an_error_occured = True
+              print(Colors.ERROR + '  Failure during genarate animations: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              continue
+            
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    <video width="320" height="240" controls>')
+            docfile.write('\n' + part[2] + '      <source src="../_animations/' + part[4] + '" type="video/mp4">')
+            docfile.write('\n' + part[2] + '    </video>')
+            docfile.write('\n')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '.. container:: animation')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    <details>')
+            docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            for line in animation[0][0].split('\n'):
+              docfile.write('  ' + line + '\n')
+            docfile.write(part[2] + '  .. code-block:: octave')
+            for line in animation[0][1].split('\n'):
+              docfile.write('\n' + '  ' + line)
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    </details>')
+            docfile.write('\n\n')
 
     docfile.close()
     # Clears the last written output (the whole line)
     print('\x1b[2K \r', end="")
+    
+# Generates the changelog
+## Traverses the changes in reverse order, to list the latest changes on top
+changelog.sort(reverse=True)
+with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
+  changelogfile.write('Changelog\n')
+  changelogfile.write('=========\n')
+  actualVersion = 0.0
+  
+  for change in changelog:
+    if actualVersion != change[0]:
+      actualVersion = change[0]
+      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n')
+      changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
+      changelogfile.write('\n')
+    
+    if change[1] == 2:
+      changelogfile.write('  * - **Added**\n')
+      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+    
+    if change[1] == 1:
+      changelogfile.write('  * - **Changed**\n')
+      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      changelogfile.write('\n')
+      changelogfile.write('      ' + change[3] + '\n')
+      
+    if change[1] == 0:
+      changelogfile.write('  * - **Deprecated**\n')
+      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+    
+  changelogfile.close()
 
 if os.path.exists('./.tmp'):
   shutil.rmtree('./.tmp')
