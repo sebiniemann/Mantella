@@ -33,8 +33,10 @@ RUN apt-get install -y wget && \
     apt-get autoremove -y --purge
 
 # Installs documentation dependencies
+# - Python3
 # - Sphinx, with read-the-document theme (documentation generation)
 # - Octave (image generation)
+RUN apt-get install python3 
 RUN apt-get install -y python-pip && \
     pip install --upgrade pip && \
     pip install Sphinx sphinx_rtd_theme && \
