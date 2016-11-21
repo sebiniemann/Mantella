@@ -35,7 +35,8 @@ addons:
     project:
       name: "SebastianNiemann/Mantella"
     notification_email: niemann@sra.uni-hannover.de
-    build_command_prepend: cov-configure --compiler gcc-5 --template#    build_command: sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"
+    build_command_prepend: cov-configure --compiler gcc-5 --template
+    build_command: sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"
     branch_pattern: coverity_scan
 
 before_script:
