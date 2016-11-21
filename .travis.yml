@@ -53,5 +53,5 @@ after_success:
   - cd Mantella.info/
   - echo "$commitMassage" > testfile.test
   - git add *
-  - git commit -m '$commitMassage'
+  - git commit -m $commitMassage
   - ssh-agent bash -c 'ssh-add ../mantella; git push origin master -v'
