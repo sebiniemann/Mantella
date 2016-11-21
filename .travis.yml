@@ -40,9 +40,9 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-#  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
-#  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
-echo "hello world"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
+
 after_success:
   - sudo docker exec mantella /bin/bash -c "./.develop.sh --doc";
   - openssl aes-256-cbc -K $encrypted_479616a097db_key -iv $encrypted_479616a097db_iv -in mantella.enc -out mantella -d
