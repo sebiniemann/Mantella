@@ -36,7 +36,7 @@ RUN apt-get install -y wget && \
 # - Python3
 # - Sphinx, with read-the-document theme (documentation generation)
 # - Octave (image generation)
-RUN apt-get install python3 
+RUN apt-get install -y python3 
 RUN apt-get install -y python-pip && \
     pip install --upgrade pip && \
     pip install Sphinx sphinx_rtd_theme && \
