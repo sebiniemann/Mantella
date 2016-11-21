@@ -7,38 +7,51 @@ language: cpp
 
 os:
   - linux
-  - osx
+#  - osx
 
 compiler:
-  - clang
+#  - clang
   - gcc
 
 install:
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then \
-      sudo docker build --build-arg CI=true -t ubuntu/mantella:latest . && \
-      sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella && \
-      sudo docker exec mantella chmod a+x ./.develop.sh \
-    ; fi
-  - | 
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
-      wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
-      mkdir catch && \
-      tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
-      sudo cp catch/single_include/catch.hpp /usr/local/include/ && \
-      rm -Rf catch.tar.gz catch/ && \
-      chmod a+x ./.develop.sh \
-    ; fi
+#  - |
+#    if [ "$TRAVIS_OS_NAME" == "linux" ]; then \
+#      sudo docker build --build-arg CI=true -t ubuntu/mantella:latest . && \
+#      sudo docker run -v ${TRAVIS_BUILD_DIR}:/mantella -w /mantella --name mantella -t -d ubuntu/mantella && \
+#      sudo docker exec mantella chmod a+x ./.develop.sh \
+#    ; fi
+#  - | 
+#    if [ "$TRAVIS_OS_NAME" == "osx" ]; then \
+#      wget -O catch.tar.gz https://github.com/philsquared/Catch/archive/V1.5.0.tar.gz && \
+#      mkdir catch && \
+#      tar -xzf catch.tar.gz -C ./catch --strip-components=1 && \
+#      sudo cp catch/single_include/catch.hpp /usr/local/include/ && \
+#      rm -Rf catch.tar.gz catch/ && \
+#      chmod a+x ./.develop.sh \
+#    ; fi
   
 addons:
-  coverity_scan:
-    project:
-      name: "SebastianNiemann/Mantella"
-    notification_email: niemann@sra.uni-hannover.de
-    build_command_prepend: cov-configure --compiler gcc-5 --template
-    build_command: sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"
-    branch_pattern: coverity_scan
+#  coverity_scan:
+#    project:
+#      name: "SebastianNiemann/Mantella"
+#    notification_email: niemann@sra.uni-hannover.de
+#    build_command_prepend: cov-configure --compiler gcc-5 --template
+#    build_command: sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"
+#    branch_pattern: coverity_scan
+
+before_script:
+  - 'commitMassage="Auto doc : $(git log --pretty="%s - %an"  -1)"'
+  - chmod 400 ./mantella
+  - ssh-agent bash -c 'ssh-add ./mantella; git clone git@github.com:Mantella/Mantella.info.git'
 
 script:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
+#  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo docker exec mantella /bin/bash -c "./.develop.sh --test --install"; fi
+#  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
+  - echo "test script"
+
+after_success:
+  - cd Mantella.info/
+  - echo "$commitMassage" > testfile.test
+  - git add *
+  - git commit -m '$commitMassage'
+  - ssh-agent bash -c 'ssh-add ../mantella; git push origin master -v'
