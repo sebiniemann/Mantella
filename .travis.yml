@@ -44,6 +44,7 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
 
 deploy:
+  skip_cleanup: true
   provider: script
   on:
     condition: "$CC = gcc"
