@@ -44,7 +44,8 @@ RUN apt-get install -y python-pip && \
     apt-get remove -y --purge python-pip && \
     apt-get autoremove -y --purge
 RUN apt-get install -y liboctave-dev
-RUN apt-get install -y ffmpeg --with-libvpx --with-libvorbis --with-fdk-aacc --with-opus
+RUN apt-get install -y ffmpeg && \
+    apt-get install -y libavcodec-extra
 
 # Installs benchmark dependencies (excluded on CI servers)
 # - Docker
