@@ -7,10 +7,10 @@ language: cpp
 
 os:
   - linux
-#  - osx
+  - osx
 
 compiler:
-#  - clang
+  - clang
   - gcc
 
 install:
@@ -44,8 +44,8 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
 
 before_deploy:
-  -  COMMIT_MESSAGE="Auto doc - $(git log --pretty="%s - %an" -1)"
-  -  echo "${COMMIT_MESSAGE}"
+  -  'COMMIT_MESSAGE="Auto doc : $(git log --pretty="%s - %an" -1)"'
+  
 deploy:
   skip_cleanup: true
   provider: script
