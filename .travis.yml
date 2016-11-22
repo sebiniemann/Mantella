@@ -47,8 +47,7 @@ deploy:
   skip_cleanup: true
   provider: script
   on:
-    condition: "$CC = gcc"
-    condition: "$TRAVIS_OS_NAME" = linux"
+    condition: "$CC = gcc && $TRAVIS_OS_NAME = linux"
     all_branches: true  
   script: |  
           sudo docker exec mantella /bin/bash -c "./.develop.sh --doc" && 
