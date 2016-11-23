@@ -30,7 +30,7 @@ if not os.path.isfile('./conf.py'):
 # Setting the versions number for conf.py
 searchresult = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
 actualVersion = searchresult.group(1) + '.' + searchresult.group(2)
-conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
+conf_file = open('./.conf.py', mode='r', encoding='utf-8').read()
 open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(project = .*)', '\\1\\nversion = u\'' + actualVersion + '\'' , conf_file, 0))
 
 os.makedirs('./.tmp', exist_ok=True)
