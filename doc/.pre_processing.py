@@ -23,7 +23,7 @@ class Colors:
     ERROR = '\033[91m'
     END = '\033[0m'
     
-if not os.path.isfile('./conf.py'):
+if not os.path.isfile('./.conf.py'):
   print("Could not find Sphinx's configuration file. Make sure to start this script within Mantella's documentation root path.")
   exit(1)
 
