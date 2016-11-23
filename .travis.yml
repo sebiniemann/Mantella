@@ -44,7 +44,8 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
 
 before_deploy:
-  -  'COMMIT_MESSAGE="Auto doc : $(git log --pretty="%s - %an" -1)"'
+     #For commit in Mantella.Info. Travis CI doesn't support create bash variables in deploy script and we brought in the current git repository.
+  -  'COMMIT_MESSAGE="autodoc : $(git log --pretty="%s - %an" -1)"'
   
 deploy:
   skip_cleanup: true
@@ -52,4 +53,4 @@ deploy:
   on:
     condition: "$CC = gcc && $TRAVIS_OS_NAME = linux"
     branch: master 
-  script: sudo docker exec mantella /bin/bash -c "./.develop.sh --doc"; openssl aes-256-cbc -K $encrypted_f98812e554e5_key -iv $encrypted_f98812e554e5_iv -in ./doc/docsecret.enc -out ./doc/docsecret -d; chmod 400 ./doc/docsecret; ssh-agent bash -c 'ssh-add ./doc/docsecret; git clone --quiet git@github.com:Mantella/Mantella.info.git'; cp -r ./doc/_html/* ./Mantella.info/; cd Mantella.info/; git add -A; git commit -m "${COMMIT_MESSAGE}"; ssh-agent bash -c 'ssh-add ../doc/docsecret; git push --quiet origin master';
+  script: sudo docker exec mantella /bin/bash -c "./.develop.sh --doc"; openssl aes-256-cbc -K $encrypted_f98812e554e5_key -iv $encrypted_f98812e554e5_iv -in ./doc/docsecret.enc -out ./doc/docsecret -d; chmod 400 ./doc/docsecret; ssh-agent bash -c 'ssh-add ./doc/docsecret; git clone --branch master --depth 1 git@github.com:Mantella/Mantella.info.git'; cp -r ./doc/_html/* ./Mantella.info/; cd Mantella.info/; git add -A; git commit -m "${COMMIT_MESSAGE}"; ssh-agent bash -c 'ssh-add ../doc/docsecret; git push origin master';
