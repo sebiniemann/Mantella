@@ -27,6 +27,12 @@ if not os.path.isfile('./conf.py'):
   print("Could not find Sphinx's configuration file. Make sure to start this script within Mantella's documentation root path.")
   exit(1)
 
+# Setting the versions number for conf.py
+searchresult = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
+actualVersion = searchresult.group(1) + '.' + searchresult.group(2)
+conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
+open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(project = .*)', '\\1\\nversion = u\'' + actualVersion + '\'' , conf_file, 0))
+
 os.makedirs('./.tmp', exist_ok=True)
 os.makedirs('./.examples', exist_ok=True)
 os.makedirs('./.images', exist_ok=True)
@@ -55,6 +61,8 @@ for file in glob.glob('../include/*/*/*.hpp'):
 for file in files:
   print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.basename(file[1]), end="", flush=True)
 
+  experimental = False
+
   headerfile = open(file[0], mode='r', encoding='utf-8')
   comments = ''.join(re.findall(r'[ ]*\/\*\*(.+?)(?=\*\/)', headerfile.read(), re.DOTALL))
   headerfile.close()
@@ -71,19 +79,31 @@ for file in files:
       print(' ' + Colors.ERROR + 'No versionadded tag found' + Colors.END)
       break
     else:
-      changelog = changelog + [(float(re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)),2,changes[0])]
+      addedVersion = re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)
+      if (actualVersion < addedVersion):
+        changelog = changelog + [(float(addedVersion),3,changes[0])]
+        experimental = True
+      else:
+        changelog = changelog + [(float(addedVersion),2,changes[0])]
         
-    if 'versionchanged' in changes[1]:
-      for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
-        changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
+        if 'versionchanged' in changes[1]:
+          for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
+            changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
     
-    if 'deprecated' in changes[1]:
-        changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
+        if 'deprecated' in changes[1]:
+          changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
 
   # Adds column widths to list-table tags
   first_column = 27
   comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
-
+  
+  # Adds experimental tags
+  if experimental:
+    if '.rst' in file[1]:
+      comments = re.sub(r'(={3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
+    else:
+      comments = re.sub(r'(-{3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
+  
   # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
@@ -98,7 +118,7 @@ for file in files:
         # '((?:\n\3  [^\n]+|\n[ ]*)+)\n|' # Matches all lines having `.. code-block::` indentation and empty lines.
       # ')', comments, re.DOTALL):
     for part in re.findall(r'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ ]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', comments, re.DOTALL):
-      docfile.write(part[0])
+      docfile.write('\n' + part[0])
 
       if part[1]:
         # Processes C++ blocks
@@ -288,8 +308,20 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
   changelogfile.write('Changelog\n')
   changelogfile.write('=========\n')
   actualVersion = 0.0
+  experimentalheader = False
   
   for change in changelog:
+    if change[1] == 3:
+      if not experimentalheader:
+        experimentalheader = True
+        changelogfile.write('\n.. list-table:: Experimental (functions are subject to change)\n')
+        changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
+        changelogfile.write('\n')
+        
+      changelogfile.write('  * - **Planned** till ' + str(change[0]) + '\n')
+      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      continue
+      
     if actualVersion != change[0]:
       actualVersion = change[0]
       changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n')

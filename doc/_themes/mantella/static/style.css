@@ -89,6 +89,12 @@ nav > ul > li.current li a {
   color: #6b6b6b;
 }
 
+div.admonition.warning{
+  background-color: #e8bf28;
+  border-radius: 15px;
+  text-align: center;
+}
+
 main {
   float: left;
   margin-left: 300px;
