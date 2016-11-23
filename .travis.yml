@@ -44,7 +44,7 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ./.develop.sh --test --install /usr/local/include; fi
 
 before_deploy:
-     #For commit in Mantella.Info. Travis CI doesn't support create bash variables in deploy script and we brought in the current git repository.
+     # As Travis does not support defining Bash variables within the *deploy* command, this is done at an earlier stage.
   -  'COMMIT_MESSAGE="autodoc : $(git log --pretty="%s - %an" -1)"'
   
 deploy:
