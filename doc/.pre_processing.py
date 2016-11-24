@@ -23,15 +23,15 @@ class Colors:
     ERROR = '\033[91m'
     END = '\033[0m'
     
-if not os.path.isfile('./.conf.py'):
+if not os.path.isfile('./conf.py'):
   print("Could not find Sphinx's configuration file. Make sure to start this script within Mantella's documentation root path.")
   exit(1)
 
 # Setting the versions number for conf.py
 searchresult = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
 actualVersion = searchresult.group(1) + '.' + searchresult.group(2)
-conf_file = open('./.conf.py', mode='r', encoding='utf-8').read()
-open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(project = .*)', '\\1\\nversion = u\'' + actualVersion + '\'' , conf_file, 0))
+conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
+open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(version =) .*', '\\1 u\'' + actualVersion + '\'' , conf_file, 0))
 
 os.makedirs('./.tmp', exist_ok=True)
 os.makedirs('./.examples', exist_ok=True)
@@ -318,7 +318,7 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
         changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
         changelogfile.write('\n')
         
-      changelogfile.write('  * - **Planned** till ' + str(change[0]) + '\n')
+      changelogfile.write('  * - **Planned** for ' + str(change[0]) + '\n')
       changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
       continue
       
