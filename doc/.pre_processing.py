@@ -87,8 +87,8 @@ for file in files:
         changelog = changelog + [(float(added_version),2,changes[0])]
         
         if 'versionchanged' in changes[1]:
-          for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
-            changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
+          for version_changes in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
+            changelog = changelog + [(float(version_changes[0]),1,changes[0],version_changes[1])]
     
         if 'deprecated' in changes[1]:
           changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
@@ -308,12 +308,12 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
   changelogfile.write('Changelog\n')
   changelogfile.write('=========\n')
   actual_version = 0.0
-  add_experimental_header = False
+  experimental_header_exists = False
   
   for change in changelog:
     if change[1] == 3:
-      if not add_experimental_header:
-        add_experimental_header = True
+      if not experimental_header_exists:
+        experimental_header_exists = True
         changelogfile.write('\n.. list-table:: Experimental (functions are subject to change)')
         changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
         changelogfile.write('\n')
