@@ -13,7 +13,7 @@ static constexpr double maximal_evaluations = std::numeric_limits<std::size_t>::
 static constexpr std::chrono::nanoseconds maximal_duration = std::chrono::milliseconds(10);
 
 /* +------------+------------+--------------+----------+-------------+
- * | Dimensions | Problem ID | Optimiser ID | Duration | Successful? |
+ * | Dimensions | Problem ID | optimiser ID | Duration | Successful? |
  * +------------+------------+--------------+----------+-------------+
  */
 static std::array<std::tuple<std::size_t, std::size_t, std::size_t, std::chrono::nanoseconds, bool>, dimensions.size() * 5 * 5 * repetitions> results;

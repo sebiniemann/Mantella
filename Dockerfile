@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 # Used to differentiate between continuous integration server and developer builds.
 ARG CI
 ENV CI ${CI:-false}
-    
+
 RUN apt-get update
 
 # Installs compilers
@@ -35,12 +35,14 @@ RUN apt-get install -y wget && \
 # Installs documentation dependencies
 # - Sphinx, with read-the-document theme (documentation generation)
 # - Octave (image generation)
+# - FFmpeg (animation generation)
 RUN apt-get install -y python-pip && \
     pip install --upgrade pip && \
     pip install Sphinx sphinx_rtd_theme && \
     apt-get remove -y --purge python-pip && \
     apt-get autoremove -y --purge
 RUN apt-get install -y liboctave-dev
+RUN apt-get install -y ffmpeg
 
 # Installs benchmark dependencies (excluded on CI servers)
 # - Docker
@@ -52,4 +54,3 @@ RUN if ! "$CI" -eq "true"; then \
       apt-get update && \
       apt-get install -y docker-engine \
     ; fi
-    
