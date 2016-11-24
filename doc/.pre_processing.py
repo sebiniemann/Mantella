@@ -28,10 +28,10 @@ if not os.path.isfile('./conf.py'):
   exit(1)
 
 # Setting the versions number for conf.py
-searchresult = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
-actualVersion = searchresult.group(1) + '.' + searchresult.group(2)
+search_result = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
+actual_version = search_result.group(1) + '.' + search_result.group(2)
 conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
-open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(version =) .*', '\\1 u\'' + actualVersion + '\'' , conf_file, 0))
+open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(version =) .*', '\\1 u\'' + actual_version + '\'' , conf_file, 0))
 
 os.makedirs('./.tmp', exist_ok=True)
 os.makedirs('./.examples', exist_ok=True)
@@ -79,12 +79,12 @@ for file in files:
       print(' ' + Colors.ERROR + 'No versionadded tag found' + Colors.END)
       break
     else:
-      addedVersion = re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)
-      if (actualVersion < addedVersion):
-        changelog = changelog + [(float(addedVersion),3,changes[0])]
+      added_version = re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)
+      if (actual_version < added_version):
+        changelog = changelog + [(float(added_version),3,changes[0])]
         experimental = True
       else:
-        changelog = changelog + [(float(addedVersion),2,changes[0])]
+        changelog = changelog + [(float(added_version),2,changes[0])]
         
         if 'versionchanged' in changes[1]:
           for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
@@ -307,23 +307,23 @@ changelog.sort(reverse=True)
 with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
   changelogfile.write('Changelog\n')
   changelogfile.write('=========\n')
-  actualVersion = 0.0
-  experimentalheader = False
+  actual_version = 0.0
+  add_experimental_header = False
   
   for change in changelog:
     if change[1] == 3:
-      if not experimentalheader:
-        experimentalheader = True
-        changelogfile.write('\n.. list-table:: Experimental (functions are subject to change)\n')
-        changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
+      if not add_experimental_header:
+        add_experimental_header = True
+        changelogfile.write('\n.. list-table:: Experimental (functions are subject to change)')
+        changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
         changelogfile.write('\n')
         
-      changelogfile.write('  * - **Planned** for ' + str(change[0]) + '\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      changelogfile.write('\n  * - Planned for ' + str(change[0]))
+      changelogfile.write('\n  - :cpp:any:`' + change[2])
       continue
       
-    if actualVersion != change[0]:
-      actualVersion = change[0]
+    if actual_version != change[0]:
+      actual_version = change[0]
       changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n')
       changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
       changelogfile.write('\n')

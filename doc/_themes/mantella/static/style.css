@@ -89,12 +89,6 @@ nav > ul > li.current li a {
   color: #6b6b6b;
 }
 
-div.admonition.warning{
-  background-color: #e8bf28;
-  border-radius: 15px;
-  text-align: center;
-}
-
 main {
   float: left;
   margin-left: 300px;
@@ -160,6 +154,12 @@ main .topic > :not(:first-child) {
 
 main p {
   margin: 0 0 8px 0;
+}
+
+main .warning {
+  background-color: #e8bf28;
+  border-radius: 15px;
+  text-align: center;
 }
 
 main .literal {
