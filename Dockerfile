@@ -38,10 +38,10 @@ RUN apt-get install -y wget && \
 # - Octave (image generation)
 # - ffmpeg (animation generation)
 RUN apt-get install -y python3 
-RUN apt-get install -y python-pip && \
-    pip install --upgrade pip && \
-    pip install Sphinx && \
-    apt-get remove -y --purge python-pip && \
+RUN apt-get install -y python-pip3 && \
+    pip3 install --upgrade pip3 && \
+    pip3 install Sphinx && \
+    apt-get remove -y --purge python-pip3 && \
     apt-get autoremove -y --purge
 RUN apt-get install -y liboctave-dev
 RUN apt-get install -y ffmpeg && \
