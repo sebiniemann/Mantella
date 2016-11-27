@@ -174,7 +174,15 @@ optimise_result<T1, N> optimise(
 template <typename T1, std::size_t N, template <class, std::size_t> class T2>
 optimise_result<T1, N> optimise(
     const T2<T1, N>& problem) {
-  return optimise(problem, hooke_jeeves_algorithm<T1, N>());
+
+    // TODO predict solver
+    // TODO extend problem to track the optimal parameters
+
+    const auto& results = optimise(problem, hooke_jeeves_algorithm<T1, N>());
+
+    // TODO add results
+
+  return results;
 }
 
 //
