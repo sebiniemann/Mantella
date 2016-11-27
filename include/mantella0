@@ -64,6 +64,7 @@ namespace mant {
 
     // Problems
     #include "mantella0_bits/problem.hpp"
+    #include "mantella0_bits/evaluate.hpp"
     #include "mantella0_bits/problem/ackley_function.hpp"
     #include "mantella0_bits/problem/rastrigin_function.hpp"
     #include "mantella0_bits/problem/rosenbrock_function.hpp"
@@ -78,12 +79,12 @@ namespace mant {
     // Optimiser
     #include "mantella0_bits/optimise_result.hpp"
     #include "mantella0_bits/optimiser.hpp"
+    #include "mantella0_bits/optimise.hpp"
     #include "mantella0_bits/optimiser/hill_climbing.hpp"
     #include "mantella0_bits/optimiser/hooke_jeeves_algorithm.hpp"
     #include "mantella0_bits/optimiser/nelder_mead_method.hpp"
     #include "mantella0_bits/optimiser/particle_swarm_optimisation.hpp"
     #include "mantella0_bits/optimiser/random_search.hpp"
-    #include "mantella0_bits/optimise.hpp"
   }
 }
 // IWYU pragma: end_exports
