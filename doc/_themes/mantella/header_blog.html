@@ -1,0 +1,18 @@
+{% block document %}
+  {%- block body -%}
+    {{ body }}
+    <div class="aktuellpost">
+      <h1>{{ text_recent_posts }}</h1>
+      <ul>
+        {%- for post, post_body in recent[:5] -%}
+          <li>
+            <a href="{{ pathto(post) }}">{{ post_body }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div class="archive_link">
+      <a href="{{ pathto('archive') }}">{{ archivechar }} Post Archive {{ archivechar }}</a>
+    </div>
+  {%- endblock -%}
+{% endblock %}
