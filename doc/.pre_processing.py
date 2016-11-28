@@ -315,32 +315,35 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
       if not experimental_header_exists:
         experimental_header_exists = True
         changelogfile.write('\n.. list-table:: Experimental (functions are subject to change)')
-        changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
+        changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column))
+        changelogfile.write('\n')
         changelogfile.write('\n')
         
       changelogfile.write('\n  * - Planned for ' + str(change[0]))
-      changelogfile.write('\n  - :cpp:any:`' + change[2])
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
       continue
       
     if actual_version != change[0]:
       actual_version = change[0]
-      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n')
-      changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
+      changelogfile.write('\n.. list-table:: Version ' + str(change[0]))
+      changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column))
+      changelogfile.write('\n')
       changelogfile.write('\n')
     
     if change[1] == 2:
-      changelogfile.write('  * - **Added**\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      changelogfile.write('\n  * - **Added**')
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
     
     if change[1] == 1:
-      changelogfile.write('  * - **Changed**\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      changelogfile.write('\n  * - **Changed**')
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
       changelogfile.write('\n')
-      changelogfile.write('      ' + change[3] + '\n')
+      changelogfile.write('      ' + change[3])
+      changelogfile.write('\n')
       
     if change[1] == 0:
-      changelogfile.write('  * - **Deprecated**\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      changelogfile.write('\n  * - **Deprecated**')
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
     
   changelogfile.close()
 
