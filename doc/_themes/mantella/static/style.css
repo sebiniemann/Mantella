@@ -156,6 +156,12 @@ main p {
   margin: 0 0 8px 0;
 }
 
+main .warning {
+  background-color: #e8bf28;
+  border-radius: 15px;
+  text-align: center;
+}
+
 main .literal {
   font-weight: normal;
   padding: 2px 4px;
