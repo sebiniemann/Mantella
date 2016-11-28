@@ -33,10 +33,11 @@ actual_version = search_result.group(1) + '.' + search_result.group(2)
 conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
 open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(version =) .*', '\\1 u\'' + actual_version + '\'' , conf_file, 0))
 
+os.makedirs('./.source', exist_ok=True)
 os.makedirs('./.tmp', exist_ok=True)
-os.makedirs('./.examples', exist_ok=True)
-os.makedirs('./.images', exist_ok=True)
-os.makedirs('./.animations', exist_ok=True)
+os.makedirs('./.source/.examples', exist_ok=True)
+os.makedirs('./.source/.images', exist_ok=True)
+os.makedirs('./.source/.animations', exist_ok=True)
 
 an_error_occured = False
 changelog = []
@@ -45,9 +46,9 @@ changelog = []
 # known beforehand.
 files = []
 for file in glob.glob('../include/*/*.hpp'):
-  files.append([file, os.path.join('./api_reference', *(file.replace('.hpp', '.rst').split(os.path.sep)[3:]))])
+  files.append([file, os.path.join('./.source/api_reference', *(file.replace('.hpp', '.rst').split(os.path.sep)[3:]))])
 for file in glob.glob('../include/*/*/*.hpp'):
-  files.append([file, os.path.join('./api_reference', *(file.replace('.hpp', '.include').split(os.path.sep)[3:]))])
+  files.append([file, os.path.join('./.source/api_reference', *(file.replace('.hpp', '.include').split(os.path.sep)[3:]))])
   
 # Iterates over each header and:
 # 1. Checks whether the files contains an documentation block (i.e. `/** ... */`) or not (only documented files are 
@@ -124,7 +125,7 @@ for file in files:
         # Processes C++ blocks
         if 'c++' in part[3]:
           if part[4]:
-            example = open('./examples/' + part[4], mode='w+')
+            example = open('./.source/examples/' + part[4], mode='w+')
             example.write(part[5].replace('\n' + part[2] + '  ', '\n').strip(' \t\n\r'))
             example.close()
           
@@ -194,7 +195,7 @@ for file in files:
               continue
 
             example = open('./generate.m', mode='w+')
-            example.write('name = "../.images/' + part[4] + '";')
+            example.write('name = "../.source/.images/' + part[4] + '";')
             example.write(image[0][1])
             example.close()
 
@@ -265,7 +266,7 @@ for file in files:
               continue
               
             # Execute generate animations file 
-            output = subprocess.Popen(['ffmpeg', '-an', '-i', part[4].split('.')[0] + '_%d.png', '-framerate', '3', '-pix_fmt', 'yuv420p', '-movflags', 'faststart', '../.animations/' + part[4]], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen(['ffmpeg', '-an', '-i', part[4].split('.')[0] + '_%d.png', '-framerate', '3', '-pix_fmt', 'yuv420p', '-movflags', 'faststart', '../.source/.animations/' + part[4]], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -275,7 +276,7 @@ for file in files:
             docfile.write('\n' + part[2] + '  .. raw:: html')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '    <video width="320" height="240" controls>')
-            docfile.write('\n' + part[2] + '      <source src="../_animations/' + part[4] + '" type="video/mp4">')
+            docfile.write('\n' + part[2] + '      <source src="../.animations/' + part[4] + '" type="video/mp4">')
             docfile.write('\n' + part[2] + '    </video>')
             docfile.write('\n')
             docfile.write('\n')
@@ -304,7 +305,7 @@ for file in files:
 # Generates the changelog
 ## Traverses the changes in reverse order, to list the latest changes on top
 changelog.sort(reverse=True)
-with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
+with open('./.source/api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
   changelogfile.write('Changelog\n')
   changelogfile.write('=========\n')
   actual_version = 0.0
