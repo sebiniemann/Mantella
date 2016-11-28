@@ -35,12 +35,14 @@ RUN apt-get install -y wget && \
 # Installs documentation dependencies
 # - Python3 (documentation processing)
 # - Sphinx (documentation generation)
+# - Tinkerer (blog generation)
 # - Octave (image generation)
 # - ffmpeg (animation generation)
 RUN apt-get install -y python3 
 RUN apt-get install -y python3-pip && \
     pip3 install --upgrade pip && \
-    pip3 install Sphinx
+    pip3 install Sphinx && \
+    pip3 install tinkerer
 RUN apt-get install -y liboctave-dev
 RUN apt-get install -y ffmpeg && \
     apt-get install -y libavcodec-extra
