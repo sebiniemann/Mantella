@@ -1,15 +1,14 @@
 /**
-
 evaluate
 ========
 
-.. cpp:class:: optimise_result
+.. cpp:function:: evaluate(problem, parameters)
 
   .. versionadded:: 1.0.0
 
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  This function evaluates a number of parameters on a problem, and returns the results as vector, in the same order.
 
-  Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+  ``evaluate`` is used by optimisers to calculate all objective values of a single step. It is part of Mantellas public API, so you are encouraged to use it when implementing your own optimisers. In addition to saving a loop, it will use the STLs automatic parallelism, once the C++17 standard is released.
 
   .. list-table:: Template parameters
 
@@ -24,27 +23,23 @@ evaluate
 
         Must be within ``[1, std::numeric_limits<std::size_t>::max()]``.
 
-  .. list-table:: Member variables
+  .. list-table:: function parameters
 
-    * - parameter
+    * - problem
 
-        ``std::array<T, N>``
-      - Lorem ipsum dolor sit amet
+        ``mant::problem<T, N>``
+      - The problem to evaluate the parameters.
+    * - parameters
 
-    * - objective_value
+        ``std::vector<std::array<T, N>>``
+      - The list of parameters that will be evaluated on `problem`.
 
-        ``T``
-      - Lorem ipsum dolor sit amet
+  .. list-table:: Returns
 
-    * - evaluations
+    * - objective_values
 
-        ``std::size_t``
-      - Lorem ipsum dolor sit amet
-
-    * - duration
-
-        ``std::chrono::nanoseconds``
-      - Lorem ipsum dolor sit amet
+        ``std::vector<T>``
+      - A vector with the same length as ``parameters``. Each index stores the objective value for the corresponding parameter.
 */
 
 template <typename T, std::size_t N>
