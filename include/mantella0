@@ -64,7 +64,6 @@ namespace mant {
 
     // Problems
     #include "mantella0_bits/problem.hpp"
-    #include "mantella0_bits/evaluate.hpp"
     #include "mantella0_bits/problem/ackley_function.hpp"
     #include "mantella0_bits/problem/rastrigin_function.hpp"
     #include "mantella0_bits/problem/rosenbrock_function.hpp"
