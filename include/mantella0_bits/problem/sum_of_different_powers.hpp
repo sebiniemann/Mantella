@@ -70,7 +70,7 @@ Sum of different powers
     * - sum_of_different_powers()
 
         Constructor
-      - Initializes all member variables to their default value.
+      - Initialises all member variables to their default value.
 
         This will especially set `objective_function` and fill the lower and bounds.
 

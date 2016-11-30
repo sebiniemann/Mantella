@@ -1,5 +1,5 @@
 /**
-analysing result
+Analysing result
 ================
 
 .. cpp:class:: analyse_result

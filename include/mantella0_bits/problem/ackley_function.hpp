@@ -70,7 +70,7 @@ Ackley function
     * - ackley_function()
 
         Constructor
-      - Initializes all member variables to their default value.
+      - Initialises all member variables to their default value.
 
         This will especially set `objective_function` and fill the lower and bounds.
 

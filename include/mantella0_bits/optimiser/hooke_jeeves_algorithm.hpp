@@ -40,7 +40,7 @@ Hooke-Jeeves algorithm
     * - hooke_jeeves_algorithm
 
         Constructor
-      - Initializes all member variables to their default value.
+      - Initialises all member variables to their default value.
 
         Will never throw an exception.
 */

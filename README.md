@@ -33,7 +33,7 @@ int main() {
     return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
   };
 
-  // optimises your problem. Selects and tunes the optimiser automatically at each invocation.
+  // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
   const mant::optimise_result<double, 2>&& result = mant::optimise(my_problem);
 
   // Prints out the best parameter and its objective value

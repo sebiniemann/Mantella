@@ -1,5 +1,5 @@
 /**
-optimiser
+Optimiser
 =========
 
 .. cpp:class:: optimiser
@@ -48,7 +48,7 @@ optimiser
     * - optimiser
 
         Constructor
-      - Initializes all member variables to their default value.
+      - Initialises all member variables to their default value.
 
         Will never throw an exception.
 

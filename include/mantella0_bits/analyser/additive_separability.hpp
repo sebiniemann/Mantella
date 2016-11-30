@@ -116,7 +116,7 @@ std::array<std::size_t, N> additive_separability(
   assert(evaluations > 0);
   assert(acceptable_deviation >= 0);
 
-  // Initializes *partition* with 0, indicating that all dimensions are in the same group and none is separable.
+  // Initialises *partition* with 0, indicating that all dimensions are in the same group and none is separable.
   std::array<std::size_t, N> partition;
   partition.fill(0);
 

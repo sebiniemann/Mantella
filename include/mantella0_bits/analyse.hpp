@@ -1,5 +1,5 @@
 /**
-analysing
+Analysing
 =========
 
 .. cpp:function:: analyse(problem, evaluations, acceptable_deviation)

@@ -1,6 +1,6 @@
 /**
 
-optimisation result
+Optimisation result
 ===================
 
 .. cpp:class:: optimise_result

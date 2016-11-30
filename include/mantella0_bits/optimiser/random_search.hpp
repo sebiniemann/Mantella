@@ -109,7 +109,7 @@ Random search
     * - random_search
 
         Constructor
-      - Initializes all member variables to their default value.
+      - Initialises all member variables to their default value.
 
         This will especially set `optimisation_function`.
 
