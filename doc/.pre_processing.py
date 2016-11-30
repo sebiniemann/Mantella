@@ -27,6 +27,12 @@ if not os.path.isfile('./conf.py'):
   print("Could not find Sphinx's configuration file. Make sure to start this script within Mantella's documentation root path.")
   exit(1)
 
+# Setting the versions number for conf.py
+search_result = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
+actual_version = search_result.group(1) + '.' + search_result.group(2)
+conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
+open('./conf.py', mode='w', encoding='utf-8').write(re.sub(r'(version =) .*', '\\1 u\'' + actual_version + '\'' , conf_file, 0))
+
 os.makedirs('./.tmp', exist_ok=True)
 os.makedirs('./.examples', exist_ok=True)
 os.makedirs('./.images', exist_ok=True)
@@ -55,6 +61,8 @@ for file in glob.glob('../include/*/*/*.hpp'):
 for file in files:
   print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.relpath(file[0]), end="", flush=True)
 
+  experimental = False
+
   headerfile = open(file[0], mode='r', encoding='utf-8')
   comments = ''.join(re.findall(r'[ ]*\/\*\*(.+?)(?=\*\/)', headerfile.read(), re.DOTALL))
   headerfile.close()
@@ -70,35 +78,38 @@ for file in files:
       print(' ' + Colors.ERROR + 'No versionadded tag found' + Colors.END)
       break
     else:
-      changelog = changelog + [(float(re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)),2,changes[0])]
-
-    if 'versionchanged' in changes[1]:
-      for vchanges in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
-        changelog = changelog + [(float(vchanges[0]),1,changes[0],vchanges[1])]
-
-    if 'deprecated' in changes[1]:
-        changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
+      added_version = re.search(r'versionadded:: (\d.\d+).*', changes[1]).group(1)
+      if (actual_version < added_version):
+        changelog = changelog + [(float(added_version),3,changes[0])]
+        experimental = True
+      else:
+        changelog = changelog + [(float(added_version),2,changes[0])]
+        
+        if 'versionchanged' in changes[1]:
+          for version_changes in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
+            changelog = changelog + [(float(version_changes[0]),1,changes[0],version_changes[1])]
+    
+        if 'deprecated' in changes[1]:
+          changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
 
   # Adds column widths to list-table tags
   first_column = 27
   comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
-
+  
+  # Adds experimental tags
+  if experimental:
+    if '.rst' in file[1]:
+      comments = re.sub(r'(={3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
+    else:
+      comments = re.sub(r'(-{3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
+  
   # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
 
   with open(file[1], mode='w', encoding='utf-8') as docfile:
-    # for part in re.findall(r''
-      # '(.*?)(?=(?:[ ]*\.\. code-block::|$))' # Matches anything until a `.. code-block::` occurs.
-      # '('
-        # '([ ]*)\.\. code-block:: ([^ ]+)' # Matches the type of `.. code-block::` (`c++`, `image` or anything else).
-        # '(?:.*?(?=:name:):name: ([^ ]+)|)' # Skips anything before `:name:` occurs and matches the name.
-        # '(?:\n\3  :[^\n]+)*' # Skips all further lines that have `.. code-block::` indentation but start with ':'.
-        # '((?:\n\3  [^\n]+|\n[ ]*)+)\n|' # Matches all lines having `.. code-block::` indentation and empty lines.
-      # ')', comments, re.DOTALL):
     for part in re.findall(r'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ \n]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', comments, re.DOTALL):
-      docfile.write(part[0])
-
+      docfile.write('\n' + part[0])
       if part[1]:
         # Processes C++ blocks
         if 'c++' in part[3]:
@@ -113,7 +124,7 @@ for file in files:
             example.close()
 
             # Compile generate code file
-            output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr = subprocess.PIPE)
+            output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -157,7 +168,7 @@ for file in files:
             example.close()
 
             # Compile generate code file
-            output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr = subprocess.PIPE)
+            output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -215,7 +226,7 @@ for file in files:
             example.close()
 
             # Compile generate code file
-            output = subprocess.Popen('c++ -std=c++14 -I../../include/ ' + example.name + ' -o ./example', shell=True, stderr = subprocess.PIPE)
+            output = subprocess.Popen('c++ -std=c++14 -I../../include/ ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -286,29 +297,43 @@ changelog.sort(reverse=True)
 with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as changelogfile:
   changelogfile.write('Changelog\n')
   changelogfile.write('=========\n')
-  actualVersion = 0.0
-
+  actual_version = 0.0
+  experimental_header_exists = False
+  
   for change in changelog:
-    if actualVersion != change[0]:
-      actualVersion = change[0]
-      changelogfile.write('\n.. list-table:: Version ' + str(change[0]) + '\n')
-      changelogfile.write('  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n')
+    if change[1] == 3:
+      if not experimental_header_exists:
+        experimental_header_exists = True
+        changelogfile.write('\n.. list-table:: Experimental (functions are subject to change)')
+        changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column))
+        changelogfile.write('\n')
+        changelogfile.write('\n')
+        
+      changelogfile.write('\n  * - Planned for ' + str(change[0]))
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
+      continue
+      
+    if actual_version != change[0]:
+      actual_version = change[0]
+      changelogfile.write('\n.. list-table:: Version ' + str(change[0]))
+      changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column))
+      changelogfile.write('\n')
       changelogfile.write('\n')
 
     if change[1] == 2:
-      changelogfile.write('  * - **Added**\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
-
+      changelogfile.write('\n  * - **Added**')
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
+    
     if change[1] == 1:
-      changelogfile.write('  * - **Changed**\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
+      changelogfile.write('\n  * - **Changed**')
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
       changelogfile.write('\n')
-      changelogfile.write('      ' + change[3] + '\n')
-
+      changelogfile.write('      ' + change[3])
+      changelogfile.write('\n')
+      
     if change[1] == 0:
-      changelogfile.write('  * - **Deprecated**\n')
-      changelogfile.write('    - :cpp:any:`' + change[2] + '`\n')
-
+      changelogfile.write('\n  * - **Deprecated**')
+      changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
   changelogfile.close()
 
 if os.path.exists('./.tmp'):

@@ -260,8 +260,6 @@ struct problem {
   std::array<T, N> lower_bounds;
   std::array<T, N> upper_bounds;
 
-  std::vector<T> identifier;
-
   constexpr problem() noexcept;
 };
 
@@ -278,8 +276,6 @@ constexpr problem<T, N>::problem() noexcept {
   // However, since we map the bounds later on internally to [0, 1] to ease maintainability in our optimisation algorithms, we use [0, 1] as default.
   lower_bounds.fill(T(0.0));
   upper_bounds.fill(T(1.0));
-
-  identifier = {T(0.0)};
 }
 
 //
@@ -292,6 +288,5 @@ TEST_CASE("problem", "[problem]") {
 
   CHECK((problem.lower_bounds == std::array<double, 2>({0.0, 0.0})));
   CHECK((problem.upper_bounds == std::array<double, 2>({1.0, 1.0})));
-  CHECK((problem.identifier == std::vector<double>({0.0})));
 }
 #endif

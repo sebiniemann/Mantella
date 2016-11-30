@@ -33,16 +33,17 @@ RUN apt-get install -y wget && \
     apt-get autoremove -y --purge
 
 # Installs documentation dependencies
-# - Sphinx, with read-the-document theme (documentation generation)
+# - Python3 (documentation processing)
+# - Sphinx (documentation generation)
 # - Octave (image generation)
-# - FFmpeg (animation generation)
-RUN apt-get install -y python-pip && \
-    pip install --upgrade pip && \
-    pip install Sphinx sphinx_rtd_theme && \
-    apt-get remove -y --purge python-pip && \
-    apt-get autoremove -y --purge
+# - ffmpeg (animation generation)
+RUN apt-get install -y python3 
+RUN apt-get install -y python3-pip && \
+    pip3 install --upgrade pip && \
+    pip3 install Sphinx
 RUN apt-get install -y liboctave-dev
-RUN apt-get install -y ffmpeg
+RUN apt-get install -y ffmpeg && \
+    apt-get install -y libavcodec-extra
 
 # Installs benchmark dependencies (excluded on CI servers)
 # - Docker
