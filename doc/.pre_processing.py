@@ -147,6 +147,7 @@ for file in files:
             docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            docfile.write('\n')
             for line in part[5].split('\n'):
               docfile.write('  ' + line + '\n')
             docfile.write(part[2] + '  .. code-block:: none')
@@ -206,6 +207,7 @@ for file in files:
             docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            docfile.write('\n')
             for line in image[0][0].split('\n'):
               docfile.write('  ' + line + '\n')
             docfile.write(part[2] + '  .. code-block:: octave')
@@ -277,6 +279,7 @@ for file in files:
             docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            docfile.write('\n')
             for line in animation[0][0].split('\n'):
               docfile.write('  ' + line + '\n')
             docfile.write(part[2] + '  .. code-block:: octave')
