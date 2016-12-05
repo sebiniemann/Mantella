@@ -308,7 +308,7 @@ position: absolute;
   color: #404040;
   background-color: #fcfcfc;
   border: 1px solid #c9c9c9;
-  margin: 5px;
+  border-radius: 4px 0 0 4px;
 }
 
 main img {
