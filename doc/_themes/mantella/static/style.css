@@ -212,7 +212,7 @@ main details pre {
   color: #f8f8f8;
 }
 
-main details > div:nth-child(even) pre {
+main details > div:nth-child(3n) pre {
   background: #343131;
 }
 
@@ -292,6 +292,24 @@ main details pre .vc { color: #f8f8f8; font-weight: normal; background: none; } 
 main details pre .vg { color: #f8f8f8; font-weight: normal; background: none; } /* Name.Variable.Global */
 main details pre .vi { color: #f8f8f8; font-weight: normal; background: none; } /* Name.Variable.Instance */
 main details pre .il { color: #ae81ff; font-weight: normal; background: none; } /* Literal.Number.Integer.Long */
+
+main .language {
+  position: relative;
+}
+
+main .language span {
+position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  display: block;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: #404040;
+  background-color: #fcfcfc;
+  border: 1px solid #c9c9c9;
+  margin: 5px;
+}
 
 main img {
   width: 95%;
