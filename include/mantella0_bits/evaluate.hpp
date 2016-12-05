@@ -6,9 +6,9 @@ evaluate
 
   .. versionadded:: 1.0.0
 
-  This function evaluates a number of parameters on a problem, and returns the results as vector, in the same order.
+  This function evaluates all given parameters on a problem, and returns the results as vector, in the same order.
 
-  ``evaluate`` is used by optimisers to calculate all objective values of a single step. It is part of Mantellas public API, so you are encouraged to use it when implementing your own optimisers. In addition to saving a loop, it will use the STLs automatic parallelism, once the C++17 standard is released.
+  ``evaluate`` is used by optimisers to calculate all objective values of a single step. It is part of Mantellas public API, so you are encouraged to use it when implementing your own optimisers. In addition to saving a loop, it will use the STLs automatic parallelism, once the C++17 standard is released supported by your compiler.
 
   .. list-table:: Template parameters
 
