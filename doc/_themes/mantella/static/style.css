@@ -99,7 +99,7 @@ main > * {
   margin: 16px 72px;
 }
 
-main aside {
+#breadcrumbs {
   padding-top: 16px;
 }
 
@@ -395,4 +395,22 @@ footer {
 footer p {
   border-top: 1px solid #e3e3e3;
   padding: 24px 0;
+}
+
+@media print {
+  nav {
+    display: none;
+  }
+
+  main {
+    margin-left: 0;
+  }
+
+  #breadcrumbs {
+    display: none;
+  }
+
+  main footer {
+    display: none;
+  }
 }
