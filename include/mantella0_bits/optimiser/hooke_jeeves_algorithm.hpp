@@ -74,7 +74,7 @@ hooke_jeeves_algorithm<T, N>::hooke_jeeves_algorithm() noexcept
       ++result.evaluations;
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
       
-      if (objective_value < result.objective_value) {
+      if (objective_value <= result.objective_value) {
         result.parameter = parameter;
         result.objective_value = objective_value;
         

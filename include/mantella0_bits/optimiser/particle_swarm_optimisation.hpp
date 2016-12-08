@@ -105,7 +105,7 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       
       local_objective_values.at(n) = objective_value;
       
-      if (objective_value < result.objective_value) {
+      if (objective_value <= result.objective_value) {
         result.parameter = parameter;
         result.objective_value = objective_value;
         
