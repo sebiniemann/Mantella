@@ -216,7 +216,7 @@ TEST_CASE("particle_swarm_optimisation", "[optimser][particle_swarm_optimisation
     CHECK(result.evaluations == 1000);
     optimiser.maximal_duration = std::chrono::microseconds(1);
     result = optimiser.optimisation_function(mant::sphere_function<double, dimensions>(), {{0.0, 0.0, 0.0}});
-    CHECK(result.duration > std::chrono::microseconds(1));
+    CHECK(result.duration >= std::chrono::microseconds(1));
     CHECK(result.duration < std::chrono::milliseconds(1));
   }
 }

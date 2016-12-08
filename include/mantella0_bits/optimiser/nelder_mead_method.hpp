@@ -339,7 +339,7 @@ TEST_CASE("nelder_mead_method", "[optimser][nelder_mead_method]") {
     CHECK(result.evaluations == 1000);
     optimiser.maximal_duration = std::chrono::microseconds(1);
     result = optimiser.optimisation_function(mant::sphere_function<double, dimensions>(), initial_parameters);
-    CHECK(result.duration > std::chrono::microseconds(1));
+    CHECK(result.duration >= std::chrono::microseconds(1));
     CHECK(result.duration < std::chrono::milliseconds(1));
   }
 }
