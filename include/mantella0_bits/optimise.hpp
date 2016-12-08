@@ -155,11 +155,13 @@ optimise_result<T1, N> optimise(
   }
 
   for (auto& parameter : initial_parameters) {
-    std::generate(
-      parameter.begin(), std::next(parameter.begin(), optimiser.active_dimensions.size()),
-      std::bind(
-        std::uniform_real_distribution<T1>(0.0, 1.0),
-        std::ref(random_number_generator())));
+    std::transform(
+      problem.lower_bounds.cbegin(), problem.lower_bounds.cend(),
+      problem.upper_bounds.cbegin(),
+      parameter.begin(),
+      [](const auto lower_bound, const auto upper_bound) {
+        return lower_bound + std::uniform_real_distribution<T1>(0.0, 1.0)(random_number_generator()) * (upper_bound - lower_bound);
+      });
   }
 
   return optimise(problem, optimiser, initial_parameters);
