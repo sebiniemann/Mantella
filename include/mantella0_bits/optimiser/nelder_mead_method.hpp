@@ -107,7 +107,7 @@ nelder_mead_method<T, N>::nelder_mead_method() noexcept
 
       simplex.at(n - 1) = {parameter, objective_value};
 
-      if (objective_value < result.objective_value) {
+      if (objective_value <= result.objective_value) {
         result.parameter = parameter;
         result.objective_value = objective_value;
 

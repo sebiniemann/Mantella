@@ -102,8 +102,8 @@ particle_swarm_optimisation<T, N>::particle_swarm_optimisation() noexcept
       result.duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start_time);
 
       local_objective_values.at(n) = objective_value;
-
-      if (objective_value < result.objective_value) {
+      
+      if (objective_value <= result.objective_value) {
         result.parameter = parameter;
         result.objective_value = objective_value;
 
