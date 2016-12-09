@@ -212,7 +212,7 @@ main details pre {
   color: #f8f8f8;
 }
 
-main details > div:nth-child(3n) pre {
+main details > :nth-child(4n - 1) pre {
   background: #343131;
 }
 
