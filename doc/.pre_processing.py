@@ -27,7 +27,7 @@ if not os.path.isfile('./conf.py'):
   print("Could not find Sphinx's configuration file. Make sure to start this script within Mantella's documentation root path.")
   exit(1)
 
-# Setting the versions number for conf.py
+# Sets the versions number for conf.py
 search_result = re.search(r'MANTELLA_VERSION_MAJOR[ ]+(\d+)\n.*[ ](\d+)', open(''.join(glob.glob('../include/mantella[0-9]')), mode='r', encoding='utf-8').read())
 actual_version = search_result.group(1) + '.' + search_result.group(2)
 conf_file = open('./conf.py', mode='r', encoding='utf-8').read()
@@ -41,8 +41,7 @@ os.makedirs('./.animations', exist_ok=True)
 an_error_occured = False
 changelog = []
 # Finds all header files inside `../include`
-# *Note:* This is only done separately to extract the provide a progress bar, wherefore the number of files needs to be
-# known beforehand.
+# *Note*: This is only done separately to provide a progress bar, wherefore the number of files needs to be known beforehand.
 files = []
 for file in glob.glob('../include/*/*.hpp'):
   files.append([file, os.path.join('./api_reference', *(file.replace('.hpp', '.rst').split(os.path.sep)[3:]))])
@@ -50,14 +49,10 @@ for file in glob.glob('../include/*/*/*.hpp'):
   files.append([file, os.path.join('./api_reference', *(file.replace('.hpp', '.include').split(os.path.sep)[3:]))])
 
 # Iterates over each header and:
-# 1. Checks whether the files contains an documentation block (i.e. `/** ... */`) or not (only documented files are
-#    further processed)
+# 1. Checks whether the file contains an documentation block (i.e. `/** ... */`) or not (only documented files are further processed)
 # 2. Looks for `.. code-block::[c++|image]` blocks
-#    a) `c++` blocks are compiled and executed. Their output is appended (with its own `.. code-block::` block) to the
-#        code example.
-#    b) `image` blocks are also compiles and executed. However, we also expect an `:octave:` delimiter, separating the
-#       data generation in C++ from the visualisation by Octave. The black is then replaced with the image by Octave,
-#       appended by its data generation and visualisation (each in its own `.. code-block::` block).
+#    a) `c++` blocks are compiled and executed. Their output is appended (with its own `.. code-block::` block) to the code example.
+#    b) `image` blocks are also compiled and executed. However, we also expect an `:octave:` delimiter, separating the data generation in C++ from the visualisation by Octave. The black is then replaced with the image by Octave, appended by its data generation and visualisation (each in its own `.. code-block::` block).
 for file in files:
   print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.relpath(file[0]), end="", flush=True)
 
@@ -71,7 +66,7 @@ for file in files:
     print(' ' + Colors.NOTICE + 'No comments found' + Colors.END)
     continue
 
-  # Searched changelog tags in comments
+  # Searches changelog tags in comments
   for changes in re.findall(r'\.\. cpp:[function|class]+::[ ]+([a-z_]+).*?\n[ ]*\n(.*?)(?:\n[ ]*\n|$)', comments, re.DOTALL):
     if not changes or not 'versionadded' in changes[1]:
       an_error_occured = True
@@ -103,7 +98,7 @@ for file in files:
     else:
       comments = re.sub(r'(-{3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
 
-  # Create subdirectory if missing
+  # Creates subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
 
@@ -123,7 +118,7 @@ for file in files:
             example.write(part[5])
             example.close()
 
-            # Compile generate code file
+            # Compiles generated code file
             output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -131,7 +126,7 @@ for file in files:
               print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
 
-           # Execute generate code file
+           # Executes generated code file
             output = subprocess.Popen('./example', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -174,7 +169,7 @@ for file in files:
             example.write(image[0][0])
             example.close()
 
-            # Compile generate code file
+            # Compiles generated code file
             output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -182,7 +177,7 @@ for file in files:
               print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
 
-            # Execute generate code file
+            # Executes generated code file
             output = subprocess.Popen('./example', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -195,7 +190,7 @@ for file in files:
             example.write(image[0][1])
             example.close()
 
-            # Execute generate octave file
+            # Executes generated octave file
             output = subprocess.Popen('octave ./generate.m', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -239,7 +234,7 @@ for file in files:
             example.write(animation[0][0])
             example.close()
 
-            # Compile generate code file
+            # Compiles generated code file
             output = subprocess.Popen('c++ -std=c++14 -I../../include/ ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -247,7 +242,7 @@ for file in files:
               print(Colors.ERROR + '  Failure during compilation: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
 
-            # Execute generate code file
+            # Executes generated code file
             output = subprocess.Popen('./example', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -260,7 +255,7 @@ for file in files:
             example.write(animation[0][1])
             example.close()
 
-            # Execute generate octave file
+            # Executes generated octave file
             output = subprocess.Popen('octave ./generate.m', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
@@ -268,7 +263,7 @@ for file in files:
               print(Colors.ERROR + '  Failure during generate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
 
-            # Execute generate animations file
+            # Executes generated animations file
             output = subprocess.Popen('ffmpeg -framerate 1/5 -i ' + part[4].split('.')[0] + '_%d.png -c:v libx264 -r 30 -pix_fmt yuv420p ../.animations/' + part[4], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
