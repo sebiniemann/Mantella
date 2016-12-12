@@ -84,25 +84,25 @@ for file in files:
         experimental = True
       else:
         changelog = changelog + [(float(added_version),2,changes[0])]
-        
+
         if 'versionchanged' in changes[1]:
           for version_changes in re.findall(r'versionchanged:: (\d.\d+)\n[ ]+(.*)', comments):
             changelog = changelog + [(float(version_changes[0]),1,changes[0],version_changes[1])]
-    
+
         if 'deprecated' in changes[1]:
           changelog = changelog + [(float(re.search(r'deprecated:: (\d.\d+).*', changes[1]).group(1)),0,changes[0])]
 
   # Adds column widths to list-table tags
   first_column = 27
   comments = re.sub(r'(( +).. list-table:: .*?\n)',  '\\1\\2  :widths: ' + str(first_column) + ' ' + str(100 - first_column) + '\n', comments, 0, re.DOTALL)
-  
+
   # Adds experimental tags
   if experimental:
     if '.rst' in file[1]:
       comments = re.sub(r'(={3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
     else:
       comments = re.sub(r'(-{3,})\n',  '\\1\n\n.. warning:: Function are subject to change', comments, 0, re.DOTALL)
-  
+
   # Create subdirectory if missing
   os.makedirs(os.path.dirname(file[1]), exist_ok=True)
 
@@ -146,10 +146,16 @@ for file in files:
             docfile.write('\n' + part[2] + '    <details>')
             docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
             docfile.write('\n')
+            docfile.write('\n' + part[2] + '      <div class="language"><span>C++</span></div>')
+            docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
             docfile.write('\n')
             for line in part[5].split('\n'):
               docfile.write('  ' + line + '\n')
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '      <div class="language"><span>output</span></div>')
+            docfile.write('\n')
             docfile.write(part[2] + '  .. code-block:: none')
             docfile.write('\n')
             for line in str(output.stdout.read(), encoding='utf-8').split('\n'):
@@ -206,11 +212,17 @@ for file in files:
             docfile.write('\n' + part[2] + '    <details>')
             docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
             docfile.write('\n')
+            docfile.write('\n' + part[2] + '      <div class="language"><span>C++</span></div>')
+            docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
             docfile.write('\n')
             for line in image[0][0].split('\n'):
               docfile.write('  ' + line + '\n')
-            docfile.write(part[2] + '  .. code-block:: octave')
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    <div class="language"><span>Octave</span></div>')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '  .. code-block:: octave')
             for line in image[0][1].split('\n'):
               docfile.write('\n' + '  ' + line)
             docfile.write('\n' + part[2] + '  .. raw:: html')
@@ -278,10 +290,16 @@ for file in files:
             docfile.write('\n' + part[2] + '    <details>')
             docfile.write('\n' + part[2] + '      <summary>Code example</summary>')
             docfile.write('\n')
+            docfile.write('\n' + part[2] + '      <div class="language"><span>C++</span></div>')
+            docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
             docfile.write('\n')
             for line in animation[0][0].split('\n'):
               docfile.write('  ' + line + '\n')
+            docfile.write('\n' + part[2] + '  .. raw:: html')
+            docfile.write('\n')
+            docfile.write('\n' + part[2] + '    <div class="language"><span>Octave</span></div>')
+            docfile.write('\n')
             docfile.write(part[2] + '  .. code-block:: octave')
             for line in animation[0][1].split('\n'):
               docfile.write('\n' + '  ' + line)
@@ -302,7 +320,7 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
   changelogfile.write('=========\n')
   actual_version = 0.0
   experimental_header_exists = False
-  
+
   for change in changelog:
     if change[1] == 3:
       if not experimental_header_exists:
@@ -311,11 +329,11 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
         changelogfile.write('\n  :widths: ' + str(first_column) + ' ' + str(100 - first_column))
         changelogfile.write('\n')
         changelogfile.write('\n')
-        
+
       changelogfile.write('\n  * - Planned for ' + str(change[0]))
       changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
       continue
-      
+
     if actual_version != change[0]:
       actual_version = change[0]
       changelogfile.write('\n.. list-table:: Version ' + str(change[0]))
@@ -326,14 +344,14 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
     if change[1] == 2:
       changelogfile.write('\n  * - **Added**')
       changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
-    
+
     if change[1] == 1:
       changelogfile.write('\n  * - **Changed**')
       changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
       changelogfile.write('\n')
       changelogfile.write('      ' + change[3])
       changelogfile.write('\n')
-      
+
     if change[1] == 0:
       changelogfile.write('\n  * - **Deprecated**')
       changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
