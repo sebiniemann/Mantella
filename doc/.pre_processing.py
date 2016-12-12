@@ -59,7 +59,7 @@ for file in glob.glob('../include/*/*/*.hpp'):
 #       data generation in C++ from the visualisation by Octave. The black is then replaced with the image by Octave,
 #       appended by its data generation and visualisation (each in its own `.. code-block::` block).
 for file in files:
-  print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.basename(file[1]), end="", flush=True)
+  print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.relpath(file[0]), end="", flush=True)
 
   experimental = False
 
@@ -68,8 +68,7 @@ for file in files:
   headerfile.close()
 
   if not comments:
-    an_error_occured = True
-    print(' ' + Colors.ERROR + 'No comments found' + Colors.END)
+    print(' ' + Colors.NOTICE + 'No comments found' + Colors.END)
     continue
 
   # Searched changelog tags in comments
@@ -109,17 +108,8 @@ for file in files:
 
 
   with open(file[1], mode='w', encoding='utf-8') as docfile:
-    # for part in re.findall(r''
-      # '(.*?)(?=(?:[ ]*\.\. code-block::|$))' # Matches anything until a `.. code-block::` occurs.
-      # '('
-        # '([ ]*)\.\. code-block:: ([^ ]+)' # Matches the type of `.. code-block::` (`c++`, `image` or anything else).
-        # '(?:.*?(?=:name:):name: ([^ ]+)|)' # Skips anything before `:name:` occurs and matches the name.
-        # '(?:\n\3  :[^\n]+)*' # Skips all further lines that have `.. code-block::` indentation but start with ':'.
-        # '((?:\n\3  [^\n]+|\n[ ]*)+)\n|' # Matches all lines having `.. code-block::` indentation and empty lines.
-      # ')', comments, re.DOTALL):
-    for part in re.findall(r'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ ]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', comments, re.DOTALL):
+    for part in re.findall(r'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ \n]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', comments, re.DOTALL):
       docfile.write('\n' + part[0])
-
       if part[1]:
         # Processes C++ blocks
         if 'c++' in part[3]:
@@ -134,7 +124,7 @@ for file in files:
             example.close()
 
             # Compile generate code file
-            output = subprocess.Popen(['c++', '-std=c++14', '-I../../include', example.name, '-o', './example'], stderr = subprocess.PIPE)
+            output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -142,7 +132,7 @@ for file in files:
               continue
 
            # Execute generate code file
-            output = subprocess.Popen(['./example'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('./example', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -159,6 +149,7 @@ for file in files:
             docfile.write('\n' + part[2] + '      <div class="language"><span>C++</span></div>')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            docfile.write('\n')
             for line in part[5].split('\n'):
               docfile.write('  ' + line + '\n')
             docfile.write('\n' + part[2] + '  .. raw:: html')
@@ -184,7 +175,7 @@ for file in files:
             example.close()
 
             # Compile generate code file
-            output = subprocess.Popen(['c++', '-std=c++14', '-I../../include', example.name, '-o', './example'], stderr = subprocess.PIPE)
+            output = subprocess.Popen('c++ -std=c++14 -I../../include ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -192,7 +183,7 @@ for file in files:
               continue
 
             # Execute generate code file
-            output = subprocess.Popen(['./example'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('./example', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -205,7 +196,7 @@ for file in files:
             example.close()
 
             # Execute generate octave file
-            output = subprocess.Popen(['octave', './generate.m'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('octave ./generate.m', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -224,6 +215,7 @@ for file in files:
             docfile.write('\n' + part[2] + '      <div class="language"><span>C++</span></div>')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            docfile.write('\n')
             for line in image[0][0].split('\n'):
               docfile.write('  ' + line + '\n')
             docfile.write('\n' + part[2] + '  .. raw:: html')
@@ -248,7 +240,7 @@ for file in files:
             example.close()
 
             # Compile generate code file
-            output = subprocess.Popen(['c++', '-std=c++14', '-I../../include', example.name, '-o', './example'], stderr = subprocess.PIPE)
+            output = subprocess.Popen('c++ -std=c++14 -I../../include/ ' + example.name + ' -o ./example', shell=True, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -256,7 +248,7 @@ for file in files:
               continue
 
             # Execute generate code file
-            output = subprocess.Popen(['./example'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('./example', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
@@ -269,19 +261,19 @@ for file in files:
             example.close()
 
             # Execute generate octave file
-            output = subprocess.Popen(['octave', './generate.m'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('octave ./generate.m', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
-              print(Colors.ERROR + '  Failure during genarate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              print(Colors.ERROR + '  Failure during generate image: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
 
             # Execute generate animations file
-            output = subprocess.Popen(['ffmpeg', '-an', '-i', part[4].split('.')[0] + '_%d.png', '-framerate', '3', '-pix_fmt', 'yuv420p', '-movflags', 'faststart', '../.animations/' + part[4]], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('ffmpeg -framerate 1/5 -i ' + part[4].split('.')[0] + '_%d.png -c:v libx264 -r 30 -pix_fmt yuv420p ../.animations/' + part[4], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
-              print(Colors.ERROR + '  Failure during genarate animations: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
+              print(Colors.ERROR + '  Failure during generate animations: \n' + Colors.END + str(output.stderr.read(), encoding='utf-8'))
               continue
 
             docfile.write('\n' + part[2] + '  .. raw:: html')
@@ -301,6 +293,7 @@ for file in files:
             docfile.write('\n' + part[2] + '      <div class="language"><span>C++</span></div>')
             docfile.write('\n')
             docfile.write('\n' + part[2] + '  .. code-block:: c++')
+            docfile.write('\n')
             for line in animation[0][0].split('\n'):
               docfile.write('  ' + line + '\n')
             docfile.write('\n' + part[2] + '  .. raw:: html')
@@ -362,7 +355,6 @@ with open('./api_reference/changelog.rst', mode='w+',  encoding='utf-8') as chan
     if change[1] == 0:
       changelogfile.write('\n  * - **Deprecated**')
       changelogfile.write('\n    - :cpp:any:`' + change[2] + '`')
-
   changelogfile.close()
 
 if os.path.exists('./.tmp'):
