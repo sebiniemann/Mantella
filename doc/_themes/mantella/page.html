@@ -6,15 +6,15 @@
     {% include 'header_blog.html' %}
   {% else %}
     {% if metadata is defined %}
-      {%- block body -%}
+      {% block body %}
         {{ timestamp(metadata.formatted_date) }}
         {{ body }}
         {{ post_meta(metadata) }}
-      {%- endblock -%}
+      {% endblock %}
     {% else %}
       {{ body }}
     {% endif %}
   {% endif %}
-{%- endblock -%}
+{% endblock %}
 {% block footer %}
 {% endblock %}

@@ -1,68 +1,68 @@
 {#- Timestamp -#}
-{%- macro timestamp(date) -%}
-    {%- if date -%}
+{% macro timestamp(date) %}
+    {% if date %}
         <div class="timestamp postmeta">
             <span>{{ date }}</span>
         </div>
-    {%- endif -%}
-{%- endmacro -%}
+    {% endif %}
+{% endmacro %}
 
 {#- Author -#}
-{%- macro author(author_name) -%}
-    {%- if author_name -%}
+{% macro author(author_name) %}
+    {% if author_name %}
         <div class="author">
             <span>{{ text_posted_by }} {{ author_name }}</span>
         </div>
-    {%- endif -%}
-{%- endmacro -%}
+    {% endif %}
+{% endmacro %}
 
 {#- Categories -#}
-{%- macro category_list(post_categories) -%}
-    {%- if post_categories -%}
+{% macro category_list(post_categories) %}
+    {% if post_categories %}
         <div class="categories">
             <span>
                 {{ text_filed_under }}:
-                {% for link, category in post_categories -%}
+                {% for link, category in post_categories %}
                     <a href="{{ pathto('categories/' + link + '.html', 1) }}">{{ category }}</a>
-                    {%- if not loop.last -%}, {% endif -%}
-                {% endfor -%}
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
             </span>
         </div>
-    {%- endif -%}
-{%- endmacro -%}
+    {% endif %}
+{% endmacro %}
 
 {#- Tags -#}
-{%- macro tag_list(post_tags) -%}
-    {%- if post_tags -%}
+{% macro tag_list(post_tags) %}
+    {% if post_tags %}
         <div class="tags">
             <span>
                 {{ text_tags }}:
-                {% for link, tag in post_tags -%}
+                {% for link, tag in post_tags %}
                     <a href="{{ pathto('tags/' + link + '.html', 1) }}">{{ tag }}</a>
-                    {%- if not loop.last -%}, {% endif -%}
-                {% endfor -%}
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
             </span>
         </div>
-    {%- endif -%}
-{%- endmacro -%}
+    {% endif %}
+{% endmacro %}
 
 {#- Comment count -#}
-{%- macro comment_count(code) -%}
-    {%- if code -%}
+{% macro comment_count(code) %}
+    {% if code %}
         <div class="comments">
             {{ code }}
         </div>
-    {%- endif -%}
-{%- endmacro -%}
+    {% endif %}
+{% endmacro %}
 
 
 {#- Post metadata -#}
-{%- macro post_meta(metadata, comment_count_code=None) -%}
+{% macro post_meta(metadata, comment_count_code=None) %}
     <div class="postmeta">
         {{ author(metadata.author) }}
         {{ category_list(metadata.filing["categories"]) }}
         {{ tag_list(metadata.filing["tags"]) }}
         {{ comment_count(comment_count_code) }}
-        {%- block post_meta_extra -%}{%- endblock -%}
+        {% block post_meta_extra %}{% endblock %}
     </div>
-{%- endmacro -%}
+{% endmacro %}
