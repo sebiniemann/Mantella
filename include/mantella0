@@ -59,8 +59,8 @@ namespace mant {
 
     // Helper
     #include "mantella0_bits/helper/random_neighbour.hpp"
-    #include "mantella0_bits/helper/predict.hpp"
     #include "mantella0_bits/helper/learn.hpp"
+    #include "mantella0_bits/helper/predict.hpp"
 
     // Problems
     #include "mantella0_bits/problem.hpp"
@@ -69,6 +69,7 @@ namespace mant {
     #include "mantella0_bits/problem/rosenbrock_function.hpp"
     #include "mantella0_bits/problem/sphere_function.hpp"
     #include "mantella0_bits/problem/sum_of_different_powers.hpp"
+    #include "mantella0_bits/evaluate.hpp"
 
     // Analyser
     #include "mantella0_bits/analyser/additive_separability.hpp"
