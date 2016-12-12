@@ -99,7 +99,7 @@ main > * {
   margin: 16px 72px;
 }
 
-#breadcrumbs {
+main aside.breadcrumbs {
   padding-top: 16px;
 }
 
@@ -424,7 +424,7 @@ footer p {
     margin-left: 0;
   }
 
-  #breadcrumbs {
+  main aside.breadcrumbs {
     display: none;
   }
 
