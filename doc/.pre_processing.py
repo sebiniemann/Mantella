@@ -41,8 +41,7 @@ os.makedirs('./.animations', exist_ok=True)
 an_error_occured = False
 changelog = []
 # Finds all header files inside `../include`
-# *Note*: This is only done separately to provide a progress bar, wherefore the number of files needs to be
-# known beforehand.
+# *Note*: This is only done separately to provide a progress bar, wherefore the number of files needs to be known beforehand.
 files = []
 for file in glob.glob('../include/*/*.hpp'):
   files.append([file, os.path.join('./api_reference', *(file.replace('.hpp', '.rst').split(os.path.sep)[3:]))])
@@ -50,14 +49,10 @@ for file in glob.glob('../include/*/*/*.hpp'):
   files.append([file, os.path.join('./api_reference', *(file.replace('.hpp', '.include').split(os.path.sep)[3:]))])
 
 # Iterates over each header and:
-# 1. Checks whether the file contains an documentation block (i.e. `/** ... */`) or not (only documented files are
-#    further processed)
+# 1. Checks whether the file contains an documentation block (i.e. `/** ... */`) or not (only documented files are further processed)
 # 2. Looks for `.. code-block::[c++|image]` blocks
-#    a) `c++` blocks are compiled and executed. Their output is appended (with its own `.. code-block::` block) to the
-#        code example.
-#    b) `image` blocks are also compiled and executed. However, we also expect an `:octave:` delimiter, separating the
-#       data generation in C++ from the visualisation by Octave. The black is then replaced with the image by Octave,
-#       appended by its data generation and visualisation (each in its own `.. code-block::` block).
+#    a) `c++` blocks are compiled and executed. Their output is appended (with its own `.. code-block::` block) to the code example.
+#    b) `image` blocks are also compiled and executed. However, we also expect an `:octave:` delimiter, separating the data generation in C++ from the visualisation by Octave. The black is then replaced with the image by Octave, appended by its data generation and visualisation (each in its own `.. code-block::` block).
 for file in files:
   print(Colors.NOTICE + '[{:3d}%]'.format(int(100.0 * (files.index(file) + 1) / len(files))) + Colors.END + ' ' + os.path.basename(file[1]), end="", flush=True)
 
@@ -109,14 +104,6 @@ for file in files:
 
 
   with open(file[1], mode='w', encoding='utf-8') as docfile:
-    # for part in re.findall(r''
-      # '(.*?)(?=(?:[ ]*\.\. code-block::|$))' # Matches anything until a `.. code-block::` occurs.
-      # '('
-        # '([ ]*)\.\. code-block:: ([^ ]+)' # Matches the type of `.. code-block::` (`c++`, `image` or anything else).
-        # '(?:.*?(?=:name:):name: ([^ ]+)|)' # Skips anything before `:name:` occurs and matches the name.
-        # '(?:\n\3  :[^\n]+)*' # Skips all further lines that have `.. code-block::` indentation but start with ':'.
-        # '((?:\n\3  [^\n]+|\n[ ]*)+)\n|' # Matches all lines having `.. code-block::` indentation and empty lines.
-      # ')', comments, re.DOTALL):
     for part in re.findall(r'(.*?)(?=(?:[ ]*\.\. code-block::|$))(([ ]*)\.\. code-block:: ([^ ]+)(?:.*?(?=:name:):name: ([^ ]+)|)(?:\n\3  :[^\n]+)*((?:\n\3  [^\n]+|\n[ ]*)+)\n|)', comments, re.DOTALL):
       docfile.write('\n' + part[0])
 
