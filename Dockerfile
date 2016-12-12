@@ -38,8 +38,8 @@ RUN apt-get install -y wget && \
 # - Tinkerer (blog generation)
 # - Octave (image generation)
 # - ffmpeg (animation generation)
-RUN apt-get install -y python3 
-RUN apt-get install -y python3-pip libxml2-dev && \
+RUN apt-get install -y libxml2-dev libxslt1-dev python3-dev
+RUN apt-get install -y python3-pip && \
     pip3 install --upgrade pip && \
     pip3 install Sphinx && \
     pip3 install tinkerer
