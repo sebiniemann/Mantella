@@ -43,7 +43,7 @@ Setting up a development system
 git clone http://github.com/Mantella/Mantella.git
 cd Mantella
 sudo docker build -t ubuntu/mantella:latest .
-sudo docker run -v .:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
+sudo docker run -v /absolute/path/to/mantella_directory:/mantella -w /mantella --name mantella -t -d ubuntu/mantella
 ```
 
 **Done!**
