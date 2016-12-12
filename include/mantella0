@@ -57,6 +57,11 @@ namespace mant {
       return random_number_generator;
     }
 
+    // Helper
+    #include "mantella0_bits/helper/random_neighbour.hpp"
+    #include "mantella0_bits/helper/predict.hpp"
+    #include "mantella0_bits/helper/learn.hpp"
+
     // Problems
     #include "mantella0_bits/problem.hpp"
     #include "mantella0_bits/evaluate.hpp"
@@ -65,9 +70,6 @@ namespace mant {
     #include "mantella0_bits/problem/rosenbrock_function.hpp"
     #include "mantella0_bits/problem/sphere_function.hpp"
     #include "mantella0_bits/problem/sum_of_different_powers.hpp"
-
-    // Randomisation
-    #include "mantella0_bits/randomisation/random_neighbour.hpp"
 
     // Analyser
     #include "mantella0_bits/analyser/additive_separability.hpp"
