@@ -89,12 +89,7 @@ TEST_CASE("evaluate", "[evaluate]") {
     return parameter.at(0) * parameter.at(1);
   };
 
-  const auto result = evaluate(problem, {{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}});
-
-  CHECK(result.at(0) == 2.0);
-  CHECK(result.at(1) == 12.0);
-  CHECK(result.at(2) == 30.0);
-
-  CHECK(evaluate(problem, {3.0, 7.0}) == problem.objective_function({{3.0, 7.0}}));
+  CHECK((evaluate(problem, {{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}}) == std::vector<double>{2.0, 12.0, 30.0}));
+  CHECK(evaluate(problem, {3.0, 7.0}) == problem.objective_function({3.0, 7.0}));
 }
 #endif
