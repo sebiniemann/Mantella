@@ -264,7 +264,7 @@ for file in files:
               continue
 
             # Executes generated animations file
-            output = subprocess.Popen('ffmpeg -framerate 1/5 -i ' + part[4].split('.')[0] + '_%d.png -c:v libx264 -r 30 -pix_fmt yuv420p ../.animations/' + part[4], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.Popen('ffmpeg -y -framerate 1/5 -i ' + part[4].split('.')[0] + '_%d.png -c:v libx264 -r 30 -pix_fmt yuv420p ../.animations/' + part[4], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output.wait()
             if output.returncode != 0:
               an_error_occured = True
