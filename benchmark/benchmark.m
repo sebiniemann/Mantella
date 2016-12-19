@@ -42,7 +42,7 @@ for problem_id = 1:length(problems)
     end
   end
 
-  xlim([min(dimensions), max(dimensions)]);
+  axis([min(dimensions), max(dimensions), 0, 1e4]);
   set(gca, 'yscale','log');
   legend('show', 'Location', 'southeast');
   saveas(gcf, ['benchmark_', problem{1}, '.png']);
