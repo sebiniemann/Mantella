@@ -7,14 +7,13 @@
 project = u'Mantella'
 version = u'0.70'
 
-master_doc = 'master'
+master_doc = 'index'
 source_suffix = ['.rst']
 
 pygments_style = 'sphinx'
 extensions = [
   'sphinx.ext.mathjax',
-  'sphinx.ext.githubpages',
-  'tinkerer.ext.blog'
+  'sphinx.ext.githubpages'
 ]
 
 #
@@ -40,15 +39,6 @@ nitpick_ignore = [
 ]
 
 add_function_parentheses = False
-
-#
-# Tinkerer blog
-#
-
-import tinkerer
-import tinkerer.paths
-
-rss_service = None
 
 #
 # Options for HTML output
