@@ -1,5 +1,5 @@
 /**
-evaluate
+Evaluate
 ========
 
 .. cpp:function:: evaluate(problem, parameters)
