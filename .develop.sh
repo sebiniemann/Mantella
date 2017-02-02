@@ -71,11 +71,21 @@ do_doc() {
   if (( SKIP_DOC_PREPROCESSING != 1 )); then
     if ! python3 ./.pre_processing.py; then AN_ERROR_OCCURED=1; finish_up; return; fi
   fi
-  if ! sphinx-build -E -a . ./_html; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! mkdir .build/; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! cp -r ./.source/. .build/; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! cp -r ./_themes/. .build/_themes/; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! cp ./conf.py .build/; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! cp ./master.rst .build/; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  if ! cp ./index_api.rst .build/; then AN_ERROR_OCCURED=1; finish_up; return; fi
   
-  if [ -d "./animations" ]; then
+  if ! sphinx-build -E -a ./.build/. ./_html; then AN_ERROR_OCCURED=1; finish_up; return; fi
+    
+  if ! rm -r .build; then AN_ERROR_OCCURED=1; finish_up; return; fi
+  
+  
+  if [ -d "./.source/animations" ]; then
     if [ ! -d "./_html/_animations" ]; then mkdir ./_html/_animations; fi
-    if ! cp ./.animations/* ./_html/_animations/; then AN_ERROR_OCCURED=1; finish_up; return; fi
+    if ! cp ./.source/animations/* ./_html/_animations/; then AN_ERROR_OCCURED=1; finish_up; return; fi
   fi
   
   cd .. || exit 1
