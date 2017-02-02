@@ -15,6 +15,14 @@ Contents:
   api_reference/analyse
   api_reference/analyse_result
   api_reference/changelog
+  
+Blog:
+  
+.. toctree::
+   :maxdepth: 2
+   
+   2016/12/13/firstpost
+
 
 Indices and tables
 ==================

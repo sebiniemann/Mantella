@@ -1,12 +1,20 @@
 {% extends "!layout.html" %}
+{% from 'blog_macros.html' import timestamp with context %}
+{% from 'blog_macros.html' import post_meta with context %}
 {% block document %}
-  {{ body }}
+  {% if pagename == 'header_blog' %}
+    {% include 'header_blog.html' %}
+  {% else %}
+    {% if metadata is defined %}
+      {% block body %}
+        {{ timestamp(metadata.formatted_date) }}
+        {{ body }}
+        {{ post_meta(metadata) }}
+      {% endblock %}
+    {% else %}
+      {{ body }}
+    {% endif %}
+  {% endif %}
 {% endblock %}
 {% block footer %}
-  {% if prev %}
-    <a href="{{ prev.link | escape }}" class="prev">{{ prev.title }}</a>
-  {% endif %}
-  {% if next %}
-    <a href="{{ next.link | escape }}" class="next">{{ next.title }}</a>
-  {% endif %}
 {% endblock %}
