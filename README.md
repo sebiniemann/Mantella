@@ -70,4 +70,4 @@ License
 
 Distributed under [MIT license](http://opensource.org/licenses/MIT).
 
-Copyright (c) 2013-2016 [Sebastian Niemann](mailto:niemann@sra.uni-hannover.de) and contributors.
+Copyright (c) 2013-2017 [Sebastian Niemann](mailto:niemann@sra.uni-hannover.de) and contributors.
