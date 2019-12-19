@@ -2,7 +2,7 @@ class Mat {
   constructor() {
     this.raw = [];
 
-    switch(arguments.length) {
+    switch (arguments.length) {
       case 0:
         // new Mat()
         this._constructorEmpty();
@@ -67,7 +67,7 @@ class Mat {
   }
 
   elem() {
-    switch(arguments.length) {
+    switch (arguments.length) {
       case 1:
         if (typeof arguments[0] === 'number') {
           // elem(n)
@@ -206,8 +206,33 @@ class Mat {
     return this;
   }
 
+  elemDiag() {
+    switch (arguments.length) {
+      case 0:
+        return this._elemDiagK(0);
+      case 1:
+        if (typeof arguments[0] === 'number'){
+          return this._elemDiagK(...arguments);
+        } else {
+          return this._elemDiagKCallback(0, ...arguments);
+        }
+      case 2:
+        return this._elemDiagKCallback(...arguments);
+    }
+  }
+
+  _elemDiagK(k) {
+    const length = (k < 0 ? this.nRows + k : this.nCols - k);
+    
+    const mat = new Mat(length, 1);
+
+
+
+    return mat;
+  }
+
   col() {
-    switch(arguments.length) {
+    switch (arguments.length) {
       case 1:
         if (typeof arguments[0] === 'number') {
           // col(n)
@@ -280,7 +305,7 @@ class Mat {
   }
 
   row() {
-    switch(arguments.length) {
+    switch (arguments.length) {
       case 1:
         if (typeof arguments[0] === 'number') {
           // row(n)
@@ -514,41 +539,49 @@ class Mat {
   }
 }
 
-function comulative() {
+//
+// Stand-alone functions
+//
+
+// Creation
+
+function empty(nRows, nCols) {
+  return new Mat(nRows, nCols);
+}
+
+function zeros(nRows, nCols) {
+  const mat = new Mat(nRows, nCols);
+
+  mat.fill(0);
+
+  return mat;
+}
+
+function ones(nRows, nCols) {
+  const mat = new Mat(nRows, nCols);
+
+  mat.fill(1);
+
+  return mat;
+}
+
+function identity(nRows, nCols) {
+  const mat = zeros(nRows, nCols);
+
+  mat.diag(() => 1);
+
+  return mat;
+}
+
+function normal(nRows, nCols) {
 
 }
 
-function comulativeCol() {
+function uniform(nRows, nCols) {
 
 }
 
-function comulativeRow() {
-
-}
-
-function diff() {
-
-}
-
-function diffCol() {
-
-}
-
-function diffRow() {
-
-}
-
-function unique() {
-
-}
-
-function shuffle() {
-
-}
-
-function clamp() {
-
-}
+// Statistics
 
 function min(mat) {
   return mat.raw.reduce((acc, value) => Math.min(acc, value), Number.POSITIVE_INFINITY);
@@ -652,6 +685,82 @@ function kurtosis(mat) {
 
   return sampleCorrectionA * _kurtosis - sampleCorrectionB;
 }
+
+// Others
+
+function comulative(mat, callback) {
+
+}
+
+function diff(mat, callback) {
+
+}
+
+function unique(mat) {
+  return new Mat([...new Set(mat.raw)]);
+}
+
+function shuffle(mat) {
+
+}
+
+function fill() {
+  
+}
+
+function replace() {
+
+}
+
+function appendCol() {
+
+}
+
+function appendRow() {
+
+}
+
+function prependCol() {
+
+}
+
+function prependRow() {
+
+}
+
+function insertCol() {
+
+}
+
+function insertRow() {
+
+}
+
+function removeCol() {
+
+}
+
+function removeRow() {
+
+}
+
+function transpose() {
+  
+}
+
+function clamp(mat, lowerBounds, upperBounds) {
+  return mat.map(x => Math.min(Math.max(x, lowerBounds), upperBounds));
+}
+
+function range() {
+
+}
+
+export {
+  Mat,
+};
+
+
 
 (async function main() {
   let mat = new Mat([

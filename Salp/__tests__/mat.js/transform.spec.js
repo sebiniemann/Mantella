@@ -1,5 +1,3 @@
-'use strict';
-
 const Mat = require('../../src/Mat');
 
 describe('transform', () => {

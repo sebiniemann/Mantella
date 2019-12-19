@@ -1,5 +1,3 @@
-'use strict';
-
 const functions = require('../../src/functions');
 
 describe('range', () => {

@@ -1,8 +1,6 @@
-'use strict';
-
 const Mat = require('../../src/Mat');
 
-describe('at', () => {
+describe('elem', () => {
   test('Single index', () => {
     const mat = new Mat([
       1, 2, 3,
