@@ -1,0 +1,5 @@
+# Yarn and NPM
+/node_modules/
+
+# Project relevant dot files
+!.*

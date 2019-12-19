@@ -27,5 +27,3 @@ License
 -------
 
 Distributed under [MIT license](http://opensource.org/licenses/MIT).
-
-Copyright (c) 2013-2019 Sebastian Niemann.
