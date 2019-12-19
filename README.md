@@ -1,73 +1,33 @@
-[![Mantella](http://mantella.info/assets/images/logo_with_name.png)](http://mantella.info/)
+![Mantella](https://github.com/sebiniemann/Mantella/raw/sebi/salp/assets/logoWithName-499x128.png)
 
-Version 0.70.0
-==============
+Welcome! This mono-repo hosts [my research projects](https://sebiniemann.github.io/Mantella/) on self-developing optimisation algorithms.
 
-[![Join the chat at https://gitter.im/Mantella/Mantella](https://badges.gitter.im/Mantella/Mantella.svg)](https://gitter.im/Mantella/Mantella) [![Linux and Mac build status](https://travis-ci.org/Mantella/Mantella.png?branch=master)](https://travis-ci.org/Mantella/Mantella) [![Windows build status](https://ci.appveyor.com/api/projects/status/3amaifoql2r85b7p?svg=true)](https://ci.appveyor.com/project/SebastianNiemann/mantella) [![Static code anylsis status](https://scan.coverity.com/projects/10668/badge.svg)](https://scan.coverity.com/projects/10668)
+Self-developing optimisation methods seek to produce increasingly efficient, domain-specific optimisers and are closely related to (AI) meta-learning techniques.
 
-[Mantella](http://mantella.info/) is an efficiency-focused C++14 header-only library for analysing and solving optimisation problems. As it only depends on the C++ standard library, Linux, Windows and Mac OS X support is a given.
+Based on my professional career as an academic researcher and industrial lead scientist, this repo also includes practical application examples that have stuck with me:
 
-**Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
+- Redundancy minimisation of parallel kinematic machines
+- Challenges from the [Global Trajectory Optimization Competition](https://sophia.estec.esa.int/gtoc_portal/)
+- Some finance-related topics (based on my current occupation, only as far as compliance permits)
 
-**Installation**
+If you want to know more about my work or self-developing optimisation methods in general – like how or why these approaches function – I always have an open ear for you 😊. The easiest way to contact me is via a [Github discussion](https://github.com/sebiniemann/Mantella/discussions/new) or by [email](mailto:sebiniemann@gmail.com). Alternatively, you may also find me at various scientific conferences throughout the year, like GECCO, ICML or ICCOPT.
 
-Download Mantella and copy the include folder's content into the system's default search path for header files.
-``` bash
-wget -O mantella.tar.gz https://github.com/Mantella/Mantella/archive/master.tar.gz
-tar -xzf mantella.tar.gz -C /usr/include --strip-components=2 --wildcards Mantella-master/include/mantella*
-```
+## Scope
 
-**Usage**
-``` cpp
-#include <mantella0>
-#include <iostream> // Used for std::cout
-#include <iterator> // Used for std::ostream_iterator
+The main purpose of this repo should be to provide an easy and comprehensible access to this field. Instead of complex, extensive libraries, tailored to each use case and every hardware, I provide only the necessary core functions as simple and clear as possible.
 
-int main() {
-  // ... Your company code.
+To make it easier to transfer these functions to other programming languages/environments and to adapt them to your technical requirements, I will also refrain from external dependencies altogether.
 
-  // Adds your own optimisation problem.
-  mant::problem<double, 2> my_problem;
-  my_problem.objective_function = [](const std::array<double, 2>& parameter) {
-    // Or your own objective value calculation ;)
-    return std::accumulate(parameter.cbegin(), parameter.cend(), 0.0);
-  };
+That said, I am happy to list any community project which (re)implements these for others to use. 🚀
 
-  // Optimises your problem. Selects and tunes the optimiser automatically at each invocation.
-  const mant::optimise_result<double, 2>&& result = mant::optimise(my_problem);
+## History
 
-  // Prints out the best parameter and its objective value
-  std::copy(result.parameter.cbegin(), result.parameter.cend(), std::ostream_iterator<double>(std::cout, " "));
-  std::cout << "-> " << result.objective_value << std::endl;
+This project took off in 2013, shortly after I joined the Systems Research and Architecture group at Leibniz Universität Hannover as a research associate. Being paid from the public purse, I wanted to keep my results freely available, following the idea of Open Science.
 
-  // Continuing your company code ...
+Back then, the focus was still on automatic algorithm selection and configuration, a precursor to where we are today. Together with wonderful colleagues, students and friends, we explored and developed many different concepts that enriched Mantella every day.
 
-  return 0;
-}
-```
+In early 2017, shortly after my exploration of self-developing optimisation algorithms began, things went abruptly quiet. I sailed from academia to industry - which only intensified my work on this topic (albeit less publicly), yet also booked much of my attention. Three years later, I seized the opportunity to rededicate myself to Mantella, revised its purpose, cleaned up a bit and started sharing insights into my work again.
 
-Got a Problem or Question?
---------------------------
+## License
 
-If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella), or ask us directly on [Gitter](https://gitter.im/Mantella/Mantella).
-
-Found an Issue or Bug?
-----------------------
-
-If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/Mantella/Mantella/issues).
-
-You are welcomed to submit a pull request with your fix afterwards, if at hand.
-
-Requesting a Feature?
----------------------
-
-If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/Mantella/Mantella/issues) labelled `feature request`.
-
-Note that submitting a pull request, implementing your requested feature, usually speeds up the process.
-
-License
--------
-
-Distributed under [MIT license](http://opensource.org/licenses/MIT).
-
-Copyright (c) 2013-2017 [Sebastian Niemann](mailto:niemann@sra.uni-hannover.de) and contributors.
+The source code is distributed under the [MIT license](http://opensource.org/licenses/MIT), the content is in the public domain. Feel free to reuse everything as you like.

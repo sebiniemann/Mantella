@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>{{ page.title }}</title>
+    <meta name="description" content="{{ page.teaser | default: site.description }}">
+    <meta property="og:title" content="{{ page.title }}">
+    <meta property="og:description" content="{{ page.teaser | default: site.description }}">
+    <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/assets/logo-openGraph.png">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="{{ site.url }}{{ site.baseurl }}/assets/logo.svg">
+
+    <meta name="google-site-verification" content="0UPAHXcfSO0EiI8C-i1wnBTkrGBgdzXx57t8WsbKIqc" />
+
+    <style>
+      @font-face {
+        font-family: 'Montserrat';
+        font-style: italic;
+        font-weight: 400;
+        font-display: swap;
+        src: url('{{ site.baseurl }}/assets/montserrat-400-italic.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('{{ site.baseurl }}/assets/montserrat-400-normal.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('{{ site.baseurl }}/assets/montserrat-600-normal.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Nunito';
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url('{{ site.baseurl }}/assets/nunito-300-normal.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Nunito';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('{{ site.baseurl }}/assets/nunito-700-normal.woff2') format('woff2');
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        color: hsl(0deg 77% 53%);
+        text-decoration: none;
+      }
+
+      body {
+        display: grid;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.125rem;
+        grid-template-columns:
+          8px
+          1fr
+          [main-start]
+          minmax(0, 710px)
+          [main-end]
+          1fr
+          8px;
+        grid-template-rows:
+          16px
+          [main-start]
+          max-content
+          [main-end]
+          32px
+          [footer-start]
+          max-content
+          [footer-end]
+          16px;
+        line-height: 1.75rem;
+      }
+
+      body > main {
+        grid-column-start: main-start;
+        grid-column-end: main-end;
+        grid-row-start: main-start;
+        grid-row-end: main-end;
+      }
+
+      body > footer {
+        border-top: 4px double hsl(0deg 0% 80%);
+        grid-column-start: main-start;
+        grid-column-end: main-end;
+        grid-row-start: footer-start;
+        grid-row-end: footer-end;
+        padding-top: 16px;
+      }
+
+      h1 {
+        align-items: center;
+        display: flex;
+        font-family: 'Nunito', sans-serif;
+        font-size: 4rem;
+        font-weight: 700;
+        line-height: 4.75rem;
+        margin-bottom: 48px;
+        margin-top: 16px;
+      }
+
+      h2 {
+        font-family: 'Nunito', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 300;
+        line-height: 3.5rem;
+        margin-bottom: 12px;
+        margin-top: 84px;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      li {
+        margin: 16px 0;
+      }
+
+      p {
+        margin-bottom: 18px;
+      }
+
+      ul {
+        padding-left: 36px;
+      }
+
+      .articleList {
+        list-style: none;
+        margin: 32px 0;
+        padding: 0;
+      }
+
+      .articleList > .item {
+        list-style: none;
+      }
+
+      .articleList > .item > .category {
+        color: hsl(0deg 0% 46%);
+        font-size: 0.875rem;
+      }
+
+      .articleList > .item > .title {
+        font-weight: 600;
+      }
+
+      .logo {
+        margin-right: 4px;
+      }
+
+      @media screen and (min-width: 600px) {
+        .logo {
+          height: 96px;
+          margin-right: 18px;
+          width: 106px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      {{ content }}
+    </main>
+
+    <footer>
+      <nav>
+        <a href="{{ site.baseurl }}/data-privacy.html">Data privacy</a>,
+        <a href="https://github.com/sebiniemann/Mantella">Repository</a>
+      </nav>
+    </footer>
+  </body>
+</html>
