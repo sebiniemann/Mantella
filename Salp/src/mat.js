@@ -565,6 +565,10 @@ function ones(nRows, nCols) {
   return mat;
 }
 
+function trace() {
+  
+}
+
 function identity(nRows, nCols) {
   const mat = zeros(nRows, nCols);
 
@@ -578,6 +582,34 @@ function normal(nRows, nCols) {
 }
 
 function uniform(nRows, nCols) {
+
+}
+
+function gamma(nRows, nCols) {
+
+}
+
+function cond() {
+
+}
+
+function repeat() {
+
+}
+
+function isApprox() {
+
+}
+
+function cross() {
+
+}
+
+function dot() {
+
+}
+
+function det() {
 
 }
 
@@ -755,6 +787,259 @@ function clamp(mat, lowerBounds, upperBounds) {
 function range() {
 
 }
+
+function covariance() {
+
+}
+
+function correlation() {
+
+}
+
+function abs() {
+  
+}
+
+function acos() {
+
+}
+
+function acosh() {
+  
+}
+
+function asin() {
+  
+}
+
+function asinh() {
+  
+}
+
+function atan() {
+  
+}
+
+function atan2() {
+  
+}
+
+function atanh() {
+  
+}
+
+function ceil() {
+  
+}
+
+function cos() {
+  
+}
+
+function cosh() {
+  
+}
+
+function floor() {
+  
+}
+
+function round() {
+  
+}
+
+function logE() {
+  
+}
+
+function log10() {
+  
+}
+
+function log2() {
+  
+}
+
+function pow() {
+  
+}
+
+function sqrt() {
+  
+}
+
+function square() {
+  
+}
+
+function cubic() {
+  
+}
+
+function cbrt() {
+  
+}
+
+function sign() {
+  
+}
+
+function sin() {
+  
+}
+
+function sinh() {
+  
+}
+
+function tan() {
+  
+}
+
+function tanh() {
+  
+}
+
+function hypot() {
+  
+}
+
+function exp() {
+  
+}
+
+function truncate() {
+
+}
+
+function minIndex() {
+
+}
+
+function maxIndex() {
+
+}
+
+function add() {
+
+}
+
+function multiply() {
+  
+}
+
+function subtract() {
+  
+}
+
+function divide() {
+  
+}
+
+function transpose() {
+
+}
+
+function isBetween() {
+
+}
+
+function isEmpty() {
+  
+}
+
+function isVector() {
+  
+}
+
+function isCol() {
+  
+}
+
+function isRow() {
+  
+}
+
+function isSquare() {
+  
+}
+
+function isSymmetric() {
+  
+}
+
+function isPositiveDefinite() {
+
+}
+
+function isFinite() {
+
+}
+
+function hasInf() {
+  
+}
+
+function hasNaN() {
+  
+}
+
+function hasNull() {
+  
+}
+
+function find() {
+  
+}
+
+function intersect() {
+
+}
+
+function kron() {
+
+}
+
+function norm() {
+
+}
+
+function rank() {
+
+}
+
+function erf() {
+
+}
+
+function gamma() {
+
+}
+
+function 
+
+// Phase 1
+
+// Standard Arrays unterstützen
+// Finanz-Funktionen unterstützen
+// skipNull
+// group
+
+// Phase 3
+
+// singular value decomposition
+// solve linear equation
+// QR decomposition
+// Moore-Penrose pseudo-inverse
+// orthonormal basis
+// LU decomposition
+// Inverse
+// Eigen decomposition
+// Cholesky decomposition
+
+// Phase 4
+
+// RNG fixieren
 
 export {
   Mat,
