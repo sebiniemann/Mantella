@@ -251,31 +251,34 @@
 
 ### Mathematical functions
 
-- `erf()`
-- `gamma()`
-- `negate()`
-- `reciprocal()`
-- `mod()`
-- `remainder()`
-- `abs()`
-- `ceil()`
-- `floor()`
-- `round()`
-- `logE()`
-- `log10()`
-- `log2()`
-- `pow()`
-- `sqrt()`
-- `square()`
-- `cubic()`
-- `cbrt()`
-- `sign()`
-- `expE()`
-- `exp2()`
-- `deg2Rad()`
-- `rad2Deg()`
-- `exp10()`
-- `truncate()`
+- `.erf()`
+- `.gamma()`
+- `.negate()`
+- `.reciprocal()`
+- `.mod()`
+- `.remainder()`
+- `.abs()`
+
+    Shorthand for `.map(Math.abs)`.
+
+- `.ceil()`
+- `.floor()`
+- `.round()`
+- `.logE()`
+- `.log10()`
+- `.log2()`
+- `.pow()`
+- `.sqrt()`
+- `.square()`
+- `.cubic()`
+- `.cbrt()`
+- `.sign()`
+- `.expE()`
+- `.exp2()`
+- `.deg2Rad()`
+- `.rad2Deg()`
+- `.exp10()`
+- `.truncate()`
 
 ### Linear algebra
 
