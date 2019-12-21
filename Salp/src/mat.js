@@ -549,6 +549,18 @@ function empty(nRows, nCols) {
   return new Mat(nRows, nCols);
 }
 
+function roll() {
+
+}
+
+function rollCol() {
+  
+}
+
+function rollRow() {
+  
+}
+
 function zeros(nRows, nCols) {
   const mat = new Mat(nRows, nCols);
 
@@ -784,8 +796,32 @@ function clamp(mat, lowerBounds, upperBounds) {
   return mat.map(x => Math.min(Math.max(x, lowerBounds), upperBounds));
 }
 
-function range() {
+function arange() {
 
+}
+
+function linspace() {
+
+}
+
+function logspace() {
+  
+}
+
+function geomspace() {
+  
+}
+
+function meshGrid() {
+  
+}
+
+function lowerTriangular() {
+  
+}
+
+function upperTriangular() {
+  
 }
 
 function covariance() {
@@ -825,6 +861,22 @@ function atan2() {
 }
 
 function atanh() {
+  
+}
+
+function sinc() {
+  
+}
+
+function sinch() {
+  
+}
+
+function tanc() {
+  
+}
+
+function tanch() {
   
 }
 
@@ -904,7 +956,47 @@ function hypot() {
   
 }
 
-function exp() {
+function expE() {
+  
+}
+
+function exp2() {
+  
+}
+
+function deg2Rad() {
+  
+}
+
+function rad2Deg() {
+  
+}
+
+function isGreater() {
+
+}
+
+function isGreaterOrEqual() {
+  
+}
+
+function isLess() {
+  
+}
+
+function isLessOrEqual() {
+  
+}
+
+function isEqual() {
+  
+}
+
+function histogram() {
+
+}
+
+function exp10() {
   
 }
 
@@ -996,6 +1088,18 @@ function intersect() {
 
 }
 
+function swapElems() {
+  
+}
+
+function swapCols() {
+
+}
+
+function swapRows() {
+
+}
+
 function kron() {
 
 }
@@ -1016,7 +1120,33 @@ function gamma() {
 
 }
 
-function 
+function negate() {
+
+}
+
+function reciprocal() {
+
+}
+
+function mod() {
+
+}
+
+function remainder() {
+  
+}
+
+function setDiff() {
+
+}
+
+function union() {
+
+}
+
+function _random() {
+
+}
 
 // Phase 1
 
@@ -1024,11 +1154,13 @@ function
 // Finanz-Funktionen unterstützen
 // skipNull
 // group
+// Konstanten
 
 // Phase 3
 
 // singular value decomposition
 // solve linear equation
+// solve least square
 // QR decomposition
 // Moore-Penrose pseudo-inverse
 // orthonormal basis

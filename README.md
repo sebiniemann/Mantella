@@ -1,4 +1,260 @@
-[![Mantella](http://mantella.info/assets/images/logo_with_name.png)](http://mantella.info/)
+# Salp
+
+## API
+
+### Fields
+
+- .nElems
+- .nCols
+- .nRows
+- .raw
+- .rng
+
+### Creation
+
+- new Mat()
+- empty(nRows, nCols)
+
+    Shorthand for `new Mat(nRows, nCols)`.
+
+- zeros(nRows, nCols)
+
+    Shorthand for `new Mat(nRows, nCols, () => 0)`.
+
+- ones(nRows, nCols)
+
+    Shorthand for `new Mat(nRows, nCols, () => 1)`.
+
+- identity(nRows, nCols)
+
+    Shorthand for `zeros(nRows, nCols).diag(() => 0)`.
+
+- normal(nRows, nCols)
+- uniform(nRows, nCols)
+- gamma(nRows, nCols)
+- arange()
+- linspace()
+- logspace()
+- geomspace()
+- meshGrid()
+- repeat()
+
+### Inplace-Manipulation and Access
+
+- .elem()
+- .elemDiag()
+- .col()
+- .row()
+- .roll()
+- .rollCol()
+- .rollRow()
+- .fill()
+- .replace()
+- .shuffle(mat)
+- .clamp(mat, lowerBounds, upperBounds)
+
+### Layout
+
+- .resize(nRows, nCols)
+- .flat()
+- .appendCol()
+- .appendRow()
+- .prependCol()
+- .prependRow()
+- .insertCol()
+- .insertRow()
+- .removeCol()
+- .removeRow()
+- .lowerTriangular()
+- .upperTriangular()
+
+### Functional
+
+- .map(callback)
+- .mapCol(callback)
+- .mapRow(callback)
+- .reduce(callback, initialValue)
+- .reduceCol(callback, initialValue)
+- .reduceRow(callback, initialValue)
+- .filter(callback)
+- .filterCol()
+- .filterRow()
+- .some()
+- .someCol()
+- .someRow()
+- .every()
+- .everyCol()
+- .everyRow()
+- .reverse()
+- .reverseCol()
+- .reverseRow()
+- .sort()
+- .sortCol()
+- .sortRow()
+- swapElems()
+- swapCols()
+- swapRows()
+
+### Output
+
+- .toString(precision = 5)
+
+### Logical
+
+- isApprox()
+- isGreater()
+- isGreaterOrEqual()
+- isLess()
+- isLessOrEqual()
+- isEqual()
+- isBetween()
+- isEmpty()
+- isVector()
+- isCol()
+- isRow()
+- isSquare()
+- isSymmetric()
+- isPositiveDefinite()
+- isFinite()
+- hasInf()
+- hasNaN()
+- hasNull()
+- find()
+
+### Statistic
+
+- min(mat)
+- max(mat)
+- range(mat)
+- mode(mat)
+- quantile(mat, q, k)
+- median(mat)
+
+    Shorthand for `quantile(mat, 2, 1)`.
+
+- quartile(mat, k)
+
+    Shorthand for `quantile(mat, 4, k)`.
+
+- decile(mat, k)
+
+    Shorthand for `quantile(mat, 10, k)`.
+
+- percentile(mat, k)
+
+    Shorthand for `quantile(mat, 100, k)`.
+
+- interquartileRange(mat)
+- mean(mat)
+- centralMoment(mat, k)
+- variance(mat)
+- standardDeviation(mat)
+- standardizedCentralMoment(mat, k)
+- skewness(mat)
+- kurtosis(mat)
+- histogram()
+- minIndex()
+- maxIndex()
+- covariance()
+- correlation()
+- comulative(mat, callback)
+- diff(mat, callback)
+
+### Trigonometric 
+
+- .sin()
+
+    Shorthand for `.map(x => Math.sin(x))`.
+
+- .sinh()
+
+    Shorthand for `.map(x => Math.sinh(x))`.
+
+- `.sinc(flavor='normalised')`
+
+    If `flavor` is set to `'normalised'`:
+
+    Shorthand for `.map(x => _scalarSinc(Math.pi * x))`.
+
+    If `flavor` is set to `'unnormalised'`:
+
+    Shorthand for `.map(_scalarSinc)`.
+
+- .sinch()
+- .asin()
+- .asinh()
+- .cos()
+- .cosh()
+- .acos()
+- .acosh()
+- .tan()
+- .tanh()
+- .tanc()
+- .tanch()
+- .atan()
+- .atan2()
+- .atanh()
+- .hypot()
+
+### Sets
+
+- intersect()
+- setDiff()
+- union()
+- unique(mat)
+
+### Mathematical functions
+
+- erf()
+- gamma()
+- negate()
+- reciprocal()
+- mod()
+- remainder()
+- abs()
+- ceil()
+- floor()
+- round()
+- logE()
+- log10()
+- log2()
+- pow()
+- sqrt()
+- square()
+- cubic()
+- cbrt()
+- sign()
+- expE()
+- exp2()
+- deg2Rad()
+- rad2Deg()
+- exp10()
+- truncate()
+
+### Linear algebra
+
+- cond()
+- cross()
+- dot()
+- det()
+- transpose()
+- kron()
+- norm()
+- rank()
+- add()
+- multiply()
+- subtract()
+- divide()
+- trace()
+
+---
+
+Distributed under [MIT license](http://opensource.org/licenses/MIT).
+
+
+
+
+---
 
 [Mantella](http://mantella.info/) is an efficiency-focused C++14 header-only library for analysing and solving optimisation problems. As it only depends on the C++ standard library, Linux, Windows and Mac OS X support is a given.
 
@@ -22,8 +278,3 @@ Requesting a Feature?
 If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/Mantella/Mantella/issues) labelled `feature request`.
 
 Note that submitting a pull request, implementing your requested feature, usually speeds up the process.
-
-License
--------
-
-Distributed under [MIT license](http://opensource.org/licenses/MIT).
