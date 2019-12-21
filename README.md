@@ -4,11 +4,33 @@
 
 ### Fields
 
-- .nElems
-- .nCols
-- .nRows
-- .raw
-- .rng
+- `.nElems`
+
+  The number of elements.
+  
+  Same as `.nRows * .nCols`.
+
+- `.nRows`
+
+  The number of rows.
+
+- `.nCols`
+
+  The number of columns.
+
+- `.raw`
+
+  The 1D `Array`
+
+- `._rng`
+
+- `._add(a, b)`
+
+- `._subtract(a, b)`
+
+- `._multiply(a, b)`
+
+- `._divide(a, b)`
 
 ### Creation
 
@@ -162,33 +184,57 @@
 
 ### Trigonometric 
 
-- .sin()
+- `.sin()`
 
-    Shorthand for `.map(x => Math.sin(x))`.
+    Shorthand for `.map(Math.sin)`.
 
-- .sinh()
+- `.sinh()`
 
-    Shorthand for `.map(x => Math.sinh(x))`.
+    Shorthand for `.map(Math.sinh)`.
 
 - `.sinc(flavor='normalised')`
 
     If `flavor` is set to `'normalised'`:
 
-    Shorthand for `.map(x => _scalarSinc(Math.pi * x))`.
+    Shorthand for `.map(x => _scalarSinc(_multiply(Math.pi, x)))`.
 
     If `flavor` is set to `'unnormalised'`:
 
     Shorthand for `.map(_scalarSinc)`.
 
-- .sinch()
-- .asin()
-- .asinh()
-- .cos()
-- .cosh()
-- .acos()
-- .acosh()
-- .tan()
-- .tanh()
+- `.sinch()`
+- `.asin()`
+
+    Shorthand for `.map(Math.asin)`.
+
+- `.asinh()`
+
+    Shorthand for `.map(Math.asinh)`.
+
+- `.cos()`
+
+    Shorthand for `.map(Math.cos)`.
+
+- `.cosh()`
+
+    Shorthand for `.map(Math.cosh)`.
+
+- `.acos()`
+
+    Shorthand for `.map(Math.acos)`.
+
+- `.acosh()`
+
+    Shorthand for `.map(Math.acosh)`.
+
+- `.tan()`
+
+    Shorthand for `.map(Math.tan)`.
+
+- `.tanh()`
+
+    Shorthand for `.map(Math.tanh)`.
+
 - .tanc()
 - .tanch()
 - .atan()
