@@ -34,153 +34,153 @@
 
 ### Creation
 
-- new Mat()
-- empty(nRows, nCols)
+- `new Mat()`
+- `empty(nRows, nCols)`
 
     Shorthand for `new Mat(nRows, nCols)`.
 
-- zeros(nRows, nCols)
+- `zeros(nRows, nCols)`
 
     Shorthand for `new Mat(nRows, nCols, () => 0)`.
 
-- ones(nRows, nCols)
+- `ones(nRows, nCols)`
 
     Shorthand for `new Mat(nRows, nCols, () => 1)`.
 
-- identity(nRows, nCols)
+- `identity(nRows, nCols)`
 
     Shorthand for `zeros(nRows, nCols).diag(() => 0)`.
 
-- normal(nRows, nCols)
-- uniform(nRows, nCols)
-- gamma(nRows, nCols)
-- arange()
-- linspace()
-- logspace()
-- geomspace()
-- meshGrid()
-- repeat()
+- `normal(nRows, nCols)`
+- `uniform(nRows, nCols)`
+- `gamma(nRows, nCols)`
+- `arange()`
+- `linspace()`
+- `logspace()`
+- `geomspace()`
+- `meshGrid()`
+- `repeat()`
 
 ### Inplace-Manipulation and Access
 
-- .elem()
-- .elemDiag()
-- .col()
-- .row()
-- .roll()
-- .rollCol()
-- .rollRow()
-- .fill()
-- .replace()
-- .shuffle(mat)
-- .clamp(mat, lowerBounds, upperBounds)
+- `.elem()`
+- `.elemDiag()`
+- `.col()`
+- `.row()`
+- `.roll()`
+- `.rollCol()`
+- `.rollRow()`
+- `.fill()`
+- `.replace()`
+- `.shuffle(mat)`
+- `.clamp(mat, lowerBounds, upperBounds)`
 
 ### Layout
 
-- .resize(nRows, nCols)
-- .flat()
-- .appendCol()
-- .appendRow()
-- .prependCol()
-- .prependRow()
-- .insertCol()
-- .insertRow()
-- .removeCol()
-- .removeRow()
-- .lowerTriangular()
-- .upperTriangular()
+- `.resize(nRows, nCols)`
+- `.flat()`
+- `.appendCol()`
+- `.appendRow()`
+- `.prependCol()`
+- `.prependRow()`
+- `.insertCol()`
+- `.insertRow()`
+- `.removeCol()`
+- `.removeRow()`
+- `.lowerTriangular()`
+- `.upperTriangular()`
 
 ### Functional
 
-- .map(callback)
-- .mapCol(callback)
-- .mapRow(callback)
-- .reduce(callback, initialValue)
-- .reduceCol(callback, initialValue)
-- .reduceRow(callback, initialValue)
-- .filter(callback)
-- .filterCol()
-- .filterRow()
-- .some()
-- .someCol()
-- .someRow()
-- .every()
-- .everyCol()
-- .everyRow()
-- .reverse()
-- .reverseCol()
-- .reverseRow()
-- .sort()
-- .sortCol()
-- .sortRow()
-- swapElems()
-- swapCols()
-- swapRows()
+- `.map(callback)`
+- `.mapCol(callback)`
+- `.mapRow(callback)`
+- `.reduce(callback, initialValue)`
+- `.reduceCol(callback, initialValue)`
+- `.reduceRow(callback, initialValue)`
+- `.filter(callback)`
+- `.filterCol()`
+- `.filterRow()`
+- `.some()`
+- `.someCol()`
+- `.someRow()`
+- `.every()`
+- `.everyCol()`
+- `.everyRow()`
+- `.reverse()`
+- `.reverseCol()`
+- `.reverseRow()`
+- `.sort()`
+- `.sortCol()`
+- `.sortRow()`
+- `swapElems()`
+- `swapCols()`
+- `swapRows()`
 
 ### Output
 
-- .toString(precision = 5)
+- .toString(precision = 5)`
 
 ### Logical
 
-- isApprox()
-- isGreater()
-- isGreaterOrEqual()
-- isLess()
-- isLessOrEqual()
-- isEqual()
-- isBetween()
-- isEmpty()
-- isVector()
-- isCol()
-- isRow()
-- isSquare()
-- isSymmetric()
-- isPositiveDefinite()
-- isFinite()
-- hasInf()
-- hasNaN()
-- hasNull()
-- find()
+- `isApprox()`
+- `isGreater()`
+- `isGreaterOrEqual()`
+- `isLess()`
+- `isLessOrEqual()`
+- `isEqual()`
+- `isBetween()`
+- `isEmpty()`
+- `isVector()`
+- `isCol()`
+- `isRow()`
+- `isSquare()`
+- `isSymmetric()`
+- `isPositiveDefinite()`
+- `isFinite()`
+- `hasInf()`
+- `hasNaN()`
+- `hasNull()`
+- `find()`
 
 ### Statistic
 
-- min(mat)
-- max(mat)
-- range(mat)
-- mode(mat)
-- quantile(mat, q, k)
-- median(mat)
+- `min(mat)`
+- `max(mat)`
+- `range(mat)`
+- `mode(mat)`
+- `quantile(mat, q, k)`
+- `median(mat)`
 
     Shorthand for `quantile(mat, 2, 1)`.
 
-- quartile(mat, k)
+- `quartile(mat, k)`
 
     Shorthand for `quantile(mat, 4, k)`.
 
-- decile(mat, k)
+- `decile(mat, k)`
 
     Shorthand for `quantile(mat, 10, k)`.
 
-- percentile(mat, k)
+- `percentile(mat, k)`
 
     Shorthand for `quantile(mat, 100, k)`.
 
-- interquartileRange(mat)
-- mean(mat)
-- centralMoment(mat, k)
-- variance(mat)
-- standardDeviation(mat)
-- standardizedCentralMoment(mat, k)
-- skewness(mat)
-- kurtosis(mat)
-- histogram()
-- minIndex()
-- maxIndex()
-- covariance()
-- correlation()
-- comulative(mat, callback)
-- diff(mat, callback)
+- `interquartileRange(mat)`
+- `mean(mat)`
+- `centralMoment(mat, k)`
+- `variance(mat)`
+- `standardDeviation(mat)`
+- `standardizedCentralMoment(mat, k)`
+- `skewness(mat)`
+- `kurtosis(mat)`
+- `histogram()`
+- `minIndex()`
+- `maxIndex()`
+- `covariance()`
+- `correlation()`
+- `comulative(mat, callback)`
+- `diff(mat, callback)`
 
 ### Trigonometric 
 
@@ -235,70 +235,67 @@
 
     Shorthand for `.map(Math.tanh)`.
 
-- .tanc()
-- .tanch()
-- .atan()
-- .atan2()
-- .atanh()
-- .hypot()
+- `.tanc()`
+- `.tanch()`
+- `.atan()`
+- `.atanh()`
+- `atan2(matA, matB)`
+- `hypot(matA, matB)`
 
 ### Sets
 
-- intersect()
-- setDiff()
-- union()
-- unique(mat)
+- `intersect()`
+- `setDiff()`
+- `union()`
+- `unique(mat)`
 
 ### Mathematical functions
 
-- erf()
-- gamma()
-- negate()
-- reciprocal()
-- mod()
-- remainder()
-- abs()
-- ceil()
-- floor()
-- round()
-- logE()
-- log10()
-- log2()
-- pow()
-- sqrt()
-- square()
-- cubic()
-- cbrt()
-- sign()
-- expE()
-- exp2()
-- deg2Rad()
-- rad2Deg()
-- exp10()
-- truncate()
+- `erf()`
+- `gamma()`
+- `negate()`
+- `reciprocal()`
+- `mod()`
+- `remainder()`
+- `abs()`
+- `ceil()`
+- `floor()`
+- `round()`
+- `logE()`
+- `log10()`
+- `log2()`
+- `pow()`
+- `sqrt()`
+- `square()`
+- `cubic()`
+- `cbrt()`
+- `sign()`
+- `expE()`
+- `exp2()`
+- `deg2Rad()`
+- `rad2Deg()`
+- `exp10()`
+- `truncate()`
 
 ### Linear algebra
 
-- cond()
-- cross()
-- dot()
-- det()
-- transpose()
-- kron()
-- norm()
-- rank()
-- add()
-- multiply()
-- subtract()
-- divide()
-- trace()
+- `cond()`
+- `cross()`
+- `dot()`
+- `det()`
+- `transpose()`
+- `kron()`
+- `norm()`
+- `rank()`
+- `add()`
+- `multiply()`
+- `subtract()`
+- `divide()`
+- `trace()`
 
 ---
 
 Distributed under [MIT license](http://opensource.org/licenses/MIT).
-
-
-
 
 ---
 
