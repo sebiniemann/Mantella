@@ -183,27 +183,27 @@
 
 - `.acot()`
 
-    Shorthand for: `mat.map(x => Math.atan(1 / x))`
+    Shorthand for: `mat.map(salp._scalarAcot)`
 
 - `.acoth()`
 
-    Shorthand for: `mat.map(x => Math.atanh(1 / x))`
+    Shorthand for: `mat.map(salp._scalarAcoth)`
 
 - `.acsc()`
 
-    Shorthand for: `mat.map(x => Math.asin(1 / x))`
+    Shorthand for: `mat.map(salp._scalarAcsc)`
 
 - `.acsch()`
 
-    Shorthand for: `mat.map(x => Math.asinh(1 / x))`
+    Shorthand for: `mat.map(salp._scalarAcsch)`
 
 - `.asec()`
 
-    Shorthand for: `mat.map(x => Math.acos(1 / x))`
+    Shorthand for: `mat.map(salp._scalarAsec)`
 
 - `.asech()`
 
-    Shorthand for: `mat.map(x => Math.acosh(1 / x))`
+    Shorthand for: `mat.map(salp._scalarAsech)`
   
 - `.asin()`
 
@@ -231,27 +231,27 @@
 
 - `.cot()`
 
-    Shorthand for: `mat.map(x => 1 / Math.tan(x))`
+    Shorthand for: `mat.map(salp._scalarCot)`
 
 - `.coth()`
 
-    Shorthand for: `mat.map(x => 1 / Math.tanh(x))`
+    Shorthand for: `mat.map(salp._scalarCoth)`
 
 - `.csc()`
 
-    Shorthand for: `mat.map(x => 1 / Math.sin(x))`
+    Shorthand for: `mat.map(salp._scalarCsc)`
 
-- `.cscs()`
+- `.csch()`
 
-    Shorthand for: `mat.map(x => 1 / Math.sinh(x))`
+    Shorthand for: `mat.map(salp._scalarCsch)`
 
 - `.sec()`
 
-    Shorthand for: `mat.map(x => 1 / Math.cos(x))`
+    Shorthand for: `mat.map(salp._scalarSec)`
 
 - `.sech()`
 
-    Shorthand for: `mat.map(x => 1 / Math.cosh(x))`
+    Shorthand for: `mat.map(salp._scalarSech)`
 
 - `.sin()`
 
@@ -261,11 +261,11 @@
 
     If `flavor` is set to `'normalised'`:
 
-    Shorthand for: `mat.map(x => Mat._scalarSinc(Math.pi * x))`
+    Shorthand for: `mat.map(x => salp._scalarSinc(Math.pi * x))`
 
     If `flavor` is set to `'unnormalised'`:
 
-    Shorthand for: `mat.map(Mat._scalarSinc)`
+    Shorthand for: `mat.map(salp._scalarSinc)`
 
 - `.sinch()`
 
