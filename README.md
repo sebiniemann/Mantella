@@ -254,7 +254,13 @@
 - `.erf()`
 - `.gamma()`
 - `.negate()`
+
+    Shorthand for `.map(x => -x)`.
+
 - `.reciprocal()`
+
+    Shorthand for `.map(x => 1/x)`.
+
 - `.mod()`
 - `.remainder()`
 - `.abs()`
@@ -262,23 +268,64 @@
     Shorthand for `.map(Math.abs)`.
 
 - `.ceil()`
+
+    Shorthand for `.map(Math.ceil)`.
+
 - `.floor()`
+
+    Shorthand for `.map(Math.floor)`.
+
 - `.round()`
-- `.logE()`
+
+    Shorthand for `.map(Math.round)`.
+
+- `.log()`
+
+    Shorthand for `.map(Math.log)`.
+
 - `.log10()`
+
+    Shorthand for `.map(Math.log10)`.
+
 - `.log2()`
-- `.pow()`
+
+    Shorthand for `.map(Math.log2)`.
+
+- `.pow(exponent)`
+
+    Shorthand for `.map(x => Math.pow(x, exponent))`.
+
 - `.sqrt()`
+
+    Shorthand for `.map(Math.sqrt)`.
+
 - `.square()`
-- `.cubic()`
+
+    Shorthand for `.pow(2)`.
+
+- `.cube()`
+
+    Shorthand for `.pow(3)`.
+
 - `.cbrt()`
+
+    Shorthand for `.map(Math.cbrt)`.
+
 - `.sign()`
-- `.expE()`
-- `.exp2()`
+
+    Shorthand for `.map(Math.sign)`.
+
+- `.exp()`
+
+    Shorthand for `.map(Math.exp)`.
+
 - `.deg2Rad()`
 - `.rad2Deg()`
+- `.exp2()`
 - `.exp10()`
-- `.truncate()`
+- `.trunc()`
+
+    Shorthand for `.map(Math.trunc)`.
 
 ### Linear algebra
 
