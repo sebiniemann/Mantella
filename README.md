@@ -357,6 +357,22 @@
 
     Shorthand for: `mat.map(Math.sqrt)`
 
+- `.clz32()`
+
+    Shorthand for: `mat.map(Math.clz32)`
+
+- `.expm1()`
+
+    Shorthand for: `mat.map(Math.expm1)`
+
+- `.fround()`
+
+    Shorthand for: `mat.map(Math.fround)`
+
+- `.log1p()`
+
+    Shorthand for: `mat.map(Math.log1p)`
+
 - `.square()`
 
     Shorthand for: `mat.pow(2)`
