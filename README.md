@@ -2,7 +2,9 @@
 
 Salp is an easy to use matrix library for Javascript. It supports NodeJS as well as browser builds and has no third-party dependencies.
 
-**Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
+My main goal for Salp is to provide a comprehensive, easy to learn mathematical library for linear algebra that simplifies and accelerates daily work.
+
+
 
 ## API
 
