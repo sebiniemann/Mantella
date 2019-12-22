@@ -267,22 +267,29 @@
 
     Shorthand for: `mat.map(salp._scalarSinc)`
 
-- `.sinch()`
-
 - `.sinh()`
 
     Shorthand for: `mat.map(Math.sinh)`
+
+- `.sinhc()`
+
+    Shorthand for: `mat.map(salp._scalarSinhc)`
 
 - `.tan()`
 
     Shorthand for: `mat.map(Math.tan)`
 
 - `.tanc()`
-- `.tanch()`
+
+    Shorthand for: `mat.map(salp._scalarTanc)`
 
 - `.tanh()`
 
     Shorthand for: `mat.map(Math.tanh)`
+
+- `.tanhc()`
+
+    Shorthand for: `mat.map(salp._scalarTanhc)`
 
 - `atan2(matA, matB)`
 - `hypot(matA, matB)`
