@@ -8,7 +8,7 @@
 
   The number of elements.
   
-  Same as `.nRows * .nCols`.
+  Same as `mat.nRows * mat.nCols`.
 
 - `.nRows`
 
@@ -18,19 +18,8 @@
 
   The number of columns.
 
-- `.raw`
-
-  The 1D `Array`
-
+- `._raw`
 - `._rng`
-
-- `._add(a, b)`
-
-- `._subtract(a, b)`
-
-- `._multiply(a, b)`
-
-- `._divide(a, b)`
 
 ### Creation
 
@@ -119,7 +108,7 @@
 
 ### Output
 
-- .toString(precision = 5)`
+- `.toString(precision=5)`
 
 ### Logical
 
@@ -182,63 +171,119 @@
 - `comulative(mat, callback)`
 - `diff(mat, callback)`
 
-### Trigonometric 
+### Trigonometric
+
+- `.acos()`
+
+    Shorthand for: `mat.map(Math.acos)`
+
+- `.acosh()`
+
+    Shorthand for: `mat.map(Math.acosh)`
+
+- `.acot()`
+
+    Shorthand for: `mat.map(x => Math.atan(1 / x))`
+
+- `.acoth()`
+
+    Shorthand for: `mat.map(x => Math.atanh(1 / x))`
+
+- `.acsc()`
+
+    Shorthand for: `mat.map(x => Math.asin(1 / x))`
+
+- `.acsch()`
+
+    Shorthand for: `mat.map(x => Math.asinh(1 / x))`
+
+- `.asec()`
+
+    Shorthand for: `mat.map(x => Math.acos(1 / x))`
+
+- `.asech()`
+
+    Shorthand for: `mat.map(x => Math.acosh(1 / x))`
+  
+- `.asin()`
+
+    Shorthand for: `mat.map(Math.asin)`
+
+- `.asinh()`
+
+    Shorthand for: `mat.map(Math.asinh)`
+
+- `.atan()`
+
+    Shorthand for: `mat.map(Math.atan)`
+
+- `.atanh()`
+
+    Shorthand for: `mat.map(Math.atanh)`
+
+- `.cos()`
+
+    Shorthand for: `mat.map(Math.cos)`
+
+- `.cosh()`
+
+    Shorthand for: `mat.map(Math.cosh)`
+
+- `.cot()`
+
+    Shorthand for: `mat.map(x => 1 / Math.tan(x))`
+
+- `.coth()`
+
+    Shorthand for: `mat.map(x => 1 / Math.tanh(x))`
+
+- `.csc()`
+
+    Shorthand for: `mat.map(x => 1 / Math.sin(x))`
+
+- `.cscs()`
+
+    Shorthand for: `mat.map(x => 1 / Math.sinh(x))`
+
+- `.sec()`
+
+    Shorthand for: `mat.map(x => 1 / Math.cos(x))`
+
+- `.sech()`
+
+    Shorthand for: `mat.map(x => 1 / Math.cosh(x))`
 
 - `.sin()`
 
-    Shorthand for: `.map(Math.sin)`
-
-- `.sinh()`
-
-    Shorthand for: `.map(Math.sinh)`
+    Shorthand for: `mat.map(Math.sin)`
 
 - `.sinc(flavor='normalised')`
 
     If `flavor` is set to `'normalised'`:
 
-    Shorthand for: `.map(x => _scalarSinc(_multiply(Math.pi, x)))`
+    Shorthand for: `mat.map(x => Mat._scalarSinc(Math.pi * x))`
 
     If `flavor` is set to `'unnormalised'`:
 
-    Shorthand for: `.map(_scalarSinc)`
+    Shorthand for: `mat.map(Mat._scalarSinc)`
 
 - `.sinch()`
-- `.asin()`
 
-    Shorthand for: `.map(Math.asin)`
+- `.sinh()`
 
-- `.asinh()`
-
-    Shorthand for: `.map(Math.asinh)`
-
-- `.cos()`
-
-    Shorthand for: `.map(Math.cos)`
-
-- `.cosh()`
-
-    Shorthand for: `.map(Math.cosh)`
-
-- `.acos()`
-
-    Shorthand for: `.map(Math.acos)`
-
-- `.acosh()`
-
-    Shorthand for: `.map(Math.acosh)`
+    Shorthand for: `mat.map(Math.sinh)`
 
 - `.tan()`
 
-    Shorthand for: `.map(Math.tan)`
-
-- `.tanh()`
-
-    Shorthand for: `.map(Math.tanh)`
+    Shorthand for: `mat.map(Math.tan)`
 
 - `.tanc()`
 - `.tanch()`
-- `.atan()`
-- `.atanh()`
+
+- `.tanh()`
+
+    Shorthand for: `mat.map(Math.tanh)`
+
 - `atan2(matA, matB)`
 - `hypot(matA, matB)`
 
@@ -255,33 +300,33 @@
 - `.gamma()`
 - `.negate()`
 
-    Shorthand for: `.map(x => -x)`
+    Shorthand for: `mat.map(x => -x)`
 
 - `.reciprocal()`
 
-    Shorthand for: `.map(x => 1/x)`
+    Shorthand for: `mat.map(x => 1 / x)`
 
 - `.mod()`
 - `.remainder()`
 - `.abs()`
 
-    Shorthand for: `.map(Math.abs)`
+    Shorthand for: `mat.map(Math.abs)`
 
 - `.ceil()`
 
-    Shorthand for: `.map(Math.ceil)`
+    Shorthand for: `mat.map(Math.ceil)`
 
 - `.floor()`
 
-    Shorthand for: `.map(Math.floor)`
+    Shorthand for: `mat.map(Math.floor)`
 
 - `.round()`
 
-    Shorthand for: `.map(Math.round)`
+    Shorthand for: `mat.map(Math.round)`
 
 - `.log()`
 
-    Shorthand for: `.map(Math.log)`.
+    Shorthand for: `mat.map(Math.log)`.
 
 - `.logK(k)`
 
@@ -289,63 +334,63 @@
     
     ```js
     const log2k = Math.log2(k);
-    .map(x => Math.log2(x) / log2k);
+    mat.map(x => Math.log2(x) / log2k);
     ```
 
 - `.log2()`
 
-    Shorthand for: `.map(Math.log2)`
+    Shorthand for: `mat.map(Math.log2)`
 
 - `.log10()`
 
-    Shorthand for: `.map(Math.log10)`
+    Shorthand for: `mat.map(Math.log10)`
 
 - `.pow(exponent)`
 
-    Shorthand for: `.map(x => Math.pow(x, exponent))`
+    Shorthand for: `mat.map(x => Math.pow(x, exponent))`
 
 - `.sqrt()`
 
-    Shorthand for: `.map(Math.sqrt)`
+    Shorthand for: `mat.map(Math.sqrt)`
 
 - `.square()`
 
-    Shorthand for: `.pow(2)`
+    Shorthand for: `mat.pow(2)`
 
 - `.cube()`
 
-    Shorthand for: `.pow(3)`
+    Shorthand for: `mat.pow(3)`
 
 - `.cbrt()`
 
-    Shorthand for: `.map(Math.cbrt)`
+    Shorthand for: `mat.map(Math.cbrt)`
 
 - `.sign()`
 
-    Shorthand for: `.map(Math.sign)`
+    Shorthand for: `mat.map(Math.sign)`
 
 - `.exp()`
 
-    Shorthand for: `.map(Math.exp)`
+    Shorthand for: `mat.map(Math.exp)`
 
 - `.expK(k)`
 
-    Shorthand for: `.map(x => Math.pow(k, x))`
+    Shorthand for: `mat.map(x => Math.pow(k, x))`
 
 - `.exp2()`
 
-    Shorthand for: `.expK(2)`
+    Shorthand for: `mat.expK(2)`
 
 - `.exp10()`
 
-    Shorthand for: `.expK(10)`
+    Shorthand for: `mat.expK(10)`
 
 - `.deg2Rad()`
 - `.rad2Deg()`
 
 - `.trunc()`
 
-    Shorthand for: `.map(Math.trunc)`
+    Shorthand for: `mat.map(Math.trunc)`
 
 ### Linear algebra
 

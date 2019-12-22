@@ -1,6 +1,6 @@
 class Mat {
   constructor() {
-    this.raw = [];
+    this._raw = [];
 
     switch (arguments.length) {
       case 0:
@@ -46,12 +46,12 @@ class Mat {
 
   _constructorArray(array) {
     this.resize(array.length, 1);
-    this.raw = [...array];
+    this._raw = [...array];
   }
 
   _constructorMat(mat) {
     this.resize(mat.nRows, mat.nCols);
-    this.raw = [...mat.raw];
+    this._raw = [...mat._raw];
   }
 
   _constructorDimensions(nRows, nCols) {
@@ -63,7 +63,7 @@ class Mat {
     this.nCols = nCols;
     this.nElems = this.nRows * this.nCols;
 
-    this.raw.length = this.nElems;
+    this._raw.length = this.nElems;
   }
 
   elem() {
@@ -133,11 +133,11 @@ class Mat {
   }
 
   _elemIndex(index) {
-    return this.raw[index];
+    return this._raw[index];
   }
 
   _elemIndexCallback(index, callback) {
-    this.raw[index] = callback(this.raw[index], index, this);
+    this._raw[index] = callback(this._raw[index], index, this);
 
     return this;
   }
@@ -628,11 +628,11 @@ function det() {
 // Statistics
 
 function min(mat) {
-  return mat.raw.reduce((acc, value) => Math.min(acc, value), Number.POSITIVE_INFINITY);
+  return mat._raw.reduce((acc, value) => Math.min(acc, value), Number.POSITIVE_INFINITY);
 }
 
 function max(mat) {
-  return mat.raw.reduce((acc, value) => Math.max(acc, value), Number.NEGATIVE_INFINITY);
+  return mat._raw.reduce((acc, value) => Math.max(acc, value), Number.NEGATIVE_INFINITY);
 }
 
 function range(mat) {
@@ -644,7 +644,7 @@ function mode(mat) {
 
   let _mode;
   let maxCounts = 0;
-  mat.raw.forEach(value => {
+  mat._raw.forEach(value => {
     counts[value] = (counts[value] || 0) + 1;
 
     if (counts[value] > maxCounts) {
@@ -660,7 +660,7 @@ function quantile(mat, q, k) {
   const rank = k / q * (mat.nElems - 1) + 1;
   const flooredRank = Math.floor(rank);
 
-  const sorted = [...mat.raw].sort();
+  const sorted = [...mat._raw].sort();
   const lower = sorted[flooredRank - 1];
   const upper = sorted[flooredRank];
 
@@ -688,13 +688,13 @@ function interquartileRange(mat) {
 }
 
 function mean(mat) {
-  return mat.raw.reduce((acc, value) => acc + value, 0) / mat.nElems;
+  return mat._raw.reduce((acc, value) => acc + value, 0) / mat.nElems;
 }
 
 function centralMoment(mat, k) {
   const _mean = mean(mat);
 
-  return mat.raw.reduce((acc, value) => acc + Math.pow((value - _mean), k), 0) / mat.nElems;
+  return mat._raw.reduce((acc, value) => acc + Math.pow((value - _mean), k), 0) / mat.nElems;
 }
 
 function variance(mat) {
@@ -741,7 +741,7 @@ function diff(mat, callback) {
 }
 
 function unique(mat) {
-  return new Mat([...new Set(mat.raw)]);
+  return new Mat([...new Set(mat._raw)]);
 }
 
 function shuffle(mat) {
