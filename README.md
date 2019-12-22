@@ -4,16 +4,14 @@ Salp, an easy to learn/use linear algebra library for Javascript.
 
 It supports NodeJS as well as browser builds and has no third-party dependencies.
 
-If you have any questions, problems or feature requests, feel free to contact me anytime. The best way (for me) is to use the [Github issue tracker](https://github.com/SebastianNiemann/Mantella/issues).
+If you have a question, problem or feature request, feel free to contact me anytime. The best way (for me) is to use the [Github issue tracker](https://github.com/SebastianNiemann/Mantella/issues).
 
 ## Roadmap
 
-My main goal for Salp is to simplify and accelerate the development of new prototypes/applications. 
-
-- **(Done)** Support of basic matrix manipulations
-- **(Done)** Support of matrix layout manipulations
-- **(Done)** Support of common mathematical & trigonometric functions
-- **(Done)** Support of common statistical functions
+- Support of basic matrix manipulations
+- Support of matrix layout manipulations
+- Support of common mathematical & trigonometric functions
+- Support of common statistical functions
 - Support of common set operations
 - Support of common decompositions, factorizations, inversions and equation solvers
 - Support of complex numbers
