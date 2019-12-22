@@ -1,10 +1,19 @@
 # Salp
 
-Salp is an easy to use matrix library for Javascript. It supports NodeJS as well as browser builds and has no third-party dependencies.
+Salp is an easy to learn/use linear algebra library for Javascript. It supports NodeJS as well as browser builds and has no third-party dependencies.
 
-My main goal for Salp is to provide a comprehensive, easy to learn mathematical library for linear algebra that simplifies and accelerates daily work.
+If you have any questions, problems or feature requests, feel free to contact me anytime. The best way (for me) is to use the [Github Issue Tracker](https://github.com/SebastianNiemann/Mantella/issues).
 
+## Roadmap
 
+My main goal for Salp is to simplify and accelerate the development of new prototypes/applications. 
+
+- **(Done)** Support of basic matrix manipulations
+- **(Done)** Support of matrix layout manipulations
+- **(Done)** Support of common mathematical & trigonometric functions
+- **(Done)** Support of common statistical functions
+- Support of common set operations
+- Support of common linear algebra operations
 
 ## API
 
@@ -444,28 +453,3 @@ My main goal for Salp is to provide a comprehensive, easy to learn mathematical 
 ---
 
 Distributed under [MIT license](http://opensource.org/licenses/MIT).
-
----
-
-[Mantella](http://mantella.info/) is an efficiency-focused C++14 header-only library for analysing and solving optimisation problems. As it only depends on the C++ standard library, Linux, Windows and Mac OS X support is a given.
-
-**Our goal for version 1.0 is to combine a high-performance, self-accelerating optimisation experience with an easy to use API.**
-
-Got a Problem or Question?
---------------------------
-
-If you have a question about how to use the Mantella C++ optimisation library, please direct these to [StackOverflow](http://stackoverflow.com/questions/tagged/mantella), or ask us directly on [Gitter](https://gitter.im/Mantella/Mantella).
-
-Found an Issue or Bug?
-----------------------
-
-If you found a bug in the source code or a mistake in any kind of documentation, please **let us know** by adding an issue to the [Github Issue Tracker](https://github.com/Mantella/Mantella/issues).
-
-You are welcomed to submit a pull request with your fix afterwards, if at hand.
-
-Requesting a Feature?
----------------------
-
-If you are missing some features within Mantella, feel free to ask us about it by adding a new request to the [Github Issue Tracker](https://github.com/Mantella/Mantella/issues) labelled `feature request`.
-
-Note that submitting a pull request, implementing your requested feature, usually speeds up the process.
