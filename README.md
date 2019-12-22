@@ -349,6 +349,10 @@
 
     Shorthand for: `mat.map(x => Math.pow(x, exponent))`
 
+- `.root(k)`
+
+    Shorthand for: `mat.pow(1 / k)`
+
 - `.sqrt()`
 
     Shorthand for: `mat.map(Math.sqrt)`
