@@ -37,19 +37,19 @@
 - `new Mat()`
 - `empty(nRows, nCols)`
 
-    Shorthand for `new Mat(nRows, nCols)`.
+    Shorthand for: `new Mat(nRows, nCols)`
 
 - `zeros(nRows, nCols)`
 
-    Shorthand for `new Mat(nRows, nCols, () => 0)`.
+    Shorthand for: `new Mat(nRows, nCols, () => 0)`
 
 - `ones(nRows, nCols)`
 
-    Shorthand for `new Mat(nRows, nCols, () => 1)`.
+    Shorthand for: `new Mat(nRows, nCols, () => 1)`
 
 - `identity(nRows, nCols)`
 
-    Shorthand for `zeros(nRows, nCols).diag(() => 0)`.
+    Shorthand for: `zeros(nRows, nCols).diag(() => 0)`
 
 - `normal(nRows, nCols)`
 - `uniform(nRows, nCols)`
@@ -152,19 +152,19 @@
 - `quantile(mat, q, k)`
 - `median(mat)`
 
-    Shorthand for `quantile(mat, 2, 1)`.
+    Shorthand for: `quantile(mat, 2, 1)`
 
 - `quartile(mat, k)`
 
-    Shorthand for `quantile(mat, 4, k)`.
+    Shorthand for: `quantile(mat, 4, k)`
 
 - `decile(mat, k)`
 
-    Shorthand for `quantile(mat, 10, k)`.
+    Shorthand for: `quantile(mat, 10, k)`
 
 - `percentile(mat, k)`
 
-    Shorthand for `quantile(mat, 100, k)`.
+    Shorthand for: `quantile(mat, 100, k)`
 
 - `interquartileRange(mat)`
 - `mean(mat)`
@@ -186,54 +186,54 @@
 
 - `.sin()`
 
-    Shorthand for `.map(Math.sin)`.
+    Shorthand for: `.map(Math.sin)`
 
 - `.sinh()`
 
-    Shorthand for `.map(Math.sinh)`.
+    Shorthand for: `.map(Math.sinh)`
 
 - `.sinc(flavor='normalised')`
 
     If `flavor` is set to `'normalised'`:
 
-    Shorthand for `.map(x => _scalarSinc(_multiply(Math.pi, x)))`.
+    Shorthand for: `.map(x => _scalarSinc(_multiply(Math.pi, x)))`
 
     If `flavor` is set to `'unnormalised'`:
 
-    Shorthand for `.map(_scalarSinc)`.
+    Shorthand for: `.map(_scalarSinc)`
 
 - `.sinch()`
 - `.asin()`
 
-    Shorthand for `.map(Math.asin)`.
+    Shorthand for: `.map(Math.asin)`
 
 - `.asinh()`
 
-    Shorthand for `.map(Math.asinh)`.
+    Shorthand for: `.map(Math.asinh)`
 
 - `.cos()`
 
-    Shorthand for `.map(Math.cos)`.
+    Shorthand for: `.map(Math.cos)`
 
 - `.cosh()`
 
-    Shorthand for `.map(Math.cosh)`.
+    Shorthand for: `.map(Math.cosh)`
 
 - `.acos()`
 
-    Shorthand for `.map(Math.acos)`.
+    Shorthand for: `.map(Math.acos)`
 
 - `.acosh()`
 
-    Shorthand for `.map(Math.acosh)`.
+    Shorthand for: `.map(Math.acosh)`
 
 - `.tan()`
 
-    Shorthand for `.map(Math.tan)`.
+    Shorthand for: `.map(Math.tan)`
 
 - `.tanh()`
 
-    Shorthand for `.map(Math.tanh)`.
+    Shorthand for: `.map(Math.tanh)`
 
 - `.tanc()`
 - `.tanch()`
@@ -255,77 +255,97 @@
 - `.gamma()`
 - `.negate()`
 
-    Shorthand for `.map(x => -x)`.
+    Shorthand for: `.map(x => -x)`
 
 - `.reciprocal()`
 
-    Shorthand for `.map(x => 1/x)`.
+    Shorthand for: `.map(x => 1/x)`
 
 - `.mod()`
 - `.remainder()`
 - `.abs()`
 
-    Shorthand for `.map(Math.abs)`.
+    Shorthand for: `.map(Math.abs)`
 
 - `.ceil()`
 
-    Shorthand for `.map(Math.ceil)`.
+    Shorthand for: `.map(Math.ceil)`
 
 - `.floor()`
 
-    Shorthand for `.map(Math.floor)`.
+    Shorthand for: `.map(Math.floor)`
 
 - `.round()`
 
-    Shorthand for `.map(Math.round)`.
+    Shorthand for: `.map(Math.round)`
 
 - `.log()`
 
-    Shorthand for `.map(Math.log)`.
+    Shorthand for: `.map(Math.log)`.
 
-- `.log10()`
+- `.logK(k)`
 
-    Shorthand for `.map(Math.log10)`.
+    Shorthand for:
+    
+    ```js
+    const log2k = Math.log2(k);
+    .map(x => Math.log2(x) / log2k);
+    ```
 
 - `.log2()`
 
-    Shorthand for `.map(Math.log2)`.
+    Shorthand for: `.map(Math.log2)`
+
+- `.log10()`
+
+    Shorthand for: `.map(Math.log10)`
 
 - `.pow(exponent)`
 
-    Shorthand for `.map(x => Math.pow(x, exponent))`.
+    Shorthand for: `.map(x => Math.pow(x, exponent))`
 
 - `.sqrt()`
 
-    Shorthand for `.map(Math.sqrt)`.
+    Shorthand for: `.map(Math.sqrt)`
 
 - `.square()`
 
-    Shorthand for `.pow(2)`.
+    Shorthand for: `.pow(2)`
 
 - `.cube()`
 
-    Shorthand for `.pow(3)`.
+    Shorthand for: `.pow(3)`
 
 - `.cbrt()`
 
-    Shorthand for `.map(Math.cbrt)`.
+    Shorthand for: `.map(Math.cbrt)`
 
 - `.sign()`
 
-    Shorthand for `.map(Math.sign)`.
+    Shorthand for: `.map(Math.sign)`
 
 - `.exp()`
 
-    Shorthand for `.map(Math.exp)`.
+    Shorthand for: `.map(Math.exp)`
+
+- `.expK(k)`
+
+    Shorthand for: `.map(x => Math.pow(k, x))`
+
+- `.exp2()`
+
+    Shorthand for: `.expK(2)`
+
+- `.exp10()`
+
+    Shorthand for: `.expK(10)`
 
 - `.deg2Rad()`
 - `.rad2Deg()`
-- `.exp2()`
-- `.exp10()`
+
 - `.trunc()`
 
-    Shorthand for `.map(Math.trunc)`.
+    Shorthand for: `.map(Math.trunc)`
 
 ### Linear algebra
 
