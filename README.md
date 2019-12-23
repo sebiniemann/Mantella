@@ -66,6 +66,7 @@ If you have a question, problem or feature request, feel free to contact me anyt
 - `geomspace()`
 - `meshGrid()`
 - `repeat()`
+- `sample()`
 
 ### Inplace-Manipulation and Access
 
@@ -73,9 +74,9 @@ If you have a question, problem or feature request, feel free to contact me anyt
 - `.elemDiag()`
 - `.col()`
 - `.row()`
-- `.roll()`
-- `.rollCol()`
-- `.rollRow()`
+- `.rotate()`
+- `.rotateCol()`
+- `.rotateRow()`
 - `.fill()`
 - `.replace()`
 - `.shuffle(mat)`
@@ -113,12 +114,18 @@ If you have a question, problem or feature request, feel free to contact me anyt
 - `.every()`
 - `.everyCol()`
 - `.everyRow()`
+- `.none()`
+- `.noneCol()`
+- `.noneRow()`
 - `.reverse()`
 - `.reverseCol()`
 - `.reverseRow()`
 - `.sort()`
 - `.sortCol()`
 - `.sortRow()`
+- `.count()`
+- `.countCol()`
+- `.countRow()`
 - `swapElems()`
 - `swapCols()`
 - `swapRows()`
@@ -313,9 +320,10 @@ If you have a question, problem or feature request, feel free to contact me anyt
 
 ### Sets
 
-- `intersect()`
-- `setDiff()`
-- `union()`
+- `setIntersect(matA, matB)`
+- `setDifference(matA, matB)`
+- `setSymmetricDifference(matA, matB)`
+- `setUnion(matA, matB)`
 - `unique(mat)`
 
 ### Mathematical functions
