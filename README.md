@@ -13,7 +13,7 @@ If you have a question, problem or feature request, feel free to contact me anyt
 - Support of common mathematical & trigonometric functions
 - Support of common statistical functions
 - Support of common set operations
-- Support of common decompositions, factorizations, inversions and equation solvers
+- Support of common decompositions, factorisations, inversions and equation solvers
 - Support of complex numbers
 - Acceleration of BLAS/LAPACK-like operations with WebAssembly
 
@@ -231,7 +231,7 @@ Statistical function:
 [range](#range),
 [skewness](#skewness),
 [standardDeviation](#standarddeviation),
-[standardizedCentralMoment](#standardizedcentralmoment),
+[standardisedCentralMoment](#standardisedcentralmoment),
 [variance](#variance)
 
 Set operations:
@@ -243,17 +243,30 @@ Set operations:
 
 Linear algebra:
 [add](#add),
-[cond](#cond),
-[cross](#cross),
-[det](#det),
+[choleskyDecomposition](#choleskyDecomposition),
+[conditionNumber](#conditionNumber),
+[crossProduct](#crossProduct),
+[determinant](#determinant),
 [divide](#divide),
-[dot](#dot),
-[kron](#kron),
+[dotProduct](#dotProduct),
+[eigenDecomposition](#eigenDecomposition),
+[generalisedInverse](#generalisedInverse),
+[hessenbergDecomposition](#hessenbergDecomposition),
+[inverse](#inverse),
+[kroneckerProduct](#kroneckerProduct),
+[luDecomposition](#luDecomposition),
 [multiply](#multiply),
 [norm](#norm),
+[orthonormalBasis](#orthonormalBasis),
+[qrDecomposition](#qrDecomposition),
+[qzDecomposition](#qzDecomposition),
 [rank](#rank),
+[schurDecomposition](#schurDecomposition),
+[singularValueDecomposition](#singularValueDecomposition),
+[solveLeastSquare](#solveLeastSquare),
+[solveLinear](#solveLinear),
 [subtract](#subtract),
-[trace](#trace)
+[trace](#trace),
 [transpose](#transpose)
 
 Output:
