@@ -76,7 +76,7 @@ Accessing and indexing:
 [elem](#elem),
 [row](#row)
 
-Iteratoren:
+Iterators:
 [entries](#entries),
 [keys](#keys),
 [values](#values)
@@ -296,7 +296,7 @@ Inner functionality:
 [_scalarAdd](#_scalarAdd),
 [_scalarSubtract](#_scalarSubtract),
 [_scalarMultiply](#_scalarMultiply),
-[_scalarDivide](#_scalarDivide),
+[_scalarDivide](#_scalarDivide)
 
 ---
 
