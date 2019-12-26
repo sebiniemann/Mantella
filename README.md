@@ -28,30 +28,32 @@ Creation:
 [Constructor](#constructor),
 [empty](#empty),
 [identity](#identity),
+[linearSpaced](#linspace),
+[logSpaced](#logspace),
+[meshgrid](#meshgrid),
 [ones](#ones),
 [randomGamma](#randomGamma),
 [randomNormal](#randomNormal),
 [randomUniform](#randomUniform),
+[repeat](#repeat),
+[sample](#sample),
+[sequence](#sequence),
 [zeros](#zeros)
 
 Layout manipulation:
 [appendCol](#appendcol),
 [appendRow](#appendrow),
+[filterCol](#filterCol),
+[filterRow](#filterRow),
 [flat](#flat),
 [insertCol](#insertcol),
 [insertRow](#insertrow),
-[linearSpaced](#linspace),
-[logSpaced](#logspace),
 [lowerTriangular](#lowertriangular),
-[meshgrid](#meshgrid),
 [prependCol](#prependcol),
 [prependRow](#prependrow),
 [removeCol](#removecol),
 [removeRow](#removerow),
-[repeat](#repeat),
 [resize](#resize),
-[sample](#sample),
-[sequence](#sequence),
 [upperTriangular](#uppertriangular)
 
 Accessing and indexing:
