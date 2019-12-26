@@ -134,284 +134,278 @@ Inner functionality:
 [._raw](#_raw),
 [._rng](#_rng)
 
-### Fields
+---
 
-#### .nElems
+### .nElems
 
-  The number of elements.
+The number of elements.
   
-  Same as `mat.nRows * mat.nCols`.
+Same as `mat.nRows * mat.nCols`.
 
-#### .nRows
+---
 
-  The number of rows.
+### .nRows
 
-#### .nCols
+The number of rows.
 
-  The number of columns.
+---
 
-#### ._raw
-#### ._rng
+### .nCols
 
-### Creation
+The number of columns.
 
-#### new Mat()
-#### new Mat(nRows, nCols)
-#### new Mat(nRows, nCols, callback)
-#### new Mat(array)
-#### new Mat(arrayOfArray)
-#### new Mat(mat)
-#### empty(nRows, nCols)
+---
 
-    Shorthand for: `new Mat(nRows, nCols)`
+### Constructor
 
-#### zeros(nRows, nCols)
+- new Mat()
+- new Mat(nRows, nCols)
+- new Mat(nRows, nCols, callback)
+- new Mat(array)
+- new Mat(arrayOfArray)
+- new Mat(mat)
 
-    Shorthand for: `new Mat(nRows, nCols, () => 0)`
+---
 
-#### ones(nRows, nCols)
+### empty(nRows, nCols)
 
-    Shorthand for: `new Mat(nRows, nCols, () => 1)`
+Shorthand for: `new Mat(nRows, nCols)`
 
-#### identity(nRows, nCols)
+---
 
-    Shorthand for: `zeros(nRows, nCols).diag(() => 0)`
+### zeros(nRows, nCols)
 
-#### randomUniform(nRows, nCols)
-#### randomUniform(nRows, nCols, { min: 0, max: 1 })
+Shorthand for: `new Mat(nRows, nCols, () => 0)`
 
-    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomUniform())
+### ones(nRows, nCols)
 
-#### randomNormal(nRows, nCols)
-#### randomNormal(nRows, nCols, { mean: 0, standardDeviation: 1 })
+Shorthand for: `new Mat(nRows, nCols, () => 1)`
 
-    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomNormal())``
+### identity(nRows, nCols)
 
-#### randomGamma(nRows, nCols)
-#### randomGamma(nRows, nCols, { shape: 1, scale: 1 })
+Shorthand for: `zeros(nRows, nCols).diag(() => 0)`
 
-    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomGamma())`
+### randomUniform(nRows, nCols)
+### randomUniform(nRows, nCols, { min: 0, max: 1 })
 
-#### arange()
-#### linspace()
-#### logspace()
-#### geomspace()
-#### meshGrid()
-#### repeat()
-#### sample()
+Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomUniform())
 
-### Inplace-Manipulation and Access
+### randomNormal(nRows, nCols)
+### randomNormal(nRows, nCols, { mean: 0, standardDeviation: 1 })
 
-#### .elem()
-#### .elemDiag()
-#### .col()
-#### .row()
-#### .rotate()
-#### .fill()
-#### .replace()
-#### .shuffle(mat)
-#### .clamp(mat, lowerBounds, upperBounds)
+Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomNormal())``
 
-### Layout
+### randomGamma(nRows, nCols)
+### randomGamma(nRows, nCols, { shape: 1, scale: 1 })
 
-#### .resize(nRows, nCols)
-#### .flat()
-#### .appendCol()
-#### .appendRow()
-#### .prependCol()
-#### .prependRow()
-#### .insertCol()
-#### .insertRow()
-#### .removeCol()
-#### .removeRow()
-#### .lowerTriangular()
-#### .upperTriangular()
+Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomGamma())`
 
-### Functional
+### arange()
+### linspace()
+### logspace()
+### geomspace()
+### meshGrid()
+### repeat()
+### sample()
 
-#### .map(callback)
-#### .mapCol(callback)
-#### .mapRow(callback)
-#### .reduce(callback, initialValue)
-#### .reduceCol(callback, initialValue)
-#### .reduceRow(callback, initialValue)
-#### .filter(callback)
-#### .filterCol()
-#### .filterRow()
-#### .some()
-#### .someCol()
-#### .someRow()
-#### .every()
-#### .everyCol()
-#### .everyRow()
-#### .none()
-#### .noneCol()
-#### .noneRow()
-#### .reverse()
-#### .reverseCol()
-#### .reverseRow()
-#### .sort()
-#### .sortCol()
-#### .sortRow()
-#### .count()
-#### .countCol()
-#### .countRow()
-#### swapElems()
-#### swapCols()
-#### swapRows()
+### .elem()
+### .elemDiag()
+### .col()
+### .row()
+### .rotate()
+### .fill()
+### .replace()
+### .shuffle(mat)
+### .clamp(mat, lowerBounds, upperBounds)
 
-### Output
+### .resize(nRows, nCols)
+### .flat()
+### .appendCol()
+### .appendRow()
+### .prependCol()
+### .prependRow()
+### .insertCol()
+### .insertRow()
+### .removeCol()
+### .removeRow()
+### .lowerTriangular()
+### .upperTriangular()
 
-#### .toString(precision=5)
+### .map(callback)
+### .mapCol(callback)
+### .mapRow(callback)
+### .reduce(callback, initialValue)
+### .reduceCol(callback, initialValue)
+### .reduceRow(callback, initialValue)
+### .filter(callback)
+### .filterCol()
+### .filterRow()
+### .some()
+### .someCol()
+### .someRow()
+### .every()
+### .everyCol()
+### .everyRow()
+### .none()
+### .noneCol()
+### .noneRow()
+### .reverse()
+### .reverseCol()
+### .reverseRow()
+### .sort()
+### .sortCol()
+### .sortRow()
+### .count()
+### .countCol()
+### .countRow()
+### swapElems()
+### swapCols()
+### swapRows()
 
-### Logical
+### .toString(precision=5)
 
-#### isApprox()
-#### isGreater()
-#### isGreaterOrEqual()
-#### isLess()
-#### isLessOrEqual()
-#### isEqual()
-#### isBetween()
-#### isEmpty()
-#### isVector()
-#### isCol()
-#### isRow()
-#### isSquare()
-#### isSymmetric()
-#### isPositiveDefinite()
-#### isFinite()
-#### hasInf()
-#### hasNaN()
-#### hasNull()
-#### find()
+### isApprox()
+### isGreater()
+### isGreaterOrEqual()
+### isLess()
+### isLessOrEqual()
+### isEqual()
+### isBetween()
+### isEmpty()
+### isVector()
+### isCol()
+### isRow()
+### isSquare()
+### isSymmetric()
+### isPositiveDefinite()
+### isFinite()
+### hasInf()
+### hasNaN()
+### hasNull()
+### find()
 
-### Statistic
-
-#### min(mat)
-#### max(mat)
-#### range(mat)
-#### mode(mat)
-#### quantile(mat, q, k)
-#### median(mat)
+### min(mat)
+### max(mat)
+### range(mat)
+### mode(mat)
+### quantile(mat, q, k)
+### median(mat)
 
     Shorthand for: `quantile(mat, 2, 1)`
 
-#### quartile(mat, k)
+### quartile(mat, k)
 
     Shorthand for: `quantile(mat, 4, k)`
 
-#### decile(mat, k)
+### decile(mat, k)
 
     Shorthand for: `quantile(mat, 10, k)`
 
-#### percentile(mat, k)
+### percentile(mat, k)
 
     Shorthand for: `quantile(mat, 100, k)`
 
-#### interquartileRange(mat)
-#### mean(mat)
-#### centralMoment(mat, k)
-#### variance(mat)
-#### standardDeviation(mat)
-#### standardizedCentralMoment(mat, k)
-#### skewness(mat)
-#### kurtosis(mat)
-#### histogram()
-#### minIndex()
-#### maxIndex()
-#### covariance()
-#### correlation()
-#### comulative(mat, callback)
-#### diff(mat, callback)
+### interquartileRange(mat)
+### mean(mat)
+### centralMoment(mat, k)
+### variance(mat)
+### standardDeviation(mat)
+### standardizedCentralMoment(mat, k)
+### skewness(mat)
+### kurtosis(mat)
+### histogram()
+### minIndex()
+### maxIndex()
+### covariance()
+### correlation()
+### comulative(mat, callback)
+### diff(mat, callback)
 
-### Trigonometric
-
-#### .acos()
+### .acos()
 
     Shorthand for: `mat.map(Math.acos)`
 
-#### .acosh()
+### .acosh()
 
     Shorthand for: `mat.map(Math.acosh)`
 
-#### .acot()
+### .acot()
 
     Shorthand for: `mat.map(salp._scalarAcot)`
 
-#### .acoth()
+### .acoth()
 
     Shorthand for: `mat.map(salp._scalarAcoth)`
 
-#### .acsc()
+### .acsc()
 
     Shorthand for: `mat.map(salp._scalarAcsc)`
 
-#### .acsch()
+### .acsch()
 
     Shorthand for: `mat.map(salp._scalarAcsch)`
 
-#### .asec()
+### .asec()
 
     Shorthand for: `mat.map(salp._scalarAsec)`
 
-#### .asech()
+### .asech()
 
     Shorthand for: `mat.map(salp._scalarAsech)`
   
-#### .asin()
+### .asin()
 
     Shorthand for: `mat.map(Math.asin)`
 
-#### .asinh()
+### .asinh()
 
     Shorthand for: `mat.map(Math.asinh)`
 
-#### .atan()
+### .atan()
 
     Shorthand for: `mat.map(Math.atan)`
 
-#### .atanh()
+### .atanh()
 
     Shorthand for: `mat.map(Math.atanh)`
 
-#### .cos()
+### .cos()
 
     Shorthand for: `mat.map(Math.cos)`
 
-#### .cosh()
+### .cosh()
 
     Shorthand for: `mat.map(Math.cosh)`
 
-#### .cot()
+### .cot()
 
     Shorthand for: `mat.map(salp._scalarCot)`
 
-#### .coth()
+### .coth()
 
     Shorthand for: `mat.map(salp._scalarCoth)`
 
-#### .csc()
+### .csc()
 
     Shorthand for: `mat.map(salp._scalarCsc)`
 
-#### .csch()
+### .csch()
 
     Shorthand for: `mat.map(salp._scalarCsch)`
 
-#### .sec()
+### .sec()
 
     Shorthand for: `mat.map(salp._scalarSec)`
 
-#### .sech()
+### .sech()
 
     Shorthand for: `mat.map(salp._scalarSech)`
 
-#### .sin()
+### .sin()
 
     Shorthand for: `mat.map(Math.sin)`
 
-#### .sinc(flavor='normalised')
+### .sinc(flavor='normalised')
 
     If `flavor` is set to `'normalised'`:
 
@@ -421,91 +415,87 @@ Inner functionality:
 
     Shorthand for: `mat.map(salp._scalarSinc)`
 
-#### .sinh()
+### .sinh()
 
     Shorthand for: `mat.map(Math.sinh)`
 
 ---
 
-#### .sinhc()
+### .sinhc()
 
     Shorthand for: `mat.map(salp._scalarSinhc)`
 
 ---
 
-#### .tan()
+### .tan()
 
 Shorthand for: `mat.map(Math.tan)`
 
 ---
 
-#### .tanc()
+### .tanc()
 
 Shorthand for: `mat.map(salp._scalarTanc)`
 
 ---
 
-#### .tanh()
+### .tanh()
 
 Shorthand for: `mat.map(Math.tanh)`
 
 ---
 
-#### .tanhc()
+### .tanhc()
 
 Shorthand for: `mat.map(salp._scalarTanhc)`
 
 ---
 
-#### atan2(matA, matB)
+### atan2(matA, matB)
 
 ---
 
-#### hypot(matA, matB)
+### hypot(matA, matB)
 
-### Sets
+### setIntersect
+### setDifference(matA, matB)
+### setSymmetricDifference(matA, matB)
+### setUnion(matA, matB)
+### unique(mat)
 
-#### setIntersect
-#### setDifference(matA, matB)
-#### setSymmetricDifference(matA, matB)
-#### setUnion(matA, matB)
-#### unique(mat)
-
-### Mathematical functions
-
-#### .erf()
-#### .gamma()
-#### .negate()
+### .erf()
+### .gamma()
+### .negate()
 
     Shorthand for: `mat.map(x => -x)`
 
-#### .reciprocal()
+### .reciprocal()
 
     Shorthand for: `mat.map(x => 1 / x)`
 
-#### .mod()
-#### .remainder()
-#### .abs()
+### .mod()
+### .remainder()
+### .abs()
 
     Shorthand for: `mat.map(Math.abs)`
 
-#### .ceil()
+### .ceil()
 
     Shorthand for: `mat.map(Math.ceil)`
 
-#### .floor()
+### .floor()
 
     Shorthand for: `mat.map(Math.floor)`
 
-#### .round()
+### .round()
 
     Shorthand for: `mat.map(Math.round)`
 
-#### .log()
+### .log()
 
     Shorthand for: `mat.map(Math.log)`.
 
-#### .logK(k)
+### .logK(k)
 
     Shorthand for:
     
@@ -514,104 +504,100 @@ Shorthand for: `mat.map(salp._scalarTanhc)`
     mat.map(x => Math.log2(x) / log2k);
     ```
 
-#### .log2()
+### .log2()
 
     Shorthand for: `mat.map(Math.log2)`
 
-#### .log10()
+### .log10()
 
     Shorthand for: `mat.map(Math.log10)`
 
-#### .pow(exponent)
+### .pow(exponent)
 
     Shorthand for: `mat.map(x => Math.pow(x, exponent))`
 
-#### .root(k)
+### .root(k)
 
     Shorthand for: `mat.pow(1 / k)`
 
-#### .sqrt()
+### .sqrt()
 
     Shorthand for: `mat.map(Math.sqrt)`
 
-#### .clz32()
+### .clz32()
 
     Shorthand for: `mat.map(Math.clz32)`
 
-#### .expm1()
+### .expm1()
 
     Shorthand for: `mat.map(Math.expm1)`
 
-#### .fround()
+### .fround()
 
     Shorthand for: `mat.map(Math.fround)`
 
-#### .log1p()
+### .log1p()
 
     Shorthand for: `mat.map(Math.log1p)`
 
-#### .square()
+### .square()
 
     Shorthand for: `mat.pow(2)`
 
-#### .cube()
+### .cube()
 
     Shorthand for: `mat.pow(3)`
 
-#### .cbrt()
+### .cbrt()
 
     Shorthand for: `mat.map(Math.cbrt)`
 
-#### .sign()
+### .sign()
 
     Shorthand for: `mat.map(Math.sign)`
 
-#### .exp()
+### .exp()
 
     Shorthand for: `mat.map(Math.exp)`
 
-#### .expK(k)
+### .expK(k)
 
     Shorthand for: `mat.map(x => Math.pow(k, x))`
 
-#### .exp2()
+### .exp2()
 
     Shorthand for: `mat.expK(2)`
 
-#### .exp10()
+### .exp10()
 
     Shorthand for: `mat.expK(10)`
 
-#### .deg2Rad()
-#### .rad2Deg()
+### .deg2Rad()
+### .rad2Deg()
 
-#### .trunc()
+### .trunc()
 
     Shorthand for: `mat.map(Math.trunc)`
 
-### Linear algebra
+### cond()
+### cross()
+### dot()
+### det()
+### transpose()
+### kron()
+### norm()
+### rank()
+### add()
+### multiply()
+### subtract()
+### divide()
+### trace()
 
-#### cond()
-#### cross()
-#### dot()
-#### det()
-#### transpose()
-#### kron()
-#### norm()
-#### rank()
-#### add()
-#### multiply()
-#### subtract()
-#### divide()
-#### trace()
-
-### Scalar functions
-
-#### _negate(a, b)
-#### _add(a, b)
-#### _subtract(a, b)
-#### _multiply(a, b)
-#### _divide(a, b)
+### _negate(a, b)
+### _add(a, b)
+### _subtract(a, b)
+### _multiply(a, b)
+### _divide(a, b)
 
 ---
 
