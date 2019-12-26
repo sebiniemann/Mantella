@@ -47,15 +47,61 @@ Layout manipulation:
 [removeRow](#removerow),
 [resize](#resize),
 [upperTriangular](#uppertriangular)
+- arange
+- linspace
+- logspace
+- geomspace
+- meshGrid
+- repeat
+- sample
 
 Accessing and indexing:
-
+[col](#col),
+[diag](#diag),
+[elem](#elem),
+[row](#row)
 
 Inplace operations:
+[inplaceElem](#inplace),
+[inplace](#inplace),
+[inplace](#inplace)
 
 
 Functional programming:
-
+- rotate
+- fill
+- replace
+- shuffle
+- map
+- mapCol
+- mapRow
+- reduce
+- reduceCol
+- reduceRow
+- filter
+- filterCol
+- filterRow
+- some
+- someCol
+- someRow
+- every
+- everyCol
+- everyRow
+- none
+- noneCol
+- noneRow
+- reverse
+- reverseCol
+- reverseRow
+- sort
+- sortCol
+- sortRow
+- count
+- countCol
+- countRow
+- swapElems
+- swapCols
+- swapRows
 
 Logical functions:
 [find](#find),
@@ -79,38 +125,39 @@ Logical functions:
 [isVector](#isvector)
 
 Basic mathematical functions:
-[erf](#erf),
-[gamma](#gamma),
-[negate](#negate),
-[reciprocal](#reciprocal),
-[mod](#mod),
-[remainder](#remainder),
 [abs](#abs),
-[ceil](#ceil),
-[floor](#floor),
-[round](#round),
-[log](#log),
-[logK](#logK),
-[log2](#log2),
-[log10](#log10),
-[pow](#pow),
-[root](#root),
-[sqrt](#sqrt),
-[clz32](#clz32),
-[expm1](#expm1),
-[fround](#fround),
-[log1p](#log1p),
-[square](#square),
-[cube](#cube),
 [cbrt](#cbrt),
-[sign](#sign),
+[ceil](#ceil),
+[clamp](#clamp),
+[clz32](#clz32),
+[cube](#cube),
+[deg2Rad](#deg2Rad),
+[erf](#erf),
 [exp](#exp),
-[expK](#expK),
 [exp2](#exp2),
 [exp10](#exp10),
-[deg2Rad](#deg2Rad),
+[expK](#expK),
+[expm1](#expm1),
+[floor](#floor),
+[fround](#fround),
+[gamma](#gamma),
+[log](#log),
+[log2](#log2),
+[log10](#log10),
+[log1p](#log1p),
+[logK](#logK),
+[mod](#mod),
+[negate](#negate),
+[pow](#pow),
 [rad2Deg](#rad2Deg),
-[trunc](#trunc),
+[reciprocal](#reciprocal),
+[remainder](#remainder),
+[root](#root),
+[round](#round),
+[sign](#sign),
+[sqrt](#sqrt),
+[square](#square),
+[trunc](#trunc)
 
 Trigonometric & hyperbolic functions:
 [acos](#acos),
@@ -197,78 +244,11 @@ Output: [toString](#tostring)
 Inner functionality:
 [._raw](#_raw),
 [._rng](#_rng)
-
-
-
-
-
-### arange()
-### linspace()
-### logspace()
-### geomspace()
-### meshGrid()
-### repeat()
-### sample()
-
-
-
-### .elem()
-### .elemDiag()
-### .col()
-### .row()
-### .rotate()
-### .fill()
-### .replace()
-### .shuffle(mat)
-### .clamp(mat, lowerBounds, upperBounds)
-
-
-
-
-### .map(callback)
-### .mapCol(callback)
-### .mapRow(callback)
-### .reduce(callback, initialValue)
-### .reduceCol(callback, initialValue)
-### .reduceRow(callback, initialValue)
-### .filter(callback)
-### .filterCol()
-### .filterRow()
-### .some()
-### .someCol()
-### .someRow()
-### .every()
-### .everyCol()
-### .everyRow()
-### .none()
-### .noneCol()
-### .noneRow()
-### .reverse()
-### .reverseCol()
-### .reverseRow()
-### .sort()
-### .sortCol()
-### .sortRow()
-### .count()
-### .countCol()
-### .countRow()
-### swapElems()
-### swapCols()
-### swapRows()
-
-
-
-
-
-
-
-
-
-### _negate(a, b)
-### _add(a, b)
-### _subtract(a, b)
-### _multiply(a, b)
-### _divide(a, b)
+- _scalarNegate
+- _scalarAdd
+- _scalarSubtract
+- _scalarMultiply
+- _scalarDivide
 
 ---
 
