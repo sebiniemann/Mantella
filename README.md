@@ -35,12 +35,27 @@ Creation:
 [zeros](#zeros)
 
 Layout manipulation:
+[resize](#resize), 
+[flat](#flat), 
+[appendCol](#appendcol), 
+[appendRow](#appendrow), 
+[prependCol](#prependcol), 
+[prependRow](#prependrow), 
+[insertCol](#insertcol), 
+[insertRow](#insertrow), 
+[removeCol](#removecol), 
+[removeRow](#removerow), 
+[lowerTriangular](#lowertriangular), 
+[upperTriangular](#uppertriangular)
 
 Accessing and indexing:
 
+
 Inplace operations:
 
+
 Functional programming:
+
 
 Logical functions:
 [find](#find),
@@ -74,7 +89,7 @@ Set operations:
 [setDifference](#setdifference), 
 [setSymmetricDifference](#setsymmetricdifference), 
 [setUnion](#setunion), 
-[unique](#unique), 
+[unique](#unique)
 
 Linear algebra:
 [cond](#cond), 
