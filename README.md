@@ -19,9 +19,9 @@ If you have a question, problem or feature request, feel free to contact me anyt
 
 ## API
 
-Fields: [nElems]()
+Fields: [nElems](#nElems), [nRows](#nRows), [nCols](#nCols)
 
-Creation:
+Creation: [Constructor](#constructor), [empty](#empty), [zeros](#zeros), [ones](#ones), [identity](#identity), [randomUniform](#randomUniform), [randomNormal](#randomNormal), [randomGamma](#randomGamma)
 
 Layout manipulation:
 
@@ -42,6 +42,8 @@ Statistical function:
 Set operations:
 
 Linear algebra:
+
+Inner functionality: [._raw](#_raw), [._rng](#_rng)
 
 ### Fields
 
@@ -86,15 +88,15 @@ Linear algebra:
 
     Shorthand for: `zeros(nRows, nCols).diag(() => 0)`
 
-#### randomNormal(nRows, nCols)
-#### randomNormal(nRows, nCols, { mean: 0, standardDeviation: 1 })
-
-    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomNormal())`
-
 #### randomUniform(nRows, nCols)
 #### randomUniform(nRows, nCols, { min: 0, max: 1 })
 
-    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomUniform())`
+    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomUniform())
+
+#### randomNormal(nRows, nCols)
+#### randomNormal(nRows, nCols, { mean: 0, standardDeviation: 1 })
+
+    Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomNormal())``
 
 #### randomGamma(nRows, nCols)
 #### randomGamma(nRows, nCols, { shape: 1, scale: 1 })
