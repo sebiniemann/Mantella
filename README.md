@@ -25,13 +25,13 @@ Creation: [Constructor](#constructor), [empty](#empty), [zeros](#zeros), [ones](
 
 Layout manipulation:
 
-Access and Indexing:
+Accessing and indexing:
 
 Inplace operations:
 
 Functional programming:
 
-Logical functions:
+Logical functions: [isApprox](#isapprox), [isGreater](#isgreater), [isGreaterOrEqual](#isgreaterorequal), [isLess](#isless), [isLessOrEqual](#islessorequal), [isEqual](#isequal), [isBetween](#isbetween), [isEmpty](#isempty), [isVector](#isvector), [isCol](#iscol), [isRow](#isrow), [isSquare](#issquare), [isSymmetric](#issymmetric), [isPositiveDefinite](#ispositivedefinite), [isFinite](#isfinite), [hasInf](#hasinf), [hasNaN](#hasnan), [hasNull](#hasnull), [find](#find)
 
 Basic mathematical functions:
 
@@ -42,6 +42,21 @@ Statistical function:
 Set operations:
 
 Linear algebra:
+
+cond()
+cross()
+dot()
+det()
+transpose()
+kron()
+norm()
+rank()
+add()
+multiply()
+subtract()
+divide()
+trace()
+
 
 Inner functionality: [._raw](#_raw), [._rng](#_rng)
 
