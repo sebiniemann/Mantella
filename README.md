@@ -6,16 +6,10 @@ It supports NodeJS as well as browser builds and has no third-party dependencies
 
 If you have a question, problem or feature request, feel free to contact me anytime. The best way (for me) is to use the [Github issue tracker](https://github.com/SebastianNiemann/Mantella/issues).
 
-## Roadmap
+Documentation:
 
-- Support of basic matrix manipulations
-- Support of matrix layout manipulations
-- Support of common mathematical & trigonometric functions
-- Support of common statistical functions
-- Support of common set operations
-- Support of common decompositions, factorisations, inversions and equation solvers
-- Support of complex numbers
-- Acceleration of BLAS/LAPACK-like operations with WebAssembly
+1. [API](#api)
+1. [Roadmap](#roadmap)
 
 ## API
 
@@ -297,6 +291,19 @@ Inner functionality:
 [_scalarSubtract](#_scalarSubtract),
 [_scalarMultiply](#_scalarMultiply),
 [_scalarDivide](#_scalarDivide)
+
+## Roadmap
+
+- Support of basic matrix functionality
+- Support of matrix creations
+- Support of matrix layout manipulations
+- Support of logical functions
+- Support of mathematical, trigonometric & hyperbolic functions
+- Support of statistical functions
+- Support of set operations
+- Support of decompositions, factorisations, inversions and equation solvers
+- Support of complex numbers
+- Acceleration of BLAS/LAPACK-like operations with WebAssembly
 
 ---
 
