@@ -40,20 +40,19 @@ Layout manipulation:
 [flat](#flat),
 [insertCol](#insertcol),
 [insertRow](#insertrow),
+[linearSpaced](#linspace),
+[logSpaced](#logspace),
 [lowerTriangular](#lowertriangular),
+[meshgrid](#meshgrid),
 [prependCol](#prependcol),
 [prependRow](#prependrow),
 [removeCol](#removecol),
 [removeRow](#removerow),
+[repeat](#repeat),
 [resize](#resize),
+[sample](#sample),
+[sequence](#sequence),
 [upperTriangular](#uppertriangular)
-- arange
-- linspace
-- logspace
-- geomspace
-- meshGrid
-- repeat
-- sample
 
 Accessing and indexing:
 [col](#col),
@@ -66,42 +65,41 @@ Inplace operations:
 [inplace](#inplace),
 [inplace](#inplace)
 
-
 Functional programming:
-- rotate
-- fill
-- replace
-- shuffle
-- map
-- mapCol
-- mapRow
-- reduce
-- reduceCol
-- reduceRow
-- filter
-- filterCol
-- filterRow
-- some
-- someCol
-- someRow
-- every
-- everyCol
-- everyRow
-- none
-- noneCol
-- noneRow
-- reverse
-- reverseCol
-- reverseRow
-- sort
-- sortCol
-- sortRow
-- count
-- countCol
-- countRow
-- swapElems
-- swapCols
-- swapRows
+[rotate](#rotate),
+[fill](#fill),
+[replace](#replace),
+[shuffle](#shuffle),
+[map](#map),
+[mapCol](#mapCol),
+[mapRow](#mapRow),
+[reduce](#reduce),
+[reduceCol](#reduceCol),
+[reduceRow](#reduceRow),
+[filter](#filter),
+[filterCol](#filterCol),
+[filterRow](#filterRow),
+[some](#some),
+[someCol](#someCol),
+[someRow](#someRow),
+[every](#every),
+[everyCol](#everyCol),
+[everyRow](#everyRow),
+[none](#none),
+[noneCol](#noneCol),
+[noneRow](#noneRow),
+[reverse](#reverse),
+[reverseCol](#reverseCol),
+[reverseRow](#reverseRow),
+[sort](#sort),
+[sortCol](#sortCol),
+[sortRow](#sortRow),
+[count](#count),
+[countCol](#countCol),
+[countRow](#countRow),
+[swapElems](#swapElems),
+[swapCols](#swapCols),
+[swapRows](#swapRows),
 
 Logical functions:
 [find](#find),
@@ -239,16 +237,34 @@ Linear algebra:
 [trace](#trace)
 [transpose](#transpose)
 
-Output: [toString](#tostring)
+Output:
+[toString](#tostring)
 
 Inner functionality:
 [._raw](#_raw),
-[._rng](#_rng)
-- _scalarNegate
-- _scalarAdd
-- _scalarSubtract
-- _scalarMultiply
-- _scalarDivide
+[._rng](#_rng),
+[_scalarTanc](#_scalarTanc),
+[_scalarSinhc](#_scalarSinhc),
+[_scalarSinc](#_scalarSinc),
+[_scalarSec](#_scalarSec),
+[_scalarSech](#_scalarSech),
+[_scalarCsc](#_scalarCsc),
+[_scalarCsch](#_scalarCsch),
+[_scalarCot](#_scalarCot),
+[_scalarCoth](#_scalarCoth),
+[_scalarAsec](#_scalarAsec),
+[_scalarAcsc](#_scalarAcsc),
+[_scalarAcsch](#_scalarAcsch),
+[_scalarAcot](#_scalarAcot),
+[_scalarAcoth](#_scalarAcoth),
+[_scalarAsech](#_scalarAsech),
+[_scalarRandomNormal](#_scalarRandomNormal),
+[_scalarRandomGamma](#_scalarRandomGamma),
+[_scalarNegate](#_scalarNegate),
+[_scalarAdd](#_scalarAdd),
+[_scalarSubtract](#_scalarSubtract),
+[_scalarMultiply](#_scalarMultiply),
+[_scalarDivide](#_scalarDivide),
 
 ---
 
