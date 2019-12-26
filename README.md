@@ -70,25 +70,30 @@ Trigonometric & hyperbolic functions:
 Statistical function:
 
 Set operations:
+[setIntersect](#setintersect), 
+[setDifference](#setdifference), 
+[setSymmetricDifference](#setsymmetricdifference), 
+[setUnion](#setunion), 
+[unique](#unique), 
 
 Linear algebra:
+[cond](#cond), 
+[cross](#cross), 
+[dot](#dot), 
+[det](#det), 
+[transpose](#transpose), 
+[kron](#kron), 
+[norm](#norm), 
+[rank](#rank), 
+[add](#add), 
+[multiply](#multiply), 
+[subtract](#subtract), 
+[divide](#divide), 
+[trace](#trace)
 
-cond()
-cross()
-dot()
-det()
-transpose()
-kron()
-norm()
-rank()
-add()
-multiply()
-subtract()
-divide()
-trace()
-
-
-Inner functionality: [._raw](#_raw), [._rng](#_rng)
+Inner functionality:
+[._raw](#_raw),
+[._rng](#_rng)
 
 ### Fields
 
@@ -421,7 +426,7 @@ Shorthand for: `mat.map(salp._scalarTanhc)`
 
 ### Sets
 
-#### setIntersect(matA, matB)
+#### setIntersect
 #### setDifference(matA, matB)
 #### setSymmetricDifference(matA, matB)
 #### setUnion(matA, matB)
