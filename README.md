@@ -35,17 +35,17 @@ Creation:
 [zeros](#zeros)
 
 Layout manipulation:
-[resize](#resize), 
-[flat](#flat), 
-[appendCol](#appendcol), 
-[appendRow](#appendrow), 
-[prependCol](#prependcol), 
-[prependRow](#prependrow), 
-[insertCol](#insertcol), 
-[insertRow](#insertrow), 
-[removeCol](#removecol), 
-[removeRow](#removerow), 
-[lowerTriangular](#lowertriangular), 
+[appendCol](#appendcol),
+[appendRow](#appendrow),
+[flat](#flat),
+[insertCol](#insertcol),
+[insertRow](#insertrow),
+[lowerTriangular](#lowertriangular),
+[prependCol](#prependcol),
+[prependRow](#prependrow),
+[removeCol](#removecol),
+[removeRow](#removerow),
+[resize](#resize),
 [upperTriangular](#uppertriangular)
 
 Accessing and indexing:
@@ -83,28 +83,52 @@ Basic mathematical functions:
 Trigonometric & hyperbolic functions:
 
 Statistical function:
+[centralMoment](#centralmoment),
+[comulative](#comulative),
+[correlation](#correlation),
+[covariance](#covariance),
+[decile](#decile),
+[diff](#diff),
+[histogram](#histogram),
+[interquartileRange](#interquartilerange),
+[kurtosis](#kurtosis),
+[max](#max),
+[maxIndex](#maxIndex),
+[mean](#mean),
+[median](#median),
+[min](#min),
+[minIndex](#minIndex),
+[mode](#mode),
+[percentile](#percentile),
+[quantile](#quantile),
+[quartile](#quartile),
+[range](#range),
+[skewness](#skewness),
+[standardDeviation](#standarddeviation),
+[standardizedCentralMoment](#standardizedcentralmoment),
+[variance](#variance)
 
 Set operations:
-[setIntersect](#setintersect), 
-[setDifference](#setdifference), 
-[setSymmetricDifference](#setsymmetricdifference), 
-[setUnion](#setunion), 
+[setDifference](#setdifference),
+[setIntersect](#setintersect),
+[setSymmetricDifference](#setsymmetricdifference),
+[setUnion](#setunion),
 [unique](#unique)
 
 Linear algebra:
-[cond](#cond), 
-[cross](#cross), 
-[dot](#dot), 
-[det](#det), 
-[transpose](#transpose), 
-[kron](#kron), 
-[norm](#norm), 
-[rank](#rank), 
-[add](#add), 
-[multiply](#multiply), 
-[subtract](#subtract), 
-[divide](#divide), 
+[add](#add),
+[cond](#cond),
+[cross](#cross),
+[det](#det),
+[divide](#divide),
+[dot](#dot),
+[kron](#kron),
+[multiply](#multiply),
+[norm](#norm),
+[rank](#rank),
+[subtract](#subtract),
 [trace](#trace)
+[transpose](#transpose)
 
 Inner functionality:
 [._raw](#_raw),
