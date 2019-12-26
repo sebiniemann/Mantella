@@ -14,18 +14,18 @@ Documentation:
 ## API
 
 Fields:
-[nCols](#nCols),
-[nElems](#nElems),
-[nRows](#nRows)
+[nCol](#nCol),
+[nElem](#nElem),
+[nRow](#nRow)
 
 Creation:
-[Constructor](#constructor),
+[Mat](#mat),
 [empty](#empty),
+[grid](#grid),
 [identity](#identity),
 [linearSpaced](#linspace),
 [logSpaced](#logspace),
 [lowerTriangular](#lowertriangular),
-[meshgrid](#meshgrid),
 [ones](#ones),
 [randomGamma](#randomGamma),
 [randomNormal](#randomNormal),
@@ -72,14 +72,24 @@ Accessing and indexing:
 
 Iterators:
 [entries](#entries),
+[entriesCol](#entriesCol),
+[entriesRow](#entriesRow),
 [keys](#keys),
-[values](#values)
+[keysCol](#keysCol),
+[keysRow](#keysRow),
+[values](#values),
+[valuesCol](#valuesCol),
+[valuesRow](#valuesRow)
 
 Inplace operations:
 [copyWithin](#copyWithin),
 [inplace](#inplace),
 [inplaceCol](#inplaceCol),
-[inplaceRow](#inplaceRow)
+[inplaceReverse](#inplaceReverse),
+[inplaceRotate](#inplaceRotate),
+[inplaceRow](#inplaceRow),
+[inplaceShuffle](#inplaceShuffle),
+[inplaceSort](#inplaceSort)
 
 Functional programming:
 [count](#count),
