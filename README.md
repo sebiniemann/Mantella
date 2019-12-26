@@ -79,8 +79,70 @@ Logical functions:
 [isVector](#isvector)
 
 Basic mathematical functions:
+[erf](#erf),
+[gamma](#gamma),
+[negate](#negate),
+[reciprocal](#reciprocal),
+[mod](#mod),
+[remainder](#remainder),
+[abs](#abs),
+[ceil](#ceil),
+[floor](#floor),
+[round](#round),
+[log](#log),
+[logK](#logK),
+[log2](#log2),
+[log10](#log10),
+[pow](#pow),
+[root](#root),
+[sqrt](#sqrt),
+[clz32](#clz32),
+[expm1](#expm1),
+[fround](#fround),
+[log1p](#log1p),
+[square](#square),
+[cube](#cube),
+[cbrt](#cbrt),
+[sign](#sign),
+[exp](#exp),
+[expK](#expK),
+[exp2](#exp2),
+[exp10](#exp10),
+[deg2Rad](#deg2Rad),
+[rad2Deg](#rad2Deg),
+[trunc](#trunc),
 
 Trigonometric & hyperbolic functions:
+[acos](#acos),
+[acosh](#acosh),
+[acot](#acot),
+[acoth](#acoth),
+[acsc](#acsc),
+[acsch](#acsch),
+[asec](#asec),
+[asech](#asech),
+[asin](#asin),
+[asinh](#asinh),
+[atan](#atan),
+[atan2](#atan2),
+[atanh](#atanh),
+[cos](#cos),
+[cosh](#cosh),
+[cot](#cot),
+[coth](#coth),
+[csc](#csc),
+[csch](#csch),
+[hypot](#hypot),
+[sec](#sec),
+[sech](#sech),
+[sin](#sin),
+[sinc](#sinc),
+[sinh](#sinh),
+[sinhc](#sinhc),
+[tan](#tan),
+[tanc](#tanc),
+[tanh](#tanh),
+[tanhc](#tanhc)
 
 Statistical function:
 [centralMoment](#centralmoment),
@@ -130,75 +192,15 @@ Linear algebra:
 [trace](#trace)
 [transpose](#transpose)
 
+Output: [toString](#tostring)
+
 Inner functionality:
 [._raw](#_raw),
 [._rng](#_rng)
 
----
 
-### .nElems
 
-The number of elements.
-  
-Same as `mat.nRows * mat.nCols`.
 
----
-
-### .nRows
-
-The number of rows.
-
----
-
-### .nCols
-
-The number of columns.
-
----
-
-### Constructor
-
-- new Mat()
-- new Mat(nRows, nCols)
-- new Mat(nRows, nCols, callback)
-- new Mat(array)
-- new Mat(arrayOfArray)
-- new Mat(mat)
-
----
-
-### empty(nRows, nCols)
-
-Shorthand for: `new Mat(nRows, nCols)`
-
----
-
-### zeros(nRows, nCols)
-
-Shorthand for: `new Mat(nRows, nCols, () => 0)`
-
-### ones(nRows, nCols)
-
-Shorthand for: `new Mat(nRows, nCols, () => 1)`
-
-### identity(nRows, nCols)
-
-Shorthand for: `zeros(nRows, nCols).diag(() => 0)`
-
-### randomUniform(nRows, nCols)
-### randomUniform(nRows, nCols, { min: 0, max: 1 })
-
-Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomUniform())
-
-### randomNormal(nRows, nCols)
-### randomNormal(nRows, nCols, { mean: 0, standardDeviation: 1 })
-
-Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomNormal())``
-
-### randomGamma(nRows, nCols)
-### randomGamma(nRows, nCols, { shape: 1, scale: 1 })
-
-Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomGamma())`
 
 ### arange()
 ### linspace()
@@ -207,6 +209,8 @@ Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomGamma())`
 ### meshGrid()
 ### repeat()
 ### sample()
+
+
 
 ### .elem()
 ### .elemDiag()
@@ -218,18 +222,8 @@ Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomGamma())`
 ### .shuffle(mat)
 ### .clamp(mat, lowerBounds, upperBounds)
 
-### .resize(nRows, nCols)
-### .flat()
-### .appendCol()
-### .appendRow()
-### .prependCol()
-### .prependRow()
-### .insertCol()
-### .insertRow()
-### .removeCol()
-### .removeRow()
-### .lowerTriangular()
-### .upperTriangular()
+
+
 
 ### .map(callback)
 ### .mapCol(callback)
@@ -262,336 +256,13 @@ Shorthand for: `zeros(nRows, nCols).diag(() => _scalarRandomGamma())`
 ### swapCols()
 ### swapRows()
 
-### .toString(precision=5)
 
-### isApprox()
-### isGreater()
-### isGreaterOrEqual()
-### isLess()
-### isLessOrEqual()
-### isEqual()
-### isBetween()
-### isEmpty()
-### isVector()
-### isCol()
-### isRow()
-### isSquare()
-### isSymmetric()
-### isPositiveDefinite()
-### isFinite()
-### hasInf()
-### hasNaN()
-### hasNull()
-### find()
 
-### min(mat)
-### max(mat)
-### range(mat)
-### mode(mat)
-### quantile(mat, q, k)
-### median(mat)
 
-    Shorthand for: `quantile(mat, 2, 1)`
 
-### quartile(mat, k)
 
-    Shorthand for: `quantile(mat, 4, k)`
 
-### decile(mat, k)
 
-    Shorthand for: `quantile(mat, 10, k)`
-
-### percentile(mat, k)
-
-    Shorthand for: `quantile(mat, 100, k)`
-
-### interquartileRange(mat)
-### mean(mat)
-### centralMoment(mat, k)
-### variance(mat)
-### standardDeviation(mat)
-### standardizedCentralMoment(mat, k)
-### skewness(mat)
-### kurtosis(mat)
-### histogram()
-### minIndex()
-### maxIndex()
-### covariance()
-### correlation()
-### comulative(mat, callback)
-### diff(mat, callback)
-
-### .acos()
-
-    Shorthand for: `mat.map(Math.acos)`
-
-### .acosh()
-
-    Shorthand for: `mat.map(Math.acosh)`
-
-### .acot()
-
-    Shorthand for: `mat.map(salp._scalarAcot)`
-
-### .acoth()
-
-    Shorthand for: `mat.map(salp._scalarAcoth)`
-
-### .acsc()
-
-    Shorthand for: `mat.map(salp._scalarAcsc)`
-
-### .acsch()
-
-    Shorthand for: `mat.map(salp._scalarAcsch)`
-
-### .asec()
-
-    Shorthand for: `mat.map(salp._scalarAsec)`
-
-### .asech()
-
-    Shorthand for: `mat.map(salp._scalarAsech)`
-  
-### .asin()
-
-    Shorthand for: `mat.map(Math.asin)`
-
-### .asinh()
-
-    Shorthand for: `mat.map(Math.asinh)`
-
-### .atan()
-
-    Shorthand for: `mat.map(Math.atan)`
-
-### .atanh()
-
-    Shorthand for: `mat.map(Math.atanh)`
-
-### .cos()
-
-    Shorthand for: `mat.map(Math.cos)`
-
-### .cosh()
-
-    Shorthand for: `mat.map(Math.cosh)`
-
-### .cot()
-
-    Shorthand for: `mat.map(salp._scalarCot)`
-
-### .coth()
-
-    Shorthand for: `mat.map(salp._scalarCoth)`
-
-### .csc()
-
-    Shorthand for: `mat.map(salp._scalarCsc)`
-
-### .csch()
-
-    Shorthand for: `mat.map(salp._scalarCsch)`
-
-### .sec()
-
-    Shorthand for: `mat.map(salp._scalarSec)`
-
-### .sech()
-
-    Shorthand for: `mat.map(salp._scalarSech)`
-
-### .sin()
-
-    Shorthand for: `mat.map(Math.sin)`
-
-### .sinc(flavor='normalised')
-
-    If `flavor` is set to `'normalised'`:
-
-    Shorthand for: `mat.map(x => salp._scalarSinc(Math.PI * x))`
-
-    If `flavor` is set to `'unnormalised'`:
-
-    Shorthand for: `mat.map(salp._scalarSinc)`
-
-### .sinh()
-
-    Shorthand for: `mat.map(Math.sinh)`
-
----
-
-### .sinhc()
-
-    Shorthand for: `mat.map(salp._scalarSinhc)`
-
----
-
-### .tan()
-
-Shorthand for: `mat.map(Math.tan)`
-
----
-
-### .tanc()
-
-Shorthand for: `mat.map(salp._scalarTanc)`
-
----
-
-### .tanh()
-
-Shorthand for: `mat.map(Math.tanh)`
-
----
-
-### .tanhc()
-
-Shorthand for: `mat.map(salp._scalarTanhc)`
-
----
-
-### atan2(matA, matB)
-
----
-
-### hypot(matA, matB)
-
-### setIntersect
-### setDifference(matA, matB)
-### setSymmetricDifference(matA, matB)
-### setUnion(matA, matB)
-### unique(mat)
-
-### .erf()
-### .gamma()
-### .negate()
-
-    Shorthand for: `mat.map(x => -x)`
-
-### .reciprocal()
-
-    Shorthand for: `mat.map(x => 1 / x)`
-
-### .mod()
-### .remainder()
-### .abs()
-
-    Shorthand for: `mat.map(Math.abs)`
-
-### .ceil()
-
-    Shorthand for: `mat.map(Math.ceil)`
-
-### .floor()
-
-    Shorthand for: `mat.map(Math.floor)`
-
-### .round()
-
-    Shorthand for: `mat.map(Math.round)`
-
-### .log()
-
-    Shorthand for: `mat.map(Math.log)`.
-
-### .logK(k)
-
-    Shorthand for:
-    
-    ```js
-    const log2k = Math.log2(k);
-    mat.map(x => Math.log2(x) / log2k);
-    ```
-
-### .log2()
-
-    Shorthand for: `mat.map(Math.log2)`
-
-### .log10()
-
-    Shorthand for: `mat.map(Math.log10)`
-
-### .pow(exponent)
-
-    Shorthand for: `mat.map(x => Math.pow(x, exponent))`
-
-### .root(k)
-
-    Shorthand for: `mat.pow(1 / k)`
-
-### .sqrt()
-
-    Shorthand for: `mat.map(Math.sqrt)`
-
-### .clz32()
-
-    Shorthand for: `mat.map(Math.clz32)`
-
-### .expm1()
-
-    Shorthand for: `mat.map(Math.expm1)`
-
-### .fround()
-
-    Shorthand for: `mat.map(Math.fround)`
-
-### .log1p()
-
-    Shorthand for: `mat.map(Math.log1p)`
-
-### .square()
-
-    Shorthand for: `mat.pow(2)`
-
-### .cube()
-
-    Shorthand for: `mat.pow(3)`
-
-### .cbrt()
-
-    Shorthand for: `mat.map(Math.cbrt)`
-
-### .sign()
-
-    Shorthand for: `mat.map(Math.sign)`
-
-### .exp()
-
-    Shorthand for: `mat.map(Math.exp)`
-
-### .expK(k)
-
-    Shorthand for: `mat.map(x => Math.pow(k, x))`
-
-### .exp2()
-
-    Shorthand for: `mat.expK(2)`
-
-### .exp10()
-
-    Shorthand for: `mat.expK(10)`
-
-### .deg2Rad()
-### .rad2Deg()
-
-### .trunc()
-
-    Shorthand for: `mat.map(Math.trunc)`
-
-### cond()
-### cross()
-### dot()
-### det()
-### transpose()
-### kron()
-### norm()
-### rank()
-### add()
-### multiply()
-### subtract()
-### divide()
-### trace()
 
 ### _negate(a, b)
 ### _add(a, b)
