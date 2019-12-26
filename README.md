@@ -19,9 +19,20 @@ If you have a question, problem or feature request, feel free to contact me anyt
 
 ## API
 
-Fields: [nElems](#nElems), [nRows](#nRows), [nCols](#nCols)
+Fields:
+[nCols](#nCols),
+[nElems](#nElems),
+[nRows](#nRows)
 
-Creation: [Constructor](#constructor), [empty](#empty), [zeros](#zeros), [ones](#ones), [identity](#identity), [randomUniform](#randomUniform), [randomNormal](#randomNormal), [randomGamma](#randomGamma)
+Creation:
+[Constructor](#constructor),
+[empty](#empty),
+[identity](#identity),
+[ones](#ones),
+[randomGamma](#randomGamma),
+[randomNormal](#randomNormal),
+[randomUniform](#randomUniform),
+[zeros](#zeros)
 
 Layout manipulation:
 
@@ -31,7 +42,26 @@ Inplace operations:
 
 Functional programming:
 
-Logical functions: [isApprox](#isapprox), [isGreater](#isgreater), [isGreaterOrEqual](#isgreaterorequal), [isLess](#isless), [isLessOrEqual](#islessorequal), [isEqual](#isequal), [isBetween](#isbetween), [isEmpty](#isempty), [isVector](#isvector), [isCol](#iscol), [isRow](#isrow), [isSquare](#issquare), [isSymmetric](#issymmetric), [isPositiveDefinite](#ispositivedefinite), [isFinite](#isfinite), [hasInf](#hasinf), [hasNaN](#hasnan), [hasNull](#hasnull), [find](#find)
+Logical functions:
+[find](#find),
+[hasInf](#hasinf),
+[hasNaN](#hasnan),
+[hasNull](#hasnull),
+[isApproxEqual](#isapproxequal),
+[isBetween](#isbetween),
+[isCol](#iscol),
+[isEmpty](#isempty),
+[isEqual](#isequal),
+[isFinite](#isfinite),
+[isGreater](#isgreater),
+[isGreaterOrEqual](#isgreaterorequal),
+[isLess](#isless),
+[isLessOrEqual](#islessorequal),
+[isPositiveDefinite](#ispositivedefinite),
+[isRow](#isrow),
+[isSquare](#issquare),
+[isSymmetric](#issymmetric),
+[isVector](#isvector)
 
 Basic mathematical functions:
 
