@@ -1,4 +1,4 @@
-![Mantella](https://github.com/sebiniemann/Mantella/raw/sebi/salp/assets/logoWithName-499x128.png)
+![Mantella](https://github.com/sebiniemann/Mantella/raw/master/assets/logoWithName-499x128.png)
 
 Welcome! This mono-repo hosts [my research projects](https://sebiniemann.github.io/Mantella/) on self-developing optimisation algorithms.
 
