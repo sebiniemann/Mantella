@@ -1,4 +1,13 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Textdateien
+*.css text eol=lf
+*.html text eol=lf
+*.js text eol=lf
+*.md text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+LICENSE text eol=lf
 
-*.sh text eol=lf
+# Binärdateien
+* binary
