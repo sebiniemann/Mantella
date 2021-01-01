@@ -1,0 +1,38 @@
+---
+layout: post
+title:  Splitting the problem dimensions
+category: Optimisation problem analysis
+intro: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+---
+
+<ul>
+  <li>Berechnung aller Zerlegungen</li>
+  <li>Berechnung aller Zweier-Zerlegungen und Inferenz aller anderen Zerlegungen</li>
+  <li>Abarbeitungsreihenfolge der Zweier-Zerlegungen nach Informationsgehalt für die Inferenz</li>
+</ul>
+
+Minimise f(x) = <input id="objectiveFunction">
+<br>
+Number of dimensionen: <output id="nDimensions"></output>
+
+<script type="module">
+import * as libSalp from '{{ site.baseurl }}/libs/salp.js';
+import * as libUtility from '{{ site.baseurl }}/libs/utility.js';
+
+let objectiveFunction;
+let nDimensions;
+
+document.getElementById('objectiveFunction').addEventListener('input', event => {
+  const value = event.target.value;
+
+  try {
+    objectiveFunction = new Function('x', `return ${'x[0] * x[1] + x[2]'}`);
+
+    nDimensions = libUtility.unique(value.match(/x\[[0-9]+?\]/g)).length;
+    document.getElementById('nDimensions').innerText = String(nDimensions);
+  } catch (error) {
+    // Do nothing
+  }
+})
+
+</script>
