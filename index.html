@@ -4,7 +4,7 @@ title:  Mantella
 ---
 
 <h1>
-  <img src="{{ site.baseurl }}/assets/logo.svg" width="70.4" height="64" class="logo" alt="">
+  <img id="logo" src="{{ site.baseurl }}/assets/mantella-milotympanum.svg" width="70.4" height="64" class="logo" alt="">
 
   {{ page.title }}
 </h1>
@@ -34,3 +34,21 @@ Right now, this is a little playground while I revise the repo and try out diffe
 <p>
   You can contact me via a <a href="https://github.com/sebiniemann/Mantella/discussions/new">Github discussion</a> or by <a href="mailto:sebiniemann@gmail.com">email</a>.
 </p>
+
+<script>
+const mantellas = [
+  '{{ site.baseurl }}/assets/mantella-aurantiaca.svg',
+  '{{ site.baseurl }}/assets/mantella-baroni.svg',
+  '{{ site.baseurl }}/assets/mantella-bernhardi.svg',
+  '{{ site.baseurl }}/assets/mantella-cowanii.svg',
+  '{{ site.baseurl }}/assets/mantella-crocea.svg',
+  '{{ site.baseurl }}/assets/mantella-ebenaui.svg',
+  '{{ site.baseurl }}/assets/mantella-expectata.svg',
+  '{{ site.baseurl }}/assets/mantella-haraldmeieri.svg',
+  '{{ site.baseurl }}/assets/mantella-manery.svg',
+  '{{ site.baseurl }}/assets/mantella-milotympanum.svg',
+  '{{ site.baseurl }}/assets/mantella-viridis.svg',
+];
+
+document.getElementById('logo').src = mantellas[Math.floor(Math.random() * mantellas.length)];
+</script>
